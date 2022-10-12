@@ -1940,12 +1940,12 @@ body {
 
 /* JUKEBOX
 --------------------------------*/
-.tab_jukebox .musiclist .type {
-	background:#def;
+.tab_jukebox .music-container .music-types .type:hover,
+.tab_jukebox .music-container .music-types .type.active {
+	background-color:#def;
 }
-.tab_jukebox .musiclist .track.odd {
-	background-color:#fff;
-}
-.tab_jukebox .musiclist .track.even {
-	background-color:#eeeeee;
+
+.tab_jukebox .music-container .music-list .track:hover,
+.tab_jukebox .music-container .music-list .track.active {
+	background-color:#def;
 }

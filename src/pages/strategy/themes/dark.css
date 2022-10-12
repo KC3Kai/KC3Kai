@@ -2608,12 +2608,14 @@ button, input, select, textarea {
 
 /* JUKEBOX
 --------------------------------*/
-.tab_jukebox .musiclist .type {
-	background:#2e2e2e;
+.tab_jukebox .music-container .music-types .type:hover,
+.tab_jukebox .music-container .music-types .type.active {
+	background-color: rgba(255, 255, 255, 0.8);
+	color: #333;
 }
-.tab_jukebox .musiclist .track.odd {
-	background-color:#222222;
-}
-.tab_jukebox .musiclist .track.even {
-	background-color:#333333;
+
+.tab_jukebox .music-container .music-list .track:hover,
+.tab_jukebox .music-container .music-list .track.active {
+	background-color: rgba(255, 255, 255, 0.8);
+	color: #333;
 }

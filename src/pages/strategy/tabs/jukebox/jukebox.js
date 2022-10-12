@@ -6,65 +6,77 @@
   KC3StrategyTabs.jukebox.definition = {
     tabSelf: KC3StrategyTabs.jukebox,
 
-    // Config
+    // Properties of default config
     type: 'battle',
-    volume: 0.1,
+    volume: 1,
 
-    // Battle BGM
+    // Current known implementation of battle BGM IDs
     maxBattleId: 216,
     missingBattleIds: [24],
 
-    /* INIT: mandatory
-    Prepares initial static data needed.
-    ---------------------------------*/
-    init: function () {
+    /**
+     * INIT: mandatory
+     * Prepares initial static data needed.
+     */
+    init() {
       const myServer = (new KC3Server()).setNum(PlayerManager.hq.server);
       this.serverIp = myServer.ip;
     },
 
-    /* RELOAD: optional
-    Loads latest player or game data if needed.
-    ---------------------------------*/
-    reload: function () {
+    /**
+     * RELOAD: optional
+     * Loads latest player or game data if needed.
+     */
+    reload() {
       this.portbgm = KC3Master._raw.bgm;
       this.mapbgm = KC3Master._raw.mapbgm;
-      this.maxBattleId = Math.max(this.maxBattleId, ...Object.values(this.mapbgm).map(v => v.api_boss_bgm).flat());
+      this.detectMaxBattleBgmId();
       this.loadConfig();
-      console.debug('maxBattleId', this.maxBattleId);
     },
 
-    /* EXECUTE: mandatory
-    Places data onto the interface from scratch.
-    ---------------------------------*/
-    execute: function () {
+    /**
+     * EXECUTE: mandatory
+     * Places data onto the interface from scratch.
+     */
+    execute() {
       this.loadConfig();
       this.initAudioListeners();
 
-      $('.type.port').on('click', () => {
-        this.selectType('port');
-      });
-      $('.type.battle').on('click', () => {
-        this.selectType('battle');
+      $('.music-types .type').on('click', (e) => {
+        this.selectType($(e.target).attr('list-type'));
       });
 
-      // Init default list
       this.selectType(this.type);
     },
 
+    detectMaxBattleBgmId() {
+      const mapBgmIds = [];
+      Object.values(this.mapbgm).forEach(o => {
+        mapBgmIds.push(o.api_moving_bgm);
+        mapBgmIds.push(...o.api_map_bgm);
+        mapBgmIds.push(...o.api_boss_bgm);
+      });
+      this.maxBattleId = Math.max(this.maxBattleId, ...mapBgmIds);
+      console.debug('Current maxBattleId', this.maxBattleId);
+    },
+
     getConfig() {
-      const config = {
-        type: this.getType(),
-        volume: this.getVolume(),
+      return {
+        type: this.type,
+        volume: this.volume,
       };
-      return config;
+    },
+
+    setType(value) {
+      this.type = value || 'battle';
+    },
+
+    setVolume(value) {
+      this.volume = Number(value) || 1;
     },
 
     loadConfig() {
-      let config;
-      try {
-        config = JSON.parse(localStorage.getItem('jukebox'));
-      } catch (error) {
-      }
+      let config = localStorage.getObject('srJukebox');
       if (!config) {
         config = this.getConfig();
         this.saveConfig();
@@ -75,34 +87,17 @@
     },
 
     saveConfig() {
-      const config = this.getConfig();
-      localStorage.setItem('jukebox', JSON.stringify(config));
-    },
-
-    getType() {
-      return this.type;
-    },
-
-    setType(value) {
-      this.type = value || 'battle';
-    },
-
-    getVolume() {
-      return this.volume;
-    },
-
-    setVolume(value) {
-      this.volume = Number(value) || 0.1;
+      localStorage.setObject('srJukebox', this.getConfig());
     },
 
     getAudio() {
-      const audio = document.querySelector('.music-player audio');
-      return audio;
+      return $('.music-player audio').get(0);
     },
 
     playAudio(src) {
       const audio = this.getAudio();
-      audio.volume = this.getVolume();
+      const config = this.getConfig();
+      audio.volume = config.volume;
       audio.src = src;
       audio.play();
     },
@@ -120,55 +115,76 @@
     },
 
     selectType(type) {
-      this.type = type;
+      this.setType(type);
       this.saveConfig();
 
       $('.music-types .type').removeClass('active');
-      $(`.music-types .type.${type}`).addClass('active');
+      $(`.music-types .type[list-type=${type}]`).addClass('active');
       this.clearList();
 
       switch (type) {
         case 'port':
           this.loadPortBgms();
-          return;
+          break;
+        case 'map':
+          this.loadMapBgms();
+          break;
         default:
           this.loadBattleBgms();
+          break;
       }
     },
 
     /**
-     *
-     * @param {*} bgms list of bgm, with `api_id` and `api_name`
+     * Adds elements with information of tracks in current type to cleared list container.
+     * @param {Array} bgms - list of bgm, with `api_id` and `api_name`.
+     * @param {String} type - type name of bgm path, acceptable: `port`, `battle` and `fanfare`.
      */
-    loadBgms(bgms) {
+    loadBgms(bgms, type) {
       bgms.forEach(bgm => {
         const item = $('.factory .track')
           .clone()
           .appendTo('.music-list')
-          .attr('bgm-type', this.type)
+          .attr('bgm-type', type)
           .attr('bgm-id', bgm.api_id);
 
         $('.id', item).text('#' + String(bgm.api_id).pad(3, '0'));
-        $('.desc', item).text(bgm.api_name);
+        $('.desc', item).text(bgm.api_name || "");
       });
 
       this.initTrackListeners();
     },
 
     loadPortBgms() {
-      $('.music-list').addClass('list');
-      this.loadBgms(Object.values(this.portbgm));
+      $('.music-list').addClass('list').removeClass('map');
+      this.loadBgms(Object.values(this.portbgm), 'port');
     },
 
     loadBattleBgms() {
-      $('.music-list').removeClass('list');
-      const bgms = Array(this.maxBattleId)
-        .fill(null)
-        .map((_, i) => i + 1)
+      $('.music-list').removeClass('list map');
+      const bgms = Array.numbers(1, this.maxBattleId)
         .filter(id => !this.missingBattleIds.includes(id))
         .sort((a, b) => b - a)
         .map(id => ({ api_id: id }));
-      this.loadBgms(bgms);
+      this.loadBgms(bgms, 'battle');
+    },
+
+    loadMapBgms() {
+      $('.music-list').addClass('list map');
+      const bgms = [];
+      Object.values(this.mapbgm).forEach(bgm => {
+        const world = bgm.api_maparea_id, map = bgm.api_no;
+        const mapName = [
+          KC3Meta.isEventWorld(world) ? world + '-' : '',
+          KC3Meta.mapToDesc(world, map)
+        ].join('');
+        bgms.push({ api_id: bgm.api_moving_bgm, api_name: mapName + ' Overworld' });
+        bgms.push({ api_id: bgm.api_map_bgm[0], api_name: mapName + ' Day Battle' });
+        bgms.push({ api_id: bgm.api_map_bgm[1], api_name: mapName + ' Night Battle' });
+        bgms.push({ api_id: bgm.api_boss_bgm[0], api_name: mapName + ' Day Boss' });
+        bgms.push({ api_id: bgm.api_boss_bgm[1], api_name: mapName + ' Night Boss' });
+      });
+      this.loadBgms(bgms, 'battle');
     },
 
     initTrackListeners() {
@@ -182,25 +198,20 @@
         $('.music-list .track').removeClass('active');
         $(target).addClass('active');
 
-        $('.music-player .id').text($('.id', target).text());
-        $('.music-player .desc').text($('.desc', target).text());
+        $('.music-player .ids span.id').text($('.id', target).text());
+        $('.music-player .ids span.type').text(type);
+        $('.music-player .desc').text('\u266a ' + $('.desc', target).text());
       });
     },
 
-    /* UPDATE: optional
-    Partially update elements of the interface,
-      possibly without clearing all contents first.
-    Be careful! Do not only update new data,
-      but also handle the old states (do cleanup).
-    Return `false` if updating all needed,
-      EXECUTE will be invoked instead.
-    ---------------------------------*/
-    update: function (pageParams) {
-      // Use `pageParams` for latest page hash values,
-      // KC3StrategyTabs.pageParams keeps the old values for states tracking
-
+    /**
+     * UPDATE: optional
+     * Partially updates elements of the interface, possibly without clearing all contents first.
+     */
+    update(pageParams) {
       // Returning `true` means updating has been handled.
       return false;
     }
+
   };
 })();

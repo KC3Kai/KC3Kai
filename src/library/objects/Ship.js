@@ -1986,8 +1986,9 @@ KC3改 Ship Object
 			const panzer3Count = this.countEquipment(482);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
-			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
+			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
+			// Known 5 rockets still 190: https://twitter.com/hedgehog_hasira/status/1579111963925225472
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
 			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80, 170, 230][type4RocketCdCount] || 230;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
