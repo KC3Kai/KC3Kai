@@ -364,6 +364,8 @@ Previously known as "Reactor"
 					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					case 94: PlayerManager.consumables.newArmamentMaterial = thisItem.api_count; break;
 					case 95: PlayerManager.consumables.submarineSupplyMaterial = thisItem.api_count; break;
+					case 96: PlayerManager.consumables.pumpkin = thisItem.api_count; break;
+					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					default: break;
 				}
 			}

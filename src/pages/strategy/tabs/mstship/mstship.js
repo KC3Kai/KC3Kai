@@ -467,10 +467,10 @@
 					5026, 5027, 5256, 5269, 5275, 5276, 5277, 5278, 5279, 5280,
 					5281, 5282, 5283, 5284, 5285, 5286, 5287, 5288, 5289, 5290,
 					5291, 5292, 5293, 5294, 5295, 5296, 5297, 5298, 5299, 5300,
-					5301, 5302, 5303, 5304, 5305, 5306, 5357,
+					5301, 5302, 5303, 5304, 5305, 5306, 5357, 5667, 5668, 5669,
 				].includes(ship_id);
 				// No card but has damaged image
-				const isSpButHasTaiha = [5269, 5357].includes(ship_id);
+				const isSpButHasTaiha = [5256, 5269, 5357].includes(ship_id);
 				const availableTypes = KC3Master.isSeasonalShip(ship_id) ?
 					isSpecificAlbumTypes ? isSpButHasTaiha ? [
 						'character_full', 'character_full_dmg',

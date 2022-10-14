@@ -6,6 +6,13 @@
   transition: 0.25s;
 }
 
+/* Force audio bgcolor keeping consistent with player's bgcolor,
+   ignoring used color theme and chrome version difference. */
+audio::-webkit-media-controls-enclosure,
+audio::-webkit-media-controls-panel {
+  background-color: rgb(241, 243, 244);
+}
+
 .tab_jukebox .music-player {
   display: grid;
   grid-auto-flow: column;
@@ -14,12 +21,13 @@
   grid-column-gap: 8px;
   position: fixed;
   bottom: 8px;
-  min-width: 680px;
-  /* chrome audio control height 54px */
+  min-width: 678px;
+  /* chrome audio control height 54px for some version */
   min-height: 60px;
   padding: 3px 8px;
-  opacity: 0.7;
+  opacity: 0.72;
   border-radius: 8px;
+  /* chrome audio control forced to light theme */
   background: #f1f3f4;
   color: #333;
   font-size: 1.8rem;
@@ -30,7 +38,7 @@
 }
 
 .tab_jukebox .music-player .ids {
-  width: 50px;
+  width: 56px;
 }
 
 .tab_jukebox .music-player .desc {

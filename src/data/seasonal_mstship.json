@@ -5238,11 +5238,11 @@
 	},
 	"5654": {
 		"api_id": 5654,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着伊201",
+		"api_yomi": "い201",
+		"api_stype": 13,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5655": {
 		"api_id": 5655,
@@ -5326,14 +5326,62 @@
 	},
 	"5665": {
 		"api_id": 5665,
+		"api_name": "トーチ作戦長鯨",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5666": {
+		"api_id": 5666,
+		"api_name": "お出掛け古鷹",
+		"api_yomi": "ふるたか",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5667": {
+		"api_id": 5667,
+		"api_name": "秋冬制服夏雲",
+		"api_yomi": "なつぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5668": {
+		"api_id": 5668,
+		"api_name": "秋冬制服夏雲改",
+		"api_yomi": "なつぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5669": {
+		"api_id": 5669,
+		"api_name": "秋冬制服峯雲",
+		"api_yomi": "みねぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5670": {
+		"api_id": 5670,
+		"api_name": "浴衣朝霜改二",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5671": {
+		"api_id": 5671,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"5666": {
-		"api_id": 5666,
+	"5672": {
+		"api_id": 5672,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
