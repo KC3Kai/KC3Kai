@@ -496,7 +496,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.isEscortLightCarrier = function(){
 		if(this.isDummy()) return false;
 		const stype = this.master().api_stype;
-		// Known implementations: Taiyou-class series, Gambier Bay series, Zuihou K2B
+		// Known implementations: Taiyou-class series, Gambier Bay series, Zuihou K2B, Ryuuhou K2E+, Langley series
 		const minAsw = (this.master().api_tais || [])[0];
 		return stype === 7 && minAsw > 0;
 	};
@@ -2750,7 +2750,7 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isEscort = stype === 1;
 		const isLightCarrier = stype === 7;
-		// is CVE? (Taiyou-class series, Gambier Bay series, Zuihou K2B, Ryuuhou K2+)
+		// is CVE? such as Taiyou-class series
 		const isEscortLightCarrier = this.isEscortLightCarrier();
 		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
 		//   AO uses the same conditions with depth charge types, but Hyasui Kai unconfirmed
