@@ -364,6 +364,8 @@ Previously known as "Reactor"
 					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					case 94: PlayerManager.consumables.newArmamentMaterial = thisItem.api_count; break;
 					case 95: PlayerManager.consumables.submarineSupplyMaterial = thisItem.api_count; break;
+					case 96: PlayerManager.consumables.pumpkin = thisItem.api_count; break;
+					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					default: break;
 				}
 			}
@@ -2655,6 +2657,7 @@ Previously known as "Reactor"
 			// Known useitem consumptions listed here are only for your reference,
 			// since all cases of `api_exchange_type` are not fully verified,
 			// exact amounts of useitem depend on following /useitem call.
+			// Some exchanges can be found in client GUI `ConfirmView` handler.
 			switch(exchangeType){
 				case 1: // exchange 4 medals with 1 blueprint
 					//if(itemId === 57) PlayerManager.consumables.medals -= 4;
@@ -2793,6 +2796,12 @@ Previously known as "Reactor"
 				break;
 				case 93: // exchange 30 sardine with a Type 2 12cm Mortar Kai and 3 devmats
 					//if(itemId === 93) PlayerManager.consumables.sardine -= 30;
+				break;
+				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni (once)
+					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
+				break;
+				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
+					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
 				break;
 				default:
 					if(isNaN(exchangeType)){

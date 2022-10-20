@@ -557,6 +557,9 @@ Does not include Ships and Gears which are managed by other Managers
 				"93": "sardine",
 				"94": "newArmamentMaterial",
 				"95": "submarineSupplyMaterial",
+				"96": "pumpkin",
+				"901": "rankPoints",
+				"902": "boiler",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :
