@@ -523,7 +523,7 @@ Provides access to data on built-in JSON files
 		useItemName :function(id){
 			// Yamato remodel consumes [87] New Model Boiler mapped to 902,
 			// directly return slotitem name here to avoid 800+ empty string elements in json
-			if(id === 902) return this.gearNameById(87);
+			if(id == 902) return this.gearNameById(87);
 			return this._useitems[id] || (KC3Master.useitem(id) || {}).api_name || "";
 		},
 		
@@ -842,6 +842,10 @@ Provides access to data on built-in JSON files
 				interceptorsType2Ids: d.interceptorsType2Ids,
 				jetAircraftType2Ids: d.jetAircraftType2Ids,
 				landBaseReconnType2Ids: d.landBaseReconnType2Ids,
+				// these are not aircraft though
+				aswDepthChargeIds: d.aswDepthChargeIds,
+				aswDepthChargeProjectorIds: d.aswDepthChargeProjectorIds,
+				aswArmorPenetrationIds: d.aswArmorPenetrationIds,
 			};
 			// clean keys with invalid value to avoid being overwritten
 			Object.keys(vo).filter(k => !Array.isArray(vo[k])).forEach(k => {

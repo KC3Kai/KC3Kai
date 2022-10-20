@@ -6841,6 +6841,85 @@
 					},
 				],
 			},
+			// Type 3 Shell Kai Ni
+			"483": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Kongou Class +1 fp, +1 aa
+					"6": [
+						{
+							single: { "houg": 1, "tyku": 1 },
+						},
+						{
+							minStars: 6,
+							single: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Kongou K2 totally +3 fp, +3 aa
+						ids: [149],
+						single: { "houg": 2, "tyku": 2 },
+					},
+					{
+						// Kongou K2C totally +4 fp, +4 aa, +1 ev
+						ids: [591],
+						single: { "houg": 3, "tyku": 3, "houk": 1 },
+					},
+					{
+						// Hiei K2 totally +2 fp, +2 aa
+						ids: [150],
+						single: { "houg": 1, "tyku": 1 },
+					},
+					{
+						// Hiei K2C totally +3 fp, +3 aa, +2 ev
+						ids: [592],
+						single: { "houg": 2, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Haruna K2 totally +2 fp, +3 aa, +2 ev
+						ids: [151],
+						single: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Kirishima K2 totally +3 fp, +3 aa
+						ids: [152],
+						single: { "houg": 2, "tyku": 2 },
+					},
+					{
+						// Yamato-class K2+
+						ids: [911, 916, 546],
+						single: { "houg": 2, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Yamato-class K2+
+						ids: [911, 916, 546],
+						minStars: 8,
+						single: { "houm": 1 },
+					},
+					{
+						// Ise-class K2
+						ids: [553, 554],
+						single: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
+					{
+						// Nagato K2, Fusou-class K2
+						ids: [541, 411, 412],
+						single: { "houg": 1, "tyku": 2 },
+					},
+					{
+						// Mutsu K2
+						ids: [573],
+						single: { "houg": 2, "tyku": 2, "houk": 1 },
+					},
+				],
+			},
 			// 20-tube 7inch UP Rocket Launchers
 			"301": {
 				count: 0,

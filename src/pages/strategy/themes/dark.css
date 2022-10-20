@@ -643,6 +643,10 @@ button, input, select, textarea {
 .ship_list .ship_item .ship_equip span {
 	color:#999999;
 }
+.ship_list .ship_item .ship_equip span.sub {
+	color:#fff;
+	background:rgba(0,0,0,0.5);
+}
 .ship_list .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555;
 }
@@ -2600,4 +2604,18 @@ button, input, select, textarea {
 }
 .tab_gunfits .testitem.testingActive {
 	background: #1f9a00;
+}
+
+/* JUKEBOX
+--------------------------------*/
+.tab_jukebox .music-container .music-types .type:hover,
+.tab_jukebox .music-container .music-types .type.active {
+	background-color: rgba(255, 255, 255, 0.8);
+	color: #333;
+}
+
+.tab_jukebox .music-container .music-list .track:hover,
+.tab_jukebox .music-container .music-list .track.active {
+	background-color: rgba(255, 255, 255, 0.8);
+	color: #333;
 }

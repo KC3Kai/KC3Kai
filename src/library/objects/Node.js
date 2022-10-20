@@ -1246,9 +1246,12 @@ Used by SortieManager
 					console.log("Event items get", resultEventItems);
 					(resultEventItems || []).forEach(function(eventItem){
 						switch(eventItem.api_type){
-							case 1: // Item
-								if(eventItem.api_id.inside(1,4)) {
-									KC3SortieManager.materialGain[eventItem.api_id+3] += eventItem.api_value;
+							case 1: // Materials/Resources
+								if(eventItem.api_id.inside(1, 4)) {
+									KC3SortieManager.materialGain[eventItem.api_id + 3] += eventItem.api_value;
+								}
+								if(eventItem.api_id.inside(31, 34)) {
+									KC3SortieManager.materialGain[eventItem.api_id - 31] += eventItem.api_value;
 								}
 							break;
 							case 2: // Ship
@@ -1256,12 +1259,17 @@ Used by SortieManager
 							break;
 							case 3: // Equip
 							break;
+							case 5: // Furniture
+							break;
 							default:
 								console.info("Unknown item type", eventItem);/*RemoveLogging:skip*/
 							break;
 						}
 					});
 				}).call(this, resultData.api_get_eventitem);
+			}
+			if(typeof resultData.api_select_reward_dict !== "undefined"){
+				console.log("Event items selectable", resultData.api_select_reward_dict);
 			}
 			
 			ConfigManager.load();
@@ -1589,7 +1597,7 @@ Used by SortieManager
 						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 && thisNode.playerCombined ? 1 : thisNode.fleetSent-1];
 						fireShipPos = thisNode.playerCombined ? fireShipPos % 6 : fireShipPos;
 						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
-						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
+						aaciTips += (!!aaciTips ? "\n" : "") + (shipName || "");
 						var aaciType = AntiAir.AACITable[fire.api_kind];
 						if(!!aaciType){
 							aaciTips += "\n[{0}] +{1} (x{2})"
@@ -1966,8 +1974,10 @@ Used by SortieManager
 		const template = $('<table><tr><th class="type">&nbsp;</th><th>Friendly&nbsp;</th><th>Abyssal</th></tr>' +
 			'<tr class="contact_row"><td>Contact</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
 			'<tr class="airbattle_row"><td>Result</td><td colspan="2" class="airbattle"></td></tr>' +
-			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' + 
-			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr></table>'
+			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' +
+			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr>' +
+			'<tr class="aaci"><td>AACI</td><td class="kind"></td><td class="info"></td></tr>' +
+			'</table>'
 		);
 		const stage3Template = $('<table class="stage3"><tr><td colspan="18">Stage3</td></tr>' +
 			'<tr class="ally_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
@@ -2014,9 +2024,19 @@ Used by SortieManager
 			if(stage2){
 				$(".ally_bomber", table).text(stage2.api_f_count + (stage2.api_f_lostcount > 0 ? " -" + stage2.api_f_lostcount : ""));
 				$(".enemy_bomber", table).text(stage2.api_e_count + (stage2.api_e_lostcount > 0 ? " -" + stage2.api_e_lostcount : ""));
+				if(stage2.api_air_fire){
+					const airfire = stage2.api_air_fire;
+					$(".aaci .kind", table).text("[{0}]".format(airfire.api_kind));
+					$(".aaci .info", table).text("#{0} [{1}]".format(
+						airfire.api_idx + 1, airfire.api_use_items.join(",")
+					));
+				} else {
+					$(".aaci", table).hide();
+				}
 			} else {
 				$(".ally_bomber", table).text("---");
 				$(".enemy_bomber", table).text("---");
+				$(".aaci", table).hide();
 			}
 			const fillAirstrikeData = (stage3Api, table, className, enemyIds) => {
 				// planeFrom[0] = ally fleet plane(s) engaged. it's always null for LBAS and support fleet

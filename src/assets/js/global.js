@@ -287,6 +287,24 @@ Object.swapMapKeyValue = function(map, isNumericKey){
 };
 
 /**
+ * Legacy polyfill for `Object.values`, supported since Chromium m66
+ * @see https://github.com/es-shims/Object.values
+ */
+if (!Object.values) {
+	Object.values = function(obj) {
+		var result = [];
+		if(typeof obj == "object"){
+			for(var key in obj){
+				if(obj.hasOwnProperty(key) && obj.propertyIsEnumerable(key)){
+					result.push(obj[key]);
+				}
+			}
+		}
+		return result;
+	};
+}
+
+/**
  * Legacy polyfill for `Object.entries`, supported since Chromium m54
  * No exception will be thrown
  * @see https://github.com/es-shims/Object.entries
@@ -785,6 +803,27 @@ Object.defineProperty(Array.prototype, "joinIfNeeded", {
 	}
 });
 
+/**
+ * Polyfill for `Array.prototype.flat`, supported since Chromium m69
+ * FlattenIntoArray too complex to fit in this module. Reduce implementation see also BP module .flatten method.
+ * @see https://github.com/es-shims/es-abstract/blob/main/2021/FlattenIntoArray.js
+ * @see https://github.com/es-shims/Array.prototype.flat
+ */
+/*
+if (!Array.prototype.flat) {
+	Object.defineProperty(Array.prototype, "flat", {
+		enumerable: false,
+		value: function flat(depth) {
+			var thisArray = this, resultArray = [];
+			var sourceLen = thisArray.length || 0;
+			var depthNum = depth || 1;
+			FlattenIntoArray(A, O, sourceLen, 0, depthNum);
+			return resultArray;
+		}
+	});
+}
+*/
+
 /*******************************\
 |*** Date                       |
 \*******************************/
@@ -1046,8 +1085,13 @@ Storage.prototype.setObject = function(key, value) {
 };
 
 Storage.prototype.getObject = function(key) {
-	return JSON.parse(this.getItem(key));
+	try {
+		return JSON.parse(this.getItem(key));
+	} catch(e) {
+		return null;
+	}
 };
+
 /**
  * https://stackoverflow.com/questions/3027142/calculating-usage-of-localstorage-space
  * DOMException (code 22, name: QuotaExceededError) will be thrown on

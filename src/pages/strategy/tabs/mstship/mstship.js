@@ -61,6 +61,23 @@
 		---------------------------------*/
 		reload :function(){
 			ConfigManager.load();
+			if(!ConfigManager.sr_dexorder) {
+				this.sortedMasterShips = this.mergedMasterShips;
+			} else {
+				this.sortedMasterShips = Object.keys(this.mergedMasterShips).map(k => this.mergedMasterShips[k]).sort((a, b) => {
+					const mstIda = a.api_id, mstIdb = b.api_id;
+					let sortNoa = a.api_sortno, sortNob = b.api_sortno;
+					if(KC3Master.isRegularShip(mstIda) && KC3Master.isRegularShip(mstIdb)) {
+						// Order remodels not in their own pages to follow base remodel,
+						// Souya's remodels in her own pages, although kc3_ values are incorrect.
+						const modela = a.kc3_model, modelb = b.kc3_model;
+						if(sortNoa > 1300) sortNoa = this.mergedMasterShips[a.kc3_bship].api_sortno;
+						if(sortNob > 1300) sortNob = this.mergedMasterShips[b.kc3_bship].api_sortno;
+						return sortNoa - sortNob || modela - modelb || mstIda - mstIdb;
+					}
+					return mstIda - mstIdb;
+				});
+			}
 		},
 		
 		/* EXECUTE
@@ -97,21 +114,23 @@
 			};
 
 			// List all ships
-			$.each(this.mergedMasterShips, function(index, shipData){
+			$.each(this.sortedMasterShips, function(index, shipData){
 				if(!shipData) { return true; }
 				const shipBox = $(".tab_mstship .factory .shipRecord").clone()
 					.appendTo(".tab_mstship .shipRecords");
 				const id = shipData.api_id;
+				const isRegularShip = KC3Master.isRegularShip(id);
 				shipBox.attr("data-id", id);
 				shipBox.data("bs", shipData.kc3_bship);
 				$("img", shipBox).attr("src", KC3Meta.shipIcon(0))
 					.attr("data-src", KC3Master.isAbyssalShip(id) ? KC3Meta.abyssIcon(id) : KC3Meta.shipIcon(id));
 				const shipName = KC3Master.isAbyssalShip(id) ?
 					KC3Meta.abyssShipName(id) : KC3Meta.shipName(shipData.api_name);
-				$(".shipName", shipBox).text(`[${id}] ${shipName}`)
+				const dispId = ConfigManager.sr_dexorder && isRegularShip ? shipData.api_sortno : id;
+				$(".shipName", shipBox).text(`[${dispId}] ${shipName}`)
 					.attr("title", shipName);
 				
-				if(!!ConfigManager.sr_dexmark && KC3Master.isRegularShip(id)) {
+				if(!!ConfigManager.sr_dexmark && isRegularShip) {
 					const isOwned = PictureBook.isEverOwnedShip(id);
 					shipBox.toggleClass("unlocked", isOwned);
 					shipBox.toggleClass("norecord", !isOwned);
@@ -337,7 +356,7 @@
 		},
 
 		showShip :function(ship_id, switchDamagedGraph, switchCgView, switchAllGraphs){
-			ship_id = Number(ship_id || "405");
+			ship_id = Number(ship_id || (ConfigManager.sr_dexorder ? "80" : "405"));
 			const self = this,
 				shipData = this.mergedMasterShips[ship_id],
 				saltState = function(){
@@ -448,10 +467,10 @@
 					5026, 5027, 5256, 5269, 5275, 5276, 5277, 5278, 5279, 5280,
 					5281, 5282, 5283, 5284, 5285, 5286, 5287, 5288, 5289, 5290,
 					5291, 5292, 5293, 5294, 5295, 5296, 5297, 5298, 5299, 5300,
-					5301, 5302, 5303, 5304, 5305, 5306, 5357,
+					5301, 5302, 5303, 5304, 5305, 5306, 5357, 5667, 5668, 5669,
 				].includes(ship_id);
 				// No card but has damaged image
-				const isSpButHasTaiha = [5269, 5357].includes(ship_id);
+				const isSpButHasTaiha = [5256, 5269, 5357].includes(ship_id);
 				const availableTypes = KC3Master.isSeasonalShip(ship_id) ?
 					isSpecificAlbumTypes ? isSpButHasTaiha ? [
 						'character_full', 'character_full_dmg',

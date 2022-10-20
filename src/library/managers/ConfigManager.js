@@ -213,9 +213,11 @@ Retrieves when needed to apply on components
 				sr_show_non_battle     : true,
 				sr_show_new_shipstate  : true,
 				sr_show_yasen_shipstate: false,
+				sr_auto_width          : false,
 				sr_custom_css          : "",
 				sr_locktag_max         : 0,
 				sr_dexmark             : true,
+				sr_dexorder            : false,
 
 				idbSaveSortie          : true,
 				idbSaveExcludeMaps     : [],

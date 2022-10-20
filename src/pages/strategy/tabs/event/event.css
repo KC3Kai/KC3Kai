@@ -928,6 +928,9 @@
 .tab_event .sortie_list .node_airtext .node_loss {
 	color:#f00;
 }
+.tab_event .sortie_list .node_airtext .aaci_loss {
+	text-shadow:0 0 4px #fe0;
+}
 /* Difficulty marker */
 .tab_event .sortie_list .sortie_box.sortie_ranks:after {
 	content: attr(data-diff);

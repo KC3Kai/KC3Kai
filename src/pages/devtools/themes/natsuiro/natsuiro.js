@@ -1489,7 +1489,8 @@
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
 				PlayerManager.consumables.sardine ? 93 :
 				PlayerManager.consumables.setsubunBeans ? 90 :
-				PlayerManager.consumables.hishimochi ? 62 : 56;
+				PlayerManager.consumables.hishimochi ? 62 :
+				PlayerManager.consumables.pumpkin ? 96 : 56;
 			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId, 1));

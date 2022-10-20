@@ -1286,6 +1286,7 @@
 											$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
 									});
 								});
+								$("span.node_BAL",nodeBox).toggleClass("aaci_loss", !!thisNode.antiAirFire && thisNode.antiAirFire.length > 0);
 								$(".node_planes", nodeBox).attr("title", thisNode.buildAirBattleLossMessage());
 							}
 							//console.debug(`${thisNode.sortie} ${thisNode.letter}`, thisNode);
