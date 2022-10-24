@@ -11,6 +11,7 @@ Listens to network history and triggers callback if game events happen
 		hasOverlay: false,
 		isNextBlockerArmed: false,
 		isNextBlockerNetworkFallback: false,
+		isNextBlockerLarger: false,
 		lastUrl: "",
 		eventTypes : {
 			GameStart: [],
@@ -444,7 +445,7 @@ Listens to network history and triggers callback if game events happen
 		signals to game tab that next button blocking overlay needs to be shown
 		triggered either by network request to results or SE network request
 		-------------------------------------------------------*/
-		triggerNextBlock: function(effectiveTaihaFlag, bySE = false) {
+		triggerNextBlock: function({ effectiveTaihaFlag, isDameconDecision } = {}, bySE = false) {
 			if(typeof effectiveTaihaFlag === "boolean") {
 				/* For every time it checks HP predictions.
 				 * If any ship predicted to be in Taiha, it arms locker in game page preventing player from advancing into next node.
@@ -453,6 +454,8 @@ Listens to network history and triggers callback if game events happen
 				 */
 				this.isNextBlockerArmed = effectiveTaihaFlag;
 			}
+			// Cache flagship damecon use decision screen flag, enlarge blocker area to block 2 large buttons on the left if true.
+			if(typeof isDameconDecision === "boolean") { this.isNextBlockerLarger = isDameconDecision; }
 			let toShowNextBlock = false;
 			if (ConfigManager.next_blocker > 0 && this.isNextBlockerArmed) {
 				if (bySE) {
@@ -479,7 +482,8 @@ Listens to network history and triggers callback if game events happen
 				this.hasOverlay = true;
 				(new RMsg("service", "showNextBlock", {
 					tabId: chrome.devtools.inspectedWindow.tabId,
-					fairy: bySE
+					fairy: bySE,
+					large: this.isNextBlockerLarger,
 				})).execute();
 			}
 		},
@@ -487,6 +491,7 @@ Listens to network history and triggers callback if game events happen
 		/* Disarms Next Node Blocker */
 		disarmNextBlock :function(){
 			this.isNextBlockerArmed = false;
+			this.isNextBlockerLarger = false;
 			this.setBattleEvent(false);
 			this.clearOverlays();
 		},

@@ -56,6 +56,12 @@
 	pointer-events: all;
 	background-position: center;
 }
+.overlay_next .nextButtonBlock.enlarged {
+	left: 210px;
+	width: 410px;
+	top: 100px;
+	height: 570px;
+}
 .kc3 .overlay_next .nextButtonBlock.bg-grey:after {
 	content: " ";
 	position: absolute;

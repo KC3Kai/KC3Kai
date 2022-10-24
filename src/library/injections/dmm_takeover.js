@@ -566,10 +566,12 @@
 					$(".nextButtonBlock").css("background", `url(${furl}) no-repeat`);
 					$(".nextButtonBlock").css("background-position", "center");
 					$(".nextButtonBlock").addClass("bg-grey");
+					$(".nextButtonBlock").toggleClass("enlarged", !!request.large);
 					$(".overlay_next").show();
 				} else {
 					$(".nextButtonBlock").css("background", "");
 					$(".nextButtonBlock").removeClass("bg-grey");
+					$(".nextButtonBlock").toggleClass("enlarged", !!request.large);
 					$(".overlay_next").show();
 				}
 				response({success: true});
