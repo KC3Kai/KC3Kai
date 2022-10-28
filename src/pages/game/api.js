@@ -120,6 +120,7 @@ $(document).on("ready", function(){
 		$("body").css("background-size", ConfigManager.api_bg_size);
 		$("body").css("background-position", ConfigManager.api_bg_position);
 		$("body").css("background-repeat", "no-repeat");
+		$("body").css("background-attachment", "fixed");
 	}
 	
 	if(ConfigManager.api_subtitles){

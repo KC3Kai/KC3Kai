@@ -221,6 +221,7 @@
 				$("body").css("background-size", config.api_bg_size);
 				$("body").css("background-position", config.api_bg_position);
 				$("body").css("background-repeat", "no-repeat");
+				$("body").css("background-attachment", "fixed");
 				autoFitWindowHeight();
 				$(window).resize(autoFitWindowHeight);
 			}
