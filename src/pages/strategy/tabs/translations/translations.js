@@ -157,6 +157,9 @@
 				terms: {
 					callback: self.showDict
 				},
+				terms_extend: {
+					callback: self.showDict
+				},
 				items: {
 					callback: self.showDict
 				},

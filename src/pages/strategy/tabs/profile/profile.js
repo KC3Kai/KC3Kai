@@ -1078,15 +1078,15 @@
 			const bc = this.battleCounts;
 			if(Object.keys(bc).length < 2) return;
 			$(".day_battle_total_24 .rank_content").html(
-				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.lastDayBattle, bc.lastDaySortie)
 			);
 			$(".day_battle_total_48 .rank_content").html(
-				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.last2DayBattle, bc.last2DaySortie)
 			);
 			$(".month_battle_total .rank_content").html(
-				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.lastMonthBattle, bc.lastMonthSortie)
 			);
 			$(".month_battle_average .rank_content").text(bc.lastMonthAvgBattle);

@@ -426,7 +426,7 @@ button, input, select, textarea {
 .page_help_btn:hover {
 	background:#000000;
 }
-.page_help_btn span {
+.page_help_btn > span:nth-child(1) {
 	width:14px;
 	height:14px;
 	line-height:14px;
