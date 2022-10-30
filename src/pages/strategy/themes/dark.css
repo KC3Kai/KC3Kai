@@ -105,7 +105,7 @@ button, input, select, textarea {
 	overflow:hidden;
 	white-space:nowrap;
 }
-.ui-tooltip-content .ship_tooltip .ship_level span.i18n {
+.ui-tooltip-content .ship_tooltip .ship_level span.l10n {
 	color:#3ec0bf;
 }
 .ui-tooltip-content .ship_tooltip .ship_level span.value.married {
@@ -128,7 +128,7 @@ button, input, select, textarea {
 	overflow:hidden;
 	white-space:nowrap;
 }
-.ui-tooltip-content .ship_tooltip .ship_exp_next span.i18n {
+.ui-tooltip-content .ship_tooltip .ship_exp_next span.l10n {
 	color:#7ca99f;
 }
 .ui-tooltip-content .ship_tooltip .ship_morale {
@@ -966,7 +966,7 @@ button, input, select, textarea {
 	background:#b1b101;
 	color:#000;
 }
-.tab_ships .ship_item .ship_lv span.i18n {
+.tab_ships .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_ships .ship_item .ship_lv span.value.married {
@@ -1131,7 +1131,7 @@ button, input, select, textarea {
 .tab_docking .ship_item:hover .ship_field {
 	background:#000000;
 }
-.tab_docking .ship_item .ship_lv span.i18n {
+.tab_docking .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_docking .ship_item .ship_lv span.value.married {
@@ -1872,7 +1872,7 @@ button, input, select, textarea {
 .tab_shipquests .ship_item:hover .ship_field {
 	background:#000000;
 }
-.tab_shipquests .ship_item .ship_lv span.i18n {
+.tab_shipquests .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_shipquests .ship_item .ship_lv span.value.married {
@@ -2539,7 +2539,7 @@ button, input, select, textarea {
 .tab_blueprints .ship_item:hover .ship_field {
 	background:#000000;
 }
-.tab_blueprints .ship_item .ship_lv span.i18n {
+.tab_blueprints .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_blueprints .ship_item .ship_lv span.value.married {

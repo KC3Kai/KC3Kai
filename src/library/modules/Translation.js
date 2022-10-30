@@ -56,11 +56,13 @@
 			// Interchange element contents with translations
 			$(".i18n").each(function(){
 				$(this).html( KC3Meta.term( $(this).text() ) );
-				$(this).css("visibility", "visible");
+				// To avoid dupelicatedly applying 
+				$(this).removeClass("i18n").addClass("l10n");
 			});
 			// Update title attribute with translations
 			$(".i18n_title").each(function(){
 				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
+				$(this).removeClass("i18n_title").addClass("l10n_title");
 			});
 		},
 
@@ -95,10 +97,11 @@
 			// Apply HTML language code, here needs ISO 639-1 abbr code
 			$("html").attr("lang", this.getLocale(ConfigManager.language));
 			
-			// Apply custom CSS for language specified in terms
+			// Apply custom CSS for language specifics in terms, lower priority
 			var cssInTerm = KC3Meta.term("LangCustomCSS");
-			if(!!cssInTerm && cssInTerm !== "LangCustomCSS"){
+			if(!!cssInTerm && cssInTerm !== "LangCustomCSS" && !$("#langCustomCSS").length){
 				var customCSS = document.createElement("style");
+				customCSS.id = "langCustomCSS";
 				customCSS.type = "text/css";
 				customCSS.innerHTML = cssInTerm;
 				$("head").append(customCSS);
