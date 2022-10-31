@@ -1,169 +1,160 @@
 <div class="page_title">
-	Ship List
+	<span class="i18n">ShipListPageTitle</span>
 	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Where is the heartlock, fuel, ammo, speed or marry column?</div>
-	<div class="help_a">They are currently merged or hidden by the limitation of page width.</div>
-	<div class="help_q">Where are the ship types of XBB and AP?</div>
-	<div class="help_a">They are not used by our shipgirls (AP taken by abyssal).</div>
-	<div class="help_q">Can I filter or sort by current HP or repair time of my shipgirls?</div>
-	<div class="help_a">Not here, go to <strong>Docking</strong> page instead.</div>
-	<div class="help_q">What is "Sort by Multiple Keys"?</div>
-	<div class="help_a"><p>Normally you can sort ships by levels, or sort by ship types so that ships of same type are grouped together. But this doesn't give you the ability to say &quot;sort ship by their types, and under the same type, sort them by level.&quot;.</p>
-	  <p>And sorting by multiple keys solves this problem: you can first sort ships by type to group them, then use ship level as the second key to sort under each type.</p>
-	  <p>To use this function, select one column header you want to sort as usual. Once the first key is chosen, you can click &quot;Start&quot; to enable multiple key sorting, under this mode, each column header you click <strong>accumulates to</strong>, instead of replacing previous sorting method.</p>
-	  <p>Suppose you want to sort ships by type, under the same type you want to sort by level, and if there are ships that have same type and level, you want to further sort them by morale. You can first click &quot;Type&quot; header, then toggle &quot;Start&quot; button to enable multiple key sorting. and then click &quot;Level&quot; and &quot;:)&quot; (Morale) in order. When toggling on &quot;Start&quot; button, you will see an extra line under it to indicate current sorting method. By performing actions above, you'll see &quot;Type &gt; Level &gt; Morale&quot;, which does what you want. If you want some keys to be sorted in reversed order, just click on that header again.</p>
-	</div>
-	<div class="help_q">What does the color of ship name mean?</div>
-	<div class="help_a">Background color indicates which fleet she belongs to:
-		<span style="font-weight:bold;" class="ship_onfleet-color1">Fleet #1</span> or <span style="font-weight:bold;" class="ship_onfleet-color2">Fleet #2</span> or
-		<span style="font-weight:bold;" class="ship_onfleet-color3">Fleet #3</span> or <span style="font-weight:bold;" class="ship_onfleet-color4">Fleet #4</span>.<br/>
-		<span style="color:#E49F9C;font-weight:bold;">Pink font</span> means Level >= 100 (Married).
-	</div>
-
+	<div class="help_q i18n">ShipListHelp1Q</div>
+	<div class="help_a i18n">ShipListHelp1A</div>
+	<div class="help_q i18n">ShipListHelp2Q</div>
+	<div class="help_a i18n">ShipListHelp2A</div>
+	<div class="help_q i18n">ShipListHelp3Q</div>
+	<div class="help_a i18n">ShipListHelp3A</div>
+	<div class="help_q i18n">ShipListHelp4Q</div>
+	<div class="help_a i18n">ShipListHelp4A</div>
+	<div class="help_q i18n">ShipListHelp5Q</div>
+	<div class="help_a i18n">ShipListHelp5A</div>
 	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Ships">Learn more</a>
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Ships" class="i18n">LearnMore</a>
 	</div>
 </div>
 
 <!-- TOGGLE FILTERS -->
 <div class="page_panel filters">
-	<div class="filters_label hover">Options &amp; Filters:<div class="fold_button glyph_minus"></div></div>
+	<div class="filters_label hover"><span class="i18n">ShipListOptionsFiltersLabel</span><div class="fold_button glyph_minus"></div></div>
 
 	<div class="massSelect">
 		<dl>
-			<dt class="massLabel">Equip Stats</dt>
-			<dd class="hover equip_yes">Yes</dd>
-			<dd class="hover equip_no">No</dd>
+			<dt class="massLabel i18n">ShipListEquipStatsLabel</dt>
+			<dd class="hover equip_yes i18n">ShipListFilterYes</dd>
+			<dd class="hover equip_no i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Remodel</dt>
-			<dd class="hover remodel_all">All</dd>
-			<dd class="hover remodel_max">Max</dd>
-			<dd class="hover remodel_nomax">Non-Max</dd>
+			<dt class="massLabel i18n">ShipListRemodelLabel</dt>
+			<dd class="hover remodel_all i18n">ShipListFilterAll</dd>
+			<dd class="hover remodel_max i18n">ShipListRemodelMax</dd>
+			<dd class="hover remodel_nomax i18n">ShipListRemodelNonMax</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Modernization</dt>
-			<dd class="hover modernization_all">All</dd>
-			<dd class="hover modernization_max">Max</dd>
-			<dd class="hover modernization_nomax">Non-</dd>
-			<dd class="hover modernization_extra">Ex</dd>
+			<dt class="massLabel i18n">ShipListModernLabel</dt>
+			<dd class="hover modernization_all i18n">ShipListFilterAll</dd>
+			<dd class="hover modernization_max i18n">ShipListModernMax</dd>
+			<dd class="hover modernization_nomax i18n">ShipListModernNonMax</dd>
+			<dd class="hover modernization_extra i18n">ShipListModernExtra</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Married</dt>
-			<dd class="hover marriage_in">All</dd>
-			<dd class="hover marriage_on">Yes</dd>
-			<dd class="hover marriage_ex">No</dd>
+			<dt class="massLabel i18n">ShipListMarriedLabel</dt>
+			<dd class="hover marriage_in i18n">ShipListFilterAll</dd>
+			<dd class="hover marriage_on i18n">ShipListFilterYes</dd>
+			<dd class="hover marriage_ex i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">In-Fleet</dt>
-			<dd class="hover fleet_all">All</dd>
-			<dd class="hover fleet_yes">Yes</dd>
-			<dd class="hover fleet_no">No</dd>
+			<dt class="massLabel i18n">ShipListInFleetLabel</dt>
+			<dd class="hover fleet_all i18n">ShipListFilterAll</dd>
+			<dd class="hover fleet_yes i18n">ShipListFilterYes</dd>
+			<dd class="hover fleet_no i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Heartlock</dt>
-			<dd class="hover heartlock_all">All</dd>
-			<dd class="hover heartlock_yes">Yes</dd>
-			<dd class="hover heartlock_no">No</dd>
+			<dt class="massLabel i18n">ShipListHeartlockLabel</dt>
+			<dd class="hover heartlock_all i18n">ShipListFilterAll</dd>
+			<dd class="hover heartlock_yes i18n">ShipListFilterYes</dd>
+			<dd class="hover heartlock_no i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Speed</dt>
-			<dd class="hover speed_all">All</dd>
-			<dd class="hover speed_slow">Slow</dd>
-			<dd class="hover speed_fast">Fast</dd>
-			<dd class="hover speed_faster">F+</dd>
-			<dd class="hover speed_fastest">F++</dd>
+			<dt class="massLabel i18n">ShipListSpeedLabel</dt>
+			<dd class="hover speed_all i18n">ShipListFilterAll</dd>
+			<dd class="hover speed_slow i18n">ShipListSpeedSlow</dd>
+			<dd class="hover speed_fast i18n">ShipListSpeedFast</dd>
+			<dd class="hover speed_faster i18n">ShipListSpeedFaster</dd>
+			<dd class="hover speed_fastest i18n">ShipListSpeedFastest</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Range</dt>
-			<dd class="hover range_all">All</dd>
-			<dd class="hover range_short">S</dd>
-			<dd class="hover range_medium">M</dd>
-			<dd class="hover range_long">L</dd>
-			<dd class="hover range_verylong">VL</dd>
+			<dt class="massLabel i18n">ShipListRangeLabel</dt>
+			<dd class="hover range_all i18n">ShipListFilterAll</dd>
+			<dd class="hover range_short i18n">ShipListRangeShort</dd>
+			<dd class="hover range_medium i18n">ShipListRangeMedium</dd>
+			<dd class="hover range_long i18n">ShipListRangeLong</dd>
+			<dd class="hover range_verylong i18n">ShipListRangeVeryLong</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Sparkled</dt>
-			<dd class="hover sparkle_all">All</dd>
-			<dd class="hover sparkle_yes">Yes</dd>
-			<dd class="hover sparkle_no">No</dd>
+			<dt class="massLabel i18n">ShipListSparkledLabel</dt>
+			<dd class="hover sparkle_all i18n">ShipListFilterAll</dd>
+			<dd class="hover sparkle_yes i18n">ShipListFilterYes</dd>
+			<dd class="hover sparkle_no i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Opening</dt>
-			<dd class="hover opatk_all">All</dd>
-			<dd class="hover opatk_yes1">ASW</dd>
-			<dd class="hover opatk_yes2">Torp</dd>
-			<dd class="hover opatk_both">Both</dd>
+			<dt class="massLabel i18n">ShipListOpeningLabel</dt>
+			<dd class="hover opatk_all i18n">ShipListFilterAll</dd>
+			<dd class="hover opatk_yes1 i18n">ShipListOpeningAsw</dd>
+			<dd class="hover opatk_yes2 i18n">ShipListOpeningTorp</dd>
+			<dd class="hover opatk_both i18n">ShipListOpeningBoth</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Ex-Slot Opened</dt>
-			<dd class="hover exslot_all">All</dd>
-			<dd class="hover exslot_yes">Yes</dd>
-			<dd class="hover exslot_no">No</dd>
+			<dt class="massLabel i18n">ShipListExslotOpenLabel</dt>
+			<dd class="hover exslot_all i18n">ShipListFilterAll</dd>
+			<dd class="hover exslot_yes i18n">ShipListFilterYes</dd>
+			<dd class="hover exslot_no i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Duplicated</dt>
-			<dd class="hover dupe_all">All</dd>
-			<dd class="hover dupe_yes">Yes</dd>
-			<dd class="hover dupe_no">No</dd>
+			<dt class="massLabel i18n">ShipListDuplicatedLabel</dt>
+			<dd class="hover dupe_all i18n">ShipListFilterAll</dd>
+			<dd class="hover dupe_yes i18n">ShipListFilterYes</dd>
+			<dd class="hover dupe_no i18n">ShipListFilterNo</dd>
 		</dl>
 		<dl class="halfwide">
-			<dt class="massLabel">Equipable</dt>
-			<dd class="hover daihatsu_all">All</dd>
-			<dd class="hover daihatsu_dlc" type2id="24">DLC</dd>
-			<dd class="hover daihatsu_dlconly" title="DLC only, not Tank">-o</dd>
-			<dd class="hover daihatsu_tank" type2id="46">Tank</dd>
-			<dd class="hover daihatsu_tankonly" title="Tank only, not DLC">-o</dd>
-			<dd class="hover daihatsu_both">Both</dd>
-			<dd class="hover daihatsu_either">Either</dd>
-			<dd class="hover daihatsu_neither">Neither</dd>
+			<dt class="massLabel i18n">ShipListEquipableLabel</dt>
+			<dd class="hover daihatsu_all i18n">ShipListFilterAll</dd>
+			<dd class="hover daihatsu_dlc i18n" type2id="24">ShipListEquipDaihatsu</dd>
+			<dd class="hover daihatsu_dlconly i18n_title" title="ShipListEquipDaihatsuTip">-o</dd>
+			<dd class="hover daihatsu_tank i18n" type2id="46">ShipListEquipTank</dd>
+			<dd class="hover daihatsu_tankonly i18n_title" title="ShipListEquipTankTip">-o</dd>
+			<dd class="hover daihatsu_both i18n">ShipListEquipBoth</dd>
+			<dd class="hover daihatsu_either i18n">ShipListEquipEither</dd>
+			<dd class="hover daihatsu_neither i18n">ShipListEquipNeither</dd>
 		</dl>
 		<dl class="halfwide">
-			<dt class="massLabel">Specific</dt>
-			<dd class="hover spgear_all">All</dd>
-			<dd class="hover spgear_fcf" type2id="34">FCF</dd>
-			<dd class="hover spgear_spf" type2id="45">SPF</dd>
-			<dd class="hover spgear_spb" type2id="11">SPB</dd>
-			<dd class="hover spgear_lfb" type2id="41">LFB</dd>
-			<dd class="hover spgear_bulge" type3id="23">Bulge</dd>
-			<dd class="hover spgear_minisub" type2id="22">Sub</dd>
-			<dd class="hover spgear_exgun" gearid="66">Ex-8cm</dd>
+			<dt class="massLabel i18n">ShipListSpecificLabel</dt>
+			<dd class="hover spgear_all i18n">ShipListFilterAll</dd>
+			<dd class="hover spgear_fcf i18n" type2id="34">ShipListEquipFcf</dd>
+			<dd class="hover spgear_spf i18n" type2id="45">ShipListEquipSpf</dd>
+			<dd class="hover spgear_spb i18n" type2id="11">ShipListEquipSpb</dd>
+			<dd class="hover spgear_lfb i18n" type2id="41">ShipListEquipLfb</dd>
+			<dd class="hover spgear_bulge i18n" type3id="23">ShipListEquipBulge</dd>
+			<dd class="hover spgear_minisub i18n" type2id="22">ShipListEquipSub</dd>
+			<dd class="hover spgear_exgun i18n" gearid="66">ShipListEquipEx8cm</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Pages</dt>
-			<dd class="hover pages_yes">Show</dd>
-			<dd class="hover pages_no">Hide</dd>
+			<dt class="massLabel i18n">ShipListPagesLabel</dt>
+			<dd class="hover pages_yes i18n">ShipListShow</dd>
+			<dd class="hover pages_no i18n">ShipListHide</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">List Scrollbar</dt>
-			<dd class="hover scroll_fix">Fixed</dd>
-			<dd class="hover scroll_none">None</dd>
+			<dt class="massLabel i18n">ShipListScrollbarLabel</dt>
+			<dd class="hover scroll_fix i18n">ShipListFixed</dd>
+			<dd class="hover scroll_none i18n">ShipListNormal</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Lock Icons</dt>
-			<dd class="hover lock_none">Hide</dd>
-			<dd class="hover lock_yes">Locked</dd>
-			<dd class="hover lock_no">Unlock</dd>
+			<dt class="massLabel i18n">ShipListLockIconsLabel</dt>
+			<dd class="hover lock_none i18n">ShipListHide</dd>
+			<dd class="hover lock_yes i18n">ShipListLocked</dd>
+			<dd class="hover lock_no i18n">ShipListUnlock</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Ship Type</dt>
-			<dd class="hover all">All</dd>
-			<dd class="hover none">None</dd>
-			<dd class="hover invert">Invert</dd>
+			<dt class="massLabel i18n">ShipListShipTypeLabel</dt>
+			<dd class="hover all i18n">ShipListSTypeAll</dd>
+			<dd class="hover none i18n">ShipListSTypeNone</dd>
+			<dd class="hover invert i18n">ShipListSTypeInvert</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Ship Class</dt>
-			<dd class="hover class_yes">Show</dd>
-			<dd class="hover class_no">Hide</dd>
+			<dt class="massLabel i18n">ShipListShipClassLabel</dt>
+			<dd class="hover class_yes i18n">ShipListShow</dd>
+			<dd class="hover class_no i18n">ShipListHide</dd>
 		</dl>
 		<dl>
-			<dt class="massLabel">Ship Tooltip</dt>
-			<dd class="hover tooltip_yes">Show</dd>
-			<dd class="hover tooltip_no">Hide</dd>
+			<dt class="massLabel i18n">ShipListTooltipLabel</dt>
+			<dd class="hover tooltip_yes i18n">ShipListShow</dd>
+			<dd class="hover tooltip_no i18n">ShipListHide</dd>
 		</dl>
 	</div>
 	<div class="clear"></div>
@@ -173,13 +164,13 @@
 	<div class="clear"></div>
 
 	<div class="input_filter show_name_filter">
-		<div class="name_label">Show by Name:</div>
+		<div class="name_label i18n">ShipListShowByNameLabel</div>
 		<input type="text" class="name_criteria" />
 	</div>
 	<div class="input_filter ship_level_filter">
-		<div class="level_start_label">Level:</div>
+		<div class="level_start_label i18n">ShipListLevelFilterLabel</div>
 		<input type="text" class="level_start_input" />
-		<div class="level_end_label">to</div>
+		<div class="level_end_label i18n">ShipListLevelUpToLabel</div>
 		<input type="text" class="level_end_input" />
 	</div>
 	<div class="input_filter control_buttons">
@@ -187,46 +178,47 @@
 	</div>
 	<div class="clear"></div>
 
-	<div class="fleet_stats_label hover">Statistics of filtered ships:
+	<div class="fleet_stats_label hover">
+		<span class="i18n">ShipListStatisticsLabel</span>
 		<span class="sum_ships"></span><div class="fold_button glyph_plus"></div></div>
 	<div class="fleet_stats">
 		<div class="fleet_stat">
-			<div class="stats_label">Σ Level:</div>
+			<div class="stats_label i18n">ShipListSumLevelLabel</div>
 			<div class="stats_value"><span class="sum_level">?</span></div>
 		</div>
 		<div class="fleet_stat">
-			<div class="stats_label">Average Level:</div>
+			<div class="stats_label i18n">ShipListAverageLevelLabel</div>
 			<div class="stats_value"><span class="average_level">?</span></div>
 		</div>
 		<div class="fleet_stat">
-			<div class="stats_label">Σ Experience:</div>
+			<div class="stats_label i18n">ShipListSumExpLabel</div>
 			<div class="stats_value"><span class="sum_exp">?</span></div>
 		</div>
 		<div class="fleet_stat">
-			<div class="stats_label">Average Expr:</div>
+			<div class="stats_label i18n">ShipListAverageExpLabel</div>
 			<div class="stats_value"><span class="average_exp">?</span></div>
 		</div>
 	</div>
 
 	<div class="ship_count">
-		<div class="count_label">Listed ships:</div>
+		<div class="count_label i18n">ShipListListedShipsLabel</div>
 		<div class="count_value"><span class="listed">?</span> /<span class="total">?</span></div>
 	</div>
 	<div class="ship_export">
-		<div class="export_label">Export to:</div>
+		<div class="export_label i18n">ShipListExportToLabel</div>
 		<div class="export_to_kanmusu_list hover">kanmusu_list</div>
 		<div class="export_to_kancepts hover">kancepts</div>
 	</div>
 	<div class="control_buttons">
-		<div class="reset_default hover">Reset All</div>
+		<div class="reset_default hover i18n">ShipListResetAll</div>
 	</div>
 	<div class="clear"></div>
 	
 	<div class="advanced_sorter">
-		<div class="adv_label">Sort by Multiple Keys:</div>
+		<div class="adv_label i18n">ShipListSortKeysLabel</div>
 		<div class="adv_sorter hover">
 			<div class="filter_box"><div class="filter_check"></div></div>
-			<div class="filter_name">Start</div>
+			<div class="filter_name i18n">ShipListSortStart</div>
 		</div>
 		<div class="sorter_desc"></div>
 		<div class="clear"></div>
@@ -240,14 +232,14 @@
 	<!-- HEADER LABELS AND ICONS -->
 	<div class="ship_header">
 		<div class="ship_item">
-			<div class="ship_field hover ship_id" data-type="id">ID</div>
+			<div class="ship_field hover ship_id i18n" data-type="id">ShipListGridTitleId</div>
 			<!--<div class="ship_field ship_lock"></div>-->
 			<div class="ship_field ship_img"></div>
-			<div class="ship_field hover ship_name" data-type="name">Name</div>
-			<div class="ship_field hover ship_sortno i18n_title" data-type="sortno" title="Ship class order in-game">C.</div>
-			<div class="ship_field hover ship_type" data-type="type">Type</div>
-			<div class="ship_field hover ship_lv" data-type="lv">Level</div>
-			<div class="ship_field hover ship_morale i18n_title" title="ShipMorale" data-type="morale">:)</div>
+			<div class="ship_field hover ship_name i18n" data-type="name">ShipListGridTitleName</div>
+			<div class="ship_field hover ship_sortno i18n i18n_title" data-type="sortno" title="ShipListGridTitleSClassTip">ShipListGridTitleSClassShort</div>
+			<div class="ship_field hover ship_type i18n" data-type="type">ShipListGridTitleSType</div>
+			<div class="ship_field hover ship_lv i18n" data-type="lv">ShipListGridTitleLevel</div>
+			<div class="ship_field hover ship_morale i18n_title" title="ShipMorale" data-type="morale"><img src="/assets/img/client/morale/3.png" /></div>
 
 			<div class="ship_field hover ship_stat ship_hp i18n_title" title="ShipHp" data-type="hp"><img src="/assets/img/stats/hp.png" /></div>
 			<div class="ship_field hover ship_stat ship_stat_mod ship_fp i18n_title" title="ShipFire" data-type="fp"><img src="/assets/img/stats/fp.png" /></div>
@@ -267,7 +259,7 @@
 			<div class="ship_field hover ship_stat ship_rn i18n_title hidden" title="ShipLength" data-type="rn"><img src="/assets/img/stats/rn.png" /></div>
 			<div class="ship_field hover ship_stat ship_ac i18n_title hidden" title="ShipCarry" data-type="ac"><img src="/assets/img/stats/ac.png" /></div>
 
-			<div class="ship_field ship_equip">Equipment</div>
+			<div class="ship_field ship_equip i18n">ShipListGridTitleEquipment</div>
 			<div class="clear"></div>
 		</div>
 	</div>

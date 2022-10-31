@@ -325,6 +325,7 @@
 	min-width:20px;
 	text-align:center;
 }
+.tab_ships .ship_header .ship_morale img,
 .tab_ships .ship_header .ship_stat img {
 	max-width:19px;
 	height:16px;
