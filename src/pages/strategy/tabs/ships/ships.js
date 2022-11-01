@@ -1175,7 +1175,7 @@
 				   function(x) { return x.carry; });
 			define("ctype", KC3Meta.term("ShipListGridTitleSClass"),
 				   function(x) { return x.ctype; });
-			define("bid", "Master-ID",
+			define("bid", KC3Meta.term("ShipListGridTitleMasterId"),
 				   function(x) { return x.bid; });
 			define("sortno", KC3Meta.term("ShipListGridTitleSClassTip"),
 				   function(x) { return x.sortno; });

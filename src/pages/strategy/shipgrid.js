@@ -62,7 +62,7 @@
 				for(let shipIdx in filteredShipList) {
 					if(shipIdx % 10 === 0) {
 						$("<div />").addClass("ingame_page").text(
-							"Page {0}".format(Math.ceil((1 + Number(shipIdx)) / 10))
+							KC3Meta.term("ShipListPageNoPattern").format(Math.ceil((1 + Number(shipIdx)) / 10))
 						).appendTo(this.shipListDiv);
 					}
 					const ship = filteredShipList[shipIdx];
@@ -172,14 +172,14 @@
 
 		defaultSorterDefinitions() {
 			const define = this.defineSimpleSorter.bind(this);
-			define("id", "Id", ship => ship.id);
-			define("masterId", "ShipId", ship => ship.masterId);
-			define("name", "Name", ship => ship.name);
-			define("type", "Type", ship => ship.stype);
-			define("ctype", "Class", ship => ship.ctype);
-			define("lv", "Level", ship => -ship.level);
-			define("sortno", "SortOrder", ship => ship.sortId);
-			define("morale", "Morale", ship => -ship.morale);
+			define("id", KC3Meta.term("ShipListGridTitleId"), ship => ship.id);
+			define("masterId", KC3Meta.term("ShipListGridTitleMasterId"), ship => ship.masterId);
+			define("name", KC3Meta.term("ShipListGridTitleName"), ship => ship.name);
+			define("type", KC3Meta.term("ShipListGridTitleSType"), ship => ship.stype);
+			define("ctype", KC3Meta.term("ShipListGridTitleSClass"), ship => ship.ctype);
+			define("lv", KC3Meta.term("ShipListGridTitleLevel"), ship => -ship.level);
+			define("sortno", KC3Meta.term("ShipListGridTitleSortNo"), ship => ship.sortId);
+			define("morale", KC3Meta.term("ShipMorale"), ship => -ship.morale);
 		}
 
 		defineSimpleFilter(filterName, optionValues, defaultIndex, testShipFunc) {
