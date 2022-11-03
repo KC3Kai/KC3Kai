@@ -2,7 +2,8 @@
 	width:680px;
 }
 .tab_experience .legend_item {
-	width:150px;
+	min-width:150px;
+	max-width:170px;
 	height:20px;
 	float:left;
 }
@@ -36,7 +37,7 @@
 	margin:2px;
 }
 .tab_experience .legend_label {
-	width:70px;
+	width:auto;
 	float:left;
 }
 
