@@ -9,6 +9,8 @@
 	width:24px;
 	height:24px;
 	float:left;
+	white-space:nowrap;
+	overflow:hidden;
 	margin:0px 2px 5px 2px;
 }
 .tab_gears .item_types .item_type.text {
@@ -307,6 +309,7 @@
 	font-size:12px;
 	text-align:center;
 	float:left;
+	white-space:nowrap;
 }
 .tab_gears .itemSorters .sortControl img {
 	margin-top:-3px;

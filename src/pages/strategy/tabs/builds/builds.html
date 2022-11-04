@@ -1,23 +1,18 @@
 <div class="page_title">
-	Construction History
+	<span class="i18n">ConstructionPageTitle</span>
 	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Are values of filters saved?</div>
-	<div class="help_a">Not persisted for now, but will be kept until next browser reloading.</div>
-
-	<div class="help_q">Can I search resource values for a range?</div>
-	<div class="help_a">You can optionally add <code>&gt;</code>, <code>&lt;</code>, <code>#</code> or <code>=</code> before the value,
-		which means <code>greater than or equal to</code>, <code>less than or equal to</code>, <code>not equal to</code> or <code>equal to</code> (default logic).</div>
-
-	<div class="help_q">Can I do filtering by ship type?</div>
-	<div class="help_a">Nope, it's troublesome via only one select control matching by IDs.
-		Feel free to enhance it if you would like to.</div>
-
+	<div class="help_q i18n">ConstructionHelp1Q</div>
+	<div class="help_a i18n">ConstructionHelp1A</div>
+	<div class="help_q i18n">ConstructionHelp2Q</div>
+	<div class="help_a i18n">ConstructionHelp2A</div>
+	<div class="help_q i18n">ConstructionHelp3Q</div>
+	<div class="help_a i18n">ConstructionHelp3A</div>
 	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Construction">Learn more</a>
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Construction" class="i18n">LearnMore</a>
 	</div>
 </div>
 
@@ -39,15 +34,14 @@
 	<select class="build_name build_result">
 		<option value="0"></option>
 	</select>
-	<div class="btn btn-primary reset_all">Reset</div>
+	<div class="btn btn-primary reset_all i18n">ArsenalHistoryResetButton</div>
 	<div class="clear"></div>
 	<div class="page_items">
 		<select class="item_per_page">
 			<option value="50">50</option><option value="30">30</option>
 			<option value="25">25</option><option value="20">20</option>
 			<option value="15">15</option><option value="10">10</option>
-		</select><span>items per page, total pages: <span class="total_page">0</span>,
-		listed items: <span class="filtered_items">0</span> /<span class="total_items">0</span> (<span class="percent">0</span>%)</span>
+		</select><span class="i18n">ArsenalHistoryPagingInfoLineLabel</span>
 	</div>
 </div>
 

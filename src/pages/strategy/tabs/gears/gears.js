@@ -615,9 +615,8 @@
 							'html' : `<img src="/assets/img/client/eqstar.png"><span>+${i}</span>`
 						}).append( $('<small/>').html(
 							'x' + (ThisSlotitem.arranged[i].heldCount + ThisSlotitem.arranged[i].extraCount)
-							+ ( ThisSlotitem.arranged[i].heldCount
-								? ' (' +ThisSlotitem.arranged[i].heldCount+ ' Equipped, ' +ThisSlotitem.arranged[i].extraCount + ' Equippable)'
-								: ''
+							+ (!ThisSlotitem.arranged[i].heldCount ? '' :
+								KC3Meta.term("EquipmentListEquipLabel").format(ThisSlotitem.arranged[i].heldCount, ThisSlotitem.arranged[i].extraCount)
 							)
 						) )
 					).append( $('<dd/>').append(showEqList(i,ThisSlotitem.arranged)) )
@@ -625,12 +624,13 @@
 				}
 
 				$('<dl/>').append( $('<dd/>').html(
-					'Total ' + (ThisSlotitem.held.length+ThisSlotitem.extras.length)
-					+ ( ThisSlotitem.held.length
-						? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
-						: ''
+					KC3Meta.term("EquipmentListTotalLabel").format(
+						(ThisSlotitem.held.length + ThisSlotitem.extras.length),
+						(!ThisSlotitem.held.length ? '' :
+							KC3Meta.term("EquipmentListEquipLabel").format(ThisSlotitem.held.length, ThisSlotitem.extras.length)
+						)
 					)
-				) ).appendTo( ItemElem.children('.holders') );
+				)).appendTo( ItemElem.children('.holders') );
 			});
 
 		},
