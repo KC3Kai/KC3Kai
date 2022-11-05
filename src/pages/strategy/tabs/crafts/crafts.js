@@ -150,6 +150,10 @@
 							$(".pagination").twbsPagination({
 								totalPages: numPages,
 								visiblePages: 9,
+								first: KC3Meta.term("TwbsPaginationFirstLabel"),
+								prev: KC3Meta.term("TwbsPaginationPrevLabel"),
+								next: KC3Meta.term("TwbsPaginationNextLabel"),
+								last: KC3Meta.term("TwbsPaginationLastLabel"),
 								onPageClick: (event, page) => {
 									this.showPage(page);
 								}
