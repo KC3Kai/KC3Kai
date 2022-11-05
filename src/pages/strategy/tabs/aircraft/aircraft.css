@@ -193,6 +193,7 @@
 	margin:0px 2px 0px 0px;
 	/*background:#ccf;*/
 	font-size:12px;
+	white-space:nowrap;
 }
 .tab_aircraft .slotitem .holder_level {
 	width:34px;

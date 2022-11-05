@@ -187,7 +187,6 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
-			
 			$(".tab_aircraft .item_stat img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
 			});
@@ -201,6 +200,8 @@
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 			
+			$(".factory .instance .instance_name input")
+				.attr("placeholder", KC3Meta.term("AircraftListSquadNamePlaceholder"));
 			$(".tab_aircraft .item_list").on("change", ".instance_name input", function(e){
 				self.squadNames["p"+$(this).attr("data-gearId")] = $(this).val();
 				localStorage.planes = JSON.stringify(self.squadNames);
@@ -232,7 +233,8 @@
 						KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 					});
 				$(".english", ItemElem).text(ThisSlotitem.english);
-				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
+				$(".japanese", ItemElem).text(ThisSlotitem.japanese)
+					.toggle(ConfigManager.language != "jp");
 				if(KC3GearManager.interceptorsType3Ids.includes(Number(type_id))){
 					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccAntiBomber"));
 					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ib"));
@@ -293,13 +295,13 @@
 						const holder = ThisPlane.MyHolder();
 						if(holder instanceof KC3LandBase){
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
-							$(".holder_name", PlaneBox).text("LBAS World "+holder.map);
+							$(".holder_name", PlaneBox).html(KC3Meta.term("AircraftListLbasWorld").format(holder.map));
 							$(".holder_level", PlaneBox).text("#"+holder.rid);
 							ThisCapacity = (holder.planes
 								.find(s => s.api_slotid === rosterId) || {}).api_max_count || "?";
 						} else if(holder === "LbasMoving"){
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
-							$(".holder_name", PlaneBox).text("LBAS Moving");
+							$(".holder_name", PlaneBox).html(KC3Meta.term("AircraftListLbasMoving"));
 							$(".holder_level", PlaneBox).text("");
 							ThisCapacity = "";
 						} else {

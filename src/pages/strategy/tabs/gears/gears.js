@@ -536,7 +536,7 @@
 						holderDiv = $('<div/>', {
 							'class' : 'holder',
 							'html'  : `<img src="${KC3Meta.itemIcon(33)}" />
-								<font>LBAS World ${item.holder.map}</font>
+								<font>${KC3Meta.term("EquipmentListLbasWorld").format(item.holder.map)}</font>
 								<span>#${item.holder.rid}</span>
 								<span>x${item.count}</span>`
 						});
@@ -591,7 +591,8 @@
 					.attr("alt", ThisSlotitem.id)
 					.on("click", gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
-				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
+				$(".japanese", ItemElem).text(ThisSlotitem.japanese)
+					.toggle(ConfigManager.language != "jp");
 
 				["sun", "mon", "tue", "wed", "thu", "fri", "sat"].forEach((day, dayIndex) => {
 					if (self.upgrades[day] && Array.isArray(self.upgrades[day][ThisSlotitem.id])) {

@@ -276,6 +276,7 @@
 	display:	block;
 	float:		left;
 	padding:	0 0 0 6px;
+	white-space:nowrap;
 }
 .tab_gears .slotitem .holders dl dd .holder span{
 	width:		40px;
@@ -283,6 +284,7 @@
 	display:	block;
 	float:		left;
 	padding:	0 0 0 2px;
+	white-space:nowrap;
 }
 .tab_gears .slotitem .holders dl dd .holder span + span{
 	width:		16px;
