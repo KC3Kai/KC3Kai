@@ -171,7 +171,7 @@
 			}).catch(error => {
 				console.error("Retrieving equipment crafting history failed", error);
 				hideAndResetInfo();
-				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
+				$(".build_list").html(KC3Meta.term("ArsenalHistoryDbFailure"));
 			});
 		},
 
@@ -215,7 +215,7 @@
 						$(".build_result", buildBox).text(itemName).attr("title", itemName);
 					}else{
 						$(".build_ricon img", buildBox).attr("src", "/assets/img/client/penguin.png");
-						$(".build_result", buildBox).text( "Penguin" );
+						$(".build_result", buildBox).html(KC3Meta.term("DevelopmentFailureOption"));
 					}
 
 					$(".build_time", buildBox).text(
@@ -227,7 +227,7 @@
 				}
 			}).catch(error => {
 				console.error("Retrieving equipment crafting history failed", error);
-				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
+				$(".build_list").html(KC3Meta.term("ArsenalHistoryDbFailure"));
 			});
 		}
 

@@ -176,7 +176,7 @@
 			}).catch(error => {
 				console.error("Retrieving large ship building history failed", error);
 				hideAndResetInfo();
-				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
+				$(".build_list").html(KC3Meta.term("ArsenalHistoryDbFailure"));
 			});
 		},
 
@@ -223,7 +223,7 @@
 				}
 			}).catch(error => {
 				console.error("Retrieving large ship building history failed", error);
-				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
+				$(".build_list").html(KC3Meta.term("ArsenalHistoryDbFailure"));
 			});
 		}
 
