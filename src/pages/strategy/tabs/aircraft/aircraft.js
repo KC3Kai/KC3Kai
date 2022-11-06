@@ -200,8 +200,6 @@
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 			
-			$(".factory .instance .instance_name input")
-				.attr("placeholder", KC3Meta.term("AircraftListSquadNamePlaceholder"));
 			$(".tab_aircraft .item_list").on("change", ".instance_name input", function(e){
 				self.squadNames["p"+$(this).attr("data-gearId")] = $(this).val();
 				localStorage.planes = JSON.stringify(self.squadNames);

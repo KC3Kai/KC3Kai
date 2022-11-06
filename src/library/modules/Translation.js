@@ -64,6 +64,11 @@
 				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
 				$(this).removeClass("i18n_title").addClass("l10n_title");
 			});
+			// Update placeholder attribute with translations
+			$(".i18n_placeholder").each(function(){
+				$(this).attr("placeholder", KC3Meta.term( $(this).attr("placeholder") ) );
+				$(this).removeClass("i18n_placeholder").addClass("l10n_placeholder");
+			});
 		},
 
 		/* APPLY HTML
