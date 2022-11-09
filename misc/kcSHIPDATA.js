@@ -20,7 +20,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [501],
+		EQUIPS: [1501],
 		fuel: 0,
 		ammo: 0
 	},
@@ -41,7 +41,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [502],
+		EQUIPS: [1502],
 		fuel: 0,
 		ammo: 0
 	},
@@ -62,7 +62,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [502, 513],
+		EQUIPS: [1502, 1513],
 		fuel: 0,
 		ammo: 0
 	},
@@ -83,7 +83,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [502, 513],
+		EQUIPS: [1502, 1513],
 		fuel: 0,
 		ammo: 0
 	},
@@ -104,7 +104,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [1, 1],
-		EQUIPS: [504, 525],
+		EQUIPS: [1504, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -125,7 +125,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [1, 1],
-		EQUIPS: [506, 525],
+		EQUIPS: [1506, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -146,7 +146,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [2, 2, 2],
-		EQUIPS: [506, 513, 525],
+		EQUIPS: [1506, 1513, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -168,7 +168,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 30,
 		SLOTS: [2, 2, 2],
-		EQUIPS: [504, 513, 513],
+		EQUIPS: [1504, 1513, 1513],
 		fuel: 0,
 		ammo: 0
 	},
@@ -189,7 +189,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [3, 3, 3],
-		EQUIPS: [505, 513, 525],
+		EQUIPS: [1505, 1513, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -211,7 +211,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 5,
 		SLOTS: [18, 18, 18],
-		EQUIPS: [519, 523, 516],
+		EQUIPS: [1519, 1523, 1516],
 		fuel: 0,
 		ammo: 0
 	},
@@ -232,7 +232,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [3, 3, 3],
-		EQUIPS: [509, 512, 525],
+		EQUIPS: [1509, 1512, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -253,7 +253,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 10,
 		SLOTS: [27, 27, 27],
-		EQUIPS: [519, 523, 516],
+		EQUIPS: [1519, 1523, 1516],
 		fuel: 0,
 		ammo: 0
 	},
@@ -297,7 +297,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [501, 514],
+		EQUIPS: [1501, 1514],
 		fuel: 0,
 		ammo: 0
 	},
@@ -318,7 +318,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [502, 514],
+		EQUIPS: [1502, 1514],
 		fuel: 0,
 		ammo: 0
 	},
@@ -339,7 +339,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [502, 515],
+		EQUIPS: [1502, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -360,7 +360,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0],
-		EQUIPS: [502, 515],
+		EQUIPS: [1502, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -381,7 +381,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [1, 1],
-		EQUIPS: [504, 525],
+		EQUIPS: [1504, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -402,7 +402,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [1, 1],
-		EQUIPS: [506, 525],
+		EQUIPS: [1506, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -423,7 +423,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [2, 2, 2],
-		EQUIPS: [506, 513, 525],
+		EQUIPS: [1506, 1513, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -445,7 +445,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 40,
 		SLOTS: [2, 2, 2],
-		EQUIPS: [506, 514, 514],
+		EQUIPS: [1506, 1514, 1514],
 		fuel: 0,
 		ammo: 0
 	},
@@ -466,7 +466,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [3, 3, 3, 3],
-		EQUIPS: [505, 506, 525, 525],
+		EQUIPS: [1505, 1506, 1525, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -488,7 +488,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 5,
 		SLOTS: [24, 24, 24],
-		EQUIPS: [520, 523, 516],
+		EQUIPS: [1520, 1523, 1516],
 		fuel: 0,
 		ammo: 0
 	},
@@ -509,7 +509,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [3, 3, 3, 3],
-		EQUIPS: [509, 509, 512, 528],
+		EQUIPS: [1509, 1509, 1512, 1528],
 		fuel: 0,
 		ammo: 0
 	},
@@ -530,7 +530,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 10,
 		SLOTS: [30, 30, 30],
-		EQUIPS: [520, 517, 524],
+		EQUIPS: [1520, 1517, 1524],
 		fuel: 0,
 		ammo: 0
 	},
@@ -551,7 +551,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 503, 503],
+		EQUIPS: [1501, 1503, 1503],
 		fuel: 0,
 		ammo: 0
 	},
@@ -572,7 +572,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [4, 4, 4, 4],
-		EQUIPS: [505, 506, 515, 525],
+		EQUIPS: [1505, 1506, 1515, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -594,7 +594,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 10,
 		SLOTS: [32, 32, 32],
-		EQUIPS: [520, 517, 524],
+		EQUIPS: [1520, 1517, 1524],
 		fuel: 0,
 		ammo: 0
 	},
@@ -615,7 +615,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [5, 5, 5, 5],
-		EQUIPS: [509, 509, 525, 528],
+		EQUIPS: [1509, 1509, 1525, 1528],
 		fuel: 0,
 		ammo: 0
 	},
@@ -637,7 +637,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 20,
 		SLOTS: [0, 0],
-		EQUIPS: [513, 513],
+		EQUIPS: [1513, 1513],
 		fuel: 0,
 		ammo: 0
 	},
@@ -659,7 +659,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 25,
 		SLOTS: [0, 0],
-		EQUIPS: [514, 514],
+		EQUIPS: [1514, 1514],
 		fuel: 0,
 		ammo: 0
 	},
@@ -681,7 +681,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 30,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515, 513, 513],
+		EQUIPS: [1515, 1513, 1513],
 		fuel: 0,
 		ammo: 0
 	},
@@ -703,7 +703,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 30,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515, 514, 514],
+		EQUIPS: [1515, 1514, 1514],
 		fuel: 0,
 		ammo: 0
 	},
@@ -725,7 +725,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 35,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515, 515, 513],
+		EQUIPS: [1515, 1515, 1513],
 		fuel: 0,
 		ammo: 0
 	},
@@ -747,7 +747,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 40,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515, 515, 514],
+		EQUIPS: [1515, 1515, 1514],
 		fuel: 0,
 		ammo: 0
 	},
@@ -768,7 +768,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [30, 30, 30],
-		EQUIPS: [505, 520, 517],
+		EQUIPS: [1505, 1520, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -789,7 +789,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [30, 30, 30],
-		EQUIPS: [505, 520, 517],
+		EQUIPS: [1505, 1520, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -810,7 +810,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [30, 30, 30],
-		EQUIPS: [505, 520, 517],
+		EQUIPS: [1505, 1520, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -831,7 +831,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [60, 60, 60],
-		EQUIPS: [536, 520, 524],
+		EQUIPS: [1536, 1520, 1524],
 		fuel: 0,
 		ammo: 0
 	},
@@ -852,7 +852,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [60, 60, 60],
-		EQUIPS: [536, 520, 524],
+		EQUIPS: [1536, 1520, 1524],
 		fuel: 0,
 		ammo: 0
 	},
@@ -873,7 +873,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [4, 4, 4, 4],
-		EQUIPS: [508, 508, 512, 525],
+		EQUIPS: [1508, 1508, 1512, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -894,7 +894,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [4, 4, 4, 4],
-		EQUIPS: [509, 508, 512, 528],
+		EQUIPS: [1509, 1508, 1512, 1528],
 		fuel: 0,
 		ammo: 0
 	},
@@ -915,7 +915,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [4, 4, 4, 4],
-		EQUIPS: [509, 509, 525, 529],
+		EQUIPS: [1509, 1509, 1525, 1529],
 		fuel: 0,
 		ammo: 0
 	},
@@ -936,7 +936,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [80, 80, 0],
-		EQUIPS: [520, 524, 508],
+		EQUIPS: [1520, 1524, 1508],
 		fuel: 0,
 		ammo: 0
 	},
@@ -957,7 +957,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [96, 96, 0],
-		EQUIPS: [520, 517, 508],
+		EQUIPS: [1520, 1517, 1508],
 		fuel: 0,
 		ammo: 0
 	},
@@ -979,7 +979,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0, 50, 0],
-		EQUIPS: [509, 505, 520, 531],
+		EQUIPS: [1509, 1505, 1520, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1001,7 +1001,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 70, 70, 0],
-		EQUIPS: [509, 520, 524, 0],
+		EQUIPS: [1509, 1520, 1524, 10],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1023,7 +1023,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0, 90, 0],
-		EQUIPS: [509, 509, 520, 531],
+		EQUIPS: [1509, 1509, 1520, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1045,7 +1045,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 35, 35],
-		EQUIPS: [505, 520, 524],
+		EQUIPS: [1505, 1520, 1524],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1067,7 +1067,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 35, 35],
-		EQUIPS: [505, 520, 517],
+		EQUIPS: [1505, 1520, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1089,7 +1089,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 35, 35],
-		EQUIPS: [505, 520, 517],
+		EQUIPS: [1505, 1520, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1111,7 +1111,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 15,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 515, 542],
+		EQUIPS: [1502, 1515, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1133,7 +1133,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 20,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 515, 542],
+		EQUIPS: [1502, 1515, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1155,7 +1155,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 25,
 		SLOTS: [2, 2, 2],
-		EQUIPS: [504, 542, 543],
+		EQUIPS: [1504, 1542, 1543],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1177,7 +1177,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 25,
 		SLOTS: [2, 2, 2, 2],
-		EQUIPS: [506, 525, 542, 543],
+		EQUIPS: [1506, 1525, 1542, 1543],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1199,7 +1199,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [98, 98, 98, 98],
-		EQUIPS: [520, 520, 524, 517],
+		EQUIPS: [1520, 1520, 1524, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1221,7 +1221,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [509, 509, 512, 529],
+		EQUIPS: [1509, 1509, 1512, 1529],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1242,7 +1242,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [506, 504, 504],
+		EQUIPS: [1506, 1504, 1504],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1264,7 +1264,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [1, 1, 1],
-		EQUIPS: [506, 515, 515],
+		EQUIPS: [1506, 1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1286,7 +1286,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 5,
 		SLOTS: [22, 22, 22, 22],
-		EQUIPS: [520, 524, 524, 517],
+		EQUIPS: [1520, 1524, 1524, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1308,7 +1308,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 140],
-		EQUIPS: [509, 512, 515, 546],
+		EQUIPS: [1509, 1512, 1515, 1546],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); }
@@ -1331,7 +1331,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 65,
 		SLOTS: [0, 0, 0, 180],
-		EQUIPS: [509, 512, 541, 546],
+		EQUIPS: [1509, 1512, 1541, 1546],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); }
@@ -1354,7 +1354,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 30,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [531, 545, 542],
+		EQUIPS: [1531, 1545, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1376,7 +1376,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 10,
 		SLOTS: [36, 36, 36, 36],
-		EQUIPS: [521, 524, 518, 518],
+		EQUIPS: [1521, 1524, 1518, 1518],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1398,7 +1398,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 65,
 		SLOTS: [4, 4, 4, 4],
-		EQUIPS: [505, 505, 515, 526],
+		EQUIPS: [1505, 1505, 1515, 1526],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1419,7 +1419,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [5, 5, 5, 5],
-		EQUIPS: [509, 509, 529, 526],
+		EQUIPS: [1509, 1509, 1529, 1526],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1441,7 +1441,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0],
-		EQUIPS: [515, 503],
+		EQUIPS: [1515, 1503],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1463,7 +1463,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 60,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515, 515, 503],
+		EQUIPS: [1515, 1515, 1503],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1485,7 +1485,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 70,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515, 515, 515],
+		EQUIPS: [1515, 1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1507,7 +1507,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [80, 80, 80, 80],
-		EQUIPS: [521, 524, 517, 517],
+		EQUIPS: [1521, 1524, 1517, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1529,7 +1529,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [90, 90, 90, 90],
-		EQUIPS: [521, 524, 518, 518],
+		EQUIPS: [1521, 1524, 1518, 1518],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1551,7 +1551,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 45,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 545, 542],
+		EQUIPS: [1502, 1545, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1573,7 +1573,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 55,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 545, 542],
+		EQUIPS: [1502, 1545, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1595,7 +1595,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 65,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 515, 542],
+		EQUIPS: [1502, 1515, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1617,7 +1617,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 75,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 515, 542],
+		EQUIPS: [1502, 1515, 1542],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1640,7 +1640,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [32, 32, 27, 5],
-		EQUIPS: [547, 548, 549, 549],
+		EQUIPS: [1547, 1548, 1549, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1662,7 +1662,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 72, 64, 36],
-		EQUIPS: [504, 521, 548, 517],
+		EQUIPS: [1504, 1521, 1548, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1684,7 +1684,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 72, 80, 40],
-		EQUIPS: [504, 547, 548, 549],
+		EQUIPS: [1504, 1547, 1548, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1706,7 +1706,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 64, 58, 58, 0],
-		EQUIPS: [505, 547, 548, 549, 0],
+		EQUIPS: [1505, 1547, 1548, 1549, 0],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1728,7 +1728,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 84, 96, 0, 0],
-		EQUIPS: [505, 547, 548, 532, 0],
+		EQUIPS: [1505, 1547, 1548, 1532, 0],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1751,7 +1751,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [48, 48, 48, 0],
-		EQUIPS: [547, 548, 549, 532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1774,7 +1774,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [60, 52, 56, 0],
-		EQUIPS: [547, 548, 549, 532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1796,7 +1796,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 72, 64, 36],
-		EQUIPS: [504, 521, 548, 517],
+		EQUIPS: [1504, 1521, 1548, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1818,7 +1818,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 55,
 		SLOTS: [0, 72, 72, 40],
-		EQUIPS: [504, 547, 548, 549],
+		EQUIPS: [1504, 1547, 1548, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1840,7 +1840,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 60,
 		SLOTS: [0, 64, 48, 36],
-		EQUIPS: [504, 521, 548, 517],
+		EQUIPS: [1504, 1521, 1548, 1517],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1862,7 +1862,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 60,
 		SLOTS: [0, 64, 68, 40],
-		EQUIPS: [504, 547, 548, 549],
+		EQUIPS: [1504, 1547, 1548, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1885,7 +1885,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 3, 3],
-		EQUIPS: [550, 550, 545, 525],
+		EQUIPS: [1550, 1550, 1545, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1908,7 +1908,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 3, 3],
-		EQUIPS: [550, 550, 545, 525],
+		EQUIPS: [1550, 1550, 1545, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1930,7 +1930,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [505,505,515,525],
+		EQUIPS: [1505, 1505, 1515, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1952,7 +1952,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [505,505,515,525],
+		EQUIPS: [1505, 1505, 1515, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1974,7 +1974,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502,502,515],
+		EQUIPS: [1502, 1502, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -1996,7 +1996,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502,502,515],
+		EQUIPS: [1502, 1502, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2019,7 +2019,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [66, 60, 60, 0],
-		EQUIPS: [547,548,549,532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2042,7 +2042,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [66, 60, 60, 0],
-		EQUIPS: [547,548,549,532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2064,7 +2064,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [506,506,529,525],
+		EQUIPS: [1506, 1506, 1529, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2086,7 +2086,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [506,506,529,525],
+		EQUIPS: [1506, 1506, 1529, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2108,7 +2108,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [551,551,529,525],
+		EQUIPS: [1551, 1551, 1529, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2130,7 +2130,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [551, 551, 529, 525],
+		EQUIPS: [1551, 1551, 1529, 1525],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2152,7 +2152,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 40,
 		SLOTS: [0, 0, 90, 90],
-		EQUIPS: [551, 551, 547, 548],
+		EQUIPS: [1551, 1551, 1547, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2174,7 +2174,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 108, 108],
-		EQUIPS: [551, 551, 547, 548],
+		EQUIPS: [1551, 1551, 1547, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2196,7 +2196,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 60,
 		SLOTS: [0, 0, 108, 108],
-		EQUIPS: [551, 551, 547, 548],
+		EQUIPS: [1551, 1551, 1547, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2218,7 +2218,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 70,
 		SLOTS: [0, 0, 130, 130],
-		EQUIPS: [551, 551, 547, 548],
+		EQUIPS: [1551, 1551, 1547, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2240,7 +2240,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 30,
 		SLOTS: [0, 0, 0, 120],
-		EQUIPS: [536, 508, 508, 548],
+		EQUIPS: [1536, 1508, 1508, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2262,7 +2262,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 40,
 		SLOTS: [0, 0, 0, 140],
-		EQUIPS: [536, 508, 508, 548],
+		EQUIPS: [1536, 1508, 1508, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2284,7 +2284,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 160],
-		EQUIPS: [536, 551, 551, 548],
+		EQUIPS: [1536, 1551, 1551, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2306,7 +2306,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 180],
-		EQUIPS: [536, 551, 551, 548],
+		EQUIPS: [1536, 1551, 1551, 1548],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2328,7 +2328,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 180],
-		EQUIPS: [552, 552, 536, 549],
+		EQUIPS: [1552, 1552, 1536, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2351,7 +2351,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [32, 32, 27, 5],
-		EQUIPS: [556, 548, 558, 549],
+		EQUIPS: [1556, 1548, 1558, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2374,7 +2374,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [32, 32, 27, 5],
-		EQUIPS: [556, 557, 558, 558],
+		EQUIPS: [1556, 1557, 1558, 1558],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2397,7 +2397,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [36, 36, 36, 36],
-		EQUIPS: [547, 548, 549, 549],
+		EQUIPS: [1547, 1548, 1549, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2420,7 +2420,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [36, 36, 36, 36],
-		EQUIPS: [556, 548, 558, 549],
+		EQUIPS: [1556, 1548, 1558, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2443,7 +2443,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [36, 36, 36, 36],
-		EQUIPS: [556, 557, 558, 558],
+		EQUIPS: [1556, 1557, 1558, 1558],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2466,7 +2466,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [48, 48, 48, 0],
-		EQUIPS: [556, 557, 558, 532],
+		EQUIPS: [1556, 1557, 1558, 1532],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2489,7 +2489,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [60, 52, 56, 0],
-		EQUIPS: [556, 557, 558, 532],
+		EQUIPS: [1556, 1557, 1558, 1532],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2511,7 +2511,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 502, 559],
+		EQUIPS: [1502, 1502, 1559],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2533,7 +2533,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 502, 559],
+		EQUIPS: [1502, 1502, 1559],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2556,7 +2556,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 559, 544],
+		EQUIPS: [1502, 1559, 1544],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2579,7 +2579,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 80,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [502, 502, 559],
+		EQUIPS: [1502, 1502, 1559],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2601,7 +2601,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 32],
-		EQUIPS: [550, 550, 541, 554],
+		EQUIPS: [1550, 1550, 1541, 1554],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2623,7 +2623,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [550, 550, 541, 555],
+		EQUIPS: [1550, 1550, 1541, 1555],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2645,7 +2645,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 70,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [550, 550, 541, 555],
+		EQUIPS: [1550, 1550, 1541, 1555],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2668,7 +2668,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 531],
+		EQUIPS: [1553, 1553, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2691,7 +2691,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 531],
+		EQUIPS: [1553, 1553, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2714,7 +2714,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 80,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 531],
+		EQUIPS: [1553, 1553, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2736,7 +2736,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [98, 98, 98, 98],
-		EQUIPS: [556, 548, 558, 549],
+		EQUIPS: [1556, 1548, 1558, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2758,7 +2758,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [98, 98, 98, 98],
-		EQUIPS: [556, 557, 558, 549],
+		EQUIPS: [1556, 1557, 1558, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2780,7 +2780,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [98, 98, 98, 98],
-		EQUIPS: [556, 557, 558, 558],
+		EQUIPS: [1556, 1557, 1558, 1558],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2802,7 +2802,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [90, 90, 90, 90],
-		EQUIPS: [556, 557, 548, 549],
+		EQUIPS: [1556, 1557, 1548, 1549],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2824,7 +2824,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [90, 90, 90, 90],
-		EQUIPS: [556, 557, 548, 558],
+		EQUIPS: [1556, 1557, 1548, 1558],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2846,7 +2846,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [90, 90, 90, 90],
-		EQUIPS: [556, 557, 558, 558],
+		EQUIPS: [1556, 1557, 1558, 1558],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2870,7 +2870,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0],
-		EQUIPS: [515],
+		EQUIPS: [1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2894,7 +2894,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0,0],
-		EQUIPS: [515,515],
+		EQUIPS: [1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2918,7 +2918,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0,0],
-		EQUIPS: [515,515],
+		EQUIPS: [1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2942,7 +2942,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 80,
 		SLOTS: [0,0],
-		EQUIPS: [515,515],
+		EQUIPS: [1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2964,7 +2964,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 40,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 515, 560],
+		EQUIPS: [1511, 1511, 1515, 1560],
 		fuel: 0,
 		ammo: 0
 	},
@@ -2986,7 +2986,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 45,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 515, 560],
+		EQUIPS: [1511, 1511, 1515, 1560],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3008,7 +3008,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 515, 560],
+		EQUIPS: [1511, 1511, 1515, 1560],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3032,7 +3032,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 70,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [515,515,515],
+		EQUIPS: [1515, 1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3056,7 +3056,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 75,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [541,515,515],
+		EQUIPS: [1541, 1515, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3080,7 +3080,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [541,541,515],
+		EQUIPS: [1541, 1541, 1515],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3104,7 +3104,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [502,502,515,531],
+		EQUIPS: [1502, 1502, 1515, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3128,7 +3128,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [502,502,515,531],
+		EQUIPS: [1502, 1502, 1515, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3152,7 +3152,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [502,502,541,531],
+		EQUIPS: [1502, 1502, 1541, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3175,7 +3175,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [12, 12, 8, 4],
-		EQUIPS: [561,561,561,561],
+		EQUIPS: [1561, 1561, 1561, 1561],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3198,7 +3198,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [16, 16, 12, 4],
-		EQUIPS: [562,561,561,561],
+		EQUIPS: [1562, 1561, 1561, 1561],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3221,7 +3221,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [24, 24, 16, 8],
-		EQUIPS: [562,562,561,561],
+		EQUIPS: [1562, 1562, 1561, 1561],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3245,7 +3245,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 60,
 		SLOTS: [12, 12, 8, 4],
-		EQUIPS: [561, 561, 561, 561],
+		EQUIPS: [1561, 1561, 1561, 1561],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); },
@@ -3270,7 +3270,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 65,
 		SLOTS: [16, 16, 12, 4],
-		EQUIPS: [562, 561, 561, 561],
+		EQUIPS: [1562, 1561, 1561, 1561],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); },
@@ -3295,7 +3295,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 70,
 		SLOTS: [24, 24, 16, 8],
-		EQUIPS: [562, 562, 561, 561],
+		EQUIPS: [1562, 1562, 1561, 1561],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); },
@@ -3320,7 +3320,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 65,
 		SLOTS: [16, 16, 12, 4],
-		EQUIPS: [562, 561, 561, 561],
+		EQUIPS: [1562, 1561, 1561, 1561],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); },
@@ -3345,7 +3345,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 70,
 		SLOTS: [24, 24, 16, 8],
-		EQUIPS: [562, 562, 561, 561],
+		EQUIPS: [1562, 1562, 1561, 1561],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); },
@@ -3370,7 +3370,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 75,
 		SLOTS: [32, 32, 24, 8],
-		EQUIPS: [562, 562, 562, 561],
+		EQUIPS: [1562, 1562, 1562, 1561],
 		fuel: 0,
 		ammo: 0,
 		canTorp: function() { return (this.HP/this.maxHP > .5); },
@@ -3394,7 +3394,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 515, 564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3417,7 +3417,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 515, 564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3440,7 +3440,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 70,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 515, 564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3463,7 +3463,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 541, 564],
+		EQUIPS: [1563, 1563, 1541, 1564],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3486,7 +3486,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 60,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 541, 564],
+		EQUIPS: [1563, 1563, 1541, 1564],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3509,7 +3509,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 541, 564],
+		EQUIPS: [1563, 1563, 1541, 1564],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3533,7 +3533,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [565, 565, 539, 567],
+		EQUIPS: [1565, 1565, 1539, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3558,7 +3558,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [565, 540, 539, 567],
+		EQUIPS: [1565, 1540, 1539, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3583,7 +3583,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [565, 553, 539, 567],
+		EQUIPS: [1565, 1553, 1539, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3608,7 +3608,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [16, 12, 12, 8],
-		EQUIPS: [562, 561, 561, 566],
+		EQUIPS: [1562, 1561, 1561, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3632,7 +3632,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [20, 18, 18, 8],
-		EQUIPS: [562, 561, 566, 566],
+		EQUIPS: [1562, 1561, 1566, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3657,7 +3657,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [24, 24, 24, 24],
-		EQUIPS: [562, 562, 566, 566],
+		EQUIPS: [1562, 1562, 1566, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3681,7 +3681,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 32, 32],
-		EQUIPS: [565, 565, 566, 566],
+		EQUIPS: [1565, 1565, 1566, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3705,7 +3705,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [565, 565, 540, 567],
+		EQUIPS: [1565, 1565, 1540, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3728,7 +3728,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [501,501,541,531],
+		EQUIPS: [1501, 1501, 1541, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3751,7 +3751,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [501,501,541,531],
+		EQUIPS: [1501, 1501, 1541, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3774,7 +3774,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [501,501,541,531],
+		EQUIPS: [1501, 1501, 1541, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3797,7 +3797,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [502,502,515,531],
+		EQUIPS: [1502, 1502, 1515, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3820,7 +3820,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [502,502,515,531],
+		EQUIPS: [1502, 1502, 1515, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3843,7 +3843,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [502,502,541,531],
+		EQUIPS: [1502, 1502, 1541, 1531],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3868,7 +3868,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [24, 24, 24, 24],
-		EQUIPS: [561,561,556,566],
+		EQUIPS: [1561, 1561, 1556, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3893,7 +3893,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [30, 30, 30, 30],
-		EQUIPS: [562,561,556,566],
+		EQUIPS: [1562, 1561, 1556, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3918,7 +3918,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [36, 36, 36, 36],
-		EQUIPS: [562,562,556,566],
+		EQUIPS: [1562, 1562, 1556, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3943,7 +3943,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [24, 24, 24, 24],
-		EQUIPS: [562,561,556,566],
+		EQUIPS: [1562, 1561, 1556, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3968,7 +3968,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [30, 30, 30, 30],
-		EQUIPS: [562,562,556,566],
+		EQUIPS: [1562, 1562, 1556, 1566],
 		fuel: 0,
 		ammo: 0
 	},
@@ -3992,7 +3992,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [568,568,569,567],
+		EQUIPS: [1568, 1568, 1569, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4016,7 +4016,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [568,568,569,567],
+		EQUIPS: [1568, 1568, 1569, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4040,7 +4040,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [568,568,569,567],
+		EQUIPS: [1568, 1568, 1569, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4064,7 +4064,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [568,568,569,567],
+		EQUIPS: [1568, 1568, 1569, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4088,7 +4088,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [568,568,569,567],
+		EQUIPS: [1568, 1568, 1569, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4112,7 +4112,7 @@ var SHIPDATA_ = {
 		SPD: 0,
 		TACC: 50,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [568,568,569,567],
+		EQUIPS: [1568, 1568, 1569, 1567],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4136,7 +4136,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [502,502,541,559],
+		EQUIPS: [1502, 1502, 1541, 1559],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4160,7 +4160,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [502,502,541,559],
+		EQUIPS: [1502, 1502, 1541, 1559],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4184,7 +4184,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [502,502,541,559],
+		EQUIPS: [1502, 1502, 1541, 1559],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4204,7 +4204,7 @@ var SHIPDATA_ = {
 		LUK: 50,
 		TACC: 70,
 		SLOTS: [0,0,0],
-		EQUIPS: [570,515,0],
+		EQUIPS: [1570, 1515, 10],
 		RNG: 1,
 		SPD: 5,
 	},
@@ -4224,7 +4224,7 @@ var SHIPDATA_ = {
 		LUK: 60,
 		TACC: 75,
 		SLOTS: [0,0,0],
-		EQUIPS: [570,570,515],
+		EQUIPS: [1570, 1570, 1515],
 		RNG: 1,
 		SPD: 5,
 	},
@@ -4244,7 +4244,7 @@ var SHIPDATA_ = {
 		LUK: 70,
 		TACC: 80,
 		SLOTS: [0,0,0],
-		EQUIPS: [570,570,570],
+		EQUIPS: [1570, 1570, 1570],
 		RNG: 1,
 		SPD: 5,
 	},
@@ -4264,7 +4264,7 @@ var SHIPDATA_ = {
 		LUK: 40,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [509,509,0,0],
+		EQUIPS: [1509, 1509, 10, 10],
 		RNG: 3,
 		SPD: 5,
 	},
@@ -4284,7 +4284,7 @@ var SHIPDATA_ = {
 		LUK: 40,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [509,509,512,0],
+		EQUIPS: [1509, 1509, 1512, 10],
 		RNG: 3,
 		SPD: 5,
 	},
@@ -4304,7 +4304,7 @@ var SHIPDATA_ = {
 		LUK: 40,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [509,509,512,529],
+		EQUIPS: [1509, 1509, 1512, 1529],
 		RNG: 3,
 		SPD: 5,
 	},
@@ -4324,7 +4324,7 @@ var SHIPDATA_ = {
 		LOS: 80,
 		LUK: 50,
 		SLOTS: [0,0,81,81],
-		EQUIPS: [552,552,561,561],
+		EQUIPS: [1552, 1552, 1561, 1561],
 		RNG: 3,
 		SPD: 0,
 	},
@@ -4344,7 +4344,7 @@ var SHIPDATA_ = {
 		LOS: 90,
 		LUK: 60,
 		SLOTS: [0,0,96,81],
-		EQUIPS: [552,552,562,561],
+		EQUIPS: [1552, 1552, 1562, 1561],
 		RNG: 3,
 		SPD: 0,
 	},
@@ -4364,7 +4364,7 @@ var SHIPDATA_ = {
 		LOS: 100,
 		LUK: 70,
 		SLOTS: [0,0,96,96],
-		EQUIPS: [552,552,562,562],
+		EQUIPS: [1552, 1552, 1562, 1562],
 		RNG: 3,
 		SPD: 0,
 	},
@@ -4384,7 +4384,7 @@ var SHIPDATA_ = {
 		LOS: 80,
 		LUK: 50,
 		SLOTS: [0,0,81,81],
-		EQUIPS: [552,552,561,561],
+		EQUIPS: [1552, 1552, 1561, 1561],
 		RNG: 3,
 		SPD: 0,
 	},
@@ -4404,7 +4404,7 @@ var SHIPDATA_ = {
 		LOS: 90,
 		LUK: 60,
 		SLOTS: [0,0,96,81],
-		EQUIPS: [552,552,562,561],
+		EQUIPS: [1552, 1552, 1562, 1561],
 		RNG: 3,
 		SPD: 0,
 	},
@@ -4424,7 +4424,7 @@ var SHIPDATA_ = {
 		LOS: 100,
 		LUK: 70,
 		SLOTS: [0,0,96,96],
-		EQUIPS: [552,552,562,562],
+		EQUIPS: [1552, 1552, 1562, 1562],
 		RNG: 3,
 		SPD: 0,
 	},
@@ -4443,7 +4443,7 @@ var SHIPDATA_ = {
 		LUK: 70,
 		TACC: 50,
 		SLOTS: [0,0,0,4],
-		EQUIPS: [563,563,515,564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 		RNG: 3,
 		SPD: 10,
 	},
@@ -4463,7 +4463,7 @@ var SHIPDATA_ = {
 		LUK: 80,
 		TACC: 60,
 		SLOTS: [0,0,0,4],
-		EQUIPS: [563,563,515,564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 		RNG: 3,
 		SPD: 10,
 	},
@@ -4483,7 +4483,7 @@ var SHIPDATA_ = {
 		LUK: 90,
 		TACC: 70,
 		SLOTS: [0,0,0,4],
-		EQUIPS: [563,563,515,564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 		RNG: 3,
 		SPD: 10,
 	},
@@ -4503,7 +4503,7 @@ var SHIPDATA_ = {
 		LUK: 70,
 		unknownstats: true,
 		SLOTS: [0,0,12,14],
-		EQUIPS: [501,541,571,571],
+		EQUIPS: [1501, 1541, 1571, 1571],
 		RNG: 4,
 		SPD: 5,
 	},
@@ -4523,7 +4523,7 @@ var SHIPDATA_ = {
 		LUK: 80,
 		unknownstats: true,
 		SLOTS: [0,0,24,28],
-		EQUIPS: [501,541,571,571],
+		EQUIPS: [1501, 1541, 1571, 1571],
 		RNG: 4,
 		SPD: 5,
 	},
@@ -4543,7 +4543,7 @@ var SHIPDATA_ = {
 		LUK: 90,
 		unknownstats: true,
 		SLOTS: [0,0,36,42],
-		EQUIPS: [501,541,571,571],
+		EQUIPS: [1501, 1541, 1571, 1571],
 		RNG: 4,
 		SPD: 5,
 	},
@@ -4564,7 +4564,7 @@ var SHIPDATA_ = {
 		LUK: 50,
 		unknownstats: true,
 		SLOTS: [19, 26, 26, 19],
-		EQUIPS: [556, 557, 558, 556],
+		EQUIPS: [1556, 1557, 1558, 1556],
 		RNG: 3,
 		SPD: 10,
 	},
@@ -4585,7 +4585,7 @@ var SHIPDATA_ = {
 		LUK: 50,
 		unknownstats: true,
 		SLOTS: [30, 48, 48, 30],
-		EQUIPS: [572, 557, 558, 572],
+		EQUIPS: [1572, 1557, 1558, 1572],
 		RNG: 3,
 		SPD: 10,
 	},
@@ -4606,7 +4606,7 @@ var SHIPDATA_ = {
 		LUK: 50,
 		unknownstats: true,
 		SLOTS: [42, 48, 48, 42],
-		EQUIPS: [572, 557, 558, 572],
+		EQUIPS: [1572, 1557, 1558, 1572],
 		RNG: 3,
 		SPD: 10,
 	},
@@ -4629,7 +4629,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		unknownstats: true,
 		SLOTS: [36, 36, 28, 28],
-		EQUIPS: [556, 561, 561, 561],
+		EQUIPS: [1556, 1561, 1561, 1561],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4652,7 +4652,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		unknownstats: true,
 		SLOTS: [36, 36, 32, 32],
-		EQUIPS: [556, 562, 562, 562],
+		EQUIPS: [1556, 1562, 1562, 1562],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4674,7 +4674,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 128],
-		EQUIPS: [509, 509, 570, 573],
+		EQUIPS: [1509, 1509, 1570, 1573],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4696,7 +4696,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 160],
-		EQUIPS: [509, 509, 570, 573],
+		EQUIPS: [1509, 1509, 1570, 1573],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4718,7 +4718,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 192],
-		EQUIPS: [509, 509, 570, 573],
+		EQUIPS: [1509, 1509, 1570, 1573],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4740,7 +4740,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 144],
-		EQUIPS: [509, 509, 570, 573],
+		EQUIPS: [1509, 1509, 1570, 1573],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4762,7 +4762,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 176],
-		EQUIPS: [509, 509, 570, 573],
+		EQUIPS: [1509, 1509, 1570, 1573],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4784,7 +4784,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 208],
-		EQUIPS: [509, 509, 570, 573],
+		EQUIPS: [1509, 1509, 1570, 1573],
 		fuel: 0,
 		ammo: 0
 	},
@@ -5156,7 +5156,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 501, 559],
+		EQUIPS: [1501, 1501, 1559],
 	},
 	1740: {
 		name: 'DD Na-Class Elite',
@@ -5177,7 +5177,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 501, 559],
+		EQUIPS: [1501, 1501, 1559],
 	},
 	1741: {
 		name: 'DD Na-Class Flagship',
@@ -5198,7 +5198,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 501, 559],
+		EQUIPS: [1501, 1501, 1559],
 	},
 	1742: {
 		name: 'DD Na-Class Late Model',
@@ -5219,7 +5219,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 501, 570],
+		EQUIPS: [1501, 1501, 1570],
 	},
 	1743: {
 		name: 'DD Na-Class Late Model Elite',
@@ -5240,7 +5240,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 501, 570],
+		EQUIPS: [1501, 1501, 1570],
 	},
 	1744: {
 		name: 'DD Na-Class Late Model Flagship',
@@ -5261,7 +5261,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [501, 501, 570],
+		EQUIPS: [1501, 1501, 1570],
 	},
 	1745: {
 		name: 'French Battleship Princess',
@@ -5281,7 +5281,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 48],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1746: {
 		name: 'French Battleship Princess 2',
@@ -5301,7 +5301,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1747: {
 		name: 'French Battleship Princess 3',
@@ -5321,7 +5321,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1748: {
 		name: 'French Battleship Princess - Damaged',
@@ -5341,7 +5341,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1749: {
 		name: 'French Battleship Princess - Damaged 2',
@@ -5361,7 +5361,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1750: {
 		name: 'French Battleship Princess - Damaged 3',
@@ -5381,7 +5381,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1751: {
 		name: 'Aircraft Carrier Summer Demon',
@@ -5402,7 +5402,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [64, 54, 56, 0],
-		EQUIPS: [547, 548, 549, 532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 	},
 	1752: {
 		name: 'Aircraft Carrier Summer Princess',
@@ -5423,7 +5423,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [72, 63, 63, 0],
-		EQUIPS: [547, 548, 549, 532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 	},
 	1753: {
 		name: 'Supply Depot Summer Princess',
@@ -5445,7 +5445,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [16, 16, 0, 0],
-		EQUIPS: [562, 562, 565, 565],
+		EQUIPS: [1562, 1562, 1565, 1565],
 	},
 	1754: {
 		name: 'Supply Depot Summer Princess 2',
@@ -5467,7 +5467,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [24, 24, 0, 0],
-		EQUIPS: [562, 562, 565, 565],
+		EQUIPS: [1562, 1562, 1565, 1565],
 	},
 	1755: {
 		name: 'European Princess',
@@ -5487,7 +5487,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 50],
-		EQUIPS: [578, 578, 559, 574],
+		EQUIPS: [1578, 1578, 1559, 1574],
 	},
 	1756: {
 		name: 'European Princess 2',
@@ -5507,7 +5507,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 120],
-		EQUIPS: [578, 578, 559, 574],
+		EQUIPS: [1578, 1578, 1559, 1574],
 	},
 	1757: {
 		name: 'European Princess 3',
@@ -5527,7 +5527,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 180],
-		EQUIPS: [578, 578, 559, 574],
+		EQUIPS: [1578, 1578, 1559, 1574],
 	},
 	1758: {
 		name: 'European Princess - Damaged',
@@ -5547,7 +5547,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 120],
-		EQUIPS: [578, 578, 570, 574],
+		EQUIPS: [1578, 1578, 1570, 1574],
 	},
 	1759: {
 		name: 'European Princess - Damaged 2',
@@ -5567,7 +5567,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 180],
-		EQUIPS: [578, 578, 570, 574],
+		EQUIPS: [1578, 1578, 1570, 1574],
 	},
 	1760: {
 		name: 'European Princess - Damaged 3',
@@ -5587,7 +5587,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 198],
-		EQUIPS: [578, 578, 570, 574],
+		EQUIPS: [1578, 1578, 1570, 1574],
 	},
 	1761: {
 		name: 'CA Ne-Class Flagship',
@@ -5608,7 +5608,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 28],
-		EQUIPS: [505, 505, 559, 574],
+		EQUIPS: [1505, 1505, 1559, 1574],
 	},
 	1762: {
 		name: 'CVL Nu-Class Elite 2',
@@ -5629,7 +5629,7 @@ var SHIPDATA_ = {
 		RNG: 0,
 		SPD: 5,
 		SLOTS: [26, 23, 23],
-		EQUIPS: [547, 548, 549],
+		EQUIPS: [1547, 1548, 1549],
 	},
 	1763: {
 		name: 'CVL Nu-Class Flagship 2',
@@ -5650,7 +5650,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [32, 29, 29, 0],
-		EQUIPS: [547, 548, 549, 532],
+		EQUIPS: [1547, 1548, 1549, 1532],
 	},
 	1764: {
 		name: 'CVL Nu-Class Flagship 3',
@@ -5671,7 +5671,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [32, 29, 29, 0],
-		EQUIPS: [556, 557, 558, 532],
+		EQUIPS: [1556, 1557, 1558, 1532],
 	},
 	1765: {
 		name: 'CVL Nu-Class Kai Elite 2',
@@ -5693,7 +5693,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [28, 24, 18, 18],
-		EQUIPS: [574, 547, 548, 549],
+		EQUIPS: [1574, 1547, 1548, 1549],
 	},
 	1766: {
 		name: 'CVL Nu-Class Kai Flagship 2',
@@ -5715,7 +5715,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [28, 28, 20, 20],
-		EQUIPS: [575, 556, 557, 558],
+		EQUIPS: [1575, 1556, 1557, 1558],
 	},
 	1767: {
 		name: 'Night Strait Princesses 1',
@@ -5735,7 +5735,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 64, 0],
-		EQUIPS: [579, 579, 575, 580],
+		EQUIPS: [1579, 1579, 1575, 1580],
 	},
 	1768: {
 		name: 'Night Strait Princesses 2',
@@ -5755,7 +5755,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 72, 0],
-		EQUIPS: [579, 579, 575, 580],
+		EQUIPS: [1579, 1579, 1575, 1580],
 	},
 	1769: {
 		name: 'Night Strait Princesses 3',
@@ -5775,7 +5775,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 81, 0],
-		EQUIPS: [579, 579, 575, 580],
+		EQUIPS: [1579, 1579, 1575, 1580],
 	},
 	1770: {
 		name: 'Night Strait Princesses - Damaged 1',
@@ -5795,7 +5795,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 120, 0],
-		EQUIPS: [579, 579, 575, 580],
+		EQUIPS: [1579, 1579, 1575, 1580],
 	},
 	1771: {
 		name: 'Night Strait Princesses - Damaged 2',
@@ -5815,7 +5815,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 180, 0],
-		EQUIPS: [579, 579, 575, 580],
+		EQUIPS: [1579, 1579, 1575, 1580],
 	},
 	1772: {
 		name: 'Night Strait Princesses - Damaged 3',
@@ -5835,7 +5835,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 198, 0],
-		EQUIPS: [579, 579, 575, 580],
+		EQUIPS: [1579, 1579, 1575, 1580],
 	},
 	1773: {
 		name: 'Entombed Anti-Air Guardian Princess 1',
@@ -5855,7 +5855,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 580],
+		EQUIPS: [1553, 1553, 1580],
 	},
 	1774: {
 		name: 'Entombed Anti-Air Guardian Princess 2',
@@ -5875,7 +5875,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 580],
+		EQUIPS: [1553, 1553, 1580],
 	},
 	1775: {
 		name: 'Entombed Anti-Air Guardian Princess 3',
@@ -5895,7 +5895,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 580],
+		EQUIPS: [1553, 1553, 1580],
 	},
 	1776: {
 		name: 'CVL Nu-Class Elite 3',
@@ -5917,7 +5917,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [26, 23, 23],
-		EQUIPS: [547, 574, 574],
+		EQUIPS: [1547, 1574, 1574],
 	},
 	1777: {
 		name: 'CVL Nu-Class Elite 4',
@@ -5939,7 +5939,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [26, 23, 23],
-		EQUIPS: [581, 582, 583],
+		EQUIPS: [1581, 1582, 1583],
 	},
 	1778: {
 		name: 'CVL Nu-Class Kai Elite 3',
@@ -5961,7 +5961,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [28, 24, 18, 18],
-		EQUIPS: [581, 582, 583, 583],
+		EQUIPS: [1581, 1582, 1583, 1583],
 	},
 	1779: {
 		name: 'CVL Nu-Class Kai Flagship 3',
@@ -5983,7 +5983,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [28, 28, 20, 20],
-		EQUIPS: [556, 557, 558, 558],
+		EQUIPS: [1556, 1557, 1558, 1558],
 	},
 	1780: {
 		name: 'CVL Nu-Class Kai Flagship 4',
@@ -6005,7 +6005,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [28, 28, 20, 20],
-		EQUIPS: [581, 582, 583, 575],
+		EQUIPS: [1581, 1582, 1583, 1575],
 	},
 	1781: {
 		name: 'Aircraft Carrier Princess 3',
@@ -6026,7 +6026,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [581, 557, 558, 583],
+		EQUIPS: [1581, 1557, 1558, 1583],
 	},
 	1782: {
 		name: 'Aircraft Carrier Princess 4',
@@ -6047,7 +6047,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [581, 557, 558, 583],
+		EQUIPS: [1581, 1557, 1558, 1583],
 	},
 	1783: {
 		name: 'Escort Water Princess 1',
@@ -6068,7 +6068,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [28, 28, 28, 0],
-		EQUIPS: [581, 582, 583, 580],
+		EQUIPS: [1581, 1582, 1583, 1580],
 	},
 	1784: {
 		name: 'Escort Water Princess 2',
@@ -6089,7 +6089,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [42, 36, 34, 0],
-		EQUIPS: [581, 582, 583, 580],
+		EQUIPS: [1581, 1582, 1583, 1580],
 	},
 	1785: {
 		name: 'Escort Water Princess 3',
@@ -6110,7 +6110,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [42, 36, 34, 0],
-		EQUIPS: [581, 582, 583, 580],
+		EQUIPS: [1581, 1582, 1583, 1580],
 	},
 	1786: {
 		name: 'Escort Water Princess - Damaged 1',
@@ -6131,7 +6131,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [28, 28, 28, 0],
-		EQUIPS: [581, 582, 583, 580],
+		EQUIPS: [1581, 1582, 1583, 1580],
 	},
 	1787: {
 		name: 'Escort Water Princess - Damaged 2',
@@ -6152,7 +6152,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [42, 36, 34, 0],
-		EQUIPS: [581, 582, 583, 580],
+		EQUIPS: [1581, 1582, 1583, 1580],
 	},
 	1788: {
 		name: 'Escort Water Princess - Damaged 3',
@@ -6173,7 +6173,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [42, 36, 34, 0],
-		EQUIPS: [581, 582, 583, 580],
+		EQUIPS: [1581, 1582, 1583, 1580],
 	},
 	1789: {
 		name: 'New Submarine Princess Flagship 4',
@@ -6214,7 +6214,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [584, 584, 584, 525],
+		EQUIPS: [1584, 1584, 1584, 1525],
 	},
 	1791: {
 		name: 'Battleship Princess Kai 2',
@@ -6234,7 +6234,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [584, 584, 584, 525],
+		EQUIPS: [1584, 1584, 1584, 1525],
 	},
 	1792: {
 		name: 'Battleship Princess Kai 3',
@@ -6254,7 +6254,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [584, 584, 584, 525],
+		EQUIPS: [1584, 1584, 1584, 1525],
 	},
 	1793: {
 		name: 'Battleship Water Demon Kai 1',
@@ -6274,7 +6274,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [585, 585, 585, 525],
+		EQUIPS: [1585, 1585, 1585, 1525],
 	},
 	1794: {
 		name: 'Battleship Water Demon Kai 2',
@@ -6294,7 +6294,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [585, 585, 585, 525],
+		EQUIPS: [1585, 1585, 1585, 1525],
 	},
 	1795: {
 		name: 'Battleship Water Demon Kai 3',
@@ -6314,7 +6314,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [585, 585, 585, 525],
+		EQUIPS: [1585, 1585, 1585, 1525],
 	},
 	1796: {
 		name: 'Battleship Water Demon Kai - Damaged 1',
@@ -6334,7 +6334,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [585, 585, 585, 525],
+		EQUIPS: [1585, 1585, 1585, 1525],
 	},
 	1797: {
 		name: 'Battleship Water Demon Kai - Damaged 2',
@@ -6354,7 +6354,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [585, 585, 585, 525],
+		EQUIPS: [1585, 1585, 1585, 1525],
 	},
 	1798: {
 		name: 'Battleship Water Demon Kai - Damaged 3',
@@ -6374,7 +6374,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [585, 585, 585, 525],
+		EQUIPS: [1585, 1585, 1585, 1525],
 	},
 	1799: {
 		name: 'Abyssal Crane Princess 1',
@@ -6395,7 +6395,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [40, 36, 36, 26],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	1800: {
 		name: 'Abyssal Crane Princess 2',
@@ -6416,7 +6416,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [40, 36, 36, 26],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	1801: {
 		name: 'Abyssal Crane Princess 3',
@@ -6437,7 +6437,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [40, 36, 36, 26],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	1802: {
 		name: 'Abyssal Crane Princess - Damaged 1',
@@ -6458,7 +6458,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [69, 46, 46, 46],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	1803: {
 		name: 'Abyssal Crane Princess - Damaged 2',
@@ -6479,7 +6479,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [69, 46, 46, 46],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	1804: {
 		name: 'Abyssal Crane Princess - Damaged 3',
@@ -6500,7 +6500,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [69, 46, 46, 46],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	1805: {
 		name: 'New Submarine Princess Vacation Mode Flagship 1',
@@ -6606,7 +6606,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	1810: {
 		name: 'Supply Depot Princess Vacation Mode 2',
@@ -6628,7 +6628,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	1811: {
 		name: 'Supply Depot Princess Vacation Mode 3',
@@ -6650,7 +6650,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	1812: {
 		name: 'Supply Depot Princess Vacation Mode - Damaged 1',
@@ -6672,7 +6672,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	1813: {
 		name: 'Supply Depot Princess Vacation Mode - Damaged 2',
@@ -6694,7 +6694,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	1814: {
 		name: 'Supply Depot Princess Vacation Mode - Damaged 3',
@@ -6716,7 +6716,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	1815: {
 		name: 'Anchorage Water Demon Vacation Mode 1',
@@ -6737,7 +6737,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 124],
-		EQUIPS: [551, 551, 551, 583],
+		EQUIPS: [1551, 1551, 1551, 1583],
 	},
 	1816: {
 		name: 'Anchorage Water Demon Vacation Mode 2',
@@ -6758,7 +6758,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 144],
-		EQUIPS: [551, 551, 551, 583],
+		EQUIPS: [1551, 1551, 1551, 1583],
 	},
 	1817: {
 		name: 'Anchorage Water Demon Vacation Mode 3',
@@ -6779,7 +6779,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 188],
-		EQUIPS: [551, 551, 551, 583],
+		EQUIPS: [1551, 1551, 1551, 1583],
 	},
 	1818: {
 		name: 'Anchorage Water Demon Vacation Mode 4',
@@ -6800,7 +6800,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [551, 551, 551, 580],
+		EQUIPS: [1551, 1551, 1551, 1580],
 	},
 	1819: {
 		name: 'Anchorage Water Demon Vacation Mode 5',
@@ -6821,7 +6821,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [551, 551, 551, 580],
+		EQUIPS: [1551, 1551, 1551, 1580],
 	},
 	1820: {
 		name: 'Anchorage Water Demon Vacation Mode 6',
@@ -6842,7 +6842,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [551, 551, 551, 580],
+		EQUIPS: [1551, 1551, 1551, 1580],
 	},
 	1821: {
 		name: 'German Escort Princess 1',
@@ -6863,7 +6863,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [52, 44, 0, 0],
-		EQUIPS: [586, 582, 553, 553],
+		EQUIPS: [1586, 1582, 1553, 1553],
 	},
 	1822: {
 		name: 'German Escort Princess 2',
@@ -6884,7 +6884,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [72, 50, 0, 0],
-		EQUIPS: [586, 582, 553, 553],
+		EQUIPS: [1586, 1582, 1553, 1553],
 	},
 	1823: {
 		name: 'German Escort Princess 3',
@@ -6905,7 +6905,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [92, 56, 0, 0],
-		EQUIPS: [586, 582, 553, 553],
+		EQUIPS: [1586, 1582, 1553, 1553],
 	},
 	1824: {
 		name: 'German Escort Princess - Damaged 1',
@@ -6926,7 +6926,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [72, 50, 0, 0],
-		EQUIPS: [586, 582, 553, 553],
+		EQUIPS: [1586, 1582, 1553, 1553],
 	},
 	1825: {
 		name: 'German Escort Princess - Damaged 2',
@@ -6947,7 +6947,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [92, 56, 0, 0],
-		EQUIPS: [586, 582, 553, 553],
+		EQUIPS: [1586, 1582, 1553, 1553],
 	},
 	1826: {
 		name: 'German Escort Princess - Damaged 3',
@@ -6968,7 +6968,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [98, 80, 0, 0],
-		EQUIPS: [586, 582, 553, 553],
+		EQUIPS: [1586, 1582, 1553, 1553],
 	},
 	1827: {
 		name: 'Dock Princess 1',
@@ -6988,7 +6988,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1828: {
 		name: 'Dock Princess 2',
@@ -7008,7 +7008,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1829: {
 		name: 'Dock Princess 3',
@@ -7028,7 +7028,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1830: {
 		name: 'Dock Princess - Damaged 1',
@@ -7048,7 +7048,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1831: {
 		name: 'Dock Princess - Damaged 2',
@@ -7068,7 +7068,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1832: {
 		name: 'Dock Princess - Damaged 3',
@@ -7088,7 +7088,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1834: {
 		name: 'French Battleship Princess Vacation Mode 1',
@@ -7108,7 +7108,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1835: {
 		name: 'French Battleship Princess Vacation Mode 2',
@@ -7128,7 +7128,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1836: {
 		name: 'French Battleship Princess Vacation Mode 3',
@@ -7148,7 +7148,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1837: {
 		name: 'French Battleship Princess Vacation Mode - Damaged 1',
@@ -7168,7 +7168,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1838: {
 		name: 'French Battleship Princess Vacation Mode - Damaged 2',
@@ -7188,7 +7188,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1839: {
 		name: 'French Battleship Princess Vacation Mode - Damaged 3',
@@ -7208,7 +7208,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [577, 577, 559, 574],
+		EQUIPS: [1577, 1577, 1559, 1574],
 	},
 	1840: {
 		name: 'European Water Princess 1',
@@ -7228,7 +7228,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 25],
-		EQUIPS: [587, 587, 559, 586],
+		EQUIPS: [1587, 1587, 1559, 1586],
 	},
 	1841: {
 		name: 'European Water Princess 2',
@@ -7248,7 +7248,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 36],
-		EQUIPS: [587, 587, 559, 586],
+		EQUIPS: [1587, 1587, 1559, 1586],
 	},
 	1842: {
 		name: 'European Water Princess 3',
@@ -7268,7 +7268,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [587, 587, 559, 586],
+		EQUIPS: [1587, 1587, 1559, 1586],
 	},
 	1843: {
 		name: 'European Water Princess - Damaged 1',
@@ -7288,7 +7288,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 36],
-		EQUIPS: [587, 587, 580, 586],
+		EQUIPS: [1587, 1587, 1580, 1586],
 	},
 	1844: {
 		name: 'European Water Princess - Damaged 2',
@@ -7308,7 +7308,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 49],
-		EQUIPS: [587, 587, 580, 586],
+		EQUIPS: [1587, 1587, 1580, 1586],
 	},
 	1845: {
 		name: 'European Water Princess - Damaged 3',
@@ -7328,7 +7328,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 81],
-		EQUIPS: [587, 587, 580, 586],
+		EQUIPS: [1587, 1587, 1580, 1586],
 	},
 	1846: {
 		name: 'Abyssal Nimbus Princess 1',
@@ -7348,7 +7348,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	1847: {
 		name: 'Abyssal Nimbus Princess 2',
@@ -7368,7 +7368,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	1848: {
 		name: 'Abyssal Nimbus Princess 3',
@@ -7388,7 +7388,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	1849: {
 		name: 'Abyssal Nimbus Princess - Damaged 1',
@@ -7408,7 +7408,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	1850: {
 		name: 'Abyssal Nimbus Princess - Damaged 2',
@@ -7428,7 +7428,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	1851: {
 		name: 'Abyssal Nimbus Princess - Damaged 3',
@@ -7448,7 +7448,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	1852: {
 		name: 'Abyssal Sun Princess 1',
@@ -7468,7 +7468,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 32],
-		EQUIPS: [589, 589, 590, 571],
+		EQUIPS: [1589, 1589, 1590, 1571],
 	},
 	1853: {
 		name: 'Abyssal Sun Princess 2',
@@ -7488,7 +7488,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [589, 589, 590, 571],
+		EQUIPS: [1589, 1589, 1590, 1571],
 	},
 	1854: {
 		name: 'Abyssal Sun Princess 3',
@@ -7508,7 +7508,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [589, 589, 590, 571],
+		EQUIPS: [1589, 1589, 1590, 1571],
 	},
 	1855: {
 		name: 'Abyssal Sun Princess - Damaged 1',
@@ -7528,7 +7528,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 32],
-		EQUIPS: [590, 590, 590, 571],
+		EQUIPS: [1590, 1590, 1590, 1571],
 	},
 	1856: {
 		name: 'Abyssal Sun Princess - Damaged 2',
@@ -7548,7 +7548,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [590, 590, 590, 571],
+		EQUIPS: [1590, 1590, 1590, 1571],
 	},
 	1857: {
 		name: 'Abyssal Sun Princess - Damaged 3',
@@ -7568,7 +7568,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 96],
-		EQUIPS: [590, 590, 590, 571],
+		EQUIPS: [1590, 1590, 1590, 1571],
 	},
 	1858: {
 		name: 'DD Ni-Class Kai',
@@ -7588,7 +7588,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 514, 531],
+		EQUIPS: [1591, 1514, 1531],
 	},
 	1859: {
 		name: 'DD Ni-Class Kai Late Model',
@@ -7608,7 +7608,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 514, 531],
+		EQUIPS: [1591, 1514, 1531],
 	},
 	1860: {
 		name: 'DD Ni-Class Kai Late Model Elite',
@@ -7628,7 +7628,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 514, 531],
+		EQUIPS: [1591, 1514, 1531],
 	},
 	1861: {
 		name: 'DD Ni-Class Kai Late Model Flagship',
@@ -7648,7 +7648,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 514, 531],
+		EQUIPS: [1591, 1514, 1531],
 	},
 	1862: {
 		name: 'CL Tsu-Class Flagship',
@@ -7669,7 +7669,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [550, 550, 545, 525],
+		EQUIPS: [1550, 1550, 1545, 1525],
 	},
 	1863: {
 		name: 'Heavy Cruiser Princess 7',
@@ -7690,7 +7690,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 515, 564],
+		EQUIPS: [1563, 1563, 1515, 1564],
 	},
 	1864: {
 		name: 'Heavy Cruiser Princess 8',
@@ -7711,7 +7711,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [563, 563, 541, 564],
+		EQUIPS: [1563, 1563, 1541, 1564],
 	},
 	1865: {
 		name: 'Northern Little Sister 1',
@@ -7732,7 +7732,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 50],
-		EQUIPS: [589, 565, 580, 562],
+		EQUIPS: [1589, 1565, 1580, 1562],
 	},
 	1866: {
 		name: 'Northern Little Sister 2',
@@ -7753,7 +7753,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 70],
-		EQUIPS: [589, 565, 580, 562],
+		EQUIPS: [1589, 1565, 1580, 1562],
 	},
 	1867: {
 		name: 'Northern Little Sister 3',
@@ -7774,7 +7774,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 90],
-		EQUIPS: [589, 565, 580, 562],
+		EQUIPS: [1589, 1565, 1580, 1562],
 	},
 	1868: {
 		name: 'Northern Little Sister - Damaged 1',
@@ -7795,7 +7795,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 80],
-		EQUIPS: [589, 591, 590, 562],
+		EQUIPS: [1589, 1591, 1590, 1562],
 	},
 	1869: {
 		name: 'Northern Little Sister - Damaged 2',
@@ -7816,7 +7816,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 100],
-		EQUIPS: [589, 591, 590, 562],
+		EQUIPS: [1589, 1591, 1590, 1562],
 	},
 	1870: {
 		name: 'Northern Little Sister - Damaged 3',
@@ -7837,7 +7837,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 120],
-		EQUIPS: [589, 591, 590, 562],
+		EQUIPS: [1589, 1591, 1590, 1562],
 	},
 	1871: {
 		name: 'Abyssal Pacific Princess 1',
@@ -7857,7 +7857,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 592, 593],
+		EQUIPS: [1592, 1592, 1592, 1593],
 	},
 	1872: {
 		name: 'Abyssal Pacific Princess 2',
@@ -7877,7 +7877,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 592, 593],
+		EQUIPS: [1592, 1592, 1592, 1593],
 	},
 	1873: {
 		name: 'Abyssal Pacific Princess 3',
@@ -7897,7 +7897,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 592, 593],
+		EQUIPS: [1592, 1592, 1592, 1593],
 	},
 	1874: {
 		name: 'Abyssal Pacific Princess - Damaged 1',
@@ -7917,7 +7917,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 592, 593],
+		EQUIPS: [1592, 1592, 1592, 1593],
 	},
 	1875: {
 		name: 'Abyssal Pacific Princess - Damaged 2',
@@ -7937,7 +7937,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 592, 593],
+		EQUIPS: [1592, 1592, 1592, 1593],
 	},
 	1876: {
 		name: 'Abyssal Pacific Princess - Damaged 3',
@@ -7957,7 +7957,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 592, 593],
+		EQUIPS: [1592, 1592, 1592, 1593],
 	},
 	1877: {
 		name: 'Abyssal Mediterranean Princess 1',
@@ -7977,7 +7977,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [596, 596, 531, 593],
+		EQUIPS: [1596, 1596, 1531, 1593],
 	},
 	1878: {
 		name: 'Abyssal Mediterranean Princess 2',
@@ -7997,7 +7997,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [596, 596, 531, 593],
+		EQUIPS: [1596, 1596, 1531, 1593],
 	},
 	1879: {
 		name: 'Abyssal Mediterranean Princess 3',
@@ -8017,7 +8017,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [596, 596, 531, 593],
+		EQUIPS: [1596, 1596, 1531, 1593],
 	},
 	1880: {
 		name: 'Abyssal Mediterranean Princess - Damaged 1',
@@ -8037,7 +8037,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [596, 596, 531, 593],
+		EQUIPS: [1596, 1596, 1531, 1593],
 	},
 	1881: {
 		name: 'Abyssal Mediterranean Princess - Damaged 2',
@@ -8057,7 +8057,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [596, 596, 531, 593],
+		EQUIPS: [1596, 1596, 1531, 1593],
 	},
 	1882: {
 		name: 'Abyssal Mediterranean Princess - Damaged 3',
@@ -8077,7 +8077,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [596, 596, 531, 593],
+		EQUIPS: [1596, 1596, 1531, 1593],
 	},
 	1883: {
 		name: 'Anzio Princess 1',
@@ -8097,7 +8097,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [599, 599, 559, 593],
+		EQUIPS: [1599, 1599, 1559, 1593],
 	},
 	1884: {
 		name: 'Anzio Princess 2',
@@ -8117,7 +8117,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [599, 599, 559, 593],
+		EQUIPS: [1599, 1599, 1559, 1593],
 	},
 	1885: {
 		name: 'Anzio Princess 3',
@@ -8137,7 +8137,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [599, 599, 559, 593],
+		EQUIPS: [1599, 1599, 1559, 1593],
 	},
 	1886: {
 		name: 'Anzio Princess - Damaged 1',
@@ -8157,7 +8157,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [599, 599, 559, 593],
+		EQUIPS: [1599, 1599, 1559, 1593],
 	},
 	1887: {
 		name: 'Anzio Princess - Damaged 2',
@@ -8177,7 +8177,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [599, 599, 559, 593],
+		EQUIPS: [1599, 1599, 1559, 1593],
 	},
 	1888: {
 		name: 'Anzio Princess - Damaged 3',
@@ -8197,7 +8197,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [599, 599, 559, 593],
+		EQUIPS: [1599, 1599, 1559, 1593],
 	},
 	1889: {
 		name: 'Airfield Princess 8',
@@ -8217,7 +8217,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [9, 9, 12],
-		EQUIPS: [594, 594, 562],
+		EQUIPS: [1594, 1594, 1562],
 	},
 	1890: {
 		name: 'Airfield Princess 9',
@@ -8237,7 +8237,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [9, 9, 12, 12],
-		EQUIPS: [595, 594, 562, 561],
+		EQUIPS: [1595, 1594, 1562, 1561],
 	},
 	1891: {
 		name: 'Airfield Princess 10',
@@ -8257,7 +8257,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [9, 9, 18, 12],
-		EQUIPS: [595, 595, 562, 562],
+		EQUIPS: [1595, 1595, 1562, 1562],
 	},
 	1892: {
 		name: 'Airfield Princess 11',
@@ -8277,7 +8277,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [18, 12, 6],
-		EQUIPS: [597, 597, 594],
+		EQUIPS: [1597, 1597, 1594],
 	},
 	1893: {
 		name: 'Airfield Princess 12',
@@ -8297,7 +8297,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [18, 12, 12, 6],
-		EQUIPS: [598, 597, 597, 594],
+		EQUIPS: [1598, 1597, 1597, 1594],
 	},
 	1894: {
 		name: 'Airfield Princess 13',
@@ -8317,7 +8317,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [36, 18, 12, 6],
-		EQUIPS: [598, 598, 598, 595],
+		EQUIPS: [1598, 1598, 1598, 1595],
 	},
 	1895: {
 		name: 'CA Ne-Class Kai',
@@ -8338,7 +8338,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [600, 600, 593, 564],
+		EQUIPS: [1600, 1600, 1593, 1564],
 	},
 	1896: {
 		name: 'CA Ne-Class Kai 2',
@@ -8359,7 +8359,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [600, 600, 593, 564],
+		EQUIPS: [1600, 1600, 1593, 1564],
 	},
 	1897: {
 		name: 'CA Ne-Class Kai 3',
@@ -8380,7 +8380,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [600, 600, 593, 564],
+		EQUIPS: [1600, 1600, 1593, 1564],
 	},
 	1898: {
 		name: 'Batavia Princess 1',
@@ -8400,7 +8400,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 564],
+		EQUIPS: [1601, 1601, 1593, 1564],
 	},
 	1899: {
 		name: 'Batavia Princess 2',
@@ -8420,7 +8420,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 564],
+		EQUIPS: [1601, 1601, 1593, 1564],
 	},
 	1900: {
 		name: 'Batavia Princess 3',
@@ -8440,7 +8440,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 564],
+		EQUIPS: [1601, 1601, 1593, 1564],
 	},
 	1901: {
 		name: 'Batavia Princess - Damaged 1',
@@ -8460,7 +8460,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 564],
+		EQUIPS: [1601, 1601, 1593, 1564],
 	},
 	1902: {
 		name: 'Batavia Princess - Damaged 2',
@@ -8480,7 +8480,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 564],
+		EQUIPS: [1601, 1601, 1593, 1564],
 	},
 	1903: {
 		name: 'Batavia Princess - Damaged 3',
@@ -8500,7 +8500,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 564],
+		EQUIPS: [1601, 1601, 1593, 1564],
 	},
 	1904: {
 		name: 'CL He-Class Kai Flagship',
@@ -8521,7 +8521,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [506, 506, 542, 543],
+		EQUIPS: [1506, 1506, 1542, 1543],
 	},
 	1905: {
 		name: 'CL He-Class Kai Flagship',
@@ -8542,7 +8542,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [506, 506, 542, 543],
+		EQUIPS: [1506, 1506, 1542, 1543],
 	},
 	1906: {
 		name: 'Aircraft Carrier Princess Kai 1',
@@ -8563,7 +8563,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [56, 52, 48, 30],
-		EQUIPS: [581, 557, 558, 583],
+		EQUIPS: [1581, 1557, 1558, 1583],
 	},
 	1907: {
 		name: 'Aircraft Carrier Princess Kai 2',
@@ -8584,7 +8584,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [58, 52, 50, 30],
-		EQUIPS: [581, 582, 558, 583],
+		EQUIPS: [1581, 1582, 1558, 1583],
 	},
 	1908: {
 		name: 'Aircraft Carrier Princess Kai 3',
@@ -8605,7 +8605,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [581, 582, 583, 583],
+		EQUIPS: [1581, 1582, 1583, 1583],
 	},
 	1909: {
 		name: 'Anti-Air Cruiser Princess 1',
@@ -8627,7 +8627,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [602, 602, 593, 603],
+		EQUIPS: [1602, 1602, 1593, 1603],
 	},
 	1910: {
 		name: 'Anti-Air Cruiser Princess 2',
@@ -8649,7 +8649,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [602, 602, 593, 603],
+		EQUIPS: [1602, 1602, 1593, 1603],
 	},
 	1911: {
 		name: 'Anti-Air Cruiser Princess 3',
@@ -8671,7 +8671,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [602, 602, 593, 603],
+		EQUIPS: [1602, 1602, 1593, 1603],
 	},
 	1912: {
 		name: 'Anti-Air Cruiser Princess - Damaged 1',
@@ -8693,7 +8693,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [602, 602, 593, 603],
+		EQUIPS: [1602, 1602, 1593, 1603],
 	},
 	1913: {
 		name: 'Anti-Air Cruiser Princess - Damaged 2',
@@ -8715,7 +8715,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [602, 602, 593, 603],
+		EQUIPS: [1602, 1602, 1593, 1603],
 	},
 	1914: {
 		name: 'Anti-Air Cruiser Princess - Damaged 3',
@@ -8737,7 +8737,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [602, 602, 593, 603],
+		EQUIPS: [1602, 1602, 1593, 1603],
 	},
 	1915: {
 		name: 'Submarine Princess Kai Flagship 1',
@@ -8758,7 +8758,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1916: {
 		name: 'Submarine Princess Kai Flagship 2',
@@ -8779,7 +8779,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1917: {
 		name: 'Submarine Princess Kai Flagship 3',
@@ -8800,7 +8800,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1918: {
 		name: 'Submarine Princess Kai Flagship - Damaged 1',
@@ -8821,7 +8821,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1919: {
 		name: 'Submarine Princess Kai Flagship - Damaged 2',
@@ -8842,7 +8842,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1920: {
 		name: 'Submarine Princess Kai Flagship - Damaged 3',
@@ -8863,7 +8863,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580],
+		EQUIPS: [1580, 1580, 1580],
 	},
 	1921: {
 		name: 'Supply Depot Princess B 1',
@@ -8885,7 +8885,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [9, 9, 9, 9],
-		EQUIPS: [561, 561, 561, 561],
+		EQUIPS: [1561, 1561, 1561, 1561],
 	},
 	1922: {
 		name: 'Supply Depot Princess B 2',
@@ -8907,7 +8907,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [12, 12, 12, 12],
-		EQUIPS: [562, 561, 561, 561],
+		EQUIPS: [1562, 1561, 1561, 1561],
 	},
 	1923: {
 		name: 'Supply Depot Princess B 3',
@@ -8929,7 +8929,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [22, 22, 22, 22],
-		EQUIPS: [562, 562, 561, 561],
+		EQUIPS: [1562, 1562, 1561, 1561],
 	},
 	1924: {
 		name: 'Supply Depot Princess B Damaged 1',
@@ -8951,7 +8951,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [14, 14, 14, 14],
-		EQUIPS: [562, 561, 561, 561],
+		EQUIPS: [1562, 1561, 1561, 1561],
 	},
 	1925: {
 		name: 'Supply Depot Princess B Damaged 2',
@@ -8973,7 +8973,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [18, 18, 18, 18],
-		EQUIPS: [562, 562, 561, 561],
+		EQUIPS: [1562, 1562, 1561, 1561],
 	},
 	1926: {
 		name: 'Supply Depot Princess B Damaged 3',
@@ -8995,7 +8995,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [26, 26, 26, 26],
-		EQUIPS: [562, 562, 562, 561],
+		EQUIPS: [1562, 1562, 1562, 1561],
 	},
 	1927: {
 		name: 'Abyssal Kuriles Princess 1',
@@ -9016,7 +9016,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [604, 604, 541, 531],
+		EQUIPS: [1604, 1604, 1541, 1531],
 	},
 	1928: {
 		name: 'Abyssal Kuriles Princess 2',
@@ -9037,7 +9037,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [604, 604, 541, 531],
+		EQUIPS: [1604, 1604, 1541, 1531],
 	},
 	1929: {
 		name: 'Abyssal Kuriles Princess 3',
@@ -9058,7 +9058,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [604, 604, 541, 531],
+		EQUIPS: [1604, 1604, 1541, 1531],
 	},
 	1930: {
 		name: 'Abyssal Kuriles Princess - Damaged 1',
@@ -9079,7 +9079,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [604, 604, 541, 531],
+		EQUIPS: [1604, 1604, 1541, 1531],
 	},
 	1931: {
 		name: 'Abyssal Kuriles Princess - Damaged 2',
@@ -9100,7 +9100,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [604, 604, 541, 531],
+		EQUIPS: [1604, 1604, 1541, 1531],
 	},
 	1932: {
 		name: 'Abyssal Kuriles Princess - Damaged 3',
@@ -9121,7 +9121,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [604, 604, 541, 531],
+		EQUIPS: [1604, 1604, 1541, 1531],
 	},
 	1933: {
 		name: 'Supply Depot Princess B Summer Landing Mode 1',
@@ -9142,7 +9142,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 48, 0],
-		EQUIPS: [565, 565, 562, 541],
+		EQUIPS: [1565, 1565, 1562, 1541],
 	},
 	1934: {
 		name: 'Supply Depot Princess B Summer Landing Mode 2',
@@ -9163,7 +9163,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 64, 0],
-		EQUIPS: [565, 565, 562, 541],
+		EQUIPS: [1565, 1565, 1562, 1541],
 	},
 	1935: {
 		name: 'Supply Depot Princess B Summer Landing Mode 3',
@@ -9184,7 +9184,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 88, 0],
-		EQUIPS: [565, 565, 562, 541],
+		EQUIPS: [1565, 1565, 1562, 1541],
 	},
 	1936: {
 		name: 'Supply Depot Princess B Summer Landing Mode - Damaged 1',
@@ -9205,7 +9205,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 64, 0],
-		EQUIPS: [565, 565, 562, 541],
+		EQUIPS: [1565, 1565, 1562, 1541],
 	},
 	1937: {
 		name: 'Supply Depot Princess B Summer Landing Mode - Damaged 2',
@@ -9226,7 +9226,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 88, 0],
-		EQUIPS: [565, 565, 562, 541],
+		EQUIPS: [1565, 1565, 1562, 1541],
 	},
 	1938: {
 		name: 'Supply Depot Princess B Summer Landing Mode - Damaged 3',
@@ -9247,7 +9247,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 98, 0],
-		EQUIPS: [565, 565, 562, 541],
+		EQUIPS: [1565, 1565, 1562, 1541],
 	},
 	1939: {
 		name: 'Gotou Islands Seabed Princess 1',
@@ -9268,7 +9268,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 541, 605],
+		EQUIPS: [1593, 1593, 1541, 1605],
 	},
 	1940: {
 		name: 'Gotou Islands Seabed Princess 2',
@@ -9289,7 +9289,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 541, 605],
+		EQUIPS: [1593, 1593, 1541, 1605],
 	},
 	1941: {
 		name: 'Gotou Islands Seabed Princess 3',
@@ -9310,7 +9310,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 541, 605],
+		EQUIPS: [1593, 1593, 1541, 1605],
 	},
 	1942: {
 		name: 'Gotou Islands Seabed Princess - Damaged 1',
@@ -9331,7 +9331,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 541, 605],
+		EQUIPS: [1593, 1593, 1541, 1605],
 	},
 	1943: {
 		name: 'Gotou Islands Seabed Princess - Damaged 2',
@@ -9352,7 +9352,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 541, 605],
+		EQUIPS: [1593, 1593, 1541, 1605],
 	},
 	1944: {
 		name: 'Gotou Islands Seabed Princess - Damaged 3',
@@ -9373,7 +9373,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 80,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 541, 605],
+		EQUIPS: [1593, 1593, 1541, 1605],
 	},
 	1945: {
 		name: 'Destroyer Forest Princess 1',
@@ -9394,7 +9394,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 593, 603],
+		EQUIPS: [1606, 1607, 1593, 1603],
 	},
 	1946: {
 		name: 'Destroyer Forest Princess 2',
@@ -9415,7 +9415,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 593, 603],
+		EQUIPS: [1606, 1607, 1593, 1603],
 	},
 	1947: {
 		name: 'Destroyer Forest Princess 3',
@@ -9436,7 +9436,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 593, 603],
+		EQUIPS: [1606, 1607, 1593, 1603],
 	},
 	1948: {
 		name: 'Destroyer Forest Princess - Damaged 1',
@@ -9457,7 +9457,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 593, 603],
+		EQUIPS: [1606, 1607, 1593, 1603],
 	},
 	1949: {
 		name: 'Destroyer Forest Princess - Damaged 2',
@@ -9478,7 +9478,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 593, 603],
+		EQUIPS: [1606, 1607, 1593, 1603],
 	},
 	1950: {
 		name: 'Destroyer Forest Princess - Damaged 3',
@@ -9499,7 +9499,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 593, 603],
+		EQUIPS: [1606, 1607, 1593, 1603],
 	},
 	1951: {
 		name: 'DD Na-Class Late Model II Elite',
@@ -9520,7 +9520,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [591, 591, 541, 603],
+		EQUIPS: [1591, 1591, 1541, 1603],
 	},
 	1952: {
 		name: 'DD Na-Class Late Model II Flagship',
@@ -9541,7 +9541,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [591, 591, 541, 603],
+		EQUIPS: [1591, 1591, 1541, 1603],
 	},
 	1953: {
 		name: 'CA Ne-Class Kai Summer Mode 1',
@@ -9561,7 +9561,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [600, 600, 593, 603],
+		EQUIPS: [1600, 1600, 1593, 1603],
 	},
 	1954: {
 		name: 'CA Ne-Class Kai Summer Mode 2',
@@ -9581,7 +9581,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [600, 600, 593, 603],
+		EQUIPS: [1600, 1600, 1593, 1603],
 	},
 	1955: {
 		name: 'CA Ne-Class Kai Summer Mode 3',
@@ -9601,7 +9601,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [600, 600, 593, 603],
+		EQUIPS: [1600, 1600, 1593, 1603],
 	},
 	1956: {
 		name: 'CA Ne-Class Kai B Summer Mode',
@@ -9621,7 +9621,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [600, 600, 541, 603],
+		EQUIPS: [1600, 1600, 1541, 1603],
 	},
 	1957: {
 		name: 'Light Cruiser Princess B 1',
@@ -9641,7 +9641,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 541, 560],
+		EQUIPS: [1511, 1511, 1541, 1560],
 	},
 	1958: {
 		name: 'Light Cruiser Princess B 2',
@@ -9661,7 +9661,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 541, 560],
+		EQUIPS: [1511, 1511, 1541, 1560],
 	},
 	1959: {
 		name: 'Light Cruiser Princess B 3',
@@ -9681,7 +9681,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 541, 560],
+		EQUIPS: [1511, 1511, 1541, 1560],
 	},
 	1960: {
 		name: 'Light Cruiser Princess B 4',
@@ -9701,7 +9701,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [511, 511, 541, 560],
+		EQUIPS: [1511, 1511, 1541, 1560],
 	},
 	1961: {
 		name: 'Aircraft Carrier Summer Princess 2',
@@ -9722,7 +9722,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [56, 48, 48, 26],
-		EQUIPS: [556, 557, 557, 558],
+		EQUIPS: [1556, 1557, 1557, 1558],
 	},
 	1962: {
 		name: 'Aircraft Carrier Summer Princess 3',
@@ -9743,7 +9743,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [58, 50, 52, 28],
-		EQUIPS: [556, 557, 557, 558],
+		EQUIPS: [1556, 1557, 1557, 1558],
 	},
 	1963: {
 		name: 'Aircraft Carrier Summer Princess 4',
@@ -9764,7 +9764,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [556, 557, 557, 558],
+		EQUIPS: [1556, 1557, 1557, 1558],
 	},
 	1964: {
 		name: 'Aircraft Carrier Summer Princess B',
@@ -9785,7 +9785,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [68, 66, 66, 0],
-		EQUIPS: [581, 557, 583, 608],
+		EQUIPS: [1581, 1557, 1583, 1608],
 	},
 	1965: {
 		name: 'New Southern Battleship Princess 1',
@@ -9806,7 +9806,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1966: {
 		name: 'New Southern Battleship Princess 2',
@@ -9827,7 +9827,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1967: {
 		name: 'New Southern Battleship Princess 3',
@@ -9848,7 +9848,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1968: {
 		name: 'New Southern Battleship Princess - Damaged 1',
@@ -9869,7 +9869,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1969: {
 		name: 'New Southern Battleship Princess - Damaged 2',
@@ -9890,7 +9890,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1970: {
 		name: 'New Southern Battleship Princess - Damaged 3',
@@ -9911,7 +9911,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1971: {
 		name: 'South Pacific Aircraft Carrier Princess 1',
@@ -9932,7 +9932,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [36, 18, 18, 15],
-		EQUIPS: [581, 582, 557, 583],
+		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1972: {
 		name: 'South Pacific Aircraft Carrier Princess 2',
@@ -9953,7 +9953,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [36, 22, 16, 16],
-		EQUIPS: [581, 582, 557, 583],
+		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1973: {
 		name: 'South Pacific Aircraft Carrier Princess 3',
@@ -9974,7 +9974,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [36, 32, 16, 16],
-		EQUIPS: [581, 582, 557, 583],
+		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1974: {
 		name: 'South Pacific Aircraft Carrier Princess - Damaged 1',
@@ -9995,7 +9995,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [36, 22, 16, 16],
-		EQUIPS: [581, 582, 557, 583],
+		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1975: {
 		name: 'South Pacific Aircraft Carrier Princess - Damaged 2',
@@ -10016,7 +10016,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [36, 32, 16, 16],
-		EQUIPS: [581, 582, 557, 583],
+		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1976: {
 		name: 'South Pacific Aircraft Carrier Princess - Damaged 3',
@@ -10037,7 +10037,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [72, 36, 36, 30],
-		EQUIPS: [581, 582, 557, 583],
+		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1977: {
 		name: 'Submarine Summer Princess B Flagship 1',
@@ -10057,7 +10057,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580],
+		EQUIPS: [1593, 1593, 1580],
 	},
 	1978: {
 		name: 'Submarine Summer Princess B Flagship 2',
@@ -10077,7 +10077,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580],
+		EQUIPS: [1593, 1593, 1580],
 	},
 	1979: {
 		name: 'New Battleship Princess 1',
@@ -10098,7 +10098,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1980: {
 		name: 'New Battleship Princess 2',
@@ -10119,7 +10119,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1981: {
 		name: 'New Battleship Princess 3',
@@ -10140,7 +10140,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1982: {
 		name: 'New Battleship Princess - Damaged 1',
@@ -10161,7 +10161,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1983: {
 		name: 'New Battleship Princess - Damaged 2',
@@ -10182,7 +10182,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1984: {
 		name: 'New Battleship Princess - Damaged 3',
@@ -10203,7 +10203,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [609, 609, 602, 603],
+		EQUIPS: [1609, 1609, 1602, 1603],
 	},
 	1985: {
 		name: 'Submarine Princess Kai B Flagship 1',
@@ -10224,7 +10224,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580],
+		EQUIPS: [1593, 1593, 1580],
 	},
 	1986: {
 		name: 'Submarine Princess Kai B Flagship 2',
@@ -10245,7 +10245,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580],
+		EQUIPS: [1593, 1593, 1580],
 	},
 	1987: {
 		name: 'Submarine Princess Kai B Flagship 3',
@@ -10266,7 +10266,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580],
+		EQUIPS: [1593, 1593, 1580],
 	},
 	1988: {
 		name: 'Abyssal Bamboo Princess 1',
@@ -10286,7 +10286,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 541, 603],
+		EQUIPS: [1606, 1607, 1541, 1603],
 	},
 	1989: {
 		name: 'Abyssal Bamboo Princess 2',
@@ -10306,7 +10306,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 541, 603],
+		EQUIPS: [1606, 1607, 1541, 1603],
 	},
 	1990: {
 		name: 'Abyssal Bamboo Princess 3',
@@ -10326,7 +10326,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 541, 603],
+		EQUIPS: [1606, 1607, 1541, 1603],
 	},
 	1991: {
 		name: 'Abyssal Bamboo Princess - Damaged 1',
@@ -10346,7 +10346,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 541, 603],
+		EQUIPS: [1606, 1607, 1541, 1603],
 	},
 	1992: {
 		name: 'Abyssal Bamboo Princess - Damaged 2',
@@ -10366,7 +10366,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 541, 603],
+		EQUIPS: [1606, 1607, 1541, 1603],
 	},
 	1993: {
 		name: 'Abyssal Bamboo Princess - Damaged 3',
@@ -10386,7 +10386,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 541, 603],
+		EQUIPS: [1606, 1607, 1541, 1603],
 	},
 	1994: {
 		name: 'Supply Depot Princess B 4',
@@ -10407,7 +10407,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [8, 8, 8, 8],
-		EQUIPS: [561, 561, 561, 561],
+		EQUIPS: [1561, 1561, 1561, 1561],
 	},
 	1995: {
 		name: 'Supply Depot Princess B - Damaged 4',
@@ -10428,7 +10428,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [10, 10, 10, 10],
-		EQUIPS: [562, 561, 561, 561],
+		EQUIPS: [1562, 1561, 1561, 1561],
 	},
 	1996: {
 		name: 'Submarine Princess Kai B Flagship 4',
@@ -10448,7 +10448,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580],
+		EQUIPS: [1593, 1593, 1580],
 	},
 	1997: {
 		name: 'Aircraft Carrier Princess Kai 4',
@@ -10469,7 +10469,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [48, 36, 35, 35],
-		EQUIPS: [581, 557, 558, 583],
+		EQUIPS: [1581, 1557, 1558, 1583],
 	},
 	1998: {
 		name: 'CL To-Class Flagship',
@@ -10490,7 +10490,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [550, 550, 603, 611],
+		EQUIPS: [1550, 1550, 1603, 1611],
 	},
 	1999: {
 		name: 'CA Ri-Class B',
@@ -10510,7 +10510,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2000: {
 		name: 'Lunga Point Heavy Cruiser Princess 1',
@@ -10530,7 +10530,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2001: {
 		name: 'Lunga Point Heavy Cruiser Princess 2',
@@ -10550,7 +10550,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2002: {
 		name: 'Lunga Point Heavy Cruiser Princess 3',
@@ -10570,7 +10570,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2003: {
 		name: 'Lunga Point Heavy Cruiser Princess - Damaged 1',
@@ -10590,7 +10590,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2004: {
 		name: 'Lunga Point Heavy Cruiser Princess - Damaged 2',
@@ -10610,7 +10610,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2005: {
 		name: 'Lunga Point Heavy Cruiser Princess - Damaged 3',
@@ -10630,7 +10630,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [601, 601, 593, 610],
+		EQUIPS: [1601, 1601, 1593, 1610],
 	},
 	2006: {
 		name: 'New Light Cruiser Princess 1',
@@ -10650,7 +10650,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [612, 612, 603, 610],
+		EQUIPS: [1612, 1612, 1603, 1610],
 	},
 	2007: {
 		name: 'New Light Cruiser Princess 2',
@@ -10670,7 +10670,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [612, 612, 603, 611],
+		EQUIPS: [1612, 1612, 1603, 1611],
 	},
 	2008: {
 		name: 'New Light Cruiser Princess 3',
@@ -10690,7 +10690,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [612, 612, 603, 611],
+		EQUIPS: [1612, 1612, 1603, 1611],
 	},
 	2009: {
 		name: 'New Light Cruiser Princess - Damaged 1',
@@ -10710,7 +10710,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [612, 612, 603, 610],
+		EQUIPS: [1612, 1612, 1603, 1610],
 	},
 	2010: {
 		name: 'New Light Cruiser Princess - Damaged 2',
@@ -10730,7 +10730,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [612, 612, 603, 611],
+		EQUIPS: [1612, 1612, 1603, 1611],
 	},
 	2011: {
 		name: 'New Light Cruiser Princess - Damaged 3',
@@ -10750,7 +10750,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 8],
-		EQUIPS: [612, 612, 603, 611],
+		EQUIPS: [1612, 1612, 1603, 1611],
 	},
 	2012: {
 		name: 'CL To-Class Elite 2',
@@ -10771,7 +10771,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 2],
-		EQUIPS: [550, 550, 603, 610],
+		EQUIPS: [1550, 1550, 1603, 1610],
 	},
 	2013: {
 		name: 'Transport Wa-Class B Elite',
@@ -10792,7 +10792,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [591, 591, 603, 610],
+		EQUIPS: [1591, 1591, 1603, 1610],
 	},
 	2014: {
 		name: 'Transport Wa-Class B Flagship',
@@ -10813,7 +10813,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [602, 602, 603, 611],
+		EQUIPS: [1602, 1602, 1603, 1611],
 	},
 	2015: {
 		name: 'Supply Depot Princess B Vacation Mode 1',
@@ -10834,7 +10834,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 32],
-		EQUIPS: [565, 565, 580, 561],
+		EQUIPS: [1565, 1565, 1580, 1561],
 	},
 	2016: {
 		name: 'Supply Depot Princess B Vacation Mode 2',
@@ -10855,7 +10855,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	2017: {
 		name: 'Supply Depot Princess B Vacation Mode 3',
@@ -10876,7 +10876,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 88],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	2018: {
 		name: 'Supply Depot Princess B Vacation Mode 4',
@@ -10897,7 +10897,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 98],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	2019: {
 		name: 'Supply Depot Princess B Vacation Mode - Damaged 1',
@@ -10918,7 +10918,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2020: {
 		name: 'Supply Depot Princess B Vacation Mode - Damaged 2',
@@ -10939,7 +10939,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2021: {
 		name: 'Supply Depot Princess B Vacation Mode - Damaged 3',
@@ -10960,7 +10960,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2022: {
 		name: 'Supply Depot Princess B Vacation Mode - Damaged 4',
@@ -10981,7 +10981,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2023: {
 		name: 'Harbour Summer Princess B 1',
@@ -11002,7 +11002,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 81, 81],
-		EQUIPS: [552, 552, 561, 561],
+		EQUIPS: [1552, 1552, 1561, 1561],
 	},
 	2024: {
 		name: 'Harbour Summer Princess B 2',
@@ -11023,7 +11023,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 96, 81],
-		EQUIPS: [552, 552, 562, 561],
+		EQUIPS: [1552, 1552, 1562, 1561],
 	},
 	2025: {
 		name: 'Harbour Summer Princess B 3',
@@ -11044,7 +11044,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 96, 96],
-		EQUIPS: [552, 552, 562, 562],
+		EQUIPS: [1552, 1552, 1562, 1562],
 	},
 	2026: {
 		name: 'Harbour Summer Princess B - Damaged 1',
@@ -11065,7 +11065,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 81, 81],
-		EQUIPS: [552, 552, 561, 561],
+		EQUIPS: [1552, 1552, 1561, 1561],
 	},
 	2027: {
 		name: 'Harbour Summer Princess B - Damaged 2',
@@ -11086,7 +11086,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 96, 81],
-		EQUIPS: [552, 552, 562, 561],
+		EQUIPS: [1552, 1552, 1562, 1561],
 	},
 	2028: {
 		name: 'Harbour Summer Princess B - Damaged 3',
@@ -11107,7 +11107,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 96, 96],
-		EQUIPS: [552, 552, 562, 562],
+		EQUIPS: [1552, 1552, 1562, 1562],
 	},
 	2029: {
 		name: 'Mediterranean Dreadnought Water Princess 1',
@@ -11127,7 +11127,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 2],
-		EQUIPS: [614, 613, 593, 610],
+		EQUIPS: [1614, 1613, 1593, 1610],
 	},
 	2030: {
 		name: 'Mediterranean Dreadnought Water Princess 2',
@@ -11147,7 +11147,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 3],
-		EQUIPS: [614, 613, 593, 610],
+		EQUIPS: [1614, 1613, 1593, 1610],
 	},
 	2031: {
 		name: 'Mediterranean Dreadnought Water Princess 3',
@@ -11167,7 +11167,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [614, 613, 593, 611],
+		EQUIPS: [1614, 1613, 1593, 1611],
 	},
 	2032: {
 		name: 'Mediterranean Dreadnought Water Princess - Damaged 1',
@@ -11187,7 +11187,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 6],
-		EQUIPS: [616, 615, 603, 610],
+		EQUIPS: [1616, 1615, 1603, 1610],
 	},
 	2033: {
 		name: 'Mediterranean Dreadnought Water Princess - Damaged 2',
@@ -11207,7 +11207,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 12],
-		EQUIPS: [616, 615, 603, 611],
+		EQUIPS: [1616, 1615, 1603, 1611],
 	},
 	2034: {
 		name: 'Mediterranean Dreadnought Water Princess - Damaged 3',
@@ -11227,7 +11227,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 36],
-		EQUIPS: [616, 615, 603, 611],
+		EQUIPS: [1616, 1615, 1603, 1611],
 	},
 	2035: {
 		name: 'Abyssal Mediterranean Princess Vacation Mode 1',
@@ -11247,7 +11247,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [596, 596, 603, 610],
+		EQUIPS: [1596, 1596, 1603, 1610],
 	},
 	2036: {
 		name: 'Abyssal Mediterranean Princess Vacation Mode 2',
@@ -11267,7 +11267,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [596, 596, 603, 610],
+		EQUIPS: [1596, 1596, 1603, 1610],
 	},
 	2037: {
 		name: 'Abyssal Mediterranean Princess Vacation Mode 3',
@@ -11287,7 +11287,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [596, 596, 603, 610],
+		EQUIPS: [1596, 1596, 1603, 1610],
 	},
 	2038: {
 		name: 'Abyssal Mediterranean Princess Vacation Mode - Damaged 1',
@@ -11307,7 +11307,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [596, 596, 603, 611],
+		EQUIPS: [1596, 1596, 1603, 1611],
 	},
 	2039: {
 		name: 'Abyssal Mediterranean Princess Vacation Mode - Damaged 2',
@@ -11327,7 +11327,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [596, 596, 603, 611],
+		EQUIPS: [1596, 1596, 1603, 1611],
 	},
 	2040: {
 		name: 'Abyssal Mediterranean Princess Vacation Mode - Damaged 3',
@@ -11347,7 +11347,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [596, 596, 603, 611],
+		EQUIPS: [1596, 1596, 1603, 1611],
 	},
 	2041: {
 		name: 'European Armored Carrier Princess 1',
@@ -11368,7 +11368,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [13, 12, 12, 12],
-		EQUIPS: [617, 618, 619, 619],
+		EQUIPS: [1617, 1618, 1619, 1619],
 	},
 	2042: {
 		name: 'European Armored Carrier Princess 2',
@@ -11389,7 +11389,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [14, 14, 14, 13],
-		EQUIPS: [617, 618, 619, 619],
+		EQUIPS: [1617, 1618, 1619, 1619],
 	},
 	2043: {
 		name: 'European Armored Carrier Princess 3',
@@ -11410,7 +11410,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [17, 17, 17, 16],
-		EQUIPS: [617, 618, 619, 619],
+		EQUIPS: [1617, 1618, 1619, 1619],
 	},
 	2044: {
 		name: 'European Armored Carrier Princess - Damaged 1',
@@ -11431,7 +11431,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [14, 14, 14, 13],
-		EQUIPS: [617, 618, 619, 619],
+		EQUIPS: [1617, 1618, 1619, 1619],
 	},
 	2045: {
 		name: 'European Armored Carrier Princess - Damaged 2',
@@ -11452,7 +11452,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [17, 17, 17, 16],
-		EQUIPS: [617, 618, 619, 619],
+		EQUIPS: [1617, 1618, 1619, 1619],
 	},
 	2046: {
 		name: 'European Armored Carrier Princess - Damaged 3',
@@ -11473,7 +11473,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [21, 20, 20, 20],
-		EQUIPS: [617, 618, 619, 619],
+		EQUIPS: [1617, 1618, 1619, 1619],
 	},
 	2047: {
 		name: 'Airfield Princess 14',
@@ -11493,7 +11493,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [16, 12, 12, 8],
-		EQUIPS: [574, 574, 617, 571],
+		EQUIPS: [1574, 1574, 1617, 1571],
 	},
 	2048: {
 		name: 'Airfield Princess 15',
@@ -11555,7 +11555,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 591, 541],
+		EQUIPS: [1591, 1591, 1541],
 	},
 	2051: {
 		name: 'DD Na-Class IIe (Mass Production Model) Elite',
@@ -11576,7 +11576,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 591, 541],
+		EQUIPS: [1591, 1591, 1541],
 	},
 	2052: {
 		name: 'DD Na-Class IIe (Mass Production Model) Flagship',
@@ -11597,7 +11597,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [591, 591, 541],
+		EQUIPS: [1591, 1591, 1541],
 	},
 	2053: {
 		name: 'Submarine Shark Water Demon 1',
@@ -11744,7 +11744,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [11, 16, 2, 2],
-		EQUIPS: [620, 619, 617, 620],
+		EQUIPS: [1620, 1619, 1617, 1620],
 	},
 	2060: {
 		name: 'Hi Convoy Princess 2',
@@ -11765,7 +11765,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [11, 16, 2, 2],
-		EQUIPS: [621, 619, 617, 621],
+		EQUIPS: [1621, 1619, 1617, 1621],
 	},
 	2061: {
 		name: 'Hi Convoy Princess - Damaged 1',
@@ -11786,7 +11786,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [20, 30, 6, 6],
-		EQUIPS: [621, 619, 617, 620],
+		EQUIPS: [1621, 1619, 1617, 1620],
 	},
 	2062: {
 		name: 'Hi Convoy Princess - Damaged 2',
@@ -11807,7 +11807,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [22, 32, 8, 8],
-		EQUIPS: [621, 619, 617, 621],
+		EQUIPS: [1621, 1619, 1617, 1621],
 	},
 	2063: {
 		name: 'Abyssal Plum Princess 1',
@@ -11827,7 +11827,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 622, 603],
+		EQUIPS: [1606, 1607, 1622, 1603],
 	},
 	2064: {
 		name: 'Abyssal Plum Princess 2',
@@ -11847,7 +11847,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 622, 603],
+		EQUIPS: [1606, 1607, 1622, 1603],
 	},
 	2065: {
 		name: 'Abyssal Plum Princess 3',
@@ -11867,7 +11867,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 622, 603],
+		EQUIPS: [1606, 1607, 1622, 1603],
 	},
 	2066: {
 		name: 'Abyssal Plum Princess - Damaged 1',
@@ -11887,7 +11887,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 622, 603],
+		EQUIPS: [1606, 1607, 1622, 1603],
 	},
 	2067: {
 		name: 'Abyssal Plum Princess - Damaged 2',
@@ -11907,7 +11907,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 622, 603],
+		EQUIPS: [1606, 1607, 1622, 1603],
 	},
 	2068: {
 		name: 'Abyssal Plum Princess - Damaged 3',
@@ -11927,7 +11927,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [606, 607, 622, 603],
+		EQUIPS: [1606, 1607, 1622, 1603],
 	},
 	2069: {
 		name: 'Yokohama Wharf Princess 1',
@@ -11948,7 +11948,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [25, 35, 6, 6],
-		EQUIPS: [621, 619, 617, 621],
+		EQUIPS: [1621, 1619, 1617, 1621],
 	},
 	2070: {
 		name: 'Yokohama Wharf Princess 2',
@@ -11969,7 +11969,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [28, 38, 9, 9],
-		EQUIPS: [621, 619, 617, 621],
+		EQUIPS: [1621, 1619, 1617, 1621],
 	},
 	2071: {
 		name: 'Yokohama Wharf Princess - Damaged 1',
@@ -11990,7 +11990,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [28, 38, 9, 9],
-		EQUIPS: [621, 619, 617, 621],
+		EQUIPS: [1621, 1619, 1617, 1621],
 	},
 	2072: {
 		name: 'Yokohama Wharf Princess - Damaged 2',
@@ -12011,7 +12011,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [36, 48, 12, 12],
-		EQUIPS: [621, 619, 617, 621],
+		EQUIPS: [1621, 1619, 1617, 1621],
 	},
 	2073: {
 		name: 'Abyssal Jade Princess 1',
@@ -12031,7 +12031,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 48],
-		EQUIPS: [623, 623, 622, 620],
+		EQUIPS: [1623, 1623, 1622, 1620],
 	},
 	2074: {
 		name: 'Abyssal Jade Princess 2',
@@ -12051,7 +12051,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [623, 623, 622, 621],
+		EQUIPS: [1623, 1623, 1622, 1621],
 	},
 	2075: {
 		name: 'Abyssal Jade Princess - Damaged 1',
@@ -12071,7 +12071,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [623, 623, 622, 603],
+		EQUIPS: [1623, 1623, 1622, 1603],
 	},
 	2076: {
 		name: 'Abyssal Jade Princess - Damaged 2',
@@ -12091,7 +12091,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [623, 623, 622, 603],
+		EQUIPS: [1623, 1623, 1622, 1603],
 	},
 	2077: {
 		name: 'Super Heavy Bomber Airfield Princess 1',
@@ -12111,7 +12111,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 0,
 		SLOTS: [16, 12, 12, 8],
-		EQUIPS: [630, 630, 630, 630],
+		EQUIPS: [1630, 1630, 1630, 1630],
 	},
 	2078: {
 		name: 'Super Heavy Bomber Airfield Princess 2',
@@ -12131,7 +12131,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 0,
 		SLOTS: [24, 20, 14, 8],
-		EQUIPS: [631, 630, 630, 630],
+		EQUIPS: [1631, 1630, 1630, 1630],
 	},
 	2079: {
 		name: 'Super Heavy Bomber Airfield Princess 3',
@@ -12151,7 +12151,7 @@ var SHIPDATA_ = {
 		RNG: 5,
 		SPD: 0,
 		SLOTS: [40, 20, 16, 8],
-		EQUIPS: [631, 631, 630, 630],
+		EQUIPS: [1631, 1631, 1630, 1630],
 	},
 	2080: {
 		name: 'Entombed Anti-Air Guardian Winter Princess 1',
@@ -12171,7 +12171,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [553, 553, 624],
+		EQUIPS: [1553, 1553, 1624],
 	},
 	2081: {
 		name: 'Entombed Anti-Air Guardian Winter Princess 2',
@@ -12192,7 +12192,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [553, 553, 624, 603],
+		EQUIPS: [1553, 1553, 1624, 1603],
 	},
 	2082: {
 		name: 'Entombed Anti-Air Guardian Winter Princess - Damaged 1',
@@ -12213,7 +12213,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [553, 553, 624, 603],
+		EQUIPS: [1553, 1553, 1624, 1603],
 	},
 	2083: {
 		name: 'Entombed Anti-Air Guardian Winter Princess - Damaged 2',
@@ -12234,7 +12234,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [553, 553, 624, 603],
+		EQUIPS: [1553, 1553, 1624, 1603],
 	},
 	2084: {
 		name: 'Supply Depot Princess C 1',
@@ -12255,7 +12255,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 24, 24],
-		EQUIPS: [565, 565, 561, 561],
+		EQUIPS: [1565, 1565, 1561, 1561],
 	},
 	2085: {
 		name: 'Supply Depot Princess C - Damaged 1',
@@ -12277,7 +12277,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2086: {
 		name: 'Supply Depot Princess C 2',
@@ -12298,7 +12298,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 32, 32],
-		EQUIPS: [565, 565, 562, 562],
+		EQUIPS: [1565, 1565, 1562, 1562],
 	},
 	2087: {
 		name: 'Supply Depot Princess C - Damaged 2',
@@ -12320,7 +12320,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2088: {
 		name: 'Supply Depot Princess C 3',
@@ -12341,7 +12341,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 52, 52],
-		EQUIPS: [565, 565, 562, 562],
+		EQUIPS: [1565, 1565, 1562, 1562],
 	},
 	2089: {
 		name: 'Supply Depot Princess C - Damaged 3',
@@ -12363,7 +12363,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2090: {
 		name: 'CA Ne-Class Kai 4',
@@ -12384,7 +12384,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 4],
-		EQUIPS: [600, 600, 593, 564],
+		EQUIPS: [1600, 1600, 1593, 1564],
 	},
 	2091: {
 		name: 'Airfield Princess Patrol Aircraft Deployment 1',
@@ -12404,7 +12404,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [8, 8, 8, 4],
-		EQUIPS: [574, 561, 547, 583],
+		EQUIPS: [1574, 1561, 1547, 1583],
 	},
 	2092: {
 		name: 'Airfield Princess Patrol Aircraft Deployment 2',
@@ -12424,7 +12424,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [16, 16, 8, 8],
-		EQUIPS: [574, 574, 547, 583],
+		EQUIPS: [1574, 1574, 1547, 1583],
 	},
 	2093: {
 		name: 'Airfield Princess Patrol Aircraft Deployment 3',
@@ -12444,7 +12444,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [18, 18, 16, 12],
-		EQUIPS: [575, 575, 547, 583],
+		EQUIPS: [1575, 1575, 1547, 1583],
 	},
 	2094: {
 		name: 'Airfield Princess 16',
@@ -12464,7 +12464,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [12, 8, 8, 4],
-		EQUIPS: [625, 625, 625, 625],
+		EQUIPS: [1625, 1625, 1625, 1625],
 	},
 	2095: {
 		name: 'Airfield Princess 17',
@@ -12484,7 +12484,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [18, 18, 12, 8],
-		EQUIPS: [626, 626, 625, 625],
+		EQUIPS: [1626, 1626, 1625, 1625],
 	},
 	2096: {
 		name: 'Airfield Princess 18',
@@ -12504,7 +12504,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 0,
 		SLOTS: [24, 24, 16, 8],
-		EQUIPS: [626, 626, 626, 625],
+		EQUIPS: [1626, 1626, 1626, 1625],
 	},
 	2097: {
 		name: 'Outer Southern Sea Destroyer Princess 1',
@@ -12524,7 +12524,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	2098: {
 		name: 'Outer Southern Sea Destroyer Princess 2',
@@ -12544,7 +12544,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	2099: {
 		name: 'Outer Southern Sea Destroyer Princess - Damaged 1',
@@ -12564,7 +12564,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	2100: {
 		name: 'Outer Southern Sea Destroyer Princess - Damaged 2',
@@ -12584,7 +12584,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [588, 588, 580, 531],
+		EQUIPS: [1588, 1588, 1580, 1531],
 	},
 	2101: {
 		name: 'CVL Nu-Class B Elite 1',
@@ -12606,7 +12606,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [16, 14, 14, 14],
-		EQUIPS: [547, 574, 574, 583],
+		EQUIPS: [1547, 1574, 1574, 1583],
 	},
 	2102: {
 		name: 'CVL Nu-Class B Elite 2',
@@ -12628,7 +12628,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [22, 18, 18, 17],
-		EQUIPS: [547, 574, 574, 583],
+		EQUIPS: [1547, 1574, 1574, 1583],
 	},
 	2103: {
 		name: 'CVL Nu-Class B Elite 3',
@@ -12650,7 +12650,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [28, 21, 20, 20],
-		EQUIPS: [547, 574, 574, 583],
+		EQUIPS: [1547, 1574, 1574, 1583],
 	},
 	2104: {
 		name: 'CVL Nu-Class B Flagship 1',
@@ -12672,7 +12672,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [36, 21, 21, 20],
-		EQUIPS: [547, 575, 575, 583],
+		EQUIPS: [1547, 1575, 1575, 1583],
 	},
 	2105: {
 		name: 'Aircraft Carrier Princess B 1',
@@ -12693,7 +12693,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [36, 30, 36, 24],
-		EQUIPS: [581, 574, 582, 583],
+		EQUIPS: [1581, 1574, 1582, 1583],
 	},
 	2106: {
 		name: 'Aircraft Carrier Princess B 2',
@@ -12714,7 +12714,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [48, 36, 48, 36],
-		EQUIPS: [581, 574, 582, 583],
+		EQUIPS: [1581, 1574, 1582, 1583],
 	},
 	2107: {
 		name: 'Aircraft Carrier Princess B 3',
@@ -12735,7 +12735,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [56, 48, 48, 36],
-		EQUIPS: [581, 574, 582, 583],
+		EQUIPS: [1581, 1574, 1582, 1583],
 	},
 	2108: {
 		name: 'Aircraft Carrier Princess B 4',
@@ -12756,7 +12756,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [72, 52, 56, 36],
-		EQUIPS: [581, 575, 582, 583],
+		EQUIPS: [1581, 1575, 1582, 1583],
 	},
 	2109: {
 		name: 'Modernized Battleship Princess 1',
@@ -12776,7 +12776,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 531, 580],
+		EQUIPS: [1592, 1592, 1531, 1580],
 	},
 	2110: {
 		name: 'Modernized Battleship Princess 2',
@@ -12796,7 +12796,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 531, 580],
+		EQUIPS: [1592, 1592, 1531, 1580],
 	},
 	2111: {
 		name: 'Modernized Battleship Princess 3',
@@ -12816,7 +12816,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 531, 580],
+		EQUIPS: [1592, 1592, 1531, 1580],
 	},
 	2112: {
 		name: 'Modernized Battleship Princess - Damaged 1',
@@ -12836,7 +12836,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 531, 580],
+		EQUIPS: [1592, 1592, 1531, 1580],
 	},
 	2113: {
 		name: 'Modernized Battleship Princess - Damaged 2',
@@ -12856,7 +12856,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 531, 580],
+		EQUIPS: [1592, 1592, 1531, 1580],
 	},
 	2114: {
 		name: 'Modernized Battleship Princess - Damaged 3',
@@ -12876,7 +12876,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [592, 592, 531, 580],
+		EQUIPS: [1592, 1592, 1531, 1580],
 	},
 	2115: {
 		name: 'CV Wo-Class Flagship Kai B',
@@ -12897,7 +12897,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		unknownstats: true,
 		SLOTS: [36, 36, 36, 36, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 		fuel: 0,
 		ammo: 0
 	},
@@ -12920,7 +12920,7 @@ var SHIPDATA_ = {
 		SPD: 10,
 		unknownstats: true,
 		SLOTS: [48, 48, 36, 36, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 		fuel: 0,
 		ammo: 0
 	},
@@ -12943,7 +12943,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [48, 44, 43, 43, 0],
-		EQUIPS: [581, 582, 583, 574, 608],
+		EQUIPS: [1581, 1582, 1583, 1574, 1608],
 	},
 	2118: {
 		name: 'Aircraft Carrier Summer Princess B 3',
@@ -12964,7 +12964,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [52, 46, 45, 45, 0],
-		EQUIPS: [581, 582, 583, 574, 608],
+		EQUIPS: [1581, 1582, 1583, 1574, 1608],
 	},
 	2119: {
 		name: 'Aircraft Carrier Summer Princess B 4',
@@ -12985,7 +12985,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [54, 48, 48, 48, 0],
-		EQUIPS: [581, 582, 583, 574, 608],
+		EQUIPS: [1581, 1582, 1583, 1574, 1608],
 	},
 	2120: {
 		name: 'Fast Light Carrier Water Demon 1',
@@ -13006,7 +13006,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [32, 30, 30, 26, 0],
-		EQUIPS: [574, 582, 583, 581, 608],
+		EQUIPS: [1574, 1582, 1583, 1581, 1608],
 	},
 	2121: {
 		name: 'Fast Light Carrier Water Demon 2',
@@ -13027,7 +13027,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [36, 32, 32, 28, 0],
-		EQUIPS: [574, 582, 583, 581, 608],
+		EQUIPS: [1574, 1582, 1583, 1581, 1608],
 	},
 	2122: {
 		name: 'Fast Light Carrier Water Demon 3',
@@ -13048,7 +13048,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [40, 38, 38, 32, 0],
-		EQUIPS: [574, 582, 583, 581, 608],
+		EQUIPS: [1574, 1582, 1583, 1581, 1608],
 	},
 	2123: {
 		name: 'Fast Light Carrier Water Demon - Damaged 1',
@@ -13069,7 +13069,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [32, 30, 30, 26, 0],
-		EQUIPS: [574, 582, 583, 581, 608],
+		EQUIPS: [1574, 1582, 1583, 1581, 1608],
 	},
 	2124: {
 		name: 'Fast Light Carrier Water Demon - Damaged 2',
@@ -13090,7 +13090,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [40, 38, 38, 32, 0],
-		EQUIPS: [574, 582, 583, 581, 608],
+		EQUIPS: [1574, 1582, 1583, 1581, 1608],
 	},
 	2125: {
 		name: 'Fast Light Carrier Water Demon - Damaged 3',
@@ -13111,7 +13111,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [48, 42, 42, 36, 0],
-		EQUIPS: [574, 582, 583, 581, 608],
+		EQUIPS: [1574, 1582, 1583, 1581, 1608],
 	},
 	2126: {
 		name: 'Prototype Carrier Princess Vacation Mode 1',
@@ -13132,7 +13132,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [40, 40, 40, 30, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 	},
 	2127: {
 		name: 'Prototype Carrier Princess Vacation Mode 2',
@@ -13153,7 +13153,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [46, 46, 46, 42, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 	},
 	2128: {
 		name: 'Prototype Carrier Princess Vacation Mode 3',
@@ -13174,7 +13174,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [62, 62, 42, 42, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 	},
 	2129: {
 		name: 'Prototype Carrier Princess Vacation Mode - Damaged 1',
@@ -13195,7 +13195,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [46, 46, 46, 42, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 	},
 	2130: {
 		name: 'Prototype Carrier Princess Vacation Mode - Damaged 2',
@@ -13216,7 +13216,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [62, 62, 42, 42, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 	},
 	2131: {
 		name: 'Prototype Carrier Princess Vacation Mode - Damaged 3',
@@ -13237,7 +13237,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [74, 74, 58, 42, 0],
-		EQUIPS: [581, 574, 582, 583, 608],
+		EQUIPS: [1581, 1574, 1582, 1583, 1608],
 	},
 	2132: {
 		name: 'Incomplete Battleship Princess 1',
@@ -13257,7 +13257,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 72, 0],
-		EQUIPS: [577, 577, 577, 574, 559],
+		EQUIPS: [1577, 1577, 1577, 1574, 1559],
 	},
 	2133: {
 		name: 'Incomplete Battleship Princess 2',
@@ -13277,7 +13277,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 80, 0],
-		EQUIPS: [577, 577, 577, 574, 559],
+		EQUIPS: [1577, 1577, 1577, 1574, 1559],
 	},
 	2134: {
 		name: 'Incomplete Battleship Princess 3',
@@ -13297,7 +13297,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 88, 0],
-		EQUIPS: [577, 577, 577, 574, 559],
+		EQUIPS: [1577, 1577, 1577, 1574, 1559],
 	},
 	2135: {
 		name: 'Incomplete Battleship Princess - Damaged 1',
@@ -13317,7 +13317,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 80, 0],
-		EQUIPS: [577, 577, 577, 574, 559],
+		EQUIPS: [1577, 1577, 1577, 1574, 1559],
 	},
 	2136: {
 		name: 'Incomplete Battleship Princess - Damaged 2',
@@ -13337,7 +13337,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 88, 0],
-		EQUIPS: [577, 577, 577, 574, 559],
+		EQUIPS: [1577, 1577, 1577, 1574, 1559],
 	},
 	2137: {
 		name: 'Incomplete Battleship Princess - Damaged 3',
@@ -13357,7 +13357,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 98, 0],
-		EQUIPS: [577, 577, 577, 574, 559],
+		EQUIPS: [1577, 1577, 1577, 1574, 1559],
 	},
 	2138: {
 		name: 'Supply Depot Princess C Vacation Mode 1',
@@ -13378,7 +13378,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 48],
-		EQUIPS: [565, 565, 580, 561],
+		EQUIPS: [1565, 1565, 1580, 1561],
 	},
 	2139: {
 		name: 'Supply Depot Princess C Vacation Mode - Damaged 1',
@@ -13399,7 +13399,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 72],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	2140: {
 		name: 'Supply Depot Princess C Vacation Mode - 2',
@@ -13420,7 +13420,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 98],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	2141: {
 		name: 'Supply Depot Princess C Vacation Mode - Damaged 2',
@@ -13441,7 +13441,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 128],
-		EQUIPS: [565, 565, 580, 562],
+		EQUIPS: [1565, 1565, 1580, 1562],
 	},
 	2142: {
 		name: 'Supply Depot Princess C Vacation Mode 3',
@@ -13462,7 +13462,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2143: {
 		name: 'Supply Depot Princess C Vacation Mode - Damaged 3',
@@ -13483,7 +13483,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2144: {
 		name: 'Supply Depot Princess C Vacation Mode 4',
@@ -13504,7 +13504,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 	2145: {
 		name: 'Supply Depot Princess C Vacation Mode - Damaged 4',
@@ -13525,7 +13525,7 @@ var SHIPDATA_ = {
 		RNG: 3,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [579, 553, 553, 580],
+		EQUIPS: [1579, 1553, 1553, 1580],
 	},
 
 };

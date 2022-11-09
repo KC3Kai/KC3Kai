@@ -445,17 +445,10 @@
 			// TBM-3W+3S
 			"389": {
 				count: 0,
-				byClass: {
-					// Lexington Class
-					"69": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 2, "tais": 3, "houk": 1 },
 					},
-					// Casablanca Class
-					"83": "69",
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
 				},
 				byShip: [
 					{

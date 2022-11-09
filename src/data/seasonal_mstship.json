@@ -5374,18 +5374,130 @@
 	},
 	"5671": {
 		"api_id": 5671,
+		"api_name": "浴衣第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5672": {
+		"api_id": 5672,
+		"api_name": "浴衣第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5673": {
+		"api_id": 5673,
+		"api_name": "ハロウィン早波",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5674": {
+		"api_id": 5674,
+		"api_name": "ハロウィン阿武隈改二",
+		"api_yomi": "あぶくま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5675": {
+		"api_id": 5675,
+		"api_name": "ハロウィン伊201",
+		"api_yomi": "い201",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5676": {
+		"api_id": 5676,
+		"api_name": "ハロウィンBrooklyn",
+		"api_yomi": "ブルックリン",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5677": {
+		"api_id": 5677,
+		"api_name": "ハロウィンMaestrale",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5678": {
+		"api_id": 5678,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"5672": {
-		"api_id": 5672,
+	"5679": {
+		"api_id": 5679,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5680": {
+		"api_id": 5680,
+		"api_name": "浴衣山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5681": {
+		"api_id": 5681,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5682": {
+		"api_id": 5682,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5683": {
+		"api_id": 5683,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5684": {
+		"api_id": 5684,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5685": {
+		"api_id": 5685,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5686": {
+		"api_id": 5686,
+		"api_name": "ハロウィンBrooklyn改",
+		"api_yomi": "ブルックリン",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }

@@ -940,6 +940,74 @@
 				});
 			});
 			
+			// Fix abyssal equipment master IDs after 2022-11-09 (bump 1000)
+			$(".tab_profile .fix_abyssalgear").on("click", function(event){
+				const handleError = function(err, msg) {
+					console.error(msg || "Fixing abyssal gear IDs error", err);
+					alert(`Oops! ${msg || "There is something wrong"}. You might report the error logs.`);
+				};
+				const bumpEqId = function(id) { return id > 500 && id < 1501 ? Number(id) + 1000 : id; };
+				// Fix table `enemy`
+				KC3Database.con.enemy.reverse().modify(function(enemy){
+					if(enemy.eq1 !== undefined) enemy.eq1 = bumpEqId(enemy.eq1);
+					if(enemy.eq2 !== undefined) enemy.eq2 = bumpEqId(enemy.eq2);
+					if(enemy.eq3 !== undefined) enemy.eq3 = bumpEqId(enemy.eq3);
+					if(enemy.eq4 !== undefined) enemy.eq4 = bumpEqId(enemy.eq4);
+					if(enemy.eq5 !== undefined) enemy.eq5 = bumpEqId(enemy.eq5);
+				}).then(function(c){
+					console.info("Enemy stats equipment have been fixed");/*RemoveLogging:skip*/
+					alert("Done 1/3~");
+				}).catch(function(e){
+					handleError(e, "Fixing enemy stats equipment error");
+				});
+				
+				const updateEslot = function(slotArrList){
+					if(Array.isArray(slotArrList)){
+						return slotArrList.map(slotArr => {
+							if(slotArr.some(id => id > 500 && id < 1501))
+								return slotArr.map(bumpEqId);
+							return slotArr;
+						});
+					}
+					return slotArrList;
+				};
+				// Fix table `sortie`, for land-base air-raid eSlot
+				KC3Database.con.sortie.reverse().modify(function(sortie){
+					const nodes = sortie.nodes;
+					if(Array.isArray(nodes)){
+						nodes.forEach(node => {
+							if(node.airRaid && node.airRaid.api_eSlot)
+								node.airRaid.api_eSlot = updateEslot(node.airRaid.api_eSlot);
+							if(node.heavyAirRaid && node.heavyAirRaid.api_eSlot)
+								node.heavyAirRaid.api_eSlot = updateEslot(node.heavyAirRaid.api_eSlot);
+						});
+					}
+				}).then(function(c){
+					console.info("Airraid enemy equipment have been fixed");/*RemoveLogging:skip*/
+					alert("Done 2/3~");
+				}).catch(function(e){
+					handleError(e, "Fixing airraid enemy equipment error");
+				});
+				// Fix table `battle`, for enemy eSlot
+				KC3Database.con.battle.reverse().modify(function(battle){
+					const day = battle.data;
+					const night = battle.yasen;
+					if(day.api_eSlot)
+						day.api_eSlot = updateEslot(day.api_eSlot);
+					if(day.api_eSlot_combined)
+						day.api_eSlot_combined = updateEslot(day.api_eSlot_combined);
+					if(night.api_eSlot)
+						night.api_eSlot = updateEslot(night.api_eSlot);
+					if(night.api_eSlot_combined)
+						night.api_eSlot_combined = updateEslot(night.api_eSlot_combined);
+				}).then(function(c){
+					console.info("Battle enemy equipment have been fixed");/*RemoveLogging:skip*/
+					alert("Done 3/3!");
+				}).catch(function(e){
+					handleError(e, "Fixing battle enemy equipment error");
+				});
+			});
+			
 			// Fix ship bugged/desynced pendingConsumption records for some reasons
 			$(".tab_profile .fix_pending_ledger").on("click", function(event){
 				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))

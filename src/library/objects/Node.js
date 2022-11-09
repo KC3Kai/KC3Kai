@@ -1735,8 +1735,8 @@ Used by SortieManager
 			}
 			if(Array.isArray(eSlot) && eSlot.length > 0){
 				for(let slotIdx = 0; slotIdx < Math.min(eSlot.length, 5); slotIdx++){
-					if(eSlot[slotIdx] > 0) {
-						const gearMaster = KC3Master.slotitem(eSlot[slotIdx]);
+					const gearMaster = KC3Master.slotitem(eSlot[slotIdx]);
+					if(eSlot[slotIdx] > 0 && !!gearMaster) {
 						tooltip += "\n" + $("<img />")
 							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
 							.css(iconStyles).prop("outerHTML");
@@ -2795,7 +2795,7 @@ Used by SortieManager
 		// Save enemy info, maybe main fleet
 		(this.eshipsMain || this.eships).forEach((enemyId, i) => {
 			if (KC3Master.isAbyssalShip(enemyId)) {
-				KC3Database.Enemy({
+				const edata = {
 					id: enemyId,
 					hp: battleData.api_e_maxhps[i],
 					fp: battleData.api_eParam[i][0],
@@ -2806,14 +2806,16 @@ Used by SortieManager
 					eq2: battleData.api_eSlot[i][1],
 					eq3: battleData.api_eSlot[i][2],
 					eq4: battleData.api_eSlot[i][3]
-				});
+				};
+				if (battleData.api_eSlot[i][4] > 0) edata.eq5 = battleData.api_eSlot[i][4];
+				KC3Database.Enemy(edata);
 			}
 		});
 		// Save combined enemy escort info
 		if(Array.isArray(this.eshipsEscort)) {
 			this.eshipsEscort.forEach((enemyId, i) => {
 				if (KC3Master.isAbyssalShip(enemyId)) {
-					KC3Database.Enemy({
+					const edata = {
 						id: enemyId,
 						hp: battleData.api_e_maxhps_combined[i],
 						fp: battleData.api_eParam_combined[i][0],
@@ -2824,7 +2826,9 @@ Used by SortieManager
 						eq2: battleData.api_eSlot_combined[i][1],
 						eq3: battleData.api_eSlot_combined[i][2],
 						eq4: battleData.api_eSlot_combined[i][3]
-					});
+					};
+					if (battleData.api_eSlot_combined[i][4] > 0) edata.eq5 = battleData.api_eSlot_combined[i][4];
+					KC3Database.Enemy(edata);
 				}
 			});
 		}

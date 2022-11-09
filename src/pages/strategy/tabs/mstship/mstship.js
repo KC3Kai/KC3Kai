@@ -1358,8 +1358,8 @@
 							}
 							// Priority to show equipment recorded via encounter
 							const equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : (abyssMaster.kc3_slots || [])[index];
-							if (equipId > 0) {
-								const equipment = KC3Master.slotitem(equipId);
+							const equipment = KC3Master.slotitem(equipId);
+							if (equipId > 0 && !!equipment) {
 								equipMasters.push(equipment);
 								const fakeGear = new KC3Gear({ itemId: 2, masterId: equipId });
 								$(".slotitem", this).text(KC3Meta.gearName(equipment.api_name))
