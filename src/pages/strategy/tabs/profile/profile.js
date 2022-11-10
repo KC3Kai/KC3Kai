@@ -673,7 +673,7 @@
 			$(".tab_profile .export_csv_abyssal").on("click", function(event){
 				// CSV Headers
 				let exportData = [
-					"ID", "Name", "SType", "HP", "FP", "AR", "TP", "AA", "Speed", "Equip1", "Equip2", "Equip3", "Equip4"
+					"ID", "Name", "SType", "HP", "FP", "AR", "TP", "AA", "Speed", "Equip1", "Equip2", "Equip3", "Equip4", "Equip5"
 				].join(",")+CSV_LINE_BREAKS;
 				KC3Database.con.enemy
 					.toArray(function(result){
@@ -688,10 +688,11 @@
 								ab.tp,
 								ab.aa,
 								csvQuoteIfNecessary(KC3Meta.shipSpeed(KC3Master.ship(ab.id).api_soku)),
-								csvQuoteIfNecessary("[" + ab.eq1 + "] " + (KC3Meta.gearNameById(ab.eq1) || "")),
-								csvQuoteIfNecessary("[" + ab.eq2 + "] " + (KC3Meta.gearNameById(ab.eq2) || "")),
-								csvQuoteIfNecessary("[" + ab.eq3 + "] " + (KC3Meta.gearNameById(ab.eq3) || "")),
-								csvQuoteIfNecessary("[" + ab.eq4 + "] " + (KC3Meta.gearNameById(ab.eq4) || ""))
+								csvQuoteIfNecessary(["[" + ab.eq1 + "]", KC3Meta.gearNameById(ab.eq1)].join(" ")),
+								csvQuoteIfNecessary(["[" + ab.eq2 + "]", KC3Meta.gearNameById(ab.eq2)].join(" ")),
+								csvQuoteIfNecessary(["[" + ab.eq3 + "]", KC3Meta.gearNameById(ab.eq3)].join(" ")),
+								csvQuoteIfNecessary(["[" + ab.eq4 + "]", KC3Meta.gearNameById(ab.eq4)].join(" ")),
+								!ab.eq5 ? "[-1]" : csvQuoteIfNecessary(["[" + ab.eq5 + "]", KC3Meta.gearNameById(ab.eq5)].join(" "))
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						
@@ -940,6 +941,74 @@
 				});
 			});
 			
+			// Fix abyssal equipment master IDs after 2022-11-09 (bump 1000)
+			$(".tab_profile .fix_abyssalgear").on("click", function(event){
+				const handleError = function(err, msg) {
+					console.error(msg || "Fixing abyssal gear IDs error", err);
+					alert(`Oops! ${msg || "There is something wrong"}. You might report the error logs.`);
+				};
+				const bumpEqId = function(id) { return id > 500 && id < 1501 ? Number(id) + 1000 : id; };
+				// Fix table `enemy`
+				KC3Database.con.enemy.reverse().modify(function(enemy){
+					if(enemy.eq1 !== undefined) enemy.eq1 = bumpEqId(enemy.eq1);
+					if(enemy.eq2 !== undefined) enemy.eq2 = bumpEqId(enemy.eq2);
+					if(enemy.eq3 !== undefined) enemy.eq3 = bumpEqId(enemy.eq3);
+					if(enemy.eq4 !== undefined) enemy.eq4 = bumpEqId(enemy.eq4);
+					if(enemy.eq5 !== undefined) enemy.eq5 = bumpEqId(enemy.eq5);
+				}).then(function(c){
+					console.info("Enemy stats equipment have been fixed");/*RemoveLogging:skip*/
+					alert("Done 1/3~");
+				}).catch(function(e){
+					handleError(e, "Fixing enemy stats equipment error");
+				});
+				
+				const updateEslot = function(slotArrList){
+					if(Array.isArray(slotArrList)){
+						return slotArrList.map(slotArr => {
+							if(slotArr.some(id => id > 500 && id < 1501))
+								return slotArr.map(bumpEqId);
+							return slotArr;
+						});
+					}
+					return slotArrList;
+				};
+				// Fix table `sortie`, for land-base air-raid eSlot
+				KC3Database.con.sortie.reverse().modify(function(sortie){
+					const nodes = sortie.nodes;
+					if(Array.isArray(nodes)){
+						nodes.forEach(node => {
+							if(node.airRaid && node.airRaid.api_eSlot)
+								node.airRaid.api_eSlot = updateEslot(node.airRaid.api_eSlot);
+							if(node.heavyAirRaid && node.heavyAirRaid.api_eSlot)
+								node.heavyAirRaid.api_eSlot = updateEslot(node.heavyAirRaid.api_eSlot);
+						});
+					}
+				}).then(function(c){
+					console.info("Airraid enemy equipment have been fixed");/*RemoveLogging:skip*/
+					alert("Done 2/3~");
+				}).catch(function(e){
+					handleError(e, "Fixing airraid enemy equipment error");
+				});
+				// Fix table `battle`, for enemy eSlot
+				KC3Database.con.battle.reverse().modify(function(battle){
+					const day = battle.data;
+					const night = battle.yasen;
+					if(day.api_eSlot)
+						day.api_eSlot = updateEslot(day.api_eSlot);
+					if(day.api_eSlot_combined)
+						day.api_eSlot_combined = updateEslot(day.api_eSlot_combined);
+					if(night.api_eSlot)
+						night.api_eSlot = updateEslot(night.api_eSlot);
+					if(night.api_eSlot_combined)
+						night.api_eSlot_combined = updateEslot(night.api_eSlot_combined);
+				}).then(function(c){
+					console.info("Battle enemy equipment have been fixed");/*RemoveLogging:skip*/
+					alert("Done 3/3!");
+				}).catch(function(e){
+					handleError(e, "Fixing battle enemy equipment error");
+				});
+			});
+			
 			// Fix ship bugged/desynced pendingConsumption records for some reasons
 			$(".tab_profile .fix_pending_ledger").on("click", function(event){
 				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))
@@ -1078,15 +1147,15 @@
 			const bc = this.battleCounts;
 			if(Object.keys(bc).length < 2) return;
 			$(".day_battle_total_24 .rank_content").html(
-				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.lastDayBattle, bc.lastDaySortie)
 			);
 			$(".day_battle_total_48 .rank_content").html(
-				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.last2DayBattle, bc.last2DaySortie)
 			);
 			$(".month_battle_total .rank_content").html(
-				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
+				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.lastMonthBattle, bc.lastMonthSortie)
 			);
 			$(".month_battle_average .rank_content").text(bc.lastMonthAvgBattle);

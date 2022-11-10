@@ -155,6 +155,10 @@
 							$(".pagination").twbsPagination({
 								totalPages: numPages,
 								visiblePages: 9,
+								first: KC3Meta.term("TwbsPaginationFirstLabel"),
+								prev: KC3Meta.term("TwbsPaginationPrevLabel"),
+								next: KC3Meta.term("TwbsPaginationNextLabel"),
+								last: KC3Meta.term("TwbsPaginationLastLabel"),
 								onPageClick: (event, page) => {
 									this.showPage(page);
 								}
@@ -176,7 +180,7 @@
 			}).catch(error => {
 				console.error("Retrieving large ship building history failed", error);
 				hideAndResetInfo();
-				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
+				$(".build_list").html(KC3Meta.term("ArsenalHistoryDbFailure"));
 			});
 		},
 
@@ -223,7 +227,7 @@
 				}
 			}).catch(error => {
 				console.error("Retrieving large ship building history failed", error);
-				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
+				$(".build_list").html(KC3Meta.term("ArsenalHistoryDbFailure"));
 			});
 		}
 

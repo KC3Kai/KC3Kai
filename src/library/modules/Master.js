@@ -12,7 +12,9 @@ Saves and loads significant data for future use
 		available: false,
 		// Not start from, excluding
 		abyssalShipIdFrom: 1500,
-		abyssalGearIdFrom: 500,
+		// Since 2022-11-09, 1st abyssal slotitem ID bumped from 501 to 1501
+		// New constant added, see main.js#SlotConst.ENEMY_SLOT_BORDER
+		abyssalGearIdFrom: 1500,
 		// Devs still archive seasonal ID backward from old max 997
 		// Since 2017-11-27, 998~ going to be used
 		// Since 2019-06-25, devs shifted IDs from 729~ to 5001~
@@ -255,7 +257,7 @@ Saves and loads significant data for future use
 				KC3Meta.resourceKeys[(key(typeStr) + Number(id) * typeStr.length) % 100] % 8973
 			);
 			const padWidth = ({
-				"ship": 4, "slot": 3, "furniture": 3, "useitem": 3, "bgm": 3,
+				"ship": 4, "slot": 4, "furniture": 3, "useitem": 3, "bgm": 3,
 			})[rscPath];
 			const paddedId = String(id).padStart(padWidth || 3, "0"),
 				suffix = !["useitem", "se"].includes(rscPath) ? "_" + getFilenameSuffix(id, typeWithPrefix) : "";
@@ -269,7 +271,7 @@ Saves and loads significant data for future use
 			return this.rsc_file(id, type, shipOrSlot, isDamaged, debuffedAbyssalSuffix);
 		},
 		bgm_file :function(id, type = "port"){
-			return this.png_file(id, type, "bgm");
+			return this.rsc_file(id, type, "bgm");
 		},
 
 		slotitem :function(id){

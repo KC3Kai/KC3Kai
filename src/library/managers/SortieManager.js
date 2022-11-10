@@ -556,6 +556,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// To check Taiha correctly on battle result screen, have to apply predicted afterHp first (invoke `#applyShipsAfterHp`)
 			let hasTaihaShip = false;
 			let isForcedToRetreat = false;
+			let isDameconDecision = false;
 			let isSafeToAdvance = false;
 			// To check if damecon already consumed during battle
 			const dameConConsumed = this.currentNode().dameConConsumed || [];
@@ -572,6 +573,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					const firstDameconPos = ship.findDameCon().pos, totalDameconCount = ship.countEquipment([42, 43]);
 					const isDameconRemainedPostBattle = firstDameconPos >= 0
 						&& (firstDameconPos !== (dameConConsumed[slotIdx] || {}).pos || totalDameconCount > 1);
+					// taiha flagship still equip damecon, consuming damecon decision screen will appear instead of regular next/back choice screen
+					if (fleetIdx === 0 && slotIdx === 0 && ship.isTaiha() && isDameconRemainedPostBattle) {
+						isDameconDecision = true;
+					}
 					// skip ships: not taiha, already escaped/sunk, unused damecon still equipped
 					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || isDameconRemainedPostBattle) {
 						return;
@@ -587,8 +592,14 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					hasTaihaShip = true;
 				});
 			});
-			console.debug("Taiha ship in fleets found?", hasTaihaShip, "flagship?", isForcedToRetreat, "safe to next?", isSafeToAdvance);
-			return hasTaihaShip && !isForcedToRetreat && !isSafeToAdvance;
+			console.debug("Taiha ship in fleets found?", hasTaihaShip, "flagship?", isForcedToRetreat, "safe to next?", isSafeToAdvance, "use damecon screen?", isDameconDecision);
+			return {
+				effectiveTaihaFlag: hasTaihaShip && !isForcedToRetreat && !isSafeToAdvance,
+				hasTaihaShip,
+				isForcedToRetreat,
+				isDameconDecision,
+				isSafeToAdvance,
+			};
 		},
 		
 		checkFCF :function(escapeData){

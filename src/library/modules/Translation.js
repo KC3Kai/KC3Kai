@@ -56,11 +56,18 @@
 			// Interchange element contents with translations
 			$(".i18n").each(function(){
 				$(this).html( KC3Meta.term( $(this).text() ) );
-				$(this).css("visibility", "visible");
+				// To avoid dupelicatedly applying 
+				$(this).removeClass("i18n").addClass("l10n");
 			});
 			// Update title attribute with translations
 			$(".i18n_title").each(function(){
 				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
+				$(this).removeClass("i18n_title").addClass("l10n_title");
+			});
+			// Update placeholder attribute with translations
+			$(".i18n_placeholder").each(function(){
+				$(this).attr("placeholder", KC3Meta.term( $(this).attr("placeholder") ) );
+				$(this).removeClass("i18n_placeholder").addClass("l10n_placeholder");
 			});
 		},
 
@@ -71,6 +78,7 @@
 			// Apply specialized global fonts
 			var fontFamily = false;
 			switch(ConfigManager.language){
+				// Default font family for CJK languages
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
 				case "tcn-yue": fontFamily = '"Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
@@ -84,9 +92,25 @@
 			} else {
 				if(returnFontFamily) return;
 			}
+			// Can be also defined in terms
+			var fontFamilyInTerm = KC3Meta.term("BodyFontFamily");
+			if(!!fontFamilyInTerm && fontFamilyInTerm !== "BodyFontFamily"){
+				fontFamily = fontFamilyInTerm;
+			}
+			if(fontFamily){ $("body").css("font-family", fontFamily); }
 			
 			// Apply HTML language code, here needs ISO 639-1 abbr code
 			$("html").attr("lang", this.getLocale(ConfigManager.language));
+			
+			// Apply custom CSS for language specifics in terms, lower priority
+			var cssInTerm = KC3Meta.term("LangCustomCSS");
+			if(!!cssInTerm && cssInTerm !== "LangCustomCSS" && !$("#langCustomCSS").length){
+				var customCSS = document.createElement("style");
+				customCSS.id = "langCustomCSS";
+				customCSS.type = "text/css";
+				customCSS.innerHTML = cssInTerm;
+				$("head").append(customCSS);
+			}
 		},
 
 		/*

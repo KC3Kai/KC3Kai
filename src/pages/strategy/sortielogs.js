@@ -495,6 +495,10 @@
 				twbsPageObj = $(".tab_"+tabCode+" .pagination").twbsPagination({
 					totalPages: countPages,
 					visiblePages: 9,
+					first: KC3Meta.term("TwbsPaginationFirstLabel"),
+					prev: KC3Meta.term("TwbsPaginationPrevLabel"),
+					next: KC3Meta.term("TwbsPaginationNextLabel"),
+					last: KC3Meta.term("TwbsPaginationLastLabel"),
 					onPageClick: function(event, page) {
 						// only reload on different page, as event also triggered after init or enabled
 						if(self.pageNum != page){

@@ -111,41 +111,41 @@
 			$(".tab_flowchart .extralist .complete").toggle(this.showingAll);
 			
 			$(".resetDailies").on("click", function(){
-				if(confirm("Are you sure?")){
+				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 					KC3QuestManager.resetDailies();
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
 			
 			$(".resetWeeklies").on("click", function(){
-				if(confirm("Are you sure?")){
+				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 					KC3QuestManager.resetWeeklies();
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
 			
 			$(".resetMonthlies").on("click", function(){
-				if(confirm("Are you sure?")){
+				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 					KC3QuestManager.resetMonthlies();
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
 			
 			$(".resetQuarterlies").on("click", function(){
-				if(confirm("Are you sure?")){
+				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 					KC3QuestManager.resetQuarterlies();
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
 			
 			$(".resetYearlies").on("click", function(){
-				if(confirm("Which option would you like to choose?\nOK: Reset all yearly quests\nCancel: Reset yearly quests of this month if any")){
-					if(confirm("Are you sure?")){
+				if(confirm(KC3Meta.term("QuestFlowchartYearlyPrompt"))){
+					if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 						KC3QuestManager.resetYearlies("all");
 						KC3StrategyTabs.reloadTab(undefined, true);
 					}
 				} else {
-					if(confirm("Are you sure?")){
+					if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 						KC3QuestManager.resetYearlies();
 						KC3StrategyTabs.reloadTab(undefined, true);
 					}
@@ -153,8 +153,7 @@
 			});
 			
 			$(".resetAllQuests").on("click", function(){
-				if(confirm(`Are you sure?
-All your quest data will be cleared, including 1-time quests you have done. Lost data would not be recovered. `)){
+				if(confirm(KC3Meta.term("QuestFlowchartAllPrompt"))){
 					KC3QuestManager.clear();
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}

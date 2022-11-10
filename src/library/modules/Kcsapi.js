@@ -298,7 +298,8 @@ Previously known as "Reactor"
 			// Clean counters first because items become to 0 will not appear in API array at all
 			Object.keys(PlayerManager.consumables).forEach(key => {
 				// these things not real 'useitem' (no data in this API result)
-				if(["fcoin", "buckets", "devmats", "screws", "torch"].indexOf(key) === -1)
+				if(!["fcoin", "buckets", "devmats", "screws", "torch",
+					"repairTeam", "repairGoddess", "portExpansion"].includes(key))
 					PlayerManager.consumables[key] = 0;
 			});
 			for(let idx in response.api_data){
@@ -2559,6 +2560,8 @@ Previously known as "Reactor"
 			// New flag for in-game button: Remodeling (Post unequip) since 2020-01-14
 			const scrapGearFlag = params.api_slot_dest_flag == 1;
 			const consumedShips = consumedShipIds.map(id => KC3ShipManager.get(id));
+			// New flag for pumpkin luck modding since 2022-10-14
+			const limitedFeedType = params.api_limited_feed_type;
 			
 			// To trigger panel activity notification, and TsunDB data submission
 			const NewShipRaw = response.api_data.api_ship;
@@ -2640,6 +2643,13 @@ Previously known as "Reactor"
 			KC3ShipManager.save();
 			
 			KC3Network.trigger("Fleet");
+			
+			// Type 1 = pumpkin luck modding
+			if(limitedFeedType == 1){
+				PlayerManager.consumables.pumpkin -= 1;
+				PlayerManager.setConsumables();
+				KC3Network.trigger("Consumables");
+			}
 		},
 		
 		/* Item Consumption
@@ -2684,6 +2694,9 @@ Previously known as "Reactor"
 				break;
 				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0]
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
+				break;
+				case 34: // exchange 22 saury (curry) with 1 Zuiun (634 Air Group / Skilled) (up to twice)
+					//if(itemId === 68) PlayerManager.consumables.mackerel -= 22;
 				break;
 				case 41: // exchange all boxes with fcoins
 					//if(itemId === 10) PlayerManager.consumables.furniture200 = 0;

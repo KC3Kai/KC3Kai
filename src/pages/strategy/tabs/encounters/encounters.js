@@ -151,6 +151,8 @@
 					[abm.api_houg, abm.api_raig, abm.api_tyku, abm.api_souk];
 				const eSlot = db ? [abd.eq1, abd.eq2, abd.eq3, abd.eq4] :
 					abm.kc3_slots || [];
+				// workaround to fix 5th gear not recorded since event Summer 2022
+				if((abm.kc3_slots || [])[4] && !eSlot[4]) eSlot.push(abm.kc3_slots[4]);
 				$(shipBox).attr("title", dummyNode.buildEnemyStatsMessage(
 					0, shipId,
 					// Ship level not recorded, always unknown

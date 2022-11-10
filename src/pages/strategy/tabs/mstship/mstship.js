@@ -1357,9 +1357,11 @@
 								$(".capacity", this).text(index >= abyssMaster.api_slot_num ? "-" : "?").show();
 							}
 							// Priority to show equipment recorded via encounter
-							const equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : (abyssMaster.kc3_slots || [])[index];
-							if (equipId > 0) {
-								const equipment = KC3Master.slotitem(equipId);
+							const equipId = enemyDbStats ?
+								enemyDbStats["eq"+(index+1)] || (index>=4 ? (abyssMaster.kc3_slots || [])[index] : undefined) :
+								(abyssMaster.kc3_slots || [])[index];
+							const equipment = KC3Master.slotitem(equipId);
+							if (equipId > 0 && !!equipment) {
 								equipMasters.push(equipment);
 								const fakeGear = new KC3Gear({ itemId: 2, masterId: equipId });
 								$(".slotitem", this).text(KC3Meta.gearName(equipment.api_name))
@@ -1457,7 +1459,7 @@
 								$(".ship_stat_max", statBox).hide();
 							} else if(stat[1] === "otorp"){
 								let canOtorp = (
-									abyssMaster.api_raig > 0 && (abyssMaster.kc3_slots || []).some(id => [541, 624].includes(id))
+									abyssMaster.api_raig > 0 && (abyssMaster.kc3_slots || []).some(id => [1541, 1624].includes(id))
 								) || (
 									[13, 14].includes(abyssMaster.api_stype) && abyssMaster.api_yomi != ""
 								);

@@ -255,6 +255,10 @@
 					totalWidth = (hiddenColumns.width() + 1) * hiddenColumns.length;
 				self.setStyleVar("--hiddenColumnsWidth", totalWidth + "px");
 			});
+			// Auto show hidden columns if page width wide enough
+			if($("#wrapper").width() >= 1200) {
+				$(".control_buttons .show_hidden_columns").trigger("click");
+			}
 			// Binding click event ends
 
 			// Update ship stats header icon set
@@ -402,7 +406,7 @@
 					if (visibleShips % 10 === 0) {
 						$("<div>")
 							.addClass("ingame_page")
-							.html("Page " + Math.ceil((visibleShips + 1) / 10))
+							.html(KC3Meta.term("ShipListPageNoPattern").format(Math.ceil((visibleShips + 1) / 10)))
 							.insertBefore(this)
 							.toggle(self.pageNo);
 					}
@@ -513,8 +517,8 @@
 				.map(function(sorterInfo) {
 					const sorter = self.sorters[sorterInfo.name];
 					return sorterInfo.reverse
-						? sorter.desc + "(R)"
-						: sorter.desc;
+						? sorter.desc + KC3Meta.term("ShipListSortDescend")
+						: sorter.desc + KC3Meta.term("ShipListSortAscend");
 				})
 				.join(" > ");
 
@@ -1131,53 +1135,53 @@
 		prepareSorters: function() {
 			const define = this.defineSimpleSorter.bind(this);
 
-			define("id", "ID",
+			define("id", KC3Meta.term("ShipListGridTitleId"),
 				   function(x) { return x.id; });
-			define("name", "Name",
+			define("name", KC3Meta.term("ShipListGridTitleName"),
 				   function(x) { return this.className ? x.fullName : x.name; });
-			define("type", "Type",
+			define("type", KC3Meta.term("ShipListGridTitleSType"),
 				   function(x) { return x.stype; });
-			define("lv", "Level",
+			define("lv", KC3Meta.term("ShipListGridTitleLevel"),
 				   function(x) { return -x.level; });
-			define("morale", "Morale",
+			define("morale", KC3Meta.term("ShipMorale"),
 				   function(x) { return -x.morale; });
-			define("hp", "HP",
+			define("hp", KC3Meta.term("ShipHp"),
 				   function(x) { return -x.hp[0]; });
-			define("fp", "Firepower",
+			define("fp", KC3Meta.term("ShipFire"),
 				   function(x) { return -x.fp[this.equipMode+1]; });
-			define("tp", "Torpedo",
+			define("tp", KC3Meta.term("ShipTorpedo"),
 				   function(x) { return -x.tp[this.equipMode+1]; });
-			define("yasen", "Yasen",
+			define("yasen", KC3Meta.term("ShipYasenFp"),
 				   function(x) { return -(x.fp[this.equipMode+1] + x.tp[this.equipMode+1]); });
-			define("aa", "Anti-Air",
+			define("aa", KC3Meta.term("ShipAntiAir"),
 				   function(x) { return -x.aa[this.equipMode+1]; });
-			define("ar", "Armor",
+			define("ar", KC3Meta.term("ShipArmor"),
 				   function(x) { return -x.ar[this.equipMode+1]; });
-			define("as", "ASW",
+			define("as", KC3Meta.term("ShipAsw"),
 				   function(x) { return -x.as[this.equipMode ? 3 : 0]; });
-			define("ev", "Evasion",
+			define("ev", KC3Meta.term("ShipEvasion"),
 				   function(x) { return -x.ev[this.equipMode]; });
-			define("ls", "LoS",
+			define("ls", KC3Meta.term("ShipLos"),
 				   function(x) { return -x.ls[this.equipMode]; });
-			define("lk", "Luck",
+			define("lk", KC3Meta.term("ShipLuck"),
 				   function(x) { return -x.lk[0]; });
-			define("fuel", "Fuel",
+			define("fuel", KC3Meta.term("ShipFuel"),
 				   function(x) { return x.fuel[1]; });
-			define("ammo", "Ammo",
+			define("ammo", KC3Meta.term("ShipAmmo"),
 				   function(x) { return x.ammo[1]; });
-			define("cost", "Cost",
+			define("cost", KC3Meta.term("ShipCost"),
 				   function(x) { return x.cost; });
-			define("sp", "Speed",
+			define("sp", KC3Meta.term("ShipSpeed"),
 				   function(x) { return x.sp; });
-			define("rn", "Range",
+			define("rn", KC3Meta.term("ShipLength"),
 				   function(x) { return x.range; });
-			define("ac", "Carry",
+			define("ac", KC3Meta.term("ShipCarry"),
 				   function(x) { return x.carry; });
-			define("ctype", "Class",
+			define("ctype", KC3Meta.term("ShipListGridTitleSClass"),
 				   function(x) { return x.ctype; });
-			define("bid", "Master-ID",
+			define("bid", KC3Meta.term("ShipListGridTitleMasterId"),
 				   function(x) { return x.bid; });
-			define("sortno", "Class in-game",
+			define("sortno", KC3Meta.term("ShipListGridTitleSClassTip"),
 				   function(x) { return x.sortno; });
 		},
 

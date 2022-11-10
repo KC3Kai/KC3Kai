@@ -1,23 +1,18 @@
 <div class="page_title">
-  Fleet Manager
-<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+	<span class="i18n">FleetManagerPageTitle</span>
+	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Why does "Current Fleets" not matched with the fleets in game?</div>
-	<div class="help_a">Go to home port in game once, then click on Heart Logo to refresh with latest data.</div>
-
-	<div class="help_q">Why eLoS or fighter power looks different? Gear improvement and plane proficiency disappeared?</div>
-	<div class="help_a">Because these data, such as gear improvement and plane proficiency, are not saved to old sortie history record. They are not able to completely be reproduced when import from old history.<br/>
-	Furthermore, as your HQ level also not saved aside, value of eLoS Formula 33 might be affected by your current HQ level.
-	</div>
-
-	<div class="help_q">Why support power is 0 or quite few?</div>
-	<div class="help_a">Because ships' fire and torpedo power with equipments are not saved to sortie history. Support power is not able to be reproduced when import from history, although some fixed powers are given to CV(L).</div>
-
+	<div class="help_q i18n">FleetManagerHelp1Q</div>
+	<div class="help_a i18n">FleetManagerHelp1A</div>
+	<div class="help_q i18n">FleetManagerHelp2Q</div>
+	<div class="help_a i18n">FleetManagerHelp2A</div>
+	<div class="help_q i18n">FleetManagerHelp3Q</div>
+	<div class="help_a i18n">FleetManagerHelp3A</div>
 	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Fleets">Learn more</a>
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Fleets" class="i18n">LearnMore</a>
 	</div>
 </div>
 
@@ -28,50 +23,50 @@
 	<form action="">
 	<div class="fleet_type_field">
 		<input type="radio" name="view_type" id="current" value="current" checked="checked">
-		<label for="current">Current Fleets</label>
+		<label for="current" class="i18n">FleetManagerViewTypeCurrentLabel</label>
 	</div>
 	<div class="fleet_type_field">
-		<input type="radio" name="view_type" id="saved" value="saved"> 
-		<label for="saved">Saved Fleets</label>
+		<input type="radio" name="view_type" id="saved" value="saved">
+		<label for="saved" class="i18n">FleetManagerViewTypeSavedLabel</label>
 		<select class="control_input" id="saved_fleet_sel">
 		</select>
-		<button type="button" id="control_saved_rename">Rename ...</button>
-		<button type="button" id="control_saved_delete">Delete ...</button>
+		<button type="button" id="control_saved_rename" class="i18n">FleetManagerSavedRenameButton</button>
+		<button type="button" id="control_saved_delete" class="i18n">FleetManagerSavedDeleteButton</button>
 		<div class="clear"></div>
 	</div>
 	<div class="fleet_type_field half">
 		<input type="radio" name="view_type" id="history" value="history">
-		<label for="history">From Sortie History</label>
+		<label for="history" class="i18n">FleetManagerViewTypeSortieLabel</label>
 		<input type="text" name="hist_query" id="hist_query"
-			class="control_input"
-			placeholder="Input Sortie Id"
+			class="control_input i18n_placeholder"
+			placeholder="FleetManagerViewTypeSortiePlaceholder"
 			value="">
 	</div>
 	<div class="fleet_type_field half">
 		<input type="radio" name="view_type" id="exped" value="exped">
-		<label for="exped">From Exped History</label>
+		<label for="exped" class="i18n">FleetManagerViewTypeExpedLabel</label>
 		<input type="text" name="exped_query" id="exped_query"
-			class="control_input"
-			placeholder="Input Exped Id"
+			class="control_input i18n_placeholder"
+			placeholder="FleetManagerViewTypeExpedPlaceholder"
 			value="">
 	</div>
 	</form>
 	<div class="clear"></div>
 	<div class="fleet_error_msg">Error Message</div>
-	<button type="button" id="control_view">View</button>
+	<button type="button" id="control_view" class="i18n">FleetManagerViewConfirmButton</button>
 </div>
 <div class="page_section" id="fleet_description"></div>
 <div class="fleet_control">
-	<button type="button" id="control_save">Save ...</button>
-	<label class="export_label">Export to:</label>
-	<button type="button" id="control_export_dbuilder">DeckBuilder</button>
-	<button type="button" id="control_export_imgkcbuilder">ImgBuilder</button>
+	<button type="button" id="control_save" class="i18n">FleetManagerFleetSaveButton</button>
+	<label class="export_label i18n">FleetManagerFleetExportToLabel</label>
+	<button type="button" id="control_export_dbuilder" class="i18n">FleetManagerExportDeckBuilderButton</button>
+	<button type="button" id="control_export_imgkcbuilder" class="i18n">FleetManagerExportImgBuilderButton</button>
 	<!--
 		 <button type="button" id="control_export_wctf">WhoCallsTheFleet</button>
 	-->
-	<button type="button" id="control_export_kcweb">AirSimulator</button>
-	<button type="button" id="control_export_jervis">JervisOR</button>
-	<button type="button" id="control_switch_view">Switch view</button>
+	<button type="button" id="control_export_kcweb" class="i18n">FleetManagerExportAirCalcButton</button>
+	<button type="button" id="control_export_jervis" class="i18n">FleetManagerExportJervisOrButton</button>
+	<button type="button" id="control_switch_view" class="i18n">FleetManagerFleetViewToggleButton</button>
 </div>
 
 <div class="fleet_list">
@@ -125,10 +120,10 @@
 		<div class="clear"></div>
 		<div class="ss_button hover"><img src="/assets/img/ui/cam1.png" /></div>
 	</div>
-	
+
 	<!-- SHIP BOX -->
 	<div class="fleet_ship">
-		
+
 		<div class="ship_box">
 			<div class="ship_hover">
 				<div class="ship_type">XXX</div>
@@ -275,5 +270,5 @@
 			</div>
 		</div>
 	</div>
-	
+
 </div>

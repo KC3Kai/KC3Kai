@@ -105,12 +105,12 @@
 			});
 
 			$("button#control_save").on("click", function() {
-				var name = prompt("Input a name",self.suggestedName);
+				var name = prompt(KC3Meta.term("FleetManagerSavedInputNamePrompt"), self.suggestedName);
 				if (!name) return;
 				name = $.trim(name);
 				var confirmFlg = true;
 				if (self.ifFleetsObjExists(name)) {
-					confirmFlg = confirm("Overwrite record with name '" + name + "'?");
+					confirmFlg = confirm(KC3Meta.term("FleetManagerSavedOverwritePrompt").format(name));
 				}
 
 				if (confirmFlg) {
@@ -123,14 +123,14 @@
 				var oldName = $("#saved_fleet_sel option:selected").val();
 				if (!oldName) return;
 
-				var newName = prompt("Renaming '" + oldName + "' to:");
+				var newName = prompt(KC3Meta.term("FleetManagerSavedRenameToPrompt").format(oldName));
 				newName = $.trim(newName);
 				if (!newName) return;
 				if (oldName === newName) return;
 
 				var confirmFlg = true;
 				if (self.ifFleetsObjExists(newName)) {
-					confirmFlg = confirm("Overwrite record with name '" + newName + "'?");
+					confirmFlg = confirm(KC3Meta.term("FleetManagerSavedOverwritePrompt").format(newName));
 				}
 
 				if (confirmFlg) {
@@ -142,7 +142,7 @@
 			$("button#control_saved_delete").on("click", function() {
 				var name = $("#saved_fleet_sel option:selected").val();
 				if (!name) return;
-				var confirmFlg = confirm("Confirm Deleting Record '" + name + "'?");
+				var confirmFlg = confirm(KC3Meta.term("FleetManagerSavedDeletePrompt").format(name));
 				if (confirmFlg) {
 					self.deleteFleetsObj(name);
 					self.refreshSavedFleets();
@@ -232,11 +232,11 @@
 		saveFleetsObj: function(name) {
 			name = $.trim(name);
 			if (name === "") {
-				$(".fleet_error_msg").text("empty name").show();
+				$(".fleet_error_msg").text(KC3Meta.term("FleetManagerSavedEmptyNameError")).show();
 				return;
 			}
 			if (!this.currentFleetsObj) {
-				$(".fleet_error_msg").text("cannot find info of current viewing fleets").show();
+				$(".fleet_error_msg").text(KC3Meta.term("FleetManagerSavedEmptyDataError")).show();
 				return;
 			}
 
@@ -285,7 +285,7 @@
 				const val = $("input#hist_query").val();
 				const sortieId = parseInt(val, 10);
 				if (!sortieId) {
-					$(".fleet_error_msg").text("Invalid sortie Id: " + val).show();
+					$(".fleet_error_msg").text(KC3Meta.term("FleetManagerSortieInvalidInputError").format(val)).show();
 					return;
 				}
 				this.showFleetFromSortieId(sortieId);
@@ -299,7 +299,7 @@
 				const val = $("input#exped_query").val();
 				const expedId = parseInt(val, 10);
 				if (!expedId) {
-					$(".fleet_error_msg").text("Invalid exped Id: " + val).show();
+					$(".fleet_error_msg").text(KC3Meta.term("FleetManagerExpedInvalidInputError").format(val)).show();
 					return;
 				}
 				this.showFleetFromExpedId(expedId);
@@ -321,9 +321,9 @@
 
 		showCurrentFleets: function() {
 			this.showAllKCFleets( this.loadCurrentFleets() );
-			$("#fleet_description").text("Current Fleets");
+			$("#fleet_description").text(KC3Meta.term("FleetManagerViewTypeCurrentLabel"));
 			this.currentFleetsObj = this.getCurrentFleetsObj();
-			this.suggestedName = "Fleets (" + new Date().format("yyyy-mm-dd HH:MM:ss") + ")";
+			this.suggestedName = KC3Meta.term("FleetManagerSavedSuggestFleetName").format(new Date().format("yyyy-mm-dd HH:MM:ss"));
 			this.sortiedMap = "";
 			this.sortiedFleet = 0;
 			this.sortiedCombined = PlayerManager.combinedFleet;
@@ -336,7 +336,7 @@
 			var self = this;
 
 			if (!fleetsObj) {
-				$(".fleet_error_msg").text("No record of '" + name + "'").show();
+				$(".fleet_error_msg").text(KC3Meta.term("FleetManagerSavedNameNotFoundError").format(name)).show();
 				return;
 			}
 
@@ -345,7 +345,7 @@
 			});
 
 			self.showAllKCFleets( kcFleets );
-			$("#fleet_description").text("Saved Fleets '" + name + "'");
+			$("#fleet_description").text(KC3Meta.term("FleetManagerSavedFleetName").format(name));
 			this.currentFleetsObj = fleetsObj;
 			this.suggestedName = name;
 			this.sortiedMap = "";
@@ -358,7 +358,7 @@
 			KC3Database.get_sortie(sortieId, function(sortieData) {
 				if (! sortieData) {
 					$(".fleet_error_msg")
-						.text("Cannot find data with sortie Id " + sortieId)
+						.text(KC3Meta.term("FleetManagerSortieIdNotFoundError").format(sortieId))
 						.show();
 					return;
 				}
@@ -376,12 +376,12 @@
 				self.sortiedMap = [sortieData.world, sortieData.mapnum].join("");
 				self.sortiedFleet = sortieData.fleetnum;
 				self.sortiedCombined = sortieData.fleetnum == 1 ? sortieData.combined : 0;
-				self.suggestedName = "Sortie #{0} {1}{2}-{3}".format(
+				self.suggestedName = KC3Meta.term("FleetManagerSortieSuggestFleetName").format(
 					sortieId, KC3Meta.isEventWorld(sortieData.world) ? "E" : "W", sortieData.world, sortieData.mapnum
 				);
 				self.showAllKCFleets( kcFleets );
-				$("#fleet_description").text("{0}{1} Fleets".format(
-					self.suggestedName, sortieData.combined ? " Combined" : ""
+				$("#fleet_description").text(KC3Meta.term("FleetManagerSortieFleetName").format(
+					self.suggestedName, sortieData.combined ? KC3Meta.term("FleetManagerSortieFleetNameIfCombined") : ""
 				));
 			});
 		},
@@ -391,7 +391,7 @@
 			KC3Database.get_exped(expedId, function(expedData) {
 				if (! expedData) {
 					$(".fleet_error_msg")
-						.text("Cannot find data with expedition Id " + expedId)
+						.text(KC3Meta.term("FleetManagerExpedIdNotFoundError").format(expedId))
 						.show();
 					return;
 				}
@@ -404,13 +404,13 @@
 				self.sortiedMap = "";
 				self.sortiedFleet = 0;
 				self.sortiedCombined = 0;
-				self.suggestedName = "Exped #{0} ({1} {2})".format(
+				self.suggestedName = KC3Meta.term("FleetManagerExpedSuggestFleetName").format(
 					expedId,
 					KC3Master.missionDispNo(expedData.mission),
 					KC3Meta.term("MissionActivity{0}".format(expedData.data.api_clear_result + 1))
 				);
 				self.showAllKCFleets( kcFleets );
-				$("#fleet_description").text("{0} Fleet".format(self.suggestedName));
+				$("#fleet_description").text(KC3Meta.term("FleetManagerExpedFleetName").format(self.suggestedName));
 			});
 		},
 
@@ -503,9 +503,9 @@
 					console.log("Failed to screenshot fleet", chrome.runtime.lastError);
 					const errMsg = chrome.runtime.lastError.message || "";
 					if(errMsg.includes("'activeTab' permission")) {
-						alert("Click KC3\u6539 icon on browser toolbar to grant screenshot permission");
+						alert(KC3Meta.term("FleetManagerSnapshotPermissionError"));
 					} else {
-						alert("Failed to capture fleet screenshot");
+						alert(KC3Meta.term("FleetManagerSnapshotFailed"));
 					}
 					$(".ss_button", fleetBox).show();
 					return;
@@ -527,9 +527,9 @@
 					}).export((error, result) => {
 						if(error) {
 							console.error("Failed to screenshot fleet", error);
-							alert("Failed to generate fleet screenshot");
+							alert(KC3Meta.term("FleetManagerSnapshotFailed"));
 						} else if(result && result.filename) {
-							alert("Saved to {0}".format(result.filename));
+							alert(KC3Meta.term("FleetManagerSnapshotSavedPrompt").format(result.filename));
 						}
 						$(".ss_button", fleetBox).show();
 					});

@@ -1,15 +1,14 @@
 <div class="page_title">
-	Experience
-	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+	<span class="i18n">ExperiencePageTitle</span>
+	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
 	<div class="help_q"></div>
 	<div class="help_a"></div>
-
 	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Experience">Learn more</a>
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Experience" class="i18n">LearnMore</a>
 	</div>
 </div>
 
@@ -19,7 +18,7 @@
 		<label>
 		<div class="legend_toggle"><input type="radio" name="selector" data-type="exp" class="graph_input" CHECKED /></div>
 		<div class="legend_color color_exp"></div>
-		<div class="legend_label">Experience</div>
+		<div class="legend_label i18n">ExperienceExpValueLabel</div>
 		</label>
 		<div class="clear"></div>
 	</div>
@@ -27,7 +26,7 @@
 		<label>
 		<div class="legend_toggle"><input type="radio" name="selector" data-type="level" class="graph_input" /></div>
 		<div class="legend_color color_level"></div>
-		<div class="legend_label">Level</div>
+		<div class="legend_label i18n">ExperienceLevelLabel</div>
 		</label>
 		<div class="clear"></div>
 	</div>
@@ -35,48 +34,48 @@
 </div>
 <div class="page_panel graph_options">
 	<div class="graph_option graph_date">
-		<div class="date_label"><label for="startDate">Start</label></div>
+		<div class="date_label"><label for="startDate" class="i18n">GraphStartDateLabel</label></div>
 		<div class="date_input"><input type="date" id="startDate" class="graph_input" /></div>
 	</div>
 	<div class="graph_option graph_date">
-		<div class="date_label"><label for="endDate">End</label></div>
+		<div class="date_label"><label for="endDate" class="i18n">GraphEndDateLabel</label></div>
 		<div class="date_input"><input type="date" id="endDate" class="graph_input" /></div>
 	</div>
 	<div class="graph_option graph_dropdown">
-		<div class="dropdown_label"><label for="graphInterval">Interval</label></div>
+		<div class="dropdown_label"><label for="graphInterval" class="i18n">GraphIntervalLabel</label></div>
 		<div class="dropdown_input">
 			<select id="graphInterval" class="graph_input">
-				<option value="1">1 hour</option>
-				<option value="3">3 hours</option>
-				<option value="6">6 hours</option>
-				<option value="12">12 hours</option>
-				<option value="24" SELECTED>1 day</option>
-				<option value="72">3 days</option>
-				<option value="168">1 week</option>
-				<option value="336">2 weeks</option>
-				<option value="504">3 weeks</option>
-				<option value="672">4 weeks</option>
-				<option value="720">30 days</option>
+				<option value="1" class="i18n">GraphIntervalOption1</option>
+				<option value="3" class="i18n">GraphIntervalOption2</option>
+				<option value="6" class="i18n">GraphIntervalOption3</option>
+				<option value="12" class="i18n">GraphIntervalOption4</option>
+				<option value="24" class="i18n" SELECTED>GraphIntervalOption5</option>
+				<option value="72" class="i18n">GraphIntervalOption6</option>
+				<option value="168" class="i18n">GraphIntervalOption7</option>
+				<option value="336" class="i18n">GraphIntervalOption8</option>
+				<option value="504" class="i18n">GraphIntervalOption9</option>
+				<option value="672" class="i18n">GraphIntervalOption10</option>
+				<option value="720" class="i18n">GraphIntervalOption11</option>
 			</select>
 		</div>
 	</div>
-	<div class="graph_option option_preset hover" data-preset="day">Day</div>
-	<div class="graph_option option_preset hover" data-preset="week">Week</div>
-	<div class="graph_option option_preset hover" data-preset="month">Month</div>
+	<div class="graph_option option_preset hover i18n" data-preset="day">GraphPresetDay</div>
+	<div class="graph_option option_preset hover i18n" data-preset="week">GraphPresetWeek</div>
+	<div class="graph_option option_preset hover i18n" data-preset="month">GraphPresetMonth</div>
 	<div class="clear"></div>
 </div>
 <div class="page_panel">
 	<div class="graph_option graph_check">
 		<div class="checkbox_input"><input type="checkbox" id="startZero" class="graph_input" /></div>
-		<div class="checkbox_label"><label for="startZero">Start at zero</label></div>
+		<div class="checkbox_label"><label for="startZero" class="i18n">GraphOptionStartZero</label></div>
 	</div>
 	<div class="graph_option graph_check">
 		<div class="checkbox_input"><input type="checkbox" id="deltaMode" class="graph_input" /></div>
-		<div class="checkbox_label"><label for="deltaMode">Delta mode</label></div>
+		<div class="checkbox_label"><label for="deltaMode" class="i18n">GraphOptionDeltaMode</label></div>
 	</div>
 	<div class="graph_option graph_check">
 		<div class="checkbox_input"><input type="checkbox" id="showTooltips" class="graph_input" /></div>
-		<div class="checkbox_label"><label for="showTooltips">Tooltips</label></div>
+		<div class="checkbox_label"><label for="showTooltips" class="i18n">GraphOptionTooltips</label></div>
 	</div>
 	<div class="clear"></div>
 </div>
