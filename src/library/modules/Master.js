@@ -271,7 +271,7 @@ Saves and loads significant data for future use
 			return this.rsc_file(id, type, shipOrSlot, isDamaged, debuffedAbyssalSuffix);
 		},
 		bgm_file :function(id, type = "port"){
-			return this.png_file(id, type, "bgm");
+			return this.rsc_file(id, type, "bgm");
 		},
 
 		slotitem :function(id){
