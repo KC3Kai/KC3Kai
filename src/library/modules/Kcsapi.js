@@ -2695,6 +2695,9 @@ Previously known as "Reactor"
 				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0]
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
 				break;
+				case 34: // exchange 22 saury (curry) with 1 Zuiun (634 Air Group / Skilled) (up to twice)
+					//if(itemId === 68) PlayerManager.consumables.mackerel -= 22;
+				break;
 				case 41: // exchange all boxes with fcoins
 					//if(itemId === 10) PlayerManager.consumables.furniture200 = 0;
 					//if(itemId === 11) PlayerManager.consumables.furniture400 = 0;
