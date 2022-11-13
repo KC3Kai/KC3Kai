@@ -1001,7 +1001,7 @@ var SHIPDATA_ = {
 		SPD: 5,
 		TACC: 50,
 		SLOTS: [0, 70, 70, 0],
-		EQUIPS: [1509, 1520, 1524, 10],
+		EQUIPS: [1509, 1520, 1524, 0],
 		fuel: 0,
 		ammo: 0
 	},
@@ -4204,7 +4204,7 @@ var SHIPDATA_ = {
 		LUK: 50,
 		TACC: 70,
 		SLOTS: [0,0,0],
-		EQUIPS: [1570, 1515, 10],
+		EQUIPS: [1570, 1515, 0],
 		RNG: 1,
 		SPD: 5,
 	},
@@ -4264,7 +4264,7 @@ var SHIPDATA_ = {
 		LUK: 40,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [1509, 1509, 10, 10],
+		EQUIPS: [1509, 1509, 0, 0],
 		RNG: 3,
 		SPD: 5,
 	},
@@ -4284,7 +4284,7 @@ var SHIPDATA_ = {
 		LUK: 40,
 		TACC: 50,
 		SLOTS: [0,0,0,0],
-		EQUIPS: [1509, 1509, 1512, 10],
+		EQUIPS: [1509, 1509, 1512, 0],
 		RNG: 3,
 		SPD: 5,
 	},
@@ -4807,7 +4807,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [14, 14, 14, 14],
-		EQUIPS: [575, 575, 520, 520]
+		EQUIPS: [1575, 1575, 1520, 1520]
 	},
 	1723: {
 		name: 'Escort Princess 2',
@@ -4828,7 +4828,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [23, 23, 25, 25],
-		EQUIPS: [575, 575, 520, 520]
+		EQUIPS: [1575, 1575, 1520, 1520]
 	},
 	1724: {
 		name: 'Escort Princess 3',
@@ -4849,7 +4849,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [32, 32, 36, 36],
-		EQUIPS: [575, 575, 520, 520]
+		EQUIPS: [1575, 1575, 1520, 1520]
 	},
 	1725: {
 		name: 'Northernmost Landing Princess 1',
@@ -4869,7 +4869,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 36],
-		EQUIPS: [565, 565, 567, 575]
+		EQUIPS: [1565, 1565, 1567, 1575]
 	},
 	1726: {
 		name: 'Northernmost Landing Princess 2',
@@ -4889,7 +4889,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 49],
-		EQUIPS: [565, 565, 567, 575]
+		EQUIPS: [1565, 1565, 1567, 1575]
 	},
 	1727: {
 		name: 'Northernmost Landing Princess 3',
@@ -4909,7 +4909,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [565, 565, 567, 575]
+		EQUIPS: [1565, 1565, 1567, 1575]
 	},
 	1728: {
 		name: 'Northern Water Princess 1',
@@ -4929,7 +4929,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 36],
-		EQUIPS: [576, 576, 515, 574]
+		EQUIPS: [1576, 1576, 1515, 1574]
 	},
 	1729: {
 		name: 'Northern Water Princess 2',
@@ -4949,7 +4949,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 49],
-		EQUIPS: [576, 576, 515, 574]
+		EQUIPS: [1576, 1576, 1515, 1574]
 	},
 	1730: {
 		name: 'Northern Water Princess 3',
@@ -4969,7 +4969,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [576, 576, 515, 574]
+		EQUIPS: [1576, 1576, 1515, 1574]
 	},
 	1731: {
 		name: 'Northern Water Princess - Damaged 1',
@@ -4989,7 +4989,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 36],
-		EQUIPS: [576, 576, 515, 575]
+		EQUIPS: [1576, 1576, 1515, 1575]
 	},
 	1732: {
 		name: 'Northern Water Princess - Damaged 2',
@@ -5009,7 +5009,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 49],
-		EQUIPS: [576, 576, 515, 575]
+		EQUIPS: [1576, 1576, 1515, 1575]
 	},
 	1733: {
 		name: 'Northern Water Princess - Damaged 3',
@@ -5029,7 +5029,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 64],
-		EQUIPS: [576, 576, 515, 575]
+		EQUIPS: [1576, 1576, 1515, 1575]
 	},
 	1734: {
 		name: 'CVL Nu-Class Kai Elite',
@@ -5050,7 +5050,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [22, 22, 22, 22],
-		EQUIPS: [574, 524, 520, 574]
+		EQUIPS: [1574, 1524, 1520, 1574]
 	},
 	1735: {
 		name: 'CVL Nu-Class Kai Flagship',
@@ -5072,7 +5072,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 5,
 		SLOTS: [23, 23, 27, 23],
-		EQUIPS: [575, 524, 520, 575]
+		EQUIPS: [1575, 1524, 1520, 1575]
 	},
 	1736: {
 		name: 'New Submarine Princess Flagship 1',
@@ -5093,7 +5093,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	1737: {
 		name: 'New Submarine Princess Flagship 2',
@@ -5114,7 +5114,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	1738: {
 		name: 'New Submarine Princess Flagship 3',
@@ -5135,7 +5135,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	1739: {
 		name: 'DD Na-Class',
@@ -6194,7 +6194,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	1790: {
 		name: 'Battleship Princess Kai 1',
@@ -6521,7 +6521,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	1806: {
 		name: 'New Submarine Princess Vacation Mode Flagship 2',
@@ -6542,7 +6542,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	1807: {
 		name: 'New Submarine Princess Vacation Mode Flagship 3',
@@ -6563,7 +6563,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580]
+		EQUIPS: [1580, 1580, 1580]
 	},
 	1808: {
 		name: 'New Submarine Princess Vacation Mode Flagship 4',
@@ -6584,7 +6584,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [580, 580, 580]
+		EQUIPS: [1580, 1580, 1580]
 	},
 	1809: {
 		name: 'Supply Depot Princess Vacation Mode 1',
@@ -11125,7 +11125,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 0,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 2],
 		EQUIPS: [1614, 1613, 1593, 1610],
 	},
@@ -11145,7 +11145,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 0,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 3],
 		EQUIPS: [1614, 1613, 1593, 1610],
 	},
@@ -11165,7 +11165,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 0,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 4],
 		EQUIPS: [1614, 1613, 1593, 1611],
 	},
@@ -11185,7 +11185,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 0,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 6],
 		EQUIPS: [1616, 1615, 1603, 1610],
 	},
@@ -11205,7 +11205,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 0,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 12],
 		EQUIPS: [1616, 1615, 1603, 1611],
 	},
@@ -11225,7 +11225,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 0,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 36],
 		EQUIPS: [1616, 1615, 1603, 1611],
 	},
@@ -11513,7 +11513,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 0,
 		SLOTS: [20, 16, 16, 12],
-		EQUIPS: [575, 575, 617 ,571],
+		EQUIPS: [1575, 1575, 1617 ,1571],
 	},
 	2049: {
 		name: 'New Submarine Princess Flagship 4',
@@ -11534,7 +11534,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [570, 570, 570]
+		EQUIPS: [1570, 1570, 1570]
 	},
 	2050: {
 		name: 'DD Na-Class IIe (Mass Production Model)',
@@ -11618,7 +11618,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580]
+		EQUIPS: [1593, 1593, 1580]
 	},
 	2054: {
 		name: 'Submarine Shark Water Demon 2',
@@ -11639,7 +11639,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580]
+		EQUIPS: [1593, 1593, 1580]
 	},
 	2055: {
 		name: 'Submarine Shark Water Demon 3',
@@ -11660,7 +11660,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 580, 580]
+		EQUIPS: [1593, 1593, 1580, 1580]
 	},
 	2056: {
 		name: 'Submarine Shark Water Demon - Damaged 1',
@@ -11681,7 +11681,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0],
-		EQUIPS: [593, 593, 580]
+		EQUIPS: [1593, 1593, 1580]
 	},
 	2057: {
 		name: 'Submarine Shark Water Demon - Damaged 2',
@@ -11702,7 +11702,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 580, 580]
+		EQUIPS: [1593, 1593, 1580, 1580]
 	},
 	2058: {
 		name: 'Submarine Shark Water Demon - Damaged 3',
@@ -11723,7 +11723,7 @@ var SHIPDATA_ = {
 		RNG: 1,
 		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [593, 593, 580, 580]
+		EQUIPS: [1593, 1593, 1580, 1580]
 	},
 	2059: {
 		name: 'Hi Convoy Princess 1',
@@ -12774,7 +12774,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 10,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [1592, 1592, 1531, 1580],
 	},
@@ -12794,7 +12794,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 10,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [1592, 1592, 1531, 1580],
 	},
@@ -12814,7 +12814,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 10,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [1592, 1592, 1531, 1580],
 	},
@@ -12834,7 +12834,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 10,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [1592, 1592, 1531, 1580],
 	},
@@ -12854,7 +12854,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 10,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [1592, 1592, 1531, 1580],
 	},
@@ -12874,7 +12874,7 @@ var SHIPDATA_ = {
 		LUK: 1,
 		unknownstats: true,
 		RNG: 3,
-		SPD: 10,
+		SPD: 5,
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [1592, 1592, 1531, 1580],
 	},
@@ -13574,7 +13574,7 @@ console.info(`JSON written to ${output}`);
 // WebKit executable
 // copy(json); console.debug("JSON copied to clipboard");
 
-/** Compare with legacy master data (2015-07-03) which full abyssal properties still existed */
+/** Compare with legacy master data (2015-07-03) which full abyssal properties still existed unti 1613 */
 /*
 const mstJson = fs.readFileSync('/temp/kancolle/api_start2-20150703.json', 'utf8');
 const oldMst = JSON.parse(mstJson);
