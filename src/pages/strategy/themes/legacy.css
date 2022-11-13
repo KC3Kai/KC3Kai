@@ -1616,17 +1616,13 @@ body {
 	background:#fff;
 	border-radius:8px;
 }
-.tab_event .sortie_list .node_exp,
-.tab_maps .sortie_list .node_exp {
-	color: cornflowerblue;
-}
 .tab_event .sortie_list .node_exp span,
 .tab_maps .sortie_list .node_exp span {
 	color: black;
 }
-.tab_event .sortie_list .node_exp:before,
-.tab_maps .sortie_list .node_exp:before {
-	color: black;
+.tab_event .sortie_list .node_exp .unit,
+.tab_maps .sortie_list .node_exp .unit {
+	color: cornflowerblue;
 }
 
 /* ENCOUNTERS

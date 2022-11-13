@@ -2012,17 +2012,17 @@ button, input, select, textarea {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
-.tab_event .sortie_list .node_exp,
-.tab_maps .sortie_list .node_exp {
-	color: rgb(91, 172, 223);
+.tab_event .sortie_list .node_exp .type,
+.tab_maps .sortie_list .node_exp .type {
+	color: #aaa;
 }
 .tab_event .sortie_list .node_exp span,
 .tab_maps .sortie_list .node_exp span {
 	color: #fff;
 }
-.tab_event .sortie_list .node_exp:before,
-.tab_maps .sortie_list .node_exp:before {
-	color: #aaa;
+.tab_event .sortie_list .node_exp .unit,
+.tab_maps .sortie_list .node_exp .unit {
+	color: rgb(91, 172, 223);
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1C:after {
 	color:rgb(0,255,0);

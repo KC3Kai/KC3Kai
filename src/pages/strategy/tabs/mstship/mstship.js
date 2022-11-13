@@ -705,7 +705,7 @@
 					);
 					$(".tab_mstship .shipInfo .remodel_blueprint .rsc_icon").attr("title",
 						((keys) => {
-							const tips = $("<div><p>Required materials:</p></div>");
+							const tips = $("<div><p>" + KC3Meta.term("MasterShipRequiredLabel") + "</p></div>");
 							// update blueprint.js either if new material implemented in-game
 							const mapKeyToIconSrc = {
 								"blueprint": KC3Meta.useitemIcon(58),

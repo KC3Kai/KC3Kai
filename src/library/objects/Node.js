@@ -1971,12 +1971,12 @@ Used by SortieManager
 		Build HTML tooltip for details of air battle losses
 	*/
 	KC3Node.prototype.buildAirBattleLossMessage = function(){
-		const template = $('<table><tr><th class="type">&nbsp;</th><th>Friendly&nbsp;</th><th>Abyssal</th></tr>' +
-			'<tr class="contact_row"><td>Contact</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
-			'<tr class="airbattle_row"><td>Result</td><td colspan="2" class="airbattle"></td></tr>' +
+		const template = $('<table><tr><th class="type">&nbsp;</th><th>'+KC3Meta.term("BattleTipFriendly")+'&nbsp;</th><th>'+KC3Meta.term("BattleTipAbyssal")+'</th></tr>' +
+			'<tr class="contact_row"><td>'+KC3Meta.term("BattleContact")+'</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
+			'<tr class="airbattle_row"><td>'+KC3Meta.term("BattleTipAirResult")+'</td><td colspan="2" class="airbattle"></td></tr>' +
 			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' +
 			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr>' +
-			'<tr class="aaci"><td>AACI</td><td class="kind"></td><td class="info"></td></tr>' +
+			'<tr class="aaci"><td>'+KC3Meta.term("BattleTipAaci")+'</td><td class="kind"></td><td class="info"></td></tr>' +
 			'</table>'
 		);
 		const stage3Template = $('<table class="stage3"><tr><td colspan="18">Stage3</td></tr>' +
@@ -2006,8 +2006,8 @@ Used by SortieManager
 				stage3cf = koukuApiData.api_stage3_combined;
 			$(".type", table).html(typeName + "&nbsp;");
 			if(stage1.api_touch_plane){
-				$(".ally_contact", table).text(stage1.api_touch_plane[0] <= 0 ? "No" : "[{0}]".format(stage1.api_touch_plane[0]));
-				$(".enemy_contact", table).text(stage1.api_touch_plane[1] <= 0 ? "No" : "[{0}]".format(stage1.api_touch_plane[1]));
+				$(".ally_contact", table).text(stage1.api_touch_plane[0] <= 0 ? KC3Meta.term("BattleContactNo") : "[{0}]".format(stage1.api_touch_plane[0]));
+				$(".enemy_contact", table).text(stage1.api_touch_plane[1] <= 0 ? KC3Meta.term("BattleContactNo") : "[{0}]".format(stage1.api_touch_plane[1]));
 			} else {
 				$(".ally_contact", table).text("---");
 				$(".enemy_contact", table).text("---");
@@ -2114,28 +2114,28 @@ Used by SortieManager
 		};
 		// Land-Base Jet Assault
 		if(this.battleDay.api_air_base_injection)
-			fillAirBattleData("LBAS Jets", this.battleDay.api_air_base_injection, true).appendTo(tooltip);
+			fillAirBattleData(KC3Meta.term("BattleTipPhaseLbasJet"), this.battleDay.api_air_base_injection, true).appendTo(tooltip);
 		// Carrier Jet Assault
 		if(this.battleDay.api_injection_kouku)
-			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
+			fillAirBattleData(KC3Meta.term("BattleTipPhaseJetAssult"), this.battleDay.api_injection_kouku).appendTo(tooltip);
 		// Land-Base Aerial Support(s)
 		if(this.battleDay.api_air_base_attack){
 			$.each(this.battleDay.api_air_base_attack, function(i, lb){
-				fillAirBattleData("LBAS #{0}".format(i + 1), lb, true).appendTo(tooltip);
+				fillAirBattleData(KC3Meta.term("BattleTipPhaseLbasWave").format(i + 1), lb, true).appendTo(tooltip);
 			});
 		}
 		// Friend Fleet Aerial Support
 		if(this.battleDay.api_friendly_kouku){
-			fillAirBattleData("Friend Fleet", this.battleDay.api_friendly_kouku).appendTo(tooltip);
+			fillAirBattleData(KC3Meta.term("BattleTipPhaseFriendFleet"), this.battleDay.api_friendly_kouku).appendTo(tooltip);
 		}
 		// Carrier Aerial Combat / (Long Distance) Aerial Raid
 		if(this.battleDay.api_kouku)
-			fillAirBattleData("Air Battle", this.battleDay.api_kouku).appendTo(tooltip);
+			fillAirBattleData(KC3Meta.term("BattleTipPhaseAirBattle"), this.battleDay.api_kouku).appendTo(tooltip);
 		if(this.battleDay.api_kouku2)
-			fillAirBattleData(" Wave #2 ", this.battleDay.api_kouku2).appendTo(tooltip);
+			fillAirBattleData(KC3Meta.term("BattleTipPhaseAirBattleWave2"), this.battleDay.api_kouku2).appendTo(tooltip);
 		// Exped Aerial Support
 		if(Object.getSafePath(this.battleDay, "api_support_info.api_support_airatack"))
-			fillAirBattleData("Exped Air", this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
+			fillAirBattleData(KC3Meta.term("BattleTipPhaseExpedAirSupport"), this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
 		return tooltip.html();
 	};
 
