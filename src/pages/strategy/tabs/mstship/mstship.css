@@ -571,6 +571,7 @@
 	margin:0px 0px 1px 0px;
 	border-radius:6px;
 	font-size:12px;
+	white-space:nowrap;
 }
 .tab_mstship .shipInfo .aaci .apiId {
 	width:40px;
