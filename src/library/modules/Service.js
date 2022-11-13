@@ -256,7 +256,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Request from devTools to display blocker on "Advance next node" button.
 		------------------------------------------*/
 		"showNextBlock": function (request, sender, response) {
-			(new TMsg(request.tabId, "gamescreen", "nextBlockShow", {fairy: request.fairy})).execute();
+			(new TMsg(request.tabId, "gamescreen", "nextBlockShow", {
+				fairy: request.fairy,
+				large: request.large,
+			})).execute();
 		},
 		
 		/* CLEAR OVERLAYS

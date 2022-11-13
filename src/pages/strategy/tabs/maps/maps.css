@@ -867,11 +867,7 @@
 	padding-top: 12px;
 	position:relative;
 }
-.tab_maps .sortie_list .node_exp span {
-	font-weight: bolder;
-	font-size: 1.25em;
-}
-.tab_maps .sortie_list .node_exp:before {
+.tab_maps .sortie_list .node_exp .type {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -880,9 +876,7 @@
 	font-size: 0.8em;
 	text-align: center;
 }
-.tab_maps .sortie_list .node_exp.hq:before {
-	content: "HQ EXP";
-}
-.tab_maps .sortie_list .node_exp.nodal:before {
-	content: "Node EXP";
+.tab_maps .sortie_list .node_exp .value {
+	font-weight: bolder;
+	font-size: 1.25em;
 }

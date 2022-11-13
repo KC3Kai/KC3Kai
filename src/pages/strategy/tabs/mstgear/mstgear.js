@@ -96,11 +96,14 @@
 			self.currentGearId = gearId;
 			const gearHost = `http://${this.server_ip}/kcs2/resources`;
 			const appendRscVer = (url) => (url && gearData.api_version ? url + `?version=${gearData.api_version}` : url);
+			// see the same name in main.js to exclude loading item_character
+			const EXCLUDE_RES = [42];
 			
 			$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
 			if(!KC3Master.isAbyssalGear(gearId)) {
 				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "card", "slot")));
-				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_character", "slot")));
+				if(!EXCLUDE_RES.includes(gearId))
+					$(".tab_mstgear .gearInfo .ga_2 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_character", "slot")));
 				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_up", "slot")));
 				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_on", "slot")));
 				$(".tab_mstgear .gearInfo .gearAssets").show();
@@ -108,7 +111,8 @@
 				// Map a abyssal gear to player gear for itemup image,
 				// see `SlotLoader.prototype.add` or `ResourceManager.prototype.getSlotitem`
 				const replacedId = KC3Meta.abyssalItemupReplace[gearId];
-				const mappedId = gearId - 500, mappedGear = KC3Master.slotitem(mappedId);
+				const mappedId = gearId - KC3Master.abyssalGearIdFrom,
+					mappedGear = KC3Master.slotitem(mappedId);
 				// Hide itemup image if category of mapped gear is different,
 				// itemup is used on cut-in scene, so items never shown may not be mapped correctly
 				if(replacedId || (mappedGear.api_type && mappedGear.api_type[0] === gearData.api_type[0])) {

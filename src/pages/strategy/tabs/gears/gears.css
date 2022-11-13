@@ -9,6 +9,8 @@
 	width:24px;
 	height:24px;
 	float:left;
+	white-space:nowrap;
+	overflow:hidden;
 	margin:0px 2px 5px 2px;
 }
 .tab_gears .item_types .item_type.text {
@@ -274,6 +276,7 @@
 	display:	block;
 	float:		left;
 	padding:	0 0 0 6px;
+	white-space:nowrap;
 }
 .tab_gears .slotitem .holders dl dd .holder span{
 	width:		40px;
@@ -281,6 +284,7 @@
 	display:	block;
 	float:		left;
 	padding:	0 0 0 2px;
+	white-space:nowrap;
 }
 .tab_gears .slotitem .holders dl dd .holder span + span{
 	width:		16px;
@@ -307,6 +311,7 @@
 	font-size:12px;
 	text-align:center;
 	float:left;
+	white-space:nowrap;
 }
 .tab_gears .itemSorters .sortControl img {
 	margin-top:-3px;

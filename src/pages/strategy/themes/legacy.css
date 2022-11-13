@@ -93,7 +93,7 @@ body {
 	overflow:hidden;
 	white-space:nowrap;
 }
-.ui-tooltip-content .ship_tooltip .ship_level span.i18n {
+.ui-tooltip-content .ship_tooltip .ship_level span.l10n {
 	color:#3ec0bf;
 }
 .ui-tooltip-content .ship_tooltip .ship_level span.value.married {
@@ -116,7 +116,7 @@ body {
 	overflow:hidden;
 	white-space:nowrap;
 }
-.ui-tooltip-content .ship_tooltip .ship_exp_next span.i18n {
+.ui-tooltip-content .ship_tooltip .ship_exp_next span.l10n {
 	color:#7ca99f;
 }
 .ui-tooltip-content .ship_tooltip .ship_morale {
@@ -411,7 +411,7 @@ body {
 .page_help_btn:hover {
 	background:#ffc;
 }
-.page_help_btn span {
+.page_help_btn > span:nth-child(1) {
 	width:14px;
 	height:14px;
 	line-height:14px;
@@ -884,7 +884,7 @@ body {
 .tab_docking .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
-.tab_docking .ship_item .ship_lv span.i18n {
+.tab_docking .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_docking .ship_item .ship_lv span.value.married {
@@ -1470,7 +1470,7 @@ body {
 .tab_shipquests .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
-.tab_shipquests .ship_item .ship_lv span.i18n {
+.tab_shipquests .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_shipquests .ship_item .ship_lv span.value.married {
@@ -1616,17 +1616,13 @@ body {
 	background:#fff;
 	border-radius:8px;
 }
-.tab_event .sortie_list .node_exp,
-.tab_maps .sortie_list .node_exp {
-	color: cornflowerblue;
-}
 .tab_event .sortie_list .node_exp span,
 .tab_maps .sortie_list .node_exp span {
 	color: black;
 }
-.tab_event .sortie_list .node_exp:before,
-.tab_maps .sortie_list .node_exp:before {
-	color: black;
+.tab_event .sortie_list .node_exp .unit,
+.tab_maps .sortie_list .node_exp .unit {
+	color: cornflowerblue;
 }
 
 /* ENCOUNTERS
@@ -1870,7 +1866,7 @@ body {
 .tab_blueprints .ship_item:hover .ship_field {
 	background:#ffffcc;
 }
-.tab_blueprints .ship_item .ship_lv span.i18n {
+.tab_blueprints .ship_item .ship_lv span.l10n {
 	color:#888;
 }
 .tab_blueprints .ship_item .ship_lv span.value.married {

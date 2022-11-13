@@ -291,7 +291,7 @@
 				mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
 				$(".map_title", mapBox)
 					.text((function(x){
-						return (x>=10) ? KC3Meta.term("StrategyEventGo") : ("All W"+x);
+						return KC3Meta.isEventWorld(x) ? KC3Meta.term("StrategyEventGo") : KC3Meta.term("StrategyNormalMapGo").format(x);
 					})(self.selectedWorld));
 
 				for(countMaps = 1;!!self.maps["m"+self.selectedWorld+countMaps];countMaps++){}
@@ -336,7 +336,7 @@
 							}
 							// If this map is already cleared
 							if(element.clear == 1 && !element.killsRequired){
-								$(".map_hp_txt", mapBox).text("Cleared!");
+								$(".map_hp_txt", mapBox).text(KC3Meta.term("BattleHistoryMapCleared"));
 								mapBox.addClass("cleared");
 								if (cWorld>=10) {
 									mapBox.addClass((function(x, w){
@@ -353,7 +353,7 @@
 										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
 								else if(!!KC3Meta.gauge(element.id))
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
-										.attr("title", "{0} kills".format(element.killsRequired || KC3Meta.gauge(element.id)));
+										.attr("title", KC3Meta.term("BattleHistoryKillsReqTip").format(element.killsRequired || KC3Meta.gauge(element.id)));
 							}else{
 								mapBox.addClass("notcleared");
 								// If HP-based gauge
@@ -383,7 +383,7 @@
 									var killsLeft = totalKills - element.kills;
 									if(totalKills){
 										if(killsLeft > 1)
-											$(".map_hp_txt", mapBox).text( "{0} / {1} kills left".format(killsLeft, totalKills) );
+											$(".map_hp_txt", mapBox).text( KC3Meta.term("BattleHistoryKillsProgress").format(killsLeft, totalKills) );
 										else
 											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") )
 												.attr("title", "{0} / {1}".format(killsLeft, totalKills))
@@ -495,6 +495,10 @@
 				twbsPageObj = $(".tab_"+tabCode+" .pagination").twbsPagination({
 					totalPages: countPages,
 					visiblePages: 9,
+					first: KC3Meta.term("TwbsPaginationFirstLabel"),
+					prev: KC3Meta.term("TwbsPaginationPrevLabel"),
+					next: KC3Meta.term("TwbsPaginationNextLabel"),
+					last: KC3Meta.term("TwbsPaginationLastLabel"),
 					onPageClick: function(event, page) {
 						// only reload on different page, as event also triggered after init or enabled
 						if(self.pageNum != page){
@@ -504,7 +508,7 @@
 				});
 				self.showPage(1, twbsPageObj);
 				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
-					"total pages: {0}, sorties: {1}".format(countPages, countSorties)
+					KC3Meta.term("BattleHistoryPagingInfoLine").format(countPages, countSorties)
 				);
 				$(".tab_"+tabCode+" .sortie_controls").show();
 			}else{
@@ -1294,7 +1298,7 @@
 							// Node EXP
 							[["base","nodal"],["hq","hq"]].forEach(function(x){
 								if(!!battle[x[0]+"EXP"]) {
-									$(".node_exp."+x[1]+" span",nodeBox).text(battle[x[0]+"EXP"]);
+									$(".node_exp."+x[1]+" span.value",nodeBox).text(battle[x[0]+"EXP"]);
 								} else {
 									$(".node_exp."+x[1],nodeBox).css("visibility",'hidden');
 								}

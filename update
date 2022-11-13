@@ -1,7 +1,7 @@
 {
-	"version" : "35.6.0",
+	"version" : "35.6.1",
 	"pr" : "https://github.com/KC3Kai/KC3Kai/pulls?q=label%3Atype%3Arelease%20",
 	"time" : "",
-	"maintenance_start": "Fri, 14 October 2022 11:00:00 +0900",
-	"maintenance_end": "Fri, 14 October 2022 20:00:00 +0900"
+	"maintenance_start": "Wed, 9 November 2022 11:00:00 +0900",
+	"maintenance_end": "Wed, 9 November 2022 20:00:00 +0900"
 }

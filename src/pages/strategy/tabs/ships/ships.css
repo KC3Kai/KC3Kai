@@ -240,15 +240,11 @@
 	float:right;
 	margin:0px 0px 2px 0px;
 }
-.tab_ships .control_buttons .reset_default {
-	float:right;
+.tab_ships .control_buttons > div {
 	font-size:12px;
 	font-weight:bold;
 	line-height:18px;
 	padding:0px 4px 0px 4px;
-}
-.tab_ships .control_buttons .show_hidden_columns {
-	height:18px;
 }
 
 .tab_ships .advanced_sorter .filter_box {
@@ -325,6 +321,7 @@
 	min-width:20px;
 	text-align:center;
 }
+.tab_ships .ship_header .ship_morale img,
 .tab_ships .ship_header .ship_stat img {
 	max-width:19px;
 	height:16px;
@@ -499,7 +496,7 @@
 	min-width:20px;
 	text-align:center;
 }
-.tab_ships .ship_item .ship_lv span.i18n {
+.tab_ships .ship_item .ship_lv span.l10n {
 }
 .tab_ships .ship_item .ship_lv span.value.married {
 }

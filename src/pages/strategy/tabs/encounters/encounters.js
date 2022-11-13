@@ -68,11 +68,11 @@
 			const isMap = worldId !== undefined;
 			const listElem = isMap ? $(".map_switcher .map_list") : $(".map_switcher .world_list");
 			listElem.html(
-				$("<option />").attr("value", 0).text("Select a {0}...".format(isMap ? "map" : "world"))
+				$("<option />").attr("value", 0).text(isMap ? KC3Meta.term("EncountersMapPickerDefaultOption") : KC3Meta.term("EncountersWorldPickerDefaultOption"))
 			);
 			$(".map_switcher .difficulty").removeClass("active");
 			if(isMap && KC3Meta.isEventWorld(worldId)) {
-				$(".map_switcher .difficulty." + (worldId >= 41 ? "newSet" : "newSet")).addClass("active");
+				$(".map_switcher .difficulty." + (worldId >= 41 ? "newSet" : "oldSet")).addClass("active");
 			}
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
@@ -151,6 +151,9 @@
 					[abm.api_houg, abm.api_raig, abm.api_tyku, abm.api_souk];
 				const eSlot = db ? [abd.eq1, abd.eq2, abd.eq3, abd.eq4] :
 					abm.kc3_slots || [];
+				if(db && abd.eq5 !== undefined) eSlot.push(abd.eq5);
+				// workaround to fix 5th gear not recorded since event Summer 2022
+				if((abm.kc3_slots || [])[4] && eSlot.length < 5) eSlot.push(abm.kc3_slots[4]);
 				$(shipBox).attr("title", dummyNode.buildEnemyStatsMessage(
 					0, shipId,
 					// Ship level not recorded, always unknown
@@ -190,26 +193,26 @@
 					if(!$("#encounter-" + mapName).length) {
 						curBox = $(".tab_encounters .factory .encounter_map").clone();
 						curBox.attr("id", "encounter-" + mapName);
-						$(".encounter_world_head", curBox).text("World " + mapName);
+						$(".encounter_world_head", curBox).text(KC3Meta.term("EncountersMapNameLabel").format(mapName));
 						curBox.appendTo(".encounter_list");
 					}
 					// Check node box
 					const nodeLetter = KC3Meta.nodeLetter(encounter.world, encounter.map, encounter.node);
 					const nodeName = encounter.name ||
-						(nodeLetter === KC3Meta.getAirBaseFakeEdge(true) ? "Land-Base Air Raid" : "");
+						(nodeLetter === KC3Meta.getAirBaseFakeEdge(true) ? KC3Meta.term("EncountersLaseBaseAirRaid") : "");
 					let curNodeHead = $("#encounter-" + mapName + " .node-" + nodeLetter);
 					curBox = curNodeHead;
 					if(!curBox.length) {
 						curBox = $(".tab_encounters .factory .encounter_node").clone();
 						curBox.addClass("node-" + nodeLetter);
-						$(".encounter_node_head", curBox).text("Node {0} {1}".format(nodeLetter, nodeName));
+						$(".encounter_node_head", curBox).text(KC3Meta.term("EncountersNodeNameLabel").format(nodeLetter, nodeName));
 						curBox.appendTo("#encounter-" + mapName + " .encounter_world_body");
 						curNodeHead = curBox;
 						curNodeHead.data("sumBaseExp", 0).data("sumExpCount", 0)
 							.data("edgesCount", 0).data("patternsCount", 0).data("totalCount", 0);
 					} else if(!!nodeName) {
 						// Update node name only if node duplicated by multi edges
-						$(".encounter_node_head", curBox).text("Node {0} {1}".format(nodeLetter, nodeName));
+						$(".encounter_node_head", curBox).text(KC3Meta.term("EncountersNodeNameLabel").format(nodeLetter, nodeName));
 					}
 					// Check formation and ships box
 					const curNodeBody = $("#encounter-" + mapName + " .node-" + nodeLetter + " .encounter_node_body");
@@ -282,7 +285,7 @@
 					}
 					if(isLbasMap && recons) {
 						const lbasAp = KC3Calc.enemyFighterPower(shipList, undefined, undefined, true)[0];
-						tooltip += !lbasAp ? "" : "\n[LBAS] " + KC3Meta.term("InferredFighterPower")
+						tooltip += !lbasAp ? "" : "\n" + KC3Meta.term("EncountersLbasAirPowPrefix") + KC3Meta.term("InferredFighterPower")
 							.format(KC3Calc.fighterPowerIntervals(lbasAp));
 					}
 					$(".encounter_formation", curBox).attr("title", tooltip);
@@ -307,9 +310,7 @@
 					if(baseExpCount) {
 						const avgBaseExp = Math.qckInt("round", baseExpSum / baseExpCount, 1);
 						$(".encounter_node_head", curNodeHead).attr("title",
-							("Recorded Encounters: {0}" +
-							"\n\u2003{1} patterns /{2} edges /{3} exp gains" +
-							"\nAverage Base Exp: {4}").format(
+							KC3Meta.term("EncountersNodeSummaryTip").format(
 								curNodeHead.data("totalCount"),
 								curNodeHead.data("patternsCount"),
 								curNodeHead.data("edgesCount"),
@@ -318,7 +319,7 @@
 						);
 					} else {
 						$(".encounter_node_head", curNodeHead).attr("title",
-							"Recorded Encounters: {0}".format(curNodeHead.data("totalCount"))
+							KC3Meta.term("EncountersNodeTotalTip").format(curNodeHead.data("totalCount"))
 						);
 					}
 				});

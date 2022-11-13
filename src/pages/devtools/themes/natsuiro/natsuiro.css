@@ -2554,7 +2554,7 @@ ABYSS FLEET
 	margin: 0px 0px 1px 0px;
 	float: left;
 }
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name .i18n {
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name .l10n {
 	width: 42px;
 	margin: 0px 1px 0px 0px;
 	float: left;
@@ -2572,7 +2572,7 @@ ABYSS FLEET
 	margin: 0px 1px 1px 0px;
 	float: left;
 }
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_level .i18n {
+.module.activity .activity_pvp .pvp_admiral .pvp_admiral_level .l10n {
 	width: 16px;
 	color: #3ec0bf;
 	float: left;
@@ -2687,7 +2687,7 @@ ABYSS FLEET
 	margin: 0px 0px 0px 0px;
 	float: left;
 }
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .i18n {
+.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .l10n {
 	width: 13px;
 	float: left;
 	overflow: hidden;
@@ -2721,7 +2721,7 @@ ABYSS FLEET
 	float: left;
 	margin: 0px 1px 0px 0px;
 }
-.module.activity .activity_pvp .pvp_base_exp .i18n {
+.module.activity .activity_pvp .pvp_base_exp .l10n {
 	width: 59px;
 	float: left;
 	margin: 0px 1px 0px 0px;
@@ -2737,7 +2737,7 @@ ABYSS FLEET
 	height: 15px;
 	float: left;
 }
-.module.activity .activity_pvp .pvp_formation .i18n {
+.module.activity .activity_pvp .pvp_formation .l10n {
 	width: 64px;
 	float: left;
 	margin: 0px 1px 0px 0px;
@@ -4672,7 +4672,7 @@ ABYSS FLEET
 	overflow:hidden;
 	white-space:nowrap;
 }
-.ui-tooltip-content .ship_face_tooltip .ship_level span.i18n {
+.ui-tooltip-content .ship_face_tooltip .ship_level span.l10n {
 	color:#3ec0bf;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_level span.value.married {
@@ -4695,7 +4695,7 @@ ABYSS FLEET
 	overflow:hidden;
 	white-space:nowrap;
 }
-.ui-tooltip-content .ship_face_tooltip .ship_exp_next span.i18n {
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next span.l10n {
 	color:#7ca99f;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_morale {

@@ -226,6 +226,9 @@
 
 /* OTHER QUESTS
 --------------------------------*/
+.tab_flowchart .extraQuest {
+	font-weight:bold;
+}
 .tab_flowchart .extralist {
 	min-height:100px;
 	margin:0px 0px 10px 0px;

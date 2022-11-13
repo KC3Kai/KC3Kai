@@ -113,6 +113,7 @@
 					this.filterDefinitions.hideUnlock.currentIndex = this.hideUnlock & 1;
 					this.filterDefinitions.hideDupe.currentIndex = this.hideDupe & 1;
 					this.filterDefinitions.hideCompleted.currentIndex = this.hideCompleted & 1;
+					$(".tab_blueprints .view_type input[type=checkbox]").prop("disabled", false);
 					break;
 				case "all":
 					this.setSorter("type");
@@ -120,6 +121,7 @@
 					this.filterDefinitions.hideUnlock.currentIndex = 0;
 					this.filterDefinitions.hideDupe.currentIndex = 0;
 					this.filterDefinitions.hideCompleted.currentIndex = 0;
+					$(".tab_blueprints .view_type input[type=checkbox]").prop("disabled", true);
 					break;
 				default:
 					console.warn("Unsupported view type:", this.viewType);

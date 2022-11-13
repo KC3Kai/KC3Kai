@@ -1,61 +1,41 @@
 <div class="page_title">
-	Blueprints Required for Ship Remodels
-	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+	<span class="i18n">BlueprintsPageTitle</span>
+	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">What is this page for?</div>
-	<div class="help_a">This page displays ships that require materials such as blueprints in order to be remodeled.</div>
-
-	<div class="help_q">Why are some materials grayed-out?</div>
-	<div class="help_a">Grayed-out materials have already been used to remodel the ship in question and are therefore no longer required.</div>
-
-	<div class="help_q">Which ships should be given a higher remodel priority?</div>
-	<div class="help_a">This depends on your personal situation. To learn more, refer to these articles:<br/>
-		<a href="https://en.kancollewiki.net/Help:Ship_Priority" target="_blank">Ship Priority</a>,
-		<a href="https://kancolle.fandom.com/wiki/Partials/Blueprint_Priority" target="_blank">Blueprint Priority</a>,
-		<a href="https://zekamashi.net/kancolle-kouryaku/kunsyou/" target="_blank">改装優先順位</a>.
-	</div>
-
-	<div class="help_q">What is the purpose of the All Ships view?</div>
-	<div class="help_a">The All Ships view displays all ships currently implemented in-game who require materials in order to be remodeled.<br />
-		It also attempts to display grayed-out materials and total needs by considering ships that are already in your possession.
-		In contrast to the Ships in Service view, several columns serve different purposes:
-		<ul>
-			<li><b>ID</b> under the Ships in Service view corresponds to the ID assigned to your individual ships, but in All Ships view it is used to refer to the Master ID assigned to the ship's type. You can see these in the <a href="#mstship">Ship Library</a>. For example, your fleet may have two Abukuma Kai Nis - one may have her own ID of 573 while the other has an ID of 5957. However, the Master ID of the ship type known as "Abukuma Kai Ni" is always 200.
-			<li><b>Level</b> instead refers to the level required in order to remodel the ship in question.
-			<li>The <b>Requirements</b> column additionally shows you the name of the ship's next form.
-		</ul>
-	</div>
-
-	<div class="help_q">Why does the data seem weird or incorrect following a game maintenance?</div>
-	<div class="help_a">
-		Sometimes the KanColle devs may either neglect to update the remodel data in a timely manner or they may put dummy data into the API result if multiple successive maintenances are scheduled.
-		In order to fix such issues after the in-game data has stabilized, you can try refreshing our remodel info cache by clicking the <b>'Rebuild ship remodel information caches'</b> link on the <a href="#profile">Profile</a> page.
-	</div>
-
+	<div class="help_q i18n">BlueprintsHelp1Q</div>
+	<div class="help_a i18n">BlueprintsHelp1A</div>
+	<div class="help_q i18n">BlueprintsHelp2Q</div>
+	<div class="help_a i18n">BlueprintsHelp2A</div>
+	<div class="help_q i18n">BlueprintsHelp3Q</div>
+	<div class="help_a i18n">BlueprintsHelp3A</div>
+	<div class="help_q i18n">BlueprintsHelp4Q</div>
+	<div class="help_a i18n">BlueprintsHelp4A</div>
+	<div class="help_q i18n">BlueprintsHelp5Q</div>
+	<div class="help_a i18n">BlueprintsHelp5A</div>
 	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Blueprints">Learn more</a>
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Blueprints" class="i18n">LearnMore</a>
 	</div>
 </div>
 
 <div class="view_types">
 	<label class="view_type">
-		<input type="radio" name="view_type" value="owned" checked /><span>Ships in Service</span>
+		<input type="radio" name="view_type" value="owned" checked /><span class="i18n">BlueprintsViewTypeShipsInService</span>
 	</label>
 	<label class="view_type">
-		<input type="radio" name="view_type" value="all" /><span>All Ships</span>
+		<input type="radio" name="view_type" value="all" /><span class="i18n">BlueprintsViewTypeAllShips</span>
 	</label>
-	<span class="view_type">Hide:</span>
+	<span class="view_type i18n">BlueprintsFilterHideLabel</span>
 	<label class="view_type">
-		<input type="checkbox" name="hide_unlock" /><span>Unlock Ships</span>
-	</label>
-	<label class="view_type">
-		<input type="checkbox" name="hide_dupe" /><span>Dupe Remodels</span>
+		<input type="checkbox" name="hide_unlock" /><span class="i18n">BlueprintsFilterUnlockShips</span>
 	</label>
 	<label class="view_type">
-		<input type="checkbox" name="hide_completed" /><span>Completed</span>
+		<input type="checkbox" name="hide_dupe" /><span class="i18n">BlueprintsFilterDupeRemodels</span>
+	</label>
+	<label class="view_type">
+		<input type="checkbox" name="hide_completed" /><span class="i18n">BlueprintsFilterCompleted</span>
 	</label>
 </div>
 <div class="clear"></div>
@@ -66,12 +46,12 @@
 	<!-- HEADER LABELS AND ICONS -->
 	<div class="ship_header">
 		<div class="ship_item">
-			<div class="ship_field hover ship_id" data-type="id">ID</div>
+			<div class="ship_field hover ship_id i18n" data-type="id">ShipListGridTitleId</div>
 			<div class="ship_field ship_img"></div>
-			<div class="ship_field hover ship_name" data-type="name">Name</div>
-			<div class="ship_field hover ship_type" data-type="type">Type</div>
-			<div class="ship_field hover ship_lv" data-type="lv">Level</div>
-			<div class="ship_field hover need_materials" data-type="materials">Requirements (Blueprints, etc)</div>
+			<div class="ship_field hover ship_name i18n" data-type="name">ShipListGridTitleName</div>
+			<div class="ship_field hover ship_type i18n" data-type="type">ShipListGridTitleSType</div>
+			<div class="ship_field hover ship_lv i18n" data-type="lv">ShipListGridTitleLevel</div>
+			<div class="ship_field hover need_materials i18n" data-type="materials">BlueprintsGridTitleRequirements</div>
 			<div class="clear"></div>
 		</div>
 	</div>
@@ -82,14 +62,14 @@
 	<div class="clear"></div>
 
 	<div class="total summary">
-		<div class="summary_item i18n">In demand:</div>
+		<div class="summary_item i18n">BlueprintsFooterInDemandLabel</div>
 		<div class="total_items">
 		</div>
 	</div>
 	<div class="clear"></div>
 
 	<div class="owned summary">
-		<div class="summary_item i18n">In possession:</div>
+		<div class="summary_item i18n">BlueprintsFooterInPossessionLabel</div>
 		<div class="owned_items">
 		</div>
 	</div>

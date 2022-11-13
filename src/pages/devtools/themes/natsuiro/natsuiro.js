@@ -503,6 +503,7 @@
 			$("body").css("background-size", ConfigManager.pan_bg_size);
 			$("body").css("background-position", ConfigManager.pan_bg_position);
 			$("body").css("background-repeat", "no-repeat");
+			$("body").css("background-attachment", "fixed");
 		}
 
 		// Panel customizations: custom css

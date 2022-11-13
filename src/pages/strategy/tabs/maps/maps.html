@@ -1,6 +1,6 @@
 <div class="page_title">
-	Sortie History
-	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+	<span class="i18n">MapHistoryPageTitle</span>
+	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
@@ -37,10 +37,8 @@ You can also share this to your friends so they can watch it too. Be careful tho
 		<p>Hold <kbd>Ctrl</kbd> or <kbd>Meta</kbd> key and click will open Fleet Manager in new tab.</p>
 	</div>
 
-	<div class="help_q"></div>
-	<div class="help_a"></div>
 	<div class="help_more">
-		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Regular-Maps">Learn more</a>
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Regular-Maps" class="i18n">LearnMore</a>
 	</div>
 </div>
 
@@ -49,35 +47,35 @@ You can also share this to your friends so they can watch it too. Be careful tho
 	<div class="world_list">
 		<div class="world_box hover active" data-world_num="0">
 			<div class="world_icon"></div>
-			<div class="world_text">All Runs</div>
+			<div class="world_text i18n">MapHistoryWorldTabAll</div>
 		</div>
 		<div class="world_box hover" data-world_num="1">
 			<div class="world_icon"></div>
-			<div class="world_text">World 1</div>
+			<div class="world_text i18n">MapHistoryWorldTab1</div>
 		</div>
 		<div class="world_box hover" data-world_num="2">
 			<div class="world_icon"></div>
-			<div class="world_text">World 2</div>
+			<div class="world_text i18n">MapHistoryWorldTab2</div>
 		</div>
 		<div class="world_box hover" data-world_num="3">
 			<div class="world_icon"></div>
-			<div class="world_text">World 3</div>
+			<div class="world_text i18n">MapHistoryWorldTab3</div>
 		</div>
 		<div class="world_box hover" data-world_num="7">
 			<div class="world_icon"></div>
-			<div class="world_text">World 7</div>
+			<div class="world_text i18n">MapHistoryWorldTab7</div>
 		</div>
 		<div class="world_box hover" data-world_num="4">
 			<div class="world_icon"></div>
-			<div class="world_text">World 4</div>
+			<div class="world_text i18n">MapHistoryWorldTab4</div>
 		</div>
 		<div class="world_box hover" data-world_num="5">
 			<div class="world_icon"></div>
-			<div class="world_text">World 5</div>
+			<div class="world_text i18n">MapHistoryWorldTab5</div>
 		</div>
 		<div class="world_box hover" data-world_num="6">
 			<div class="world_icon"></div>
-			<div class="world_text">World 6</div>
+			<div class="world_text i18n">MapHistoryWorldTab6</div>
 		</div>
 		<div class="clear"></div>
 	</div>
@@ -101,17 +99,20 @@ You can also share this to your friends so they can watch it too. Be careful tho
 <div class="sortie_controls">
 	<div class="sortie_per_page">
 		<select class="item_count_select">
-			<option value="100">100&nbsp;(Slowest)</option><option value="50">50&emsp;(Slower)</option>
-			<option value="20">20</option><option value="10">10</option><option value="5">5</option>
+			<option value="100" class="i18n">BattleHistoryPagingOption1</option>
+			<option value="50" class="i18n">BattleHistoryPagingOption2</option>
+			<option value="20" class="i18n">BattleHistoryPagingOption3</option>
+			<option value="10" class="i18n">BattleHistoryPagingOption4</option>
+			<option value="5" class="i18n">BattleHistoryPagingOption5</option>
 		</select>
-		<span>sorties per page,</span>
+		<span class="i18n">BattleHistoryPagingSettingLabel</span>
 	</div>
 	<div class="sortie_count"></div>
 	<div class="sortie_batch_toggles">
-		<div class="show_yasen_shipstate_toggle sortie_toggle active hover" data-target="show_yasen_shipstate" title="Yasen info">Y</div>
-		<div class="show_new_shipstate_toggle sortie_toggle active hover" data-target="show_new_shipstate" title="Taiha/Chuuha stamps">T</div>
-		<div class="non_battle_toggle sortie_toggle active hover" data-target="non_battle" title="Battle nodes only">B</div>
-		<div class="boss_node_toggle sortie_toggle active hover" data-target="boss_node" title="Boss arrivals only">O</div>
+		<div class="show_yasen_shipstate_toggle sortie_toggle active hover i18n_title" data-target="show_yasen_shipstate" title="BattleHistoryToggleButtonYtip">Y</div>
+		<div class="show_new_shipstate_toggle sortie_toggle active hover i18n_title" data-target="show_new_shipstate" title="BattleHistoryToggleButtonTtip">T</div>
+		<div class="non_battle_toggle sortie_toggle active hover i18n_title" data-target="non_battle" title="BattleHistoryToggleButtonBtip">B</div>
+		<div class="boss_node_toggle sortie_toggle active hover i18n_title" data-target="boss_node" title="BattleHistoryToggleButtonOtip">O</div>
 	</div>
 </div>
 
@@ -159,63 +160,62 @@ You can also share this to your friends so they can watch it too. Be careful tho
 				<div class="clear"></div>
 			</div>
 			<div class="sortie_column sortie_toggles">
-				<div class="sortie_toggle hover" data-target="sortie_roster" title="Fleet">F</div>
-				<div class="sortie_toggle hover" data-target="sortie_nodes" title="Nodes">N</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy" title="Enemy">E</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds" title="Conditions">C</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes" title="Air Battle">A</div>
+				<div class="sortie_toggle hover i18n_title" data-target="sortie_roster" title="BattleHistoryToggleButtonFtip">F</div>
+				<div class="sortie_toggle hover i18n_title" data-target="sortie_nodes" title="BattleHistoryToggleButtonNtip">N</div>
+				<div class="sortie_toggle sortie_toggle_in active hover i18n_title" data-target="node_enemy" title="BattleHistoryToggleButtonEtip">E</div>
+				<div class="sortie_toggle sortie_toggle_in active hover i18n_title" data-target="node_conds" title="BattleHistoryToggleButtonCtip">C</div>
+				<div class="sortie_toggle sortie_toggle_in active hover i18n_title" data-target="node_planes" title="BattleHistoryToggleButtonAtip">A</div>
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
 		</div>
 		<div class="sortie_roster">
 			<div class="sortie_rfleet rfleet_main">
-				<div class="rfleet_title">Main Fleet</div>
+				<div class="rfleet_title i18n">BattleHistoryFleetLabelMain</div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_escort">
-				<div class="rfleet_title">Escort Fleet</div>
+				<div class="rfleet_title i18n">BattleHistoryFleetLabelEscort</div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_preboss">
-				<div class="rfleet_title">Pre-boss Support</div>
+				<div class="rfleet_title i18n">BattleHistoryFleetLabelNodeSupport</div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_boss">
-				<div class="rfleet_title">Boss Support</div>
+				<div class="rfleet_title i18n">BattleHistoryFleetLabelBossSupport</div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_lbas rfleet_lbas1">
-				<div class="rfleet_title">LBAS <span class="num"></span> <span class="action"></span></div>
+				<div class="rfleet_title"><span class="i18n">BattleHistoryFleetLabelLbas</span> <span class="num"></span> <span class="action"></span></div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_lbas rfleet_lbas2">
-				<div class="rfleet_title">LBAS <span class="num"></span> <span class="action"></span></div>
+				<div class="rfleet_title"><span class="i18n">BattleHistoryFleetLabelLbas</span> <span class="num"></span> <span class="action"></span></div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_lbas rfleet_lbas3">
-				<div class="rfleet_title">LBAS <span class="num"></span> <span class="action"></span></div>
+				<div class="rfleet_title"><span class="i18n">BattleHistoryFleetLabelLbas</span> <span class="num"></span> <span class="action"></span></div>
 				<div class="rfleet_body">
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_control">
 				<div class="rfleet_body">
-					<div class="sortie_toggle button_tomanager hover" title="View fleets at Fleet Manager">To Fleet Manager</div>
-					<div class="sortie_toggle export_btn export_img_builder hover" title="View fleets on external ImgBuilder site">ImgBuilder</div>
-					<div class="sortie_toggle export_btn export_kcweb hover" title="View fleets on external Aerial Combat Simulator">AirSimulator</div>
-					<div class="sortie_toggle export_btn export_jervis hover" title="View fleets on external Fleet Hub">JervisOR</div>
+					<div class="sortie_toggle button_tomanager hover i18n i18n_title" title="BattleHistoryFleetButtonToManagerTip">BattleHistoryFleetButtonToManager</div>
+					<div class="sortie_toggle export_btn export_img_builder hover i18n i18n_title" title="BattleHistoryFleetButtonImgBuilderTip">BattleHistoryFleetButtonImgBuilder</div>
+					<div class="sortie_toggle export_btn export_kcweb hover i18n i18n_title" title="BattleHistoryFleetButtonAirCalcTip">BattleHistoryFleetButtonAirCalc</div>
+					<div class="sortie_toggle export_btn export_jervis hover i18n i18n_title" title="BattleHistoryFleetButtonJervisOrTip">BattleHistoryFleetButtonJervisOr</div>
 				</div>
 			</div>
 			<div class="clear"></div>
 		</div>
 		<div class="sortie_nodes">
-			
 		</div>
 	</div>
 	
@@ -249,26 +249,26 @@ You can also share this to your friends so they can watch it too. Be careful tho
 		<div class="node_details">
 			<div class="node_conds">
 				<div class="node_cond">
-					<div class="node_cond_label">Detect</div>
+					<div class="node_cond_label i18n">BattleDetection</div>
 					<div class="node_cond_value node_detect">-</div>
 				</div>
 				<div class="node_cond">
-					<div class="node_cond_label">Engage</div>
+					<div class="node_cond_label i18n">BattleEngangement</div>
 					<div class="node_cond_value node_engage">-</div>
 				</div>
 				<div class="node_cond">
-					<div class="node_cond_label">Contact</div>
+					<div class="node_cond_label i18n">BattleContact</div>
 					<div class="node_cond_value node_contact">-</div>
 				</div>
 				<div class="node_cond">
-					<div class="node_cond_label">Air Battle</div>
+					<div class="node_cond_label i18n">BattleAirBattle</div>
 					<div class="node_cond_value node_airbattle">-</div>
 				</div>
 			</div>
 			<div class="node_planes">
 				<div class="node_airsides">
-					<div class="node_airside">Friendly</div>
-					<div class="node_airside">Abyssal</div>
+					<div class="node_airside i18n">BattleTipFriendly</div>
+					<div class="node_airside i18n">BattleTipAbyssal</div>
 					<div class="clear"></div>
 				</div>
 				<div class="node_airtype">
@@ -310,8 +310,8 @@ You can also share this to your friends so they can watch it too. Be careful tho
 					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="node_exp hq"><span></span> exp</div>
-			<div class="node_exp nodal"><span></span> exp</div>
+			<div class="node_exp hq"><span class="type i18n">BattleHistoryHqExpLabel</span><span class="value"></span> <span class="unit i18n">BattleHistoryExpUnitLabel</span></div>
+			<div class="node_exp nodal"><span class="type i18n">BattleHistoryNodeExpLabel</span><span class="value"></span> <span class="unit i18n">BattleHistoryExpUnitLabel</span></div>
 		</div>
 	</div>
 	
