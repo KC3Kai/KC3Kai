@@ -885,7 +885,7 @@
 				KC3Database.con.enemy.toArray(function(enemyList){
 					KC3Database.con.enemy.clear();
 					for(const r of enemyList){
-						if(r.id < 1501) { r.id += 1000; }
+						if(r.id > 500 && r.id < 1501) { r.id += 1000; }
 						KC3Database.Enemy(r);
 					}
 					console.info("Enemy stats have been fixed");/*RemoveLogging:skip*/
@@ -965,7 +965,8 @@
 				const updateEslot = function(slotArrList){
 					if(Array.isArray(slotArrList)){
 						return slotArrList.map(slotArr => {
-							if(slotArr.some(id => id > 500 && id < 1501))
+							if(Array.isArray(slotArr)
+								&& slotArr.some(id => id > 500 && id < 1501))
 								return slotArr.map(bumpEqId);
 							return slotArr;
 						});
