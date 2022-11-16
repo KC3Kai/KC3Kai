@@ -144,7 +144,7 @@
 			const usedChars = localStorage.usedSpace();
 			const kiloChars = Math.floor(usedChars / 1024);
 			const usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
-			$(".management .used").text("Used {0}K, {1}%".format(kiloChars, usedPercent));
+			$(".management .used").text(KC3Meta.term("ProfileLocalStorageUsage").format(kiloChars, usedPercent));
 			if(usedPercent > 75){
 				$(".management .used").css("color", "orangered");
 			}
@@ -204,16 +204,16 @@
 				const hash = importedData.hash;
 				delete importedData.hash;
 				if( JSON.stringify(importedData).hashCode() !== hash ) {
-					alert("Invalid KC3 File. Might have been edited, or from an old KC3 version.");
+					alert(KC3Meta.term("ProfileImportInvalidHash"));
 					window.location.reload();
 					return;
 				}
 				if(PlayerManager.hq.id && importedData.player.id !== PlayerManager.hq.id &&
-					! confirm("You are going to import a profile from different player, are you sure?")) {
+					! confirm(KC3Meta.term("ProfileImportIdConfirm"))) {
 					window.location.reload();
 					return;
 				}
-				if( ! confirm("Are you sure to overwrite all your current profile data?")) {
+				if( ! confirm(KC3Meta.term("ProfileImportWriteConfirm"))) {
 					window.location.reload();
 					return;
 				}
@@ -235,7 +235,7 @@
 					if(window.File && window.FileReader && window.FileList && window.Blob){
 						profileReader.readAsText( event.target.files[0] );
 					}else{
-						alert("Unfortunately, file reading is not available on your browser.");
+						alert(KC3Meta.term("ProfileImportUnsupport"));
 					}
 				}
 			});
@@ -247,21 +247,21 @@
 				delete importedData.hash;
 				// ignore hash verifying here, allow json modification
 				if(!importedData.config || ConfigManager.version < importedData.config.version) {
-					alert("Invalid settings. Might be wrong file, or from a newer KC3 version.");
+					alert(KC3Meta.term("ProfileImportInvalidConfig"));
 					window.location.reload();
 					return;
 				}
 				if(JSON.stringify(importedData).hashCode() !== hash) {
 					console.debug("Settings to be imported hash values different:", JSON.stringify(importedData).hashCode(), hash);
 				}
-				if(!confirm("Are you sure to overwrite all your current settings?")) {
+				if(!confirm(KC3Meta.term("ProfileImportConfigConfirm"))) {
 					window.location.reload();
 					return;
 				}
 				for(const key in importedData) {
 					localStorage[key] = JSON.stringify(importedData[key]);
 				}
-				alert("Settings have been imported, please reload all your KC3 pages!");
+				alert(KC3Meta.term("ProfileImportConfigDone"));
 				window.location.reload();
 			};
 			
@@ -275,7 +275,7 @@
 					if(window.File && window.FileReader && window.FileList && window.Blob){
 						configReader.readAsText( event.target.files[0] );
 					}else{
-						alert("Unfortunately, file reading is not available on your browser.");
+						alert(KC3Meta.term("ProfileImportUnsupport"));
 					}
 				}
 			});
@@ -434,7 +434,7 @@
 					self.saveFile(filename, exportData, "text/csv");
 				}).catch(function(e){
 					console.error("Export expedition error", e);
-					alert("Oops! There is something wrong. You might report the error logs.");
+					alert(KC3Meta.term("ProfileExportErrorAlert"));
 				});
 			};
 			// Export CSV: Expedition
@@ -715,16 +715,14 @@
 			
 			// Clear Quick Data
 			$(".tab_profile .clear_storage").on("click", function(event){
-				if( ! confirm("Are you sure? Lost data would not be recovered."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixDataLostWarning"))) return false;
 				localStorage.clear();
 				window.location.reload();
 			});
 			
 			// Clear Histories
 			$(".tab_profile .clear_history").on("click", function(event){
-				if( ! confirm("Are you sure? Lost data would not be recovered."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixDataLostWarning"))) return false;
 				KC3Database.clear(function(){
 					window.location.reload();
 				});
@@ -732,10 +730,9 @@
 			
 			// Clear all ledger data if tab becomes unavailable thank to unknown corrupted records
 			$(".tab_profile .clear_ledger").on("click", function(event){
-				if(!confirm("Are you sure? Lost data would not be recovered."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixDataLostWarning"))) return false;
 				KC3Database.con.navaloverall.clear().then(() => {
-					alert("Done!");
+					alert(KC3Meta.term("ProfileBugFixDonePopup").format("!"));
 				});
 			});
 			
@@ -763,11 +760,7 @@
 			
 			// Clear RemodelDb (will be rebuilt on page reloaded)
 			$(".tab_profile .clear_remodeldb").on("click", function(event) {
-				const result = confirm(
-					"You are about to rebuild ship remodel information,\n"
-					+ "it won't be correct until next time you restart game with KC3 to get latest ship data."
-				);
-				if(result === true) {
+				if(confirm(KC3Meta.term("ProfileBugFixRemodelDialog"))) {
 					delete localStorage.remodelDb;
 					window.location.reload();
 				}
@@ -775,11 +768,10 @@
 			
 			// Clear inconsistent localStorage cached ships & gears
 			$(".tab_profile .clear_localcache").on("click", function(event){
-				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed all other KC3 tabs."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixConfirmDialog"))) return false;
 				delete localStorage.ships;
 				delete localStorage.gears;
-				alert("Done! Cache data will be available again after you restart the game.");
+				alert(KC3Meta.term("ProfileBugFixDonePopup").format("!"));
 			});
 			
 			// Clear next reset time of quests and trigger a reset check at once
@@ -794,13 +786,12 @@
 					}
 				});
 				KC3QuestManager.checkAndResetQuests(Date.now());
-				alert("Done!");
+				alert(KC3Meta.term("ProfileBugFixDonePopup").format("!"));
 			});
 			
 			// Clear transient properties
 			$(".tab_profile .clear_fcf").on("click", function(event){
-				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixConfirmDialog"))) return false;
 				let json = localStorage.ships;
 				const hash = json.hashCode();
 				json = json.replace(/,\"didFlee\":(true|false)/g, "")
@@ -829,8 +820,7 @@
 			
 			// Clear old encounter data from phase 1 normal maps
 			$(".tab_profile .clear_old_encounters").on("click", function(event){
-				if(!confirm("Are you sure? Lost data would not be recovered."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixDataLostWarning"))) return false;
 				KC3Database.con.encounters.where("world").below(10).delete().then(() => {
 					alert("Done!");
 				}).catch(err => {
@@ -842,6 +832,7 @@
 			// Fix buggy ledger data, current possible types:
 			// 1: LBAS type, 2: Consumables empty useitem
 			$(".tab_profile .fix_ledger").on("click", function(event){
+				if(!confirm(KC3Meta.term("ProfileBugFixDbConfirmDialog"))) return false;
 				// Fix LBAS type
 				KC3Database.get_lodger_data(Range(0,Infinity,0,1),
 				function(ld){
@@ -876,6 +867,7 @@
 			
 			// Fix abyssal master IDs after 2017-04-05 (bump 1000)
 			$(".tab_profile .fix_abyssal").on("click", function(event){
+				if(!confirm(KC3Meta.term("ProfileBugFixDbConfirmDialog"))) return false;
 				const handleError = function(err, msg) {
 					console.error(msg || "Fixing abyssal IDs error", err);
 					alert(`Oops! ${msg || "There is something wrong"}. You might report the error logs.`);
@@ -943,6 +935,7 @@
 			
 			// Fix abyssal equipment master IDs after 2022-11-09 (bump 1000)
 			$(".tab_profile .fix_abyssalgear").on("click", function(event){
+				if(!confirm(KC3Meta.term("ProfileBugFixDbConfirmDialog"))) return false;
 				const handleError = function(err, msg) {
 					console.error(msg || "Fixing abyssal gear IDs error", err);
 					alert(`Oops! ${msg || "There is something wrong"}. You might report the error logs.`);
@@ -1012,8 +1005,7 @@
 			
 			// Fix ship bugged/desynced pendingConsumption records for some reasons
 			$(".tab_profile .fix_pending_ledger").on("click", function(event){
-				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))
-					return false;
+				if(!confirm(KC3Meta.term("ProfileBugFixDbConfirmDialog"))) return false;
 				KC3ShipManager.load();
 				const badStateShips = KC3ShipManager.find(ship => {
 					const sortieCnt = ship.lastSortie.length,
@@ -1025,7 +1017,7 @@
 				} else {
 					alert("Found {0} ships with pending data,\n".format(badStateShips.length) +
 						"Will begin to update your database,\n" +
-						"might take a long time if the data amount is mass.\n" +
+						"might take a long time for massive datasets.\n" +
 						"Operation will be performed in background,\n" +
 						"keep eyes on your computer's CPU/disk usage.");
 					badStateShips.forEach(ship => {

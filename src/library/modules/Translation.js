@@ -177,7 +177,7 @@
 				language = "en";
 			}
 
-			var translationBase = {}, enJSON;
+			var translationBase = {}, jsonText, enJSON;
 			if(extendEnglish && language!=="en"){
 				// Load english file
 				try {
@@ -213,18 +213,26 @@
 			// version will be used instead
 			var translation;
 			try {
-				translation = JSON.parse($.ajax({
+				jsonText = $.ajax({
 					url : repo+'lang/data/' +language+ '/' + filename + '.json',
 					async: false
-				}).responseText);
-
+				}).responseText;
+				translation = JSON.parse(jsonText);
 				if (track_source) {
 					this.addTags(translation, language);
 				}
 			} catch (e) {
+				const debugJsonPos = function(e) {
+					if(e.message.includes("at position ")) {
+						const posIdx = Number(e.message.match(/at position (\d+)/)[1]);
+						console.debug(e.message + " of [" + language + "/" + filename + ".json]: ["
+							+ jsonText.substring(posIdx - 1, posIdx + 2) + "] at [" + jsonText.substring(posIdx - 32, posIdx + 32) + "]");
+					}
+				};
 				// As EN can be used, fail-safe for other JSON syntax error
-				if (e instanceof SyntaxError && extendEnglish && language!=="en"){
+				if (e instanceof SyntaxError && extendEnglish && language !== "en"){
 					console.warn("Loading translation failed", filename, language, e);/*RemoveLogging:skip*/
+					debugJsonPos(e);
 					translation = null;
 					// Show error message for Strategy Room
 					if($("#error").length>0){
@@ -236,6 +244,7 @@
 				} else {
 					// Unknown error still needs to be handled asap
 					console.error("Loading translation failed", filename, language, e);
+					debugJsonPos(e);
 					let errMsg = $(("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
 						"<p>Contact developers plz! &gt;_&lt;</p>").format(filename, language, e));
 					if($("#error").length>0){
