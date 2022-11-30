@@ -2488,7 +2488,8 @@
 								$(".base_plane_name", planeBox).text(itemObj.name())
 									.attr("title", itemObj.name()).lazyInitTooltip();
 								
-								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
+								// in-game id padding changed to 4 digits since 2022-11-09, ours unchanged
+								const paddedId = String(itemObj.masterId).padStart(3, "0");
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first
 								$(".base_plane_img img", planeBox).attr("alt", itemObj.masterId)

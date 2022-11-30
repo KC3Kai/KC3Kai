@@ -2571,6 +2571,41 @@
 					multiple: { "houg": 1, "tyku": 5, "houk": 3 },
 				},
 			},
+			// Kyoufuu Kai Ni
+			"485": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Mogami Class
+					"9": {
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
+					},
+				},
+				byShip: [
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						multiple: { "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 5,
+						multiple: { "tyku": 1 },
+					},
+					{
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
+			},
 			// Ka Type Observation Autogyro
 			"69": {
 				count: 0,
