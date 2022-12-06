@@ -1466,7 +1466,7 @@
 						return true;
 					} else if(e.altKey) {
 						self.copyToClipboard(JSON.stringify(sortieData), () => {
-							alert("Replay data copied to clipboard");
+							alert(KC3Meta.term("BattleReplayToClipboard"));
 						});
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
@@ -1585,7 +1585,7 @@
 		this.endExport = function(error, result) {
 			if (error) {
 				console.error("Generating replay data failed", error);
-				alert("Failed to generate replay data");
+				alert(KC3Meta.term("BattleReplayGenReplayFailed"));
 			} else if (result && result.filename) {
 				// Show a response if hideDownload shelf bar is true
 				//alert("Saved to {0}".format(result.filename));
