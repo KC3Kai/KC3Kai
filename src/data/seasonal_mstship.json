@@ -5430,19 +5430,19 @@
 	},
 	"5678": {
 		"api_id": 5678,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "浴衣秋雲",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5679": {
 		"api_id": 5679,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "浴衣秋雲改二",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5680": {
 		"api_id": 5680,
@@ -5454,43 +5454,43 @@
 	},
 	"5681": {
 		"api_id": 5681,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "浴衣鵜来",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5682": {
 		"api_id": 5682,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "浴衣鵜来改",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5683": {
 		"api_id": 5683,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣最上",
+		"api_yomi": "もがみ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5684": {
 		"api_id": 5684,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣最上改二",
+		"api_yomi": "もがみ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5685": {
 		"api_id": 5685,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣最上改二特",
+		"api_yomi": "もがみ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5686": {
 		"api_id": 5686,
@@ -5499,5 +5499,149 @@
 		"api_stype": 3,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5687": {
+		"api_id": 5687,
+		"api_name": "秋刀魚山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5688": {
+		"api_id": 5688,
+		"api_name": "秋刀魚第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5689": {
+		"api_id": 5689,
+		"api_name": "秋刀魚Ranger",
+		"api_yomi": "レンジャー",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5690": {
+		"api_id": 5690,
+		"api_name": "秋刀魚木曾",
+		"api_yomi": "きそ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5691": {
+		"api_id": 5691,
+		"api_name": "秋刀魚木曾改二",
+		"api_yomi": "きそ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5692": {
+		"api_id": 5692,
+		"api_name": "秋刀魚伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5693": {
+		"api_id": 5693,
+		"api_name": "秋刀魚朝霜改二",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5694": {
+		"api_id": 5694,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5695": {
+		"api_id": 5695,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5696": {
+		"api_id": 5696,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5697": {
+		"api_id": 5697,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5698": {
+		"api_id": 5698,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5699": {
+		"api_id": 5699,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5700": {
+		"api_id": 5700,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5701": {
+		"api_id": 5701,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5702": {
+		"api_id": 5702,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5703": {
+		"api_id": 5703,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5704": {
+		"api_id": 5704,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

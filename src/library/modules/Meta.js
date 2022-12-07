@@ -151,6 +151,8 @@ Provides access to data on built-in JSON files
 			667, // Yamakaze K2D -> K2
 			136, // Yamato Kai -> K2
 			911, // Yamato K2 -> K2J
+			285, // Houshou Kai -> K2
+			894, // Houshou K2 -> K2S
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],

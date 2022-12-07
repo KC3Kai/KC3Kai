@@ -160,6 +160,7 @@
                 case 506: // Mogami Kai Ni Toku
                     return 15;
                 case 318: // Ryuuhou Kai
+                case 894: // Houshou Kai Ni
                     return 20;
                 case 699: // Souya (AGS)
                     return 5;
@@ -264,6 +265,9 @@
                 case 668: // Yahagi K2B
                 case 883: // Ryuuhou K2E
                 case 888: // Ryuuhou K2
+                case 285: // Houshou Kai
+                case 894: // Houshou Kai Ni
+                case 899: // Houshou Kai Ni Sen
                     return 20;
                 case 501: // Mogami Kai Ni
                     return 60;

@@ -935,6 +935,11 @@
 						origins: [89, 184],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
+					// Houshou K2+
+					{
+						ids: [894, 899],
+						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
+					},
 					// All ships can equip this get stars bonuses
 					{
 						minStars: 2,
@@ -1205,6 +1210,36 @@
 					},
 				],
 			},
+			// Type 0 Fighter Model 64 (Skilled Fighter-bomber)
+			"487": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 5, "tyku": 3, "houk": 2, "houm": 4 },
+					},
+					{
+						// Ryuuhou K2+
+						ids: [883, 888],
+						multiple: { "houg": 3, "tyku": 1, "houk": 1, "houm": 2 },
+					},
+					// For all ships can equip it
+					{
+						minStars: 6,
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "tyku": 1, "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1, "houm": 1 },
+					},
+				],
+			},
 			// FM-2
 			"277": {
 				count: 0,
@@ -1353,11 +1388,18 @@
 						multiple: { "houg": 2, "tyku": 2, "tais": 2, "houk": 2 },
 					},
 				},
-				byShip: {
-					// All CVL +1 aa, +1 ev
-					stypes: [7],
-					multiple: { "tyku": 1, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg":1, "tyku": 1, "tais": 1, "houk": 1 },
+					},
+					{
+						// All CVL +1 aa, +1 ev
+						stypes: [7],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Type 96 Fighter Kai
 			"228": {
@@ -1374,11 +1416,18 @@
 						multiple: { "houg": 3, "tyku": 3, "tais": 4, "houk": 4 },
 					},
 				},
-				byShip: {
-					// All CVL +1 aa, +1 ev, +2 asw
-					stypes: [7],
-					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg":1, "tyku": 1, "tais": 2, "houk": 2 },
+					},
+					{
+						// All CVL +1 aa, +1 ev, +2 asw
+						stypes: [7],
+						multiple: { "tyku": 1, "tais": 2, "houk": 1 },
+					},
+				],
 			},
 			// Shiden Kai 4
 			"271": {
@@ -1671,6 +1720,11 @@
 						multiple: { "houg": 3, "tyku": 3, "houk": 4 },
 					},
 					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 4, "tyku": 4, "houk": 4 },
+					},
+					{
 						// Suzuya/Kumano-Kou Kai Ni, Kaga Kai Ni Go
 						ids: [508, 509, 646],
 						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
@@ -1679,6 +1733,36 @@
 						// Ise/Hyuuga Kai Ni, Ryuuhou Kai Ni+,
 						ids: [553, 554, 883, 888],
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+				],
+			},
+			// Type 0 Fighter Model 64 (Air Superiority Fighter Specification)
+			"486": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 4, "tyku": 4, "houk": 3, "houm": 2 },
+					},
+					{
+						// Ryuuhou K2+
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+					// For all ships can equip it
+					{
+						minStars: 6,
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1, "houm": 1 },
 					},
 				],
 			},
@@ -6302,6 +6386,7 @@
 			// 8cm High-angle Gun Kai + Extra Machine Guns
 			"220": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
 						// Noshiro K2, Yahagi K2+, Mogami K2+
@@ -6330,7 +6415,50 @@
 							distinct: { "tyku": 1, "houk": 2 },
 						},
 					},
-				]
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "tyku": 2, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 3, "houk": 3 },
+						},
+					},
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						minStars: 10,
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				],
+			},
+			// 10cm Twin High-angle Gun Mount Kai + Additional Machine Guns
+			"275": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 3, "houk": 3 },
+						},
+					},
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						minStars: 7,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						minStars: 10,
+						multiple: { "houg": 1, "tyku": 1, "houm": 1 },
+					},
+				],
 			},
 			// Type 21 Air Radar
 			"30": {
@@ -7496,6 +7624,13 @@
 						single: { "soku": 5, },
 					},
 				},
+				byShip: [
+					{
+						// Houshou K2+, 1 boiler gets Fast like I-201/I-203
+						ids: [894, 899],
+						single: { "soku": 5, },
+					},
+				],
 			},
 			// Pugliese Underwater Protection Bulkhead
 			"136": {
@@ -8150,14 +8285,14 @@
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Maryland, Gangut, Conte di Cavour (base remodel)
-						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
+						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 918, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
-						excludes: [541, 573, 888, 878, 879],
+						excludes: [541, 573, 888, 878, 879, 894, 899],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -8235,9 +8370,10 @@
 						],
 					},
 					{
-						// Slow Group C: Akashi, Hayasui, Akitsumaru
+						// Slow Group C: Akashi, Hayasui, Akitsumaru, Houshou K2+
 						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201, I-203, Scamp
-						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299],
+						origins: [182, 460, 161, 89,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299],
+						excludes: [89, 285],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
