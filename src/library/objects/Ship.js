@@ -980,7 +980,7 @@ KC3改 Ship Object
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
 				else if (flag.includes("Sonar")) { return 18; }
-				else if (flag.includes("Boiler")) { return 19; }
+				else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
 				return 0; // Unknown synergy type
 			});
 			return obj;
