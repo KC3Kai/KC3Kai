@@ -2810,15 +2810,17 @@ KC3改 Ship Object
 		// For other CVL possible but hard to reach 50 asw and do OASW with Sonar and high ASW aircraft.
 		// For CV Kaga K2Go, can perform OASW with any asw aircraft like Taiyou-class Kai+:
 		//   https://twitter.com/noobcyan/status/1299886834919510017
-		// For Houshou K2S, ASW aircraft in 0-size slot can't enable OASW and shelling ASW:
+		// For Houshou K2S, ASW aircraft in 0-size slot only can't enable OASW and shelling ASW:
 		//   https://twitter.com/myteaGuard/status/1600867450429485056
+		//   but can do OASW even in 0-size slot with another ASW aircraft together:
+		//   https://twitter.com/bobcat18/status/1600909312033193984
 		if(isLightCarrier || isKagaK2Go) {
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(522).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
-			if( ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)                  // ship visible asw irrelevant
-				|| this.hasNonZeroSlotEquipmentFunc(g => g.isHighAswBomber(false))    // mainly asw 50/65, dive bomber not work
+			if( hasAswAircraft && ( (isTaiyouKaiAfter || isKagaK2Go)        // ship visible asw irrelevant
+				|| this.equipment().some(g => g.isHighAswBomber(false)) )   // mainly asw 50/65, dive bomber not work
 			) return true;
 			// Visible bonus from Torpedo Bombers confirmed counted towards asw 100 threshold since 2021-02-09:
 			// https://twitter.com/panmodoki10/status/1359036399618412545
