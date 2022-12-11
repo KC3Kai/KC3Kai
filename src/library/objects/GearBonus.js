@@ -7596,53 +7596,6 @@
 					},
 				],
 			},
-			// New Model High Temperature High Pressure Boiler
-			"87": {
-				count: 0,
-				starsDist: [],
-				byClass: {
-					// Kongou Class Kai Ni C
-					"6": [
-						{
-							remodel: 3,
-							single: { "raig": 1, "houk": 2 },
-						},
-						{
-							remodel: 3,
-							minStars: 6,
-							single: { "houk": 1 },
-						},
-						{
-							remodel: 3,
-							minStars: 8,
-							single: { "raig": 1 },
-						},
-						{
-							remodel: 3,
-							minStars: 10,
-							single: { "houg": 1 },
-						},
-					],
-					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
-					"109": {
-						single: { "soku": 5, },
-					},
-				},
-				byShip: [
-					{
-						// Houshou K2+, 1 newModelBoiler gets Fast like I-201/I-203,
-						// according tests, supposed to be Slow Group A when turbine equipped,
-						// but newModelBoiler + enhancedBoiler (-turbine) goes back to Slow,
-						// 2 newModelBoilers + turbine is still Fast+ instead of Fastest.
-						// so use strange synergy to simulate this buggy behavior?
-						ids: [894, 899],
-						synergy: {
-							flags: [ "improvedTurbineNonexist", "enhancedBoilerNonexist" ],
-							single: { "soku": 5 },
-						},
-					},
-				],
-			},
 			// Pugliese Underwater Protection Bulkhead
 			"136": {
 				count: 0,
@@ -8097,6 +8050,53 @@
 					},
 				],
 			},
+			// New Model High Temperature High Pressure Boiler
+			"87": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Kongou Class Kai Ni C
+					"6": [
+						{
+							remodel: 3,
+							single: { "raig": 1, "houk": 2 },
+						},
+						{
+							remodel: 3,
+							minStars: 6,
+							single: { "houk": 1 },
+						},
+						{
+							remodel: 3,
+							minStars: 8,
+							single: { "raig": 1 },
+						},
+						{
+							remodel: 3,
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
+					"109": {
+						single: { "soku": 5, },
+					},
+				},
+				byShip: [
+					{
+						// Houshou K2+, 1 newModelBoiler gets Fast like I-201/I-203,
+						// according tests, supposed to be Slow Group A when turbine equipped,
+						// but newModelBoiler + enhancedBoiler (-turbine) goes back to Slow,
+						// 2 newModelBoilers + turbine is still Fast+ instead of Fastest.
+						// so use strange synergy to simulate this buggy behavior?
+						ids: [894, 899],
+						synergy: {
+							flags: [ "improvedTurbineNonexist", "enhancedBoilerNonexist" ],
+							single: { "soku": 5 },
+						},
+					},
+				],
+			},
 			// Improved Kanhon Type Turbine, speed boost synergy with boilers
 			// https://wikiwiki.jp/kancolle/%E9%80%9F%E5%8A%9B#da6be20e
 			"33": {
@@ -8349,6 +8349,8 @@
 					},
 					{
 						// Slow Group B special: Yuubari Kai Ni Toku, Samuel B.Roberts
+						// suspected works like Houshou K2+ with newModelBoilers:
+						//   equip turbine +5 if no other engines equipped, otherwise back to Slow B
 						ids: [623, 561, 681],
 						single: { "soku": 5 },
 						synergy: [
