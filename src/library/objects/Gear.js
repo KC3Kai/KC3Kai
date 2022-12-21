@@ -987,11 +987,12 @@ KC3改 Equipment Object
 		// FM-2 (AA 6 DV 2) is not fighter-bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
 		// Type 0 Fighter Model 64 (Two-seat w/ KMX) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
+		// Type 0 Fighter Model 64 (Skilled Fighter-bomber)?
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			// Using ID list for now since data insufficient
-			[60, 154, 219, 447].indexOf(this.masterId) > -1;
+			[60, 154, 219, 447, 487].indexOf(this.masterId) > -1;
 			//this.master().api_tyku > 2 && this.master().api_baku < 6;
 	};
 

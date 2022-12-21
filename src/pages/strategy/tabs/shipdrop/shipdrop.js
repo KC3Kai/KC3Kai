@@ -144,7 +144,7 @@
 				const nodeDrop = $(".node_drop", factory).clone();
 				const isBossNode = !!allNodes[node].boss;
 				$(".node_name", nodeDrop)
-					.text("Node " + node + (isBossNode ? " (Boss)" : ""))
+					.text(KC3Meta.term("ShipDropNodeNameLabel").format(node, isBossNode ? KC3Meta.term("ShipDropNodeNameBossAnno") : ""))
 					.toggleClass("boss", isBossNode)
 					.toggleClass("unknown", !!allNodes[node].unknown);
 				const shipIds = Object.keys(allNodes[node]).filter(id => id.startsWith("s-"));
@@ -226,7 +226,9 @@
 			const isMap = worldId !== undefined;
 			const listElem = isMap ? $(".control_panel .map_list") : $(".control_panel .world_list");
 			listElem.html(
-				$("<option />").attr("value", 0).text("Select a {0}...".format(isMap ? "map" : "world"))
+				$("<option />").attr("value", 0).text(
+					isMap ? KC3Meta.term("ShipDropMapPickerDefaultOption") : KC3Meta.term("ShipDropWorldPickerDefaultOption")
+				)
 			);
 			$(".filters .massSelect #eventSelected").toggle(KC3Meta.isEventWorld(worldId));
 			$(".filters .massSelect #timeRange").toggle(!KC3Meta.isEventWorld(worldId));
@@ -299,7 +301,11 @@
 				const elem = $(".factory .ship_filter_type").clone()
 					.appendTo(".filters .ship_types");
 				elem.data("id", stype);
-				$(".filter_name", elem).text(stype === 0 ? "No Drop" : stype === 100 ? "Item" : KC3Meta.stype(stype));
+				$(".filter_name", elem).text(
+					stype === 0 ? KC3Meta.term("ShipDropShipTypeFilterNoDrop") :
+					stype === 100 ? KC3Meta.term("ShipDropShipTypeFilterItem") :
+					KC3Meta.stype(stype)
+				);
 				this.ship_filter_checkbox[stype] = true;
 				elem.on("click", stypeHandler.bind(this, stype, elem, this.ship_filter_checkbox));
 				if(stype === 100 && KC3Meta.isEventWorld(this.selectedWorld)) elem.hide();

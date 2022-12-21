@@ -533,7 +533,7 @@ KC3改 Ship Object
 	 */
 	 KC3Ship.prototype.isYamashiomaruWithAswAircraft = function(){
 		if(this.isDummy()) return false;
-		return [900, 717].includes(this.masterId) && this.equipment().find(g => g.isAswAircraft(false));
+		return [900, 717].includes(this.masterId) && this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
 	};
 
 	/* REPAIR TIME
@@ -980,7 +980,7 @@ KC3改 Ship Object
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
 				else if (flag.includes("Sonar")) { return 18; }
-				else if (flag.includes("Boiler")) { return 19; }
+				else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
 				return 0; // Unknown synergy type
 			});
 			return obj;
@@ -1279,6 +1279,15 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.hasNonZeroSlotEquipment = function(masterId, isExslotIncluded = false) {
 		return this.findEquipmentById(masterId, isExslotIncluded)
+			.some((v, i) => !!v && this.slots[i] > 0);
+	};
+
+	/**
+	 * Indicate if some specific equipment (aircraft usually) equipped on non-0 slot.
+	 */
+	KC3Ship.prototype.hasNonZeroSlotEquipmentFunc = function(filterFunc, isExslotIncluded = false) {
+		console.assert(typeof filterFunc === "function", "filter function must be defined");
+		return this.equipment(isExslotIncluded).map(filterFunc)
 			.some((v, i) => !!v && this.slots[i] > 0);
 	};
 
@@ -2801,13 +2810,17 @@ KC3改 Ship Object
 		// For other CVL possible but hard to reach 50 asw and do OASW with Sonar and high ASW aircraft.
 		// For CV Kaga K2Go, can perform OASW with any asw aircraft like Taiyou-class Kai+:
 		//   https://twitter.com/noobcyan/status/1299886834919510017
+		// For Houshou K2S, ASW aircraft in 0-size slot only can't enable OASW and shelling ASW:
+		//   https://twitter.com/myteaGuard/status/1600867450429485056
+		//   but can do OASW even in 0-size slot with another ASW aircraft together:
+		//   https://twitter.com/bobcat18/status/1600909312033193984
 		if(isLightCarrier || isKagaK2Go) {
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(522).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
-			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
-			if( ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)                  // ship visible asw irrelevant
-				|| this.equipment(true).some(gear => gear.isHighAswBomber(false))     // mainly asw 50/65, dive bomber not work
+			const hasAswAircraft = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
+			if( hasAswAircraft && ( (isTaiyouKaiAfter || isKagaK2Go)        // ship visible asw irrelevant
+				|| this.equipment().some(g => g.isHighAswBomber(false)) )   // mainly asw 50/65, dive bomber not work
 			) return true;
 			// Visible bonus from Torpedo Bombers confirmed counted towards asw 100 threshold since 2021-02-09:
 			// https://twitter.com/panmodoki10/status/1359036399618412545
@@ -2836,7 +2849,7 @@ KC3改 Ship Object
 				return this.countEquipmentType(1, 15) >= 2 || this.countEquipmentType(1, 44) >= 1;
 			}
 			// To be consistent with ASW attack condition, any ASW capable aircraft might be supported.
-			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
+			const hasAswAircraft = this.hasNonZeroSlotEquipmentFunc(gear => gear.isAswAircraft(false));
 			return hasSonar && hasAswAircraft;
 		}
 
@@ -2870,7 +2883,7 @@ KC3改 Ship Object
 			// https://twitter.com/yukicacoon/status/1505719117260550147
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
-			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
+			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike));
 		}
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
@@ -3666,7 +3679,7 @@ KC3改 Ship Object
 		if(this.masterId === 352) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
-				const aswEquip = this.equipment().find(g => g.isAswAircraft(false));
+				const aswEquip = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
 				results.push(aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2]);
 			} else
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
@@ -3679,7 +3692,7 @@ KC3改 Ship Object
 		else if([900, 717].includes(this.masterId)) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
-				const aswEquip = this.equipment().find(g => g.isAswAircraft(false));
+				const aswEquip = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
 				results.push(aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2]);
 			} else
 			// air attack if carrier bomber equipped, otherwise fall back to shelling

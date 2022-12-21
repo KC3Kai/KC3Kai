@@ -37,7 +37,11 @@
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
+				improvedTurbine: 0,
+				improvedTurbineNonexist: 1,
+				improvedTurbineIds: [33],
 				enhancedBoiler: 0,
+				enhancedBoilerNonexist: 1,
 				enhancedBoilerIds: [34],
 				newModelBoiler: 0,
 				newModelBoilerIds: [87],
@@ -935,6 +939,11 @@
 						origins: [89, 184],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
+					// Houshou K2+
+					{
+						ids: [894, 899],
+						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
+					},
 					// All ships can equip this get stars bonuses
 					{
 						minStars: 2,
@@ -1205,6 +1214,36 @@
 					},
 				],
 			},
+			// Type 0 Fighter Model 64 (Skilled Fighter-bomber)
+			"487": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 5, "tyku": 3, "houk": 2, "houm": 4 },
+					},
+					{
+						// Ryuuhou K2+
+						ids: [883, 888],
+						multiple: { "houg": 3, "tyku": 1, "houk": 1, "houm": 2 },
+					},
+					// For all ships can equip it
+					{
+						minStars: 6,
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "tyku": 1, "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1, "houm": 1 },
+					},
+				],
+			},
 			// FM-2
 			"277": {
 				count: 0,
@@ -1353,11 +1392,18 @@
 						multiple: { "houg": 2, "tyku": 2, "tais": 2, "houk": 2 },
 					},
 				},
-				byShip: {
-					// All CVL +1 aa, +1 ev
-					stypes: [7],
-					multiple: { "tyku": 1, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg":1, "tyku": 1, "tais": 1, "houk": 1 },
+					},
+					{
+						// All CVL +1 aa, +1 ev
+						stypes: [7],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Type 96 Fighter Kai
 			"228": {
@@ -1374,11 +1420,18 @@
 						multiple: { "houg": 3, "tyku": 3, "tais": 4, "houk": 4 },
 					},
 				},
-				byShip: {
-					// All CVL +1 aa, +1 ev, +2 asw
-					stypes: [7],
-					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg":1, "tyku": 1, "tais": 2, "houk": 2 },
+					},
+					{
+						// All CVL +1 aa, +1 ev, +2 asw
+						stypes: [7],
+						multiple: { "tyku": 1, "tais": 2, "houk": 1 },
+					},
+				],
 			},
 			// Shiden Kai 4
 			"271": {
@@ -1671,6 +1724,11 @@
 						multiple: { "houg": 3, "tyku": 3, "houk": 4 },
 					},
 					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 4, "tyku": 4, "houk": 4 },
+					},
+					{
 						// Suzuya/Kumano-Kou Kai Ni, Kaga Kai Ni Go
 						ids: [508, 509, 646],
 						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
@@ -1679,6 +1737,36 @@
 						// Ise/Hyuuga Kai Ni, Ryuuhou Kai Ni+,
 						ids: [553, 554, 883, 888],
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+				],
+			},
+			// Type 0 Fighter Model 64 (Air Superiority Fighter Specification)
+			"486": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 4, "tyku": 4, "houk": 3, "houm": 2 },
+					},
+					{
+						// Ryuuhou K2+
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+					// For all ships can equip it
+					{
+						minStars: 6,
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1, "houm": 1 },
 					},
 				],
 			},
@@ -2570,6 +2658,41 @@
 					ids: [501, 506],
 					multiple: { "houg": 1, "tyku": 5, "houk": 3 },
 				},
+			},
+			// Kyoufuu Kai Ni
+			"485": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Mogami Class
+					"9": {
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
+					},
+				},
+				byShip: [
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						multiple: { "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 5,
+						multiple: { "tyku": 1 },
+					},
+					{
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Ka Type Observation Autogyro
 			"69": {
@@ -6267,6 +6390,7 @@
 			// 8cm High-angle Gun Kai + Extra Machine Guns
 			"220": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
 						// Noshiro K2, Yahagi K2+, Mogami K2+
@@ -6295,7 +6419,50 @@
 							distinct: { "tyku": 1, "houk": 2 },
 						},
 					},
-				]
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "tyku": 2, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 3, "houk": 3 },
+						},
+					},
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						minStars: 10,
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				],
+			},
+			// 10cm Twin High-angle Gun Mount Kai + Additional Machine Guns
+			"275": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 3, "houk": 3 },
+						},
+					},
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						minStars: 7,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Houshou K2+
+						ids: [894, 899],
+						minStars: 10,
+						multiple: { "houg": 1, "tyku": 1, "houm": 1 },
+					},
+				],
 			},
 			// Type 21 Air Radar
 			"30": {
@@ -7429,39 +7596,6 @@
 					},
 				],
 			},
-			// New Model High Temperature High Pressure Boiler
-			"87": {
-				count: 0,
-				starsDist: [],
-				byClass: {
-					// Kongou Class Kai Ni C
-					"6": [
-						{
-							remodel: 3,
-							single: { "raig": 1, "houk": 2 },
-						},
-						{
-							remodel: 3,
-							minStars: 6,
-							single: { "houk": 1 },
-						},
-						{
-							remodel: 3,
-							minStars: 8,
-							single: { "raig": 1 },
-						},
-						{
-							remodel: 3,
-							minStars: 10,
-							single: { "houg": 1 },
-						},
-					],
-					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
-					"109": {
-						single: { "soku": 5, },
-					},
-				},
-			},
 			// Pugliese Underwater Protection Bulkhead
 			"136": {
 				count: 0,
@@ -7916,6 +8050,53 @@
 					},
 				],
 			},
+			// New Model High Temperature High Pressure Boiler
+			"87": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Kongou Class Kai Ni C
+					"6": [
+						{
+							remodel: 3,
+							single: { "raig": 1, "houk": 2 },
+						},
+						{
+							remodel: 3,
+							minStars: 6,
+							single: { "houk": 1 },
+						},
+						{
+							remodel: 3,
+							minStars: 8,
+							single: { "raig": 1 },
+						},
+						{
+							remodel: 3,
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
+					"109": {
+						single: { "soku": 5, },
+					},
+				},
+				byShip: [
+					{
+						// Houshou K2+, 1 newModelBoiler gets Fast like I-201/I-203,
+						// according tests, supposed to be Slow Group A when turbine equipped,
+						// but newModelBoiler + enhancedBoiler (-turbine) goes back to Slow,
+						// 2 newModelBoilers + turbine is still Fast+ instead of Fastest.
+						// so use strange synergy to simulate this buggy behavior?
+						ids: [894, 899],
+						synergy: {
+							flags: [ "improvedTurbineNonexist", "enhancedBoilerNonexist" ],
+							single: { "soku": 5 },
+						},
+					},
+				],
+			},
 			// Improved Kanhon Type Turbine, speed boost synergy with boilers
 			// https://wikiwiki.jp/kancolle/%E9%80%9F%E5%8A%9B#da6be20e
 			"33": {
@@ -8082,9 +8263,9 @@
 						],
 					},
 					{
-						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni, Yamato K2J
-						origins: [131, 143, 80, 81],
-						excludes: [80, 275, 81, 276, 911],
+						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni, Yamato K2J, Houshou K2+
+						origins: [131, 143, 80, 81, 89],
+						excludes: [80, 275, 81, 276, 911, 89, 285],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -8115,14 +8296,14 @@
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Maryland, Gangut, Conte di Cavour (base remodel)
-						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
+						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 918, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
-						excludes: [541, 573, 888, 878, 879],
+						excludes: [541, 573, 888, 878, 879, 894, 899],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -8168,6 +8349,8 @@
 					},
 					{
 						// Slow Group B special: Yuubari Kai Ni Toku, Samuel B.Roberts
+						// suspected works like Houshou K2+ with newModelBoilers:
+						//   equip turbine +5 if no other engines equipped, otherwise back to Slow B
 						ids: [623, 561, 681],
 						single: { "soku": 5 },
 						synergy: [

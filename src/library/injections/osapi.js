@@ -46,6 +46,19 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	// Start timer to check if API link exists every half-second
 	intervalChecker = setInterval(checkAgain, 500);
 	
+	// 1 min to keep hiding top spacebar added by osapi page thank to some browser randomly fails
+	var intervalTimer = 0, intervalCounter = 0;
+	function hideSpacingTop(){
+		document.querySelectorAll("#spacing_top").forEach(function(e){
+			e.style.display = "none";
+			e.style.height = 0;
+			e.style.margin = 0;
+			e.style.padding = 0;
+		});
+		intervalCounter += 1;
+		if(intervalCounter > 60) clearInterval(intervalTimer);
+	}
+	
 	var applyConfigMsg = (new RMsg("service", "getConfig", {
 		id: ["api_gameScale", "dmm_customize"],
 		attr: ["dmmplay", "extract_api"]
@@ -65,8 +78,8 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 			if(response.value[1] && response.storage[0] == "true"){
 				console.log("Applying customized styles...");
 				// Hide spacing top
-				var spacingTop = document.querySelector("#spacing_top");
-				if(spacingTop) spacingTop.style.display = "none";
+				$("#spacing_top").hide();
+				intervalTimer = setInterval(hideSpacingTop, 1000);
 				// Prevent Tab key scrolling
 				$(document).on("keydown", function(e){
 					if(e.which === 9) {

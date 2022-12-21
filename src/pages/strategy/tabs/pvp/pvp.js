@@ -30,7 +30,7 @@
 					$("#pvp_list").empty();
 				}
 				$(".tab_pvp .toggles .pvp_count").text(
-					"Total pages: {1}, battles: {0}".format(self.items, self.pages, self.itemsPerPage)
+					KC3Meta.term("PvpHistoryPagingInfoLine").format(self.items, self.pages, self.itemsPerPage)
 				);
 			});
 			
@@ -134,11 +134,11 @@
 				$(".pvp_date", recordBox).text(pvpTime.format("mmm d", false, this.locale))
 					.attr("title", pvpTime.format("yyyy-mm-dd HH:MM:ss"));
 			} else {
-				$(".pvp_date", recordBox).text("Unknown");
+				$(".pvp_date", recordBox).text(KC3Meta.term("Unknown"));
 			}
 			$(".pvp_result img", recordBox)
 				.attr("src", `/assets/img/client/ratings/${pvpBattle.rating}.png`)
-				.attr("title", "Base EXP " + pvpBattle.baseEXP );
+				.attr("title", KC3Meta.term("PvpBaseExp") + ": " + pvpBattle.baseEXP );
 			$(".pvp_dl", recordBox).data("id", pvpBattle.id);
 			if (pvpBattle.sortie_name) showPvpLedger(pvpBattle.sortie_name);
 			
@@ -397,7 +397,7 @@
 						return true;
 					} else if(e.altKey) {
 						self.copyToClipboard(JSON.stringify(encodeData), () => {
-							alert("Replay data copied to clipboard");
+							alert(KC3Meta.term("BattleReplayToClipboard"));
 						});
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
@@ -438,7 +438,7 @@
 		endExport : function(error, result) {
 			if (error) {
 				console.error("Generating replay data failed", error);
-				alert("Failed to generate replay data");
+				alert(KC3Meta.term("BattleReplayGenReplayFailed"));
 			} else if (result && result.filename) {
 				// Show a response if hideDownload shelf bar is true
 				//alert("Saved to {0}".format(result.filename));

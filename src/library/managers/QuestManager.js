@@ -338,6 +338,19 @@ Uses KC3Quest objects to play around with
 					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyNov.resetMonth);
 				},
 			},
+			// Reset on 1st December every year
+			yearlyDec: {
+				type: 'yearlyDec',
+				key: 'timeToResetYearlyDecQuests',
+				resetMonth: DECEMBER,
+				questIds: [1120],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyDec.type);
+				},
+				calculateNextReset: function (serverTime) {
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyDec.resetMonth);
+				},
+			},
 		},
 
 		calculateNextYearlyReset: function (serverTime, resetMonth) {
@@ -519,6 +532,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyOct').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyNov').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyDec').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -616,7 +630,7 @@ Uses KC3Quest objects to play around with
 				} else {
 					const thisMonth = Date.getJstDate().getMonth();
 					// keep empty for umimplemented months
-					const monthAbbr = ["Jan", "Feb", "Mar", "", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", ""][thisMonth];
+					const monthAbbr = ["Jan", "Feb", "Mar", "", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][thisMonth];
 					const type = monthAbbr ? "yearly" + monthAbbr : false;
 					console.log("Auto found yearlies", type);
 					if(type) this.resetLoop(this.getRepeatableIds(type));

@@ -1,37 +1,25 @@
 <div class="page_title">
-	Ship Drop Records
+	<span class="i18n">ShipDropPageTitle</span>
 	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Are these records from a data collecting cloud service?</div>
-	<div class="help_a">Nope. These drops are from recorded sortie history data of your own, if you have enabled the history recording.<br/>
-		It's just an alternative view of Maps / Events History pages, no remote data from any report server have been fetched.<br/>
-		It's expected that unable to determine boss node from 'ancient' history or events data.<br/>
-		Will be a little weird if node letters are not ready or your history data have been partially corrupted.
-	</div>
-
-	<div class="help_q">Will some ship types listed here drop?</div>
-	<div class="help_a">Nope. All available ship types are just copied from Ship List page.<br/>
-		To activate only 1 filter quickly instead of switching, like doing it on the Ship List page,
-		you can hold <kbd>Alt</kbd> key and left click one of them.
-	</div>
-
-	<div class="help_more">Online statistics services:
-		<a href="https://db.kcwiki.org/drop/" target="_blank">poi-statistics</a><br/>
-		<a href="https://tsundb.kc3.moe/" target="_blank">TsunDB</a>
-	</div>
+	<div class="help_q i18n">ShipDropHelp1Q</div>
+	<div class="help_a i18n">ShipDropHelp1A</div>
+	<div class="help_q i18n">ShipDropHelp2Q</div>
+	<div class="help_a i18n">ShipDropHelp2A</div>
+	<div class="help_more i18n">ShipDropHelpMore</div>
 </div>
 
 <div class = "control_panel">
 	<!-- WORLD SELECTOR -->
 	<div class="selectors">
 		<select class="world_list">
-			<option value="0">Select a world...</option>
+			<option value="0" class="i18n">ShipDropWorldPickerDefaultOption</option>
 		</select>
 		<select class="map_list">
-			<option value="0">Select a map...</option>
+			<option value="0" class="i18n">ShipDropMapPickerDefaultOption</option>
 		</select>
 	</div>
 	<div class="clear"></div>
@@ -45,7 +33,7 @@
 		<div class="massSelect">
 			<!-- BATTLE RANK -->
 			<dl class="rank_selector">
-				<dt class="massLabel">Battle Rank:</dt>
+				<dt class="massLabel i18n">ShipDropBattleRankLabel</dt>
 				<dd class="hover rank sab">SAB</dd>
 				<dd class="hover rank sa">SA</dd>
 				<dd class="hover rank s">S</dd>
@@ -54,15 +42,15 @@
 			</dl>
 			<!-- DIffICULTY -->
 			<dl class="diff_selector" id="eventSelected">
-				<dt class="massLabel">Difficulty:</dt>
-				<dd class="hover diff hard">Hard</dd>
-				<dd class="hover diff normal">Normal</dd>
-				<dd class="hover diff easy">Easy</dd>
-				<dd class="hover diff casual">Casual</dd>
+				<dt class="massLabel i18n">ShipDropDifficultyLabel</dt>
+				<dd class="hover diff hard i18n">ShipDropDifficultyOptionHard</dd>
+				<dd class="hover diff normal i18n">ShipDropDifficultyOptionNormal</dd>
+				<dd class="hover diff easy i18n">ShipDropDifficultyOptionEasy</dd>
+				<dd class="hover diff casual i18n">ShipDropDifficultyOptionCasual</dd>
 			</dl>
 			<!-- DATE TIME RANGE -->
 			<dl class="time_range" id="timeRange">
-				<div class="time_label"><label for="startTime">Sortie On:</label></div>
+				<div class="time_label"><label for="startTime" class="i18n">ShipDropSortieTimeLabel</label></div>
 				<div class="time_input"><input type="date" id="startTime" /></div>
 				<div class="time_label">~</div>
 				<div class="time_input"><input type="date" id="endTime" /></div>
