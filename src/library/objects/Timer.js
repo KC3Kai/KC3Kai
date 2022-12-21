@@ -52,20 +52,20 @@ Has functions for TimerManager to use
 	};
 	
 	KC3Timer.prototype.expnum = function(){
-		if(this.expedNum > 0){
+		if(this.active && this.expedNum > 0){
 			$(".timer-expnum", this.element).text( KC3Master.missionDispNo(this.expedNum) );
 		}
 	};
 	
 	KC3Timer.prototype.face = function(faceId = this.faceId, isLocked = false){
-		if(this.faceId > 0){
+		if(faceId > 0){
 			$(".timer-img img", this.element).attr("src", this.rosterId > 0 ?
 				KC3ShipManager.get(this.rosterId).shipIcon() :
-				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png"));
+				KC3Meta.shipIcon(faceId, "/assets/img/ui/empty.png"));
 			$(".timer-img", this.element).attr("title",
-				KC3Meta.shipName(this.faceId)
+				KC3Meta.shipName(faceId)
 			);
-			$(".timer-img", this.element).data("masterId", this.faceId).off("dblclick")
+			$(".timer-img", this.element).data("masterId", faceId).off("dblclick")
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstship-{0}".format($(this).data("masterId"))

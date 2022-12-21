@@ -2050,18 +2050,30 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_mission/result":function(params, response, headers){
 			var utcHour  = Date.toUTChours(headers.Date),
-				deck     = parseInt(params.api_deck_id, 10),
-				timerRef = KC3TimerManager._exped[ deck-2 ],
-				shipList = PlayerManager.fleets[deck - 1].ships.slice(0),
-				expedNum = parseInt(timerRef.expedNum, 10);
-			
+				deckId   = parseInt(params.api_deck_id, 10),
+				fleetObj = PlayerManager.fleets[deckId - 1],
+				shipList = fleetObj.ships.slice(0),
+				// timer must be still activated to retrieve corresponding info
+				timerObj = KC3TimerManager.exped(deckId),
+				expedNum = parseInt(timerObj.expedNum, 10),
+				completeTime = timerObj.completion;
+			if(!expedNum) {
+				expedNum = fleetObj.mission[1];
+				completeTime = fleetObj.mission[2];
+			}
 			KC3Network.trigger("ExpedResult",{
 				expedNum:expedNum,
 				params:params,
 				response:response.api_data
 			});
 			
-			console.log("Fleet #" + deck + " has returned from Expedition #", expedNum, "with result", response.api_data);
+			if(!expedNum) {
+				console.warn("Fleet #" + deckId + " has lost its expedition id num for unknown reason", response.api_data);
+				// workaround: do not clear values of expedNum and composition in timer?
+				// anyway, possible to find and use expedNum in master data by exped jp name in response
+			} else {
+				console.log("Fleet #" + deckId + " has returned from Expedition #", expedNum, "with result", response.api_data);
+			}
 			
 			shipList.forEach(function(rosterId){
 				var shipData = KC3ShipManager.get(rosterId);
@@ -2105,12 +2117,12 @@ Previously known as "Reactor"
 			KC3Database.Expedition({
 				data     :response.api_data,
 				mission  :expedNum,
-				fleet    :PlayerManager.fleets[deck - 1].sortieJson(),
-				fleetN   :deck, /* tricks dj >w< */
+				fleet    :fleetObj.sortieJson(),
+				fleetN   :deckId, /* tricks dj >w< */
 				shipXP   :response.api_data.api_get_ship_exp,
 				admiralXP:response.api_data.api_get_exp,
 				items    :[1,2].map(function(x){return response.api_data["api_get_item"+x] || null;}),
-				time     :Math.floor((new Date(timerRef.completion)).getTime()/1000)
+				time     :Math.floor((new Date(completeTime)).getTime()/1000)
 			},function(dbId){
 				// If success or great success
 				if(response.api_data.api_clear_result > 0){
@@ -2174,7 +2186,7 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_mission/return_instruction":function(params, response, headers){
-			KC3TimerManager._exped[parseInt(params.api_deck_id)-2].completion = response.api_data.api_mission[2];
+			KC3TimerManager.exped(parseInt(params.api_deck_id)).completion = response.api_data.api_mission[2];
 		},
 		
 		/*-------------------------------------------------------*/

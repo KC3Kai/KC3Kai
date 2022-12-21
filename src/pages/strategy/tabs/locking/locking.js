@@ -146,7 +146,7 @@
         }
 
         clearAllPlannedLocks() {
-            if (!confirm("Are you sure?")) return;
+            if (!confirm(KC3Meta.term("LockingPlannerClearLocksConfirm"))) return;
             localStorage.removeItem("lock_plan");
             $(".ships_area .plannedlock", this.tab).remove();
             this.shipList.forEach(ship => {
@@ -369,7 +369,8 @@
 
             // Speed
             $(".ship_filter_speed", this.tab).empty();
-            ["All", "Slow", "Fast+"].forEach((speed, i) => {
+            [KC3Meta.term("LockingPlannerFilterSpeedAll"), KC3Meta.term("LockingPlannerFilterSpeedSlow"),
+             KC3Meta.term("LockingPlannerFilterSpeedFast+")].forEach((speed, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_speed");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_speed")
@@ -379,7 +380,11 @@
             });
 
             // Daihatsu/Amphibious Tank
-            ["---", "Daihatsu", "DLC-only", "Tank", "Tank-only", "Both", "Either", "Neither", "FCF"].forEach((val, i) => {
+            [KC3Meta.term("LockingPlannerFilterCanEquipAll"), KC3Meta.term("LockingPlannerFilterCanEquipDaihatsu"),
+             KC3Meta.term("LockingPlannerFilterCanEquipDaihatsuOnly"), KC3Meta.term("LockingPlannerFilterCanEquipTank"),
+             KC3Meta.term("LockingPlannerFilterCanEquipTankOnly"), KC3Meta.term("LockingPlannerFilterCanEquipBoth"),
+             KC3Meta.term("LockingPlannerFilterCanEquipEither"), KC3Meta.term("LockingPlannerFilterCanEquipNeither"),
+             KC3Meta.term("LockingPlannerFilterCanEquipFcf")].forEach((val, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_daihatsu")
@@ -388,27 +393,27 @@
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
 
-            // Hide tag locked (not heart-locke)
+            // Hide tag locked (not heart-locked)
             let elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_taglocked");
             $("input[type='checkbox']", elm).attr("id", "taglocked");
-            $(".filter_name label", elm).attr("for", "taglocked").text("Hide");
+            $(".filter_name label", elm).attr("for", "taglocked").text(KC3Meta.term("LockingPlannerFilterLockedHide"));
 
             // Equip stats
             elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_equipstats");
             $("input[type='checkbox']", elm).attr("id", "equipstats");
-            $(".filter_name label", elm).attr("for", "equipstats").text("Stats");
+            $(".filter_name label", elm).attr("for", "equipstats").text(KC3Meta.term("LockingPlannerFilterEquipStats"));
             // Equip icons
             elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_equipicons");
             $("input[type='checkbox']", elm).attr("id", "equipicons");
-            $(".filter_name label", elm).attr("for", "equipicons").text("Icons");
+            $(".filter_name label", elm).attr("for", "equipicons").text(KC3Meta.term("LockingPlannerFilterEquipIcons"));
             // Ex-slot opened
             elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_exslotopen");
             $("input[type='checkbox']", elm).attr("id", "exslotopen");
-            $(".filter_name label", elm).attr("for", "exslotopen").text("Exslot");
+            $(".filter_name label", elm).attr("for", "exslotopen").text(KC3Meta.term("LockingPlannerFilterEquipExslot"));
 
             this.updateFilters();
 
