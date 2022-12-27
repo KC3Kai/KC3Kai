@@ -2887,13 +2887,13 @@
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class Kai Ni
-						ids: [149, 150, 151, 152],
+						// all Kongou Class Kai Ni+
+						ids: [149, 150, 151, 152, 591, 592],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2 and Haruna K2
-						ids: [149, 151],
+						// for Kongou K2/C and Haruna K2
+						ids: [149, 151, 591],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -2906,15 +2906,16 @@
 			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
 			"289": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
-						// all Kongou Class Kai Ni
-						ids: [149, 150, 151, 152],
+						// all Kongou Class Kai Ni+
+						ids: [149, 150, 151, 152, 591, 592],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2 and Haruna K2
-						ids: [149, 151],
+						// for Kongou K2/C and Haruna K2
+						ids: [149, 151, 591],
 						multiple: { "houg": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -2930,6 +2931,79 @@
 						// extra +2 aa, +2 ev for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 2, "houk": 2 },
+					},
+					{
+						// by stars for Haruna K2
+						ids: [151],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// by stars for Kongou K2C
+						ids: [591],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [591],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [591],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [591],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// by stars for Kongou K2, Hiei K2/C, Kirishima K2
+						ids: [149, 150, 152, 592],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [149, 150, 152, 592],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [149, 150, 152, 592],
+						minStars: 10,
+						multiple: { "houk": 1 },
 					},
 				],
 			},
@@ -8079,7 +8153,7 @@
 					],
 					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
 					"109": {
-						single: { "soku": 5, },
+						single: { "soku": 5 },
 					},
 				},
 				byShip: [
@@ -8088,12 +8162,16 @@
 						// according tests, supposed to be Slow Group A when turbine equipped,
 						// but newModelBoiler + enhancedBoiler (-turbine) goes back to Slow,
 						// 2 newModelBoilers + turbine is still Fast+ instead of Fastest.
-						// so use strange synergy to simulate this buggy behavior?
+						// was using strange synergy to simulate this buggy behavior.
+						// fixed since 2022-12-27: https://twitter.com/KanColle_STAFF/status/1607683940651012098
 						ids: [894, 899],
+						single: { "soku": 5 },
+						/*
 						synergy: {
 							flags: [ "improvedTurbineNonexist", "enhancedBoilerNonexist" ],
 							single: { "soku": 5 },
 						},
+						*/
 					},
 				],
 			},
