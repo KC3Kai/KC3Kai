@@ -5686,11 +5686,11 @@
 	},
 	"5710": {
 		"api_id": 5710,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "売り子風雲改二",
+		"api_yomi": "かざぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5711": {
 		"api_id": 5711,

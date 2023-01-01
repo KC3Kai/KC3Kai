@@ -7466,6 +7466,102 @@
 					},
 				],
 			},
+			// Type 2 Depth Charge Kai Ni
+			"488": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Japan": {
+						// All IJN DD
+						stypes: [2],
+						multiple: { "tais": 1, "houk": 1 },
+					},
+				},
+				// IJN DE
+				byClass: {
+					// Shimushu Class
+					"74": {
+						multiple: { "tais": 1, "houk": 1 },
+					},
+					// Etorofu Class
+					"77": "74",
+					// Hiburi Class
+					"85": "74",
+					// Type D CDS Class
+					"104": "74",
+					// Ukuru Class
+					"117": "74",
+				},
+				byShip: [
+					{
+						// Shigure K2
+						ids: [145],
+						multiple: { "tais": 5, "houk": 4, "houm": 2 },
+					},
+					// For Shigure K2
+					{
+						ids: [145],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 5,
+						multiple: { "tais": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 9,
+						multiple: { "tais": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 10,
+						multiple: { "tais": 1 },
+					},
+					{
+						// Shigure Kai, Yukikaze Kai+, Isokaze B Kai, Hamakaze B Kai
+						ids: [243,      228, 651, 656, 557, 558],
+						multiple: { "tais": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Shigure base, Yahagi K2+, Hibiki Kai, Fusou/Yamashiro K2, Suzutsuki/Fuyutsuki Kai, Ushio K2, Hatsushimo K2
+						ids: [43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "tais": 1 },
+					},
+					// For ships of previous 2 types
+					{
+						minStars: 5,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 7,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "tais": 1 },
+					},
+				],
+			},
 			// RUR-4A Weapon Alpha Kai
 			"377": {
 				count: 0,

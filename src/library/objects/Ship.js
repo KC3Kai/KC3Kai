@@ -2767,6 +2767,7 @@ KC3改 Ship Object
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
+		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		const isKagaK2Go = this.masterId === 646;
 
 		// lower condition for DE and CVL, even lower if equips Sonar
@@ -2839,6 +2840,7 @@ KC3改 Ship Object
 
 		// Fusou-class Kai Ni can OASW with at least 1 Helicopter + Sonar and asw >= 100.
 		//   https://twitter.com/cat_lost/status/1146075888636710912
+		// Fusou-class Kai Ni can equip DepthCharge since 2022-12-31, can OASW with DC+Sonar and asw >= 100.
 		// Shinshumaru can OASW with at least 1 slot of Autogyro/Seaplane Bomber + Sonar and asw >= 100.
 		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
 		// Yamato Kai Ni Juu (BBV) can OASW with at least 1 asw aircraft + Sonar and asw >= 100
@@ -2850,7 +2852,7 @@ KC3改 Ship Object
 			}
 			// To be consistent with ASW attack condition, any ASW capable aircraft might be supported.
 			const hasAswAircraft = this.hasNonZeroSlotEquipmentFunc(gear => gear.isAswAircraft(false));
-			return hasSonar && hasAswAircraft;
+			return hasSonar && (hasAswAircraft || isFusouClassKaiNi);
 		}
 
 		// for other ship types who can do ASW with Depth Charge
@@ -3700,6 +3702,20 @@ KC3改 Ship Object
 				results.push(["AirAttack", 1]);
 			else
 				pushRocketAttackIfNecessary(["SingleAttack", 0]);
+		}
+		// is this ship Fusou-class Kai Ni
+		else if([411, 412].includes(this.masterId)) {
+			if(targetShipType.isSubmarine) {
+				const aswAircraft = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
+				const depthCharge = this.hasEquipmentType(15);
+				if(aswAircraft) results.push(["AirAttack", 1]);
+				else if(depthCharge) results.push(["DepthCharge", 2]);
+				// BBV default to air attack against submarine
+				else results.push(["AirAttack", 1]);
+			} else {
+				// default for other targets
+				pushRocketAttackIfNecessary(["SingleAttack", 0]);
+			}
 		} else if(isThisCarrier) {
 			results.push(["AirAttack", 1]);
 		}
