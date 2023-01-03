@@ -1085,6 +1085,8 @@ KC3改 Equipment Object
 		// Added since 2021-10-29: https://twitter.com/KanColle_STAFF/status/1454037548209037315
 		//   [378] Lightweight ASW Torpedo (Initial Test Model)
 		//   [439] Hedgehog (Initial Model)
+		// Added since 2022-12-31: https://twitter.com/twillwave1024/status/1609121582139707395
+		//   [488] Type2 DC K2
 		// ~~No armor penetration effect found for newly added ones~~
 		//   https://twitter.com/myteaGuard/status/1454139122168127493
 		// Armor penetration extended since 2022-08-04, even applied to some projectors, summary:

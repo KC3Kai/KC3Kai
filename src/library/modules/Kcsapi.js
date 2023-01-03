@@ -2740,6 +2740,9 @@ Previously known as "Reactor"
 				case 2101: // 2021: exchange 1 xmas select gift box with 2 Tenzan Model 12A
 				case 2102: // 2021: exchange 1 xmas select gift box with 1 GFCS Mk.37 +2
 				case 2103: // 2021: exchange 1 xmas select gift box with 8 screws [0, 0, 0, 8]
+				case 2201: // 2022: exchange 1 xmas select gift box with 1 Skilled Deck Personnel
+				case 2202: // 2022: exchange 1 xmas select gift box with 3 T99 Dive Bomber Model 22
+				case 2203: // 2022: exchange 1 xmas select gift box with 9 screws [0, 0, 0, 9]
 					//if(itemId === 80) PlayerManager.consumables.xmasGiftBox -= 1;
 				break;
 				case 61: // exchange 5 rice with 1 origini

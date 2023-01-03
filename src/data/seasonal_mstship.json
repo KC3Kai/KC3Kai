@@ -5558,75 +5558,75 @@
 	},
 	"5694": {
 		"api_id": 5694,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "Xmas山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5695": {
 		"api_id": 5695,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "Xmas長鯨",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5696": {
 		"api_id": 5696,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "Xmas長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5697": {
 		"api_id": 5697,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "クリスマスJean Bart",
+		"api_yomi": "ジャン・バール",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5698": {
 		"api_id": 5698,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "クリスマスL.d.S.D.d.Abruzzi",
+		"api_yomi": "アブルッツィ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5699": {
 		"api_id": 5699,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "Xmas鵜来",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5700": {
 		"api_id": 5700,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "クリスマスRanger",
+		"api_yomi": "レンジャー",
+		"api_stype": 11,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5701": {
 		"api_id": 5701,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "Xmas矢矧改二",
+		"api_yomi": "やはぎ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5702": {
 		"api_id": 5702,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "Xmas矢矧改二乙",
+		"api_yomi": "やはぎ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5703": {
 		"api_id": 5703,
@@ -5638,6 +5638,62 @@
 	},
 	"5704": {
 		"api_id": 5704,
+		"api_name": "クリスマスHonolulu ",
+		"api_yomi": "ホノルル",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5705": {
+		"api_id": 5705,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5706": {
+		"api_id": 5706,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5707": {
+		"api_id": 5707,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5708": {
+		"api_id": 5708,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5709": {
+		"api_id": 5709,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5710": {
+		"api_id": 5710,
+		"api_name": "売り子風雲改二",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5711": {
+		"api_id": 5711,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
