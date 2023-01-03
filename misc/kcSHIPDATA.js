@@ -10778,7 +10778,7 @@ var SHIPDATA_ = {
 		nameJP: '輸送ワ級IIelite',
 		image: 'SWaE.jpg',
 		type: 'AO',
-		aacitype: 5,
+		//aacitype: 5,
 		HP: 480,
 		FP: 33,
 		TP: 0,
