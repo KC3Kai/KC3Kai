@@ -2840,7 +2840,7 @@ KC3改 Ship Object
 
 		// Fusou-class Kai Ni can OASW with at least 1 Helicopter + Sonar and asw >= 100.
 		//   https://twitter.com/cat_lost/status/1146075888636710912
-		// Fusou-class Kai Ni can equip DepthCharge since 2022-12-31, can OASW with DC+Sonar and asw >= 100.
+		// Fusou-class Kai Ni can equip Depth Charge since 2022-12-31, can OASW with DC+Sonar and asw >= 100.
 		// Shinshumaru can OASW with at least 1 slot of Autogyro/Seaplane Bomber + Sonar and asw >= 100.
 		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
 		// Yamato Kai Ni Juu (BBV) can OASW with at least 1 asw aircraft + Sonar and asw >= 100
@@ -2867,6 +2867,7 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.isHayasuiKaiWithTorpedoBomber();
 		const isKagaK2Go = this.masterId === 646;
+		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru
 		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAswAircraft();
 		if(isAirAntiSubStype) {
@@ -2885,7 +2886,8 @@ KC3改 Ship Object
 			// https://twitter.com/yukicacoon/status/1505719117260550147
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
-			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike));
+			// or if Fusou-class K2 equipped Depth Charge
+			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike)) || (isFusouClassKaiNi && this.hasEquipmentType(2, 15));
 		}
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
@@ -3707,7 +3709,7 @@ KC3改 Ship Object
 		else if([411, 412].includes(this.masterId)) {
 			if(targetShipType.isSubmarine) {
 				const aswAircraft = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
-				const depthCharge = this.hasEquipmentType(15);
+				const depthCharge = this.hasEquipmentType(2, 15);
 				if(aswAircraft) results.push(["AirAttack", 1]);
 				else if(depthCharge) results.push(["DepthCharge", 2]);
 				// BBV default to air attack against submarine
