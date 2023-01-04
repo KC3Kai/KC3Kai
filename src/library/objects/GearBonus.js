@@ -2887,13 +2887,13 @@
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class Kai Ni
-						ids: [149, 150, 151, 152],
+						// all Kongou Class Kai Ni+
+						ids: [149, 150, 151, 152, 591, 592],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2 and Haruna K2
-						ids: [149, 151],
+						// for Kongou K2/C and Haruna K2
+						ids: [149, 151, 591],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -2906,15 +2906,16 @@
 			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
 			"289": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
-						// all Kongou Class Kai Ni
-						ids: [149, 150, 151, 152],
+						// all Kongou Class Kai Ni+
+						ids: [149, 150, 151, 152, 591, 592],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2 and Haruna K2
-						ids: [149, 151],
+						// for Kongou K2/C and Haruna K2
+						ids: [149, 151, 591],
 						multiple: { "houg": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -2930,6 +2931,79 @@
 						// extra +2 aa, +2 ev for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 2, "houk": 2 },
+					},
+					{
+						// by stars for Haruna K2
+						ids: [151],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// by stars for Kongou K2C
+						ids: [591],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [591],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [591],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [591],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// by stars for Kongou K2, Hiei K2/C, Kirishima K2
+						ids: [149, 150, 152, 592],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [149, 150, 152, 592],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [149, 150, 152, 592],
+						minStars: 10,
+						multiple: { "houk": 1 },
 					},
 				],
 			},
@@ -7392,6 +7466,102 @@
 					},
 				],
 			},
+			// Type 2 Depth Charge Kai Ni
+			"488": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Japan": {
+						// All IJN DD
+						stypes: [2],
+						multiple: { "tais": 1, "houk": 1 },
+					},
+				},
+				// IJN DE
+				byClass: {
+					// Shimushu Class
+					"74": {
+						multiple: { "tais": 1, "houk": 1 },
+					},
+					// Etorofu Class
+					"77": "74",
+					// Hiburi Class
+					"85": "74",
+					// Type D CDS Class
+					"104": "74",
+					// Ukuru Class
+					"117": "74",
+				},
+				byShip: [
+					{
+						// Shigure K2
+						ids: [145],
+						multiple: { "tais": 5, "houk": 4, "houm": 2 },
+					},
+					// For Shigure K2
+					{
+						ids: [145],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 5,
+						multiple: { "tais": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 9,
+						multiple: { "tais": 1 },
+					},
+					{
+						ids: [145],
+						minStars: 10,
+						multiple: { "tais": 1 },
+					},
+					{
+						// Shigure Kai, Yukikaze Kai+, Isokaze B Kai, Hamakaze B Kai
+						ids: [243,      228, 651, 656, 557, 558],
+						multiple: { "tais": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Shigure base, Yahagi K2+, Hibiki Kai, Fusou/Yamashiro K2, Suzutsuki/Fuyutsuki Kai, Ushio K2, Hatsushimo K2
+						ids: [43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "tais": 1 },
+					},
+					// For ships of previous 2 types
+					{
+						minStars: 5,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 7,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						multiple: { "tais": 1 },
+					},
+				],
+			},
 			// RUR-4A Weapon Alpha Kai
 			"377": {
 				count: 0,
@@ -8079,7 +8249,7 @@
 					],
 					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
 					"109": {
-						single: { "soku": 5, },
+						single: { "soku": 5 },
 					},
 				},
 				byShip: [
@@ -8088,12 +8258,16 @@
 						// according tests, supposed to be Slow Group A when turbine equipped,
 						// but newModelBoiler + enhancedBoiler (-turbine) goes back to Slow,
 						// 2 newModelBoilers + turbine is still Fast+ instead of Fastest.
-						// so use strange synergy to simulate this buggy behavior?
+						// was using strange synergy to simulate this buggy behavior.
+						// fixed since 2022-12-27: https://twitter.com/KanColle_STAFF/status/1607683940651012098
 						ids: [894, 899],
+						single: { "soku": 5 },
+						/*
 						synergy: {
 							flags: [ "improvedTurbineNonexist", "enhancedBoilerNonexist" ],
 							single: { "soku": 5 },
 						},
+						*/
 					},
 				],
 			},
