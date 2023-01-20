@@ -5630,11 +5630,11 @@
 	},
 	"5703": {
 		"api_id": 5703,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "修羅場秋雲改二",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5704": {
 		"api_id": 5704,
@@ -5646,35 +5646,35 @@
 	},
 	"5705": {
 		"api_id": 5705,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "修羅場C101秋雲改二",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5706": {
 		"api_id": 5706,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "超修羅場秋雲改二",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5707": {
 		"api_id": 5707,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "超スーパー修羅場秋雲改二",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5708": {
 		"api_id": 5708,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "打ち上げ秋雲改二",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5709": {
 		"api_id": 5709,
@@ -5694,10 +5694,82 @@
 	},
 	"5711": {
 		"api_id": 5711,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "大掃除曙改二",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5712": {
+		"api_id": 5712,
+		"api_name": "正月Samuel B.Roberts Mk.II",
+		"api_yomi": "サミュエル・B・ロバーツ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5713": {
+		"api_id": 5713,
+		"api_name": "正月長鯨",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5714": {
+		"api_id": 5714,
+		"api_name": "正月第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5715": {
+		"api_id": 5715,
+		"api_name": "正月山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5716": {
+		"api_id": 5716,
+		"api_name": "正月大井",
+		"api_yomi": "おおい",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5717": {
+		"api_id": 5717,
+		"api_name": "正月Ranger",
+		"api_yomi": "レンジャー",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5718": {
+		"api_id": 5718,
+		"api_name": "正月瑞鳳改二",
+		"api_yomi": "ずいほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5719": {
+		"api_id": 5719,
+		"api_name": "正月Johnston",
+		"api_yomi": "ジョンストン",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5720": {
+		"api_id": 5720,
+		"api_name": "正月瑞鳳改二乙",
+		"api_yomi": "ずいほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }
