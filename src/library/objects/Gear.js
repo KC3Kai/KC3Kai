@@ -310,9 +310,11 @@ KC3改 Equipment Object
 					case 40: // Large Sonar
 						modifier = 0.75; break;
 					case 15: // Depth Charge (Projector)
-						// 2 more DCPs have become DC category for synergy since 2021-10-29,
-						// their bonus for this case still unknown
-						modifier = [226, 227].includes(this.masterId) ? 0 : 0.75;
+						// DCP and mortars give shelling fire power:
+						// https://twitter.com/dd_izokaze_fake/status/1164149227024334848
+						// DC not, except Hedgehog:
+						// https://twitter.com/hedgehog_hasira/status/1509928826117054469
+						modifier = [226, 227, 378, 488].includes(this.masterId) ? 0 : 0.75;
 						break;
 				}
 				break;
@@ -1009,7 +1011,7 @@ KC3改 Equipment Object
 		const isNightRecon = planeMst && planeMst.api_type[3] === 50;
 		if(!returnEffectsObj) return isNightRecon;
 		else {
-			// see PSVia `Server_Controllers.BattleLogic.Exec_Midnight.cs#setTouchPlaneValanceValue`
+			// see KC Vita `Server_Controllers.BattleLogic.Exec_Midnight.cs#setTouchPlaneValanceValue`
 			const nightContactLevel = isNightRecon ? [1, 1, 2, 3][planeMst.api_houm || 0] || 3 : 0;
 			const powerBonus = isNightRecon ? [0, 5, 7, 9][nightContactLevel] || 0 : 0;
 			// night battle base hit constant is 69

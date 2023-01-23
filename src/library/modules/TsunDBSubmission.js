@@ -1099,7 +1099,8 @@
 		processEventBattle: function(http){
 			// Sends the raw battle api with minimal info to reconstruct battle on server side
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
-			if(!KC3Meta.isEventWorld(this.currentMap[0])) { return; }
+			// The data is only sent for event maps and non-standard maps 6-4, 6-5, 7-4 and 7-5
+			if(!KC3Meta.isEventWorld(this.currentMap[0]) && !(this.currentMap[0].inside(6, 7) && this.currentMap[1].inside(4, 5))) { return; }
 			const thisNode = KC3SortieManager.currentNode();
 			const apiData = http.response.api_data;
 			
