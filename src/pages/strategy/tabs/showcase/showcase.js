@@ -47,6 +47,27 @@
 				name: "Recon Planes",
 				order: "ls"
 			},
+			"t_jet": {
+				name: "Jet Planes",
+				nameTypeIdx: 1,
+				nameTypeId: 40,
+				order: "dv",
+				types: [ 39, 40 ]
+			},
+			"t_lbaa": {
+				name: "LB Attackers",
+				nameTypeIdx: 0,
+				nameTypeId: 21,
+				order: "tp",
+				types: [ 37, 48, 49, 47 ]
+			},
+			"t_lbfi": {
+				name: "LB Fighters",
+				nameTypeIdx: 0,
+				nameTypeId: 22,
+				order: "aa",
+				types: [ 38, 44 ]
+			},
 			"t11": {
 				name: "Radars",
 				order: "ht"
@@ -54,37 +75,41 @@
 			"t10": {
 				name: "Seaplanes",
 				order: "ls",
-				types: [ 10, 43 ]
+				types: [ 10, 43, 33 ]
 			},
 			"t19": {
 				name: "Turbines",
 				order: "ev"
 			},
-			"t_x1": {
+			"t_asw": {
 				name: "Anti-Submarine",
+				nameTypeIdx: 0,
+				nameTypeId: 7,
 				order: "as",
-				types: [ 17, 18 ]
+				types: [ 17, 18, 21, 22 ]
 			},
-			"t_x2": {
+			"t_shells": {
 				name: "Shells",
 				types: [ 12, 13 ]
 			},
-			"t_x3": {
+			"t_night": {
 				name: "Night Gear",
-				types: [ 24, 27, 32 ]
+				types: [ 24, 27, 50, 45, 46, 32 ]
 			},
-			"t_x4": {
+			"t_dlc": {
+				name: "Landing Craft",
+				nameTypeIdx: 2,
+				nameTypeId: 24,
+				types: [ 20, 36, 25 ]
+			},
+			"t_other1": {
+				name: "Other",
+				types: [ 30, 31, 42 ]
+			},
+			"t_other2": {
 				name: "Other",
 				types: [ 26, 28, 29, 23 ]
 			},
-			"t_x5": {
-				name: "Other",
-				types: [ 30, 31 ]
-			},
-			"t_x6": {
-				name: "Other",
-				types: [ 20, 21, 22, 33 ]
-			}
 		},
 		shipsToExport: [],
 		gearsToExport: [],
@@ -520,7 +545,11 @@
 
 				// Create gear-type box
 				const gearTypeBox = $(".tab_showcase .factory .gtype_box").clone();
-				$(".gtype_title", gearTypeBox).text(element.name);
+				$(".gtype_title", gearTypeBox).text(
+					gearTypeIcon > 0 ? KC3Meta.gearTypeName(3, gearTypeIcon)
+						: element.nameTypeIdx !== undefined ? KC3Meta.gearTypeName(element.nameTypeIdx, element.nameTypeId)
+						: KC3Meta.term("ShowcaseEquipType" + element.name.replace(" ", ""))
+				);
 
 				// Add gears on this gear-type
 				$.each(topGearList, function(gearIndex, thisTopGear){

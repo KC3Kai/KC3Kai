@@ -44,6 +44,11 @@
 			"1": { "type": "kills", "boss": [5, 8] },
 			"2": { "type": "kills", "boss": [18, 23, 24, 25] }
 		},
+		"75": {
+			"1": { "type": "kills", "boss": [11] },
+			"2": { "type": "kills", "boss": [19] },
+			"3": { "type": "kills", "boss": [24, 25] }
+		},
 		"415": {
 			"1": { "type": "tp", "boss": [12], "landing": [9] },
 			"2": { "type": "hp", "boss": [23] }

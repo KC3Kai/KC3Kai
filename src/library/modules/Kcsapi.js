@@ -2795,7 +2795,7 @@ Previously known as "Reactor"
 				case 74: // exchange 1 dinner ticket with 3 mamiya
 					//if(itemId === 89) PlayerManager.consumables.dinnerTicket -= 1;
 				break;
-				// see also `main.js#ConfirmView.prototype.initialize`
+				// see also `main.js#ConfirmView.prototype.initialize` next to `SetsubunUseDialog`
 				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
@@ -2803,17 +2803,19 @@ Previously known as "Reactor"
 					// 10 beans with a Action Report in 2020 (once)
 					// 7 beans with a Medal in 2021
 					// 18 beans + 28 devmats with a Type 1 Land-based Attack Aircraft Model 22A in 2022
+					// 10 beans + 8 devmats with a Type 97 Torpedo Bomber (Skilled) in 2023
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
 					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					// 20 beans + 40 devmats with a Ginga in 2021 (once)
-					// 20 beans with a Blueprint in 2022
+					// 20 beans with a Blueprint in 2022 and 2023
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
 				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
 					// 29 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2021 (once)
 					// 27 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2022
+					// 30 beans + 60 devmats with a Type 4 Heavy Bomber Hiryuu (Skilled) in 2023 (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]

@@ -59,6 +59,7 @@
 			this.seedBranch( rootQuestTree, 1105); // F100
 			this.seedBranch( rootQuestTree, 1107); // F102
 			this.seedBranch( rootQuestTree, 1120); // F113
+			this.seedBranch( rootQuestTree, 1123); // F114
 			this.seedBranch( rootQuestTree, 702 ); // Gd2
 			this.seedBranch( rootQuestTree, 716 ); // G8
 			this.seedBranch( rootQuestTree, 249 ); // Bm1

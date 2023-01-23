@@ -402,6 +402,9 @@ known IDs see QuestManager
 					case 21: // Type 0 Fighter Model 52
 						KC3QuestManager.get(628).increment(); // F25 monthly
 						break;
+					case 82: // Type 97 Torpedo Bomber (931 Air Group)
+						KC3QuestManager.get(1123).increment(); // F114 yearly
+						break;
 					case 106: // Type 13 Air Radar Kai
 						KC3QuestManager.get(1104).increment(); // F99 yearly
 						break;
