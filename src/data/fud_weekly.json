@@ -186,6 +186,9 @@
 		"m72": {
 			"E": { "factor": 4, "lower": [ 0, "F"], "upper": [46, "G"], "note": "?" },
 			"I": { "factor": 4, "lower": [63, "L"], "upper": [69, "M"] }
+		},
+		"m75": {
+			"I": { "factor": 4, "lower": [ 0, "L"], "upper": [55, "M"], "note": "?" }
 		}
 	},
 	"specialQuotesSizes": {
