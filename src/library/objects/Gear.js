@@ -363,8 +363,10 @@ KC3改 Equipment Object
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
 				// Dive Bomber, 0.2 per star
-				if([7, 57].includes(type2) && !this.isFighterBomber())
-					return 0.2 * stars;
+				if([7, 57].includes(type2) && (
+					// Type 0 Fighter Model 64 variants counted as both
+					!this.isFighterBomber() || [447, 487].includes(this.masterId)
+				))	return 0.2 * stars;
 				// Torpedo Bomber, 0.2 per star
 				if([8, 58].includes(type2))
 					return 0.2 * stars;
@@ -989,7 +991,7 @@ KC3改 Equipment Object
 		// FM-2 (AA 6 DV 2) is not fighter-bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
 		// Type 0 Fighter Model 64 (Two-seat w/ KMX) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
-		// Type 0 Fighter Model 64 (Skilled Fighter-bomber)?
+		// Type 0 Fighter Model 64 (Skilled Fighter-bomber): https://twitter.com/noro_006/status/1600419310006317056
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
