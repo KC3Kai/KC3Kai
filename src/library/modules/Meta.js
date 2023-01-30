@@ -1320,7 +1320,7 @@ Provides access to data on built-in JSON files
 						seasons : ["Winter", "Spring", "Summer", "Fall"],
 						fromId : 21,
 						fromYear : 2013,
-						skippedSeasons : [[42, 2], [48, 3], [50, 4]],
+						skippedSeasons : [[42, 2], [48, 3], [50, 4], [56, 5]],
 					},
 					period = eventMapDefs.seasons.length,
 					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (
