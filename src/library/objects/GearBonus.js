@@ -2882,6 +2882,40 @@
 					},
 				],
 			},
+			// Type 1 Fighter Hayabusa Model II Kai (20th Squadron)
+			"489": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All remodels of Akitsumaru and Yamashiomaru
+						origins: [161, 900],
+						multiple: { "houg": 1, "tais": 1, "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Yamashiomaru Kai
+						ids: [717],
+						multiple: { "houg": 2, "tais": 1, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
 				count: 0,
