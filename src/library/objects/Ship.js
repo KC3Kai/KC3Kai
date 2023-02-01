@@ -1611,7 +1611,7 @@ KC3改 Ship Object
 				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
 				// DV power from items other than previous ones should not be counted
-				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58, 35]);
+				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58]);
 				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57, 35],
 					KC3GearManager.antiLandDiveBomberIds);
 				shellingPower += Math.floor(1.3 * (tbBaku + dbBaku));
@@ -1622,7 +1622,9 @@ KC3改 Ship Object
 				shellingPower += this.equipmentTotalStats("raig", true, true);
 				// ~~DV visible bonus not implemented yet~~ found from non-aircraft since 2022-08-26:
 				// [478] Skilled Deck Personnel + Aviation Maintenance Hands
-				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, true);
+				// DV from antisub patrol aircraft counted against surface as expected:
+				//   https://twitter.com/twillwave1024/status/1620737825963646976
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true));
 			}
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("airattack");
