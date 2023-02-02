@@ -1608,13 +1608,13 @@ KC3改 Ship Object
 				// TP from all Torpedo Bombers not taken into account, DV power counted,
 				//   current TB with DV power: TBM-3W+3S
 				// Regular Dive Bombers make carrier cannot attack against land-installation,
-				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
-				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
+				//   with some exceptions, see #antiLandDiveBomberIds
+				// DV power from Skilled Deck Personnel counted?
 				// DV power from items other than previous ones should not be counted
-				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58]);
-				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57, 35],
+				const eqBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58, 35]);
+				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57],
 					KC3GearManager.antiLandDiveBomberIds);
-				shellingPower += Math.floor(1.3 * (tbBaku + dbBaku));
+				shellingPower += Math.floor(1.3 * (eqBaku + dbBaku));
 			} else {
 				// Should limit to TP from equippable aircraft?
 				// ~~TP visible bonus from Torpedo Bombers no effect.~~ Added since 2021-08-04
@@ -1622,7 +1622,7 @@ KC3改 Ship Object
 				shellingPower += this.equipmentTotalStats("raig", true, true);
 				// ~~DV visible bonus not implemented yet~~ found from non-aircraft since 2022-08-26:
 				// [478] Skilled Deck Personnel + Aviation Maintenance Hands
-				// DV from antisub patrol aircraft counted against surface as expected:
+				// DV power from antisub patrol aircraft counted against surface as expected:
 				//   https://twitter.com/twillwave1024/status/1620737825963646976
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true));
 			}
