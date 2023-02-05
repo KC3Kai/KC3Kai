@@ -377,8 +377,9 @@ KC3改 Equipment Object
 				// Anti-Sub PBY, Kai & ASW: 0.3 vs 0.2?
 				// https://twitter.com/CC_jabberwock/status/1522610871788212226
 				// https://twitter.com/yukicacoon/status/1522783905350565889
+				// https://twitter.com/CC_jabberwock/status/1621947944596557824
 				if(type2 === 26)
-					return (this.master().api_tais > 8 ? 0.3 : 0.2) * stars;
+					return (this.master().api_tais > 7 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
 			case "lbas":
