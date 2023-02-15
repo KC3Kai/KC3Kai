@@ -2158,7 +2158,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
@@ -2182,7 +2182,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
@@ -2206,7 +2206,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
@@ -2223,7 +2223,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
