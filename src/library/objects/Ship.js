@@ -3612,7 +3612,7 @@ KC3改 Ship Object
 				// Ise-class Kai Ni Zuiun Multi-Angle Attack since 2019-03-27
 				const spZuiunCnt = this.countNonZeroSlotEquipment(
 					// All seaplane bombers named Zuiun capable?
-					[26, 79, 80, 81, 207, 237, 322, 323]
+					[26, 79, 80, 81, 207, 237, 322, 323, 490]
 				);
 				// Zuiun priority to Air/Sea Attack when they are both equipped
 				if(spZuiunCnt > 1) results.push(KC3Ship.specialAttackTypeDay(200));
@@ -3820,6 +3820,7 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
+			200: ["Cutin", 200, "CutinNightZuiunNight", 1.25],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],

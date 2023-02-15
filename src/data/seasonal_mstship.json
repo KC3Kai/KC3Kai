@@ -5771,5 +5771,85 @@
 		"api_stype": 7,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5721": {
+		"api_id": 5721,
+		"api_name": "節分浦波改二",
+		"api_yomi": "うらなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5722": {
+		"api_id": 5722,
+		"api_name": "節分天霧改二",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5723": {
+		"api_id": 5723,
+		"api_name": "節分天霧改二丁",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5724": {
+		"api_id": 5724,
+		"api_name": "節分鳳翔改二",
+		"api_yomi": "ほうしょう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5725": {
+		"api_id": 5725,
+		"api_name": "節分鳳翔改二戦",
+		"api_yomi": "ほうしょう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5726": {
+		"api_id": 5726,
+		"api_name": "節分第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5727": {
+		"api_id": 5727,
+		"api_name": "節分Ranger",
+		"api_yomi": "レンジャー",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5728": {
+		"api_id": 5728,
+		"api_name": "節分Johnston",
+		"api_yomi": "ジョンストン",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5729": {
+		"api_id": 5729,
+		"api_name": "節分Johnston改",
+		"api_yomi": "ジョンストン",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5730": {
+		"api_id": 5730,
+		"api_name": "節分神鷹",
+		"api_yomi": "しんよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
 	}
 }

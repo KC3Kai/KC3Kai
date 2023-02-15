@@ -2162,8 +2162,8 @@
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
 				],
@@ -2186,8 +2186,8 @@
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
 				],
@@ -2210,8 +2210,25 @@
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
+						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
+				],
+			},
+			// Prototype Night Zuiun (Attack Equipment)
+			"490": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						distinctGears: [237, 322, 323],
+						single: { "houg": 3, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
 				],

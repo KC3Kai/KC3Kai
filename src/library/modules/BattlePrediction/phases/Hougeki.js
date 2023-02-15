@@ -98,6 +98,7 @@
 
   Hougeki.isSpecialCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) >= 100
     // Multi-angle attacks just single attacker cutin, should fall into regular parsing
+    // Night Zuiun cutin (200) added since 2023-02-14, single attacker, 1~2 defenders
     && ![200, 201].includes(api_at_type || api_sp_list);
   Hougeki.isNelsonTouch     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
   Hougeki.isNagatoCutin     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 101;
