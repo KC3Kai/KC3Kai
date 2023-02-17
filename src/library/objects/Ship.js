@@ -2485,10 +2485,14 @@ KC3改 Ship Object
 				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
 				if( !(warfareType === "Antisub" && (isOaswPhase || [11, 18, 22].includes(this.master().api_stype))) ) {
-					// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
-					const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
 					this.equipment().forEach((g, i) => {
 						if(g.isAirstrikeAircraft()) {
+							// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
+							// Type 1 Fighter Hayabusa Model II Kai bonus not fully tested, all -4 for now:
+							// https://twitter.com/yukicacoon/status/1625831965055410176
+							const expBonus = [489].includes(g.masterId)
+								? [0, 0, 0, 0, 0, 1, 3, 6]
+								: [0, 1, 2, 3, 4, 5, 7, 10];
 							const aceLevel = g.ace || 0;
 							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];
 							let mod = Math.floor(Math.sqrt(internalExpHigh) + (expBonus[aceLevel] || 0)) / 100;
@@ -3439,6 +3443,19 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Night Zuiun night cut-in attack modifiers are variant depending on equipment.
+	 * But bonuses seems be randomly added on every attacks? so finally random from 1.24 to maxed 1.36?
+	 * @see https://twitter.com/yukicacoon/status/1625854945777025025
+	 */
+	KC3Ship.prototype.estimateNightZuiunCutinModifier = function() {
+		const baseModifier = 1.2;
+		const nightZuiunCount = this.countEquipment(490);
+		const nightZuiunBonus = (nightZuiunCount >= 1 ? 0.04 : 0) + (nightZuiunCount >= 2 ? 0.08 : 0);
+		const surfaceRadarBonus = this.equipment(true).some(gear => gear.isSurfaceRadar()) ? 0.04 : 0;
+		return baseModifier + nightZuiunBonus + surfaceRadarBonus;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -3624,7 +3641,8 @@ KC3改 Ship Object
 				if(spSuiseiCnt > 1) results.push(KC3Ship.specialAttackTypeDay(201));
 			}
 		}
-		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
+		// Rotorcraft and ASW Patrol can trigger Artillery Spotting too since 2023-02-14
+		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11, 25, 26]);
 		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
 			/*
 			 * To estimate if can do day time special attacks (aka Artillery Spotting).
@@ -3820,7 +3838,7 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
-			200: ["Cutin", 200, "CutinNightZuiunNight", 1.25],
+			200: ["Cutin", 200, "CutinNightZuiunNight", 1.28],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
@@ -3846,7 +3864,8 @@ KC3改 Ship Object
 			101: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
-			104: { posIndex: [0, 1], partIndex: [1], },
+			104: { posIndex: [0, 1], partIndex: [1], nightOnly: true },
+			200: { posIndex: [], partIndex: [], nightOnly: true, modFunc: "estimateNightZuiunCutinModifier", },
 			300: { posIndex: [1, 2], posIndex2: [1, 1, 2, 2], partIndex: [0, 1, 2], },
 			301: { posIndex: [2, 3], posIndex2: [2, 2, 3, 3], partIndex: [0, 2, 3], },
 			302: { posIndex: [1, 3], posIndex2: [1, 1, 3, 3], partIndex: [0, 1, 3], },
@@ -3982,6 +4001,13 @@ KC3改 Ship Object
 				const yamatoCutinId = this.canDoYamatoClassCutin();
 				if(yamatoCutinId) {
 					results.push(KC3Ship.specialAttackTypeNight(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(0, yamatoCutinId)));
+				}
+				// special [490] Night Zuiun Cutin since 2023-02-14, sharing ID 200 with daytime Zuiun Multi-Angle Attack, behaves more like single ship cutins below, except multiple enemy targets
+				// basic conditions: capable stypes CL, CAV, BBV, AV; Night Zuiun equpped; main guns >= 2, not even chuuha
+				if([3, 6, 10, 16].includes(stype)
+					&& this.hasEquipment(490) && this.countEquipmentType(1, 1) >= 2
+					&& !this.isStriped()) {
+					results.push(KC3Ship.specialAttackTypeNight(200, null, this.estimateNightZuiunCutinModifier()));
 				}
 				// special torpedo related cut-in for destroyers since 2017-10-25,
 				// these types can be rolled for every setup requirements met, beofore regular cutins below
@@ -4294,6 +4320,7 @@ KC3改 Ship Object
 			13: 125,
 			14: 122,
 			// 100~104 might be different, even with day one
+			// 200 unknown, day one 120
 			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }

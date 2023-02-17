@@ -738,9 +738,13 @@ KC3改 Equipment Object
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isJet = [57, 58].includes(type2);
+			const isAsPartol = [26].includes(type2);
 			// ~~Visible bonus no effect~~ Added since 2021-08-04, counted in ship class later since it's total stats bonus.
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
-			if(isTorpedoBomber && targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
+			if((isTorpedoBomber && targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0)
+				// still under verification for strange Antisub Patrol
+				// baku stat no effect on opening airstrike even for the only Type 1 Fighter
+				|| isAsPartol) {
 				power = 0;
 			}
 			power += this.attackPowerImprovementBonus(isExpedSupport ? "support" : "airstrike");
@@ -768,10 +772,11 @@ KC3改 Equipment Object
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
 			const isTorpedoBomber = [8, 58].includes(type2);
-			const isDiveBomber = [7, 11, 57].includes(type2);
+			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isLandBaseAttacker = [47].includes(type2);
 			const isLandBaseHeavyBomber = [53].includes(type2);
 			const isJet = [57, 58].includes(type2);
+			const isAsAircraft = [25, 26].includes(type2);
 			result += 25;
 			let stat = isTorpedoBomber || isLandBaseAttacker || isLandBaseHeavyBomber ?
 				this.master().api_raig : this.master().api_baku;
@@ -943,7 +948,6 @@ KC3改 Equipment Object
 				KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
 				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
-				// still under verification for strange Rotorcraft and Antisub Patrol
 			) || [489].includes(this.masterId));
 	};
 
