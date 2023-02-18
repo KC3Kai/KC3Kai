@@ -3444,13 +3444,12 @@ KC3改 Ship Object
 
 	/**
 	 * Night Zuiun night cut-in attack modifiers are variant depending on equipment.
-	 * But bonuses seems be randomly added on every attacks? so finally random from 1.24 to maxed 1.36?
 	 * @see https://twitter.com/yukicacoon/status/1625854945777025025
 	 */
 	KC3Ship.prototype.estimateNightZuiunCutinModifier = function() {
-		const baseModifier = 1.2;
-		const nightZuiunCount = this.countEquipment(490);
-		const nightZuiunBonus = (nightZuiunCount >= 1 ? 0.04 : 0) + (nightZuiunCount >= 2 ? 0.08 : 0);
+		const baseModifier = 1.24;
+		const nightZuiunCount = this.countNonZeroSlotEquipment(490);
+		const nightZuiunBonus = nightZuiunCount >= 2 ? 0.08 : 0;
 		const surfaceRadarBonus = this.equipment(true).some(gear => gear.isSurfaceRadar()) ? 0.04 : 0;
 		return baseModifier + nightZuiunBonus + surfaceRadarBonus;
 	};
@@ -4005,7 +4004,7 @@ KC3改 Ship Object
 				// special [490] Night Zuiun Cutin since 2023-02-14, sharing ID 200 with daytime Zuiun Multi-Angle Attack, behaves more like single ship cutins below, except multiple enemy targets
 				// basic conditions: capable stypes CL, CAV, BBV, AV; Night Zuiun equpped; main guns >= 2, not even chuuha
 				if([3, 6, 10, 16].includes(stype)
-					&& this.hasEquipment(490) && this.countEquipmentType(1, 1) >= 2
+					&& this.hasNonZeroSlotEquipment(490) && this.countEquipmentType(1, 1) >= 2
 					&& !this.isStriped()) {
 					results.push(KC3Ship.specialAttackTypeNight(200, null, this.estimateNightZuiunCutinModifier()));
 				}
