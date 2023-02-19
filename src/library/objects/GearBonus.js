@@ -7710,7 +7710,7 @@
 				count: 0,
 				byNation: {
 					"UnitedStates": {
-						multiple: { "tais": 3 },
+						multiple: { "tais": 2 },
 					},
 					"UnitedKingdom": {
 						multiple: { "tais": 1 },
