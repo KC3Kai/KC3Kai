@@ -77,7 +77,7 @@
 				"name": "Adrymne",
 				"avatar": "https://avatars0.githubusercontent.com/u/15857144?v=4&s=88",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/Adrymne"
 				}
@@ -86,7 +86,7 @@
 				"name": "Vultren",
 				"avatar" : "https://avatars0.githubusercontent.com/u/10458410?v=3&s=40",
 				"desc" : "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/Vultren"
 				}
@@ -95,7 +95,7 @@
 				"name": "Sanya V. Litvyak",
 				"avatar" : "https://avatars3.githubusercontent.com/u/1585104?v=4&s=460",
 				"desc" : "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/Nya-chan"
 				}
@@ -135,7 +135,7 @@
 				"name": "reinforce",
 				"avatar": "https://avatars2.githubusercontent.com/u/1038834?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/reinforce"
 				}
@@ -647,24 +647,6 @@
 					"gh" : "https://github.com/Jurrunio",
 					"tw" : "https://twitter.com/Jurrunio"
 				}
-			},
-			{
-				"name": "dotsidious",
-				"avatar" : "https://avatars.githubusercontent.com/u/106551196?v=4",
-				"desc" : "English",
-				"active": 1,
-				"links" : {
-					"gh" : "https://github.com/dotsidious"
-				}
-			},
-			{
-				"name": "yuanmaxmax",
-				"avatar" : "https://avatars.githubusercontent.com/u/73090916?v=4",
-				"desc" : "繁體中文",
-				"active": 1,
-				"links" : {
-					"gh" : "https://github.com/yuanmaxmax"
-				}
 			}
 		],
 		"AboutForkContributors": [
@@ -730,7 +712,7 @@
 				"name": "Jebzou",
 				"avatar": "https://avatars0.githubusercontent.com/u/22751386?s=460&v=4",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/Jebzou",
 					"tw" : "https://twitter.com/Jebzou"
@@ -740,7 +722,7 @@
 				"name": "abs15986",
 				"avatar" : "https://avatars2.githubusercontent.com/u/13902881?s=60&v=4",
 				"desc" : "简体中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/abs15986"
 				}
@@ -749,7 +731,7 @@
 				"name": "MZI",
 				"avatar" : "https://avatars1.githubusercontent.com/u/14719366?s=460&v=4",
 				"desc" : "简体中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/MZIchenjl"
 				}
@@ -758,7 +740,7 @@
 				"name": "redpizza",
 				"avatar" : "https://avatars2.githubusercontent.com/u/31765780?s=460&v=4",
 				"desc" : "日本語",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/redpizza"
 				}
@@ -767,7 +749,7 @@
 				"name": "Ning Humbert",
 				"avatar" : "https://avatars1.githubusercontent.com/u/8641779?s=460&v=4",
 				"desc" : ["简体中文", "日本語"],
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/lackofdream"
 				}
@@ -776,7 +758,7 @@
 				"name": "Felix Suwito",
 				"avatar" : "https://avatars3.githubusercontent.com/u/19694373?s=460&v=4",
 				"desc" : "Indonesian",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/flixwito"
 				}
@@ -785,7 +767,7 @@
 				"name": "Trần Quốc Hưng",
 				"avatar" : "https://avatars3.githubusercontent.com/u/23023212?s=460&v=4",
 				"desc" : "Tiếng Việt",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/mw3tv123"
 				}
@@ -794,9 +776,27 @@
 				"name": "MacBread",
 				"avatar" : "https://avatars1.githubusercontent.com/u/37400313?s=460&v=4",
 				"desc" : "한국어",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" : "https://github.com/MacBread"
+				}
+			},
+			{
+				"name": "dotsidious",
+				"avatar" : "https://avatars.githubusercontent.com/u/106551196?v=4",
+				"desc" : "English",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/dotsidious"
+				}
+			},
+			{
+				"name": "yuanmaxmax",
+				"avatar" : "https://avatars.githubusercontent.com/u/73090916?v=4",
+				"desc" : "繁體中文",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/yuanmaxmax"
 				}
 			}
 		],
@@ -844,7 +844,7 @@
 				"name": "NicolaosGreene",
 				"avatar": "https://avatars1.githubusercontent.com/u/3627763?v=3&s=40",
 				"desc": "AboutDevTester",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" :"https://github.com/NicolaosGreene",
 					"st" :"http://steamcommunity.com/profiles/76561198023180048/",
@@ -875,7 +875,7 @@
 	 			"name": "HKGPsy ",
 	 			"avatar" : "https://avatars2.githubusercontent.com/u/16491462?v=3&s=40",
 	 			"desc" : "AboutReporter",
-				"active": 1,
+				"active": 0,
 	 			"links" : {
 	 				"gh" :"https://github.com/HKGPsy"
 	 			}
@@ -932,7 +932,7 @@
 	 			"name": "Matty Chan",
 	 			"avatar" : "https://avatars0.githubusercontent.com/u/21363469?v=4&s=460",
 	 			"desc" : "AboutReporter",
-				"active": 1,
+				"active": 0,
 	 			"links" : {
 	 				"gh" :"https://github.com/Accelyte"
 	 			}
@@ -1000,7 +1000,7 @@
 			"desc": "AboutPartnerZHKcWikiDesc",
 			"image": "kcwiki.png",
 			"links": [
-				"http://zh.kcwiki.moe"
+				"https://zh.kcwiki.cn"
 			]
 		},
 		{
@@ -1008,7 +1008,7 @@
 			"desc": "AboutPartnerPoiStatsDesc",
 			"image": "https://raw.githubusercontent.com/poooi/poi/master/assets/icons/icon.png",
 			"links": [
-				"http://db.kcwiki.moe"
+				"https://db.kcwiki.cn"
 			]
 		},
 		{
@@ -1016,7 +1016,7 @@
 			"desc": "AboutPartnerWhoCallsDesc",
 			"image": "https://raw.githubusercontent.com/Diablohu/WhoCallsTheFleet/master/app/assets/images/appicon.png",
 			"links": [
-				"http://fleet.diablohu.com",
+				"https://fleet.diablohu.com",
 				"https://github.com/Diablohu/WhoCallsTheFleet"
 			]
 		},
