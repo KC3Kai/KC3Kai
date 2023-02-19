@@ -291,7 +291,7 @@
 				"name": "arialypse",
 				"avatar" : "https://avatars0.githubusercontent.com/u/13535817?v=3&s=40",
 				"desc" : "ภาษาไทย",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" : "https://github.com/arialypse",
 					"fb" : "https://www.facebook.com/Arialypse",
@@ -304,7 +304,7 @@
 				"name": "kololz",
 				"avatar" : "https://avatars0.githubusercontent.com/u/12908497?v=3&s=40",
 				"desc" : "繁體中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/kololz",
 					"fb" :"https://www.facebook.com/kololz",
@@ -359,7 +359,7 @@
 				"name": "Admiral Mikado",
 				"avatar" : "https://avatars2.githubusercontent.com/u/40426881?s=460&v=4",
 				"desc" : "Deutsch",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/Admiral-Mikado",
 					"wk" :"http://kancolle.fandom.com/wiki/User:Admiral_Mikado"
@@ -597,7 +597,7 @@
 				"name": "TrickLin",
 				"avatar" : "https://avatars2.githubusercontent.com/u/8099890?s=88&v=4",
 				"desc" : "简体中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/TrickLin"
 				}
@@ -606,7 +606,7 @@
 				"name": "RandomGuyB5",
 				"avatar" : "https://avatars1.githubusercontent.com/u/40309140?s=460&v=4",
 				"desc" : "Deutsch",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/RandomGuyB5"
 				}
@@ -624,7 +624,7 @@
 				"name": "ShinDes",
 				"avatar" : "https://avatars3.githubusercontent.com/u/35944727?s=460&v=4",
 				"desc" : "Español",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" : "https://github.com/ShinHKPDes"
 				}
@@ -633,7 +633,7 @@
 				"name": "魁の光",
 				"avatar" : "https://avatars.githubusercontent.com/u/17513773?v=4",
 				"desc" : "Tiếng Việt",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/haidang10897"
 				}
@@ -646,6 +646,24 @@
 				"links" : {
 					"gh" : "https://github.com/Jurrunio",
 					"tw" : "https://twitter.com/Jurrunio"
+				}
+			},
+			{
+				"name": "dotsidious",
+				"avatar" : "https://avatars.githubusercontent.com/u/106551196?v=4",
+				"desc" : "English",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/dotsidious"
+				}
+			},
+			{
+				"name": "yuanmaxmax",
+				"avatar" : "https://avatars.githubusercontent.com/u/73090916?v=4",
+				"desc" : "繁體中文",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/yuanmaxmax"
 				}
 			}
 		],
