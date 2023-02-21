@@ -3444,6 +3444,7 @@ KC3改 Ship Object
 
 	/**
 	 * Night Zuiun night cut-in attack modifiers are variant depending on equipment.
+	 * Suspected to be multi-rolls since random modifier and higher rate for bonus gears.
 	 * @see https://twitter.com/yukicacoon/status/1625854945777025025
 	 */
 	KC3Ship.prototype.estimateNightZuiunCutinModifier = function() {
@@ -4319,7 +4320,8 @@ KC3改 Ship Object
 			13: 125,
 			14: 122,
 			// 100~104 might be different, even with day one
-			// 200 unknown, day one 120
+			// same factor for all setups? https://twitter.com/yukicacoon/status/1627519416907988994
+			200: 152,
 			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }
