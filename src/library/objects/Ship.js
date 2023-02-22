@@ -3864,8 +3864,9 @@ KC3改 Ship Object
 			101: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
-			104: { posIndex: [0, 1], partIndex: [1], nightOnly: true },
-			200: { posIndex: [], partIndex: [], nightOnly: true, modFunc: "estimateNightZuiunCutinModifier", },
+			104: { posIndex: [0, 1], partIndex: [1], nightOnly: true, },
+			// Power mods irrelevant to ship position, not necessary yet
+			//200: { posIndex: [], partIndex: [], nightOnly: true, },
 			300: { posIndex: [1, 2], posIndex2: [1, 1, 2, 2], partIndex: [0, 1, 2], },
 			301: { posIndex: [2, 3], posIndex2: [2, 2, 3, 3], partIndex: [0, 2, 3], },
 			302: { posIndex: [1, 3], posIndex2: [1, 1, 3, 3], partIndex: [0, 1, 3], },
