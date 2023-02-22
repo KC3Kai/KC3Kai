@@ -85,9 +85,9 @@
         // return a string representation of stype query
         showSType: function(stypes) {
             function translate(x) {
-                return x === "*"? "Any":x;
+                return x === "*" ? KC3Meta.term("ExpcalcTemplateAnyShipType") : x;
             }
-            return stypes.length === 0 ? "<Empty>" : stypes.map(translate).join(",");
+            return stypes.length === 0 ? KC3Meta.term("ExpcalcTemplateEmptyShipType") : stypes.map(translate).join(",");
         },
         showInputSType: function(stypes) {
             return stypes.join(",");

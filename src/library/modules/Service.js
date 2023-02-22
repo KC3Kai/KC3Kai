@@ -73,8 +73,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			localStorage.gameVersion = (gameVerStr || "").split("=")[1] || "";
 			
 			// If refreshing API link, close source tabs and re-open game frame
-			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
-				localStorage.extract_api = false;
+			// localStorage has problems with primitive boolean
+			if(localStorage.extract_api == "true"){
+				localStorage.extract_api = "false";
 				chrome.tabs.remove([sender.tab.id], function(){});
 				// To avoid cross-domain warning of chrome
 				//window.open("../pages/game/api.html", "kc3kai_game");
@@ -448,7 +449,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"dmmFrameInject" :function(request, sender, response){
 			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
-			if( isDMMFrame(senderUrl) && localStorage.dmmplay == "false"){
+			if( isDMMFrame(senderUrl) && localStorage.dmmplay != "true"){
 				// DMM FRAME
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {

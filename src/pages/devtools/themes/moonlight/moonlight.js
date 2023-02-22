@@ -1349,7 +1349,7 @@
 		CatBomb: function(data){
 			$("#catBomb").hide();
 			
-			if (!ConfigManager.showCatBombs) return false;
+			if (!ConfigManager.showCatBombs || !data.title) return false;
 			
 			$("#catBomb .title").html( data.title );
 			$("#catBomb .description").html( data.message );

@@ -363,8 +363,10 @@ KC3改 Equipment Object
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
 				// Dive Bomber, 0.2 per star
-				if([7, 57].includes(type2) && !this.isFighterBomber())
-					return 0.2 * stars;
+				if([7, 57].includes(type2) && (
+					// Type 0 Fighter Model 64 variants counted as both
+					!this.isFighterBomber() || [447, 487].includes(this.masterId)
+				))	return 0.2 * stars;
 				// Torpedo Bomber, 0.2 per star
 				if([8, 58].includes(type2))
 					return 0.2 * stars;
@@ -375,8 +377,9 @@ KC3改 Equipment Object
 				// Anti-Sub PBY, Kai & ASW: 0.3 vs 0.2?
 				// https://twitter.com/CC_jabberwock/status/1522610871788212226
 				// https://twitter.com/yukicacoon/status/1522783905350565889
+				// https://twitter.com/CC_jabberwock/status/1621947944596557824
 				if(type2 === 26)
-					return (this.master().api_tais > 8 ? 0.3 : 0.2) * stars;
+					return (this.master().api_tais > 7 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
 			case "lbas":
@@ -615,9 +618,8 @@ KC3改 Equipment Object
 
 		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane
-		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
-			|| (forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.indexOf(type2) > -1)){
-			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku );
+		if(this.isAntiAirAircraft(forLbas)){
+			return Math.floor( Math.sqrt(capacity) * (this.master().api_tyku || 0) );
 		}
 
 		// Equipment did not return on plane check, no fighter power
@@ -634,13 +636,12 @@ KC3改 Equipment Object
 
 		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane
-		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
-			|| (forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.indexOf(type2) > -1)){
+		if(this.isAntiAirAircraft(forLbas)){
 			var aceLevel = this.ace > 0 ? this.ace : 0,
 				internalBonus = KC3Meta.airPowerAverageBonus(aceLevel),
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
 				averageBonus = internalBonus + typeBonus;
-			var aaStat = this.master().api_tyku;
+			var aaStat = this.master().api_tyku || 0;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
 			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
@@ -664,8 +665,7 @@ KC3改 Equipment Object
 		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane,
 		// Also take recon/lb planes into account because they participate in LBAS battle.
-		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
-			|| (forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.indexOf(type2) > -1)){
+		if(this.isAntiAirAircraft(forLbas)){
 			var aceLevel = this.ace > 0 ? this.ace : 0,
 				internalExps = KC3Meta.airPowerInternalExpBounds(aceLevel),
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
@@ -674,7 +674,7 @@ KC3改 Equipment Object
 					Math.sqrt(internalExps[1] / 10) + typeBonus
 				];
 			
-			var aaStat = this.master().api_tyku;
+			var aaStat = this.master().api_tyku || 0;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
 			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
@@ -738,9 +738,13 @@ KC3改 Equipment Object
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isJet = [57, 58].includes(type2);
+			const isAsPartol = [26].includes(type2);
 			// ~~Visible bonus no effect~~ Added since 2021-08-04, counted in ship class later since it's total stats bonus.
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
-			if(isTorpedoBomber && targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
+			if((isTorpedoBomber && targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0)
+				// still under verification for strange Antisub Patrol
+				// baku stat no effect on opening airstrike even for the only Type 1 Fighter
+				|| isAsPartol) {
 				power = 0;
 			}
 			power += this.attackPowerImprovementBonus(isExpedSupport ? "support" : "airstrike");
@@ -768,10 +772,11 @@ KC3改 Equipment Object
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
 			const isTorpedoBomber = [8, 58].includes(type2);
-			const isDiveBomber = [7, 11, 57].includes(type2);
+			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isLandBaseAttacker = [47].includes(type2);
 			const isLandBaseHeavyBomber = [53].includes(type2);
 			const isJet = [57, 58].includes(type2);
+			const isAsAircraft = [25, 26].includes(type2);
 			result += 25;
 			let stat = isTorpedoBomber || isLandBaseAttacker || isLandBaseHeavyBomber ?
 				this.master().api_raig : this.master().api_baku;
@@ -928,15 +933,22 @@ KC3改 Equipment Object
 
 	KC3Gear.prototype.isAntiAirAircraft = function(forLbas){
 		return this.exists()
-			&& (forLbas ? KC3GearManager.antiAirLandBaseFighterType2Ids : KC3GearManager.antiAirFighterType2Ids)
-				.indexOf(this.master().api_type[2]) > -1
-			&& this.master().api_tyku > 0;
+			&& ((
+				(forLbas ? KC3GearManager.antiAirLandBaseFighterType2Ids : KC3GearManager.antiAirFighterType2Ids)
+					.indexOf(this.master().api_type[2]) > -1
+				// many planes have proficiency AA bonus even base AA is 0
+				//&& this.master().api_tyku > 0
+				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
+			) || [489].includes(this.masterId));
 	};
 
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
 		return this.exists()
-			&& KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
-			&& (this.master().api_raig > 0 || this.master().api_baku > 0);
+			&& ((
+				KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
+				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
+				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
+			) || [489].includes(this.masterId));
 	};
 
 	KC3Gear.prototype.isAswAircraft = function(forCvl = false, forSupport = false){
@@ -989,7 +1001,7 @@ KC3改 Equipment Object
 		// FM-2 (AA 6 DV 2) is not fighter-bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
 		// Type 0 Fighter Model 64 (Two-seat w/ KMX) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
-		// Type 0 Fighter Model 64 (Skilled Fighter-bomber)?
+		// Type 0 Fighter Model 64 (Skilled Fighter-bomber): https://twitter.com/noro_006/status/1600419310006317056
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&

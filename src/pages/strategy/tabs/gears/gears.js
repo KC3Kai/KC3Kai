@@ -109,6 +109,8 @@
 			"t49": "dv",
 			// night recon
 			"t50": "ht",
+			// night seaplane bomber
+			"t51": "dv",
 			// all types
 			"tall": "type",
 		},
@@ -344,6 +346,8 @@
 			});
 			$(".tab_gears .item_types .item_type img").each((_, img) => {
 				$(img).attr("src", KC3Meta.itemIcon($(img).parent().data("type")));
+			}).error(e => {
+				$(e.target).unbind("error").attr("src", "/assets/img/ui/empty.png");
 			});
 			$(".tab_gears .item_types .item_type").each((_, elm) => {
 				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));

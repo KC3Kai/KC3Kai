@@ -406,8 +406,8 @@
 					.text( GoalTemplateManager.showSType(tdata.stype) );
 				$(".goal_map .goal_value",goalBox).text( mapStr );
 				$(".goal_rank .goal_value",goalBox).text( self.rankNames[tdata.rank] );
-				$(".goal_fs .goal_value",goalBox).text( tdata.flagship? "Yes":"No" );
-				$(".goal_mvp .goal_value",goalBox).text( tdata.mvp? "Yes":"No" );
+				$(".goal_fs .goal_value",goalBox).text( tdata.flagship? KC3Meta.term("ExpcalcIsYes") : KC3Meta.term("ExpcalcIsNo") );
+				$(".goal_mvp .goal_value",goalBox).text( tdata.mvp? KC3Meta.term("ExpcalcIsYes") : KC3Meta.term("ExpcalcIsNo") );
 				$(".goal_baseexp .goal_value", goalBox).text( tdata.baseExp );
 
 				// "edit" mode
@@ -425,7 +425,7 @@
 				} else {
 					goalBox.removeClass("disabled");
 				}
-				$(".goal_onoff", goalBox).text( tdata.enable? "Enabled":"Disabled");
+				$(".goal_onoff", goalBox).text( tdata.enable? KC3Meta.term("ExpcalcTemplateEnabledButton") : KC3Meta.term("ExpcalcTemplateDisabledButton"));
 
 				$(".goal_fs .goal_value", goalBox).toggleClass("bool_no",!tdata.flagship);
 				$(".goal_mvp .goal_value", goalBox).toggleClass("bool_no",!tdata.mvp);
@@ -594,7 +594,7 @@
 
 				// build a dialog for confirmation
 				var shipsStr = targetShips.map( function(x) { return x.shipDesc; }).join("\n");
-				if (! confirm( "Applying template to following ship(s): \n" + shipsStr + "\nConfirm ?"))
+				if (! confirm( KC3Meta.term("ExpcalcApplyTemplateConfirm").format(shipsStr) ))
 					return true;
 
 				$.each( targetShips, function(i,x) {
@@ -646,10 +646,11 @@
 					&& typeof curGoal !== "undefined"
 					&& curGoal[0] < nextLevel) {
 
-					var resp = confirm(
-						"Would you like to change your leveling goal for " +
-						ThisShip.name() + " (#" + ShipRosterId + ") to level " +
-						nextLevel + "?");
+					var resp = confirm(KC3Meta.term("ExpcalcChangeGoalConfirm").format(
+						ThisShip.name(),
+						ShipRosterId,
+						nextLevel
+					));
 					if (resp) {
 						self.goals["s"+ ShipRosterId][0] = nextLevel;
 						self.save();
@@ -805,11 +806,11 @@
 			$(".ship_baseexp .ship_value", goalBox).text( shipGoal.baseExp );
 
 			// Exp Modifier: MVP
-			$(".ship_mvp .ship_value", goalBox).text( shipGoal.isMvp ? "Yes" : "No" );
+			$(".ship_mvp .ship_value", goalBox).text( shipGoal.isMvp ? KC3Meta.term("ExpcalcIsYes") : KC3Meta.term("ExpcalcIsNo") );
 			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !shipGoal.isMvp);
 
 			// Exp Modifier: FLAGSHIP
-			$(".ship_fs .ship_value", goalBox).text( shipGoal.isFlagship ? "Yes" : "No" );
+			$(".ship_fs .ship_value", goalBox).text( shipGoal.isFlagship ? KC3Meta.term("ExpcalcIsYes") : KC3Meta.term("ExpcalcIsNo") );
 			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !shipGoal.isFlagship);
 
 			// Exp Modifier: RANK

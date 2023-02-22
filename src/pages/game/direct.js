@@ -1,7 +1,7 @@
 (function(){
 	"use strict";
 	const source = "https://raw.githubusercontent.com/KC3Kai/kc3-translations/dev-autotl/data";
-	const isNotDmmplayPrev = localStorage.dmmplay == "false";
+	const isNotDmmplayPrev = (localStorage.dmmplay != "true");
 	
 	function getInfExpirationDate(){
 		var infinityExpire = new Date();
@@ -11,8 +11,8 @@
 	
 	// Redirect to DMM play page when activated
 	function activateDmmPlay(){
-		localStorage.extract_api = false;
-		localStorage.dmmplay = true;
+		localStorage.extract_api = "false";
+		localStorage.dmmplay = "true";
 		applyCookiesAndRedirect();
 	}
 	function applyCookiesAndRedirect(htmlLink){
@@ -80,13 +80,13 @@
 		$(".altGameModes .modePlay").on("click", function(){
 			switch ($(this).data("mode")) {
 				case "frame":
-					localStorage.extract_api = false;
-					localStorage.dmmplay = false;
+					localStorage.extract_api = "false";
+					localStorage.dmmplay = "false";
 					applyCookiesAndRedirect("dmm.html");
 				break;
 				case "api":
-					localStorage.extract_api = true;
-					localStorage.dmmplay = false;
+					localStorage.extract_api = "true";
+					localStorage.dmmplay = "false";
 					applyCookiesAndRedirect();
 				break;
 			}
