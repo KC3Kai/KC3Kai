@@ -29,6 +29,8 @@
 						s1 = 'ls'; s2 = 'or'; break;
 					case 10: // Seaplane Bomber/Recon
 						s1 = 'dv'; s2 = 'ls'; break;
+					case 51: // Seaplane Night Bomber
+						s1 = 'dv'; s2 = 'ls'; break;
 					case 50: // Seaplane Night Recon
 						s1 = 'ht'; s2 = 'ls'; break;
 					case 37: // LB Attacker
