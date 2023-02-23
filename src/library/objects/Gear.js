@@ -571,13 +571,13 @@ KC3改 Equipment Object
 			case 6: // Carrier-based fighter
 			case 45: // Seaplane fighter. Seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 			case 48: // LB fighter or LB interceptor
+			case 49: // LB recon, uncertain: all? or AA > 2 like fighter bomber?
+				// for now: https://twitter.com/noro_006/status/1628605249492766721
+				// btw, no proficiency type bonus: https://twitter.com/noro_006/status/1628593477134209024
 				modifier = 0.2; break;
 			case 7: // Fighter bomber
 			case 57: // Jet fighter bomber
 				if(this.isFighterBomber()) modifier = 0.25;
-				break;
-			case 49: // LB recon, uncertain: all? or AA > 2 like fighter bomber?
-				modifier = 0.25;
 				break;
 			case 41: // Large Flying Boat, uncertain?
 				return 0.25 * Math.sqrt(stars);
