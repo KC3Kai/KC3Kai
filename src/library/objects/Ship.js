@@ -4321,8 +4321,10 @@ KC3改 Ship Object
 			13: 125,
 			14: 122,
 			// 100~104 might be different, even with day one
-			// same factor for all setups? https://twitter.com/yukicacoon/status/1627519416907988994
-			200: 152,
+			// same factor for all setups with bonus gears, 153~164?
+			// https://twitter.com/yukicacoon/status/1627519416907988994
+			// https://twitter.com/yukicacoon/status/1628701453677363202
+			200: 155,
 			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }
