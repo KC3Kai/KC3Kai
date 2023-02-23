@@ -29,23 +29,22 @@
 				const info = KENI.findRawInfo(m.api_id);
 				return (["[{0}] ".format(m.api_id) + m.api_name,
 					m.api_details,
-					"Difficulty: {0}".format(m.api_difficulty),
-					"Reset type: {0}".format(m.api_reset_type),
-					"Damage type: {0}".format(m.api_damage_type),
-					"Cost fuel: {0}%, ammo: {1}%".format(m.api_use_fuel * 100, m.api_use_bull * 100),
-					"Levels of successful rewards:\n"
-						+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
+					KC3Meta.term("ExpedPastExpedDifficulty").format(m.api_difficulty),
+					KC3Meta.term("ExpedPastExpedResetType").format(m.api_reset_type),
+					KC3Meta.term("ExpedPastExpedDamageType").format(m.api_damage_type),
+					KC3Meta.term("ExpedPastExpedCostPercentage").format(m.api_use_fuel * 100, m.api_use_bull * 100),
+					KC3Meta.term("ExpedPastExpedRewardsLevel").format(m.api_win_mat_level)
 						+ (m.api_win_item1[0] > 0 ?
-							["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
+							["\n\t", KC3Meta.useItemName(m.api_win_item1[0]), ": ", m.api_win_item1[1]].join("") : "")
 						+ (m.api_win_item2[0] > 0 ?
-							[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
-					String(m.api_deck_num) + " ships fleet: "
+							[", ", KC3Meta.useItemName(m.api_win_item2[0]), ": ", m.api_win_item2[1]].join("") : ""),
+					KC3Meta.term("ExpedPastExpedFleetShips").format(m.api_deck_num)
 						+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", "),
-					(info.kc3_gs_all_sparkle ? "GS needs all ships sparkled" : ""),
-					(info.kc3_gs_drum_count ? "GS rate affected by sparkles & higher for drums >= {0}".format(info.kc3_gs_drum_count) : ""),
-					(info.kc3_gs_flagship_level ? "GS rate affected by sparkles & flagship level" : ""),
+					(info.kc3_gs_all_sparkle ? KC3Meta.term("ExpedPastExpedGsAllSparkled") : ""),
+					(info.kc3_gs_drum_count ? KC3Meta.term("ExpedPastExpedGsSparkleDrums").format(info.kc3_gs_drum_count) : ""),
+					(info.kc3_gs_flagship_level ? KC3Meta.term("ExpedPastExpedGsSparkleLevel") : ""),
 					(m.api_reset_type && Array.isArray(info.kc3_unlocked_by) ?
-						"Unlocked by: {0}".format(info.kc3_unlocked_by.map(id => KC3Master.missionDispNo(id)).join(","))
+						KC3Meta.term("ExpedPastExpedUnlockBy").format(info.kc3_unlocked_by.map(id => KC3Master.missionDispNo(id)).join(","))
 						: ""),
 				].filter(v => !!v).join("\n"));
 			};
@@ -108,7 +107,8 @@
 							.prop("checked", val)
 						.end()
 						.find(".expedText")
-							.text( "World " + world).attr("title", KC3Meta.worldToDesc(world))
+							.text(KC3Meta.term("ExpedPastWorldLabel").format(world))
+							.attr("title", KC3Meta.worldToDesc(world))
 						.end()
 						.find(".expedTime")
 							.remove()
@@ -222,7 +222,7 @@
 						}
 					});
 					$('.tab_expedpast .exped_count').text(
-						"Total pages: {0}, Total expeditions: {1}, Great Success /Total Success: {2} /{3} ({4}%)"
+						KC3Meta.term("ExpedPastPagingInfoLine")
 							.format(KC3Meta.formatNumber(numPages), KC3Meta.formatNumber(numRecords),
 								KC3Meta.formatNumber(gs), KC3Meta.formatNumber(ns),
 								((gs / ns * 100) || 0).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))

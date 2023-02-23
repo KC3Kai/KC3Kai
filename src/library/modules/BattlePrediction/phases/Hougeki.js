@@ -54,14 +54,16 @@
 
   // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou / SubFleet / Yamato) may attack different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
+  // Night Zuiun cutin behaves more like other regular night cutins (single attacker, unlimited triggering times, etc), but it attacks more than 1 target, so need to be parsed like special.
   Hougeki.parseSpecialCutin = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseDefender, parseInfo, isRealAttack,
       parseAttacker, parseAttackerFriend, parseAttackerSpecial,
       isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin,
       isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3,
-      isYamatoCutin3P, isYamatoCutin2P } = KC3BattlePrediction.battle.phases.hougeki;
+      isYamatoCutin3P, isYamatoCutin2P,
+      isNightZuiunCutin } = KC3BattlePrediction.battle.phases.hougeki;
 
-    const { api_df_list: defenders, api_damage: damages } = attackJson;
+    const { api_df_list: defenders, api_damage: damages, api_at_list: orgAttacker } = attackJson;
     return defenders.map((defender, index) => ({
       damage: parseDamage({ api_damage: [damages[index]] }),
       attacker: (
@@ -75,6 +77,8 @@
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2], isAllySideFriend, index})) :
         isKongouCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1], isAllySideFriend, index})) :
+        isNightZuiunCutin(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [orgAttacker, orgAttacker], isAllySideFriend, index})) :
         isSubmarineCutin1(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [1, 2] : [1, 1, 2, 2]), isAllySideFriend, index})) :
         isSubmarineCutin2(attackJson) ?
@@ -97,8 +101,10 @@
   Hougeki.isRealAttack = ({ defender }) => defender.position !== -1;
 
   Hougeki.isSpecialCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) >= 100
-    // Multi-angle attacks just single attacker cutin, should fall into regular parsing
-    && ![200, 201].includes(api_at_type || api_sp_list);
+    // Multi-angle attacks just single attacker & defender cutin, could fall into regular parsing
+    && ![200, 201].includes(api_at_type);
+  // Night Zuiun cutin (200) for api_sp_list added since 2023-02-14, single attacker, 1~2 defenders
+  Hougeki.isNightZuiunCutin = ({ api_at_type, api_sp_list }) => (api_sp_list) === 200;
   Hougeki.isNelsonTouch     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
   Hougeki.isNagatoCutin     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 101;
   Hougeki.isMutsuCutin      = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 102;
@@ -122,7 +128,7 @@
     const { getBattleType } = KC3BattlePrediction.battle;
     // Fix known game API issue: for combined fleet night battle, api_at_list (of api_sp_list: 104) still point to 0, instead of escort fleet flagship 6.
     // This will cause Kongou Class cutin in CF gives wrong damage dealers and can't tell difference with day time cutin (if any).
-    const combinedFleetPosDiff = (api_sp_list && !isAllySideFriend && getBattleType().player
+    const combinedFleetPosDiff = (api_sp_list === 104 && !isAllySideFriend && getBattleType().player
       && getBattleType().player !== KC3BattlePrediction.Player.SINGLE) ? COMBINED_FLEET_MAIN_ALIGN : 0;
     return {
       side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,

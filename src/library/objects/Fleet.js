@@ -635,9 +635,13 @@ Contains summary information about a fleet and its ships
 						accurcy: gearMaster.api_houm || 0,
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
-						// LoS improvement taken into account, but any other modifier unknown
-						rate: ((gearMaster.api_saku || 0) + gear.losStatImprovementBonus())
+						slotSize: ship.slotSize(gearIdx),
+						// KCKai only adds planes in a non-zero slot to selection list
+						// LoS improvement taken into account, but any other modifier unknown for browser
+						rate: ship.slotSize(gearIdx) > 0 ? (
+							((gearMaster.api_saku || 0) + gear.losStatImprovementBonus())
 							* (airControlModifiers[dispSeiku] || 0)
+						) : 0
 					});
 				}
 			});

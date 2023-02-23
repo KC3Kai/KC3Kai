@@ -14,11 +14,11 @@
 		id: ["api_gameScale", "dmm_customize", "fix_game_code"],
 		attr: ["dmmplay", "extract_api"]
 	}, function (response) {
-		if (response.value && response.storage) {
+		if (Array.isArray(response.value) && Array.isArray(response.storage)) {
 			if ( // if dmm site play mode and customize enabled
-				(response.value[1] && response.storage[0] == "true")
+				response.value[1]
 				// if dmm frame or api link play mode
-				|| response.storage[0] == "false" || response.storage[1] == "true"
+				|| response.storage[0] != "true" || response.storage[1] == "true"
 			) {
 				//console.debug("Setting zoom to scale", response.value[0] + "%");
 				const scale = (response.value[0] || 100) / 100;
@@ -40,7 +40,7 @@
 			}
 		}
 		// Experimental function: improve 3rd-party components used by game
-		if (response.value && response.value[2]) {
+		if (Array.isArray(response.value) && !!response.value[2]) {
 			const body = $("body")[0];
 			const script = document.createElement("script");
 			script.setAttribute("type", "text/javascript");

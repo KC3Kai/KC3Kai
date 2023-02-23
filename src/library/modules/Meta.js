@@ -922,9 +922,10 @@ Provides access to data on built-in JSON files
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
 				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
-				// move Submarine Fleet Cutin index 300 to 30
-				// move Yamato-class Cutin index 400 to 40
-				this._battle.cutinNight[index >= 400 ? index - 360 : index >= 300 ? index - 270 : index >= 100 ? index - 80 : index] || "";
+				// move Zuiun Night Cutin index 200 to 30
+				// move Submarine Fleet Cutin index 300 to 40
+				// move Yamato-class Cutin index 400 to 50
+				this._battle.cutinNight[index >= 400 ? index - 350 : index >= 300 ? index - 260 : index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		aacitype :function(index){
@@ -1320,7 +1321,7 @@ Provides access to data on built-in JSON files
 						seasons : ["Winter", "Spring", "Summer", "Fall"],
 						fromId : 21,
 						fromYear : 2013,
-						skippedSeasons : [[42, 2], [48, 3], [50, 4]],
+						skippedSeasons : [[42, 2], [48, 3], [50, 4], [56, 6]],
 					},
 					period = eventMapDefs.seasons.length,
 					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (

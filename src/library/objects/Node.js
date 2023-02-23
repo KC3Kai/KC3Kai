@@ -353,7 +353,7 @@ Used by SortieManager
 		const checkSortieSpecialAttack = attacks => attacks.some(attack => {
 			const spApiId = Number(attack.cutin || attack.ncutin);
 			// special attacks ID ranged in [100, 200)
-			// [200, 201] used by multi-angle attacks, not counted
+			// [200, 201] used by multi-angle/night-zuiun attacks, not counted
 			// [300, 302] used by submarine fleet attacks since 2021-05-08
 			// [400, 401] used by Yamato/Musashi special attacks
 			if (spApiId.inside(200, 201)) return false;

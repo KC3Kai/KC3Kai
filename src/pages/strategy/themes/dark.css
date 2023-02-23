@@ -1429,9 +1429,6 @@ button, input, select, textarea {
 .tab_aircraft .item_types {
 	padding:8px 5px 5px 5px;
 }
-.tab_aircraft .item_types .item_type {
-	margin-right:3px;
-}
 .tab_aircraft .item_types .item_type.active {
 	background:#555555;
 }

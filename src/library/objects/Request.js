@@ -69,6 +69,8 @@ Executes processing and relies on KC3Network for the triggers
 				console.info("Response temporary redirect:", this.statusCode, this.url, this.headers);
 				return false;
 			}
+			// Game client has added auto-reconnecting since Sep 2022, network failures may not cause in-game catbomb immediately
+			KC3Request.fakeCatbomb = true;
 			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
@@ -139,6 +141,7 @@ Executes processing and relies on KC3Network for the triggers
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {
+				KC3Request.fakeCatbomb = false;
 				KC3Network.trigger("Bomb201", {
 					title: KC3Meta.term("Bomb201Title"),
 					message: KC3Meta.term("Bomb201Message")
@@ -148,6 +151,7 @@ Executes processing and relies on KC3Network for the triggers
 			
 			// If it fails on "api_start2" which is the first API call
 			if(this.call.indexOf("api_start2") > -1){
+				KC3Request.fakeCatbomb = false;
 				KC3Network.trigger( "CatBomb", {
 					title: KC3Meta.term("CatBombHardAPIErrorTitle"),
 					message: KC3Meta.term("CatBombHardAPIErrorMsg").format(this.gameStatus)
@@ -165,6 +169,7 @@ Executes processing and relies on KC3Network for the triggers
 				// If clock difference is greater than 5 minutes
 				var timeDiff = Math.abs(computerClock - serverClock);
 				if(timeDiff > 300000){
+					KC3Request.fakeCatbomb = false;
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombWrongComputerClockTitle"),
 						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
@@ -172,6 +177,7 @@ Executes processing and relies on KC3Network for the triggers
 				
 				// Something else other than clock is wrong, or parsing headers.Date failed
 				} else {
+					KC3Request.fakeCatbomb = false;
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
 						message: KC3Meta.term("CatBombErrorOnHomePortMsg").format(this.gameStatus)
@@ -180,6 +186,8 @@ Executes processing and relies on KC3Network for the triggers
 				return false;
 			}
 			
+			// On 1st time network failure, 2nd retry may get a 'status 0' result, then 3rd retry may succeed
+			KC3Request.fakeCatbomb = (this.gameStatus == 100 || this.gameStatus == 0);
 			// Some other API Call failed
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombAPIDataErrorTitle"),
@@ -195,6 +203,7 @@ Executes processing and relies on KC3Network for the triggers
 					KC3Request.headerReminder = true;
 				}
 				if(!KC3Request.headerReminder) {
+					KC3Request.fakeCatbomb = false;
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombMissingServerTimeTitle"),
 						message: KC3Meta.term("CatBombMissingServerTimeMsg")
@@ -213,6 +222,11 @@ Executes processing and relies on KC3Network for the triggers
 	
 	------------------------------------------*/
 	KC3Request.prototype.process = function(){
+		// Auto close previous 'fake' catbomb notice box
+		if(KC3Request.fakeCatbomb){
+			KC3Request.fakeCatbomb = false;
+			KC3Network.trigger("CatBomb", {});
+		}
 		// If API call is supported
 		if(typeof Kcsapi[this.call] === "function"){
 			// check clock and clear quests at 5AM JST

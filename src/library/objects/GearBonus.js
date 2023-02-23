@@ -2158,12 +2158,12 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
 				],
@@ -2182,12 +2182,12 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
 				],
@@ -2206,12 +2206,29 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						distinctGears: [237, 322, 323],
+						distinctGears: [237, 322, 323, 490],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
+						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
+				],
+			},
+			// Prototype Night Zuiun (Attack Equipment)
+			"490": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						distinctGears: [237, 322, 323, 490],
+						single: { "houg": 3, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
+						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
 				],
@@ -2877,6 +2894,40 @@
 					{
 						// Akitsumaru Kai
 						ids: [166],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 1 Fighter Hayabusa Model II Kai (20th Squadron)
+			"489": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All remodels of Akitsumaru and Yamashiomaru
+						origins: [161, 900],
+						multiple: { "houg": 1, "tais": 1, "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Yamashiomaru Kai
+						ids: [717],
+						multiple: { "houg": 2, "tais": 1, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -7659,7 +7710,7 @@
 				count: 0,
 				byNation: {
 					"UnitedStates": {
-						multiple: { "tais": 3 },
+						multiple: { "tais": 2 },
 					},
 					"UnitedKingdom": {
 						multiple: { "tais": 1 },

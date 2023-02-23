@@ -1,5 +1,5 @@
 <div class="page_title">
-  Leveling Goals
+	<span class="i18n">ExpcalcPageTitle</span>
 	<div class="page_help_btn hover"><span>?</span> <span class="i18n">PageCommonHelpTopics</div>
 </div>
 
@@ -71,62 +71,61 @@
 <div class="box_control">
   <div class="box_control_line">
     <dl>
-      <dt>Sections</dt>
-      <dd class="toggle_goal_templates hover toggle">Goal Templates</dd>
-      <dd class="toggle_recommended hover toggle">Recommended</dd>
-      <dd class="toggle_other_ships hover toggle">Other Ships</dd>
+      <dt class="i18n">ExpcalcSectionsLabel</dt>
+      <dd class="toggle_goal_templates hover toggle i18n">ExpcalcSectionsToggleGoalTemplates</dd>
+      <dd class="toggle_recommended hover toggle i18n">ExpcalcSectionsToggleRecommended</dd>
+      <dd class="toggle_other_ships hover toggle i18n">ExpcalcSectionsToggleOtherShips</dd>
     </dl>
   </div>
   <div class="box_control_line">
     <dl>
-      <dt>Highlight</dt>
-      <dd class="btn_hl_clear hover toggle">Clear All</dd>
-      <dd class="btn_hl_close_to_remodel hover toggle">Close To Remodel</dd>
-      <dd class="btn_hl_can_be_remodelled hover toggle">Can Be Remodelled</dd>
+      <dt class="i18n">ExpcalcHighlightLabel</dt>
+      <dd class="btn_hl_clear hover toggle i18n">ExpcalcHighlightButtonClearAll</dd>
+      <dd class="btn_hl_close_to_remodel hover toggle i18n">ExpcalcHighlightButtonCloseToRemodel</dd>
+      <dd class="btn_hl_can_be_remodelled hover toggle i18n">ExpcalcHighlightButtonCanBeRemodelled</dd>
     </dl>
   </div>
   <div class="box_control_line line_close_to_remodel">
     <dl>
-      <dt>Close-to-remodel maximum level difference</dt>
+      <dt class="i18n">ExpcalcHighlightLevelDiffLabel</dt>
       <dd style="margin-left:5px"><input type="text" id="inp_lvl_diff"></dd>
     </dl>
   </div>
   <div class="box_control_line order_line">
     <dl>
-    <dt>Order Ships By</dt>
-    <dd class="order_id hover toggle active up" data-order="id">ID</dd>
-    <dd class="order_xpdiff hover toggle" data-order="xpdiff">XP Left</dd>
-    <dd class="order_name hover toggle" data-order="name">Name</dd>
-    <dd class="order_shiptype hover toggle" data-order="shiptype">Ship Type</dd>
-    <dd class="order_gameorder hover toggle" data-order="gameorder">In-Game Type</dd>
-    <dd class="order_level hover toggle" data-order="level">Level</dd>
-    <dd class="order_remodel hover toggle" data-order="remodel">Goal</dd>
-    <dd class="order_lvldiff hover toggle" data-order="lvldiff">Levels To Goal</dd>
+    <dt class="i18n">ExpcalcOrderByLabel</dt>
+    <dd class="order_id hover toggle active up i18n" data-order="id">ExpcalcOrderByRadioId</dd>
+    <dd class="order_xpdiff hover toggle i18n" data-order="xpdiff">ExpcalcOrderByRadioExpLeft</dd>
+    <dd class="order_name hover toggle i18n" data-order="name">ExpcalcOrderByRadioName</dd>
+    <dd class="order_shiptype hover toggle i18n" data-order="shiptype">ExpcalcOrderByRadioShipType</dd>
+    <dd class="order_gameorder hover toggle i18n" data-order="gameorder">ExpcalcOrderByRadioIngameType</dd>
+    <dd class="order_level hover toggle i18n" data-order="level">ExpcalcOrderByRadioLevel</dd>
+    <dd class="order_remodel hover toggle i18n" data-order="remodel">ExpcalcOrderByRadioGoal</dd>
+    <dd class="order_lvldiff hover toggle i18n" data-order="lvldiff">ExpcalcOrderByRadioLevelsToGoal</dd>
   </dl>
   </div>
 </div>
 
 <div class="page_padding section_expcalc">
-  <div class="page_section">Current Goals</div>
+  <div class="page_section i18n">ExpcalcCurrentGoalsLabel</div>
   <div class="section_body box_goals">
 
   </div>
 
-  <div class="page_section gt_content">Goal Templates</div>
+  <div class="page_section gt_content i18n">ExpcalcGoalTemplatesLabel</div>
   <div class="section_body box_goal_templates gt_content">
   </div>
   <div class="section_body gt_content new_template">
-    <a>New template</a>
+    <a class="i18n">ExpcalcNewTemplateButton</a>
   </div>
 
-  <div class="page_section recom_content">Recommended</div>
+  <div class="page_section recom_content i18n">ExpcalcRecommendedLabel</div>
   <div class="section_body box_recommend recom_content">
 
   </div>
 
-  <div class="page_section other_content">Other Ships</div>
+  <div class="page_section other_content i18n">ExpcalcOtherShipsLabel</div>
   <div class="section_body box_other other_content">
-
   </div>
 
 </div>
@@ -140,38 +139,38 @@
       <div class="ship_type"></div>
     </div>
     <div class="ship_col ship_lv">
-      <div class="ship_label">Level</div>
+      <div class="ship_label i18n">ExpcalcShipLevelLabel</div>
       <div class="ship_value"></div>
     </div>
     <div class="ship_col ship_target">
-      <div class="ship_label">Goal</div>
+      <div class="ship_label i18n">ExpcalcLevelGoalLabel</div>
       <div class="ship_value"></div>
       <div class="ship_input"><input type="textbox"></div>
     </div>
     <div class="ship_col ship_exp ship_activeOnly">
-      <div class="ship_label">Exp Left</div>
+      <div class="ship_label i18n">ExpcalcExpLeftLabel</div>
       <div class="ship_value"></div>
     </div>
     <div class="ship_col ship_result ship_activeOnly">
-      <div class="ship_label">Battles</div>
+      <div class="ship_label i18n">ExpcalcBattlesLeftLabel</div>
       <div class="ship_value"></div>
     </div>
     <div class="ship_col ship_map ship_activeOnly">
-      <div class="ship_label">Map</div>
+      <div class="ship_label i18n">ExpcalcGridMapLabel</div>
       <div class="ship_value"></div>
       <div class="ship_input">
         <select></select>
       </div>
     </div>
     <div class="ship_col ship_baseexp ship_activeOnly">
-      <div class="ship_label">Base Exp</div>
+      <div class="ship_label i18n">ExpcalcBaseExpLabel</div>
       <div class="ship_value"></div>
       <div class="ship_input">
           <input type="textbox">
       </div>
     </div>
     <div class="ship_col ship_rank ship_activeOnly">
-      <div class="ship_label">Rank</div>
+      <div class="ship_label i18n">ExpcalcBattleRankLabel</div>
       <div class="ship_value"></div>
       <div class="ship_input">
         <select>
@@ -185,26 +184,26 @@
       </div>
     </div>
     <div class="ship_col ship_fs ship_activeOnly">
-      <div class="ship_label">FS</div>
+      <div class="ship_label i18n">ExpcalcIsFlagshipLabel</div>
       <div class="ship_value yes_or_no"></div>
       <div class="ship_input"><input type="checkbox"></div>
     </div>
     <div class="ship_col ship_mvp ship_activeOnly">
-      <div class="ship_label">MVP</div>
+      <div class="ship_label i18n">ExpcalcIsMvpLabel</div>
       <div class="ship_value yes_or_no"></div>
       <div class="ship_input"><input type="checkbox"></div>
     </div>
     <div class="ship_col ship_btn hover ship_add">+</div>
-    <div class="ship_col ship_btn hover ship_rem">X</div>
-    <div class="ship_col ship_btn hover ship_edit">E</div>
-    <div class="ship_col ship_btn hover ship_save">S</div>
+    <div class="ship_col ship_btn hover ship_rem i18n">ExpcalcRemoveButton</div>
+    <div class="ship_col ship_btn hover ship_edit i18n">ExpcalcEditButton</div>
+    <div class="ship_col ship_btn hover ship_save i18n">ExpcalcSaveButton</div>
     <div class="clear"></div>
   </div>
 
   <div class="goal_template">
     <div class="setting_group">
       <div class="goal_col goal_type">
-        <div class="goal_label">Ship Types</div>
+        <div class="goal_label i18n">ExpcalcTemplateShipTypesLabel</div>
         <div class="goal_value"></div>
         <div class="goal_input">
           <input type="text" name="stype">
@@ -212,21 +211,21 @@
         </div>
       </div>
       <div class="goal_col goal_map">
-        <div class="goal_label">Map</div>
+        <div class="goal_label i18n">ExpcalcGridMapLabel</div>
         <div class="goal_value"></div>
         <div class="goal_input">
           <select></select>
         </div>
       </div>
       <div class="goal_col goal_baseexp">
-        <div class="goal_label">Base Exp</div>
+        <div class="goal_label i18n">ExpcalcBaseExpLabel</div>
         <div class="goal_value"></div>
         <div class="goal_input">
           <input type="text" name="baseexp">
         </div>
       </div>
       <div class="goal_col goal_rank">
-        <div class="goal_label">Rank</div>
+        <div class="goal_label i18n">ExpcalcBattleRankLabel</div>
         <div class="goal_value">S</div>
         <div class="goal_input">
           <select>
@@ -240,30 +239,30 @@
         </div>
       </div>
       <div class="goal_col goal_fs">
-        <div class="goal_label">FS</div>
+        <div class="goal_label i18n">ExpcalcIsFlagshipLabel</div>
         <div class="goal_value yes_or_no"></div>
         <div class="goal_input">
           <input type="checkbox">
         </div>
       </div>
       <div class="goal_col goal_mvp yes_or_no">
-        <div class="goal_label">MVP</div>
+        <div class="goal_label i18n">ExpcalcIsMvpLabel</div>
         <div class="goal_value yes_or_no"></div>
         <div class="goal_input">
           <input type="checkbox">
         </div>
       </div>
-      <div class="goal_col goal_btn hover goal_edit">E</div>
-      <div class="goal_col goal_btn hover goal_save">S</div>
-      <div class="goal_col goal_btn hover goal_rem">X</div>
+      <div class="goal_col goal_btn hover goal_edit i18n">ExpcalcEditButton</div>
+      <div class="goal_col goal_btn hover goal_save i18n">ExpcalcSaveButton</div>
+      <div class="goal_col goal_btn hover goal_rem i18n">ExpcalcRemoveButton</div>
       <div class="clear"></div>
     </div>
     <div class="manage_buttons">
-      <div class="goal_col goal_btn hover goal_up">▲</div>
-      <div class="goal_col goal_btn hover goal_down">▼</div>
-      <div class="goal_col goal_btn hover goal_hl_coverage">Highlight Coverage</div>
-      <div class="goal_col goal_btn hover goal_onoff">Enable</div>
-      <div class="goal_col goal_btn hover goal_apply">Apply to Current Goals</div>
+      <div class="goal_col goal_btn hover goal_up i18n">ExpcalcTemplateMoveUpButton</div>
+      <div class="goal_col goal_btn hover goal_down i18n">ExpcalcTemplateMoveDownButton</div>
+      <div class="goal_col goal_btn hover goal_hl_coverage i18n">ExpcalcTemplateHighlightButton</div>
+      <div class="goal_col goal_btn hover goal_onoff i18n">ExpcalcTemplateEnabledButton</div>
+      <div class="goal_col goal_btn hover goal_apply i18n">ExpcalcTemplateApplyButton</div>
       <div class="clear"></div>
     </div>
   </div>
