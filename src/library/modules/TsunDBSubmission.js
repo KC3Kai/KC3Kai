@@ -1286,7 +1286,7 @@
 							: fs.estimateNightAttackType(enemy, true);
 					}
 					const estCutinId = cutinType[1];
-					if (cutin === 0) { break; }
+					if (cutinType[0] !== "Cutin" || estCutinId <= 0) { break; }
 					const cutinEquips = attack.equip || [-1];
 					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
@@ -1299,6 +1299,8 @@
 					// but we still use this flag to avoid dummy entries in a single battle (also unlikely for player to do so)
 					if (specialCutinIds.includes(cutin)) {
 						this.sortieSpecialAttack = true;
+					}
+					if (specialCutinIds.includes(estCutinId)) {
 						// Flagship ship Chuuha ignored
 						if (attack.hp / ship.hp[1] <= 0.5) { continue; }
 
@@ -1308,12 +1310,12 @@
 						// Additional HP checks for partner ships for NagaMutsu, Colorado, Yamato (101, 102, 103, 400, 401)
 						// This check is only necessary for day battle
 						const partnerHps = [];
-						if (isYasenNotFound && cutin in shipIndexListSpecial) {
+						if (isYasenNotFound && estCutinId in shipIndexListSpecial) {
 							// Checks HP thresholds for each partner ship (index from shipIndexListSpecial)
-							const hpThreshold = [400, 401].includes(cutin) ? 0.5 : 0.25;
+							const hpThreshold = [400, 401].includes(estCutinId) ? 0.5 : 0.25;
 							let isPartnerShipIncapble = false;
-							for (let psidx in shipIndexListSpecial[cutin]) {
-								const partnerPos = shipIndexListSpecial[cutin][psidx];
+							for (let psidx in shipIndexListSpecial[estCutinId]) {
+								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
 								if (num < 3) {
 									const php = playerShipsPartial[num][partnerPos].hp;
 									const mhp = fleet.ship(partnerPos).hp[1];
@@ -1327,13 +1329,13 @@
 							if (!!isPartnerShipIncapble) { continue; }
 						}
 
-						misc = buildSortieSpecialInfo(fleet, cutin);
+						misc = buildSortieSpecialInfo(fleet, estCutinId);
 						// The attack round to check if the trigger rates from the first and second round are different
 						misc.attackRound = num;
 						// Partner ships HP to check if Chuuha affects trigger rate
-						if (isYasenNotFound && cutin in shipIndexListSpecial) {
-							for (let psidx in shipIndexListSpecial[cutin]) {
-								const partnerPos = shipIndexListSpecial[cutin][psidx];
+						if (isYasenNotFound && estCutinId in shipIndexListSpecial) {
+							for (let psidx in shipIndexListSpecial[estCutinId]) {
+								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
 								misc["ship" + (partnerPos + 1)].hp = partnerHps[partnerPos];
 							}
 						}
@@ -1346,7 +1348,7 @@
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
 					} else {
-						misc = ship.nightSpAttackBaseRate(cutin);
+						misc = ship.nightSpAttackBaseRate(estCutinId);
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					// Attacker HP and fleet type for hit/miss prediction
@@ -1369,7 +1371,6 @@
 						misc, cutin,
 						cutinequips: cutinEquips,
 						cutintype: cutinType[2],
-						cutinguess: estCutinId,
 						time,
 					});
 					this.sendData(this.spAttack, 'spattack');
