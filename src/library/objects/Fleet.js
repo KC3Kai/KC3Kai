@@ -892,6 +892,7 @@ Contains summary information about a fleet and its ships
 			// 4% fuel, no ammo for radar ambush, 8% for PT imps since Winter 2019 event
 			totalCost.ambushFuel += Math.floor(maxFuel * 0.04) || 1;
 			totalCost.ambushAmmo += Math.floor(maxAmmo * 0.08) || 1;
+			// 12% fuel, 6% ammo? for anti sub and air strike node  since Spring 2023 event
 		}
 		return totalCost;
 	};
