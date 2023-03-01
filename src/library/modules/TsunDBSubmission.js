@@ -98,7 +98,7 @@
 			map: null,
 			difficulty: null,
 			rewards: [],
-			select: null
+			selectreward: null
 		},
 		data : {
 			map: null,
@@ -816,7 +816,7 @@
 			this.eventreward.difficulty = this.data.difficulty;
 			this.eventreward.rewards = apiData.api_get_eventitem;
 			if(apiData.api_select_reward_dict) {
-				this.eventreward.select = apiData.api_select_reward_dict;
+				this.eventreward.selectreward = apiData.api_select_reward_dict;
 			}
 			
 			this.sendData(this.eventreward, 'eventreward');
