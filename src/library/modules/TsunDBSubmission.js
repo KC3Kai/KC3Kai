@@ -1269,7 +1269,7 @@
 				const template2 = Object.assign({}, template, { ship: shipInfo });
 				
 				// Update night Zuiun attacker index if night Zuiun CI has been triggered for the first time 
-				if ((attacks[0] == 200) && !(attack.cutin >= 0) && (nightZuiunIdx == -1)) nightZuiunIdx = idx;
+				if ((attacks[0].ncutin == 200) && (nightZuiunIdx == -1)) nightZuiunIdx = idx;
 					
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
