@@ -2340,7 +2340,8 @@
 						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo,
 						FleetSummary.battleCost.nightStartFuel, FleetSummary.battleCost.nightStartAmmo,
 						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo,
-						FleetSummary.battleCost.ambushFuel, FleetSummary.battleCost.ambushAmmo
+						FleetSummary.battleCost.ambushFuel, FleetSummary.battleCost.ambushAmmo,
+						FleetSummary.battleCost.aswAirFuel, FleetSummary.battleCost.aswAirAmmo
 					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel
 					)) + (!(FleetSummary.repairCost.fuel || FleetSummary.repairCost.steel) ? "" :

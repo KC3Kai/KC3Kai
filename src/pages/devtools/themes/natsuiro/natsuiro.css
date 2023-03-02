@@ -750,6 +750,17 @@ html,body {
 	background-size: 40px 40px;
 	background-position: -61px -107px;
 }
+.module.activity .sortie_node.nc_air_support_sub {
+	background:
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
+		#7d0000;
+	background-size: 28px 27px;
+	background-position: -52px -67px;
+	box-shadow: inset 0px 0px 4px 2px #2e15ca;
+}
 .module.activity .sortie_node.nc_enemy_combined {
 	background:
 		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),

@@ -1307,13 +1307,13 @@
   };
 
   const normalizeFleets = (fleets, battleData) => {
-    const { removeRetreated, hideOverkill } = KC3BattlePrediction.rank;
+    const { removeRetreated, hideOverkillAndInvisible } = KC3BattlePrediction.rank;
 
     return {
-      playerMain: hideOverkill(removeRetreated(fleets.playerMain, battleData.api_escape_idx)),
-      playerEscort: hideOverkill(removeRetreated(fleets.playerEscort, battleData.api_escape_idx_combined)),
-      enemyMain: hideOverkill(fleets.enemyMain),
-      enemyEscort: hideOverkill(fleets.enemyEscort),
+      playerMain: hideOverkillAndInvisible(removeRetreated(fleets.playerMain, battleData.api_escape_idx)),
+      playerEscort: hideOverkillAndInvisible(removeRetreated(fleets.playerEscort, battleData.api_escape_idx_combined)),
+      enemyMain: hideOverkillAndInvisible(fleets.enemyMain),
+      enemyEscort: hideOverkillAndInvisible(fleets.enemyEscort),
     };
   };
 
@@ -1354,7 +1354,11 @@
 
   /* --------------------[ NORMALIZE ]--------------------- */
 
-  const hideOverkill = fleet => fleet.map((ship) => {
+  const hideOverkillAndInvisible = fleet => fleet.map((ship) => {
+    // hp = "N/A" string implemented since event Spring 2023:
+    // under verification, known: client-side uses isNaN, invisible flag on, internal hp is 1;
+    //                            server-side rank S if others sunk, damage gauge uncertain
+    if (isNaN(ship.hp)) return Object.assign({}, ship, { hp: 0, sunk: true });
     return ship.hp < 0 ? Object.assign({}, ship, { hp: 0 }) : ship;
   });
 
@@ -1402,7 +1406,7 @@
     zipHps,
     removeRetreated,
 
-    hideOverkill,
+    hideOverkillAndInvisible,
     // Helpers
     getSunkCount,
     getShipCount,
