@@ -1177,6 +1177,8 @@
 			const fleetSent = this.data.sortiedFleet;
 			const battleConds = KC3Calc.collectBattleConditions();
 			const isYasenNotFound = !thisNode.battleNight;
+			// Adding an index to keep track of the first attacker that triggers night Zuiun CI. A night Zuiun CI flag will be added to all SUBSEQUENT attack submissions (excluding the first night Zuiun CI).
+			let nightZuiunIdx = -1;
 
 			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
 			const shipIndexListSpecial = {
@@ -1265,6 +1267,10 @@
 				const shipCount = fleet.countShips();
 				const shipInfo = fillShipInfo(ship);
 				const template2 = Object.assign({}, template, { ship: shipInfo });
+				
+				// Update night Zuiun attacker index if night Zuiun CI has been triggered for the first time 
+				if ((attacks[0] == 200) && !(attack.cutin >= 0) && (nightZuiunIdx == -1)) nightZuiunIdx = idx;
+					
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
 					if (attack.phase !== "hougeki") { continue; }
@@ -1349,6 +1355,11 @@
 						}
 					} else {
 						misc = ship.nightSpAttackBaseRate(cutin);
+						
+						// Adding night Zuiun flag if the attacker index is larger than nightZuiunIdx and nightZuiunIdx != -1
+						if ((nightZuiunIdx != -1) && (idx > nightZuiunIdx)) {
+							misc.nightZuiunFlare = true; 
+						}
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					// Attacker HP and fleet type for hit/miss prediction
