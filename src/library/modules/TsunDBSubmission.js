@@ -98,7 +98,7 @@
 			map: null,
 			difficulty: null,
 			rewards: [],
-			select: null
+			selectreward: null
 		},
 		data : {
 			map: null,
@@ -816,7 +816,7 @@
 			this.eventreward.difficulty = this.data.difficulty;
 			this.eventreward.rewards = apiData.api_get_eventitem;
 			if(apiData.api_select_reward_dict) {
-				this.eventreward.select = apiData.api_select_reward_dict;
+				this.eventreward.selectreward = apiData.api_select_reward_dict;
 			}
 			
 			this.sendData(this.eventreward, 'eventreward');
@@ -1292,7 +1292,7 @@
 							: fs.estimateNightAttackType(enemy, true);
 					}
 					const estCutinId = cutinType[1];
-					if (estCutinId === 0) { break; }
+					if (cutinType[0] !== "Cutin" || estCutinId <= 0) { break; }
 					const cutinEquips = attack.equip || [-1];
 					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
@@ -1335,7 +1335,7 @@
 							if (!!isPartnerShipIncapble) { continue; }
 						}
 
-						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+						misc = buildSortieSpecialInfo(fleet, estCutinId);
 						// The attack round to check if the trigger rates from the first and second round are different
 						misc.attackRound = num;
 						// Partner ships HP to check if Chuuha affects trigger rate
@@ -1354,7 +1354,7 @@
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
 					} else {
-						misc = ship.nightSpAttackBaseRate(cutin);
+						misc = ship.nightSpAttackBaseRate(estCutinId);
 						
 						// Adding night Zuiun flag if the attacker index is larger than nightZuiunIdx and nightZuiunIdx != -1
 						if ((nightZuiunIdx != -1) && (idx > nightZuiunIdx)) {

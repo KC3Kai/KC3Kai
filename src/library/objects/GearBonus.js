@@ -114,7 +114,7 @@
 					21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 					41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
 					71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
-					111, 115, 117
+					111, 115, 117, 119
 				],
 			},
 			// Ryuusei
@@ -2905,13 +2905,47 @@
 				starsDist: [],
 				byShip: [
 					{
-						// All remodels of Akitsumaru and Yamashiomaru
+						// All remodels of Akitsumaru, Yamashiomaru and Kumanomaru
 						origins: [161, 900],
 						multiple: { "houg": 1, "tais": 1, "tyku": 2, "houk": 1, "houm": 1 },
 					},
 					{
-						// Yamashiomaru Kai
-						ids: [717],
+						// Yamashiomaru Kai, Kumanomaru Kai
+						ids: [717, 948],
+						multiple: { "houg": 2, "tais": 1, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
+			"491": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All remodels of Akitsumaru, Yamashiomaru and Kumanomaru
+						origins: [161, 900],
+						multiple: { "houg": 1, "tais": 1, "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Yamashiomaru Kai, Kumanomaru Kai
+						ids: [717, 948],
 						multiple: { "houg": 2, "tais": 1, "tyku": 2, "houk": 2, "houm": 1 },
 					},
 					// For any ship can equip it

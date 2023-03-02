@@ -939,7 +939,8 @@ KC3改 Equipment Object
 				// many planes have proficiency AA bonus even base AA is 0
 				//&& this.master().api_tyku > 0
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
-			) || [489].includes(this.masterId));
+				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+			) || [489, 491].includes(this.masterId));
 	};
 
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
@@ -948,7 +949,8 @@ KC3改 Equipment Object
 				KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
 				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
-			) || [489].includes(this.masterId));
+				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+			) || [489, 491].includes(this.masterId));
 	};
 
 	KC3Gear.prototype.isAswAircraft = function(forCvl = false, forSupport = false){
