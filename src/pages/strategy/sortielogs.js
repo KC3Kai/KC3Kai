@@ -328,7 +328,7 @@
 						// Check unselected difficulty
 						if(KC3Meta.isEventWorld(cWorld) && !element.difficulty) {
 							mapBox.addClass("noclearnogauge");
-							$(".map_hp_txt", mapBox).text("No difficulty");
+							$(".map_hp_txt", mapBox).text(KC3Meta.term("BattleHistoryMapDiffUnselect"));
 						} else {
 							// EASY MODO STRIKES BACK
 							if(ConfigManager.info_troll && element.difficulty==1) {

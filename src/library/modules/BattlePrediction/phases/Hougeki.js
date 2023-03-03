@@ -93,7 +93,7 @@
         // Exception: unknown cutin type, may cause wrong attacker assigments, thank to api_at_list not array and always value 0
         parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: orgAttacker, isAllySideFriend}))
       ),
-      // PvP now can trigger Night Zuiun cutin now
+      // PvP now can trigger Night Zuiun cutin, just in case if so does friendly fleet
       defender: isAllySideFriend ? parseDefenderFriend({ api_at_eflag, api_df_list: [defender] }) :
         parseDefender({ api_at_eflag, api_df_list: [defender] }),
       info: parseInfo(attackJson, index),
