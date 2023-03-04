@@ -314,7 +314,8 @@
 		},
 		"563": {
 			"1": { "type": "tp", "boss": [15], "landing": [6] },
-			"2": { "type": "hp", "boss": [39] }
+			"2": { "type": "hp", "boss": [39] },
+			"3": { "type": "hp", "boss": [51] }
 		}
 	},
 	"abyssKaiShipIds": [

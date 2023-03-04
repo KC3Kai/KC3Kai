@@ -2906,7 +2906,7 @@
 				byShip: [
 					{
 						// All remodels of Akitsumaru, Yamashiomaru and Kumanomaru
-						origins: [161, 900],
+						origins: [161, 900, 943],
 						multiple: { "houg": 1, "tais": 1, "tyku": 2, "houk": 1, "houm": 1 },
 					},
 					{
@@ -2940,7 +2940,7 @@
 				byShip: [
 					{
 						// All remodels of Akitsumaru, Yamashiomaru and Kumanomaru
-						origins: [161, 900],
+						origins: [161, 900, 943],
 						multiple: { "houg": 1, "tais": 1, "tyku": 2, "houk": 1, "houm": 1 },
 					},
 					{

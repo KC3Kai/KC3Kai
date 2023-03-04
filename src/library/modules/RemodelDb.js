@@ -118,6 +118,8 @@
                 case 667: // Yamakaze K2D
                 case 900: // Yamashiomaru
                     return 10;
+                case 943: // Kumanomaru
+                    return 22;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                 case 908: // Amagiri K2D
@@ -213,6 +215,8 @@
                 case 231: // Akebono
                 case 900: // Yamashiomaru
                     return 15;
+                case 943: // Kumanomaru
+                    return 18;
                 case 313: // Tanikaze
                     return 20;
                 case 651: // Tan Yang
