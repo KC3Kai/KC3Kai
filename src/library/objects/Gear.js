@@ -788,11 +788,6 @@ KC3改 Equipment Object
 					stat = this.master().api_baku;
 				}
 			}
-			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
-			if(isAsAircraft && [491].includes(this.masterId)) {
-				typeModifier = 0.8;
-				stat = 19;
-			}
 			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
 			// even no 1.8 found on Shinzan Kai, see
@@ -892,7 +887,7 @@ KC3改 Equipment Object
 			}
 			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) works like LBAA
 			if(this.masterId === 491 && !isLand) {
-				// DD
+				// DD, supposed to be 19 TP, 0.8 type modifier
 				if([2].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.8;
 			}
 		}
