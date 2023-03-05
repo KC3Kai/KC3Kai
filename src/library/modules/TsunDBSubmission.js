@@ -98,7 +98,7 @@
 			map: null,
 			difficulty: null,
 			rewards: [],
-			select: null
+			selectreward: null
 		},
 		data : {
 			map: null,
@@ -816,7 +816,7 @@
 			this.eventreward.difficulty = this.data.difficulty;
 			this.eventreward.rewards = apiData.api_get_eventitem;
 			if(apiData.api_select_reward_dict) {
-				this.eventreward.select = apiData.api_select_reward_dict;
+				this.eventreward.selectreward = apiData.api_select_reward_dict;
 			}
 			
 			this.sendData(this.eventreward, 'eventreward');
@@ -1177,6 +1177,9 @@
 			const fleetSent = this.data.sortiedFleet;
 			const battleConds = KC3Calc.collectBattleConditions();
 			const isYasenNotFound = !thisNode.battleNight;
+			// Adding an index to keep track of the first attacker that triggers night Zuiun CI.
+			// A night Zuiun CI flag will be added to all SUBSEQUENT attack submissions (excluding the first night Zuiun CI).
+			let nightZuiunIdx = -1;
 
 			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
 			const shipIndexListSpecial = {
@@ -1265,9 +1268,12 @@
 				const shipCount = fleet.countShips();
 				const shipInfo = fillShipInfo(ship);
 				const template2 = Object.assign({}, template, { ship: shipInfo });
+
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
 					if (attack.phase !== "hougeki") { continue; }
+					// Records night Zuiun attacker index if night Zuiun CI has been actually triggered for the first time
+					if (nightZuiunIdx === -1 && attack.ncutin === 200) nightZuiunIdx = idx;
 					let target = attack.target;
 					if (Array.isArray(target)) { target = target[0]; }
 					let enemy = enemyList[target];
@@ -1286,7 +1292,7 @@
 							: fs.estimateNightAttackType(enemy, true);
 					}
 					const estCutinId = cutinType[1];
-					if (estCutinId === 0) { break; }
+					if (cutinType[0] !== "Cutin" || estCutinId <= 0) { break; }
 					const cutinEquips = attack.equip || [-1];
 					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
@@ -1329,7 +1335,7 @@
 							if (!!isPartnerShipIncapble) { continue; }
 						}
 
-						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+						misc = buildSortieSpecialInfo(fleet, estCutinId);
 						// The attack round to check if the trigger rates from the first and second round are different
 						misc.attackRound = num;
 						// Partner ships HP to check if Chuuha affects trigger rate
@@ -1348,7 +1354,11 @@
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
 					} else {
-						misc = ship.nightSpAttackBaseRate(cutin);
+						misc = ship.nightSpAttackBaseRate(estCutinId);
+						// Adding night Zuiun flag if the attacker index is larger than effective nightZuiunIdx
+						if (nightZuiunIdx >= 0 && idx > nightZuiunIdx) {
+							misc.nightZuiunFlare = true; 
+						}
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					// Attacker HP and fleet type for hit/miss prediction

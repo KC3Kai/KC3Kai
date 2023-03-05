@@ -28,7 +28,9 @@ Used by SortieManager
 		const classNameKindIdMap = ["", "",
 			"nc_night_battle", "nc_night_battle",
 			"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
-			"nc_night_to_day", "nc_long_range_raid"
+			"nc_night_to_day", "nc_long_range_raid",
+			// not really indicated by kind id
+			"", "nc_air_support_sub"
 		];
 		return isEmptyClassKept ? classNameKindIdMap : classNameKindIdMap.filter(n => !!n);
 	};
@@ -50,6 +52,7 @@ Used by SortieManager
 				this.eships = [];
 				this.eventKind = nodeData.api_event_kind;
 				this.eventId = nodeData.api_event_id;
+				this.eventColorNo = nodeData.api_color_no;
 				this.gaugeDamage = 0; // calculate this on result screen. make it fair :D
 				this.nodeDesc = ["", "",
 					KC3Meta.term("BattleKindNightStart"),
@@ -60,6 +63,12 @@ Used by SortieManager
 					KC3Meta.term("BattleKindNightToDay"),
 					KC3Meta.term("BattleKindLongRangeRaid")][this.eventKind];
 				this.nodeExtraClass = KC3Node.knownNodeExtraClasses(true)[this.eventKind] || "";
+				// Antisub battle with aerial support node since Spring 2023
+				// cannot be indentified by eventKind, so it's KindFake
+				if(this.eventColorNo === 15) {
+					this.nodeDesc = KC3Meta.term("BattleKindFakeAirSupportSub");
+					this.nodeExtraClass = "nc_air_support_sub";
+				}
 			}
 			
 			// If passed formatted enemy list from PVP
@@ -1710,7 +1719,10 @@ Used by SortieManager
 		if(masterId > 0){
 			const shipMaster = KC3Master.ship(masterId);
 			const abyssMaster = KC3Master.abyssalShip(masterId, true);
-			const isCurrentHpShown = ConfigManager.info_battle && this.enemyHP && Object.keys(this.enemyHP[index] || {}).length > 0;
+			const isCurrentHpShown = ConfigManager.info_battle
+				&& this.enemyHP && Object.keys(this.enemyHP[index] || {}).length > 0
+				// unnecessary to show current hp if max hp is "N/A"
+				&& !isNaN(maxHp);
 			tooltip += "{0}: {1}\n".format(masterId,
 				isPvP ? KC3Meta.shipName(masterId) : KC3Meta.abyssShipName(masterId));
 			tooltip += "{0} Lv {1} HP {2}\n".format(

@@ -49,8 +49,6 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	// 1 min to keep hiding top spacebar added by osapi page thank to some browser randomly fails.
 	// it seems some browser not correctly storing and passing localStorage values here,
 	// resulted in conditions of applying not met.
-	// so it's unconditional now, no retries needed?
-	/*
 	var intervalTimer = 0, intervalCounter = 0;
 	function hideSpacingTop(){
 		document.querySelectorAll("#spacing_top").forEach(function(e){
@@ -62,7 +60,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 		intervalCounter += 1;
 		if(intervalCounter > 60) clearInterval(intervalTimer);
 	}
-	*/
+	
 	var applyConfigMsg = (new RMsg("service", "getConfig", {
 		id: ["api_gameScale", "dmm_customize"],
 		attr: ["dmmplay", "extract_api"]
@@ -81,7 +79,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 			console.log("Applying customized styles...");
 			// Hide spacing top div element
 			$("#spacing_top").hide();
-			//intervalTimer = setInterval(hideSpacingTop, 1000);
+			intervalTimer = setInterval(hideSpacingTop, 1000);
 			// Prevent Tab key scrolling
 			$(document).on("keydown", function(e){
 				if(e.which === 9) {

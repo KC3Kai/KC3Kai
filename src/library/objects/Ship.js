@@ -2490,7 +2490,7 @@ KC3改 Ship Object
 							// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 							// Type 1 Fighter Hayabusa Model II Kai bonus not fully tested, all -4 for now:
 							// https://twitter.com/yukicacoon/status/1625831965055410176
-							const expBonus = [489].includes(g.masterId)
+							const expBonus = [489, 491].includes(g.masterId)
 								? [0, 0, 0, 0, 0, 1, 3, 6]
 								: [0, 1, 2, 3, 4, 5, 7, 10];
 							const aceLevel = g.ace || 0;
@@ -2748,7 +2748,7 @@ KC3改 Ship Object
 				394, // Jervis Kai
 				893, // Janus Kai
 				681, 920, // Samuel B.Roberts Kai and Mk.II
-				562, 689, 596, 692, 628, 629, // all remodels of Fletcher-class
+				562, 689, 596, 692, 628, 629, 941, 726, // all remodels of Fletcher-class
 				624, // Yuubari Kai Ni D
 			].includes(this.masterId);
 	};
@@ -4321,10 +4321,10 @@ KC3改 Ship Object
 			13: 125,
 			14: 122,
 			// 100~104 might be different, even with day one
-			// same factor for all setups with bonus gears, 153~164?
-			// https://twitter.com/yukicacoon/status/1627519416907988994
+			// same factor for all setups with bonus gears and multi-roll for more chance?
 			// https://twitter.com/yukicacoon/status/1628701453677363202
-			200: 155,
+			// https://twitter.com/yukicacoon/status/1630145015644311554
+			200: 158,
 			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }

@@ -5851,5 +5851,37 @@
 		"api_stype": 7,
 		"api_soku": 5,
 		"api_slot_num": 3
+	},
+	"5731": {
+		"api_id": 5731,
+		"api_name": "バレンタイン藤波",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5732": {
+		"api_id": 5732,
+		"api_name": "バレンタイン第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5733": {
+		"api_id": 5733,
+		"api_name": "バレンタイン鵜来",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5734": {
+		"api_id": 5734,
+		"api_name": "バレンタインNorthampton",
+		"api_yomi": "ノーザンプトン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }

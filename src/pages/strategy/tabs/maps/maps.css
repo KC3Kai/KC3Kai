@@ -397,6 +397,9 @@
 .tab_maps .sortie_list .sortie_edge.long_range_raid {
 	background:#EE7400;
 }
+.tab_event .sortie_list .sortie_edge.air_support_sub {
+	background:#2E15CA;
+}
 .tab_maps .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
 	background-repeat:no-repeat;

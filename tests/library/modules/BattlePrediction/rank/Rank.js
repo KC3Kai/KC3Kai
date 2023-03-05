@@ -71,8 +71,8 @@ QUnit.module('modules > BattlePrediction > Rank', function () {
     });
   });
 
-  QUnit.module('hideOverkill', {
-    beforeEach() { this.subject = Rank.hideOverkill; },
+  QUnit.module('hideOverkillAndInvisible', {
+    beforeEach() { this.subject = Rank.hideOverkillAndInvisible; },
   }, function () {
     QUnit.test('empty fleet', function (assert) {
       assert.deepEqual(this.subject([]), []);
@@ -99,6 +99,29 @@ QUnit.module('modules > BattlePrediction > Rank', function () {
         { hp: 0, sunk: true, dameConConsumed: false },
       ]);
     });
+
+    QUnit.test('hide invisible', function (assert) {
+      const fleet = [
+        { hp: 56, sunk: false, dameConConsumed: false },
+        { hp: -14, sunk: true, dameConConsumed: false },
+        { hp: -34, sunk: true, dameConConsumed: false },
+        { hp: -1, sunk: true, dameConConsumed: false },
+        { hp: "N/A", sunk: false, dameConConsumed: false },
+        { hp: "N/A", sunk: false, dameConConsumed: false },
+      ];
+
+      const result = this.subject(fleet);
+
+      assert.deepEqual(result, [
+        { hp: 56, sunk: false, dameConConsumed: false },
+        { hp: 0, sunk: true, dameConConsumed: false },
+        { hp: 0, sunk: true, dameConConsumed: false },
+        { hp: 0, sunk: true, dameConConsumed: false },
+        { hp: 0, sunk: true, dameConConsumed: false },
+        { hp: 0, sunk: true, dameConConsumed: false },
+      ]);
+    });
+
   });
 
   QUnit.module('getSunkCount', {

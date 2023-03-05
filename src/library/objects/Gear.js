@@ -788,6 +788,11 @@ KC3改 Equipment Object
 					stat = this.master().api_baku;
 				}
 			}
+			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
+			if(isAsAircraft && [491].includes(this.masterId)) {
+				typeModifier = 0.8;
+				stat = 19;
+			}
 			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
 			// even no 1.8 found on Shinzan Kai, see
@@ -885,6 +890,11 @@ KC3改 Equipment Object
 				// CVL, BB, AO
 				if([7, 8, 9, 10, 22].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.3;
 			}
+			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) works like LBAA
+			if(this.masterId === 491 && !isLand) {
+				// DD
+				if([2].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.8;
+			}
 		}
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264
@@ -939,7 +949,8 @@ KC3改 Equipment Object
 				// many planes have proficiency AA bonus even base AA is 0
 				//&& this.master().api_tyku > 0
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
-			) || [489].includes(this.masterId));
+				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+			) || [489, 491].includes(this.masterId));
 	};
 
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
@@ -948,7 +959,8 @@ KC3改 Equipment Object
 				KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
 				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
-			) || [489].includes(this.masterId));
+				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+			) || [489, 491].includes(this.masterId));
 	};
 
 	KC3Gear.prototype.isAswAircraft = function(forCvl = false, forSupport = false){

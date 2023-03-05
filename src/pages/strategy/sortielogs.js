@@ -328,7 +328,7 @@
 						// Check unselected difficulty
 						if(KC3Meta.isEventWorld(cWorld) && !element.difficulty) {
 							mapBox.addClass("noclearnogauge");
-							$(".map_hp_txt", mapBox).text("No difficulty");
+							$(".map_hp_txt", mapBox).text(KC3Meta.term("BattleHistoryMapDiffUnselect"));
 						} else {
 							// EASY MODO STRIKES BACK
 							if(ConfigManager.info_troll && element.difficulty==1) {
@@ -778,8 +778,9 @@
 						$.each(sortie.nodes, function(index, node) {
 							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id, sortieTime);
 							const isBattle = node.type === "battle";
-							const battleKind = KC3Node.knownNodeExtraClasses(true)
+							let battleKind = KC3Node.knownNodeExtraClasses(true)
 								.map(s => s.substr(3))[node.eventKind];
+							if(isBattle && node.eventColorNo === 15) battleKind = "air_support_sub";
 							edges.push(node.id);
 							$(".sortie_edge_"+(index+1), sortieBox)
 								.addClass("edge_" + node.type)

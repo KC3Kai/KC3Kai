@@ -11,7 +11,7 @@
     volume: 1,
 
     // Current known implementation of battle BGM IDs
-    maxBattleId: 217,
+    maxBattleId: 221,
     missingBattleIds: [24],
 
     /**
@@ -58,6 +58,13 @@
       });
       this.maxBattleId = Math.max(this.maxBattleId, ...mapBgmIds);
       console.debug('Current maxBattleId', this.maxBattleId);
+      // Checks if missing ID implemented someday by the way
+      this.missingBattleIds.forEach(id => {
+        if (mapBgmIds.includes(id)) {
+          console.log('Missing battle BGM ID detected', id);
+          console.debug('News: missing battle BGM ID detected', id);
+        }
+      });
     },
 
     getConfig() {

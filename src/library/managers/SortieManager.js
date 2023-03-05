@@ -717,10 +717,12 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					// Raw API result data
 					const mapNext = node.nodeData;
 					if(mapNext) {
-						if(mapNext.api_event_id !== undefined)   // Node raw event ID, 0 should be saved
+						if(mapNext.api_event_id !== undefined)   // Node raw event ID, value 0 saved either
 							toSave.eventId = mapNext.api_event_id;
-						if(mapNext.api_event_kind !== undefined) // Node raw event kind, 0 should be saved
+						if(mapNext.api_event_kind !== undefined) // Node raw event kind, value 0 saved either
 							toSave.eventKind = mapNext.api_event_kind;
+						if(mapNext.api_color_no !== undefined)   // Node raw color number (texture id)
+							toSave.eventColorNo = mapNext.api_color_no;
 						if(mapNext.api_destruction_battle)       // Land Base Enemy Raid
 							toSave.airRaid = mapNext.api_destruction_battle;
 						// Super Heavy Air Raid, no battle data in /next api, have to wait for the api after QTE event

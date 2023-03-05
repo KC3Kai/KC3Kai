@@ -2340,7 +2340,8 @@
 						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo,
 						FleetSummary.battleCost.nightStartFuel, FleetSummary.battleCost.nightStartAmmo,
 						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo,
-						FleetSummary.battleCost.ambushFuel, FleetSummary.battleCost.ambushAmmo
+						FleetSummary.battleCost.ambushFuel, FleetSummary.battleCost.ambushAmmo,
+						FleetSummary.battleCost.aswAirFuel, FleetSummary.battleCost.aswAirAmmo
 					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel
 					)) + (!(FleetSummary.repairCost.fuel || FleetSummary.repairCost.steel) ? "" :
@@ -3195,7 +3196,7 @@
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > -1){
-						if (thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined) {
+						if (thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined && !isNaN(thisNode.maxHPs.enemy[index])) {
 							newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
 							
 							if(index === 0) {
@@ -3425,7 +3426,7 @@
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				
 				$.each(thisNode.eships, function(index, eshipId){
-					if(eshipId > 0 && thisNode.enemyHP[index].hp !== undefined){
+					if(eshipId > 0 && thisNode.enemyHP[index].hp !== undefined && !isNaN(thisNode.maxHPs.enemy[index])){
 						newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
