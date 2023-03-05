@@ -76,6 +76,7 @@
                 case 214: // Tatsuta
                 case 242: // Shiratsuyu
                 case 632: // Ariake
+                case 633: // Yuugure
                 case 643: // Ume
                     return 15;
                 case 231: // Akebono
@@ -117,6 +118,8 @@
                 case 667: // Yamakaze K2D
                 case 900: // Yamashiomaru
                     return 10;
+                case 943: // Kumanomaru
+                    return 22;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                 case 908: // Amagiri K2D
@@ -124,6 +127,7 @@
                 case 359: // Okinami
                 case 562: // Johnston
                 case 596: // Fletcher
+                case 941: // Heywood
                     return 80;
                 case 692: // Fletcher Kai
                     return 120;
@@ -205,11 +209,14 @@
                 case 317: // Urakaze
                 case 320: // Isokaze
                 case 632: // Ariake
+                case 633: // Yuugure
                 case 643: // Ume
                     return 10;
                 case 231: // Akebono
                 case 900: // Yamashiomaru
                     return 15;
+                case 943: // Kumanomaru
+                    return 18;
                 case 313: // Tanikaze
                     return 20;
                 case 651: // Tan Yang
@@ -233,6 +240,7 @@
                 case 390: // Amagiri Kai
                 case 903: // Amagiri K2
                 case 908: // Amagiri K2D
+                case 941: // Heywood
                     return 10;
                 case 692: // Fletcher Kai
                 case 628: // Fletcher Kai Mod.2

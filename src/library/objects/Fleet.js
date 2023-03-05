@@ -872,6 +872,8 @@ Contains summary information about a fleet and its ships
 			airRaidAmmo: 0,
 			ambushFuel: 0,
 			ambushAmmo: 0,
+			aswAirFuel: 0,
+			aswAirAmmo: 0,
 		};
 		for(let i = 0; i < this.countShips(); i++) {
 			const ship = this.ship(i);
@@ -892,6 +894,9 @@ Contains summary information about a fleet and its ships
 			// 4% fuel, no ammo for radar ambush, 8% for PT imps since Winter 2019 event
 			totalCost.ambushFuel += Math.floor(maxFuel * 0.04) || 1;
 			totalCost.ambushAmmo += Math.floor(maxAmmo * 0.08) || 1;
+			// 12% fuel, 6% ammo for anti sub & air support node since Spring 2023 event
+			totalCost.aswAirFuel += Math.floor(maxFuel * 0.12) || 1;
+			totalCost.aswAirAmmo += Math.floor(maxAmmo * 0.06) || 1;
 		}
 		return totalCost;
 	};
