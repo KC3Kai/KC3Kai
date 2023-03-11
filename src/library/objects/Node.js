@@ -799,13 +799,13 @@ Used by SortieManager
 			}
 			result.fleets.enemyMain.forEach((ship, position) => {
 				this.enemyHP[position] = ship;
-				this.enemySunk[position] = ship.sunk;
+				this.enemySunk[position] = ship.sunk && !ship.inv;
 			});
 			result.fleets.enemyEscort.forEach((ship, index) => {
 				const position = index + 6;
 
 				this.enemyHP[position] = ship;
-				this.enemySunk[position] = ship.sunk;
+				this.enemySunk[position] = ship.sunk && !ship.inv;
 			});
 
 			this.unexpectedList = this.unexpectedList || [];
@@ -1079,7 +1079,7 @@ Used by SortieManager
 			const enemyResult = isAgainstEnemyEscort ? result.fleets.enemyEscort : result.fleets.enemyMain;
 			enemyResult.forEach((ship, position) => {
 				this.enemyHP[position] = ship;
-				this.enemySunk[position] = ship.sunk;
+				this.enemySunk[position] = ship.sunk && !ship.inv;
 			});
 
 			this.unexpectedList = this.unexpectedList || [];
