@@ -1270,6 +1270,8 @@ Used by SortieManager
 							break;
 							case 5: // Furniture
 							break;
+							case 7: // Selectable
+							break;
 							default:
 								console.info("Unknown item type", eventItem);/*RemoveLogging:skip*/
 							break;

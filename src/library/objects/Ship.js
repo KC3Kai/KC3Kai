@@ -4191,26 +4191,35 @@ KC3改 Ship Object
 		// Chuuha bonus
 		const isChuuhaOrWorse = (currentHp || this.hp[0]) <= (this.hp[1] / 2);
 		if (isChuuhaOrWorse) { baseValue += 18; }
+		let gearBonus = 0;
 		// Ship Personnel bonus
-		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
+		if (this.hasEquipmentType(2, 39)) { gearBonus += 5; }
 		// Torpedo Squadron Skilled Lookouts +9 in total if equipped by DD/CL/CLT
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { baseValue += 4; }
+		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { gearBonus += 4; }
 		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
-		if (!!fleetSearchlight) { baseValue += 7; }
+		if (!!fleetSearchlight) { gearBonus += 7; }
 		// Enemy searchlight -5, not implemented, rarely used by abyssal
 		// Starshell bonus/penalty
 		const battleConds = this.collectBattleConditions();
 		const playerStarshell = battleConds.playerFlarePos > 0;
 		const enemyStarshell = battleConds.enemyFlarePos > 0;
-		if (playerStarshell) { baseValue += 4; }
-		if (enemyStarshell) { baseValue += -10; }
+		if (playerStarshell) { gearBonus += 4; }
+		if (enemyStarshell) { gearBonus += -10; }
+		// Bonuses from equipment overridden for Night Zuiun cutin like enemy gears penalty?
+		// https://twitter.com/yukicacoon/status/1635930780735266816
+		if (spType === 200) {
+			if (!!fleetSearchlight) { gearBonus -= (5 + 7); }
+			if (playerStarshell) { gearBonus -= (10 + 4); }
+		}
+		baseValue += gearBonus;
 		return {
 			baseValue,
 			levelModifier,
 			isFlagship,
 			isChuuhaOrWorse,
+			gearBonus,
 			fleetSearchlight,
 			playerStarshell,
 			enemyStarshell
@@ -4324,7 +4333,7 @@ KC3改 Ship Object
 			// same factor for all setups with bonus gears and multi-roll for more chance?
 			// https://twitter.com/yukicacoon/status/1628701453677363202
 			// https://twitter.com/yukicacoon/status/1630145015644311554
-			200: 158,
+			200: 135,
 			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }
