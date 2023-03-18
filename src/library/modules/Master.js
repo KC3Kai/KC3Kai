@@ -366,6 +366,11 @@ Saves and loads significant data for future use
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
 		 *   * [166] AkitsuMaru Kai can equip aviation personnel [402] Arctic Gear & Deck Personnel only,
 		 *     the same hard-code method with Richelieu's one
+		 *   * [945/727] No.101-class Landing Ship can only equip [229, 379, 382] in small guns, [66, 220] in secondary guns.
+		 *     the same hard-code method with above, but bugged in 5.5.9.7, temporarily removed in 5.5.9.8
+		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` (logic bug found) and `#createUnsetList_unType`
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
+		 *     * see `main.js#PresetDeployLayer.prototype._validate`
 		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] on slot 4, can only equip [12, 21, 43] on slot 5,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *     * see `main.js#RemodelUtil.excludeEquipList`
