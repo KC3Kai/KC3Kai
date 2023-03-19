@@ -1356,8 +1356,8 @@
 
   const hideOverkillAndInvisible = fleet => fleet.map((ship) => {
     // hp = "N/A" string implemented since event Spring 2023:
-    // under verification, known: client-side uses isNaN, invisible flag on, internal hp is 1;
-    //                            server-side rank S if others sunk, damage gauge uncertain
+    // known points: client-side uses isNaN(), invisible flag on, internal hp is 1;
+    //               server-side rank S if others sunk, damage gauge can reach 100% if others sunk
     if (isNaN(ship.hp)) return Object.assign({}, ship, { hp: 0, sunk: true, inv: true });
     return ship.hp < 0 ? Object.assign({}, ship, { hp: 0 }) : ship;
   });
