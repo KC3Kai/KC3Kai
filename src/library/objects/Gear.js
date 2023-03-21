@@ -644,7 +644,7 @@ KC3改 Equipment Object
 			var aaStat = this.master().api_tyku || 0;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
+			var intStat = KC3GearManager.interceptorsType2Ids.includes(type2) ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 			return Math.floor( Math.sqrt(capacity) * aaStat + averageBonus );
@@ -677,7 +677,7 @@ KC3改 Equipment Object
 			var aaStat = this.master().api_tyku || 0;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
+			var intStat = KC3GearManager.interceptorsType2Ids.includes(type2) ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 
@@ -702,7 +702,7 @@ KC3改 Equipment Object
 		if(this.isDummy() || capacity <= 0) { return 0; }
 		var type2 = this.master().api_type[2];
 		// Check if this object is a interceptor plane or not
-		if(KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1) {
+		if(KC3GearManager.interceptorsType2Ids.includes(type2)) {
 			var interceptPower = (
 				// Base anti-air power
 				this.master().api_tyku +
@@ -823,12 +823,12 @@ KC3改 Equipment Object
 		const type2 = this.master().api_type[2];
 		const isLbaa = [47].includes(type2);
 		const lbAttackerModifier = isLbaa ? 1.8 : 1;
-		let concatModifier = 1;
+		let contactModifier = 1;
 		// TODO contact plane should be gotten from LBAS support section, wave by wave
 		const contactPlaneId = 0;
 		if(contactPlaneId > 0) {
 			const contactPlaneAcc = KC3Master.slotitem(contactPlaneId).api_houm;
-			concatModifier = contactPlaneAcc >= 3 ? 1.2 : contactPlaneAcc >= 2 ? 1.17 : 1.12;
+			contactModifier = contactPlaneAcc >= 3 ? 1.2 : contactPlaneAcc >= 2 ? 1.17 : 1.12;
 		}
 		const isEnemyCombined = KC3Calc.collectBattleConditions().isEnemyCombined || false;
 		const enemyCombinedModifier = isEnemyCombined ? 1.1 : 1;
@@ -909,7 +909,7 @@ KC3改 Equipment Object
 			});
 		}
 		const onNormal = Math.floor(cappedPower
-			* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
+			* lbAttackerModifier * contactModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 		// Proficiency critical modifier has been applied sometime since 2017-12-11?
 		// Modifier calculation is the same, but different from carrier-based,
 		// modifiers for squadron slots are independent and no first slot bonus.
@@ -919,14 +919,14 @@ KC3改 Equipment Object
 		const proficiencyCriticalModifier = 1 + (Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100);
 		const criticalModifier = 1.5;
 		const onCritical = Math.floor(Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
-			* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
+			* lbAttackerModifier * contactModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 		return [onNormal, onCritical];
 	};
 
 	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
 		// Only used for the slot already equipped aircraft, unused for now
 		if(this.isDummy()) { return 0; }
-		if( KC3GearManager.carrierBasedAircraftType3Ids.indexOf( this.master().api_type[3] ) > -1){
+		if( KC3GearManager.carrierBasedAircraftType3Ids.includes(this.master().api_type[3])){
 			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
 		}
 		return 0;
@@ -939,8 +939,10 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isAntiAirAircraft = function(forLbas){
 		return this.exists()
 			&& ((
-				(forLbas ? KC3GearManager.antiAirLandBaseFighterType2Ids : KC3GearManager.antiAirFighterType2Ids)
-					.indexOf(this.master().api_type[2]) > -1
+				(forLbas ?
+					KC3GearManager.antiAirLandBaseFighterType2Ids.concat(KC3GearManager.antiAirFighterType2Ids) :
+					KC3GearManager.antiAirFighterType2Ids
+				).includes(this.master().api_type[2])
 				// many planes have proficiency AA bonus even base AA is 0
 				//&& this.master().api_tyku > 0
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
@@ -951,7 +953,7 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
 		return this.exists()
 			&& ((
-				KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
+				KC3GearManager.airStrikeBomberType2Ids.includes(this.master().api_type[2])
 				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
 				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
@@ -977,7 +979,7 @@ KC3改 Equipment Object
 			KC3GearManager.aswAircraftType2Ids.filter(id => id !== 25 && id !== 26);
 		if(forSupport) type2Ids.push(10, 45);
 		return this.exists() &&
-			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			type2Ids.includes(this.master().api_type[2]) &&
 			this.master().api_tais > 0;
 	};
 
@@ -997,7 +999,7 @@ KC3改 Equipment Object
 		//   Type 0 Model 11B variants
 		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26];
 		return this.exists() &&
-			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			type2Ids.includes(this.master().api_type[2]) &&
 			this.master().api_tais > 6;
 	};
 
@@ -1011,9 +1013,9 @@ KC3改 Equipment Object
 		// Type 0 Fighter Model 64 (Skilled Fighter-bomber): https://twitter.com/noro_006/status/1600419310006317056
 		const type2Ids = [7, 57];
 		return this.exists() &&
-			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			type2Ids.includes(this.master().api_type[2]) &&
 			// Using ID list for now since data insufficient
-			[60, 154, 219, 447, 487].indexOf(this.masterId) > -1;
+			[60, 154, 219, 447, 487].includes(this.masterId);
 			//this.master().api_tyku > 2 && this.master().api_baku < 6;
 	};
 
@@ -1022,7 +1024,7 @@ KC3改 Equipment Object
 		// Contact select-able by previous 3 types, plus Torpedo Bomber
 		const type2 = isSelection ? [8, 9, 10, 41, 49, 58, 59, 94] : [9, 10, 41, 49, 59, 94];
 		return this.exists() &&
-			type2.indexOf(this.master().api_type[2]) > -1;
+			type2.includes(this.master().api_type[2]);
 	};
 
 	KC3Gear.isNightContactAircraft = function(mstId = 0, returnEffectsObj = false){
@@ -1053,7 +1055,7 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isAirRadar = function(){
 		return this.exists() &&
 			// BTW, type 93 is the special Large Radar that not existed in master data without special converation
-			[12, 13, 93].indexOf(this.master().api_type[2]) > -1 &&
+			[12, 13, 93].includes(this.master().api_type[2]) &&
 			this.master().api_tyku > 1;
 	};
 
@@ -1069,7 +1071,7 @@ KC3改 Equipment Object
 		   which the only difference is including '[278] SK Radar' large radar.
 		   sample: DD Kasumi K2 + SK Radar + Model C gun gets synergy bonus. */
 		return this.exists() &&
-			[12, 13, 93].indexOf(this.master().api_type[2]) > -1 &&
+			[12, 13, 93].includes(this.master().api_type[2]) &&
 			this.master().api_saku > 4;
 	};
 
@@ -1080,13 +1082,13 @@ KC3改 Equipment Object
 		 but they have forgotten there are Air Radars with accuracy > 2 in Large Radar category,
 		 and there is a Destroyer (Kasumi K2) who can equip Large Radar... */
 		return this.exists() &&
-			[12, 13, 93].indexOf(this.master().api_type[2]) > -1 &&
+			[12, 13, 93].includes(this.master().api_type[2]) &&
 			this.master().api_houm > 2;
 	};
 
 	KC3Gear.prototype.isAafdBuiltinHighAngleMount = function(){
 		return this.exists() &&
-			[1, 4].indexOf(this.master().api_type[2]) > -1 &&
+			[1, 4].includes(this.master().api_type[2]) &&
 			this.master().api_tyku > 7;
 	};
 
@@ -1112,7 +1114,7 @@ KC3改 Equipment Object
 		//   https://twitter.com/myteaGuard/status/1454139122168127493
 		// Armor penetration extended since 2022-08-04, even applied to some projectors, summary:
 		//   https://twitter.com/twillwave1024/status/1555399272358899712
-			KC3GearManager.aswDepthChargeIds.indexOf(this.masterId) > -1;
+			KC3GearManager.aswDepthChargeIds.includes(this.masterId);
 	};
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
@@ -1127,7 +1129,7 @@ KC3改 Equipment Object
 		// Not counted by either:
 		//   [346][347] Type2 12cm Mortar Kai & CD
 		return this.exists() && this.master().api_type[2] === 15 &&
-			KC3GearManager.aswDepthChargeProjectorIds.indexOf(this.masterId) > -1;
+			KC3GearManager.aswDepthChargeProjectorIds.includes(this.masterId);
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {
@@ -1161,8 +1163,8 @@ KC3改 Equipment Object
 			if(gearObj.stars > 0){ nameText += " \u2605{0}".format(gearObj.stars); }
 			if(gearObj.ace > 0){ nameText += " \u00bb{0}".format(gearObj.ace); }
 			if(slotSize !== undefined && gearData &&
-				(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1
-				|| KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1)){
+				(KC3GearManager.carrierBasedAircraftType3Ids.includes(gearData.api_type[3])
+				|| KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3]))){
 				nameText += " x{0}".format(slotSize);
 			}
 		}

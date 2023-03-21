@@ -1859,7 +1859,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus:
+		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 2: [ 68] Daihatsu Landing Craft
@@ -1868,6 +1868,7 @@ KC3改 Ship Object
 		//  * 5: [355] M4A1 DD
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
+		//  * ?: [494/495] Toku Daihatsu Landing Craft + Chi-Ha (Kai)
 		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, 355, [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
