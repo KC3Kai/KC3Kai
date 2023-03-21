@@ -96,16 +96,22 @@
 			self.currentGearId = gearId;
 			const gearHost = `http://${this.server_ip}/kcs2/resources`;
 			const appendRscVer = (url) => (url && gearData.api_version ? url + `?version=${gearData.api_version}` : url);
-			// see the same name in main.js to exclude loading item_character
-			const EXCLUDE_RES = [42];
+			// see the same name in main.js to exclude loading some special types
+			const EXCLUDE_RES = {
+				"item_character": [42],
+				"item_up": [496],
+				"item_on": [],
+			};
 			
 			$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
 			if(!KC3Master.isAbyssalGear(gearId)) {
 				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "card", "slot")));
-				if(!EXCLUDE_RES.includes(gearId))
+				if(!EXCLUDE_RES.item_character.includes(gearId))
 					$(".tab_mstgear .gearInfo .ga_2 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_character", "slot")));
-				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_up", "slot")));
-				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_on", "slot")));
+				if(!EXCLUDE_RES.item_up.includes(gearId))
+					$(".tab_mstgear .gearInfo .ga_3 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_up", "slot")));
+				if(!EXCLUDE_RES.item_on.includes(gearId))
+					$(".tab_mstgear .gearInfo .ga_4 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_on", "slot")));
 				$(".tab_mstgear .gearInfo .gearAssets").show();
 			} else {
 				// Map a abyssal gear to player gear for itemup image,

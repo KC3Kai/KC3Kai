@@ -117,8 +117,8 @@ QUnit.module('modules > BattlePrediction > Rank', function () {
         { hp: 0, sunk: true, dameConConsumed: false },
         { hp: 0, sunk: true, dameConConsumed: false },
         { hp: 0, sunk: true, dameConConsumed: false },
-        { hp: 0, sunk: true, dameConConsumed: false },
-        { hp: 0, sunk: true, dameConConsumed: false },
+        { hp: 0, sunk: true, dameConConsumed: false, inv: true },
+        { hp: 0, sunk: true, dameConConsumed: false, inv: true },
       ]);
     });
 

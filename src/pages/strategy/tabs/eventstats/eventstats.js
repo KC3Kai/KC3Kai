@@ -308,8 +308,13 @@
 					}
 
 					// Calculate overall damage dealt, including airstrike and LBAS
-					const eMaxHps = !battleData.api_ship_ke_combined ? battleData.api_e_maxhps : battleData.api_e_maxhps.slice(0, 6).concat(battleData.api_e_maxhps_combined);
-					enemy.forEach((eship, index) => this.stats.overallDamageDealt += (eMaxHps[index] - eship.hp));
+					const eMaxHps = !battleData.api_ship_ke_combined ? battleData.api_e_maxhps
+						: battleData.api_e_maxhps.slice(0, 6).concat(battleData.api_e_maxhps_combined);
+					enemy.forEach((eship, index) => {
+						if (!isNaN(eMaxHps[index]) && !isNaN(eship.hp)) {
+							this.stats.overallDamageDealt += (eMaxHps[index] - eship.hp);
+						}
+					});
 				}));
 
 				// Get sortie consumption

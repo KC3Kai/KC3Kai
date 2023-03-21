@@ -111,6 +111,8 @@
 			"t50": "ht",
 			// night seaplane bomber
 			"t51": "dv",
+			// army units
+			"t52": "overall",
 			// all types
 			"tall": "type",
 		},
