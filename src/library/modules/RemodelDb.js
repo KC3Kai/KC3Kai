@@ -120,6 +120,8 @@
                     return 10;
                 case 943: // Kumanomaru
                     return 22;
+                case 945: // No.101 Transport Ship
+                    return 9;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                 case 908: // Amagiri K2D
@@ -217,6 +219,8 @@
                     return 15;
                 case 943: // Kumanomaru
                     return 18;
+                case 945: // No.101 Transport Ship
+                    return 11;
                 case 313: // Tanikaze
                     return 20;
                 case 651: // Tan Yang

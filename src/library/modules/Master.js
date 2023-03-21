@@ -366,6 +366,12 @@ Saves and loads significant data for future use
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
 		 *   * [166] AkitsuMaru Kai can equip aviation personnel [402] Arctic Gear & Deck Personnel only,
 		 *     the same hard-code method with Richelieu's one
+		 *   * [945/727] No.101 Transport Ship can only equip [229, 379, 382] in small guns,
+		 *     [727] No.101 Kai can only equip [66, 220] in secondary guns.
+		 *     the same hard-code method with above, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
+		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
+		 *     * see `main.js#PresetDeployLayer.prototype._validate`
 		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] on slot 4, can only equip [12, 21, 43] on slot 5,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *     * see `main.js#RemodelUtil.excludeEquipList`
@@ -422,6 +428,23 @@ Saves and loads significant data for future use
 			if(type2Id === 35 && gearId !== 402) {
 				const akitsumaruKaiPos = capableShips.indexOf(166);
 				if(akitsumaruKaiPos >= 0) capableShips.splice(akitsumaruKaiPos, 1);
+			}
+			// Remove No.101 Transport Ship all remodels from Small Guns type list except 3 specific items
+			// Either added to incapable ships because LHA stype can equip but not excluded by master data
+			if(type2Id === 1 && ![229, 379, 382].includes(gearId)) {
+				const no101BasePos = capableShips.indexOf(945);
+				if(no101BasePos >= 0) capableShips.splice(no101BasePos, 1);
+				if(!incapableShips.includes(945)) incapableShips.push(945);
+				const no101KaiPos = capableShips.indexOf(727);
+				if(no101KaiPos >= 0) capableShips.splice(no101KaiPos, 1);
+				if(!incapableShips.includes(727)) incapableShips.push(727);
+			}
+			// Remove No.101 Transport Ship Kai from Secondary Guns type list except 2 specific items
+			// Either added to incapable ships because LHA stype can equip but not excluded by master data
+			if(type2Id === 4 && ![66, 220].includes(gearId)) {
+				const no101KaiPos = capableShips.indexOf(727);
+				if(no101KaiPos >= 0) capableShips.splice(no101KaiPos, 1);
+				if(!incapableShips.includes(727)) incapableShips.push(727);
 			}
 			return {
 				stypes: capableStypes,

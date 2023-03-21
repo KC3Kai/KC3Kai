@@ -105,7 +105,7 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊'
+			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
 		specialPtImpPackNames: ['PT小鬼群'],
@@ -181,7 +181,8 @@ Provides access to data on built-in JSON files
 			1601: 356,  1602: 362,  1603: 278,  1604: 294,  1605: 384,  1606: 379,  1607: 380,  1608: 279,
 			1609: 381,  1610: 1610, 1611: 1611, 1612: 387,  1613: 426,  1614: 427,  1615: 428,  1616: 429,
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
-			1625: 1561, 1626: 1562, 1627: 266,  1630: 1630, 1631: 1630
+			1625: 1561, 1626: 1562, 1627: 266,  1630: 1630, 1631: 1630, 1634: 1573, 1635: 1561, 1636: 1562,
+			1637: 364,  1638: 48,
 		},
 		
 		/* Initialization
@@ -634,6 +635,8 @@ Provides access to data on built-in JSON files
 				"650": 54, // Souya AGB: 南極観測船
 				"900": 55, // Yamashiomaru: 特設護衛空母
 				"717": 55, // Yamashiomaru K: 特設護衛空母
+				"945": 56, // No.101: 戦車揚陸艦
+				"727": 56, // No.101 K: 戦車揚陸艦
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);

@@ -100,7 +100,7 @@
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
-				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118],
+				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121],
 				"UnitedKingdom": [67, 78, 82, 88, 108, 112],
 				"Italia": [58, 61, 64, 68, 80, 92, 113],
 				"Netherlands": [98],
@@ -114,7 +114,7 @@
 					21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 					41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
 					71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
-					111, 115, 117, 119
+					111, 115, 117, 119, 120
 				],
 			},
 			// Ryuusei
@@ -2521,6 +2521,8 @@
 					"106": "95",
 					// Brooklyn Class
 					"110": "95",
+					// New Orleans Class
+					"121": "95",
 				},
 			},
 			// SO3C Seamew Kai
@@ -2559,6 +2561,8 @@
 					"106": "95",
 					// Brooklyn Class
 					"110": "95",
+					// New Orleans Class
+					"121": "95",
 				},
 			},
 			// Ar196 Kai
@@ -8419,13 +8423,13 @@
 						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+
 						//   All fast DD: not here, see next item
 						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?
-						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton
+						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
 						origins: [
 								83, 332, 549, 515, 444, 432, 433, 603, 931,
 								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877,
 								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896,
-								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655,
+								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923,
 								74, 76, 116, 102, 103, 184, 925
 							],
 						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
@@ -8553,11 +8557,11 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru?
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru?, Kumanomaru?, No.101 Transport Ship?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Maryland, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900,
+						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900, 943, 945,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 918, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
@@ -8644,7 +8648,9 @@
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
 						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201, I-203, Scamp
-						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299],
+						origins: [182, 460, 161,
+							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299
+						],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],

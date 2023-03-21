@@ -3086,13 +3086,13 @@
 							
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
 							if (enemyFleetBox === "combined") {
+								updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent);
 								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
 									.css("height", 15*enemyHPPercent)
 									.css("width", "2px");
 								enemyBarHeight = $(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1)).height();
 								$(".module.activity .abyss_combined .abyss_hp_bar_"+(index+1))
 									.css("margin-top", 15-enemyBarHeight);
-								updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent);
 							} else {
 								updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
 							}
@@ -5012,6 +5012,8 @@
 	function updateEnemyHpBarStyles(hpBarSelector, hpPercent, maxWidth) {
 		if(maxWidth > 0) {
 			$(hpBarSelector).css("width", maxWidth * hpPercent);
+		} else {
+			$(hpBarSelector).css("width", "");
 		}
 		if(hpPercent === undefined || isNaN(hpPercent)) {
 			$(hpBarSelector).css("background", "#999999");

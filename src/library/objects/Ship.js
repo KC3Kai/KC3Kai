@@ -1859,7 +1859,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus:
+		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 2: [ 68] Daihatsu Landing Craft
@@ -1868,6 +1868,7 @@ KC3改 Ship Object
 		//  * 5: [355] M4A1 DD
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
+		//  * ?: [494/495] Toku Daihatsu Landing Craft + Chi-Ha (Kai)
 		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, 355, [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
@@ -3456,14 +3457,28 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return the landing attack kind ID, return 0 if can not attack.
+	 * @return the landing attack effect (animation) kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
+	 *  new effect for 2nd Class Transporter implemented since March 2023 defined by `getKakuzaEffectType`
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		// to differentiate Kakuza kind ID, added 100 to final result
+		if(targetShipType.isLand && this.master().api_ctype === 120) {
+			const armyUnit1Cnt = this.countEquipment(496),
+				armyUnit2Cnt = this.countEquipment(497),
+				armyUnit3Cnt = this.countEquipment(498),
+				armyUnit4Cnt = this.countEquipment(499);
+			if((armyUnit3Cnt + armyUnit4Cnt) >= 2) return 106;
+			if(armyUnit2Cnt >= 1 && (armyUnit3Cnt + armyUnit4Cnt) === 1) return 105;
+			if(armyUnit2Cnt >= 2) return 104;
+			if((armyUnit3Cnt + armyUnit4Cnt) === 1) return 103;
+			if(armyUnit2Cnt === 1) return 102;
+			if(armyUnit1Cnt === 1) return 101;
+		}
 		if(targetShipType.isPtImp) {
 			// Soukoutei (Armored Boat Class)
 			if(this.hasEquipment(408)) return 7;
@@ -3471,6 +3486,8 @@ KC3改 Ship Object
 			if(this.hasEquipment(409)) return 8;
 		}
 		if(targetShipType.isLand) {
+			// Toku Daihatsu + Chi-Ha and Kai
+			if(this.hasEquipment([494, 495])) return 10;
 			// M4A1 DD
 			if(this.hasEquipment(355)) return 6;
 			// Toku Daihatsu + T1 Gun Tank
@@ -3482,7 +3499,7 @@ KC3改 Ship Object
 			// Armed Daihatsu
 			if(this.hasEquipment(409)) return 8;
 		}
-		// Abyssal land attack target, like Supply Depot Princess, and etc.
+		// Abyssal land attack target, like Supply Depot Princess, see SPECIAL_ENTRY.
 		const isTargetLandable = KC3Meta.specialLandInstallationNames.includes(targetShip.api_name);
 		// M4A1 DD
 		if(this.hasEquipment(355) && isTargetLandable) return 6;
@@ -3679,22 +3696,28 @@ KC3改 Ship Object
 		}
 		
 		// is target a land installation
+		let landingAttackType = 0, hasRocketLauncher = false;
 		if(targetShipType.isLand) {
-			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
+			landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
+			hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// Landing craft anti-installation animation has now become an optional effect of other base attack methods even Rocket,
 			// day time only CVCI of special attacks can be coupling with landing effects,
 			// see `PhaseAttackBase.prototype.setOptionalEffects`, and eg:
 			//   Gambier Bay Mk.II doing air attack + DLC landing at the same time https://twitter.com/noobcyan/status/1415679788983873537
 			// here we still count it as priority exclusive base attack method
-			if(landingAttackType > 0) results.push(["LandingAttack", landingAttackType]);
+			// 2nd Class Transporter's Kakuza attack only happen when normal attack type is 0, so lower priority
+			if(landingAttackType > 0 && landingAttackType < 100) results.push(["LandingEffect", landingAttackType]);
 		}
 		const pushRocketAttackIfNecessary = (normalAttack) => {
-			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// is target installation, Rocket equipped and base not AirAttack,
 			// see `main.js#PhaseHougeki.prototype._hasRocketEffect`
 			if(targetShipType.isLand && hasRocketLauncher && normalAttack[1] !== 1) {
 				// no such ID -1, just mean higher priority
-				results.push(["Rocket", -1]);
+				results.push(["RocketAttack", -1]);
+			// is target installation, army gears equppiped and base is SingleAttack,
+			// see `main.js#PhaseHougeki.prototype._normal`
+			} else if(targetShipType.isLand && landingAttackType > 100 && normalAttack[1] === 0) {
+				results.push(["AshoreAttack", landingAttackType]);
 			} else {
 				results.push(normalAttack);
 			}
@@ -3738,6 +3761,9 @@ KC3改 Ship Object
 				// default for other targets
 				pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			}
+		// 2nd Class Transporter against submarine
+		} else if(targetShipType.isSubmarine && this.master().api_ctype === 120) {
+			results.push(["DepthCharge", 2]);
 		} else if(isThisCarrier) {
 			results.push(["AirAttack", 1]);
 		}
@@ -4083,16 +4109,20 @@ KC3改 Ship Object
 			}
 		}
 		
+		let landingAttackType = 0, hasRocketLauncher = false;
 		if(targetShipType.isLand) {
-			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
+			landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
+			hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// the same with day shelling, landing craft animation now optional effects added to other attack methods
-			if(landingAttackType > 0) results.push(["LandingAttack", landingAttackType]);
+			if(landingAttackType > 0 && landingAttackType < 100) results.push(["LandingEffect", landingAttackType]);
 		}
 		const pushRocketAttackIfNecessary = (normalAttack) => {
-			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// see `main.js#PhaseHougekiBase.prototype._hasRocketEffect`
 			if(targetShipType.isLand && hasRocketLauncher && normalAttack[1] !== 1) {
 				results.push(["Rocket", -1]);
+			// see `main.js#PhaseHougeki.prototype._normal`
+			} else if(targetShipType.isLand && landingAttackType > 100 && normalAttack[1] === 0) {
+				results.push(["AshoreAttack", landingAttackType]);
 			} else {
 				results.push(normalAttack);
 			}
@@ -4101,6 +4131,8 @@ KC3改 Ship Object
 		if(isCarrierNightAirAttack) {
 			results.push(["AirAttack", 1, true]);
 		} else if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go)) {
+			results.push(["DepthCharge", 2]);
+		} else if(targetShipType.isSubmarine && this.master().api_ctype === 120) {
 			results.push(["DepthCharge", 2]);
 		} else if(isThisCarrier) {
 			// these abyssal ships can only be shelling attacked,
@@ -4191,26 +4223,35 @@ KC3改 Ship Object
 		// Chuuha bonus
 		const isChuuhaOrWorse = (currentHp || this.hp[0]) <= (this.hp[1] / 2);
 		if (isChuuhaOrWorse) { baseValue += 18; }
+		let gearBonus = 0;
 		// Ship Personnel bonus
-		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
+		if (this.hasEquipmentType(2, 39)) { gearBonus += 5; }
 		// Torpedo Squadron Skilled Lookouts +9 in total if equipped by DD/CL/CLT
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { baseValue += 4; }
+		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { gearBonus += 4; }
 		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
-		if (!!fleetSearchlight) { baseValue += 7; }
+		if (!!fleetSearchlight) { gearBonus += 7; }
 		// Enemy searchlight -5, not implemented, rarely used by abyssal
 		// Starshell bonus/penalty
 		const battleConds = this.collectBattleConditions();
 		const playerStarshell = battleConds.playerFlarePos > 0;
 		const enemyStarshell = battleConds.enemyFlarePos > 0;
-		if (playerStarshell) { baseValue += 4; }
-		if (enemyStarshell) { baseValue += -10; }
+		if (playerStarshell) { gearBonus += 4; }
+		if (enemyStarshell) { gearBonus += -10; }
+		// Bonuses from equipment overridden for Night Zuiun cutin like enemy gears penalty?
+		// https://twitter.com/yukicacoon/status/1635930780735266816
+		if (spType === 200) {
+			if (!!fleetSearchlight) { gearBonus -= (5 + 7); }
+			if (playerStarshell) { gearBonus -= (10 + 4); }
+		}
+		baseValue += gearBonus;
 		return {
 			baseValue,
 			levelModifier,
 			isFlagship,
 			isChuuhaOrWorse,
+			gearBonus,
 			fleetSearchlight,
 			playerStarshell,
 			enemyStarshell
@@ -4324,7 +4365,7 @@ KC3改 Ship Object
 			// same factor for all setups with bonus gears and multi-roll for more chance?
 			// https://twitter.com/yukicacoon/status/1628701453677363202
 			// https://twitter.com/yukicacoon/status/1630145015644311554
-			200: 158,
+			200: 135,
 			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }
@@ -4718,6 +4759,8 @@ KC3改 Ship Object
 					if(this.isMarried()) value *= fit[1].married || 1;
 					result += value * Math.sqrt(count);
 				});
+				// Yet another tests and formulas here, feel free to implement this version
+				// https://twitter.com/Divinity_123/status/1637255766166863873
 				break;
 			case 16: // for Seaplane Tender
 				// Medium cal. main guns penalties on Nisshin, Commandant Teste, Kamoi Kai
