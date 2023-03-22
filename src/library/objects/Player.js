@@ -30,6 +30,7 @@ Instantiate-able class to represent one player
 			this.gearSlots = 500;
 			this.parallelQuestCount = 5;
 			this.monthlyExpedResetTime = 0;
+			this.furniture = [1, 38, 72, 102, 133, 164];
 		}
 	};
 	
@@ -51,6 +52,8 @@ Instantiate-able class to represent one player
 		this.shipSlots = data.maxShipSlots;
 		this.gearSlots = 3 + data.maxGearSlots;
 		this.parallelQuestCount = data.questCount;
+
+		this.furniture = data.furniture;
 		
 		this.updateLevel(data.level, data.exp);
 		this.checkRankPoints();
@@ -176,6 +179,7 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("longestIdleTime");
 		localStorage.removeItem("pictureBook");
 		localStorage.removeItem("playerNewsFeed");
+		localStorage.removeItem("furniture");
 		// History of map clear and event boss hp info will be lost,
 		// still keep them since they are unrecoverable.
 		//localStorage.removeItem("maps");
@@ -218,6 +222,7 @@ Instantiate-able class to represent one player
 			this.gearSlots = playerInfo.gearSlots || 500;
 			this.parallelQuestCount = playerInfo.parallelQuestCount || 5;
 			this.monthlyExpedResetTime = playerInfo.monthlyExpedResetTime || 0;
+			this.furniture = playerInfo.furniture || [1, 38, 72, 102, 133, 164];
 			return true;
 		}
 		return false;
