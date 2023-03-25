@@ -182,6 +182,8 @@
 
 			KC3Database.con.sortie.where("world").equals(this.world).and(data => data.hq === hqId).each(sortie => {
 				const mapnum = sortie.mapnum;
+				const diff = sortie.diff;
+				const clearDiff = this.maps[`m${this.world}${mapnum}`].difficulty;
 				let hpbar = false;
 				if (sortie.eventmap && sortie.eventmap.api_gauge_type == 2) hpbar = true;
 				if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
@@ -191,7 +193,7 @@
 				let cleared = false;
 				let lastDance = false;
 				if (sortie.eventmap && sortie.eventmap.api_cleared) cleared = true;
-				if (!cleared) {
+				if (!cleared && diff == clearDiff) {
 					this.stats.clearCount[mapnum]++;
 					const mapname = `${this.world}${mapnum}`;
 					const mapdata = this.maps["m" + mapname];
@@ -322,7 +324,7 @@
 					const consArray = buildConsumptionArray(arr);
 					this.stats.sortieConsumption[mapnum] = this.stats.sortieConsumption[mapnum] || [];
 					this.stats.sortieConsumption[mapnum].push(consArray);
-					if (!cleared) {
+					if (!cleared && diff == clearDiff) {
 						this.stats.clearConsumption[mapnum] = this.stats.clearConsumption[mapnum] || [];
 						this.stats.clearConsumption[mapnum].push(consArray);
 					}
