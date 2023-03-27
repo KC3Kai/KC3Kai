@@ -52,7 +52,6 @@ Instantiate-able class to represent one player
 		this.shipSlots = data.maxShipSlots;
 		this.gearSlots = 3 + data.maxGearSlots;
 		this.parallelQuestCount = data.questCount;
-
 		this.furniture = data.furniture;
 		
 		this.updateLevel(data.level, data.exp);

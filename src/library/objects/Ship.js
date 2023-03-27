@@ -1865,11 +1865,11 @@ KC3改 Ship Object
 		//  * 2: [ 68] Daihatsu Landing Craft
 		//  * 3: [230,482] Toku Daihatsu Landing Craft + 11th Tank Regiment, Toku Daihatsu Landing Craft + Panzer III (North African Specification)
 		//  * 4: [193] Toku Daihatsu Landing Craft
-		//  * 5: [355] M4A1 DD
+		//  * 5: [355,495] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		//  * ?: [494/495] Toku Daihatsu Landing Craft + Chi-Ha (Kai)
-		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, 355, [408, 409], 436];
+		//  * ?: [494] Toku Daihatsu Landing Craft + Chi-Ha
+		const landingCraftIds = [167, [166, 449, 495], 68, [230, 482], 193, [355, 495], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1911,7 +1911,7 @@ KC3改 Ship Object
 			}
 		});
 		if(forSdpPostcap) {
-			const hasType89LandingForce = this.hasEquipment(166);
+			const hasType89LandingForce = this.hasEquipment([166, 495]);
 			const hasHoni1 = this.hasEquipment(449);
 			const hasPanzer2 = landingCraftCounts[7] > 0;
 			// When T89Tank/Honi1/Panzer2 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
@@ -1970,6 +1970,7 @@ KC3改 Ship Object
 			spTankAdditive = 0, spTankModifier = 1,
 			m4a1ddAdditive = 0, m4a1ddModifier = 1,
 			gunTankAdditive = 0, gunTankModifier = 1,
+			chihaTankAdditive = 0, chihaTankModifier = 1,
 			synergyAdditive = 0, synergyModifier = 1;
 		
 		let wg42Bonus = 1;
@@ -1996,6 +1997,7 @@ KC3改 Ship Object
 			const m4a1ddCount = this.countEquipment(355);
 			const honi1Count = this.countEquipment(449);
 			const panzer3Count = this.countEquipment(482);
+			const chihaCount = this.countEquipment([494, 495]);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai
@@ -2041,6 +2043,8 @@ KC3改 Ship Object
 			m4a1ddAdditive = m4a1ddCount ? 35 : 0;
 			gunTankModifier = honi1Count ? 1.3 : 1;
 			gunTankAdditive = honi1Count ? 42 : 0;
+			chihaTankModifier = chihaCount ? 1.5 : 1;
+			chihaTankAdditive = chihaCount ? 33 : 0;
 			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -2152,6 +2156,7 @@ KC3改 Ship Object
 				spTankModifier,
 				m4a1ddModifier,
 				gunTankModifier,
+				chihaTankModifier,
 				synergyModifier,
 			},
 			additives: {
@@ -2160,6 +2165,7 @@ KC3改 Ship Object
 				spTankAdditive,
 				m4a1ddAdditive,
 				gunTankAdditive,
+				chihaTankAdditive,
 				synergyAdditive,
 			}
 		};
