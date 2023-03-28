@@ -1940,23 +1940,25 @@ ABYSS FLEET
 	height:40px;
 	float:left;
 	overflow:hidden;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 5px 0px;
 }
 .module.activity .activity_modernization .mod_ship_pic img {
 	width:60px;
 	height:40px;
 	position:relative;
-	border-radius: 5px;
+	border-radius:5px;
 }
 .module.activity .activity_modernization .mod_ship_name {
 	width:105px;
 	height:auto;
+	max-height:42px;
 	line-height:14px;
 	float:left;
 	font-size:14px;
 	font-weight:bold;
 	color:#4f4;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 .module.activity .activity_modernization .mod_ship_level {
 	width:105px;
