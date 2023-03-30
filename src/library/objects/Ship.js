@@ -1859,17 +1859,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus, 2 unknown:
+		// 8 types of (13 gears) Daihatsu Landing Craft with known bonus:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
-		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
+		//  * 1: [166,449,494] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either)
 		//  * 2: [ 68] Daihatsu Landing Craft
 		//  * 3: [230,482] Toku Daihatsu Landing Craft + 11th Tank Regiment, Toku Daihatsu Landing Craft + Panzer III (North African Specification)
 		//  * 4: [193] Toku Daihatsu Landing Craft
 		//  * 5: [355,495] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		//  * ?: [494] Toku Daihatsu Landing Craft + Chi-Ha
-		const landingCraftIds = [167, [166, 449, 495], 68, [230, 482], 193, [355, 495], [408, 409], 436];
+		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, [355, 495], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1907,11 +1906,17 @@ KC3改 Ship Object
 				} else {
 					oneGearBonus *= getModifier(type, "count1");
 					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
+					// only get count2 bonus when chiha with t89
+					else if(type === 1) {
+						const t89Count = this.countEquipment(166),
+							chihaCount = this.countEquipment([494, 495]);
+						if(t89Count > 0 && chihaCount > 0) { moreGearBonus *= getModifier(type, "count2"); }
+					}
 				}
 			}
 		});
 		if(forSdpPostcap) {
-			const hasType89LandingForce = this.hasEquipment([166, 495]);
+			const hasType89LandingForce = this.hasEquipment([166, 494, 495]);
 			const hasHoni1 = this.hasEquipment(449);
 			const hasPanzer2 = landingCraftCounts[7] > 0;
 			// When T89Tank/Honi1/Panzer2 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
@@ -1971,6 +1976,7 @@ KC3改 Ship Object
 			m4a1ddAdditive = 0, m4a1ddModifier = 1,
 			gunTankAdditive = 0, gunTankModifier = 1,
 			chihaTankAdditive = 0, chihaTankModifier = 1,
+			chihaTankKaiAdditive = 0, chihaTankKaiModifier = 1,
 			synergyAdditive = 0, synergyModifier = 1;
 		
 		let wg42Bonus = 1;
@@ -1997,7 +2003,8 @@ KC3改 Ship Object
 			const m4a1ddCount = this.countEquipment(355);
 			const honi1Count = this.countEquipment(449);
 			const panzer3Count = this.countEquipment(482);
-			const chihaCount = this.countEquipment([494, 495]);
+			const chihaCount = this.countEquipment(494);
+			const chihaKaiCount = this.countEquipment(495);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai
@@ -2012,12 +2019,13 @@ KC3改 Ship Object
 			// Following synergy bonuses from Armored Boat and Armed Daihatsu:
 			//   https://twitter.com/yukicacoon/status/1368513654111408137
 			//   https://twitter.com/yukicacoon/status/1383313261089542152
+			//   https://twitter.com/hedgehog_hasira/status/1641121541378260996
 			const abCount = this.countEquipment(408);
 			const armedCount = this.countEquipment(409);
-			// Normal, T89, Toku, Honi1
-			const dlcGroup1Count = this.countEquipment([68, 166, 193, 449]);
-			// T2 tank, T11 shikon
-			const dlcGroup2Count = this.countEquipment([167, 230]);
+			// Normal, T89, Toku, Honi1, Chiha
+			const dlcGroup1Count = this.countEquipment([68, 166, 193, 449, 494]);
+			// T2 tank, T11 shikon, Chiha Kai
+			const dlcGroup2Count = this.countEquipment([167, 230, 495]);
 			// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
 			const doubleSynergyFlag = abCount === 1 && armedCount === 1;
@@ -2034,7 +2042,7 @@ KC3改 Ship Object
 			const abdSynergyModifier = singleSynergyModifier * doubleSynergyModifier;
 			const abdSynergyAdditive = singleSynergyAdditive + doubleSynergyAdditive;
 			
-			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1, Panzer3
+			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1, Panzer3, Chiha
 			// although here using word 'tank', but they are in landing craft cateory unlike T2 tank
 			// Different for uncategorized surface installation types, eg: Anchorage Water Demon Vacation Mode x1.1 for shikon only, Dock Princess x1.4 +0 for 3 sptanks
 			spTankModifier = shikonCount + honi1Count + panzer3Count ? 1.8 : 1;
@@ -2043,8 +2051,11 @@ KC3改 Ship Object
 			m4a1ddAdditive = m4a1ddCount ? 35 : 0;
 			gunTankModifier = honi1Count ? 1.3 : 1;
 			gunTankAdditive = honi1Count ? 42 : 0;
-			chihaTankModifier = chihaCount ? 1.5 : 1;
-			chihaTankAdditive = chihaCount ? 33 : 0;
+			// https://twitter.com/Camellia_bb/status/1641254420246839301
+			chihaTankModifier = chihaCount ? 1.4 : 1;
+			chihaTankAdditive = chihaCount ? 28 : 0;
+			chihaTankKaiModifier = chihaKaiCount ? 1.5 : 1;
+			chihaTankKaiAdditive = chihaKaiCount ? 33 : 0;
 			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -2157,6 +2168,7 @@ KC3改 Ship Object
 				m4a1ddModifier,
 				gunTankModifier,
 				chihaTankModifier,
+				chihaTankKaiModifier,
 				synergyModifier,
 			},
 			additives: {
@@ -2166,6 +2178,7 @@ KC3改 Ship Object
 				m4a1ddAdditive,
 				gunTankAdditive,
 				chihaTankAdditive,
+				chihaTankKaiAdditive,
 				synergyAdditive,
 			}
 		};
@@ -2322,12 +2335,14 @@ KC3改 Ship Object
 		}
 		
 		// Apply modifiers, flooring unknown, anti-land modifiers get in first
-		let result = (((((((basicPower
+		let result = (((((((((basicPower
 			* mulBonus("stypeModifier")   + addBonus("stypeAdditive"))
 			* mulBonus("generalModifier"))
 			* mulBonus("spTankModifier")  + addBonus("spTankAdditive"))
 			* mulBonus("m4a1ddModifier")  + addBonus("m4a1ddAdditive"))
 			* mulBonus("gunTankModifier") + addBonus("gunTankAdditive"))
+			* mulBonus("chihaTankModifier")    + addBonus("chihaTankAdditive"))
+			* mulBonus("chihaTankKaiModifier") + addBonus("chihaTankKaiAdditive"))
 			* mulBonus("synergyModifier") + addBonus("synergyAdditive"))
 			+ addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
