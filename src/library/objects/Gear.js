@@ -79,6 +79,8 @@ KC3改 Equipment Object
 						default:
 							const baseKey = key.slice(0, -3);
 							if(synergyGears[key].includes(gear.masterId)) {
+								const minStars = synergyGears[baseKey + "MinStars"];
+								if(minStars > 0 && (!gear.stars || gear.stars < minStars)) break;
 								synergyGears[baseKey] += 1;
 								if(synergyGears[baseKey + "Nonexist"]) synergyGears[baseKey + "Nonexist"] = 0;
 							}
