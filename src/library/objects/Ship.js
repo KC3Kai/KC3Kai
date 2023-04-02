@@ -2017,29 +2017,30 @@ KC3改 Ship Object
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			
 			// Following synergy bonuses from Armored Boat and Armed Daihatsu:
-			//   https://twitter.com/yukicacoon/status/1368513654111408137
-			//   https://twitter.com/yukicacoon/status/1383313261089542152
+			//   https://twitter.com/oxke_admiral/status/1642326265364615168
 			//   https://twitter.com/hedgehog_hasira/status/1641121541378260996
+			//   https://twitter.com/yukicacoon/status/1383313261089542152
+			//   https://twitter.com/yukicacoon/status/1368513654111408137
 			const abCount = this.countEquipment(408);
 			const armedCount = this.countEquipment(409);
-			// Normal, T89, Toku, Honi1, Chiha
-			const dlcGroup1Count = this.countEquipment([68, 166, 193, 449, 494]);
-			// T2 tank, T11 shikon, Chiha Kai
-			const dlcGroup2Count = this.countEquipment([167, 230, 495]);
-			// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
+			// Normal, T89, Toku, Panzer2, Honi1
+			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449]);
+			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
+			const dlcGroup2Count = this.countEquipment([167, 230, 482, 494, 495]);
+			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
-			const doubleSynergyFlag = abCount === 1 && armedCount === 1;
+			const doubleSynergyFlag = abCount >= 1 && armedCount >= 1;
 			const dlcGroupLevel1Flag = dlcGroup1Count + dlcGroup2Count >= 1;
 			const dlcGroupLevel2Flag = dlcGroup1Count + dlcGroup2Count >= 2;
-			const singleSynergyModifier = singleSynergyFlag && dlcGroupLevel1Flag ? 1.2 : 1;
-			const doubleSynergyModifier = doubleSynergyFlag && dlcGroupLevel2Flag ? 1.3 :
-				doubleSynergyFlag && dlcGroup2Count >= 1 ? 1.2 :
-				doubleSynergyFlag && dlcGroup1Count >= 1 ? 1.1 : 1;
+			const singleSynergyModifier = singleSynergyFlag && dlcGroupLevel1Flag ? 0.2 : 0;
+			const doubleSynergyModifier = doubleSynergyFlag && dlcGroupLevel2Flag ? 0.3 :
+				doubleSynergyFlag && dlcGroup2Count >= 1 ? 0.2 :
+				doubleSynergyFlag && dlcGroup1Count >= 1 ? 0.1 : 0;
 			const singleSynergyAdditive = singleSynergyFlag && dlcGroupLevel1Flag ? 10 : 0;
-			const doubleSynergyAdditive = doubleSynergyFlag && dlcGroupLevel2Flag ? 5 :
-				doubleSynergyFlag && dlcGroup2Count >= 1 ? 3 :
-				doubleSynergyFlag && dlcGroup1Count >= 1 ? 2 : 0;
-			const abdSynergyModifier = singleSynergyModifier * doubleSynergyModifier;
+			const doubleSynergyAdditive = doubleSynergyFlag && dlcGroupLevel2Flag ? 15 :
+				doubleSynergyFlag && dlcGroup2Count >= 1 ? 10 :
+				doubleSynergyFlag && dlcGroup1Count >= 1 ? 5 : 0;
+			const abdSynergyModifier = 1 + singleSynergyModifier + doubleSynergyModifier;
 			const abdSynergyAdditive = singleSynergyAdditive + doubleSynergyAdditive;
 			
 			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1, Panzer3, Chiha

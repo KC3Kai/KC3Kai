@@ -281,6 +281,7 @@ KC3改 Equipment Object
 					case 37: // Anti-Ground Rocket
 					case 39: // Skilled Lookouts
 					case 46: // Amphibious Tank
+					//case 52: // Landing Force
 						modifier = 1; break;
 					case 3: // Large Cal. Main
 						modifier = 1.5; break;
