@@ -1954,6 +1954,8 @@ KC3改 Ship Object
 	 * 			precap special (toku) daihatsu + (shikon/gun) tank,
 	 * 			precap m4a1dd,
 	 * 			precap gun tank,
+	 * 			precap chiha tank,
+	 * 			precap chiha tank kai,
 	 * 			precap daihatsu synergy,
 	 * 		},
 	 * 		additives: {
@@ -1962,6 +1964,8 @@ KC3改 Ship Object
 	 * 			precap special (toku) daihatsu + tank,
 	 * 			precap m4a1dd,
 	 * 			precap gun tank,
+	 * 			precap chiha tank,
+	 * 			precap chiha tank kai,
 	 * 			precap daihatsu synergy,
 	* 		}
 	 * }
