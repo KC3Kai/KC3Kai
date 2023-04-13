@@ -224,7 +224,8 @@
 
 					// Battle analysis
 					const checkForLastHit = battle.boss && isClearSortie;
-					const nodeData = sortie.nodes.find(node => node.id === battle.node);
+					const nodeData = Array.isArray(sortie.nodes)
+						&& sortie.nodes.find(node => node.id === battle.node);
 					if (!nodeData) { return; }
 					const nodeKind = nodeData.eventKind;
 					const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
