@@ -1266,13 +1266,18 @@
 							// Day Battle only or Night to Day Battle data
 							if((battleType & BATTLE_NIGHT) === 0){
 								// No detection, aerial and LBAS combat if Night2Day battle not go into day
+								// No detection for long range radar ambush node too, show wave mark instead
 								if(thisNode.detection[0]){
 									$(".node_detect", nodeBox).text( thisNode.detection[0] )
 										.addClass( thisNode.detection[1] )
-										.attr("title", "{0} vs {1}".format(
-											thisNode.detection[0],
-											KC3Meta.detection(thisNode.battleDay.api_search[1])[0]
-										));
+										.attr("title", (thisNode.battleDay.api_name || "").includes("ld_shooting")
+											|| !thisNode.battleDay.api_search ?
+											KC3Meta.term("BattleKindLongRangeRaid") :
+											"{0} vs {1}".format(
+												thisNode.detection[0],
+												KC3Meta.detection(thisNode.battleDay.api_search[1])[0]
+											)
+										);
 								}
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );

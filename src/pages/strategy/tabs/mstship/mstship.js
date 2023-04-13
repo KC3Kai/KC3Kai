@@ -1254,11 +1254,19 @@
 											idList = synergyList[flag.replace(/Nonexist$/, "Ids")];
 											$(".synergyIcon span", synergyFlag).html("&nbsp;-");
 										}
-										const synergyName = (idList && idList.length === 1) ?
+										let synergyName = (idList && idList.length === 1) ?
 											KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) :
 											KC3Meta.term(flag.toCamelCase(true));
 										const synergyNameList = Array.isArray(idList) ? idList.map(id =>
 											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`) : [];
+										if (synergyList[flag + "MinStars"] > 0) {
+											const level = synergyList[flag + "MinStars"];
+											synergyName += "&emsp;&#9733;{0}".format(
+												Number(level) >= 10 ?
+												'<span style="font-size: smaller">max</span>' :
+												'+' + level
+											);
+										}
 										$(".synergyType", synergyFlag).html(synergyName)
 											.attr("title", synergyNameList.join("\n"));
 										$(".synergyFlags", synergyBox).append(synergyFlag);

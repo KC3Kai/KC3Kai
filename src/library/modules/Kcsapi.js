@@ -116,6 +116,7 @@ Previously known as "Reactor"
 				questCount: response.api_data.api_parallel_quest_count,
 				repairSlots: response.api_data.api_basic.api_count_ndock,
 				buildSlots: response.api_data.api_basic.api_count_kdock,
+				furniture: response.api_data.api_basic.api_furniture,
 			});
 			
 			PlayerManager.setFleets( response.api_data.api_deck_port );

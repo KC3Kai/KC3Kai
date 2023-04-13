@@ -408,7 +408,7 @@ Contains summary information about a fleet and its ships
 						tokuHoni1Count += 1;
 						// improvement unknown
 						addImprove(gearObj.stars);
-					//case 494: // Toku DLC + Chi-Ha?
+					// [494] Toku DLC + Chi-Ha not counted
 					//case 495: // Toku DLC + Chi-Ha Kai?
 					break;
 				}

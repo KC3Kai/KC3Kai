@@ -79,6 +79,8 @@ KC3改 Equipment Object
 						default:
 							const baseKey = key.slice(0, -3);
 							if(synergyGears[key].includes(gear.masterId)) {
+								const minStars = synergyGears[baseKey + "MinStars"];
+								if(minStars > 0 && (!gear.stars || gear.stars < minStars)) break;
 								synergyGears[baseKey] += 1;
 								if(synergyGears[baseKey + "Nonexist"]) synergyGears[baseKey + "Nonexist"] = 0;
 							}
@@ -279,6 +281,7 @@ KC3改 Equipment Object
 					case 37: // Anti-Ground Rocket
 					case 39: // Skilled Lookouts
 					case 46: // Amphibious Tank
+					//case 52: // Landing Force
 						modifier = 1; break;
 					case 3: // Large Cal. Main
 						modifier = 1.5; break;
