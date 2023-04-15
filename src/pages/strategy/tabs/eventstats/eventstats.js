@@ -182,6 +182,11 @@
 
 			KC3Database.con.sortie.where("world").equals(this.world).and(data => data.hq === hqId).each(sortie => {
 				const mapnum = sortie.mapnum;
+				const diff = sortie.diff;
+				const mapname = `${this.world}${mapnum}`;
+				const mapdata = this.maps["m" + mapname];
+				const selectedDiff = mapdata && mapdata.difficulty;
+				const isDiffMatched = (selectedDiff === undefined) || (diff == selectedDiff);
 				let hpbar = false;
 				if (sortie.eventmap && sortie.eventmap.api_gauge_type == 2) hpbar = true;
 				if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
@@ -191,10 +196,8 @@
 				let cleared = false;
 				let lastDance = false;
 				if (sortie.eventmap && sortie.eventmap.api_cleared) cleared = true;
-				if (!cleared) {
+				if (!cleared && isDiffMatched) {
 					this.stats.clearCount[mapnum]++;
-					const mapname = `${this.world}${mapnum}`;
-					const mapdata = this.maps["m" + mapname];
 					const gauges = Object.keys(KC3Meta.eventGauge(mapname));
 					if (sortie.eventmap && sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
 						lastDance = true;
@@ -203,9 +206,8 @@
 				}
 				this.stats.sortieCount[mapnum]++;
 				let isClearSortie = false;
-				const mapname = `m${this.world}${mapnum}`;
-				if (!cleared && hpbar && this.maps[mapname] && this.maps[mapname].stat) {
-					const killid = this.maps[mapname].stat.onClear;
+				if (!cleared && hpbar && mapdata && mapdata.stat) {
+					const killid = mapdata.stat.onClear;
 					if (killid == sortie.id) isClearSortie = true;
 				}
 				// Get battle data
@@ -222,7 +224,8 @@
 
 					// Battle analysis
 					const checkForLastHit = battle.boss && isClearSortie;
-					const nodeData = sortie.nodes.find(node => node.id === battle.node);
+					const nodeData = Array.isArray(sortie.nodes)
+						&& sortie.nodes.find(node => node.id === battle.node);
 					if (!nodeData) { return; }
 					const nodeKind = nodeData.eventKind;
 					const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
@@ -322,7 +325,7 @@
 					const consArray = buildConsumptionArray(arr);
 					this.stats.sortieConsumption[mapnum] = this.stats.sortieConsumption[mapnum] || [];
 					this.stats.sortieConsumption[mapnum].push(consArray);
-					if (!cleared) {
+					if (!cleared && isDiffMatched) {
 						this.stats.clearConsumption[mapnum] = this.stats.clearConsumption[mapnum] || [];
 						this.stats.clearConsumption[mapnum].push(consArray);
 					}

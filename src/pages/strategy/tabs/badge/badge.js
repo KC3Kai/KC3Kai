@@ -32,6 +32,9 @@
 			$(".export_value", $("#ep_colle").parent().parent()).text(
 				JSON.stringify( Object.keys(KC3ShipManager.list).map(x => KC3ShipManager.list[x].masterId) )
 			);
+			$(".export_value", $("#ep_furniture").parent().parent()).text(
+				JSON.stringify( PlayerManager.hq.furniture )
+			);
 
 			$(".tab_badge .export_parts input").on("click", function () {
 				// on every option change we clear exported results
@@ -134,6 +137,9 @@
 				if (checkLabel("#ep_colle")) {
 					resultPost.colleFlag = "on";
 				}
+				if (checkLabel("#ep_furniture")) {
+					resultPost.furniture = result.furniture;
+				}
 
 				$.each(resultPost, function(k,v) {
 					resultPost[k] = encodeVal(v);
@@ -217,6 +223,7 @@
 			result.ttkLvl = PlayerManager.hq.level;
 			result.ttkName = PlayerManager.hq.name;
 			result.ttkServer = PlayerManager.hq.server;
+			result.furniture = PlayerManager.hq.furniture;
 			return result;
 		}
 	};

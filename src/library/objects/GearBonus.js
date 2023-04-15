@@ -55,6 +55,9 @@
 				quadrupleTorpedoOxygenLateModelIds: [15, 286],
 				submarineTorpedoLateModel: 0,
 				submarineTorpedoLateModelIds: [213, 214, 383],
+				submarineBowTorpedoLateModelSkilled4stars: 0,
+				submarineBowTorpedoLateModelSkilled4starsMinStars: 4,
+				submarineBowTorpedoLateModelSkilled4starsIds: [461],
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 				tripleLargeGunMountK2: 0,
@@ -5003,29 +5006,101 @@
 			// Skilled Sonar Personnel + Late Model Bow Torpedo Mount (4 tubes)
 			"461": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// I-400 Class
-					"44": {
-						distinctGears: [457, 461],
-						single: { "raig": 1, "houk": 4 },
-					},
+					"44": [
+						{
+							distinctGears: [457, 461],
+							single: { "raig": 1, "houk": 4 },
+						},
+						{
+							minStars: 4,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 					// I-13, I-14
-					"71": {
-						distinctGears: [457, 461],
-						single: { "raig": 2, "houk": 2 },
-					},
+					"71": [
+						{
+							distinctGears: [457, 461],
+							single: { "raig": 2, "houk": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 					// I-47 Class
 					"103": "71",
 					// I-201, I-203
-					"109": {
-						distinctGears: [457, 461],
-						single: { "raig": 3, "houk": 3 },
-					},
+					"109": [
+						{
+							distinctGears: [457, 461],
+							single: { "raig": 3, "houk": 3 },
+						},
+						{
+							minStars: 2,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 				},
 			},
 			// Late Model Radar & Passive Radiolocator + Snorkel Equipment
 			"458": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// I-400 Class
 					"44": {
@@ -5042,6 +5117,46 @@
 						single: { "raig": 3, "houk": 6 },
 					},
 				},
+				byShip: [
+					{
+						classes: [44, 71, 103, 109],
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						classes: [44, 71, 103, 109],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						classes: [44, 71, 103, 109],
+						minStars: 8,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 2,
+						synergy: {
+							flags: [ "submarineBowTorpedoLateModelSkilled4stars" ],
+							single: { "raig": 7, "houm": 5 },
+						},
+					},
+					{
+						stypes: [13, 14],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 5,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Late Model Submarine Radar & Passive Radiolocator
 			"384": {
@@ -8557,7 +8672,7 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru?, Kumanomaru?, No.101 Transport Ship?
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Maryland, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste

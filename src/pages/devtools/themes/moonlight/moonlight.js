@@ -3696,7 +3696,7 @@
 			var ModShip = KC3ShipManager.get(data.rosterId);
 
 			$(".activity_modernization .mod_ship_pic img").attr("src", KC3Meta.shipIcon(ModShip.masterId) );
-			$(".activity_modernization .mod_ship_name").text( ModShip.name() );
+			$(".activity_modernization .mod_ship_name").text( ModShip.name() ).attr("title", ModShip.name());
 			$(".activity_modernization .mod_ship_level span.value").text( ModShip.level );
 
 			$(".activity_modernization .mod_result_tp .mod_result_old").text( data.oldStats[1] );
