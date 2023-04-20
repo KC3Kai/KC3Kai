@@ -3287,7 +3287,7 @@ KC3改 Ship Object
 		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
-				&& (!PlayerManager.combinedFleet || fleetNum === 2)) {
+				&& (!PlayerManager.combinedFleet || fleetNum !== 1)) {
 				const isFormationAllowed = [1, 4, 12, 14].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
@@ -3310,12 +3310,12 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is Submarine Tender without Taiha, Echelon (forward) / Line Abreast (antisub) formation selected.
+	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
 	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
 	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
-	 * Unknown in combined fleet.
+	 * Trigger-able in Striking Force, not in Combined Fleet? (too few samples to certain)
 	 *
 	 * @return API ID (300~302) if this ship can do special cut-in attack, otherwise false.
 	 */
@@ -3324,8 +3324,7 @@ KC3改 Ship Object
 		// is this ship Lv30+ Taigei/Jingei-class and not Taiha
 		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha() && this.level >= 30) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3
-				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3) {
 				const isEchelonOrLineAbreast = [4, 5, 11, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
@@ -3494,10 +3493,10 @@ KC3改 Ship Object
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		// to differentiate Kakuza kind ID, added 100 to final result
 		if(targetShipType.isLand && this.master().api_ctype === 120) {
-			const armyUnit1Cnt = this.countEquipment(496),
-				armyUnit2Cnt = this.countEquipment(497),
-				armyUnit3Cnt = this.countEquipment(498),
-				armyUnit4Cnt = this.countEquipment(499);
+			const armyUnit1Cnt = this.countEquipment(496), // Infantry
+				armyUnit2Cnt = this.countEquipment(497),   // Chiha
+				armyUnit3Cnt = this.countEquipment(498),   // Chiha Kai
+				armyUnit4Cnt = this.countEquipment(499);   // Infantry + Chiha Kai
 			if((armyUnit3Cnt + armyUnit4Cnt) >= 2) return 106;
 			if(armyUnit2Cnt >= 1 && (armyUnit3Cnt + armyUnit4Cnt) === 1) return 105;
 			if(armyUnit2Cnt >= 2) return 104;
