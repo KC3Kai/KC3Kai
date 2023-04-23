@@ -338,6 +338,22 @@ button, input, select, textarea {
 	height:80px;
 	margin:10px;
 }
+#menu .logo img:hover {
+	animation: glowa10 1s infinite alternate;
+}
+@keyframes glowa10 {
+	from {
+		filter:
+			drop-shadow(0 0 5px rgba(255, 87, 112, 0.5))
+			drop-shadow(0 0 7px rgba(228, 66, 141, 0.4))
+			drop-shadow(0 0 9px rgba(196, 45, 168, 0.3))
+			drop-shadow(0 0 7px rgba(228, 66, 141, 0.4))
+			drop-shadow(0 0 5px rgba(255, 87, 112, 0.5));
+	}
+	to {
+		filter: drop-shadow(0 0 5px #f5c1f5);
+	}
+}
 #menu .submenu {
 	width:100px;
 	margin:0px 0px 10px 0px;

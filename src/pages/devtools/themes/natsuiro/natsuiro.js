@@ -1036,17 +1036,8 @@
 		})).execute();
 
 		// Waiting for actions
-		$("<div>").css({
-			"width" : "300px",
-			"height" : "50px",
-			"line-height" : "50px",
-			"background" : "#fff",
-			"border-radius" : "10px",
-			"margin" : "30px auto 0px",
-			"text-align" : "center",
-			"font-weight" : "bold",
-			"font-size" : "14px"
-		}).addClass("waitingForActions").html( KC3Meta.term("PanelWaitActions") ).appendTo("body");
+		$("<div></div>").addClass("waitingForActions logo").html( '<img src="/assets/img/logo/64.png" class="pinkglowanim use-gpu">' ).appendTo("body");
+		$("<div></div>").addClass("waitingForActions text").html( KC3Meta.term("PanelWaitActions") ).appendTo("body");
 	});
 
 	$(window).on("resize", function(){
