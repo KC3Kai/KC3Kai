@@ -2008,6 +2008,7 @@
 			var isSentOut = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
 			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
+			var smokeType = thisNode.smokeType || 0;
 			var sortieSpecialCutins = (ConfigManager.info_compass && ConfigManager.info_battle) ? thisNode.sortieSpecialCutins || [] : [];
 
 			// COMBINED
@@ -2032,7 +2033,7 @@
 								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index);
 							spCutinUsed = sortieSpecialCutins[index] == 1 && KC3SortieManager.fleetSent == 1;
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
+						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
 							.commonElements()
 							.defineShort(MainFleet)
 							.toggleClass("special_cutin", spCutinUsed)
@@ -2065,7 +2066,7 @@
 							spCutinUsed = (sortieSpecialCutins[index] == 1 && KC3SortieManager.fleetSent == 2) ||
 								(sortieSpecialCutins[index] == 2 && KC3SortieManager.isCombinedSortie());
 						}
-						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
+						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
 							.commonElements(true)
 							.defineShort(EscortFleet)
 							.toggleClass("special_cutin", spCutinUsed)
@@ -2162,7 +2163,7 @@
 							spCutinUsed = (sortieSpecialCutins[index] == 1 && isSelectedSortiedFleet) ||
 								(sortieSpecialCutins[index] == 2 && isSelected2ndFleetOnCombined);
 						}
-						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
+						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
 							.commonElements()
 							.defineLong(CurrentFleet)
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)
@@ -2844,7 +2845,33 @@
 							})).execute();
 						});
 					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
-					nodeEncBox.text("...");
+					nodeEncBox.empty();
+					// Show current enemy fleet hints from API data as first row, added since 2023-04-23
+					if(thisNode.enemyPreview.length > 0){
+						const shipList = [].concat(...thisNode.enemyPreview.map(f => f.api_ship_ids || []));
+						const encBox = $("#factory .encounter_record").clone();
+						$(".encounter_formation", encBox).hide();
+						$(".encounter_ships", encBox).css("margin-left", 26);
+						$.each(shipList, function(_, shipId){
+							if(shipId > 0){
+								const shipBox = $("#factory .encounter_ship").clone();
+								$(shipBox).removeClass(KC3Meta.abyssShipBorderClass());
+								$(shipBox).addClass(KC3Meta.abyssShipBorderClass(shipId));
+								$("img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
+								$("img", shipBox).attr("alt", shipId);
+								$("img", shipBox).data("masterId", shipId)
+									.on("dblclick", self.shipDoubleClickFunction);
+								$(shipBox).attr("title", "{0}: {1}"
+									.format(shipId, KC3Meta.abyssShipName(shipId))
+								).lazyInitTooltip();
+								$(".encounter_ships", encBox).append(shipBox);
+							}
+						});
+						if(shipList.length > 6){
+							$(".encounter_ships", encBox).addClass("combined");
+						}
+						encBox.appendTo(nodeEncBox);
+					}
 					KC3Database.con.encounters.filter(node =>
 						node.world === world && node.map === map
 						// Known issue: this edge ID filtering only gives encounters of edge's own,
@@ -2854,7 +2881,6 @@
 					).toArray(function(thisNodeEncounterList){
 						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
 							return;
-						nodeEncBox.empty();
 						const sortedList = thisNodeEncounterList.sort(
 							(a, b) => (b.count || 1) - (a.count || 1)
 						);
@@ -2900,6 +2926,13 @@
 							if(shipList.length > 6){
 								$(".encounter_ships", encBox).addClass("combined");
 							}
+							// Highlight encounters matched with preview fleets if any
+							if(thisNode.enemyPreview.length > 0){
+								if( thisNode.enemyPreview.every((f, i) => {
+									const dbf = i > 0 ? edata.escort : edata.main;
+									return f.api_ship_ids.every((id, idx) => id === dbf[idx]);
+								}) ) encBox.addClass("matched");
+							}
 							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count || 1);
 							tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
 							if(encounter.exp){
@@ -2915,8 +2948,6 @@
 						});
 					}).catch(err => {
 						console.error("Loading node encounters failed", err);
-						// Keep 3 dots as unknown
-						nodeEncBox.text("...");
 					});
 					break;
 
@@ -3391,12 +3422,15 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${rankLetter}.png`);
 				const dmgGauge = thisNode.predictedDamageGauge || thisNode.predictedDamageGaugeNight || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}\n{2}".format(
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}\n{2}{3}".format(
 					KC3Meta.term("BattleRating"),
 					KC3Meta.term("BattleDamageGauges").format(
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
 					),
+					thisNode.smokeType > 0 ? "{0}\n".format(
+						KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType)
+					) : "",
 					thisNode.buildUnexpectedDamageMessage()
 				)).lazyInitTooltip();
 			}
@@ -3612,7 +3646,8 @@
 						const playerItem = KC3GearManager.get(item.api_id);
 						const masterItem = KC3Master.slotitem(masterId);
 						const icon = KC3Meta.itemIcon(masterItem.api_type[3]);
-						$(".equipIcon img", itemDiv).attr("src", icon);
+						$(".equipIcon img", itemDiv).attr("src", icon)
+							.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); });
 						$(".equipName", itemDiv).text(playerItem.name());
 						// Show extra item info
 						const existedCount = KC3GearManager.countByMasterId(masterId);

@@ -108,7 +108,7 @@
 			},
 			"t_other2": {
 				name: "Other",
-				types: [ 26, 28, 29, 23 ]
+				types: [ 26, 28, 29, 23, 54 ]
 			},
 		},
 		shipsToExport: [],

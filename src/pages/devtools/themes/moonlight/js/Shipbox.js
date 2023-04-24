@@ -9,7 +9,7 @@
 	"use strict";
 	
 	window.KC3NatsuiroShipbox = function( base, rosterId, position,
-		showCombinedFleetBars, dameConConsumed, isStarShellUsed, noAirBombingDamage ){
+		showCombinedFleetBars, dameConConsumed, isStarShellUsed, noAirBombingDamage, smokeType ){
 		this.element = $("#factory "+base).clone();
 		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
@@ -18,6 +18,7 @@
 		this.dameConConsumed = dameConConsumed || false;
 		this.starShellUsed = isStarShellUsed || false;
 		this.rosaK2Success = noAirBombingDamage === true && [4, 6].includes(this.shipData.estimateAntiAirEffectType()[0]);
+		this.smokeEmitted = smokeType > 0;
 		
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
@@ -130,7 +131,9 @@
 				// Although starshell not equippable at ex-slot for now
 				(this.starShellUsed && myExItem.masterId == 101) ||
 				// Successful 12cm 30tube Rocket Launcher K2 AA defense
-				(this.rosaK2Success && myExItem.masterId === 274)
+				(this.rosaK2Success && myExItem.masterId === 274) ||
+				// Although Smoke Generators not equippable in ex-slot for now
+				(this.smokeEmitted && [500, 501].includes(myExItem.masterId))
 			)
 		);
 		
@@ -526,7 +529,9 @@
 						// Mark all equipped starshell
 						(this.starShellUsed && thisGear.masterId == 101) ||
 						// Successful 12cm 30tube Rocket Launcher K2 AA defense
-						(this.rosaK2Success && thisGear.masterId === 274)
+						(this.rosaK2Success && thisGear.masterId === 274) ||
+						// Mark all Smoke Generators
+						(this.smokeEmitted && [500, 501].includes(thisGear.masterId))
 					);
 				} else {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("item_being_used");

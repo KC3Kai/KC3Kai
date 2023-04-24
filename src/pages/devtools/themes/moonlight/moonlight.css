@@ -1465,6 +1465,9 @@ ABYSS FLEET
 	margin:0px 0px 2px 0px;
 	float:left;
 }
+.module.activity .encounters .encounter_record.matched {
+	box-shadow: inset 0px 0px 5px 2px rgba(119, 255, 204, 0.8);
+}
 .module.activity .encounters .encounter_formation {
 	width:24px;
 	height:24px;

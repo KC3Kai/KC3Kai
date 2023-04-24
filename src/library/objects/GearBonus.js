@@ -5941,6 +5941,7 @@
 			// 12.7cm Twin Gun Mount Model A Kai Ni
 			"294": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ayanami Class
 					"1": {
@@ -5970,6 +5971,55 @@
 					// Fubuki Class
 					"12": "1",
 				},
+				byShip: [
+					{
+						// Miyuki K2
+						ids: [959],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minCount: 2,
+						single: { "houg": 2 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minCount: 3,
+						single: { "houg": 3 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minStars: 6,
+						multiple: { "houm": 4 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minStars: 7,
+						multiple: { "houg": 6 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
 			},
 			// Prototype Long-barrel 12.7cm Twin Gun Mount Model A Kai 4
 			"455": {
@@ -6047,6 +6097,23 @@
 						// Isonami K2
 						ids: [666],
 						multiple: { "houg": 1, "tais": 1 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minCount: 2,
+						single: { "houg": 2 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minCount: 3,
+						single: { "houg": 3 },
 					},
 				],
 			},
@@ -6493,11 +6560,30 @@
 					// Fubuki Class
 					"12": "1",
 				},
-				byShip: {
-					// Isonami K2
-					ids: [666],
-					multiple: { "houg": 1, "tyku": 1, "tais": 1 },
-				},
+				byShip: [
+					{
+						// Isonami K2
+						ids: [666],
+						multiple: { "houg": 1, "tyku": 1, "tais": 1 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minCount: 2,
+						single: { "houg": 2 },
+					},
+					{
+						// Miyuki K2
+						ids: [959],
+						minCount: 3,
+						single: { "houg": 3 },
+					},
+				],
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
 			"296": {
@@ -8301,6 +8387,48 @@
 						// Naganami Kai Ni
 						ids: [543],
 						single: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// Smoke Generator (Smoke Screen)
+			"500": {
+				count: 0,
+				byShip: [
+					{
+						// Miyuki K2
+						ids: [959],
+						multiple: { "houk": 4 },
+					},
+					{
+						// All remodels of Johnston, Samuel B.Robers, Sendai, Harukaze, Kamikaze, Shikinami, Uranami, Aoba
+						origins: [562, 561, 54, 473, 471, 14, 486, 61],
+						multiple: { "houk": 3 },
+					},
+					{
+						// All remodels of Inazuma, Haguro, Hatsushimo, Kasumi, Fubuki, Atago, Amagiri, Hamanami
+						origins: [37, 65, 41, 49, 9, 67, 479, 484],
+						multiple: { "houk": 2 },
+					},
+				],
+			},
+			// Smoke Generator Kai (Smoke Screen)
+			"501": {
+				count: 0,
+				byShip: [
+					{
+						// Miyuki K2
+						ids: [959],
+						multiple: { "houk": 4 },
+					},
+					{
+						// All remodels of Johnston, Samuel B.Robers, Sendai, Harukaze, Kamikaze, Shikinami, Uranami, Aoba
+						origins: [562, 561, 54, 473, 471, 14, 486, 61],
+						multiple: { "houk": 3 },
+					},
+					{
+						// All remodels of Inazuma, Haguro, Hatsushimo, Kasumi, Fubuki, Atago, Amagiri, Hamanami
+						origins: [37, 65, 41, 49, 9, 67, 479, 484],
+						multiple: { "houk": 2 },
 					},
 				],
 			},

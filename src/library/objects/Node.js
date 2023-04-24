@@ -78,6 +78,12 @@ Used by SortieManager
 			} else {
 				this.mainFlagshipKilled = false;
 			}
+
+			// `api_e_deck_info` added for /start and /next since 2023-04-23
+			this.enemyPreview = [];
+			if(Array.isArray(nodeData.api_e_deck_info)){
+				this.enemyPreview = nodeData.api_e_deck_info;
+			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
 		this.enemyHP = [{},{},{},{},{},{}];
@@ -501,6 +507,7 @@ Used by SortieManager
 
 		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
+		this.smokeType = battleData.api_smoke_type || 0;
 		
 		if((battleData.api_name || "").includes("ld_airbattle") || this.eventKind === 6) {
 			this.isLongDistanceAirRaid = true;

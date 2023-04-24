@@ -573,7 +573,7 @@ KC3改 Ship Object
 	   0 <= fuelPercent <= 1, < 0 use current fuel
 	   0 <= ammoPercent <= 1, < 0 use current ammo
 	   to calculate bauxite cost: bauxiteNeeded == true
-	   to calculate steel cost per battles: steelNeeded == true
+	   to calculate steel cost per battle: steelNeeded == true
 	   costs of expeditions simulate rounding by adding roundUpFactor(0.4/0.5?) before flooring
 	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
 	 */

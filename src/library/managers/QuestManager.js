@@ -247,6 +247,19 @@ Uses KC3Quest objects to play around with
 					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyMar.resetMonth);
 				},
 			},
+			// Reset on 1st April every year
+			yearlyApr: {
+				type: 'yearlyApr',
+				key: 'timeToResetYearlyAprQuests',
+				resetMonth: APRIL,
+				questIds: [362],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyApr.type);
+				},
+				calculateNextReset: function (serverTime) {
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyApr.resetMonth);
+				},
+			},
 			// Reset on 1st May every year
 			yearlyMay: {
 				type: 'yearlyMay',
@@ -525,6 +538,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyJan').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyApr').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyJun').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyJul').indexOf(questId)>-1;
@@ -586,8 +600,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -629,8 +643,7 @@ Uses KC3Quest objects to play around with
 					});
 				} else {
 					const thisMonth = Date.getJstDate().getMonth();
-					// keep empty for umimplemented months
-					const monthAbbr = ["Jan", "Feb", "Mar", "", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][thisMonth];
+					const monthAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][thisMonth];
 					const type = monthAbbr ? "yearly" + monthAbbr : false;
 					console.log("Auto found yearlies", type);
 					if(type) this.resetLoop(this.getRepeatableIds(type));
@@ -821,6 +834,15 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip(143)  // Musashi any remodel
 							&& fleet.countShipType(3) >= 1
 							&& fleet.countShipType(2) >= 2;
+					},
+				"362": // C72 PvP with Fubuki, Shirayuki, Hatsuyuki, Miyuki
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(9)   // Fubuki any remodel
+							&& fleet.hasShip(10)  // Shirayuki any remodel
+							&& fleet.hasShip(32)  // Hatsuyuki any remodel
+							&& fleet.hasShip(11); // Miyuki any remodel
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

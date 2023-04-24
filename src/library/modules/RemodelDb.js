@@ -114,6 +114,7 @@
                     return 20;
                 case 206: // Isonami
                     return 28;
+                case 204: // Miyuki
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
                 case 900: // Yamashiomaru
