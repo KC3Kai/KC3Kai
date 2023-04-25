@@ -529,11 +529,11 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship is Yamashiomaru with ASW capble aircraft equipped
+	 * @return true if this ship is Yamashiomaru with ASW possible aircraft equipped
 	 */
-	 KC3Ship.prototype.isYamashiomaruWithAswAircraft = function(){
+	 KC3Ship.prototype.isYamashiomaruWithAircraft = function(){
 		if(this.isDummy()) return false;
-		return [900, 717].includes(this.masterId) && this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
+		return [900, 717].includes(this.masterId) && this.hasEquipmentType(2, [7, 8, 25, 26]);
 	};
 
 	/* REPAIR TIME
@@ -1042,7 +1042,7 @@ KC3改 Ship Object
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Yamashiomaru
-			const isAirAntiSubStype = this.isAirAntiSubStype() || this.isHayasuiKaiWithTorpedoBomber() || this.isYamashiomaruWithAswAircraft();
+			const isAirAntiSubStype = this.isAirAntiSubStype() || this.isHayasuiKaiWithTorpedoBomber() || this.isYamashiomaruWithAircraft();
 			if(isAirAntiSubStype) {
 				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
 				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
@@ -2902,7 +2902,7 @@ KC3改 Ship Object
 		const isKagaK2Go = this.masterId === 646;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru
-		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAswAircraft();
+		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAircraft();
 		if(isAirAntiSubStype) {
 			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertain conditions (using CVL's currently),
 			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
@@ -2917,6 +2917,8 @@ KC3改 Ship Object
 			// For day time, false if CVL or CVL-like chuuha
 			// Yamashiomaru can air attack even taiha, but power calc seems fall back to depth charge?
 			// https://twitter.com/yukicacoon/status/1505719117260550147
+			// If 0 asw stat dive bomber equipped, even no depth charge used
+			// https://twitter.com/CC_jabberwock/status/1650452631398256640
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
 			// or if Fusou-class K2 equipped Depth Charge
@@ -2924,7 +2926,7 @@ KC3改 Ship Object
 		}
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
-		//      Yamashiomaru uses depth charge if not air attack or any ASW stat > 0 gear equppied.
+		//      Yamashiomaru uses depth charge if not air attack or no gear equppied.
 		// *FBB: if Yamato K2 inherits K2 Juu's asw mod, she can depth charge without any equip.
 		// https://twitter.com/yukicacoon/status/1554821784104419329
 		// it's more likely no stype limited ingame, the asw stat of ship was the only condition?
