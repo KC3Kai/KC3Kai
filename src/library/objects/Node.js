@@ -1760,6 +1760,7 @@ Used by SortieManager
 					if(eSlot[slotIdx] > 0 && !!gearMaster) {
 						tooltip += "\n" + $("<img />")
 							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
+							.attr("alt", eSlot[slotIdx])
 							.css(iconStyles).prop("outerHTML");
 						tooltip += KC3Meta.gearName(gearMaster.api_name);
 						if(KC3GearManager.carrierBasedAircraftType3Ids
@@ -1914,7 +1915,8 @@ Used by SortieManager
 						const gearMaster = KC3Master.slotitem(gid);
 						const gearIcon = $("<img/>").width(13).height(13)
 							.css("vertical-align", "text-bottom")
-							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
+							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
+							.attr("alt", gid);
 						if(isStarShellUser && gearMaster.api_type[2] === 33) {
 							gearIcon.css("filter", "drop-shadow(0px 0px 2px #ff3399)")
 								.css("-webkit-filter", "drop-shadow(0px 0px 2px #ff3399)");
@@ -1932,7 +1934,8 @@ Used by SortieManager
 						.css("vertical-align", "text-bottom")
 						.css("border-radius", "50%")
 						.css("background-color", "rgba(192,192,192,0.5)")
-						.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
+						.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
+						.attr("alt", friendlyFleet.api_slot_ex[idx]);
 					if(isAaciTriggered && aaciInfo[idx].items.includes(gearMaster.api_id)) {
 						gearIcon.css("filter", "drop-shadow(0px 0px 2px #119911)")
 							.css("-webkit-filter", "drop-shadow(0px 0px 2px #119911)");

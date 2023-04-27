@@ -4174,7 +4174,7 @@
 					const consumeGearBox = $(".remodel_consume_item", consumeList);
 					$(".remodel_slot_icon img", consumeGearBox)
 						.attr("src", KC3Meta.itemIcon(consumeGear.api_type[3]))
-						.data("masterId", masterId)
+						.attr("alt", masterId).data("masterId", masterId)
 						.on("dblclick", this.gearDoubleClickFunction);
 					$(".remodel_slot_name", consumeGearBox)
 						.text(KC3Meta.gearName(consumeGear.api_name))
@@ -5175,6 +5175,7 @@
 			.attr("src", KC3Meta.itemIcon(gearMst.api_type[3]))
 			.attr("title", (recipe.api_id ? "{0}" : "[{0}]")
 				.format(recipe.api_id || gearMst.api_id))
+			.attr("alt", gearMst.api_id)
 			.data("masterId", gearMst.api_id)
 			.on("dblclick", self.gearDoubleClickFunction);
 		$(".remodel_slot_name", itemBox)
@@ -5246,13 +5247,15 @@
 			var fcpMaster = KC3Master.slotitem(fcontactId);
 			fContactIcon = $("<img />")
 				.attr("src", KC3Meta.itemIcon(fcpMaster.api_type[3]))
-				.attr("title", KC3Meta.gearName(fcpMaster.api_name));
+				.attr("title", KC3Meta.gearName(fcpMaster.api_name))
+				.attr("alt", fcontactId);
 		}
 		if(econtactId > 0){
 			var ecpMaster = KC3Master.slotitem(econtactId);
 			eContactIcon = $("<img />")
 				.attr("src", KC3Meta.itemIcon(ecpMaster.api_type[3]))
-				.attr("title", KC3Meta.gearName(ecpMaster.api_name));
+				.attr("title", KC3Meta.gearName(ecpMaster.api_name))
+				.attr("alt", econtactId);
 		}
 		contactSpan
 			.append(!!fContactIcon ? fContactIcon : fcontact)

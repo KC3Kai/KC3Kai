@@ -780,6 +780,9 @@ KC3改 Equipment Object
 			const isLandBaseHeavyBomber = [53].includes(type2);
 			const isJet = [57, 58].includes(type2);
 			const isAsAircraft = [25, 26].includes(type2);
+			const targetMst = targetShipId > 0 && KC3Master.ship(targetShipId);
+			const isTargetLand = !!targetMst && targetMst.api_soku === 0;
+
 			result += 25;
 			let stat = isTorpedoBomber || isLandBaseAttacker || isLandBaseHeavyBomber ?
 				this.master().api_raig : this.master().api_baku;
@@ -787,12 +790,20 @@ KC3改 Equipment Object
 			if(isLandBaseAttacker || isLandBaseHeavyBomber) {
 				if(isLandBaseAttacker) typeModifier = 0.8;
 				// use DV stat if LandBase Attack Aircraft against land installation
-				if(targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
+				if(isTargetLand) {
 					stat = this.master().api_baku;
 				}
 			}
-			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
+			// Antisub Patrol and Rotorcraft might use different values?
+			// against DD for Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
+			// https://twitter.com/Divinity_123/status/1651147441607983104
+			if(isAsAircraft) {
+				const isTargetDestroyer = !isTargetLand && !!targetMst && targetMst.api_stype === 2;
+				stat = (this.masterId === 491 && isTargetDestroyer) ? 30 : this.master().api_baku || 0;
+				typeModifier = 1;
+			}
+			stat += this.attackPowerImprovementBonus("lbas");
 			// even no 1.8 found on Shinzan Kai, see
 			// https://twitter.com/yukicacoon/status/1341747923109875715
 			let capModifier = isLandBaseHeavyBomber ? 1.0 : 1.8;
@@ -807,7 +818,8 @@ KC3改 Equipment Object
 	 */
 	KC3Gear.prototype.applyLandbasePowerCap = function(precapPower){
 		// increased from 150 to 170 since 2021-03-01
-		const cap = 170;
+		// suspected to be increased to 190 sometime? uncertain since LBAA power can rarely reach cap
+		const cap = 190;
 		const isCapped = precapPower > cap;
 		const power = Math.floor(isCapped ? cap + Math.sqrt(precapPower - cap) : precapPower);
 		return {
@@ -888,10 +900,9 @@ KC3改 Equipment Object
 				// CVL, BB, AO
 				if([7, 8, 9, 10, 22].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.3;
 			}
-			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) works like LBAA
+			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) works like LBAA,
+			// might be hidden base power too, see #landbaseAirstrikePower
 			if(this.masterId === 491 && !isLand) {
-				// DD, supposed to be 19 TP, 0.8 type modifier
-				if([2].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.8;
 			}
 		}
 		// Postcap LBAA recon modifier if LB recon is present
