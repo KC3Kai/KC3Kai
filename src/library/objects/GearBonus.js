@@ -90,6 +90,8 @@
 				type21AirRadarIds: [30, 410],
 				type21AirRadarK2: 0,
 				type21AirRadarK2Ids: [410],
+				type42AirRadarK2: 0,
+				type42AirRadarK2Ids: [411],
 				rangefinderAirRadar: 0,
 				rangefinderAirRadarIds: [142, 460],
 				rangefinderKaiAirRadar: 0,
@@ -2980,17 +2982,17 @@
 				byShip: [
 					{
 						// all Kongou Class Kai Ni+
-						ids: [149, 150, 151, 152, 591, 592],
+						ids: [149, 150, 151, 152, 591, 592, 593, 954],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2/C and Haruna K2
-						ids: [149, 151, 591],
+						// for Kongou K2/C and Haruna K2+
+						ids: [149, 151, 591, 593, 954],
 						multiple: { "houg": 1 },
 					},
 					{
-						// extra +1 aa, +2 ev for Haruna K2
-						ids: [151],
+						// extra +1 aa, +2 ev for Haruna K2+
+						ids: [151, 593, 954],
 						multiple: { "tyku": 1, "houk": 2 },
 					},
 				],
@@ -3002,12 +3004,12 @@
 				byShip: [
 					{
 						// all Kongou Class Kai Ni+
-						ids: [149, 150, 151, 152, 591, 592],
+						ids: [149, 150, 151, 152, 591, 592, 593, 954],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2/C and Haruna K2
-						ids: [149, 151, 591],
+						// for Kongou K2/C and Haruna K2+
+						ids: [149, 151, 591, 593, 954],
 						multiple: { "houg": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -3020,43 +3022,43 @@
 						multiple: { "tyku": 1 },
 					},
 					{
-						// extra +2 aa, +2 ev for Haruna K2
-						ids: [151],
+						// extra +2 aa, +2 ev for Haruna K2+
+						ids: [151, 593, 954],
 						multiple: { "tyku": 2, "houk": 2 },
 					},
 					{
 						// by stars for Haruna K2
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 1,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 3,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 5,
 						multiple: { "houg": 1 },
 					},
 					{
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 7,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 8,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 9,
 						multiple: { "houg": 1 },
 					},
 					{
-						ids: [151],
+						ids: [151, 593, 954],
 						minStars: 10,
 						multiple: { "houk": 1 },
 					},
@@ -3099,6 +3101,173 @@
 					},
 				],
 			},
+			// 35.6cm Twin Gun Mount Kai 3 (Dazzle Camouflage)
+			"502": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// +1 fp for Hiei K2+, Kirishima K2
+						ids: [150, 592, 152],
+						multiple: { "houg": 1 },
+					},
+					{
+						// +2 fp for Kongou K2+, Haruna K2
+						ids: [149, 591, 151],
+						multiple: { "houg": 2, "tyku": 1 },
+					},
+					{
+						// +3 fp Haruna K2C
+						ids: [954],
+						multiple: { "houg": 3, "tyku": 3 },
+					},
+					{
+						// +5 fp Haruna K2?
+						ids: [593],
+						multiple: { "houg": 5, "tyku": 4 },
+					},
+					{
+						// total +2 aa for Haruna K2
+						ids: [151],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// for Kongou K2/C and Haruna K2+
+						ids: [149, 151, 591, 954],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 2 },
+						},
+					},
+					{
+						// Haruna K2?
+						ids: [593],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "houk": 4 },
+						},
+					},
+					{
+						// Haruna K2+
+						ids: [151, 593, 954],
+						synergy: {
+							flags: [ "type21AirRadarK2" ],
+							single: { "tyku": 1 },
+							byStars: {
+								gear: 410,
+								multiple: false,
+								 "7": { "houg": 1 },
+								"10": { "houk": 1 },
+							}
+						}
+					},
+					{
+						// Haruna K2+
+						ids: [151, 593, 954],
+						synergy: {
+							flags: [ "type42AirRadarK2" ],
+							single: { "tyku": 2 },
+							byStars: {
+								gear: 411,
+								multiple: false,
+								 "2": { "houg": 1 },
+								 "4": { "houk": 1 },
+								 "6": { "houm": 1 },
+								 "8": { "tyku": 1 },
+								"10": { "houg": 1 },
+							}
+						}
+					},
+					{
+						// by stars for Haruna K2C+
+						ids: [593, 954],
+						minStars: 0,
+						multiple: { "houk": 3 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [593, 954],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// by stars for Haruna K2, Kongou K2C
+						ids: [151, 591],
+						minStars: 0,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151],
+						minStars: 2,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151, 591],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [151, 591],
+						minStars: 6,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [151, 591],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [151, 591],
+						minStars: 10,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// by stars for Kongou K2, Hiei K2/C, Kirishima K2
+						ids: [149, 150, 152, 592],
+						minStars: 5,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [149, 150, 152, 592],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [149, 150, 152, 592],
+						minStars: 10,
+						multiple: { "tyku": 1 },
+					},
+				],
+			},
 			// 35.6cm Twin Gun Mount Kai
 			"328": {
 				count: 0,
@@ -3130,6 +3299,16 @@
 					// extra +1 fp, +1 aa for Hiei Kai Ni C
 					{
 						ids: [592],
+						multiple: { "houg": 1, "tyku": 1 },
+					},
+					// extra +2 aa for Haruna Kai Ni ?
+					{
+						ids: [593],
+						multiple: { "tyku": 2 },
+					},
+					// extra +1 fp, +1 aa for Haruna Kai Ni C?
+					{
+						ids: [954],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 				],
@@ -3166,6 +3345,13 @@
 					// Fusou Class
 					"26": "2",
 				},
+				byShip: [
+					{
+						// Haruna Kai Ni ?
+						ids: [593],
+						multiple: { "houg": -1, "raig": -1, "tyku": 2 },
+					},
+				],
 			},
 			// 41cm Triple Gun Mount Kai Ni
 			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
@@ -3346,11 +3532,23 @@
 					},
 					// Kongou Class Kai Ni only (K2C incapable)
 					"6": {
-						remodel: 2,
-						remodelCap: 2,
-						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+							remodel: 2,
+							remodelCap: 2,
+							multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
+				byShip: [
+					{
+						// Kongou K2C, Hiei K2C
+						ids: [591, 592],
+						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+					},
+					{
+						// Haruna K2C+
+						ids: [593, 954],
+						multiple: { "houg": 1, "souk": 1, "houk": -1 },
+					},
+				],
 			},
 			// 16inch Mk.I Triple Gun Mount + AFCT Kai
 			"299": {
@@ -3371,6 +3569,18 @@
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
+				byShip: [
+					{
+						// Kongou K2C, Hiei K2C
+						ids: [591, 592],
+						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+					},
+					{
+						// Haruna K2C+
+						ids: [593, 954],
+						multiple: { "houg": 1, "souk": 1, "houk": -1 },
+					},
+				],
 			},
 			// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284
 			"300": {
@@ -3391,6 +3601,18 @@
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
+				byShip: [
+					{
+						// Kongou K2C, Hiei K2C
+						ids: [591, 592],
+						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+					},
+					{
+						// Haruna K2C+
+						ids: [593, 954],
+						multiple: { "houg": 1, "souk": 1, "houk": -1 },
+					},
+				],
 			},
 			// 16inch Mk.I Twin Gun Mount
 			"330": {
@@ -4363,7 +4585,7 @@
 					},
 					// Kongou Class
 					"6": {
-						multiple: { "tyku": 2, "houk": 2 },
+						multiple: { "tyku": -2, "houk": -2 },
 					},
 					// Gangut Class
 					"73": "6",
@@ -4371,8 +4593,8 @@
 					"113": "6",
 				},
 				byShip: {
-					// Yamato K2+, Musashi K2
-					ids: [911, 916, 546],
+					// Yamato K2+, Musashi K2, Haruna K2C+
+					ids: [911, 916, 546, 593, 954],
 					multiple: { "tyku": 2, "houk": 2 },
 					synergy: {
 						flags: [ "rangefinderKaiAirRadar" ],
@@ -4674,6 +4896,11 @@
 						// Yura Kai Ni
 						ids: [488],
 						multiple: { "houg": 2, "raig": 4, "houk": 4 },
+					},
+					{
+						// Haruna K2?
+						ids: [593],
+						multiple: { "raig": -1, "houk": -1 },
 					},
 				],
 			},
@@ -6848,6 +7075,7 @@
 			// Type 21 Air Radar Kai Ni
 			"410": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Akizuki Class
 					"54": [
@@ -6901,19 +7129,24 @@
 					},
 					{
 						// stars >= +4 on members below
-						ids: [151, 411, 412, 541, 573, 553, 554],
+						ids: [151, 593, 954, 411, 412, 541, 573, 553, 554],
 						minStars: 4,
 						single: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// stars +10 on members below
-						ids: [151, 411, 412, 541, 573, 553, 554],
+						ids: [151, 593, 954, 411, 412, 541, 573, 553, 554],
 						minStars: 10,
 						single: { "houg": 1, "tyku": 1 },
 					},
 					{
-						// Haurna K2, Fusou K2, Yamashiro K2
-						ids: [151, 411, 412],
+						// Haurna K2?
+						ids: [593],
+						single: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+					{
+						// Haurna K2+, Fusou K2, Yamashiro K2
+						ids: [151, 593, 954, 411, 412],
 						single: { "houg": 3, "tyku": 4 },
 					},
 					{
@@ -7005,8 +7238,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+
-						ids: [407,   145,        419,             151,       541,       911, 916],
+						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+, Haruna K2C+
+						ids: [407,   145,        419,             151,       541,       911, 916,   593,954],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
@@ -7281,6 +7514,11 @@
 						},
 					],
 				},
+				byShip: {
+					// Haruna K2?
+					ids: [593],
+					single: { "houg": -1 },
+				},
 			},
 			// Type 3 Shell
 			"35": {
@@ -7306,7 +7544,7 @@
 					},
 					{
 						// Haruna K2 +1 aa, +1 ev
-						ids: [151],
+						ids: [151, 593, 954],
 						single: { "tyku": 1, "houk": 1 },
 					},
 					{
@@ -7352,6 +7590,16 @@
 						// Haruna K2 totally +2 fp, +2 aa, +1 ev
 						ids: [151],
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Haruna K2? totally +2 fp, +4 aa, +2 ev
+						ids: [593],
+						single: { "houg": 1, "tyku": 3, "houk": 2 },
+					},
+					{
+						// Haruna K2C totally +3 fp, +3 aa, +1 ev
+						ids: [954],
+						single: { "houg": 2, "tyku": 2, "houk": 1 },
 					},
 					{
 						// Kirishima K2 totally +3 fp, +2 aa
@@ -7410,6 +7658,16 @@
 						// Haruna K2 totally +2 fp, +3 aa, +2 ev
 						ids: [151],
 						single: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Haruna K2? totally +3 fp, +6 aa, +3 ev
+						ids: [593],
+						single: { "houg": 2, "tyku": 5, "houk": 3 },
+					},
+					{
+						// Haruna K2C totally +3 fp, +5 aa, +2 ev
+						ids: [954],
+						single: { "houg": 2, "tyku": 4, "houk": 2 },
 					},
 					{
 						// Kirishima K2 totally +3 fp, +3 aa
