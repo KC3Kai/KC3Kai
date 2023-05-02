@@ -1011,8 +1011,10 @@ Uses KC3Quest objects to play around with
 						return fleet.countShipType([7, 11, 18]) === 0
 							// replace ctype with by nation function in future?
 							&& fleet.countShipClass([
-								65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, // US
-								67, 78, 82, 88, 108, 112,                                         // UK
+								// US
+								65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121,
+								// UK
+								67, 78, 82, 88, 108, 112,
 							]) >= 3;
 					},
 				"975": // By12 Sortie Isonami K2, Uranami K2, Ayanami K2, Shikinami K2

@@ -1265,14 +1265,6 @@
 											KC3Meta.term(flag.toCamelCase(true));
 										const synergyNameList = Array.isArray(idList) ? idList.map(id =>
 											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`) : [];
-										if (synergyList[flag + "MinStars"] > 0) {
-											const level = synergyList[flag + "MinStars"];
-											synergyName += "&emsp;&#9733;{0}".format(
-												Number(level) >= 10 ?
-												'<span style="font-size: smaller">max</span>' :
-												'+' + level
-											);
-										}
 										$(".synergyType", synergyFlag).html(synergyName)
 											.attr("title", synergyNameList.join("\n"));
 										$(".synergyFlags", synergyBox).append(synergyFlag);
@@ -1300,6 +1292,22 @@
 											$(".gearType", synergyBonusBox).append($("<img>")
 												.attr("src", KC3Meta.itemIcon(synergyIcon(syn.byCount.gear))));
 											$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
+										});
+									}
+									if (syn.byStars) {
+										Object.keys(syn.byStars).forEach(function (number) {
+											if (isNaN(parseInt(number))) {
+												return;
+											}
+											const synergyLevelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
+											addStatsToBox(syn.byStars[number], synergyLevelBox);
+											$(".gearLevel", synergyLevelBox).html("&#9733;{0}".format(
+												Number(number) >= 10 ?
+													'<span style="font-size: smaller">max</span>' :
+													'+' + number
+												)
+											);
+											$(".synergyBonusRows", synergyBox).append(synergyLevelBox);
 										});
 									}
 									$(".synergyGears", gearBox).append(synergyBox);

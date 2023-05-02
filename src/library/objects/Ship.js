@@ -3263,6 +3263,7 @@ KC3改 Ship Object
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
+	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01)
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
@@ -3285,7 +3286,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoKongouCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Kongou-class K2C and not even Chuuha
+		// is this ship Kongou-class K2C(K2B) and not even Chuuha
 		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
@@ -3300,6 +3301,10 @@ KC3改 Ship Object
 						"591": [592, 151, 439, 364],
 						// Hiei K2C: Kongou K2C, Kirishima K2
 						"592": [591, 152],
+						// Haruna K2B: Kongou K2C, Hiei K2C
+						"593": [591, 592],
+						// Haruna K2C: Kongou K2C, Hiei K2C
+						"954": [591, 592],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
 						&& !fleetObj.ship(1).isStriped(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
@@ -3358,7 +3363,7 @@ KC3改 Ship Object
 	 *   2-ship cutin will be performed;
 	 * if flagship is Yamato K2+, and 2nd, 3rd is specific combination, 3-ship cutin triggered,
 	 *   known 2nd/3rd ship pairs are: Nagato K2+Mutsu K2, Ise K2+Hyuuga K2, Fusou K2+Yamashiro K2,
-	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C, SouthDakota K+Washington K, Italia+Roma K, Colorado K+Maryland K
+	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C/Haruna K2B+, SouthDakota K+Washington K, Italia+Roma K, Colorado K+Maryland K
 	 * 2nd, 3rd ship must be healthy either (not even Chuuha).
 	 *
 	 * The same additional ammo consumptions: 16% for 400, 12% for 401
@@ -3412,6 +3417,8 @@ KC3改 Ship Object
 							{ p1: [411], p2: [412] },      // Fusou + Yamashiro
 							{ p1: [576], p2: [364] },      // Nelson + Warspite
 							{ p1: [591], p2: [592] },      // Kongou + Hiei
+							{ p1: [591], p2: [593] },      // Kongou + Haruna K2B (Haruna added since 2023-05-01)
+							{ p1: [591], p2: [954] },      // Kongou + Haruna K2C
 							{ p1: [697], p2: [659] },      // South Dakota + Washington
 							{ p1: [446], p2: [447] },      // Italia + Roma
 							{ p1: [1496], p2: [918] },     // Colorado + Maryland
@@ -4044,8 +4051,9 @@ KC3改 Ship Object
 				if(this.canDoKongouCutin()) {
 					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 					// Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
+					// Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
 					const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
-					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.2 * engagementMod));
+					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.4 * engagementMod));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {

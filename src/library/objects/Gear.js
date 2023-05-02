@@ -70,6 +70,9 @@ KC3改 Equipment Object
 						case "airRadarIds":
 							if(gear.isAirRadar()) synergyGears.airRadar += 1;
 						break;
+						case "highAccuracyRadarIds":
+							if(gear.master().api_houm >= 8) synergyGears.highAccuracyRadar += 1;
+						break;
 						case "rotorcraftIds":
 							if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
 						break;
@@ -185,6 +188,20 @@ KC3改 Equipment Object
 							} else {
 								total += (synergy.byCount[countAmount] || {})[apiName] || 0;
 							}
+						}
+						if(synergy.byStars) {
+							const gearMstId = synergy.byStars.gearId;
+							const starDist = (bonusGears[gearMstId] || {}).starsDist || [];
+							const isMultiple = !!synergy.byStars.multiple;
+							Object.keys(synergy.byStars).forEach(starStr => {
+								const minStars = parseInt(starStr);
+								if(!isNaN(minStars)) {
+									const synergyGearCount = starDist.slice(minStars).sumValues();
+									if(synergyGearCount > 0) {
+										total += ((synergy.byStars[starStr] || {})[apiName] || 0) * (isMultiple ? synergyGearCount : 1);
+									}
+								}
+							});
 						}
 					}
 				};

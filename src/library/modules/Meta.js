@@ -154,21 +154,24 @@ Provides access to data on built-in JSON files
 			285, // Houshou Kai -> K2
 			894, // Houshou K2 -> K2S
 			204, // Miyuki Kai -> K2
+			151, // Haruna K2 -> K2B
+			593, // Haruna K2B -> K2C
+			954, // Haruna K2C -> K2B
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
 		coloradoCutinShips: [601, 1496, 913, 918],
-		kongouCutinShips: [591, 592],
+		kongouCutinShips: [591, 592, 593, 954],
 		subFleetCutinShips: [184, 634, 635, 639, 640],
 		yamatoCutinShips: [911, 916],
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392],
-		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496, 918],
+		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			1516: 1516, 1517: 1517, 1518: 1518, 1519: 1516, 1520: 1517, 1521: 1518, 1522: 1516, 1523: 1516,

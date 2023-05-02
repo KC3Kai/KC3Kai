@@ -848,7 +848,8 @@
 	padding-left: 40px;
 }
 
-.tab_mstship .shipInfo .bonusList .leveledBonusStatsList .bonusStatsList {
+.tab_mstship .shipInfo .bonusList .leveledBonusStatsList .bonusStatsList,
+.tab_mstship .shipInfo .bonusList .synergyGears .bonusStatsList {
 	padding-left: 20px;
 }
 
