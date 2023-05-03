@@ -3261,7 +3261,7 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
-	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
+	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
 	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01)
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
@@ -3297,8 +3297,8 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd ship is valid partner and not even Chuuha
 					validCombinedShips = ({
-						// Kongou K2C: Hiei K2C, Haruna K2, Warspite
-						"591": [592, 151, 439, 364],
+						// Kongou K2C: Hiei K2C, Haruna K2+, Warspite
+						"591": [592, 151, 593, 954, 439, 364],
 						// Hiei K2C: Kongou K2C, Kirishima K2
 						"592": [591, 152],
 						// Haruna K2B: Kongou K2C, Hiei K2C
