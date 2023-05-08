@@ -362,6 +362,7 @@ Saves and loads significant data for future use
 		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
 		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,
 		 *     either hard-coded the exception conndition in following codes.
+		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem` and `#excludeEquipList`
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
 		 *   * [166] AkitsuMaru Kai can equip aviation personnel [402] Arctic Gear & Deck Personnel only,
@@ -369,6 +370,7 @@ Saves and loads significant data for future use
 		 *   * [945/727] No.101 Transport Ship can only equip [229, 379, 382] in small guns,
 		 *     [727] No.101 Kai can only equip [66, 220] in secondary guns.
 		 *     the same hard-code method with above, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
+		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem` and `#excludeEquipList`
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
 		 *     * see `main.js#PresetDeployLayer.prototype._validate`
