@@ -298,7 +298,7 @@ KC3改 Equipment Object
 					case 37: // Anti-Ground Rocket
 					case 39: // Skilled Lookouts
 					case 46: // Amphibious Tank
-					//case 52: // Landing Force
+					case 52: // Landing Force
 					case 54: // Smoke Generator
 						modifier = 1; break;
 					case 3: // Large Cal. Main
@@ -350,7 +350,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// Known standard sqrt(stars), see equiptype for api_type[2]
-				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 35, 36, 37, 38, 39, 42, 46, 54].includes(type2))
+				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 35, 36, 37, 38, 39, 42, 46, 52, 54].includes(type2))
 					modifier = 1;
 				else switch(type2) {
 					case 4: // Secondary guns, same values with day shelling fire
