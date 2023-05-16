@@ -58,6 +58,12 @@
                     return 300;
                 case 150: // Hiei K2
                     return 330;
+                case 151: // Haruna K2
+                    return 390;
+                case 593: // Haruna K2B
+                    return 55;
+                case 954: // Haruna K2C
+                    return 15;
                 case 277: // Akagi Kai
                     return 100;
                 case 594: // Akagi Kai Ni
@@ -114,6 +120,7 @@
                     return 20;
                 case 206: // Isonami
                     return 28;
+                case 204: // Miyuki
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
                 case 900: // Yamashiomaru
@@ -267,6 +274,8 @@
                 case 624: // Yuubari Kai Ni D
                     return 30;
                 case 579: // Gotland Kai
+                case 593: // Haruna K2B
+                case 954: // Haruna K2C
                     return 35;
                 case 306: // Noshiro Kai
                     return 77;

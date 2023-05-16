@@ -218,6 +218,8 @@ Retrieves when needed to apply on components
 				sr_locktag_max         : 0,
 				sr_dexmark             : true,
 				sr_dexorder            : false,
+				sr_akashi_slock        : false,
+				sr_locking_fscroll     : true,
 
 				idbSaveSortie          : true,
 				idbSaveExcludeMaps     : [],

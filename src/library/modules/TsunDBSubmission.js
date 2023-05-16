@@ -663,7 +663,8 @@
 		
 		processEnemy: function(http, airRaidData) {
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
-			this.resupplyUsed = !!http.params.api_supply_flag;
+			// Caution: http params are strings, !!"0" is true
+			this.resupplyUsed = http.params.api_supply_flag == 1;
 			const apiData = airRaidData || http.response.api_data;
 			this.enemyComp = {};
 			
@@ -1111,7 +1112,7 @@
 				difficulty: this.data.difficulty,
 				debuffed: !!thisNode.debuffed,
 				cleared: !!this.data.cleared,
-				resupplyused: !!http.params.api_supply_flag,
+				resupplyused: http.params.api_supply_flag == 1,
 				playerformation: thisNode.fformation,
 				rawapi: apiData,
 				amountofnodes: this.data.nodeInfo.amountOfNodes, // to be used for phase tracking
@@ -1148,7 +1149,8 @@
 				fleet2: null,
 				lbas: PlayerManager.bases.filter(b => b.map === this.currentMap[0] && b.action === 1).map(b => formatLandBase(b.sortieJson())),
 				support: null,
-				fleettype: this.data.fleetType
+				fleettype: this.data.fleetType,
+				smokeused: http.params.api_smoke_flag == 1
 			};
 			if (KC3SortieManager.isCombinedSortie()) {
 				fleet.fleet2 = PlayerManager.fleets[1].ship().map(ship => formatShip(ship));

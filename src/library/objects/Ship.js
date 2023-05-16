@@ -529,11 +529,11 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship is Yamashiomaru with ASW capble aircraft equipped
+	 * @return true if this ship is Yamashiomaru with ASW possible aircraft equipped
 	 */
-	 KC3Ship.prototype.isYamashiomaruWithAswAircraft = function(){
+	 KC3Ship.prototype.isYamashiomaruWithAircraft = function(){
 		if(this.isDummy()) return false;
-		return [900, 717].includes(this.masterId) && this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
+		return [900, 717].includes(this.masterId) && this.hasEquipmentType(2, [7, 8, 25, 26]);
 	};
 
 	/* REPAIR TIME
@@ -573,7 +573,7 @@ KC3改 Ship Object
 	   0 <= fuelPercent <= 1, < 0 use current fuel
 	   0 <= ammoPercent <= 1, < 0 use current ammo
 	   to calculate bauxite cost: bauxiteNeeded == true
-	   to calculate steel cost per battles: steelNeeded == true
+	   to calculate steel cost per battle: steelNeeded == true
 	   costs of expeditions simulate rounding by adding roundUpFactor(0.4/0.5?) before flooring
 	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
 	 */
@@ -1042,7 +1042,7 @@ KC3改 Ship Object
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Yamashiomaru
-			const isAirAntiSubStype = this.isAirAntiSubStype() || this.isHayasuiKaiWithTorpedoBomber() || this.isYamashiomaruWithAswAircraft();
+			const isAirAntiSubStype = this.isAirAntiSubStype() || this.isHayasuiKaiWithTorpedoBomber() || this.isYamashiomaruWithAircraft();
 			if(isAirAntiSubStype) {
 				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
 				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
@@ -2902,7 +2902,7 @@ KC3改 Ship Object
 		const isKagaK2Go = this.masterId === 646;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru
-		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAswAircraft();
+		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAircraft();
 		if(isAirAntiSubStype) {
 			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertain conditions (using CVL's currently),
 			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
@@ -2917,6 +2917,8 @@ KC3改 Ship Object
 			// For day time, false if CVL or CVL-like chuuha
 			// Yamashiomaru can air attack even taiha, but power calc seems fall back to depth charge?
 			// https://twitter.com/yukicacoon/status/1505719117260550147
+			// If 0 asw stat dive bomber equipped, even no depth charge used
+			// https://twitter.com/CC_jabberwock/status/1650452631398256640
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
 			// or if Fusou-class K2 equipped Depth Charge
@@ -2924,7 +2926,7 @@ KC3改 Ship Object
 		}
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
-		//      Yamashiomaru uses depth charge if not air attack or any ASW stat > 0 gear equppied.
+		//      Yamashiomaru uses depth charge if not air attack or no gear equppied.
 		// *FBB: if Yamato K2 inherits K2 Juu's asw mod, she can depth charge without any equip.
 		// https://twitter.com/yukicacoon/status/1554821784104419329
 		// it's more likely no stype limited ingame, the asw stat of ship was the only condition?
@@ -3259,8 +3261,9 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
-	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
-	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
+	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ (extended) / Warspite
+	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2 / Haruna K2B/C (extended)
+	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01)
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
@@ -3283,21 +3286,25 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoKongouCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Kongou-class K2C and not even Chuuha
+		// is this ship Kongou-class K2C(K2B) and not even Chuuha
 		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
-				&& (!PlayerManager.combinedFleet || fleetNum === 2)) {
+				&& (!PlayerManager.combinedFleet || fleetNum !== 1)) {
 				const isFormationAllowed = [1, 4, 12, 14].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd ship is valid partner and not even Chuuha
 					validCombinedShips = ({
-						// Kongou K2C: Hiei K2C, Haruna K2, Warspite
-						"591": [592, 151, 439, 364],
-						// Hiei K2C: Kongou K2C, Kirishima K2
-						"592": [591, 152],
+						// Kongou K2C: Hiei K2C, Haruna K2+, Warspite
+						"591": [592, 151, 593, 954, 439, 364],
+						// Hiei K2C: Kongou K2C, Kirishima K2, Haruna K2B/C
+						"592": [591, 152, 593, 954],
+						// Haruna K2B: Kongou K2C, Hiei K2C
+						"593": [591, 592],
+						// Haruna K2C: Kongou K2C, Hiei K2C
+						"954": [591, 592],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
 						&& !fleetObj.ship(1).isStriped(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
@@ -3310,12 +3317,12 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is Submarine Tender without Taiha, Echelon (forward) / Line Abreast (antisub) formation selected.
+	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
 	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
 	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
-	 * Unknown in combined fleet.
+	 * Trigger-able in Striking Force, not in Combined Fleet? (too few samples to certain)
 	 *
 	 * @return API ID (300~302) if this ship can do special cut-in attack, otherwise false.
 	 */
@@ -3324,8 +3331,7 @@ KC3改 Ship Object
 		// is this ship Lv30+ Taigei/Jingei-class and not Taiha
 		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha() && this.level >= 30) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3
-				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3) {
 				const isEchelonOrLineAbreast = [4, 5, 11, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
@@ -3357,7 +3363,7 @@ KC3改 Ship Object
 	 *   2-ship cutin will be performed;
 	 * if flagship is Yamato K2+, and 2nd, 3rd is specific combination, 3-ship cutin triggered,
 	 *   known 2nd/3rd ship pairs are: Nagato K2+Mutsu K2, Ise K2+Hyuuga K2, Fusou K2+Yamashiro K2,
-	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C, SouthDakota K+Washington K, Italia+Roma K, Colorado K+Maryland K
+	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C/Haruna K2B+, SouthDakota K+Washington K, Italia+Roma K, Colorado K+Maryland K
 	 * 2nd, 3rd ship must be healthy either (not even Chuuha).
 	 *
 	 * The same additional ammo consumptions: 16% for 400, 12% for 401
@@ -3411,6 +3417,8 @@ KC3改 Ship Object
 							{ p1: [411], p2: [412] },      // Fusou + Yamashiro
 							{ p1: [576], p2: [364] },      // Nelson + Warspite
 							{ p1: [591], p2: [592] },      // Kongou + Hiei
+							{ p1: [591], p2: [593] },      // Kongou + Haruna K2B (Haruna added since 2023-05-01)
+							{ p1: [591], p2: [954] },      // Kongou + Haruna K2C
 							{ p1: [697], p2: [659] },      // South Dakota + Washington
 							{ p1: [446], p2: [447] },      // Italia + Roma
 							{ p1: [1496], p2: [918] },     // Colorado + Maryland
@@ -3494,10 +3502,10 @@ KC3改 Ship Object
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		// to differentiate Kakuza kind ID, added 100 to final result
 		if(targetShipType.isLand && this.master().api_ctype === 120) {
-			const armyUnit1Cnt = this.countEquipment(496),
-				armyUnit2Cnt = this.countEquipment(497),
-				armyUnit3Cnt = this.countEquipment(498),
-				armyUnit4Cnt = this.countEquipment(499);
+			const armyUnit1Cnt = this.countEquipment(496), // Infantry
+				armyUnit2Cnt = this.countEquipment(497),   // Chiha
+				armyUnit3Cnt = this.countEquipment(498),   // Chiha Kai
+				armyUnit4Cnt = this.countEquipment(499);   // Infantry + Chiha Kai
 			if((armyUnit3Cnt + armyUnit4Cnt) >= 2) return 106;
 			if(armyUnit2Cnt >= 1 && (armyUnit3Cnt + armyUnit4Cnt) === 1) return 105;
 			if(armyUnit2Cnt >= 2) return 104;
@@ -4043,8 +4051,9 @@ KC3改 Ship Object
 				if(this.canDoKongouCutin()) {
 					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 					// Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
+					// Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
 					const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
-					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.2 * engagementMod));
+					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.4 * engagementMod));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {

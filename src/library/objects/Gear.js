@@ -70,6 +70,9 @@ KC3改 Equipment Object
 						case "airRadarIds":
 							if(gear.isAirRadar()) synergyGears.airRadar += 1;
 						break;
+						case "highAccuracyRadarIds":
+							if(gear.master().api_houm >= 8) synergyGears.highAccuracyRadar += 1;
+						break;
 						case "rotorcraftIds":
 							if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
 						break;
@@ -186,6 +189,20 @@ KC3改 Equipment Object
 								total += (synergy.byCount[countAmount] || {})[apiName] || 0;
 							}
 						}
+						if(synergy.byStars) {
+							const gearMstId = synergy.byStars.gearId;
+							const starDist = (bonusGears[gearMstId] || {}).starsDist || [];
+							const isMultiple = !!synergy.byStars.multiple;
+							Object.keys(synergy.byStars).forEach(starStr => {
+								const minStars = parseInt(starStr);
+								if(!isNaN(minStars)) {
+									const synergyGearCount = starDist.slice(minStars).sumValues();
+									if(synergyGearCount > 0) {
+										total += ((synergy.byStars[starStr] || {})[apiName] || 0) * (isMultiple ? synergyGearCount : 1);
+									}
+								}
+							});
+						}
 					}
 				};
 				if(Array.isArray(bonusDef.synergy)) {
@@ -281,7 +298,8 @@ KC3改 Equipment Object
 					case 37: // Anti-Ground Rocket
 					case 39: // Skilled Lookouts
 					case 46: // Amphibious Tank
-					//case 52: // Landing Force
+					case 52: // Landing Force
+					case 54: // Smoke Generator
 						modifier = 1; break;
 					case 3: // Large Cal. Main
 						modifier = 1.5; break;
@@ -332,7 +350,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// Known standard sqrt(stars), see equiptype for api_type[2]
-				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 35, 36, 37, 38, 39, 42, 46].includes(type2))
+				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 35, 36, 37, 38, 39, 42, 46, 52, 54].includes(type2))
 					modifier = 1;
 				else switch(type2) {
 					case 4: // Secondary guns, same values with day shelling fire
@@ -780,23 +798,35 @@ KC3改 Equipment Object
 			const isLandBaseHeavyBomber = [53].includes(type2);
 			const isJet = [57, 58].includes(type2);
 			const isAsAircraft = [25, 26].includes(type2);
+			const targetMst = targetShipId > 0 && KC3Master.ship(targetShipId);
+			const isTargetLand = !!targetMst && targetMst.api_soku === 0;
+
 			result += 25;
 			let stat = isTorpedoBomber || isLandBaseAttacker || isLandBaseHeavyBomber ?
 				this.master().api_raig : this.master().api_baku;
 			let typeModifier = 1;
 			if(isLandBaseAttacker || isLandBaseHeavyBomber) {
-				if(isLandBaseAttacker) typeModifier = 0.8;
+				typeModifier = 0.8;
 				// use DV stat if LandBase Attack Aircraft against land installation
-				if(targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
+				if(isTargetLand) {
 					stat = this.master().api_baku;
 				}
 			}
-			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
-			// even no 1.8 found on Shinzan Kai, see
+			// Antisub Patrol and Rotorcraft might use different values?
+			// against DD for Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
+			// https://twitter.com/Divinity_123/status/1651948848351158273
+			if(isAsAircraft) {
+				const isTargetDestroyer = !isTargetLand && !!targetMst && targetMst.api_stype === 2;
+				stat = (this.masterId === 491 && isTargetDestroyer) ? 30 : this.master().api_baku || 0;
+				typeModifier = 1;
+			}
+			stat += this.attackPowerImprovementBonus("lbas");
+			let sizeModifier = 1.8;
+			// even no 1.8 found on Shinzan Kai?
 			// https://twitter.com/yukicacoon/status/1341747923109875715
-			let capModifier = isLandBaseHeavyBomber ? 1.0 : 1.8;
-			result += Math.sqrt(capacity * capModifier) * stat;
+			//if(isLandBaseHeavyBomber) sizeModifier = 1.0;
+			result += Math.sqrt(capacity * sizeModifier) * stat;
 			result *= typeModifier;
 		}
 		return result;
@@ -807,7 +837,8 @@ KC3改 Equipment Object
 	 */
 	KC3Gear.prototype.applyLandbasePowerCap = function(precapPower){
 		// increased from 150 to 170 since 2021-03-01
-		const cap = 170;
+		// suspected to be increased to 220 sometime? uncertain since LBAA power can rarely reach cap
+		const cap = 220;
 		const isCapped = precapPower > cap;
 		const power = Math.floor(isCapped ? cap + Math.sqrt(precapPower - cap) : precapPower);
 		return {
@@ -822,9 +853,30 @@ KC3改 Equipment Object
 	 * @return tuple of [normal power, critical power]
 	 */
 	KC3Gear.prototype.applyLandbasePowerModifiers = function(basicPower, landBaseObj, targetShipId = 0){
-		const cappedPower = this.applyLandbasePowerCap(basicPower).power;
 		const type2 = this.master().api_type[2];
 		const isLbaa = [47].includes(type2);
+
+		// Power modifier if LB recon is present
+		// suspected to be precap modifier?
+		// https://twitter.com/syoukuretin/status/1068477784232587264
+		// https://twitter.com/Nishisonic/status/1080146808318263296
+		// https://twitter.com/yukicacoon/status/1570246361790185473
+		// https://twitter.com/CC_jabberwock/status/1651961974497107968
+		let lbReconModifier = 1;
+		if(landBaseObj) {
+			// Get power modifier by LB recon accuray stat
+			landBaseObj.toShipObject().equipment((rid, idx, gear) => {
+				if(!rid || gear.isDummy()) { return; }
+				if(gear.master().api_type[2] === 49) {
+					const acc = gear.master().api_houm;
+					lbReconModifier = Math.max(lbReconModifier,
+						acc >= 3 ? 1.15 : 1.12
+					);
+				}
+			});
+		}
+		// Applies power cap
+		const cappedPower = this.applyLandbasePowerCap(basicPower * lbReconModifier).power;
 		const lbAttackerModifier = isLbaa ? 1.8 : 1;
 		let contactModifier = 1;
 		// TODO contact plane should be gotten from LBAS support section, wave by wave
@@ -888,31 +940,14 @@ KC3改 Equipment Object
 				// CVL, BB, AO
 				if([7, 8, 9, 10, 22].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.3;
 			}
-			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) works like LBAA
+			// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) works like LBAA,
+			// might be hidden base power too, see #landbaseAirstrikePower
 			if(this.masterId === 491 && !isLand) {
-				// DD, supposed to be 19 TP, 0.8 type modifier
-				if([2].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.8;
+				lbaaAbyssalModifier = 1;
 			}
 		}
-		// Postcap LBAA recon modifier if LB recon is present
-		// https://twitter.com/syoukuretin/status/1068477784232587264
-		// https://twitter.com/Nishisonic/status/1080146808318263296
-		// https://twitter.com/yukicacoon/status/1570246361790185473
-		let lbaaReconModifier = 1;
-		if(isLbaa && landBaseObj) {
-			// Get LBAA power modifier by LB recon accuray stat
-			landBaseObj.toShipObject().equipment((rid, idx, gear) => {
-				if(!rid || gear.isDummy()) { return; }
-				if(gear.master().api_type[2] === 49) {
-					const acc = gear.master().api_houm;
-					lbaaReconModifier = Math.max(lbaaReconModifier,
-						acc >= 3 ? 1.15 : 1.12
-					);
-				}
-			});
-		}
 		const onNormal = Math.floor(cappedPower
-			* lbAttackerModifier * contactModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
+			* lbAttackerModifier * contactModifier * lbaaAbyssalModifier * enemyCombinedModifier);
 		// Proficiency critical modifier has been applied sometime since 2017-12-11?
 		// Modifier calculation is the same, but different from carrier-based,
 		// modifiers for squadron slots are independent and no first slot bonus.
@@ -922,7 +957,7 @@ KC3改 Equipment Object
 		const proficiencyCriticalModifier = 1 + (Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100);
 		const criticalModifier = 1.5;
 		const onCritical = Math.floor(Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
-			* lbAttackerModifier * contactModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
+			* lbAttackerModifier * contactModifier * lbaaAbyssalModifier * enemyCombinedModifier);
 		return [onNormal, onCritical];
 	};
 

@@ -227,6 +227,9 @@ AntiAir: anti-air related calculations
 	// 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni or + Skilled Fire Direction Center
 	var is15mDuplexRangefinderT21AirRadarOrFDC = masterIdIn([142, 460]);
 
+	// 35.6cm Twin Gun Mount Kai 3 (Dazzle Camouflage) or Kai 4
+	var is356mmTwinGunMountKai3Plus = masterIdIn([502, 503]);
+
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -542,6 +545,7 @@ AntiAir: anti-air related calculations
 		johnstonIcon = 562,
 		fletcherIcon = 596,
 		atlantaIcon = 597,
+		harunaK2BIcon = 593,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -583,6 +587,7 @@ AntiAir: anti-air related calculations
 	var isFletcherClass = ctypeIdEq( 91 );
 	var isAtlantaClass = ctypeIdEq( 99 );
 	var isYuubariK2 = masterIdEq( 622 );
+	var isHarunaK2B = masterIdEq( harunaK2BIcon );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -614,8 +619,8 @@ AntiAir: anti-air related calculations
 			108, // Town Class
 			112, // Illustrious Class
 		]),
-		// Kongou Class Kai Ni, K2C
-		masterIdIn( [149, 150, 151, 152, 591, 592] )
+		// Kongou Class Kai Ni+
+		masterIdIn( [149, 150, 151, 152, 591, 592, 593, 954] )
 	);
 	var isYamatoClassKai2 = masterIdIn([
 		911, // Yamato K2
@@ -1180,6 +1185,19 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
 				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ))
+		)
+	);
+
+	// Haruna K2B
+	declareAACI(
+		46, 8, 1.55, // referred from abyssal resist under smoke: [3?, 6?, ?]
+		[harunaK2BIcon, lcMainGunIcon, cdmgIcon, radarIcon],
+		predAllOf(isHarunaK2B),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is356mmTwinGunMountKai3Plus ),
+				hasSome( isAAGunCDMG ),
+				hasSome( isAARadar ))
 		)
 	);
 

@@ -19,12 +19,13 @@
             // SIDENOTE1: tag conds checking can be found in EventSortieCondition.prototype._check
             // SIDENOTE2: relationships between map gauge, boss edges and bgm ids can be found in BattleScene.TaskInit.prototype._showHpGauge /.prototype._playBGM
             const configs = KC3Meta.eventLockingTagConfigs();
+            ConfigManager.load();
             this.lockLimit = ConfigManager.sr_locktag_max || configs.maxTagAmount || 2;
             this.moLocks = ConfigManager.sr_locktag_mo || configs.moTagIds || [];
             this.eoLocks = ConfigManager.sr_locktag_eo || configs.eoTagIds || [];
             this.heartLockMode = 2;
             this.showShipLevel = true;
-            this.scrollFixed = true;
+            this.scrollFixed = !!ConfigManager.sr_locking_fscroll;
             this.currentTab = "all";
         }
 
@@ -65,6 +66,9 @@
             $(".ships_area .lship .level", this.tab).toggle(this.showShipLevel);
             $(".toggleFixedScroll", this.tab).on("click", (e) => {
                 this.scrollFixed = !this.scrollFixed;
+                ConfigManager.load();
+                ConfigManager.sr_locking_fscroll = this.scrollFixed;
+                ConfigManager.save();
                 $(".vscroll", this.tab).toggleClass("scroll_fix", this.scrollFixed);
                 if (this.scrollFixed) this.adjustHeight();
             });

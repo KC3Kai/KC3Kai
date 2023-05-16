@@ -25,7 +25,7 @@
 			},
 			"t16": {
 				name: "High-Angles",
-				order: "fp"
+				order: "aa"
 			},
 			"t5": {
 				name: "Torpedos",
@@ -100,7 +100,7 @@
 				name: "Landing Craft",
 				nameTypeIdx: 2,
 				nameTypeId: 24,
-				types: [ 20, 36, 25 ]
+				types: [ 20, 36, 25, 52 ]
 			},
 			"t_other1": {
 				name: "Other",
@@ -108,7 +108,7 @@
 			},
 			"t_other2": {
 				name: "Other",
-				types: [ 26, 28, 29, 23 ]
+				types: [ 26, 28, 29, 23, 54 ]
 			},
 		},
 		shipsToExport: [],

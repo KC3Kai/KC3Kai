@@ -78,6 +78,12 @@ Used by SortieManager
 			} else {
 				this.mainFlagshipKilled = false;
 			}
+
+			// `api_e_deck_info` added for /start and /next since 2023-04-23
+			this.enemyPreview = [];
+			if(Array.isArray(nodeData.api_e_deck_info)){
+				this.enemyPreview = nodeData.api_e_deck_info;
+			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
 		this.enemyHP = [{},{},{},{},{},{}];
@@ -501,6 +507,7 @@ Used by SortieManager
 
 		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
+		this.smokeType = battleData.api_smoke_type || 0;
 		
 		if((battleData.api_name || "").includes("ld_airbattle") || this.eventKind === 6) {
 			this.isLongDistanceAirRaid = true;
@@ -1753,6 +1760,7 @@ Used by SortieManager
 					if(eSlot[slotIdx] > 0 && !!gearMaster) {
 						tooltip += "\n" + $("<img />")
 							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
+							.attr("alt", eSlot[slotIdx])
 							.css(iconStyles).prop("outerHTML");
 						tooltip += KC3Meta.gearName(gearMaster.api_name);
 						if(KC3GearManager.carrierBasedAircraftType3Ids
@@ -1907,7 +1915,8 @@ Used by SortieManager
 						const gearMaster = KC3Master.slotitem(gid);
 						const gearIcon = $("<img/>").width(13).height(13)
 							.css("vertical-align", "text-bottom")
-							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
+							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
+							.attr("alt", gid);
 						if(isStarShellUser && gearMaster.api_type[2] === 33) {
 							gearIcon.css("filter", "drop-shadow(0px 0px 2px #ff3399)")
 								.css("-webkit-filter", "drop-shadow(0px 0px 2px #ff3399)");
@@ -1925,7 +1934,8 @@ Used by SortieManager
 						.css("vertical-align", "text-bottom")
 						.css("border-radius", "50%")
 						.css("background-color", "rgba(192,192,192,0.5)")
-						.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
+						.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
+						.attr("alt", friendlyFleet.api_slot_ex[idx]);
 					if(isAaciTriggered && aaciInfo[idx].items.includes(gearMaster.api_id)) {
 						gearIcon.css("filter", "drop-shadow(0px 0px 2px #119911)")
 							.css("-webkit-filter", "drop-shadow(0px 0px 2px #119911)");

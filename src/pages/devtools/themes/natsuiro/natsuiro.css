@@ -38,6 +38,26 @@ html,body {
 	font-family: "Microsoft JhengHei UI", "Microsoft JhengHei", "Heiti TC", "LiHei Pro Medium", sans-serif;
 }
 
+.waitingForActions.logo {
+	width: 100%;
+	height: 70px;
+	top: 16px;
+	position: absolute;
+	margin: 0 auto;
+	text-align: center;
+}
+.waitingForActions.text {
+	width: 300px;
+	height: 50px;
+	line-height: 50px;
+	background: #fff;
+	border-radius: 10px;
+	margin: 90px auto 0px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}
+
 /* MODALS
 ------------------------------*/
 .modalBox {
@@ -1216,6 +1236,9 @@ ABYSS FLEET
 	border-radius:5px;
 	margin:0px 0px 2px 0px;
 	float:left;
+}
+.module.activity .encounters .encounter_record.matched {
+	box-shadow: inset 0px 0px 5px 2px #e37;
 }
 .module.activity .encounters .encounter_formation {
 	width:24px;
@@ -4590,6 +4613,22 @@ ABYSS FLEET
 
 /* ANIMATIONS
 ----------------------------------- */
+.pinkglowanim {
+	animation: glowa10 1s infinite alternate;
+}
+@keyframes glowa10 {
+	from {
+		filter:
+			drop-shadow(0 0 5px rgba(255, 87, 112, 0.5))
+			drop-shadow(0 0 7px rgba(228, 66, 141, 0.4))
+			drop-shadow(0 0 9px rgba(196, 45, 168, 0.3))
+			drop-shadow(0 0 7px rgba(228, 66, 141, 0.4))
+			drop-shadow(0 0 5px rgba(255, 87, 112, 0.5));
+	}
+	to {
+		filter: drop-shadow(0 0 5px #f5c1f5);
+	}
+}
 @-webkit-keyframes lock-warning {
 	to {
 		visibility:hidden;

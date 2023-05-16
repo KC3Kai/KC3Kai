@@ -137,6 +137,7 @@
                     .css(iconStyles)
                     .prop("outerHTML");
                 planeListHtml += $("<img />").attr("src", KC3Meta.itemIcon(p.icon))
+                    .attr("alt", p.icon)
                     .css(iconStyles).prop("outerHTML");
                 planeListHtml += '<span style="color:#45a9a5">\u2605{0}</span>\u2003'
                     .format(p.stars);
