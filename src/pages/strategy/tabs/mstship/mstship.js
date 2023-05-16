@@ -846,7 +846,8 @@
 					const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
 						.appendTo(listClass);
 					$(".typeIcon img", equipTypeBox).attr("src", KC3Meta.itemIcon(firstIconId))
-						.attr("title", "[?,?,{0},{1},?]".format(typeId, firstIconId));
+						.attr("title", "[?,?,{0},{1},?]".format(typeId, firstIconId))
+						.attr("alt", firstIconId);
 					$(".typeName", equipTypeBox).text(KC3Meta.gearTypeName(2, typeId))
 						.attr("title", KC3Meta.gearTypeName(2, typeId));
 				};
@@ -907,10 +908,12 @@
 								$("<img/>")
 									.attr("src", KC3Meta.itemIcon(equipIcon[0], 1))
 									.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
+									.attr("alt", equipIcon[0])
 									.appendTo($(".equipIcons", aaciBox));
 								if(equipIcon.length > 1) {
 									$('<img/>')
 										.attr("src", KC3Meta.itemIcon(equipIcon[1], 1))
+										.attr("alt", equipIcon[1])
 										.addClass(aaciObj.icons[i].indexOf("-") > -1 ? "minusIcon" : "plusIcon")
 										.appendTo($(".equipIcons", aaciBox));
 								}
@@ -1177,7 +1180,8 @@
 								const firstIconId = KC3Meta.itemIconsByType2(typeId)[typeId === 4 ? 1 : 0];
 								const typeName = KC3Meta.gearTypeName(2, typeId);
 								$(".gearId", gearBox).text(`[T${typeId}]`);
-								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(firstIconId));
+								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(firstIconId))
+									.attr("alt", firstIconId);
 								const allGears = KC3Master.all_slotitems();
 								const matchedGearNames = Object.keys(allGears).filter(
 									id => !KC3Master.isAbyssalGear(id) && allGears[id].api_type[2] == typeId
@@ -1187,7 +1191,8 @@
 								const iconId = gear.id.substr(3);
 								const typeName = KC3Meta.gearTypeName(3, iconId);
 								$(".gearId", gearBox).text(`[I${iconId}]`);
-								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconId));
+								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconId))
+									.attr("alt", iconId);
 								const allGears = KC3Master.all_slotitems();
 								const matchedGearNames = Object.keys(allGears).filter(
 									id => !KC3Master.isAbyssalGear(id) && allGears[id].api_type[3] == iconId
@@ -1248,7 +1253,8 @@
 									const synergyBox = $(".tab_mstship .factory .synergy").clone();
 									syn.flags.map((flag) => {
 										const synergyFlag = $(".tab_mstship .factory .synergyFlag").clone();
-										$(".synergyIcon img", synergyFlag).attr("src", KC3Meta.itemIcon(synergyIcon(flag)));
+										$(".synergyIcon img", synergyFlag)
+											.attr("src", KC3Meta.itemIcon(synergyIcon(flag)));
 										let idList = synergyList[flag + "Ids"];
 										if (flag.endsWith("Nonexist")) {
 											idList = synergyList[flag.replace(/Nonexist$/, "Ids")];
@@ -1259,14 +1265,6 @@
 											KC3Meta.term(flag.toCamelCase(true));
 										const synergyNameList = Array.isArray(idList) ? idList.map(id =>
 											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`) : [];
-										if (synergyList[flag + "MinStars"] > 0) {
-											const level = synergyList[flag + "MinStars"];
-											synergyName += "&emsp;&#9733;{0}".format(
-												Number(level) >= 10 ?
-												'<span style="font-size: smaller">max</span>' :
-												'+' + level
-											);
-										}
 										$(".synergyType", synergyFlag).html(synergyName)
 											.attr("title", synergyNameList.join("\n"));
 										$(".synergyFlags", synergyBox).append(synergyFlag);
@@ -1291,8 +1289,25 @@
 											const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
 											addStatsToBox(syn.byCount[number], synergyBonusBox);
 											$(".gearCount", synergyBonusBox).text(`x${number}`);
-											$(".gearType", synergyBonusBox).append($("<img>").attr("src", KC3Meta.itemIcon(synergyIcon(syn.byCount.gear))));
+											$(".gearType", synergyBonusBox).append($("<img>")
+												.attr("src", KC3Meta.itemIcon(synergyIcon(syn.byCount.gear))));
 											$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
+										});
+									}
+									if (syn.byStars) {
+										Object.keys(syn.byStars).forEach(function (number) {
+											if (isNaN(parseInt(number))) {
+												return;
+											}
+											const synergyLevelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
+											addStatsToBox(syn.byStars[number], synergyLevelBox);
+											$(".gearLevel", synergyLevelBox).html("&#9733;{0}".format(
+												Number(number) >= 10 ?
+													'<span style="font-size: smaller">max</span>' :
+													'+' + number
+												)
+											);
+											$(".synergyBonusRows", synergyBox).append(synergyLevelBox);
 										});
 									}
 									$(".synergyGears", gearBox).append(synergyBox);

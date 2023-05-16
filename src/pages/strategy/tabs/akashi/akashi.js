@@ -22,6 +22,8 @@
 			// Get upgrade data
 			var akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
+			ConfigManager.load();
+			this.showEquippedLocked = !!ConfigManager.sr_akashi_slock;
 			//console.log(this.upgrades);
 		},
 
@@ -120,6 +122,9 @@
 
 			if(KC3StrategyTabs.pageParams[3] !== undefined){
 				this.showEquippedLocked = !!parseInt(KC3StrategyTabs.pageParams[3]);
+				ConfigManager.load();
+				ConfigManager.sr_akashi_slock = this.showEquippedLocked;
+				ConfigManager.save();
 			}
 			const refreshOnToggleEquippedLocked = () => {
 				$(".loading").show();

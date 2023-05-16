@@ -113,6 +113,8 @@
 			"t51": "dv",
 			// army units
 			"t52": "overall",
+			// smoke generator
+			"t54": "overall",
 			// all types
 			"tall": "type",
 		},

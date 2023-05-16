@@ -896,7 +896,7 @@
 								$(".rfleet_equips .rfleet_equip.rfleet_equip_"+(i+1),rshipBox)
 									.find("img")
 									.attr("src", KC3Meta.itemIcon(masterGear.api_type[3]))
-									.attr("title", KC3Meta.gearName(masterGear.api_name))
+									.attr("title", KC3Meta.gearNameById(gearId))
 									.addClass("hover").attr("alt", gearId)
 									.click(gearClickFunc);
 							});
