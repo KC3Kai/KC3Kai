@@ -2930,7 +2930,11 @@
 							if(thisNode.enemyPreview.length > 0){
 								if( thisNode.enemyPreview.every((f, i) => {
 									const dbf = i > 0 ? edata.escort : edata.main;
-									return f.api_ship_ids.every((id, idx) => id === dbf[idx]);
+									return f.api_ship_ids.length > 0
+										&& f.api_ship_ids.every((id, idx) => id === dbf[idx])
+										&& (f.api_kind > 0 ||
+											f.api_ship_ids.length === dbf.filter(v => v > 0).length
+										);
 								}) ) encBox.addClass("matched");
 							}
 							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count || 1);
