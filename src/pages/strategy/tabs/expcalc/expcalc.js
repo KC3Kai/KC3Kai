@@ -42,7 +42,7 @@
 					arr.push(x);
 			}
 			// figure out a list of possible goal levels in ascending order.
-			// a goal level might be remodel level or 99 (can be married) / 175 (full exp)
+			// a goal level might be remodel level or 99 (can be married) / 180 (full exp)
 			var possibleNextLevels = RemodelDb.nextLevels( masterId );
 			setAdd(possibleNextLevels, KC3Ship.getMarriedLevel() - 1);
 			setAdd(possibleNextLevels, KC3Ship.getMaxLevel());
@@ -364,14 +364,14 @@
 				mapSplit = $(".ship_map select", editingBox).val().split("-");
 				//console.debug("mapSplit", mapSplit);
 				self.goals["s"+ editingBox.data("id") ] = [
-					/*0*/ parseInt($(".ship_target input", editingBox).val(), 10), // target level
+					/*0*/ Math.max(1, parseInt($(".ship_target input", editingBox).val(), 10)), // target level
 					/*1*/ parseInt(mapSplit[0], 10), // world
 					/*2*/ parseInt(mapSplit[1], 10), // map
 					/*3*/ 0, // node
 					/*4*/ parseInt($(".ship_rank select", editingBox).val(), 10), // battle rank
-					/*5*/ $(".ship_fs input", editingBox).prop("checked")?1:0, // flagship
-					/*6*/ $(".ship_mvp input", editingBox).prop("checked")?1:0, // mvp
-					/*7*/ parseInt($(".ship_baseexp input", editingBox).val(), 10), // base exp
+					/*5*/ $(".ship_fs input", editingBox).prop("checked") ?  1:0, // flagship
+					/*6*/ $(".ship_mvp input", editingBox).prop("checked") ? 1:0, // mvp
+					/*7*/ Math.max(1, parseInt($(".ship_baseexp input", editingBox).val(), 10) || 0), // base exp
 				];
 
 				self.save();

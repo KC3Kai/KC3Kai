@@ -228,8 +228,13 @@ KC3改 Ship Object
 	KC3Ship.prototype.isAbsent = function(){ return (this.didFlee || this.hp[0] <= 0 || this.hp[1] <= 0); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
+	// marriage implemented since 2014-02-14
 	KC3Ship.getMarriedLevel = function(){ return 100; };
-	KC3Ship.getMaxLevel = function(){ return 175; };
+	// 2015-12-08: 150->155
+	// 2017-07-31: 155->165
+	// 2018-08-17: 165->175
+	// 2023-05-26: 175->180
+	KC3Ship.getMaxLevel = function(){ return 180; };
 	// hard-coded at `Core.swf/vo.UserShipData.VHP` / `main.js#ShipModel.prototype.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
 	// hard-coded at `Core.swf/vo.UserShipData.VAS` / `main.js#ShipModel.prototype.VAS`
@@ -1161,7 +1166,7 @@ KC3改 Ship Object
 	/**
 	 * Maxed stats of this ship.
 	 * @return stats without the equipment but with modernization at Lv.99,
-	 *         stats at Lv.175 can be only estimated by data from known database.
+	 *         stats at Lv.180 can be only estimated by data from known database.
 	 */
 	KC3Ship.prototype.maxedStats = function(statAttr, isMarried = this.isMarried()){
 		if(this.isDummy()) { return false; }

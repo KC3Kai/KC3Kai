@@ -567,8 +567,10 @@ AntiAir: anti-air related calculations
 	var isNotSubmarine = predNot(stypeIdIn( [13 /* SS */, 14 /* SSV */] ));
 	var isBattleship = stypeIdIn( [8 /* FBB */, 9 /* BB */, 10 /* BBV */] );
 	var isAkizukiClass = ctypeIdEq( 54 );
+	var isNotAkizukiClass = predNot( isAkizukiClass );
 	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
+	var isNotMayaK2 = predNot( isMayaK2 );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
 	var isKasumiK2B = masterIdEq( kasumiK2BIcon );
 	var isSatsukiK2 = masterIdEq( satsukiK2Icon );
@@ -672,10 +674,11 @@ AntiAir: anti-air related calculations
 	// Besides, there are 3 elements in KC vita `antifireParam` (see `Server_Controllers.BattleLogic/Exec_AirBattle.cs`)
 	//   fixed bonus [0] default to 1 for player, 0 for enemy, [1] another part of fixed bonus, [2] is modifier.
 	//   however wikiwiki have assumed all fixed bonus +1, so values here are [0] + [1] - 1
+	// Reworks of server-side codes are released on 2023-05-26, known facts from vita codes are subjected to update.
 	declareAACI(
 		5, 4, 1.5, // vita value: [2, 3, 1.55]
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast(isBuiltinHighAngleMount, 2),
@@ -686,7 +689,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		8, 4, 1.4, // vita value: [2, 3, 1.45]
 		[surfaceShipIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isBuiltinHighAngleMount ),
@@ -699,7 +702,7 @@ AntiAir: anti-air related calculations
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
 		// 8cm HA variants can be equipped on ex-slot for some ships, min slots can be 2
 		// but for now, these ships are all not 2-slot DD
-		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -711,7 +714,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		9, 2, 1.3, // vita value: [1, 2, 1.3]
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
-		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(1)),
+		predAllOf(isNotSubmarine/*, isNotAkizukiClass*/, slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -729,6 +732,21 @@ AntiAir: anti-air related calculations
 				/* CDMGs are AAGuns, so we need at least 2 AA guns
 				   including the CDMG one we have just counted */
 				hasAtLeast( isAAGunWithAtLeast(3), 2 ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// api_kind 13 was deprecated by devs, perhaps masked by kind 8 so 0% trigger chance?
+	// according vita codes, non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
+	// eventually fixed by the reworks on 2023-05-26
+	declareAACI(
+		13, 4, 1.35, // vita value: [1, 4, 1.35]
+		[surfaceShipIcon, biHaMountIcon, cdmgIcon, radarIcon],
+		predAllOf(isNotMayaK2, slotNumAtLeast(2)),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isBuiltinHighAngleMount ),
+				hasSome( isAAGunCDMG ),
 				hasSome( isAARadar ))
 		)
 	);
@@ -784,7 +802,8 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Ooyodo Kai for now, too low trigger rate (5%~10%) to investigate, since almost covered by kind 8
+	// Ooyodo Kai
+	// was too low trigger rate (5%~10%) to investigate, since almost covered by kind 8
 	declareAACI(
 		27, 5, 1.55,
 		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
@@ -862,21 +881,6 @@ AntiAir: anti-air related calculations
 				hasSome( isAAGunCDMG ))
 		)
 	);
-	// api_kind 13 deprecated by devs, perhaps covered by kind 8 so 0% trigger forever?
-	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
-	/*
-	declareAACI(
-		13, 4, 1.35, // vita value: [1, 4, 1.35]
-		[mayaIcon, biHaMountIcon, cdmgIcon, radarIcon],
-		predAllOf(isMayaNotK2),
-		withEquipmentMsts(
-			predAllOf(
-				hasSome( isBuiltinHighAngleMount ),
-				hasSome( isAAGunCDMG ),
-				hasSome( isAARadar ))
-		)
-	);
-	*/
 
 	// AA stat 2 machine gun capable for kind 14~17: https://twitter.com/nishikkuma/status/1535641120386224129
 	// Isuzu K2
@@ -1251,6 +1255,10 @@ AntiAir: anti-air related calculations
 	// note: priority is different from trigger chance rate, since random number roll just done once,
 	//       lower priority AACI is still possible to be triggered if chance value is greater.
 	//       on the opposite, both lower priority and lesser chance means never be triggered.
+	// note since 2023-05-26: priority and roll chance have been re-organized, notably:
+	//    * almost all possible patterns on a ship are put into the list to get trigger chance;
+	//    * kind 13 no longer unreachable by trigger rate or elseif statement;
+	//    other details still under investigations.
 	// param: AACI IDs from possibleAACIs functions
 	// param: a optional callback function to customize ordering
 	function sortedPossibleAaciList(aaciIds, sortCallback) {
