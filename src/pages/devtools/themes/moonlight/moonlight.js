@@ -3328,6 +3328,15 @@
 							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
 							if(simData) openSimulatorWindow(simData, e.altKey);
 						});
+					// Add tip to show night battle against main or escort fleet
+					if(thisNode.enemyCombined) {
+						const activeFleet = KC3Calc.estimateNightActiveCombinedEnemy(thisNode);
+						if(activeFleet > 0) {
+							$(".module.activity .battle_night").attr("title",
+								KC3Meta.term("BattleNightAgainst").format(activeFleet)
+							);
+						}
+					}
 				}
 				
 				// Indicate night to day battle, and if battle is kept to dawn (day time)

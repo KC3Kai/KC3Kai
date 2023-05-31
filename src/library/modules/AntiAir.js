@@ -357,7 +357,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.375 : 2*0.4) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -496,6 +496,9 @@ AntiAir: anti-air related calculations
 	// avoid modifying this structure directly, use "declareAACI" instead.
 	var AACITable = {};
 
+	// 2 parts of fixed bonus defined by KC vita, and resist means AAR modifier applied to this part only
+	//   and resist part is minimal 1 for player side even no AACI, which omitted by wikiwiki AACI table
+	// sort order used for sorting on fleet priority of all possible AACIs
 	// typeIcons is a array including [ship icon, equip icon, ...]
 	// predicateShipMst is a function f: f(mst)
 	// predicateShipObj is a function f: f(shipObj)
@@ -503,15 +506,21 @@ AntiAir: anti-air related calculations
 	// is capable of performing such type of AACI
 	function declareAACI(
 		apiId,
-		fixedBonus,
+		fixedResist,
+		fixedRandom,
 		modifier,
+		ratePercent,
+		sortSequen,
 		typeIcons,
 		predicateShipSlots,
 		predicateWithEquips) {
 		AACITable[apiId] = {
 			id: apiId,
-			fixed: fixedBonus,
+			fixed: fixedResist + fixedRandom - 1,
 			modifier: modifier,
+			rate: ratePercent,
+			sort: sortSequen,
+			additives: [fixedResist, fixedRandom],
 			icons: typeIcons,
 			predicateShipMst: predicateShipSlots,
 			predicateShipObj: predicateWithEquips
@@ -676,7 +685,7 @@ AntiAir: anti-air related calculations
 	//   however wikiwiki have assumed all fixed bonus +1, so values here are [0] + [1] - 1
 	// Reworks of server-side codes are released on 2023-05-26, known facts from vita codes are subjected to update.
 	declareAACI(
-		5, 4, 1.5, // vita value: [2, 3, 1.55]
+		5, 2, 3, 1.5, 40, 2400, // vita value: [2.0, 3.0, 1.55]
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
 		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -687,7 +696,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		8, 4, 1.4, // vita value: [2, 3, 1.45]
+		8, 2, 3, 1.4, 50, 2500, // vita value: [2.0, 3.0, 1.45]
 		[surfaceShipIcon, biHaMountIcon, radarIcon],
 		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -698,7 +707,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		7, 3, 1.35, // vita value: [2, 2, 1.35]
+		7, 2, 2, 1.35, 45, 2600, // vita value
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
 		// 8cm HA variants can be equipped on ex-slot for some ships, min slots can be 2
 		// but for now, these ships are all not 2-slot DD
@@ -712,9 +721,10 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		9, 2, 1.3, // vita value: [1, 2, 1.3]
+		9, 1, 2, 1.3, 40, 2700, // vita value
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
-		predAllOf(isNotSubmarine/*, isNotAkizukiClass*/, slotNumAtLeast(1)),
+		// possible to trigger on Akizuki-class since 2023-05-26
+		predAllOf(isNotSubmarine, slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -723,7 +733,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		12, 3, 1.25, // vita value: [1, 3, 1.25]
+		12, 1, 3, 1.25, 45, 2800, // vita value
 		[surfaceShipIcon, cdmgIcon, aaGunIcon, radarIcon],
 		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -740,7 +750,7 @@ AntiAir: anti-air related calculations
 	// according vita codes, non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
 	// eventually fixed by the reworks on 2023-05-26
 	declareAACI(
-		13, 4, 1.35, // vita value: [1, 4, 1.35]
+		13, 1, 4, 1.35, 35, 2820, // vita value
 		[surfaceShipIcon, biHaMountIcon, cdmgIcon, radarIcon],
 		predAllOf(isNotMayaK2, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -753,7 +763,7 @@ AntiAir: anti-air related calculations
 
 	// battleship special AACIs
 	declareAACI(
-		4, 6, 1.5, // vita value: [5, 2, 1.5]
+		4, 5, 2, 1.5, 52, 2150, // vita value
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon, radarIcon],
 		predAllOf(isBattleship, slotNumAtLeast(4)),
 		withEquipmentMsts(
@@ -766,7 +776,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		6, 4, 1.45, // vita value: [4, 1, 1.5]
+		6, 4, 1, 1.45, 40, undefined, // vita value: [4.0, 1.0, 1.5]
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon],
 		predAllOf(isBattleship, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -779,7 +789,7 @@ AntiAir: anti-air related calculations
 
 	// Ise-class Kai only AACIs
 	declareAACI(
-		25, 7, 1.55,
+		25, 7, 1, 1.55, 60, 1950, // uncertain value
 		[iseIcon, aaGunK2RockeLaunIcon, radarIcon, type3ShellIcon],
 		predAllOf(isIseClassKai, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -792,7 +802,7 @@ AntiAir: anti-air related calculations
 
 	// Musashi K2 + Yamato K2
 	declareAACI(
-		26, 6, 1.4,
+		26, 6, 1, 1.4, 60, 2130, // uncertain value
 		[musashiK2Icon, haMountKaiAmg, radarIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -805,7 +815,7 @@ AntiAir: anti-air related calculations
 	// Ooyodo Kai
 	// was too low trigger rate (5%~10%) to investigate, since almost covered by kind 8
 	declareAACI(
-		27, 5, 1.55,
+		27, 5, 1, 1.55, 55, undefined, // uncertain value
 		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
 		predAllOf(isOoyodoKai),
 		withEquipmentMsts(
@@ -818,7 +828,7 @@ AntiAir: anti-air related calculations
 
 	// Ise-class Kai + Musashi Kai
 	declareAACI(
-		28, 4, 1.4,
+		28, 4, 1, 1.4, 56, 2410, // uncertain value
 		[battleShipKaiIcon, aaGunK2RockeLaunIcon, radarIcon],
 		predAllOf(isBattleShipKai),
 		withEquipmentMsts(
@@ -830,7 +840,7 @@ AntiAir: anti-air related calculations
 
 	// Akizuki-class AACIs
 	declareAACI(
-		1, 7, 1.7, // vita value: [3, 5, 1.75]
+		1, 3, 5, 1.7, 65, 2100, // vita value: [3.0, 5.0, 1.75]
 		[akizukiIcon, haMountIcon, haMountIcon, radarIcon],
 		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -840,7 +850,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		2, 6, 1.7, // vita value: [3, 4, 1.7]
+		2, 3, 4, 1.7, 58, 2200, // vita value
 		[akizukiIcon, haMountIcon, radarIcon],
 		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -850,7 +860,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		3, 4, 1.6, // vita value: [2, 3, 1.6]
+		3, 2, 3, 1.6, 50, 2300, // vita value
 		[akizukiIcon, haMountIcon, haMountIcon],
 		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -860,7 +870,7 @@ AntiAir: anti-air related calculations
 
 	// Maya K2
 	declareAACI(
-		10, 8, 1.65, // vita value: [3, 6, 1.65]
+		10, 3, 6, 1.65, 60, 1900, // vita value
 		[mayaK2Icon, haMountIcon, cdmgIcon, radarIcon],
 		// Omitted slot num for specified ship, same below
 		predAllOf(isMayaK2),
@@ -872,7 +882,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		11, 6, 1.5, // vita value: [2, 5, 1.5]
+		11, 2, 5, 1.5, 55, 1920, // vita value
 		[mayaK2Icon, haMountIcon, cdmgIcon],
 		predAllOf(isMayaK2),
 		withEquipmentMsts(
@@ -882,10 +892,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// All values like fixed and rate below are uncertain because only 1~13 implemented by KC vita
 	// AA stat 2 machine gun capable for kind 14~17: https://twitter.com/nishikkuma/status/1535641120386224129
 	// Isuzu K2
 	declareAACI(
-		14, 4, 1.45,
+		14, 4, 1, 1.45, 63, undefined,
 		[isuzuK2Icon, haMountIcon, aaGunIcon, radarIcon],
 		predAllOf(isIsuzuK2),
 		withEquipmentMsts(
@@ -896,7 +907,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		15, 3, 1.3,
+		15, 3, 1, 1.3, 54, undefined,
 		[isuzuK2Icon, haMountIcon, aaGunIcon],
 		predAllOf(isIsuzuK2),
 		withEquipmentMsts(
@@ -908,7 +919,7 @@ AntiAir: anti-air related calculations
 
 	// Kasumi K2B, Yuubari K2
 	declareAACI(
-		16, 4, 1.4,
+		16, 4, 1, 1.4, 62, undefined,
 		[kasumiK2BIcon, haMountIcon, aaGunIcon, radarIcon],
 		predAnyOf(isKasumiK2B, isYuubariK2),
 		withEquipmentMsts(
@@ -919,7 +930,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		17, 2, 1.25,
+		17, 2, 1, 1.25, 57, undefined,
 		[kasumiK2BIcon, haMountIcon, aaGunIcon],
 		predAllOf(isKasumiK2B),
 		withEquipmentMsts(
@@ -931,7 +942,7 @@ AntiAir: anti-air related calculations
 
 	// Satsuki K2
 	declareAACI(
-		18, 2, 1.2,
+		18, 2, 1, 1.2, 59, 2810,
 		[satsukiK2Icon, cdmgIcon],
 		predAllOf(isSatsukiK2),
 		withEquipmentMsts(
@@ -941,7 +952,7 @@ AntiAir: anti-air related calculations
 
 	// Kinu K2
 	declareAACI(
-		19, 5, 1.45,
+		19, 5, 1, 1.45, 60, undefined,
 		[kinuK2Icon, haMountNbifdIcon, cdmgIcon],
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
@@ -953,7 +964,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		20, 3, 1.25,
+		20, 3, 1, 1.25, 65, undefined,
 		[kinuK2Icon, cdmgIcon],
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
@@ -963,7 +974,7 @@ AntiAir: anti-air related calculations
 
 	// Yura K2
 	declareAACI(
-		21, 5, 1.45,
+		21, 5, 1, 1.45, 60, 2230,
 		[yuraK2Icon, haMountIcon, radarIcon],
 		predAllOf(isYuraK2),
 		withEquipmentMsts(
@@ -975,7 +986,7 @@ AntiAir: anti-air related calculations
 
 	// Fumizuki K2
 	declareAACI(
-		22, 2, 1.2,
+		22, 2, 1, 1.2, 65, 2830,
 		[fumizukiK2Icon, cdmgIcon],
 		predAllOf(isFumizukiK2),
 		withEquipmentMsts(
@@ -985,7 +996,7 @@ AntiAir: anti-air related calculations
 
 	// UIT-25 / I-504
 	declareAACI(
-		23, 1, 1.05, // referred from abyssal resist: [1, 1, ?]
+		23, 1, 1, 1.05, 80, 2840, // fixed referred from abyssal resist: [1, 1]
 		[uit25Icon, aaGunNotCdIcon],
 		predAnyOf(isUit25, isI504),
 		withEquipmentMsts(
@@ -995,7 +1006,7 @@ AntiAir: anti-air related calculations
 
 	// Tenryuu K2 / Tatsuta K2
 	declareAACI(
-		24, 3, 1.25,
+		24, 3, 1, 1.25, 62, undefined,
 		[tatsutaK2Icon, haMountIcon, aaGunNotCdIcon],
 		predAnyOf(isTenryuuK2, isTatsutaK2),
 		withEquipmentMsts(
@@ -1007,7 +1018,7 @@ AntiAir: anti-air related calculations
 
 	// Isokaze B Kai / Hamakaze B Kai
 	declareAACI(
-		29, 5, 1.55,
+		29, 5, 1, 1.55, 60, 2240,
 		[isokazeBkIcon, haMountIcon, radarIcon],
 		predAnyOf(isIsokazeBk, isHamakazeBk),
 		withEquipmentMsts(
@@ -1019,7 +1030,7 @@ AntiAir: anti-air related calculations
 
 	// Tenryuu K2, Gotland Kai+
 	declareAACI(
-		30, 3, 1.3,
+		30, 3, 1, 1.3, 50, undefined,
 		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
 		predAnyOf(isTenryuuK2, isGotlandKai, isGotlandAndra),
 		withEquipmentMsts(
@@ -1028,7 +1039,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		31, 2, 1.25,
+		31, 2, 1, 1.25, 50, undefined,
 		[tenryuuK2Icon, haMountIcon, haMountIcon],
 		predAllOf(isTenryuuK2),
 		withEquipmentMsts(
@@ -1041,7 +1052,7 @@ AntiAir: anti-air related calculations
 	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2
 	// (QF2 + FCR) OR (QF2 + 7UP) OR (7UP + 7UP)
 	declareAACI(
-		32, 3, 1.2,
+		32, 3, 1, 1.2, 60, undefined,
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
 		predAnyOf(isBritishShips),
 		withEquipmentMsts(
@@ -1057,7 +1068,7 @@ AntiAir: anti-air related calculations
 
 	// Gotland Kai/andra
 	declareAACI(
-		33, 3, 1.35,
+		33, 3, 1, 1.35, 42, undefined,
 		[gotlandKaiIcon, haMountIcon, aaGunIcon],
 		predAnyOf(isGotlandKai, isGotlandAndra),
 		withEquipmentMsts(
@@ -1067,9 +1078,9 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Fletcher-class all forms (Fletcher, Johnston)
+	// Fletcher-class all forms
 	declareAACI(
-		34, 7, 1.6,
+		34, 7, 1, 1.6, 60, 2110,
 		[fletcherIcon, haMountKaiRadar, haMountKaiRadar],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
@@ -1078,7 +1089,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		35, 6, 1.55,
+		35, 6, 1, 1.55, 55, 2210,
 		[fletcherIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
@@ -1088,7 +1099,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		36, 6, 1.55,
+		36, 6, 1, 1.55, 50, 2220,
 		[fletcherIcon, haMountIcon, haMountIcon, radarIcon],
 		// there are enough slots for Kai only
 		predAllOf(isFletcherClass, slotNumAtLeast(3)),
@@ -1099,7 +1110,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		37, 4, 1.45, // referred from abyssal resist: [2or3, 3or2, ?]
+		37, 2, 3, 1.45, 40, 2430, // fixed referred from abyssal resist: [2or3, 3or2]
 		[fletcherIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
@@ -1110,7 +1121,7 @@ AntiAir: anti-air related calculations
 
 	// Atlanta-class
 	declareAACI(
-		38, 10, 1.85, // referred from abyssal resist 0.6: [5or6, 6or5, ?]
+		38, 6, 5, 1.85, 60, 1500, // fixed referred from abyssal resist 0.6: [5or6, 6or5]
 		[atlantaIcon, haMountKaiRadar, haMountKaiRadar],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
@@ -1119,7 +1130,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		39, 10, 1.7,
+		39, 6, 5, 1.7, 60, 1600,
 		[atlantaIcon, haMountKaiRadar, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
@@ -1129,7 +1140,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		40, 10, 1.7, // referred from pvp resist 0.5: [6or7, 5or4, ?]
+		40, 6, 5, 1.7, 60, 1700, // fixed referred from pvp resist 0.5: [6or7, 5or4]
 		[atlantaIcon, haMountCdIcon, haMountCdIcon, radarIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
@@ -1139,7 +1150,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		41, 9, 1.65,
+		41, 5, 5, 1.65, 60, 1800,
 		[atlantaIcon, haMountCdIcon, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
@@ -1150,7 +1161,7 @@ AntiAir: anti-air related calculations
 
 	// Yamato K2/K2J + Musashi K2
 	declareAACI(
-		42, 10, 1.65,
+		42, 10, 1, 1.65, 65, 1750,
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1161,7 +1172,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		43, 8, 1.6,
+		43, 8, 1, 1.6, 60, 1910,
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1171,7 +1182,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		44, 6, 1.6,
+		44, 6, 1, 1.6, 55, 2120,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1182,7 +1193,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		45, 5, 1.55,
+		45, 5, 1, 1.55, 50, undefined,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1194,7 +1205,7 @@ AntiAir: anti-air related calculations
 
 	// Haruna K2B
 	declareAACI(
-		46, 8, 1.55, // referred from abyssal resist under smoke: [3?, 6?, ?]
+		46, 3, 6, 1.55, 50, undefined, // fixed referred from abyssal resist under smoke
 		[harunaK2BIcon, lcMainGunIcon, cdmgIcon, radarIcon],
 		predAllOf(isHarunaK2B),
 		withEquipmentMsts(
@@ -1258,6 +1269,8 @@ AntiAir: anti-air related calculations
 	// note since 2023-05-26: priority and roll chance have been re-organized, notably:
 	//    * almost all possible patterns on a ship are put into the list to get trigger chance;
 	//    * kind 13 no longer unreachable by trigger rate or elseif statement;
+	//    * priority of all possible patterns on fleet no longer ordered by ID, new sorting updated on 2023-05-28;
+	//    * https://docs.google.com/spreadsheets/d/1agGoLv57g5eOXLXtNIKHRoBYy61OQYxibWP6Vi_DMuY/view
 	//    other details still under investigations.
 	// param: AACI IDs from possibleAACIs functions
 	// param: a optional callback function to customize ordering
@@ -1280,8 +1293,9 @@ AntiAir: anti-air related calculations
 
 	function sortedFleetPossibleAaciList(triggeredShipAaciIds) {
 		return sortedPossibleAaciList(triggeredShipAaciIds, function(a, b) {
-			// Order by (API) id desc
-			return b.id - a.id;
+			// Order by predefined order id asc (since 2023-05-28), API id desc
+			return (a.sort || Infinity) - (b.sort || Infinity)
+				|| b.id - a.id;
 		});
 	}
 
@@ -1360,6 +1374,7 @@ AntiAir: anti-air related calculations
 		shipPossibleAACIs: shipPossibleAACIs,
 		shipAllPossibleAACIs: shipAllPossibleAACIs,
 		fleetPossibleAACIs: fleetPossibleAACIs,
-		sortedPossibleAaciList: sortedPossibleAaciList
+		sortedPossibleAaciList: sortedPossibleAaciList,
+		sortedFleetPossibleAaciList: sortedFleetPossibleAaciList
 	};
 })();
