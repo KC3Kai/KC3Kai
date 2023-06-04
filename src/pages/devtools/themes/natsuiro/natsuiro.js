@@ -3762,7 +3762,7 @@
 			var ctBonus = playerFleet.lookupKatoriClassBonus();
 			// Base EXP only affected by first two ships of opponent's fleet
 			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctBonus);
-			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s || "?");
 			$(".activity_pvp .pvp_base_exp").attr("title",
 				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
 				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))

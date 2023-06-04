@@ -1943,32 +1943,31 @@ ABYSS FLEET
 	float: left;
 	text-align: left;
 	width: 110px;
-	margin-right: 3px;
 }
 .module.activity .activity_expeditionPlanner .estimated_time {
 	float: right;
 	text-align: right;
-	min-width: 67px;
+	max-width: 68px;
+	margin-right: 2px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
 	text-align: center;
 	height: 20px;
 	margin-bottom: 2px;
-	display:none;
+	display: none;
 }
 .module.activity .activity_expeditionPlanner .expres_resos {
-	width: 170px;
+	width: 180px;
 	height: 40px;
 	margin-bottom: 3px;
-	display: inline-block;
 }
 .module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
 	display:inline-block;
 	width:65px;
 	height:40px;
 	float:left;
-	/* text-align: center; */
+	/*text-align: center;*/
 	/*background:#fcc;*/
 }
 .module.activity .activity_expeditionPlanner .expres_greatbtn {
