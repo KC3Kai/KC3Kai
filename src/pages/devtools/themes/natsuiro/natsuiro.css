@@ -1851,22 +1851,25 @@ ABYSS FLEET
 	text-align:center;
 	white-space:nowrap;
 	overflow-x:hidden;
+	/* no longer worked since chrome 94 */
 	overflow-y:overlay;
+}
+.module.activity .activity_expeditionPlanner > div {
+	width: 180px;
 }
 .module.activity .activity_expeditionPlanner::-webkit-scrollbar {
 	width: 5px;
 }
-.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed {
 	color:#006600;
 	text-shadow:none;
 }
-.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed{
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed {
 	color:#cc0000;
 	text-shadow:none;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
-	width: 100%;
 	height: 28px;
 }
 
@@ -1929,8 +1932,7 @@ ABYSS FLEET
 	display: none;
 }
 
-
-.module.activity .activity_expeditionPlanner li:hover >ul {
+.module.activity .activity_expeditionPlanner li:hover > ul {
 	display: block;
 }
 
@@ -1958,7 +1960,6 @@ ABYSS FLEET
 	display: none;
 }
 .module.activity .activity_expeditionPlanner .expres_resos {
-	width: 180px;
 	height: 40px;
 	margin-bottom: 3px;
 }

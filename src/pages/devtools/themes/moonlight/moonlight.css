@@ -2058,6 +2058,10 @@ ABYSS FLEET
 	overflow-x:hidden;
 	overflow-y:overlay;
 }
+/* have to fixed width since overflow overlay deprecated (equals to auto) since chrome 94 */
+.module.activity .activity_expeditionPlanner > div {
+	width: 180px;
+}
 .module.activity .activity_expeditionPlanner::-webkit-scrollbar {
 	width: 5px;
 }
@@ -2070,10 +2074,16 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed {
 	color:#000;
 	background:rgba(20,20,20,0.7);
-	text-shadow:-1px -1px 1px #aa0707, 0px -1px 1px #aa0707, 1px -1px 1px #aa0707, -1px 0px 1px #aa0707, 1px 0px 1px #aa0707, -1px 1px 1px #aa0707, 0px 1px 1px #aa0707, 1px 1px 1px #aa0707;
+	text-shadow:-1px -1px 1px #aa0707,
+		0px -1px 1px #aa0707,
+		1px -1px 1px #aa0707,
+		-1px 0px 1px #aa0707,
+		1px 0px 1px #aa0707,
+		-1px 1px 1px #aa0707,
+		0px 1px 1px #aa0707,
+		1px 1px 1px #aa0707;
 }
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
-	width: 100%;
 	height: 28px;
 }
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
@@ -2127,7 +2137,7 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
 	display: none;
 }
-.module.activity .activity_expeditionPlanner li:hover >ul {
+.module.activity .activity_expeditionPlanner li:hover > ul {
 	display: block;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_timer {
