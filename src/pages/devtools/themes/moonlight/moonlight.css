@@ -2058,7 +2058,7 @@ ABYSS FLEET
 	overflow-x:hidden;
 	overflow-y:overlay;
 }
-/* have to fixed width since overflow overlay deprecated (equals to auto) since chrome 94 */
+/* fixed width thank to overflow:overlay deprecated (behaves the same as auto) since chrome 114 */
 .module.activity .activity_expeditionPlanner > div {
 	width: 180px;
 }

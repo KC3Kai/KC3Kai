@@ -1851,7 +1851,7 @@ ABYSS FLEET
 	text-align:center;
 	white-space:nowrap;
 	overflow-x:hidden;
-	/* no longer worked since chrome 94 */
+	/* no longer worked since chrome 114 */
 	overflow-y:overlay;
 }
 .module.activity .activity_expeditionPlanner > div {
