@@ -363,9 +363,9 @@
 				'api_req_map/next': this.processNext,
 				
 				'api_req_sortie/battle': [this.processEnemy, this.processAACI, this.processGunfit, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet, this.processEventBattle],
-				'api_req_sortie/airbattle': [this.processEnemy, this.processEventBattle],
+				'api_req_sortie/airbattle': [this.processEnemy, this.processAACI, this.processEventBattle],
 				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy, this.processEventBattle],
-				'api_req_sortie/ld_airbattle': [this.processEnemy, this.processEventBattle],
+				'api_req_sortie/ld_airbattle': [this.processEnemy, this.processAACI, this.processEventBattle],
 				'api_req_sortie/ld_shooting': [this.processEnemy, this.processEventBattle],
 				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
 				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy, this.processEventBattle],
@@ -988,7 +988,8 @@
 				lvl: triggeredShip.level,
 				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
 				aa: triggeredShip.estimateNakedStats("aa"),
-				luck: triggeredShip.lk[0]
+				luck: triggeredShip.lk[0],
+				apiname: http.call
 			};
 
 			this.aaci.equips = triggeredShip.equipment(true).map(g => g.masterId || -1);
