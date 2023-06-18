@@ -387,7 +387,7 @@ known IDs see QuestManager
 				}
 				switch(context.gearMaster.api_id) {
 					case 3: // 10cm Twin High-angle Gun Mount
-						KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
+						KC3QuestManager.get(686).increment(0); // F77 quarterly index 0, flagship check needed?
 						break;
 					case 4: // 14cm Single Gun Mount
 						KC3QuestManager.get(653).increment(); // F90 quarterly
@@ -405,22 +405,22 @@ known IDs see QuestManager
 						KC3QuestManager.get(628).increment(); // F25 monthly
 						break;
 					case 82: // Type 97 Torpedo Bomber (931 Air Group)
-						KC3QuestManager.get(1123).increment(); // F114 yearly
+						KC3QuestManager.get(1123).increment(); // F114 yearly, flagship check needed?
 						break;
 					case 106: // Type 13 Air Radar Kai
 						KC3QuestManager.get(1104).increment(); // F99 yearly
 						break;
 					case 121: // Type 94 Anti-Aircraft Fire Director
-						KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
+						KC3QuestManager.get(686).increment(1); // F77 quarterly index 1, flagship check needed?
 						break;
 					case 125: // 61cm Triple (Oxygen) Torpedo Mount
 						KC3QuestManager.get(1103).increment(); // F98 yearly
 						break;
 					case 242: // Swordfish
-						KC3QuestManager.get(654).increment(0); // F93 yearly index 0
+						KC3QuestManager.get(654).increment(0); // F93 yearly index 0, flagship check needed?
 						break;
 					case 249: // Fulmar
-						KC3QuestManager.get(654).increment(1); // F93 yearly index 1
+						KC3QuestManager.get(654).increment(1); // F93 yearly index 1, flagship check needed?
 						break;
 				}
 				break;

@@ -32,13 +32,13 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
 				highAccuracyRadar: 0,
 				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460],
 				aaMachineGun: 0,
-				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
+				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301, 505],
 				improvedTurbine: 0,
 				improvedTurbineNonexist: 1,
 				improvedTurbineIds: [33],
@@ -5278,6 +5278,13 @@
 							single: { "raig": 3, "houk": 2 },
 						},
 					},
+					{
+						// Shigure K3
+						ids: [961],
+						minStars: 5,
+						multiple: { "raig": 1 },
+						countCap: 2,
+					},
 				],
 			},
 			// 533mm Triple Torpedo Mount
@@ -6550,8 +6557,8 @@
 						multiple: { "raig": 1 },
 					},
 					{
-						// Shigure K2, Shikinami K2
-						ids: [145, 627],
+						// Shigure K2+, Shikinami K2
+						ids: [145, 961, 627],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -6609,11 +6616,18 @@
 						},
 					],
 				},
-				byShip: {
-					// Yukikaze, Shigure, Isokaze, extra +1 ev
-					origins: [20, 43, 167],
-					multiple: { "houk": 1 },
-				},
+				byShip: [
+					{
+						// Yukikaze, Shigure, Isokaze, extra +1 ev
+						origins: [20, 43, 167],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Shigure K3
+						ids: [961],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+				],
 			},
 			// 12.7cm Twin Gun Mount Model C Kai 3
 			"470": {
@@ -6661,20 +6675,36 @@
 						multiple: { "houk": 2 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2
-						ids: [566, 567, 568, 656, 670, 915, 651, 145],
+						// Shigure K3
+						ids: [961],
+						multiple: { "houg": 3, "houk": 2, "houm": 3 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
+						multiple: { "houg": 1, "houm": 2 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
+						multiple: { "houg": 2 },
+						minCount: 2,
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
 						minStars: 5,
 						multiple: { "houm": 1 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2
-						ids: [566, 567, 568, 656, 670, 915, 651, 145],
+						// Kagerou Class K2, Tan Yang, Shigure K2+
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
 						minStars: 8,
 						multiple: { "houg": 1 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2
-						ids: [566, 567, 568, 656, 670, 915, 651, 145],
+						// Kagerou Class K2, Tan Yang, Shigure K2+
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
 						minStars: 10,
 						multiple: { "houm": 1 },
 					},
@@ -6743,8 +6773,8 @@
 						single: { "houg": 1 },
 					},
 					{
-						// Akigumo Kai Ni
-						ids: [648],
+						// Akigumo Kai Ni, Shigure K3
+						ids: [648, 961],
 						multiple: { "houg": 2 },
 						synergy: [
 							{
@@ -7066,8 +7096,8 @@
 						multiple: { "houg": 1, "raig": 1 },
 					},
 					{
-						// Shigure K2
-						ids: [145],
+						// Shigure K2+
+						ids: [145, 961],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
@@ -7418,8 +7448,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+, Haruna K2B+
-						ids: [407,   145,        419,             151,       541,       911, 916,   593,954],
+						// Ushio K2, Shigure K2+, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+, Haruna K2B+
+						ids: [407,   145, 961,    419,             151,       541,       911, 916,   593, 954],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
@@ -7490,6 +7520,27 @@
 						ids: [668],
 						distinctGears: [106, 450],
 						single: { "tyku": 1, "houk": 1 },
+					},
+				],
+			},
+			// Radar Equipment Mast (Type 13 Kai + Type 22 Radar Kai 4)
+			"506": {
+				count: 0,
+				byShip: [
+					{
+						// Shigure K3
+						ids: [961],
+						single: { "houg": 2, "tyku": 2, "houk": 4, "houm": 3 },
+					},
+					{
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai
+						ids: [145, 497, 656, 557, 558],
+						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
+					},
+					{
+						// Asashimo K2, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai
+						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537],
+						single: { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
 					},
 				],
 			},
@@ -7633,6 +7684,77 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+				],
+			},
+			//
+			"505": {
+				count: 0,
+				byShip: [
+					{
+						// All DD
+						stypes: [2],
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// All CL, CLT, CT
+						stypes: [3, 4, 21],
+						multiple: { "tyku": 1, "houk": 2 },
+					},
+					{
+						// All CA, CAV, AV
+						stypes: [5, 6, 16],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Shigure K3
+						ids: [961],
+						single: { "houg": 2, "tyku": 3, "houk": 4 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "houg": 1, "tyku": 2, "houk": 3 },
+						},
+					},
+					{
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Yahagi K2B
+						ids: [145, 497, 656, 668],
+						single: { "houg": 2, "tyku": 3, "houk": 4 },
+					},
+					{
+						// Shiratsuyu Kai, Yuudachi K2, Shigure Kai, Tan Yang, Murasame K2, Yukikaze Kai
+						ids: [242, 144, 243, 651, 498, 228],
+						single: { "tyku": 2, "houk": 2 },
+					},
+					{
+						// Murasame Kai, Yuudachi Kai, Harusame Kai
+						ids: [244, 245, 323],
+						single: { "tyku": 1, "houk": 2 },
+					},
+					{
+						// Kasumi K2B/K2, Hibiki Kai+, Asashimo K2, Isokaze B Kai, Hamakaze B Kai, Ushio K2, Hatsushimo K2
+						ids: [470, 464, 235, 147, 578, 557, 558, 407, 419],
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Hatsushimo K2
+						ids: [145, 497, 656, 419],
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+					{
+						// Shigure K3, Yukikaze K2
+						ids: [961, 656],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 1 },
+						},
 					},
 				],
 			},
@@ -8003,8 +8125,8 @@
 						single: { "houk": 1, "tais": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
-						ids: [145, 363, 476, 578, 588, 667],
+						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
+						ids: [145, 961, 363, 476, 578, 588, 667],
 						minStars: 4,
 						single: { "tais": 1 },
 					},
@@ -8093,8 +8215,8 @@
 				},
 				byShip: [
 					{
-						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2, Yukikaze K2
-						ids: [622, 623,  141,      160,     488,     656],
+						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2, Yukikaze K2, Shigure K3
+						ids: [622, 623,  141,      160,     488,     656,         961],
 						single: { "houk": 3, "tais": 1 },
 					},
 					{
@@ -8145,8 +8267,8 @@
 						multiple: { "houk": 1, "tais": 1 },
 					},
 					{
-						// Noshiro K2
-						ids: [662],
+						// Noshiro K2, Shigure K3
+						ids: [662, 961],
 						multiple: { "tais": 3 },
 					},
 				],
@@ -8172,8 +8294,8 @@
 						multiple: { "houg": 1, "houk": 2, "tais": 3 },
 					},
 					{
-						// Noshiro K2
-						ids: [662],
+						// Noshiro K2, Shigure K3
+						ids: [662, 961],
 						multiple: { "tais": 4, "houk": 1 },
 					},
 				],
@@ -8222,38 +8344,38 @@
 				},
 				byShip: [
 					{
-						// Shigure K2
-						ids: [145],
+						// Shigure K2+
+						ids: [145, 961],
 						multiple: { "tais": 5, "houk": 4, "houm": 2 },
 					},
-					// For Shigure K2
+					// For Shigure K2+
 					{
-						ids: [145],
+						ids: [145, 961],
 						minStars: 3,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [145],
+						ids: [145, 961],
 						minStars: 5,
 						multiple: { "tais": 1 },
 					},
 					{
-						ids: [145],
+						ids: [145, 961],
 						minStars: 7,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [145],
+						ids: [145, 961],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [145],
+						ids: [145, 961],
 						minStars: 9,
 						multiple: { "tais": 1 },
 					},
 					{
-						ids: [145],
+						ids: [145, 961],
 						minStars: 10,
 						multiple: { "tais": 1 },
 					},
@@ -8979,10 +9101,10 @@
 				count: 0,
 				byShip: [
 					{
-						// Okinami K2, Akigumo K2 with Air Radar fp +1, aa +2, ev +3
+						// Okinami K2, Akigumo K2, Shigure K3 with Air Radar fp +1, aa +2, ev +3
 						// btw1, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
 						// btw2, main.js's function `get_type3_nums` refers `api_type[2]` in fact, not our 't3'(`api_type[3]`), so it uses `12 || 13` for all radars.
-						ids: [569, 648],
+						ids: [569, 648, 961],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },

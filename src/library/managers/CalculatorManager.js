@@ -645,6 +645,34 @@
     };
 
     /**
+     * Get the escort fleet survival score from predicted day battle results,
+     * estimate the activte fleet of night battle.
+     * @return 1=main fleet, 2=escort fleet, undefined if judgement conditions not met
+     * @see predicted version of `api_active_deck[1]` in /api_req_combined_battle/ec_midnight_battle
+     * @see https://wikiwiki.jp/kancolle/%E9%80%A3%E5%90%88%E8%89%A6%E9%9A%8A#wd314cc2
+     */
+    const estimateNightActiveCombinedEnemy = (node = KC3SortieManager.currentNode()) => {
+        if(node && node.predictedFleetsDay && Array.isArray(node.eParamEscort)) {
+            if(node.eParamEscort.length !== node.predictedFleetsDay.enemyEscort.length) return;
+            let score = 0;
+            node.eParamEscort.forEach((param, idx) => {
+                if(!Array.isArray(param)) return;
+                const mhp = param[0];
+                const enemy = node.predictedFleetsDay.enemyEscort[idx],
+                      chp = enemy.hp, isSunk = enemy.sunk;
+                if(!isSunk) {
+                    if(idx == 0) score += 1;
+                    score += (chp / mhp) > 0.5  ? 1
+                           : (chp / mhp) > 0.25 ? 0.7
+                           : 0;
+                }
+            });
+            return score < 3 ? 1 : 2;
+        }
+        return;
+    };
+
+    /**
      * Get battle opponent's fighter power only based on master data.
      *
      * @param {Array}  enemyFleetShips - master ID array of opponent fleet ships.
@@ -884,6 +912,7 @@
         
         enemyFighterPower,
         fighterPowerIntervals,
+        estimateNightActiveCombinedEnemy,
         
         getShipLevelingGoal,
         nextResetsTimestamp,

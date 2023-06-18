@@ -646,10 +646,10 @@ Used by SortieManager
 				bombingDamages2.push(
 					((battleData.api_kouku2.api_stage3_combined || {}).api_fdam || []).map(damageToInteger)
 				);
-				bombingTargetedFlags.push(
+				bombingTargetedFlags2.push(
 					((battleData.api_kouku2.api_stage3 || {}).api_fbak_flag || []).map(mergeToBoolean.bind(null, (battleData.api_kouku2.api_stage3 || {}).api_frai_flag || []))
 				);
-				bombingTargetedFlags.push(
+				bombingTargetedFlags2.push(
 					((battleData.api_kouku2.api_stage3_combined || {}).api_fbak_flag || []).map(mergeToBoolean.bind(null, (battleData.api_kouku2.api_stage3_combined || {}).api_frai_flag || []))
 				);
 			}

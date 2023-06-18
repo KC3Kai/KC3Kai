@@ -1851,22 +1851,25 @@ ABYSS FLEET
 	text-align:center;
 	white-space:nowrap;
 	overflow-x:hidden;
+	/* no longer worked since chrome 114 */
 	overflow-y:overlay;
+}
+.module.activity .activity_expeditionPlanner > div {
+	width: 180px;
 }
 .module.activity .activity_expeditionPlanner::-webkit-scrollbar {
 	width: 5px;
 }
-.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed {
 	color:#006600;
 	text-shadow:none;
 }
-.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed{
+.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed {
 	color:#cc0000;
 	text-shadow:none;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
-	width: 100%;
 	height: 28px;
 }
 
@@ -1929,8 +1932,7 @@ ABYSS FLEET
 	display: none;
 }
 
-
-.module.activity .activity_expeditionPlanner li:hover >ul {
+.module.activity .activity_expeditionPlanner li:hover > ul {
 	display: block;
 }
 
@@ -1943,32 +1945,30 @@ ABYSS FLEET
 	float: left;
 	text-align: left;
 	width: 110px;
-	margin-right: 3px;
 }
 .module.activity .activity_expeditionPlanner .estimated_time {
 	float: right;
 	text-align: right;
-	min-width: 67px;
+	max-width: 68px;
+	margin-right: 2px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
 	text-align: center;
 	height: 20px;
 	margin-bottom: 2px;
-	display:none;
+	display: none;
 }
 .module.activity .activity_expeditionPlanner .expres_resos {
-	width: 170px;
 	height: 40px;
 	margin-bottom: 3px;
-	display: inline-block;
 }
 .module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
 	display:inline-block;
 	width:65px;
 	height:40px;
 	float:left;
-	/* text-align: center; */
+	/*text-align: center;*/
 	/*background:#fcc;*/
 }
 .module.activity .activity_expeditionPlanner .expres_greatbtn {

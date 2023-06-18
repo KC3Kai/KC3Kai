@@ -558,6 +558,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"94": "newArmamentMaterial",
 				"95": "submarineSupplyMaterial",
 				"96": "pumpkin",
+				"97": "teruteruBouzu",
 				"901": "rankPoints",
 				"902": "boiler",
 			};
