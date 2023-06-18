@@ -1345,10 +1345,13 @@ Contains summary information about a fleet and its ships
 		secondShipLevel = this.ship(1).level,
 		ctBonus = 1
 	) {
-		var baseExp = 3 + Math.floor(
-			KC3Meta.expShip(firstShipLevel)[1] / 100 +
-			KC3Meta.expShip(secondShipLevel)[1] / 300
-		);
+		const exps1 = KC3Meta.expShip(firstShipLevel),
+			exps2 = KC3Meta.expShip(secondShipLevel);
+		var baseExp = 3 + Math.floor(exps1[1] / 100 + exps2[1] / 300);
+		// return undefined and NaN if exp unknown, level 0 for 2nd empty slot acceptable
+		if(exps1.every(v => !v) || (secondShipLevel > 0 && exps2.every(v => !v))){
+			baseExp = undefined;
+		}
 		if(baseExp > 500){
 			baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
 		}

@@ -697,6 +697,14 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			if(ConfigManager.dmm_redirgadget) {
 				const cacheServerBaseUrl = ConfigManager.dmm_gadgetcache || "https://kcwiki.github.io/cache/";
 				const path = details.url.split(gadgetServerHost)[1] || "";
+				// do not redirect information pages and some scripts for viewing rankers monthly,
+				// since currently default cache server has not cached these assets yet
+				if(path.includes("kcscontents/information/")
+					|| path.includes("kcscontents/script/jquery")
+					|| path.includes("kcscontents/script/jss")
+					|| path.includes("kcscontents/script/smooth")
+					|| path.includes("kcscontents/script/rollover")
+				) return {};
 				// console.debug("Redirecting gadget " + details.type + " request:", details.url, "to:", cacheServerBaseUrl);
 				return {
 					redirectUrl: [cacheServerBaseUrl, (cacheServerBaseUrl.endsWith("/") ? "" : "/"), path].join("")

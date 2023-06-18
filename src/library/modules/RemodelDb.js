@@ -104,6 +104,8 @@
                 case 651: // Tan Yang
                 case 681: // Samuel B.Roberts Kai
                     return 60;
+                case 145: // Shigure K2
+                    return 77;
                 case 208: // Shikinami
                 case 225: // Kagerou
                 case 226: // Shiranui

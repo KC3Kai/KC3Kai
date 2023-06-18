@@ -83,6 +83,12 @@
 		return (crc ^ -1) >>> 0;
 	};
 
+	const randomUUIDv4 = () => ((window.crypto &&
+		([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,
+			c => (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+		)
+	) || Math.random().toString(16).substr(2));
+
 	const matchGimmickApiName = (apiName = "") => !!apiName.match(/^api_m\d+/);
 	const isMapGimmickTriggered = (apiData = {}) => !!Object.keys(apiData).find(matchGimmickApiName);
 
@@ -357,9 +363,9 @@
 				'api_req_map/next': this.processNext,
 				
 				'api_req_sortie/battle': [this.processEnemy, this.processAACI, this.processGunfit, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet, this.processEventBattle],
-				'api_req_sortie/airbattle': [this.processEnemy, this.processEventBattle],
+				'api_req_sortie/airbattle': [this.processEnemy, this.processAACI, this.processEventBattle],
 				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy, this.processEventBattle],
-				'api_req_sortie/ld_airbattle': [this.processEnemy, this.processEventBattle],
+				'api_req_sortie/ld_airbattle': [this.processEnemy, this.processAACI, this.processEventBattle],
 				'api_req_sortie/ld_shooting': [this.processEnemy, this.processEventBattle],
 				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
 				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy, this.processEventBattle],
@@ -502,6 +508,15 @@
 				this.shipDrop.counts[baseFormId] = 1 + (this.shipDrop.counts[baseFormId] || 0);
 				return false; // no ship wanted to find
 			});
+			
+			// Builds random ID for eventBattle during the same sortie
+			const uuid = randomUUIDv4();
+			const checksumObj = {
+				fleet: this.data,
+				time: Date.now(),
+				rand: uuid
+			};
+			this.sortieFleetChecksum = [uuid, crc32c(JSON.stringify(checksumObj))].join('-');
 		},
 		
 		processNext: function(http) {
@@ -973,7 +988,8 @@
 				lvl: triggeredShip.level,
 				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
 				aa: triggeredShip.estimateNakedStats("aa"),
-				luck: triggeredShip.lk[0]
+				luck: triggeredShip.lk[0],
+				apiname: http.call
 			};
 
 			this.aaci.equips = triggeredShip.equipment(true).map(g => g.masterId || -1);
@@ -1150,7 +1166,8 @@
 				lbas: PlayerManager.bases.filter(b => b.map === this.currentMap[0] && b.action === 1).map(b => formatLandBase(b.sortieJson())),
 				support: null,
 				fleettype: this.data.fleetType,
-				smokeused: http.params.api_smoke_flag == 1
+				smokeused: http.params.api_smoke_flag == 1,
+				checksum: this.sortieFleetChecksum || null
 			};
 			if (KC3SortieManager.isCombinedSortie()) {
 				fleet.fleet2 = PlayerManager.fleets[1].ship().map(ship => formatShip(ship));
@@ -1355,12 +1372,15 @@
 							if (isEscort) { misc.fleetMainLoS = PlayerManager.fleets[0].artillerySpottingLineOfSight(); }
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
+						misc.attackRound = num;
 					} else {
 						misc = ship.nightSpAttackBaseRate(estCutinId);
 						// Adding night Zuiun flag if the attacker index is larger than effective nightZuiunIdx
 						if (nightZuiunIdx >= 0 && idx > nightZuiunIdx) {
 							misc.nightZuiunFlare = true; 
 						}
+						// To check the ordinal number of multiple hits attack (and multiple targets for night Zuiun)
+						misc.attackHit = num;
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					// Attacker HP and fleet type for hit/miss prediction
@@ -2009,6 +2029,7 @@
 				amountofnodes: null,
 				difficulty: null
 			};
+			this.sortieFleetChecksum = null;
 			this.sortieSpecialAttack = null;
 			this.delayedABSubmission = null;
 			this.torchCount = 0;

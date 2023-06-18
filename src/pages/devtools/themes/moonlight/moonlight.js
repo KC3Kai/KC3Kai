@@ -1598,7 +1598,7 @@
 				if(slotitem) amount = slotitem.amount;
 				$(`.consumable_display .count_${attrName}`).text(amount).parent().attr("title", KC3Meta.useItemName(useitemId));
 			};
-			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 62, 64, 65, 66, 67, 68, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94, 95, 96].forEach(updateCountByUseitemId);
+			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 62, 64, 65, 66, 67, 68, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94, 95, 96, 97].forEach(updateCountByUseitemId);
 			$(".count_sumScrews").text(
 				(PlayerManager.getConsumableById(4) || 0) +    // screws
 				(PlayerManager.getConsumableById(60) || 0) +   // 1 present box => 1 screw
@@ -2930,7 +2930,11 @@
 							if(thisNode.enemyPreview.length > 0){
 								if( thisNode.enemyPreview.every((f, i) => {
 									const dbf = i > 0 ? edata.escort : edata.main;
-									return f.api_ship_ids.every((id, idx) => id === dbf[idx]);
+									return f.api_ship_ids.length > 0
+										&& f.api_ship_ids.every((id, idx) => id === dbf[idx])
+										&& (f.api_kind > 0 ||
+											f.api_ship_ids.length === dbf.filter(v => v > 0).length
+										);
 								}) ) encBox.addClass("matched");
 							}
 							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count || 1);
@@ -3324,6 +3328,15 @@
 							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
 							if(simData) openSimulatorWindow(simData, e.altKey);
 						});
+					// Add tip to show night battle against main or escort fleet
+					if(thisNode.enemyCombined) {
+						const activeFleet = KC3Calc.estimateNightActiveCombinedEnemy(thisNode);
+						if(activeFleet > 0) {
+							$(".module.activity .battle_night").attr("title",
+								KC3Meta.term("BattleNightAgainst").format(activeFleet)
+							);
+						}
+					}
 				}
 				
 				// Indicate night to day battle, and if battle is kept to dawn (day time)
@@ -3871,7 +3884,7 @@
 			var ctBonus = playerFleet.lookupKatoriClassBonus();
 			// Base EXP only affected by first two ships of opponent's fleet
 			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctBonus);
-			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s || "?");
 			$(".activity_pvp .pvp_base_exp").attr("title",
 				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
 				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))

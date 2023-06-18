@@ -5883,5 +5883,69 @@
 		"api_stype": 5,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5735": {
+		"api_id": 5735,
+		"api_name": "春の私服Washington",
+		"api_yomi": "ワシントン",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5736": {
+		"api_id": 5736,
+		"api_name": "春の私服Washington改",
+		"api_yomi": "ワシントン",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5737": {
+		"api_id": 5737,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5738": {
+		"api_id": 5738,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5739": {
+		"api_id": 5739,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5740": {
+		"api_id": 5740,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5741": {
+		"api_id": 5741,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5742": {
+		"api_id": 5742,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

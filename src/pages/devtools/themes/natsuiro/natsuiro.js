@@ -1482,7 +1482,8 @@
 				PlayerManager.consumables.sardine ? 93 :
 				PlayerManager.consumables.setsubunBeans ? 90 :
 				PlayerManager.consumables.hishimochi ? 62 :
-				PlayerManager.consumables.pumpkin ? 96 : 56;
+				PlayerManager.consumables.pumpkin ? 96 :
+				PlayerManager.consumables.teruteruBouzu ? 97 : 56;
 			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId, 1));
@@ -2804,7 +2805,11 @@
 							if(thisNode.enemyPreview.length > 0){
 								if( thisNode.enemyPreview.every((f, i) => {
 									const dbf = i > 0 ? edata.escort : edata.main;
-									return f.api_ship_ids.every((id, idx) => id === dbf[idx]);
+									return f.api_ship_ids.length > 0
+										&& f.api_ship_ids.every((id, idx) => id === dbf[idx])
+										&& (f.api_kind > 0 ||
+											f.api_ship_ids.length === dbf.filter(v => v > 0).length
+										);
 								}) ) encBox.addClass("matched");
 							}
 							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count || 1);
@@ -3198,6 +3203,15 @@
 							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
 							if(simData) openSimulatorWindow(simData, e.altKey);
 						});
+					// Add tip to show night battle against main or escort fleet
+					if(thisNode.enemyCombined) {
+						const activeFleet = KC3Calc.estimateNightActiveCombinedEnemy(thisNode);
+						if(activeFleet > 0) {
+							$(".module.activity .battle_night").attr("title",
+								KC3Meta.term("BattleNightAgainst").format(activeFleet)
+							);
+						}
+					}
 				}
 				
 				// Indicate night to day battle, and if battle is kept to dawn (day time)
@@ -3749,7 +3763,7 @@
 			var ctBonus = playerFleet.lookupKatoriClassBonus();
 			// Base EXP only affected by first two ships of opponent's fleet
 			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctBonus);
-			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s || "?");
 			$(".activity_pvp .pvp_base_exp").attr("title",
 				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
 				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))
