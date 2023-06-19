@@ -4094,7 +4094,8 @@ KC3改 Ship Object
 					// https://docs.google.com/spreadsheets/d/1_e0M6asJUbu9EEW4PrGCu9hOxZnY7OQEDHH2DUAzjN8/htmlview
 					const modelDK2SmallGunCnt = this.countEquipment(267),
 					      modelDK3SmallGunCnt = this.countEquipment(366);
-					// possible to equip 2 D guns for 4 slots Tashkent
+					// possible to equip 2 D guns for 4 slots Tashkent,
+					// or surface radar in ex-slot ships since 2023-06-14
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					// https://twitter.com/grapefox_zuizui/status/1664695317625819145
 					const modelDSmallGunModifier =
