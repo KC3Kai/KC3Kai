@@ -1256,6 +1256,7 @@ button, input, select, textarea {
 }
 .tab_expcalc .ship_goal.inactive .ship_label {
 	font-size:11px;
+	white-space:nowrap;
 }
 .tab_expcalc .ship_goal.inactive .ship_value {
 	font-size:13px;
