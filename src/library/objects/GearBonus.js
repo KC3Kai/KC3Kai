@@ -74,6 +74,8 @@
 				twin51cmLargeGunMount: 0,
 				twin51cmLargeGunMountIds: [281],
 				twin51cmLargeGunMountNonexist: 1,
+				triple14inch45LargeGunMount: 0,
+				triple14inch45LargeGunMountIds: [508],
 				rotorcraft: 0,
 				rotorcraftIds: [69, 324, 325, 326, 327],
 				helicopter: 0,
@@ -3695,6 +3697,84 @@
 						},
 					},
 				],
+			},
+			// 14inch/45 Twin Gun Mount
+			"507": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": {
+						stypes: [8, 9, 10],
+						multiple: { "houg": 2, "houk": 1, "houm": 1 },
+						synergy: [
+							{
+								flags: [ "usNavySurfaceRadar" ],
+								distinct: { "houg": 1, "houk": 1, "houm": 2 },
+							},
+							{
+								flags: [ "triple14inch45LargeGunMount" ],
+								single: { "houg": 1, "houk": 2, "houm": 1 },
+							},
+						],
+					},
+					"UnitedKingdom": 6,
+				},
+				byClass: {
+					// Kongou Class
+					"6": {
+						distinctGears: [507, 508],
+						single: { "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "triple14inch45LargeGunMount" ],
+							single: { "houg": 1, "houk": 1, "houm": 1 },
+						},
+					},
+					// Ise Class
+					"2": 6,
+					// Fusou Class
+					"26": 6,
+				},
+				byShip: [
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "souk": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+				],
+			},
+			// 14inch/45 Triple Gun Mount
+			"508": {
+				count: 0,
+				byNation: {
+					"UnitedStates": {
+						stypes: [8, 9, 10],
+						multiple: { "houg": 2, "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "usNavySurfaceRadar" ],
+							distinct: { "houg": 1, "houk": 1, "houm": 2 },
+						},
+					},
+					"UnitedKingdom": 6,
+				},
+				byClass: {
+					// Kongou Class
+					"6": {
+						distinctGears: [507, 508],
+						single: { "houk": 1, "houm": 1 },
+					},
+					// Ise Class
+					"2": 6,
+					// Fusou Class
+					"26": 6,
+				},
 			},
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
