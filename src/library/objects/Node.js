@@ -164,7 +164,7 @@ Used by SortieManager
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
 		KC3SortieManager.materialGain[this.item-1] += this.amount;
 		
-		currentMap.clear |= (++currentMap.kills) >= KC3Meta.gauge(mapKey);
+		currentMap.clear |= (++currentMap.kills) >= KC3Meta.gauge(mapKey, currentMap.gaugeNum);
 		KC3SortieManager.setCurrentMapData(currentMap);
 		
 		if(KC3SortieManager.isSortieAt(1, 6)){
@@ -1177,7 +1177,7 @@ Used by SortieManager
 					case 'single':   /* Single Victory */
 						break;
 					case 'multiple': /* Kill-based */
-						const totalKills = maps[ckey].killsRequired || KC3Meta.gauge(ckey.replace("m",""));
+						const totalKills = maps[ckey].killsRequired || KC3Meta.gauge(ckey.replace("m",""), maps[ckey].gaugeNum);
 						if(totalKills - (maps[ckey].kills || 0) > 0)
 							maps[ckey].kills += mainFlagshipDestFlag;
 						break;

@@ -5326,7 +5326,7 @@
 					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
 				// If kill-based gauge
 				}else{
-					var totalKills = thisMap.killsRequired || KC3Meta.gauge( thisMapId );
+					var totalKills = thisMap.killsRequired || KC3Meta.gauge(thisMapId, thisMap.gaugeNum);
 					console.debug("Map " + thisMapId + " total kills:", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),

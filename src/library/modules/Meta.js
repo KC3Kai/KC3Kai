@@ -763,8 +763,9 @@ Provides access to data on built-in JSON files
 			return {name:"Unknown Server", num:num, ip:"0.0.0.0" };
 		},
 		
-		gauge :function(map_id){
-			return (this._dataColle.gauges || {})["m" + map_id] || false;
+		gauge :function(mapId, gaugeNum){
+			var mapInfo = (this._dataColle.gauges || {})["m" + mapId] || false;
+			return Array.isArray(mapInfo) && gaugeNum > 0 ? mapInfo[gaugeNum-1] || false : mapInfo;
 		},
 		
 		eventGauge :function(mapId, gaugeNum){
