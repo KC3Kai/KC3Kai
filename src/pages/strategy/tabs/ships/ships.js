@@ -641,8 +641,9 @@
 				canEquipLFB: ThisShip.canEquip(41),
 				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
 				canEquipMinisub: ThisShip.canEquip(22),
-				canExslotEquip8cmGun: ThisShip.canEquip(undefined, 66) >= 2
-					|| ThisShip.canEquip(undefined, 220) >= 2,
+				canExslotEquipSpec: KC3Master.equip_exslot_ship(ThisShip.masterId).length > 0 // check master API definitions
+					// check client hard-coded items except Improved Kanhon Type Turbine
+					|| KC3Master.equip_exslot_ids().slice(1).some(gear => KC3Master.equip_on_ship(ThisShip.masterId, gear) >= 2),
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
@@ -892,7 +893,7 @@
 			self.defineShipFilter(
 				"spgear",
 				savedFilterValues.spgear || 0,
-				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub", "exgun"],
+				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub", "exids"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipFCF)
@@ -901,7 +902,7 @@
 						|| (curVal === 4 && ship.canEquipLFB)
 						|| (curVal === 5 && ship.canEquipBulge)
 						|| (curVal === 6 && ship.canEquipMinisub)
-						|| (curVal === 7 && ship.canExslotEquip8cmGun);
+						|| (curVal === 7 && ship.canExslotEquipSpec);
 				});
 
 			self.defineShipFilter(
