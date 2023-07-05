@@ -641,9 +641,9 @@
 				canEquipLFB: ThisShip.canEquip(41),
 				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
 				canEquipMinisub: ThisShip.canEquip(22),
-				canExslotEquipSpec: KC3Master.equip_exslot_ship(ThisShip.masterId).length > 0 // check master API definitions
+				canExslotEquipSpec: KC3Master.equip_exslot_ship(ThisShip.masterId).length > 0,
 					// check client hard-coded items except Improved Kanhon Type Turbine
-					|| KC3Master.equip_exslot_ids().slice(1).some(gear => KC3Master.equip_on_ship(ThisShip.masterId, gear) >= 2),
+					//|| KC3Master.equip_exslot_ids().slice(1).some(gearId => KC3Master.equip_on_ship(ThisShip.masterId, gearId) >= 2),
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
