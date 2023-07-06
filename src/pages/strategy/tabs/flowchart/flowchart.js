@@ -161,18 +161,18 @@
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
-
+			
 			$(".showOnlyScrews").on("click", function() {
-				$(".questFlowItem, .questExtraItem").each(function() {
+				$(".flowchart .questFlowItem, .extralist .questExtraItem").each(function() {
 					$(this).addClass("noScrewsHidden");
-					const questDescription = $(this).find(".questDesc:first").attr("title");
-					if (questDescription.includes("Screw")) {
+					const questDescTip = $(".questDesc:first", this).attr("title");
+					if (questDescTip && questDescTip.includes(KC3Meta.term("QuestFlowchartScrewKeyword"))) {
 						$(this).removeClass("noScrewsHidden").addClass("containsScrews");
 						$(this).parents(".questFlowItem, .questExtraItem").removeClass("noScrewsHidden");
 					}
 				});
 			});
-
+			
 			$(".showNotOnlyScrews").on("click", function() {
 				$(".questFlowItem, .questExtraItem").removeClass("noScrewsHidden").removeClass("containsScrews");
 			});
