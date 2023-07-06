@@ -6,7 +6,7 @@
 .tab_compare .compare_add {
 	height:24px;
 	line-height:24px;
-	margin:10px 0px 27px 0px;
+	margin:10px 0 27px 0;
 	display: none;
 }
 .tab_compare .compare_add_col {
@@ -17,11 +17,11 @@
 .tab_compare .compare_add_label {
 	font-size:12px;
 	font-weight:bold;
-	margin:0px 10px 0px 0px;
+	margin:0 10px 0 0;
 }
 .tab_compare .compare_input {
 	width:150px;
-	margin:0px 10px 0px 0px;
+	margin:0 10px 0 0;
 }
 .tab_compare .compare_input input {
 	width:150px;
@@ -35,12 +35,12 @@
 .tab_compare .compare_suggest_item {
 	width:auto;
 	float:left;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_compare .compare_suggest_icon {
 	width:24px; height:26px;
 	float:left;
-	margin:0px 3px 0px 0px;
+	margin:0 3px 0 0;
 }
 .tab_compare .compare_suggest_icon img {
 	width:24px; height:24px;
@@ -58,14 +58,14 @@
 --------------------------------*/
 .tab_compare .compare_list {
 	min-height:200px;
-	margin:0px 0px 20px 0px;
+	margin:0 0 20px 0;
 	border-bottom:1px solid #ccc;
-	padding:0px 0px 10px 0px;
+	padding:0 0 10px 0;
 }
 .tab_compare .compare_ship {
 	min-width:680px;
 	height:24px;
-	margin:0px 0px 4px 0px;
+	margin:0 0 4px 0;
 }
 .tab_compare .compare_ship_col {
 	height:24px;
@@ -74,7 +74,7 @@
 
 .tab_compare .compare_ship_icon {
 	width:24px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 }
 .tab_compare .compare_ship_icon img {
 	width:24px;
@@ -85,14 +85,14 @@
 	width:124px;
 	line-height:24px;
 	font-size:12px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	white-space: nowrap;
 	overflow: hidden;
 }
 .tab_compare .compare_ship_stat {
 	width:24px;
 	line-height:24px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	border-radius:12px;
 	text-align:center;
 }
@@ -105,7 +105,7 @@
 .tab_compare .compare_remove {
 	width:24px;
 	line-height:24px;
-	margin:0px 0px 0px 5px;
+	margin:0 0 0 5px;
 	border-radius:12px;
 	text-align:center;
 	font-weight:bold;
@@ -119,9 +119,9 @@
 	width:505px;
 }
 .tab_compare .compare_ship_bar {
-	width:0px;
+	width:0;
 	height:10px;
-	margin:7px 5px 7px 0px;
+	margin:7px 5px 7px 0;
 	float:left;
 }
 .tab_compare .compare_ship_value {
@@ -147,14 +147,14 @@
 	font-size:12px;
 	font-weight:bold;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	text-align:center;
 }
 .tab_compare .compare_select_stat {
 	width:28px;
 	height:30px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	text-align:center;
 }
 .tab_compare .compare_select_stat img {

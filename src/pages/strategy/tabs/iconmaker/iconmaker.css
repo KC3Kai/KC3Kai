@@ -57,7 +57,7 @@
 .tab_iconmaker .loading {
 	width:24px;
 	height:24px;
-	margin:-2px 0px 0px -10px;
+	margin:-2px 0 0 -10px;
 	visibility:hidden;
 }
 .tab_iconmaker .img_url.error {
@@ -78,14 +78,14 @@
 
 .tab_iconmaker .cropped_controls {
 	position:absolute;
-	margin:2px 0px 0px 632px;
+	margin:2px 0 0 632px;
 }
 .tab_iconmaker .cropped_controls .btn {
 	float:left;
 	width:20px;
 	height:20px;
-	padding:0px 2px;
-	margin:0px 2px;
+	padding:0 2px;
+	margin:0 2px;
 }
 
 .tab_iconmaker .preview {
@@ -105,7 +105,7 @@
 	width:40px;
 	height:40px;
 	float:left;
-	margin:20px 0px 0px 5px;
+	margin:20px 0 0 5px;
 	border-radius:20px;
 	overflow:hidden;
 	border:1px solid #000;
@@ -114,13 +114,13 @@
 	width:40px;
 	height:40px;
 	position:relative;
-	margin:-1px 0px 0px -1px;
+	margin:-1px 0 0 -1px;
 }
 .tab_iconmaker .preview .fleet_legacy {
 	width:50px;
 	height:50px;
 	float:left;
-	margin:15px 0px 0px 5px;
+	margin:15px 0 0 5px;
 	background:#ccc;
 	border:1px solid #ccc;
 	border-radius: 25px;
@@ -137,14 +137,14 @@
 		rgba(34,34,34,1) 30%,
 		rgba(34,34,34,0) 100%
 	);
-	top:0px;
+	top:0;
 	left:5px;
 	position:relative;
-	margin:0px 0px 0px 5px;
+	margin:0 0 0 5px;
 	overflow:hidden;
 }
 .tab_iconmaker .preview .fleet_dark img {
 	width:140px;
 	height:140px;
-	margin:-32px 0px 0px -16px
+	margin:-32px 0 0 -16px
 }

@@ -24,7 +24,7 @@
 	width:94px;
 	min-height:247px;
 	float:left;
-	margin:0px 3px 0px 0px;
+	margin:0 3px 0 0;
 	border-radius:8px;
 	padding:3px 3px;
 }
@@ -33,13 +33,13 @@
 	width:88px;
 	height:15px;
 	line-height:15px;
-	margin:0px 0px 1px 0px;
+	margin:0 0 1px 0;
 }
 .tab_expedpast .expedNumBox .expedCheck {
 	width:15px;
 	height:15px;
 	float:left;
-	margin:0px 5px 0px 5px;
+	margin:0 5px 0 5px;
 }
 .tab_expedpast .expedNumBox .expedCheck input {
 	width:13px;
@@ -51,7 +51,7 @@
 	height:15px;
 	float:left;
 	text-align:center;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	font-size:12px;
 }
 .tab_expedpast .expedNumBox .expedText.monthly {
@@ -59,7 +59,7 @@
 }
 .tab_expedpast .expedNumBox .expedWhole .expedText {
 	width:63px;
-	margin:0px;
+	margin:0;
 }
 .tab_expedpast .expedNumBox .expedTime {
 	width:33px;
@@ -112,24 +112,24 @@
 --------------------------------*/
 .tab_expedpast .exped_pages {
 	width:100%;
-	margin:0px 0px 10px 0px;
-	padding:5px 10px 0px;
+	margin:0 0 10px 0;
+	padding:5px 10px 0;
 	border-bottom:1px solid #369;
 }
 .tab_expedpast .exped_pages .pagination {
-	margin:0px;
+	margin:0;
 }
 .tab_expedpast .exped_count {
 	font-size:12px;
 	line-height:12px;
-	margin:0px 5px 5px 5px;
+	margin:0 5px 5px 5px;
 }
 /* RECORDS
 --------------------------------*/
 .tab_expedpast .exped_item {
 	width:680px;
 	height:34px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	border-radius:8px;
 	padding:2px 5px;
 }
@@ -144,7 +144,7 @@
 	width:70px;
 	line-height:15px;
 	text-align:center;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	color:#888;
 	white-space:nowrap;
 }
@@ -157,7 +157,7 @@
 }
 .tab_expedpast .exped_number {
 	width:35px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
@@ -166,7 +166,7 @@
 }
 .tab_expedpast .exped_exp {
 	width:35px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	text-align:center;
 	font-size:14px;
 	color:#bbb;
@@ -175,14 +175,14 @@
 
 .tab_expedpast .exped_ships {
 	width:200px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	/*background:#cfc;*/
 }
 .tab_expedpast .exped_ship {
 	width:30px;
 	height:30px;
 	float:left;
-	margin:0px 3px 0px 0px;
+	margin:0 3px 0 0;
 	position:relative;
 }
 .tab_expedpast .exped_ship_img {
@@ -195,13 +195,13 @@
 }
 .tab_expedpast .exped_ship_img.sparkled {
 	border:2px solid #ffcc00;
-	box-shadow: 0px 0px 5px 0px #ff0;
+	box-shadow: 0 0 5px 0 #ff0;
 }
 .tab_expedpast .exped_ship img {
 	width:28px;
 	height:28px;
 	position:relative;
-	margin:-1px 0px 0px -1px;
+	margin:-1px 0 0 -1px;
 	vertical-align:top;
 }
 .tab_expedpast .exped_ship_exp {
@@ -210,9 +210,9 @@
 	line-height:12px;
 	position:absolute;
 	top:20px;
-	text-shadow:0px 0px 2px #000,
-		0px 0px 2px #000,
-		0px 0px 5px #555;
+	text-shadow:0 0 2px #000,
+		0 0 2px #000,
+		0 0 5px #555;
 	color:#fff;
 	text-align:center;
 	font-size:12px;
@@ -222,7 +222,7 @@
 	width:30px;
 	height:26px;
 	line-height:26px;
-	margin:2px 5px 0px 0px;
+	margin:2px 5px 0 0;
 	background:#777;
 	color:#fff;
 	text-align:center;
@@ -233,7 +233,7 @@
 	width:30px;
 	height:22px;
 	line-height:22px;
-	margin:4px 3px 0px 0px;
+	margin:4px 3px 0 0;
 	text-align:center;
 	font-size:12px;
 	border-radius:5px;
@@ -255,13 +255,13 @@
 }
 .tab_expedpast .exped_result {
 	width:70px;
-	margin:0px 5px 0px 5px;
+	margin:0 5px 0 5px;
 	overflow:hidden;
 }
 .tab_expedpast .exped_result img {
 	width:170px;
 	height:30px;
-	margin:0px 0px 0px -50px;
+	margin:0 0 0 -50px;
 	position:relative;
 }
 .tab_expedpast .exped_reward {

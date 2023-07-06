@@ -13,7 +13,7 @@
 	overflow-x: hidden;
 	border:1px solid #ccc;
 	background:#ffc;
-	border-radius: 8px 0px 0px 8px;
+	border-radius: 8px 0 0 8px;
 	float: left;
 	margin-top: 10px;
 }
@@ -23,7 +23,7 @@
 	height: 800px;
 	float: left;
 	border: 1px solid #ccc;
-	border-radius: 0px 8px 8px 0px;
+	border-radius: 0 8px 8px 0;
 	padding-left: 5px;
 	margin-top: 10px;
 }
@@ -57,7 +57,7 @@
 	border-radius: 3px;
 	text-align: center;
 	padding: 1px 5px;
-	margin: 3px 8px 3px 0px;
+	margin: 3px 8px 3px 0;
 	border: 1px solid #242;
 	background: #77f;
 }
@@ -66,7 +66,7 @@
 }
 
 .tab_quotes .part_right .voice_entity {
-	margin: 2px 0px 2px 0px;
+	margin: 2px 0 2px 0;
 }
 
 .tab_quotes .part_right .voice_entity.missing {
@@ -91,7 +91,7 @@
 }
 
 .tab_quotes .part_right .voice_entity.inherit {
-	margin: 2px 0px 2px 0px;
+	margin: 2px 0 2px 0;
 }
 
 .tab_quotes .part_right .voice_entity .voice {
@@ -187,14 +187,14 @@
 	width: 141px;
 	height: 20px;
 	float: left;
-	padding: 0px 0px 0px 1px;
+	padding: 0 0 0 1px;
 	white-space: nowrap;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_pg_box {
 	width: 152px;
 	height:12px;
-	margin:4px 3px 0px;
+	margin:4px 3px 0;
 	background:#777;
 	border:1px solid #333;
 	border-radius:4px;
