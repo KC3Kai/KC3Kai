@@ -211,11 +211,6 @@
 */
 
 
-
-
-
-
-
 /* .slotitem .holders (new since 2015/07/13) */
 .tab_gears .slotitem .holders{
 	width:		calc(100% - 260px);
@@ -277,6 +272,8 @@
 	float:		left;
 	padding:	0 0 0 6px;
 	white-space:nowrap;
+	overflow:	hidden;
+	text-overflow:ellipsis;
 }
 .tab_gears .slotitem .holders dl dd .holder span{
 	width:		40px;
