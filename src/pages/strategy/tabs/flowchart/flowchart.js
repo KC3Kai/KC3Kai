@@ -164,18 +164,17 @@
 
 			$(".showOnlyScrews").on("click", function() {
 				$(".questFlowItem, .questExtraItem").each(function() {
-					$(this).addClass("noscrewshidden");
+					$(this).addClass("noScrewsHidden");
 					const questDescription = $(this).find(".questDesc:first").attr("title");
 					if (questDescription.includes("Screw")) {
-						$(this).removeClass("noscrewshidden");
-						$(this).addClass("containsscrews");
-						$(this).parents(".questFlowItem, .questExtraItem").removeClass("noscrewshidden");
+						$(this).removeClass("noScrewsHidden").addClass("containsScrews");
+						$(this).parents(".questFlowItem, .questExtraItem").removeClass("noScrewsHidden");
 					}
 				});
 			});
 
 			$(".showNotOnlyScrews").on("click", function() {
-				$(".questFlowItem, .questExtraItem").removeClass("noscrewshidden").removeClass("containsscrews");
+				$(".questFlowItem, .questExtraItem").removeClass("noScrewsHidden").removeClass("containsScrews");
 			});
 			
 			// Manual quest count overrides

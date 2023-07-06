@@ -314,13 +314,13 @@
 }
 
 /* Quest Screw filter */
-.tab_flowchart .questFlowItem.noscrewshidden,
-.tab_flowchart .questExtraItem.noscrewshidden {
+.tab_flowchart .questFlowItem.noScrewsHidden,
+.tab_flowchart .questExtraItem.noScrewsHidden {
 	display: none;
 }
 
-.tab_flowchart .questFlowItem.containsscrews:before,
-.tab_flowchart .questExtraItem.containsscrews:before {
+.tab_flowchart .questFlowItem.containsScrews:before,
+.tab_flowchart .questExtraItem.containsScrews:before {
 	content: "";
 	display: block;
 	width: 9px;
@@ -332,6 +332,6 @@
 	background-size: cover;
 }
 
-.tab_flowchart .questExtraItem.containsscrews:before {
+.tab_flowchart .questExtraItem.containsScrews:before {
 	left: 40px;
 }
