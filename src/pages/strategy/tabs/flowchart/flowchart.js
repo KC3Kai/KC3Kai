@@ -161,6 +161,22 @@
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
+
+			$(".showOnlyScrews").on("click", function() {
+				$(".questFlowItem, .questExtraItem").each(function() {
+					$(this).addClass("noscrewshidden");
+					const questDescription = $(this).find(".questDesc:first").attr("title");
+					if (questDescription.includes("Screw")) {
+						$(this).removeClass("noscrewshidden");
+						$(this).addClass("containsscrews");
+						$(this).parents(".questFlowItem, .questExtraItem").removeClass("noscrewshidden");
+					}
+				});
+			});
+
+			$(".showNotOnlyScrews").on("click", function() {
+				$(".questFlowItem, .questExtraItem").removeClass("noscrewshidden").removeClass("containsscrews");
+			});
 			
 			// Manual quest count overrides
 			const flowchart = $(".flowchart");

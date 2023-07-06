@@ -55,6 +55,7 @@
 	line-height:20px;
 	margin:0 0 2px 0;
 	font-size:12px;
+	position: relative;
 }
 .tab_flowchart .questFlowItem .questInfo {
 	height:20px;
@@ -243,6 +244,7 @@
 	line-height:20px;
 	margin:0 0 2px 0;
 	font-size:12px;
+	position: relative;
 }
 .tab_flowchart .questExtraItem .questIcon {
 	width:49px;
@@ -309,4 +311,27 @@
 .tab_flowchart .questIcon.label_other {
 	border-left:4px solid transparent;
 	border-right:4px solid #fe6;
+}
+
+/* Quest Screw filter */
+.tab_flowchart .questFlowItem.noscrewshidden,
+.tab_flowchart .questExtraItem.noscrewshidden {
+	display: none;
+}
+
+.tab_flowchart .questFlowItem.containsscrews:before,
+.tab_flowchart .questExtraItem.containsscrews:before {
+	content: "";
+	display: block;
+	width: 9px;
+	height: 9px;
+	position: absolute;
+	top: 3px;
+	left: 34px;
+	background: transparent url("/assets/img/client/screws.png") no-repeat;
+	background-size: cover;
+}
+
+.tab_flowchart .questExtraItem.containsscrews:before {
+	left: 40px;
 }
