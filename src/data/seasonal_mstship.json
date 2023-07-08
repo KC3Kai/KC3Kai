@@ -5947,5 +5947,45 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 1
+	},
+	"5743": {
+		"api_id": 5743,
+		"api_name": "梅雨第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5744": {
+		"api_id": 5744,
+		"api_name": "梅雨Gotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5745": {
+		"api_id": 5745,
+		"api_name": "梅雨玉波",
+		"api_yomi": "たまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5746": {
+		"api_id": 5746,
+		"api_name": "梅雨Tuscaloosa",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5747": {
+		"api_id": 5747,
+		"api_name": "お出掛け清霜改",
+		"api_yomi": "きよしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
