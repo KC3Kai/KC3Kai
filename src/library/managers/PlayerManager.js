@@ -559,6 +559,8 @@ Does not include Ships and Gears which are managed by other Managers
 				"95": "submarineSupplyMaterial",
 				"96": "pumpkin",
 				"97": "teruteruBouzu",
+				"98": "blueRibbon",
+				"99": "whiteRibbon",
 				"901": "rankPoints",
 				"902": "boiler",
 			};

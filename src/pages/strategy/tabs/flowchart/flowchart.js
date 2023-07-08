@@ -43,6 +43,7 @@
 			this.seedBranch( rootQuestTree, 355 ); // C62
 			this.seedBranch( rootQuestTree, 357 ); // C66
 			this.seedBranch( rootQuestTree, 362 ); // C72
+			this.seedBranch( rootQuestTree, 368 ); // Cy11
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9

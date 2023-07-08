@@ -599,6 +599,23 @@
 	display:inline;
 }
 
+.tab_ships .ship_item .ship_ribbon {
+	display:none;
+}
+.tab_ships .ship_item .ship_ribbon img {
+	width:12px;
+	height:20px;
+	margin:-4px 0 0 -10px;
+	position:relative;
+	display:inline;
+}
+.tab_ships .ship_item .ship_ribbon.r-1 img {
+	content:url("/assets/img/client/ribbons/1.png");
+}
+.tab_ships .ship_item .ship_ribbon.r-2 img {
+	content:url("/assets/img/client/ribbons/2.png");
+}
+
 .tab_ships .more_columns .ship_item .hidden {
 	display:block !important;
 	visibility:visible !important;

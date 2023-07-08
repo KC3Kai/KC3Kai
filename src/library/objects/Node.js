@@ -2663,7 +2663,7 @@ Used by SortieManager
 
 						let power = time === 'Day'
 							? ship.shellingFirePower(combinedFleetFactor, isLand)
-							: ship.nightBattlePower(this.fcontactId) - (isLand ? ship.tp[0] : 0);
+							: ship.nightBattlePower(this.fcontactId) - (isLand ? ship.tp[0] + ship.statsSp("tp") : 0);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
 						if (time === 'Night' && ship.canCarrierNightAirAttack()) {
 							power = ship.nightAirAttackPower(this.fcontactId, isLand);
