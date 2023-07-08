@@ -40,7 +40,7 @@
 	display:inline-block;
 	min-width:71px;
 	min-height:30px;
-	margin:0px 4px 0px 0px;
+	margin:0 4px 0 0;
 }
 
 .tab_shipdrop .content_root .node_drop .node_name {
@@ -65,27 +65,27 @@
 }
 
 .tab_shipdrop .selectors {
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	height:42px;
 }
 
 .tab_shipdrop .control_panel .world_list {
 	min-width:150px;
 	height:22px;
-	margin:10px 0px 0px 10px;
+	margin:10px 0 0 10px;
 	float:left;
 }
 
 .tab_shipdrop .control_panel .map_list {
 	min-width:115px;
 	height:22px;
-	margin:10px 0px 0px 10px;
+	margin:10px 0 0 10px;
 	float:left;
 }
 
 .tab_shipdrop .control_panel .filters >p {
 	font-weight:bold;
-	margin:0px 0px 10px 10px;
+	margin:0 0 10px 10px;
 }
 
 .tab_shipdrop .filters .ship_types {
@@ -97,14 +97,14 @@
 	width:80px;
 	height:18px;
 	line-height:18px;
-	margin:0px 5px 2px 0px;
+	margin:0 5px 2px 0;
 	float:left;
 }
 
 .tab_shipdrop .ship_filter_type .filter_box {
 	width:10px;
 	height:10px;
-	margin:3px 7px 0px 3px;
+	margin:3px 7px 0 3px;
 	float:left;
 }
 .tab_shipdrop .ship_filter_type .filter_check {
@@ -120,14 +120,14 @@
 }
 
 .tab_shipdrop .massSelect {
-	margin:10px 10px 0px 10px;
+	margin:10px 10px 0 10px;
 }
 
 .tab_shipdrop .massSelect dl {
 	width:42%;
 	display:inline-block;
 	vertical-align:top;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	overflow:hidden;
 }
 .tab_shipdrop .massSelect dl dt,
@@ -139,7 +139,7 @@
 	font-weight:bold;
 }
 .tab_shipdrop .massSelect .hover {
-	margin:0px 0px 0px 4px;
+	margin:0 0 0 4px;
 	padding: 0 3px;
 	border-radius: 4px;
 }

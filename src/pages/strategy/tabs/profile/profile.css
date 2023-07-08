@@ -3,7 +3,7 @@
 }
 
 .tab_profile .homepage_hints {
-	margin:10px 0px 0px 0px;
+	margin:10px 0 0 0;
 	padding:5px 5px 5px 5px;
 	border-radius:5px 5px 5px 5px;
 	display:none;
@@ -18,14 +18,14 @@
 	width:680px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 }
 .tab_profile .hq_label {
 	width:75px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
-	padding:0px 0px 0px 5px;
+	margin:0 5px 0 0;
+	padding:0 0 0 5px;
 	font-weight:bold;
 	white-space:nowrap;
 }
@@ -33,7 +33,7 @@
 	width:580px;
 	height:20px;
 	float:left;
-	padding:0px 5px 0px 5px;
+	padding:0 5px 0 5px;
 }
 
 /* STATISTICS
@@ -44,7 +44,7 @@
 .tab_profile .stat_section {
 	width:215px;
 	float:left;
-	margin:0px 10px 0px 0px;
+	margin:0 10px 0 0;
 }
 .tab_profile .stat_head {
 	width:215px;
@@ -52,8 +52,8 @@
 	line-height:20px;
 	font-weight:bold;
 	text-align:center;
-	border-radius:8px 8px 0px 0px;
-	margin:0px 0px 2px 0px;
+	border-radius:8px 8px 0 0;
+	margin:0 0 2px 0;
 }
 .tab_profile .stat_sortie .stat_head {
 	background:#fcc;
@@ -71,14 +71,14 @@
 	width:215px;
 	height:18px;
 	line-height:18px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 }
 .tab_profile .stat_label {
 	width:100px;
 	height:15px;
 	float:left;
-	margin:0px 10px 0px 0px;
-	padding:0px 0px 0px 5px;
+	margin:0 10px 0 0;
+	padding:0 0 0 5px;
 	white-space:nowrap;
 }
 .tab_profile .stat_value {
@@ -94,13 +94,13 @@
 	width:680px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 }
 .tab_profile .rank_label {
 	width:250px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	white-space:nowrap;
 }
 .tab_profile .rank_content {
@@ -115,7 +115,7 @@
 .tab_profile .feed_item {
 	width:680px;
 	height:22px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	font-size:12px;
 }
 .tab_profile .feed_item .colorbox {
@@ -129,7 +129,7 @@
 	width:80px;
 	height:20px;
 	line-height:20px;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 	margin:1px 2px 1px 2px;
 	float:left;
 	overflow:hidden;
@@ -139,7 +139,7 @@
 	width:553px;
 	height:20px;
 	line-height:20px;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 	margin:1px 1px 1px 1px;
 	float:left;
 	overflow:hidden;

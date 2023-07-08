@@ -35,6 +35,9 @@ npm-debug.log
 .vscode/
 jsconfig.json
 
+# JetBrains
+.idea/
+
 # Typescript v1 declaration files
 typings/
 

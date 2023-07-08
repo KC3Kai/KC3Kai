@@ -10,7 +10,7 @@
 .tab_ships .filters .fleet_stats_label {
 	font-size:12px;
 	font-weight:bold;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 }
 .tab_ships .filters .fold_button,
 .tab_ships .filters .fold_button_fleet_stats {
@@ -40,14 +40,14 @@
 }
 .tab_ships .massSelect {
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	font-size:12px;
 }
 .tab_ships .massSelect dl {
 	width: calc(33% - 1px);
 	display: inline-block;
 	vertical-align: top;
-	margin: 0px 0px 5px 0px;
+	margin: 0 0 5px 0;
 	overflow: hidden;
 }
 .tab_ships .massSelect dl.halfwide {
@@ -65,7 +65,7 @@
 	font-weight:bold;
 }
 .tab_ships .massSelect .hover {
-	margin:0px 0px 0px 4px;
+	margin:0 0 0 4px;
 	padding: 0 3px;
 	border-radius: 4px;
 }
@@ -77,19 +77,19 @@
 	flex-flow:row wrap;
 	width:100%;
 	min-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 }
 .tab_ships .filters .ship_filter_type {
 	width:80px;
 	height:18px;
 	line-height:18px;
-	margin:0px 5px 2px 0px;
+	margin:0 5px 2px 0;
 }
 
 .tab_ships .show_name_filter {
 	float: left;
 	height: 18px;
-	margin: 0px 2px 2px 0px;
+	margin: 0 2px 2px 0;
 }
 .tab_ships .show_name_filter .name_label {
 	float: left;
@@ -113,7 +113,7 @@
 .tab_ships .ship_level_filter {
 	float: left;
 	height: 18px;
-	margin: 0px 2px 2px 24px;
+	margin: 0 2px 2px 24px;
 }
 .tab_ships .ship_level_filter .level_start_label {
 	float: left;
@@ -154,7 +154,7 @@
 }
 
 .tab_ships .advanced_sorter {
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 }
 .tab_ships .advanced_sorter .adv_label {
 	float:left;
@@ -172,7 +172,7 @@
 
 .tab_ships .ship_count {
 	float:left;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	line-height:18px;
 	width:220px;
 }
@@ -196,13 +196,13 @@
 	display:none;
 	font-size:12px;
 	height:auto;
-	margin:0px 0px 2px 0px;
-	padding:0px 10px 0px 10px;
+	margin:0 0 2px 0;
+	padding:0 10px 0 10px;
 }
 .tab_ships .fleet_stats .fleet_stat .stats_label,
 .tab_ships .fleet_stats .fleet_stat .stats_value {
 	display:inline-block;
-	margin-bottom:0px;
+	margin-bottom:0;
 	line-height:18px;
 }
 .tab_ships .fleet_stats .fleet_stat .stats_label {
@@ -213,13 +213,13 @@
 	display:inline-block;
 	height:18px;
 	vertical-align:top;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	overflow:hidden;
 }
 
 .tab_ships .ship_export {
 	float:left;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	line-height:18px;
 }
 .tab_ships .ship_export div {
@@ -233,24 +233,24 @@
 }
 .tab_ships .ship_export .hover {
 	font-weight:normal;
-	margin:0px 1px 0px 0px;
+	margin:0 1px 0 0;
 }
 
 .tab_ships .control_buttons {
 	float:right;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 }
 .tab_ships .control_buttons > div {
 	font-size:12px;
 	font-weight:bold;
 	line-height:18px;
-	padding:0px 4px 0px 4px;
+	padding:0 4px 0 4px;
 }
 
 .tab_ships .advanced_sorter .filter_box {
 	width:10px;
 	height:10px;
-	margin:3px 7px 0px 3px;
+	margin:3px 7px 0 3px;
 	float:left;
 }
 .tab_ships .advanced_sorter .filter_check {
@@ -266,13 +266,13 @@
 .tab_ships .advanced_sorter .sorter_desc {
 	font-size:12px;
 	color:#999;
-	padding:0px 0px 0px 10px;
+	padding:0 0 0 10px;
 }
 
 .tab_ships .ship_filter_type .filter_box {
 	width:10px;
 	height:10px;
-	margin:3px 7px 0px 3px;
+	margin:3px 7px 0 3px;
 	float:left;
 }
 .tab_ships .ship_filter_type .filter_check {
@@ -291,7 +291,7 @@
 .tab_ships .ship_header {
 	width:100%;
 	height:22px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 }
 .tab_ships .scroll_fix .ship_header {
 	width:calc(100% - 10px);
@@ -304,7 +304,7 @@
 	line-height:20px;
 	font-size:12px;
 	font-weight:bold;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 }
 .tab_ships .ship_header .ship_item .ship_id {
 	text-align:center;
@@ -341,7 +341,7 @@
 	width:100%;
 	height:auto;
 	min-height:50px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	overflow-x:auto;
 }
 .tab_ships .scroll_fix .ship_list {
@@ -366,7 +366,7 @@
 	height:20px;
 	line-height:20px;
 	font-size:12px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	overflow:hidden;
 	position:relative;
 	white-space:nowrap;
@@ -382,7 +382,7 @@
 .tab_ships .ship_item .ship_field {
 	height:20px;
 	float:left;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_ships .ship_item .ship_field .order.asc {
 	float:right;
@@ -406,9 +406,9 @@
 	width:100%;
 	line-height:14px;
 	font-size:14px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	text-align:left;
-	padding:0px 0px 0px 10px;
+	padding:0 0 0 10px;
 	color:#aaa;
 	display:none;
 }
@@ -545,8 +545,8 @@
 .tab_ships .ship_item .ship_equip span {
 	position:absolute;
 	display:flex;
-	left:0px;
-	top:0px;
+	left:0;
+	top:0;
 	font-size:10px;
 	width:100%;
 	height:100%;
@@ -622,5 +622,5 @@
 }
 
 .tab_ships .page_padding.scroll_fix {
-	padding:0px 5px 0px;
+	padding:0 5px 0;
 }

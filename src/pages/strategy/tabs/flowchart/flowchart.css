@@ -6,7 +6,7 @@
 	height:34px;
 	line-height:34px;
 	font-size:18px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 }
 .tab_flowchart .factory {
 	display:none;
@@ -16,7 +16,7 @@
 --------------------------------*/
 .tab_flowchart .questControls {
 	width:700px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	padding:5px 10px;
 }
 .tab_flowchart .questControls .questLabel {
@@ -32,7 +32,7 @@
 	width:90px;
 	height:20px;
 	line-height:20px;
-	margin:0px 5px 2px 0px;
+	margin:0 5px 2px 0;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;
@@ -43,31 +43,31 @@
 	width:680px;
 	overflow:hidden;
 	min-height:100px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 .tab_flowchart .flowchart ul {
-	margin:0px;
-	padding:0px;
+	margin:0;
+	padding:0;
 	list-style: none;
 }
 /* Row Layout */
 .tab_flowchart .questFlowItem {
 	line-height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	font-size:12px;
+	position: relative;
 }
 .tab_flowchart .questFlowItem .questInfo {
 	height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 }
 .tab_flowchart .questFlowItem .questChildren {
-	padding:0px 0px 0px 20px;
-	background:url(../../../../assets/img/ui/branch.png);
-	background-repeat: repeat-y;
+	padding:0 0 0 20px;
+	background:url(../../../../assets/img/ui/branch.png) repeat-y;
 }
 /* Base Styling */
 .tab_flowchart .questFlowItem .questTrunk {
-	margin:0px 0px 0px -10px;
+	margin:0 0 0 -10px;
 	float:left;
 	width:10px;
 	height:20px;
@@ -75,7 +75,7 @@
 }
 .tab_flowchart .questFlowItem .questIcon {
 	width:42px;
-	margin:1px 5px 0px 1px;
+	margin:1px 5px 0 1px;
 	text-align:center;
 	font-size:10px;
 	font-weight:bold;
@@ -108,7 +108,7 @@
 }
 .tab_flowchart .questFlowItem .questDesc {
 	max-width:64%;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -122,7 +122,7 @@
 	line-height:16px;
 	overflow:hidden;
 	float:right;
-	margin:2px 2px 0px 0px;
+	margin:2px 2px 0 0;
 	text-align:center;
 	color:#999;
 }
@@ -147,14 +147,14 @@
 	width:60px;
 	height:16px;
 	float:left;
-	margin:0px 2px 0px 2px;
+	margin:0 2px 0 2px;
 	/*background:#cfc;*/
 }
 .tab_flowchart .questFlowItem .questToggle {
 	width:16px;
 	height:16px;
 	float:left;
-	margin:0px 0px 0px 4px;
+	margin:0 0 0 4px;
 	border-radius:50%;
 	-webkit-user-select:none;
 }
@@ -168,7 +168,7 @@
 	width:16px;
 	height:16px;
 	float:left;
-	margin:0px 0px 0px 3px;
+	margin:0 0 0 3px;
 	border-radius:50%;
 	-webkit-user-select:none;
 }
@@ -231,7 +231,7 @@
 }
 .tab_flowchart .extralist {
 	min-height:100px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	/*background:#ffc;*/
 }
 .tab_flowchart .extralist ul.questList {
@@ -242,13 +242,14 @@
 	width:680px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	font-size:12px;
+	position: relative;
 }
 .tab_flowchart .questExtraItem .questIcon {
 	width:49px;
 	height:18px;
-	margin:1px 5px 0px 1px;
+	margin:1px 5px 0 1px;
 	text-align:center;
 	font-size:10px;
 	font-weight:bold;
@@ -268,7 +269,7 @@
 	width:16px;
 	height:16px;
 	float:left;
-	margin:0px 0px 0px 9px;
+	margin:0 0 0 9px;
 	border-radius:8px;
 	-webkit-user-select:none;
 }
@@ -310,4 +311,27 @@
 .tab_flowchart .questIcon.label_other {
 	border-left:4px solid transparent;
 	border-right:4px solid #fe6;
+}
+
+/* Quest Screw filter */
+.tab_flowchart .questFlowItem.noScrewsHidden,
+.tab_flowchart .questExtraItem.noScrewsHidden {
+	display: none;
+}
+
+.tab_flowchart .questFlowItem.containsScrews:before,
+.tab_flowchart .questExtraItem.containsScrews:before {
+	content: "";
+	display: block;
+	width: 9px;
+	height: 9px;
+	position: absolute;
+	top: 3px;
+	left: 34px;
+	background: transparent url("/assets/img/client/screws.png") no-repeat;
+	background-size: cover;
+}
+
+.tab_flowchart .questExtraItem.containsScrews:before {
+	left: 40px;
 }

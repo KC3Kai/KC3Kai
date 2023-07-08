@@ -11,7 +11,7 @@
 	float:left;
 	white-space:nowrap;
 	overflow:hidden;
-	margin:0px 2px 5px 2px;
+	margin:0 2px 5px 2px;
 }
 .tab_gears .item_types .item_type.text {
 	text-align:center;
@@ -42,13 +42,13 @@
 .tab_gears .slotitem .info {
 	width:230px;
 	float:left;
-	margin:0px 30px 0px 0px;
+	margin:0 30px 0 0;
 }
 .tab_gears .slotitem .info .icon {
 	width:24px;
 	height:24px;
 	line-height:18px;
-	margin:6px 5px 3px 0px;
+	margin:6px 5px 3px 0;
 	float:left;
 	background:#2C3A3B;
 	border-radius:12px;
@@ -62,7 +62,7 @@
 	width:200px;
 	line-height:20px;
 	min-height:30px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 	font-weight:bold;
 	float:left;
 }
@@ -70,7 +70,7 @@
 	width:230px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
@@ -84,13 +84,13 @@
 	width:230px;
 	height:auto;
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 }
 .tab_gears .slotitem .info .item_stat {
 	width:40px;
 	height:20px;
 	float:left;
-	margin:0px 2px 2px 0px;
+	margin:0 2px 2px 0;
 	font-size:12px;
 	white-space:nowrap;
 }
@@ -100,13 +100,13 @@
 .tab_gears .slotitem .info .item_stat img {
 	max-width:19px;
 	height:16px;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_gears .slotitem .info .counts {
 	width:230px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	font-size:12px;
 }
 
@@ -302,8 +302,8 @@
 	width: 40px;
 	height:20px;
 	line-height:20px;
-	padding:0px 4px 0px 4px;
-	margin: 0px 2px 0px 1px;
+	padding:0 4px 0 4px;
+	margin: 0 2px 0 1px;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;

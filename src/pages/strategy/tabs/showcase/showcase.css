@@ -12,8 +12,8 @@
 	min-width: 140px;
 	height: 20px;
 	line-height: 20px;
-	margin: 0px 10px 0px 0px;
-	padding: 0px 10px 0px 10px;
+	margin: 0 10px 0 0;
+	padding: 0 10px 0 10px;
 	font-weight: bold;
 	font-size: 12px;
 	text-align: center;
@@ -26,7 +26,7 @@
 
 .tab_showcase .controls {
 	width: 700px;
-	margin: 0px 0px 0px 0px;
+	margin: 0 0 0 0;
 	padding: 5px 10px;
 }
 .tab_showcase .control.disabled {
@@ -52,7 +52,7 @@
 	height:134px;
 	float:left;
 	border-radius:10px;
-	margin:0px 0px 5px 5px;
+	margin:0 0 5px 5px;
 	overflow:hidden;
 }
 .tab_showcase .stype_title {
@@ -72,7 +72,7 @@
 	width:105px;
 	height:50px;
 	float:left;
-	margin:0px 0px 3px 3px;
+	margin:0 0 3px 3px;
 	border-radius:8px;
 }
 .tab_showcase .show_ship .ship_pic {
@@ -80,7 +80,7 @@
 	height:30px;
 	line-height:30px;
 	float:left;
-	margin:2px 5px 0px 2px;
+	margin:2px 5px 0 2px;
 	border-radius:15px;
 	overflow:hidden;
 }
@@ -98,14 +98,14 @@
 	line-height:14px;
 	font-size:12px;
 	float:left;
-	margin:3px 0px 0px 0px;
+	margin:3px 0 0 0;
 }
 .tab_showcase .show_ship .ship_level {
 }
 .tab_showcase .show_ship .ship_mods {
 	width:105px;
 	height:14px;
-	margin:2px 0px 0px 0px;
+	margin:2px 0 0 0;
 }
 .tab_showcase .show_ship .ship_mod {
 	width:18px;
@@ -114,7 +114,7 @@
 	float:left;
 	font-size:10px;
 	text-align:center;
-	margin:1px 0px 0px 2px;
+	margin:1px 0 0 2px;
 }
 .tab_showcase .show_ship .ship_mod_fp.max {
 	background:#ff8888;
@@ -135,7 +135,7 @@
 /* GEARS
 -----------------------------*/
 .tab_showcase .gtype_boxes {
-	padding:0px 0px 10px 0px;
+	padding:0 0 10px 0;
 }
 .tab_showcase .gtype_box {
 	width:220px;
@@ -143,7 +143,7 @@
 	float:left;
 	/*background:#def;*/
 	border-radius:10px;
-	margin:0px 0px 5px 6px;
+	margin:0 0 5px 6px;
 	overflow:hidden;
 }
 .tab_showcase .gtype_title {
@@ -164,13 +164,13 @@
 	width:210px;
 	height:18px;
 	line-height:18px;
-	margin:2px 0px 0px 5px;
+	margin:2px 0 0 5px;
 }
 .tab_showcase .show_gear .gear_icon {
 	width:18px;
 	height:18px;
 	float:left;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_showcase .show_gear .gear_icon img {
 	width:18px;

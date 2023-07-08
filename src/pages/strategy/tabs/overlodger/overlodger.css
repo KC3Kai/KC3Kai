@@ -52,7 +52,7 @@
 	width:100%;
 	height:12px;
 	line-height:12px;
-	margin:5px 0px;
+	margin:5px 0;
 }
 .tab_overlodger .filterBox .filterType  input,
 .tab_overlodger .filterBox .filterData  input,
@@ -60,7 +60,7 @@
 	display:block;
 	width:12px;
 	height:12px;
-	margin:0px 5px;
+	margin:0 5px;
 	float:left;
 }
 .tab_overlodger .filterBox .filterText {
@@ -86,13 +86,13 @@
 	float:left;
 	width:25%;
 	line-height:12px;
-	margin:5px 0px;
+	margin:5px 0;
 }
 .tab_overlodger .filterBox .filterMapTypes .filterSType input {
 	display:block;
 	width:12px;
 	height:12px;
-	margin:0px 5px;
+	margin:0 5px;
 	float:left;
 }
 .tab_overlodger .filterBox .filterMapOption select {
@@ -151,7 +151,7 @@
 }
 
 .tab_overlodger .loading {
-	margin:8px 0px;
+	margin:8px 0;
 	display:block;
 }
 .tab_overlodger .loading img {
@@ -201,7 +201,7 @@
 .tab_overlodger .lodger-data .bar.NM {
 	position: relative;
 	width: 42%;
-	margin: 9px 0px;
+	margin: 9px 0;
 }
 .tab_overlodger .lodger-data .bar .bar {
 	position: absolute;

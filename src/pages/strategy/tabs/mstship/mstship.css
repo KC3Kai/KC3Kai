@@ -5,7 +5,7 @@
 	display:none;
 }
 .tab_mstship .cg_notes {
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	border-radius:5px 5px 5px 5px;
 	display:none;
 }
@@ -22,16 +22,16 @@
 --------------------------------*/
 .tab_mstship .filters {
 	width:700px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	background:#f0f5ff;
 /*	padding:5px 10px; */
-	border-bottom:0px solid #369;
+	border-bottom:0 solid #369;
 }
 .tab_mstship .filters .stype {
-	padding:0px 8px;
+	padding:0 8px;
 	height:20px;
 	line-height: 20px;
-	margin:0px 6px 4px 0px;
+	margin:0 6px 4px 0;
 	float:left;
 	background:#09c;
 	color:#fff;
@@ -52,16 +52,16 @@
 	float:left;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	padding:5px 0px;
+	padding:5px 0;
 	border:1px solid #ccc;
 	background:#ffc;
-	border-radius: 8px 0px 0px 8px;
+	border-radius: 8px 0 0 8px;
 }
 .tab_mstship .shipRecord {
 	width:auto;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	padding-left:5px;
 }
 .tab_mstship .shipRecord:hover {
@@ -81,7 +81,7 @@
 	width:150px;
 	height:20px;
 	float:left;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 	white-space:nowrap;
 	overflow:visible;
 }
@@ -94,7 +94,7 @@
 	float:left;
 	background:#eee;
 	border:1px solid #ccc;
-	border-radius: 0px 8px 8px 0px;
+	border-radius: 0 8px 8px 0;
 	padding:5px 5px 5px 5px;
 	position:relative;
 }
@@ -106,7 +106,7 @@
 	width:218px;
 	height:300px;
 	float:left;
-	margin:5px 5px 5px 0px;
+	margin:5px 5px 5px 0;
 	background:#006c91;
 	overflow:hidden;
 	text-align:center;
@@ -181,14 +181,14 @@
 	width:245px;
 	min-height:132px;
 	float:left;
-	margin:5px 0px 2px 0px;
+	margin:5px 0 2px 0;
 }
 .tab_mstship .shipInfo .ship_stat {
 	width:119px;
 	height:20px;
 	line-height:20px;
 	float:left;
-	margin:0px 3px 3px 0px;
+	margin:0 3px 3px 0;
 }
 .tab_mstship .shipInfo .ship_stat_icon {
 	width:20px;
@@ -200,7 +200,7 @@
 .tab_mstship .shipInfo .ship_stat_icon img {
 	max-width:19px;
 	height:16px;
-	margin:2px 1px 2px 0px;
+	margin:2px 1px 2px 0;
 }
 .tab_mstship .shipInfo .ship_stat_name {
 	width:45px;
@@ -215,7 +215,7 @@
 	float:left;
 	display:none;
 	font-size:12px;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 }
 .tab_mstship .shipInfo .ship_stat_value {
 	width:25px;
@@ -230,19 +230,19 @@
 	width:245px;
 	min-height:92px;
 	float:left;
-	margin:2px 0px 2px 0px;
-	padding:0px 0px 0px 0px;
+	margin:2px 0 2px 0;
+	padding:0 0 0 0;
 }
 .tab_mstship .shipInfo .equipment {
 	width:245px;
 	height:20px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 }
 .tab_mstship .shipInfo .equipment .capacity {
 	width:30px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	text-align:center;
 	font-size:14px;
 	font-weight:bold;
@@ -268,12 +268,12 @@
 	line-height:16px;
 	float:left;
 	position:relative;
-	margin:2px 0px 0px -10px;
+	margin:2px 0 0 -10px;
 	padding-left: 12px;
 	z-index:1;
 	color:white;
 	background:#444;
-	border-radius:0px 3px 3px 0px;
+	border-radius:0 3px 3px 0;
 	font-size:12px;
 	text-overflow: ellipsis;
 	overflow:hidden;
@@ -334,13 +334,13 @@
 /* MORE INFORMATION
 --------------------------------*/
 .tab_mstship .shipInfo .more {
-	margin:5px 0px 10px 0px;
+	margin:5px 0 10px 0;
 }
 .tab_mstship .shipInfo .more .moreinfo_box {
 	width:470px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	overflow:hidden;
 }
 .tab_mstship .shipInfo .more .ship_label {
@@ -350,13 +350,13 @@
 	font-size:12px;
 	color:#888;
 	font-weight:bold;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 }
 .tab_mstship .shipInfo .more .rsc {
 	width:70px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 }
 .tab_mstship .shipInfo .more .rsc_icon {
 	width:20px;
@@ -373,12 +373,12 @@
 .tab_mstship .shipInfo .more .rsc_value {
 	width:50px;
 	height:20px;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 	float:left;
 }
 .tab_mstship .shipInfo .more .rsc.remodel_blueprint {
 	width:20px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	display:none;
 }
 /* Remodel */
@@ -386,7 +386,7 @@
 	width:145px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	overflow:hidden;
 	white-space:nowrap;
 	font-weight:bold;
@@ -402,7 +402,7 @@
 	width:40px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	font-size:12px;
 }
 .tab_mstship .shipInfo .more .remodel_level span {
@@ -420,7 +420,7 @@
 }
 .tab_mstship .shipInfo .more .other_forms_list a,
 .tab_mstship .shipInfo .more .seasonal_cg_list a {
-	margin:0px 10px 0px 0px;
+	margin:0 10px 0 0;
 }
 .tab_mstship .shipInfo .more .seasonal_cg.moreinfo_box {
 	height:auto;
@@ -449,7 +449,7 @@
 	float: left;
 }
 .tab_mstship .shipInfo .more .at_level .slider {
-	margin:5px 0px 0px 10px;
+	margin:5px 0 0 10px;
 	width: 400px;
 }
 
@@ -468,7 +468,7 @@
 /* Subtitles */
 .tab_mstship .shipInfo .subtitles {
 	width:470px;
-	margin:10px 0px 20px 0px;
+	margin:10px 0 20px 0;
 	font-weight: normal;
 	font-size:12px;
 	text-align: center;
@@ -477,21 +477,21 @@
 /* Regular Voices */
 .tab_mstship .shipInfo .voices {
 	width:470px;
-	margin:10px 0px 10px 0px;
+	margin:10px 0 10px 0;
 }
 .tab_mstship .shipInfo .voices .voice {
 	width:90px;
-	margin:0px 2px 2px 2px;
+	margin:0 2px 2px 2px;
 }
 
 /* Hourlies */
 .tab_mstship .shipInfo .hourlies {
 	width:470px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 .tab_mstship .shipInfo .hourlies .voice {
 	width:60px;
-	margin:0px 3px 2px 3px;
+	margin:0 3px 2px 3px;
 }
 /* Accordion like */
 .tab_mstship .shipInfo .accordion {
@@ -530,7 +530,7 @@
 	float:left;
 	width:224px;
 	height:20px;
-	margin:0px 2px 1px 0px;
+	margin:0 2px 1px 0;
 	font-size:12px;
 	line-height:20px;
 	border-radius:6px;
@@ -551,7 +551,7 @@
 .tab_mstship .shipInfo .equipExSlot .typeName {
 	float:left;
 	width:200px;
-	margin:0px 2px 0px 2px;
+	margin:0 2px 0 2px;
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;
@@ -568,7 +568,7 @@
 .tab_mstship .shipInfo .aaci .aaciPattern {
 	width:290px;
 	height:22px;
-	margin:0px 0px 1px 0px;
+	margin:0 0 1px 0;
 	border-radius:6px;
 	font-size:12px;
 	white-space:nowrap;
@@ -576,14 +576,14 @@
 .tab_mstship .shipInfo .aaci .apiId {
 	width:40px;
 	height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	padding:2px 5px;
 	float:left;
 }
 .tab_mstship .shipInfo .aaci .shipIcon {
 	width:20px;
 	height:20px;
-	margin:0px 1px 0px 0px;
+	margin:0 1px 0 0;
 	padding:2px 5px;
 	float:left;
 }
@@ -596,7 +596,7 @@
 .tab_mstship .shipInfo .aaci .equipIcons {
 	width:100px;
 	height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	padding:2px 5px;
 	float:left;
 }
@@ -607,7 +607,7 @@
 .tab_mstship .shipInfo .aaci .equipIcons .plusIcon {
 	width:15px;
 	height:15px;
-	margin:6px 0px 0px -12px;
+	margin:6px 0 0 -12px;
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(75deg);
@@ -617,7 +617,7 @@
 .tab_mstship .shipInfo .aaci .equipIcons .minusIcon {
 	width:15px;
 	height:15px;
-	margin:6px 0px 0px -12px;
+	margin:6px 0 0 -12px;
 	position:relative;
 	pointer-events:none;
 	filter:hue-rotate(-90deg);
@@ -627,14 +627,14 @@
 .tab_mstship .shipInfo .aaci .fixed {
 	width:50px;
 	height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	padding:2px 5px;
 	float:left;
 }
 .tab_mstship .shipInfo .aaci .modifier {
 	width:50px;
 	height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	padding:2px 5px;
 	float:left;
 }
@@ -656,7 +656,7 @@
 .tab_mstship .shipInfo .gunfit .fitgear {
 	width:400px;
 	height:24px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 	padding:2px 5px;
 	border-radius:6px;
 	line-height:20px;
@@ -670,7 +670,7 @@
 .tab_mstship .shipInfo .gunfit .fitgear .gearName {
 	width:230px;
 	height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	float:left;
 	font-size:12px;
 	white-space:nowrap;
@@ -680,7 +680,7 @@
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitDay {
 	width:75px;
 	height:20px;
-	text-shadow:0px 0px 7px #777, 1px 1px 1px #555;
+	text-shadow:0 0 7px #777, 1px 1px 1px #555;
 	background:#ace;
 	border-radius:3px;
 	float:left;
@@ -693,7 +693,7 @@
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
 	width:75px;
 	height:20px;
-	text-shadow:0px 0px 7px #eee, 1px 1px 1px #ccc;
+	text-shadow:0 0 7px #eee, 1px 1px 1px #ccc;
 	background:#258;
 	border-radius:3px;
 	float:left;
@@ -880,7 +880,7 @@
 	display: flex;
 	flex-direction: row-reverse;
 	align-items: flex-end;
-	margin: 0px 2px;
+	margin: 0 2px;
 	position: absolute;
 	right: 4px;
 	bottom: 4px;
