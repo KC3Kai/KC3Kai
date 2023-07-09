@@ -314,13 +314,13 @@
 }
 
 /* Quest Screw filter */
-.tab_flowchart .questFlowItem.noScrewsHidden,
-.tab_flowchart .questExtraItem.noScrewsHidden {
+.tab_flowchart .questFlowItem.questFilterHidden,
+.tab_flowchart .questExtraItem.questFilterHidden {
 	display: none;
 }
 
-.tab_flowchart .questFlowItem.containsScrews:before,
-.tab_flowchart .questExtraItem.containsScrews:before {
+.tab_flowchart .questFlowItem[class*="contains"]:before,
+.tab_flowchart .questExtraItem[class*="contains"]:before {
 	content: "";
 	display: block;
 	width: 9px;
@@ -328,10 +328,31 @@
 	position: absolute;
 	top: 3px;
 	left: 34px;
-	background: transparent url("/assets/img/client/screws.png") no-repeat;
+	background-color: transparent;
+	background-repeat: no-repeat;
 	background-size: cover;
 }
 
-.tab_flowchart .questExtraItem.containsScrews:before {
+.tab_flowchart .questExtraItem[class*="contains"]:before {
 	left: 40px;
+}
+
+.tab_flowchart .questFlowItem.containsBuckets:before,
+.tab_flowchart .questExtraItem.containsBuckets:before {
+	background-image: url("/assets/img/client/bucket.png");
+}
+
+.tab_flowchart .questFlowItem.containsDevMats:before,
+.tab_flowchart .questExtraItem.containsDevMats:before {
+	background-image: url("/assets/img/client/devmat.png");
+}
+
+.tab_flowchart .questFlowItem.containsScrews:before,
+.tab_flowchart .questExtraItem.containsScrews:before {
+	background-image: url("/assets/img/client/screws.png");
+}
+
+.tab_flowchart .questFlowItem.containsTorches:before,
+.tab_flowchart .questExtraItem.containsTorches:before {
+	background-image: url("/assets/img/client/ibuild.png");
 }

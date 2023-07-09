@@ -471,13 +471,15 @@ known IDs see QuestManager
 			// If we have meta for this quest, and not an ID-reused seasonal one
 			if(questMeta && checkExpectedHash(questMeta)) {
 				// Attach meta info to this object
+				// Reward resources order: [buckets, devmats, screws, torches] (alphabetical for now)
 				this.meta = function() { return {
 					available : true,
 					code : questMeta.code,
 					name : questMeta.name,
 					desc : questMeta.desc,
 					memo : questMeta.memo,
-					trackingDesc : questMeta.trackingDesc
+					trackingDesc : questMeta.trackingDesc,
+					rewardResources: questMeta.rewardResources,
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false && Array.isArray(questMeta.tracking)) {
@@ -498,6 +500,7 @@ known IDs see QuestManager
 				|| oldMeta.desc !== questMeta.desc
 				|| oldMeta.memo !== questMeta.memo
 				|| oldMeta.trackingDesc !== questMeta.trackingDesc
+				|| oldMeta.rewardResources !== questMeta.rewardResources
 				)) {
 				// Only update meta text, keep tracking untouched
 				this.meta = function() { return {
@@ -506,7 +509,8 @@ known IDs see QuestManager
 					name : questMeta.name,
 					desc : questMeta.desc,
 					memo : questMeta.memo,
-					trackingDesc : questMeta.trackingDesc
+					trackingDesc : questMeta.trackingDesc,
+					rewardResources: questMeta.rewardResources,
 				}; };
 			} else if(questMeta && !checkExpectedHash(questMeta)) {
 				this.meta = noMeta;
