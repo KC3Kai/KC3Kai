@@ -471,7 +471,7 @@ known IDs see QuestManager
 			// If we have meta for this quest, and not an ID-reused seasonal one
 			if(questMeta && checkExpectedHash(questMeta)) {
 				// Attach meta info to this object
-				// Reward resources order: [buckets, devmats, screws, torches] (alphabetical for now)
+				// Reward resources order: [torches, buckets, devmats, screws]
 				this.meta = function() { return {
 					available : true,
 					code : questMeta.code,

@@ -3,7 +3,8 @@
 		"unlock": [102]
 	},
 	"102": {
-		"unlock": [103]
+		"unlock": [103],
+		"rewardResources": [1, 0, 0, 0]
 	},
 	"103": {
 		"unlock": [104, 105]
@@ -12,55 +13,69 @@
 		"unlock": [115, 116]
 	},
 	"105": {
-		"unlock": [106, 108, 254, 401]
+		"unlock": [106, 108, 254, 401],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"106": {
-		"unlock": [215]
+		"unlock": [215],
+		"rewardResources": [0, 1, 0, 0]
 	},
 	"107": {
-		"unlock": [217]
+		"unlock": [217],
+		"rewardResources": [0, 0, 0, 1]
 	},
 	"108": {
-		"unlock": [111]
+		"unlock": [111],
+		"rewardResources": [2, 0, 0, 0]
 	},
 	"109": {
 		"unlock": [110, 704]
 	},
 	"110": {
-		"unlock": [118]
+		"unlock": [118],
+		"rewardResources": [0, 1, 1, 0]
 	},
 	"111": {
-		"unlock": [112]
+		"unlock": [112],
+		"rewardResources": [0, 2, 1, 0]
 	},
 	"112": {
-		"unlock": [153, 896]
+		"unlock": [153, 896],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"113": {
-		"unlock": [114, 119]
+		"unlock": [114, 119],
+		"rewardResources": [2, 0, 0, 0]
 	},
 	"114": {
-		"unlock": [185, 625]
+		"unlock": [185, 625],
+		"rewardResources": [2, 0, 4, 0]
 	},
 	"115": {
-		"unlock": [215]
+		"unlock": [215],
+		"rewardResources": [1, 0, 0, 0]
 	},
 	"116": {
-		"unlock": [120, 146, 174]
+		"unlock": [120, 146, 174],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"117": {
-		"unlock": [217]
+		"unlock": [217],
+		"rewardResources": [2, 0, 0, 0]
 	},
 	"118": {
 		"unlock": [611]
 	},
 	"119": {
-		"unlock": [121, 219]
+		"unlock": [121, 219],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"120": {
 		"unlock": [128, 222, 274]
 	},
 	"121": {
-		"unlock": [122, 124, 125, 127, 129, 223]
+		"unlock": [122, 124, 125, 127, 129, 223],
+		"rewardResources": [0, 2, 1, 0]
 	},
 	"122": {
 		"unlock": [123, 126, 224]
@@ -75,7 +90,8 @@
 		"unlock": [131, 231]
 	},
 	"126": {
-		"unlock": [232]
+		"unlock": [232],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"127": {
 		"unlock": [139, 405]
@@ -84,19 +100,23 @@
 		"unlock": [138, 233]
 	},
 	"129": {
-		"unlock": [130]
+		"unlock": [130],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"130": {
 		"unlock": [410]
 	},
 	"131": {
-		"unlock": [133, 239]
+		"unlock": [133, 239],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"132": {
-		"unlock": [144, 149, 240]
+		"unlock": [144, 149, 240],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"133": {
-		"unlock": [136, 188, 244]
+		"unlock": [136, 188, 244],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"134": {
 		"unlock": [245]
@@ -105,139 +125,183 @@
 		"unlock": [246]
 	},
 	"136": {
-		"unlock": [152, 248]
+		"unlock": [152, 248],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"137": {
-		"unlock": [140, 147, 249, 418]
+		"unlock": [140, 147, 249, 418],
+		"rewardResources": [0, 0, 5, 0]
 	},
 	"138": {
-		"unlock": [250]
+		"unlock": [250],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"139": {
-		"unlock": [414]
+		"unlock": [414],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"140": {},
 	"141": {
-		"unlock": [251]
+		"unlock": [251],
+		"rewardResources": [2, 0, 2, 0]
 	},
 	"142": {},
 	"143": {
-		"unlock": [253]
+		"unlock": [253],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"144": {
-		"unlock": [258]
+		"unlock": [258],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"145": {
-		"unlock": [259]
+		"unlock": [259],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"146": {
-		"unlock": [261, 618]
+		"unlock": [261, 618],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"147": {
-		"unlock": [262]
+		"unlock": [262],
+		"rewardResources": [0, 0, 3, 3]
 	},
 	"148": {
-		"unlock": [266]
+		"unlock": [266],
+		"rewardResources": [0, 2, 0, 2]
 	},
 	"149": {
-		"unlock": [267, 268]
+		"unlock": [267, 268],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"150": {
-		"unlock": [269]
+		"unlock": [269],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"151": {
-		"unlock": [270]
+		"unlock": [270],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"152": {
-		"unlock": [162, 307]
+		"unlock": [162, 307],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"153": {
-		"unlock": [275]
+		"unlock": [275],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"154": {
-		"unlock": [276]
+		"unlock": [276],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"155": {
 		"unlock": [277]
 	},
 	"156": {
-		"unlock": [278]
+		"unlock": [278],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"157": {
-		"unlock": [279]
+		"unlock": [279],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"158": {
-		"unlock": [281]
+		"unlock": [281],
+		"rewardResources": [0, 0, 8, 0]
 	},
 	"161": {
-		"unlock": [287]
+		"unlock": [287],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"162": {
-		"unlock": [288]
+		"unlock": [288],
+		"rewardResources": [0, 0, 2, 2]
 	},
 	"163": {
-		"unlock": [289]
+		"unlock": [289],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"164": {
-		"unlock": [293, 625, 627]
+		"unlock": [293, 625, 627],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"165": {
-		"unlock": [166, 182]
+		"unlock": [166, 182],
+		"rewardResources": [0, 0, 0, 2]
 	},
 	"166": {
-		"unlock": [294, 630]
+		"unlock": [294, 630],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"167": {
 		"unlock": [633]
 	},
 	"168": {
-		"unlock": [295]
+		"unlock": [295],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"169": {
-		"unlock": [296]
+		"unlock": [296],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"170": {
-		"unlock": [297]
+		"unlock": [297],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"171": {
-		"unlock": [807]
+		"unlock": [807],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"172": {
-		"unlock": [808]
+		"unlock": [808],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"173": {
-		"unlock": [814]
+		"unlock": [814],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"174": {
-		"unlock": [817]
+		"unlock": [817],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"175": {
-		"unlock": [870]
+		"unlock": [870],
+		"rewardResources": [0, 0, 3, 0]
 	},
-	"176": {},
+	"176": {
+		"rewardResources": [0, 0, 0, 3]
+	},
 	"177": {
-		"unlock": [339, 826]
+		"unlock": [339, 826],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"178": {
-		"unlock": [835]
+		"unlock": [835],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"179": {
-		"unlock": [836]
+		"unlock": [836],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"180": {
-		"unlock": [856]
+		"unlock": [856],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"181": {
-		"unlock": [718, 858]
+		"unlock": [718, 858],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"182": {
-		"unlock": [859, 924]
+		"unlock": [859, 924],
+		"rewardResources": [0, 0, 4, 0]
 	},
 	"183": {
-		"unlock": [189, 860]
+		"unlock": [189, 860],
+		"rewardResources": [0, 4, 0, 0]
 	},
 	"184": {
-		"unlock": [196, 863]
+		"unlock": [196, 863],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"185": {
 		"unlock": [669, 864]
@@ -245,15 +309,20 @@
 	"186": {
 		"unlock": [871]
 	},
-	"187": {},
+	"187": {
+		"rewardResources": [0, 3, 0, 0]
+	},
 	"188": {
-		"unlock": [875]
+		"unlock": [875],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"189": {
-		"unlock": [877]
+		"unlock": [877],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"190": {
-		"unlock": [319]
+		"unlock": [319],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"191": {
 		"unlock": [195]
@@ -265,63 +334,81 @@
 		"unlock": [323]
 	},
 	"194": {
-		"unlock": [887]
+		"unlock": [887],
+		"rewardResources": [0, 0, 5, 0]
 	},
 	"195": {
-		"unlock": [328, 891]
+		"unlock": [328, 891],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"196": {
-		"unlock": [197, 892]
+		"unlock": [197, 892],
+		"rewardResources": [0, 5, 0, 0]
 	},
 	"197": {
-		"unlock": [346, 930]
+		"unlock": [346, 930],
+		"rewardResources": [0, 6, 0, 0]
 	},
 	"201": {
 		"unlock": [216, 211, 212, 330, 337, 892],
 		"tracking": [
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 1, 0]
 	},
-	"202": {},
+	"202": {
+		"rewardResources": [0, 1, 0, 0]
+	},
 	"203": {
-		"unlock": [501, 502]
+		"unlock": [501, 502],
+		"rewardResources": [0, 1, 0, 0]
 	},
 	"204": {
-		"unlock": [201, 689]
+		"unlock": [201, 689],
+		"rewardResources": [0, 1, 0, 0]
 	},
 	"205": {
-		"unlock": [206]
+		"unlock": [206],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"206": {
 		"unlock": [207, 234, 255, 290]
 	},
 	"207": {
-		"unlock": [208, 416]
+		"unlock": [208, 416],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"208": {
-		"unlock": [209]
+		"unlock": [209],
+		"rewardResources": [0, 0, 1, 0]
 	},
-	"209": {},
+	"209": {
+		"rewardResources": [0, 1, 1, 0]
+	},
 	"210": {
 		"unlock": [327, 931],
 		"tracking": [
 			[0, 10]
-		]
+		],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"211": {
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"212": {
 		"tracking": [
 			[0, 5]
-		]
+		],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"213": {
 		"tracking": [
 			[0, 20]
-		]
+		],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"214": {
 		"unlock": [221, 893],
@@ -330,16 +417,19 @@
 			[0, 24],
 			[0, 12],
 			[0, 6]
-		]
+		],
+		"rewardResources": [2, 0, 2, 0]
 	},
 	"215": {
-		"unlock": [117]
+		"unlock": [117],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"216": {
 		"unlock": [172, 210, 218, 214, 213, 311, 426, 634, 678, 810, 938],
 		"tracking": [
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 1, 1, 0]
 	},
 	"217": {
 		"unlock": [861]
@@ -348,36 +438,45 @@
 		"unlock": [226, 220, 917],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 1, 1, 0]
 	},
 	"219": {},
 	"220": {
 		"unlock": [228, 854],
 		"tracking": [
 			[0, 20]
-		]
+		],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"221": {
 		"unlock": [261, 257, 264],
 		"tracking": [
 			[0, 50]
-		]
+		],
+		"rewardResources": [0, 3, 0, 0]
 	},
-	"222": {},
+	"222": {
+		"rewardResources": [0, 1, 0, 0]
+	},
 	"223": {
-		"unlock": [890, 927]
+		"unlock": [890, 927],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"224": {
-		"unlock": [147, 155, 182, 365, 368]
+		"unlock": [147, 155, 182, 365, 368],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"225": {
-		"unlock": [689]
+		"unlock": [689],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"226": {
 		"unlock": [230],
 		"tracking": [
 			[0, 5]
-		]
+		],
+		"rewardResources": [1, 1, 0, 0]
 	},
 	"227": {
 		"unlock": [152, 154]
@@ -386,19 +485,22 @@
 		"unlock": [229, 241, 613, 645, 857],
 		"tracking": [
 			[0, 15]
-		]
+		],
+		"rewardResources": [0, 2, 0, 1]
 	},
 	"229": {
 		"unlock": [242],
 		"tracking": [
 			[0, 12]
-		]
+		],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"230": {
 		"unlock": [881],
 		"tracking": [
 			[0, 6]
-		]
+		],
+		"rewardResources": [0, 1, 0, 0]
 	},
 	"231": {
 		"unlock": [929]
@@ -412,7 +514,8 @@
 		"hash": -1063490626
 	},
 	"235": {
-		"unlock": [236, 237, 919, 929]
+		"unlock": [236, 237, 919, 929],
+		"rewardResources": [0, 3, 3, 0]
 	},
 	"236": {
 		"unlock": [958]
@@ -424,27 +527,32 @@
 		"hash": -934197686
 	},
 	"239": {
-		"unlock": [132, 264, 298, 412, 812]
+		"unlock": [132, 264, 298, 412, 812],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"240": {
-		"unlock": [265]
+		"unlock": [265],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"241": {
 		"tracking": [
 			[0, 5]
-		]
+		],
+		"rewardResources": [0, 0, 3, 3]
 	},
 	"242": {
 		"unlock": [243],
 		"tracking": [
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 1, 1, 0]
 	},
 	"243": {
 		"unlock": [809],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 2, 2]
 	},
 	"244": {},
 	"245": {
@@ -453,12 +561,15 @@
 	"246": {
 		"unlock": [142]
 	},
-	"247": {},
+	"247": {
+		"rewardResources": [0, 3, 0, 0]
+	},
 	"248": {
 		"unlock": [137, 252]
 	},
 	"249": {
-		"unlock": [265]
+		"unlock": [265],
+		"rewardResources": [0, 0, 5, 0]
 	},
 	"250": {
 		"unlock": [141, 614, 615]
@@ -468,7 +579,9 @@
 	"253": {
 		"unlock": [616]
 	},
-	"254": {},
+	"254": {
+		"rewardResources": [0, 3, 0, 0]
+	},
 	"255": {
 		"unlock": [256, 876]
 	},
@@ -477,64 +590,88 @@
 			[0, 3]
 		]
 	},
-	"257": {},
+	"257": {
+		"rewardResources": [0, 0, 0, 3]
+	},
 	"258": {
 		"unlock": [145]
 	},
-	"259": {},
+	"259": {
+		"rewardResources": [0, 3, 0, 4]
+	},
 	"260": {
-		"unlock": [285, 976]
+		"unlock": [285, 976],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"261": {
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 0, 3]
 	},
-	"262": {},
+	"262": {
+		"rewardResources": [0, 0, 0, 5]
+	},
 	"263": {
 		"unlock": [189]
 	},
 	"264": {
-		"unlock": [266, 626, 822]
+		"unlock": [266, 626, 822],
+		"rewardResources": [0, 0, 0, 2]
 	},
 	"265": {
 		"unlock": [628],
 		"tracking": [
 			[0, 10]
-		]
+		],
+		"rewardResources": [0, 0, 5, 3]
 	},
-	"266": {},
+	"266": {
+		"rewardResources": [0, 0, 4, 2]
+	},
 	"267": {
 		"unlock": [150]
 	},
-	"268": {},
+	"268": {
+		"rewardResources": [0, 0, 2, 0]
+	},
 	"269": {
 		"unlock": [271]
 	},
 	"270": {},
 	"271": {
-		"unlock": [151]
+		"unlock": [151],
+		"rewardResources": [0, 0, 0, 2]
 	},
 	"272": {
 		"unlock": [417]
 	},
 	"273": {
-		"unlock": [236, 888]
+		"unlock": [236, 888],
+		"rewardResources": [0, 0, 3, 3]
 	},
 	"274": {
-		"unlock": [153, 277, 298]
+		"unlock": [153, 277, 298],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"275": {
-		"unlock": [194]
+		"unlock": [194],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"276": {
-		"unlock": [904]
+		"unlock": [904],
+		"rewardResources": [0, 0, 5, 2]
 	},
-	"277": {},
+	"277": {
+		"rewardResources": [0, 0, 0, 2]
+	},
 	"278": {
-		"unlock": [309]
+		"unlock": [309],
+		"rewardResources": [0, 3, 0, 0]
 	},
-	"279": {},
+	"279": {
+		"rewardResources": [0, 0, 4, 4]
+	},
 	"280": {
 		"unlock": [284],
 		"tracking": [
@@ -542,14 +679,18 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 4, 4, 2]
 	},
 	"281": {
 		"unlock": [282]
 	},
-	"282": {},
+	"282": {
+		"rewardResources": [0, 0, 0, 5]
+	},
 	"283": {
-		"unlock": [620]
+		"unlock": [620],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"284": {
 		"unlock": [845],
@@ -558,14 +699,17 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 0, 2]
 	},
 	"285": {
-		"unlock": [924]
+		"unlock": [924],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"286": {},
 	"287": {
-		"unlock": [169, 290, 622, 623, 420]
+		"unlock": [169, 290, 622, 623, 420],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"288": {},
 	"289": {
@@ -581,90 +725,119 @@
 		"unlock": [364, 916, 996]
 	},
 	"293": {
-		"unlock": [165, 629]
+		"unlock": [165, 629],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"294": {
-		"unlock": [631, 645]
+		"unlock": [631, 645],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"295": {
 		"unlock": [169]
 	},
 	"296": {
-		"unlock": [170, 641]
+		"unlock": [170, 641],
+		"rewardResources": [0, 0, 0, 2]
 	},
-	"297": {},
-	"298": {},
+	"297": {
+		"rewardResources": [0, 0, 0, 3]
+	},
+	"298": {
+		"rewardResources": [0, 0, 8, 5]
+	},
 	"299": {
 		"unlock": [893]
 	},
-	"301": {},
+	"301": {
+		"rewardResources": [0, 0, 1, 0]
+	},
 	"302": {
 		"tracking": [
 			[0, 20]
-		]
+		],
+		"rewardResources": [0, 0, 2, 1]
 	},
 	"303": {
 		"unlock": [299, 302, 304, 313, 314, 315, 331, 436, 689, 832, 890, 905, 911],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [1, 0, 0, 0]
 	},
 	"304": {
 		"tracking": [
 			[0, 5]
-		]
+		],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"306": {
-		"unlock": [134]
+		"unlock": [134],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"307": {
-		"unlock": [273]
+		"unlock": [273],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"308": {
-		"unlock": [419]
+		"unlock": [419],
+		"rewardResources": [0, 2, 0, 1]
 	},
 	"309": {
-		"unlock": [157, 358]
+		"unlock": [157, 358],
+		"rewardResources": [0, 2, 0, 1]
 	},
 	"311": {
 		"unlock": [280],
 		"tracking": [
 			[0, 7]
-		]
+		],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"312": {
-		"unlock": [330, 636]
+		"unlock": [330, 636],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"313": {
 		"unlock": [644]
 	},
 	"314": {
-		"unlock": [441]
+		"unlock": [441],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"315": {},
-	"316": {},
+	"316": {
+		"rewardResources": [0, 0, 0, 2]
+	},
 	"317": {
-		"unlock": [352]
+		"unlock": [352],
+		"rewardResources": [0, 5, 0, 0]
 	},
 	"318": {
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 2, 2, 0]
 	},
-	"319": {},
+	"319": {
+		"rewardResources": [0, 0, 6, 0]
+	},
 	"320": {
-		"unlock": [353, 880]
+		"unlock": [353, 880],
+		"rewardResources": [0, 3, 4, 2]
 	},
 	"322": {},
 	"323": {
-		"unlock": [346, 347, 884]
+		"unlock": [346, 347, 884],
+		"rewardResources": [0, 4, 4, 0]
 	},
 	"324": {
 		"unlock": [683, 885, 886]
 	},
 	"325": {},
 	"326": {},
-	"327": {},
+	"327": {
+		"rewardResources": [0, 3, 4, 0]
+	},
 	"328": {},
 	"329": {
 		"unlock": [841],
@@ -674,18 +847,26 @@
 		"unlock": [343],
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"331": {
-		"unlock": [695]
+		"unlock": [695],
+		"rewardResources": [0, 0, 6, 0]
 	},
-	"332": {},
+	"332": {
+		"rewardResources": [6, 0, 6, 0]
+	},
 	"333": {
-		"unlock": [283, 334]
+		"unlock": [283, 334],
+		"rewardResources": [3, 0, 3, 0]
 	},
-	"334": {},
+	"334": {
+		"rewardResources": [0, 0, 4, 0]
+	},
 	"335": {
-		"unlock": [336]
+		"unlock": [336],
+		"rewardResources": [0, 0, 4, 0]
 	},
 	"336": {
 		"unlock": [621]
@@ -694,13 +875,17 @@
 		"unlock": [339],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 0, 3]
 	},
-	"338": {},
+	"338": {
+		"rewardResources": [0, 0, 5, 0]
+	},
 	"339": {
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 8, 3]
 	},
 	"340": {
 		"unlock": [435, 707, 907],
@@ -712,28 +897,36 @@
 	"342": {
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 4, 4, 0]
 	},
 	"343": {
 		"unlock": [345, 357, 698]
 	},
-	"344": {},
+	"344": {
+		"rewardResources": [0, 4, 0, 2]
+	},
 	"345": {
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 5, 4, 0]
 	},
 	"346": {
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 4, 6, 0]
 	},
-	"347": {},
+	"347": {
+		"rewardResources": [0, 5, 8, 4]
+	},
 	"348": {
 		"unlock": [349],
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 3, 0, 3]
 	},
 	"349": {
 		"hash": -1036353451
@@ -741,9 +934,12 @@
 	"350": {
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 4, 0, 0]
 	},
-	"351": {},
+	"351": {
+		"rewardResources": [0, 0, 5, 0]
+	},
 	"352": {},
 	"353": {
 		"tracking": [
@@ -758,22 +954,26 @@
 	"355": {
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"356": {
 		"unlock": [975],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 4, 3]
 	},
 	"357": {
 		"unlock": [977],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 6, 4]
 	},
 	"358": {
-		"unlock": [983]
+		"unlock": [983],
+		"rewardResources": [0, 0, 10, 2]
 	},
 	"359": {
 		"unlock": [986, 1119],
@@ -786,7 +986,8 @@
 	"362": {
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 6, 4]
 	},
 	"363": {
 		"unlock": [994],
@@ -794,21 +995,26 @@
 	},
 	"364": {},
 	"365": {
-		"unlock": [366, 998, 1130]
+		"unlock": [366, 998, 1130],
+		"rewardResources": [0, 0, 8, 3]
 	},
-	"366": {},
+	"366": {
+		"rewardResources": [0, 8, 4, 0]
+	},
 	"368": {
 		"unlock": [992],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 3, 3, 0]
 	},
 	"401": {},
 	"402": {
 		"unlock": [403, 424],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"403": {
 		"tracking": [
@@ -839,7 +1045,8 @@
 	"411": {
 		"tracking": [
 			[0, 6]
-		]
+		],
+		"rewardResources": [0, 0, 2, 1]
 	},
 	"412": {
 		"unlock": [247, 413]
@@ -854,21 +1061,28 @@
 		"unlock": [442]
 	},
 	"416": {
-		"unlock": [272]
+		"unlock": [272],
+		"rewardResources": [0, 0, 2, 0]
 	},
-	"417": {},
+	"417": {
+		"rewardResources": [0, 0, 2, 0]
+	},
 	"418": {
-		"unlock": [308, 316]
+		"unlock": [308, 316],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"419": {
-		"unlock": [424, 982]
+		"unlock": [424, 982],
+		"rewardResources": [0, 0, 0, 1]
 	},
 	"420": {
-		"unlock": [624]
+		"unlock": [624],
+		"rewardResources": [0, 0, 0, 2]
 	},
 	"422": {},
 	"423": {
-		"unlock": [913]
+		"unlock": [913],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"424": {
 		"unlock": [425, 663],
@@ -877,7 +1091,8 @@
 		]
 	},
 	"425": {
-		"unlock": [663, 933]
+		"unlock": [663, 933],
+		"rewardResources": [0, 2, 2, 0]
 	},
 	"426": {
 		"unlock": [428],
@@ -886,7 +1101,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 4, 0]
 	},
 	"427": {
 		"unlock": [428]
@@ -896,22 +1112,28 @@
 			[0, 2],
 			[0, 2],
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"429": {
-		"unlock": [187, 871]
+		"unlock": [187, 871],
+		"rewardResources": [0, 4, 0, 0]
 	},
 	"430": {
-		"unlock": [431]
+		"unlock": [431],
+		"rewardResources": [0, 8, 0, 4]
 	},
 	"431": {
-		"unlock": [291]
+		"unlock": [291],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"432": {
-		"unlock": [433, 444]
+		"unlock": [433, 444],
+		"rewardResources": [0, 0, 4, 2]
 	},
 	"433": {
-		"unlock": [440, 445]
+		"unlock": [440, 445],
+		"rewardResources": [0, 6, 0, 0]
 	},
 	"434": {
 		"tracking": [
@@ -920,7 +1142,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 5, 0, 3]
 	},
 	"435": {
 		"unlock": [708],
@@ -933,7 +1156,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 4, 0, 0]
 	},
 	"437": {
 		"tracking": [
@@ -941,7 +1165,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 7, 3]
 	},
 	"438": {
 		"tracking": [
@@ -949,7 +1174,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 5, 4]
 	},
 	"439": {
 		"unlock": [440],
@@ -958,7 +1184,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 6, 4, 0]
 	},
 	"440": {
 		"tracking": [
@@ -967,7 +1194,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"441": {
 		"hash": 723297322
@@ -979,9 +1207,12 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 6, 3]
 	},
-	"443": {},
+	"443": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"444": {
 		"tracking": [
 			[0, 1],
@@ -989,67 +1220,90 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 5, 6, 4]
 	},
 	"445": {},
 	"446": {
-		"unlock": [952]
+		"unlock": [952],
+		"rewardResources": [0, 0, 6, 4]
 	},
 	"447": {
-		"unlock": [1108]
+		"unlock": [1108],
+		"rewardResources": [0, 0, 6, 3]
 	},
 	"448": {
 		"hash": 651088039
 	},
-	"501": {},
-	"502": {},
+	"501": {
+		"rewardResources": [0, 1, 0, 0]
+	},
+	"502": {
+		"rewardResources": [0, 0, 1, 0]
+	},
 	"503": {
 		"unlock": [504],
 		"tracking": [
 			[0, 5]
-		]
+		],
+		"rewardResources": [0, 2, 0, 0]
 	},
 	"504": {
 		"tracking": [
 			[0, 15]
-		]
+		],
+		"rewardResources": [1, 0, 1, 0]
 	},
-	"601": {},
-	"602": {},
-	"603": {},
-	"604": {},
+	"601": {
+		"rewardResources": [0, 0, 1, 0]
+	},
+	"602": {
+		"rewardResources": [0, 0, 2, 0]
+	},
+	"603": {
+		"rewardResources": [1, 0, 1, 0]
+	},
+	"604": {
+		"rewardResources": [0, 1, 1, 0]
+	},
 	"605": {
 		"unlock": [606, 679, 680, 693, 901, 903],
 		"tracking": [
 			[0, 1]
-		]
+		],
+		"rewardResources": [1, 0, 1, 0]
 	},
 	"606": {
 		"unlock": [607, 896],
 		"tracking": [
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 1, 1, 0]
 	},
 	"607": {
 		"unlock": [608, 653, 673],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"608": {
 		"unlock": [609, 617, 619, 669],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [1, 0, 2, 0]
 	},
 	"609": {
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 1, 0, 0]
 	},
 	"610": {},
 	"611": {
-		"unlock": [306]
+		"unlock": [306],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"612": {},
 	"613": {
@@ -1062,13 +1316,15 @@
 	"616": {},
 	"617": {},
 	"618": {
-		"unlock": [619]
+		"unlock": [619],
+		"rewardResources": [0, 0, 0, 7]
 	},
 	"619": {
 		"unlock": [637, 638, 654, 689],
 		"tracking": [
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 0, 1]
 	},
 	"620": {},
 	"621": {
@@ -1117,26 +1373,34 @@
 	"636": {
 		"unlock": [815]
 	},
-	"637": {},
+	"637": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"638": {
 		"unlock": [671],
 		"tracking": [
 			[0, 6]
-		]
+		],
+		"rewardResources": [0, 0, 2, 1]
 	},
-	"639": {},
+	"639": {
+		"rewardResources": [0, 0, 0, 6]
+	},
 	"640": {},
 	"641": {
-		"unlock": [642, 690]
+		"unlock": [642, 690],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"642": {
-		"unlock": [643, 681]
+		"unlock": [643, 681],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"643": {
 		"unlock": [644],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"644": {},
 	"645": {},
@@ -1145,8 +1409,12 @@
 	"648": {
 		"unlock": [655]
 	},
-	"649": {},
-	"650": {},
+	"649": {
+		"rewardResources": [0, 0, 2, 0]
+	},
+	"650": {
+		"rewardResources": [0, 0, 2, 0]
+	},
 	"651": {},
 	"652": {},
 	"653": {
@@ -1167,7 +1435,8 @@
 			[0, 5],
 			[0, 5],
 			[0, 5]
-		]
+		],
+		"rewardResources": [0, 0, 10, 5]
 	},
 	"656": {},
 	"657": {
@@ -1175,7 +1444,8 @@
 			[0, 6],
 			[0, 5],
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 10, 5]
 	},
 	"658": {
 		"unlock": [1103]
@@ -1188,15 +1458,18 @@
 		"unlock": [662, 664]
 	},
 	"662": {
-		"unlock": [425]
+		"unlock": [425],
+		"rewardResources": [0, 0, 2, 0]
 	},
 	"663": {
 		"tracking": [
 			[0, 10]
-		]
+		],
+		"rewardResources": [0, 0, 3, 0]
 	},
 	"664": {
-		"unlock": [665]
+		"unlock": [665],
+		"rewardResources": [0, 0, 4, 0]
 	},
 	"665": {
 		"unlock": [667]
@@ -1214,19 +1487,22 @@
 		"unlock": [188, 317, 674, 689, 876],
 		"tracking": [
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 1, 0]
 	},
 	"674": {
 		"unlock": [657, 675, 676, 677, 688, 803],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 1, 1, 0]
 	},
 	"675": {
 		"tracking": [
 			[0, 6],
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 4, 4]
 	},
 	"676": {
 		"tracking": [
@@ -1234,20 +1510,23 @@
 			[0, 3],
 			[0, 1]
 		],
-		"unlock": [318, 804]
+		"unlock": [318, 804],
+		"rewardResources": [0, 1, 7, 0]
 	},
 	"677": {
 		"tracking": [
 			[0, 4],
 			[0, 2],
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 5, 0, 0]
 	},
 	"678": {
 		"tracking": [
 			[0, 3],
 			[0, 5]
-		]
+		],
+		"rewardResources": [0, 0, 8, 0]
 	},
 	"679": {
 		"unlock": [680]
@@ -1257,16 +1536,19 @@
 		"tracking": [
 			[0, 4],
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 6, 0]
 	},
 	"681": {
 		"tracking": [
 			[0, 4],
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"682": {
-		"unlock": [322, 430, 685, 693]
+		"unlock": [322, 430, 685, 693],
+		"rewardResources": [0, 0, 4, 0]
 	},
 	"683": {},
 	"684": {},
@@ -1292,8 +1574,12 @@
 		"unlock": [690]
 	},
 	"690": {},
-	"691": {},
-	"692": {},
+	"691": {
+		"rewardResources": [0, 0, 5, 0]
+	},
+	"692": {
+		"rewardResources": [0, 0, 5, 2]
+	},
 	"693": {
 		"unlock": [694, 695]
 	},
@@ -1306,19 +1592,25 @@
 		"hash": 2046493671
 	},
 	"698": {},
-	"701": {},
+	"701": {
+		"rewardResources": [0, 0, 1, 0]
+	},
 	"702": {
 		"unlock": [689, 703, 714],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 1, 0, 0]
 	},
 	"703": {
 		"tracking": [
 			[0, 15]
-		]
+		],
+		"rewardResources": [1, 0, 2, 0]
 	},
-	"704": {},
+	"704": {
+		"rewardResources": [0, 0, 1, 0]
+	},
 	"705": {},
 	"707": {
 		"hash": 1674109486
@@ -1347,29 +1639,36 @@
 		"unlock": [715],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 1, 2, 0]
 	},
 	"715": {
 		"unlock": [944],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 2, 3, 2]
 	},
 	"716": {
 		"unlock": [717],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 2, 3, 0]
 	},
 	"717": {
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 4, 2]
 	},
 	"718": {
-		"unlock": [719]
+		"unlock": [719],
+		"rewardResources": [0, 0, 8, 0]
 	},
-	"719": {},
+	"719": {
+		"rewardResources": [0, 0, 0, 5]
+	},
 	"801": {
 		"unlock": [803],
 		"hash": 1796193154
@@ -1389,11 +1688,16 @@
 		"unlock": [806]
 	},
 	"806": {
-		"unlock": [813]
+		"unlock": [813],
+		"rewardResources": [0, 0, 0, 3]
 	},
-	"807": {},
+	"807": {
+		"rewardResources": [0, 0, 0, 3]
+	},
 	"808": {},
-	"809": {},
+	"809": {
+		"rewardResources": [0, 0, 0, 3]
+	},
 	"810": {
 		"unlock": [426, 811]
 	},
@@ -1403,38 +1707,53 @@
 	"812": {
 		"unlock": [813, 911, 936]
 	},
-	"813": {},
-	"814": {
-		"unlock": [815]
+	"813": {
+		"rewardResources": [0, 0, 0, 3]
 	},
-	"815": {},
+	"814": {
+		"unlock": [815],
+		"rewardResources": [0, 0, 0, 2]
+	},
+	"815": {
+		"rewardResources": [0, 0, 0, 3]
+	},
 	"816": {},
 	"817": {
-		"unlock": [818]
+		"unlock": [818],
+		"rewardResources": [0, 3, 0, 0]
 	},
-	"818": {},
-	"819": {},
+	"818": {
+		"rewardResources": [0, 0, 4, 0]
+	},
+	"819": {
+		"rewardResources": [0, 0, 0, 2]
+	},
 	"820": {},
 	"821": {
-		"unlock": [186]
+		"unlock": [186],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"822": {
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"823": {
-		"unlock": [940]
+		"unlock": [940],
+		"rewardResources": [0, 4, 0, 0]
 	},
 	"824": {},
 	"825": {
 		"unlock": [642]
 	},
 	"826": {
-		"unlock": [827]
+		"unlock": [827],
+		"rewardResources": [0, 3, 0, 0]
 	},
 	"827": {
-		"unlock": [837]
+		"unlock": [837],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"828": {
 		"unlock": [656, 833]
@@ -1456,11 +1775,13 @@
 		"unlock": [837]
 	},
 	"837": {
-		"unlock": [970]
+		"unlock": [970],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"838": {},
 	"839": {
-		"unlock": [870]
+		"unlock": [870],
+		"rewardResources": [0, 0, 0, 2]
 	},
 	"840": {
 		"unlock": [841],
@@ -1477,7 +1798,8 @@
 		"hash": -111553163
 	},
 	"844": {
-		"unlock": [969]
+		"unlock": [969],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"845": {
 		"tracking": [
@@ -1489,16 +1811,22 @@
 		]
 	},
 	"846": {
-		"unlock": [656, 658, 848, 850, 854, 862]
+		"unlock": [656, 658, 848, 850, 854, 862],
+		"rewardResources": [0, 0, 0, 3]
 	},
-	"847": {},
+	"847": {
+		"rewardResources": [0, 0, 0, 3]
+	},
 	"848": {},
 	"849": {
 		"unlock": [850]
 	},
-	"850": {},
+	"850": {
+		"rewardResources": [0, 0, 5, 0]
+	},
 	"851": {
-		"unlock": [181, 852]
+		"unlock": [181, 852],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"852": {},
 	"853": {},
@@ -1509,18 +1837,24 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"855": {
-		"unlock": [856, 857]
+		"unlock": [856, 857],
+		"rewardResources": [0, 0, 4, 0]
 	},
 	"856": {
-		"unlock": [158]
+		"unlock": [158],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"857": {},
-	"858": {},
+	"858": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"859": {
-		"unlock": [666]
+		"unlock": [666],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"860": {
 		"unlock": [877, 940]
@@ -1529,12 +1863,14 @@
 		"unlock": [862],
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 4, 0, 0]
 	},
 	"862": {
 		"tracking": [
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 8, 4]
 	},
 	"863": {},
 	"864": {
@@ -1557,16 +1893,20 @@
 		"unlock": [427, 982]
 	},
 	"870": {
-		"unlock": [186, 429, 891]
+		"unlock": [186, 429, 891],
+		"rewardResources": [0, 0, 3, 0]
 	},
-	"871": {},
+	"871": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"872": {
 		"tracking": [
 			[0, 1],
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"873": {
 		"unlock": [874, 875],
@@ -1577,7 +1917,8 @@
 		]
 	},
 	"874": {
-		"unlock": [692]
+		"unlock": [692],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"875": {
 		"unlock": [325],
@@ -1586,15 +1927,20 @@
 		]
 	},
 	"876": {},
-	"877": {},
+	"877": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"878": {
-		"unlock": [966]
+		"unlock": [966],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"879": {},
 	"880": {
 		"unlock": [889, 934]
 	},
-	"881": {},
+	"881": {
+		"rewardResources": [0, 0, 0, 5]
+	},
 	"882": {
 		"unlock": [883],
 		"hash": -581999876
@@ -1606,27 +1952,36 @@
 	"884": {
 		"unlock": [355, 961]
 	},
-	"885": {},
+	"885": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"886": {
 		"unlock": [684]
 	},
-	"887": {},
+	"887": {
+		"rewardResources": [0, 5, 0, 4]
+	},
 	"888": {
 		"tracking": [
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"889": {
-		"unlock": [931]
+		"unlock": [931],
+		"rewardResources": [0, 8, 0, 0]
 	},
-	"890": {},
+	"890": {
+		"rewardResources": [0, 8, 0, 0]
+	},
 	"891": {
 		"unlock": [934]
 	},
 	"892": {
-		"unlock": [197]
+		"unlock": [197],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"893": {
 		"tracking": [
@@ -1644,21 +1999,27 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 4, 0]
 	},
-	"895": {},
+	"895": {
+		"rewardResources": [0, 0, 0, 4]
+	},
 	"896": {
 		"unlock": [897, 966]
 	},
 	"897": {
 		"unlock": [696]
 	},
-	"898": {},
+	"898": {
+		"rewardResources": [0, 5, 0, 0]
+	},
 	"901": {
 		"unlock": [902]
 	},
 	"902": {
-		"unlock": [903]
+		"unlock": [903],
+		"rewardResources": [0, 0, 12, 6]
 	},
 	"903": {
 		"tracking": [
@@ -1666,7 +2027,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 10, 0, 0]
 	},
 	"904": {
 		"unlock": [356, 974],
@@ -1675,7 +2037,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 8, 10, 4]
 	},
 	"905": {
 		"unlock": [914],
@@ -1685,7 +2048,8 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 6, 8, 0]
 	},
 	"906": {
 		"unlock": [907],
@@ -1704,7 +2068,9 @@
 	"910": {
 		"hash": -1052875248
 	},
-	"911": {},
+	"911": {
+		"rewardResources": [0, 6, 0, 0]
+	},
 	"912": {
 		"tracking": [
 			[0, 1],
@@ -1712,40 +2078,50 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 5, 6, 0]
 	},
-	"913": {},
+	"913": {
+		"rewardResources": [0, 6, 0, 0]
+	},
 	"914": {
 		"tracking": [
 			[0, 1],
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 5, 0, 4]
 	},
 	"915": {
 		"hash": -1381733347
 	},
 	"916": {},
 	"917": {
-		"unlock": [918]
+		"unlock": [918],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"918": {},
 	"919": {
-		"unlock": [920, 923]
+		"unlock": [920, 923],
+		"rewardResources": [0, 4, 0, 2]
 	},
 	"920": {
-		"unlock": [921]
+		"unlock": [921],
+		"rewardResources": [0, 0, 6, 0]
 	},
 	"921": {
-		"unlock": [922]
+		"unlock": [922],
+		"rewardResources": [0, 0, 0, 4]
 	},
 	"922": {},
 	"923": {
-		"unlock": [949]
+		"unlock": [949],
+		"rewardResources": [0, 4, 5, 0]
 	},
 	"924": {
-		"unlock": [925]
+		"unlock": [925],
+		"rewardResources": [0, 0, 88, 0]
 	},
 	"925": {
 		"unlock": [926, 948]
@@ -1761,12 +2137,15 @@
 			[0, 2],
 			[0, 2],
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 10, 8]
 	},
 	"929": {
 		"unlock": [995]
 	},
-	"930": {},
+	"930": {
+		"rewardResources": [0, 0, 10, 5]
+	},
 	"931": {
 		"unlock": [366, 998]
 	},
@@ -1779,11 +2158,14 @@
 	"934": {
 		"unlock": [935]
 	},
-	"935": {},
+	"935": {
+		"rewardResources": [0, 0, 0, 6]
+	},
 	"936": {},
 	"937": {},
 	"938": {
-		"unlock": [939]
+		"unlock": [939],
+		"rewardResources": [0, 0, 8, 0]
 	},
 	"939": {},
 	"940": {},
@@ -1791,21 +2173,25 @@
 	"942": {
 		"hash": -1254105866
 	},
-	"943": {},
+	"943": {
+		"rewardResources": [0, 8, 0, 0]
+	},
 	"944": {
 		"tracking": [
 			[0, 2],
 			[0, 2],
 			[0, 2]
 		],
-		"unlock": [945, 946]
+		"unlock": [945, 946],
+		"rewardResources": [0, 0, 5, 0]
 	},
 	"945": {
 		"tracking": [
 			[0, 2],
 			[0, 2],
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"946": {
 		"tracking": [
@@ -1813,7 +2199,8 @@
 			[0, 1],
 			[0, 1]
 		],
-		"unlock": [947]
+		"unlock": [947],
+		"rewardResources": [0, 5, 0, 0]
 	},
 	"947": {
 		"tracking": [
@@ -1832,7 +2219,9 @@
 			[0, 2]
 		]
 	},
-	"949": {},
+	"949": {
+		"rewardResources": [0, 0, 0, 7]
+	},
 	"950": {
 		"unlock": [951],
 		"hash": 1654036373
@@ -1859,10 +2248,12 @@
 		"hash": 1797333829
 	},
 	"957": {
-		"unlock": [958]
+		"unlock": [958],
+		"rewardResources": [0, 6, 8, 0]
 	},
 	"958": {
-		"unlock": [1108]
+		"unlock": [1108],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"959": {
 		"unlock": [960],
@@ -1872,7 +2263,8 @@
 		"hash": 1565979746
 	},
 	"961": {
-		"unlock": [980]
+		"unlock": [980],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"962": {
 		"unlock": [963, 964],
@@ -1890,12 +2282,16 @@
 		"hash": 155966612
 	},
 	"966": {
-		"unlock": [967]
+		"unlock": [967],
+		"rewardResources": [0, 0, 0, 5]
 	},
 	"967": {
-		"unlock": [968, 989]
+		"unlock": [968, 989],
+		"rewardResources": [0, 0, 8, 4]
 	},
-	"968": {},
+	"968": {
+		"rewardResources": [0, 0, 0, 6]
+	},
 	"969": {},
 	"970": {},
 	"971": {
@@ -1911,10 +2307,12 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 0, 8, 0]
 	},
 	"974": {
-		"unlock": [356]
+		"unlock": [356],
+		"rewardResources": [0, 9, 9, 0]
 	},
 	"975": {
 		"tracking": [
@@ -1922,26 +2320,35 @@
 			[0, 1],
 			[0, 1],
 			[0, 1]
-		]
+		],
+		"rewardResources": [0, 9, 0, 4]
 	},
 	"976": {
-		"unlock": [977]
+		"unlock": [977],
+		"rewardResources": [0, 10, 0, 0]
 	},
 	"977": {
 		"unlock": [978]
 	},
-	"978": {},
+	"978": {
+		"rewardResources": [0, 0, 0, 8]
+	},
 	"979": {
 		"hash": -1328284272
 	},
 	"980": {
 		"unlock": [981]
 	},
-	"981": {},
-	"982": {
-		"unlock": [1118]
+	"981": {
+		"rewardResources": [0, 0, 0, 7]
 	},
-	"983": {},
+	"982": {
+		"unlock": [1118],
+		"rewardResources": [0, 6, 7, 0]
+	},
+	"983": {
+		"rewardResources": [0, 0, 0, 7]
+	},
 	"984": {
 		"unlock": [359, 985],
 		"hash": 1217146660
@@ -1960,7 +2367,9 @@
 	"988": {
         "hash": 21243418
 	},
-	"989": {},
+	"989": {
+		"rewardResources": [0, 0, 0, 10]
+	},
 	"990": {
 		"unlock": [1122],
 		"hash": -78932396
@@ -1982,30 +2391,39 @@
 	},
 	"996": {},
 	"997": {
-		"unlock": [365]
+		"unlock": [365],
+		"rewardResources": [0, 7, 10, 0]
+	},
+	"998": {
+		"rewardResources": [0, 0, 10, 0]
 	},
 	"1101": {
-		"unlock": [1102, 1103]
+		"unlock": [1102, 1103],
+		"rewardResources": [8, 0, 8, 4]
 	},
 	"1102": {
-		"unlock": [1116, 1118]
+		"unlock": [1116, 1118],
+		"rewardResources": [0, 0, 10, 4]
 	},
 	"1103": {
 		"tracking": [
 			[0, 3]
 		],
-		"unlock": [1104]
+		"unlock": [1104],
+		"rewardResources": [0, 0, 5, 2]
 	},
 	"1104": {
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 5, 2]
 	},
 	"1105": {
 		"unlock": [445],
 		"tracking": [
 			[0, 3]
-		]
+		],
+		"rewardResources": [0, 0, 10, 8]
 	},
 	"1106": {
 		"unlock": [1117]
@@ -2014,7 +2432,8 @@
 		"tracking": [
 			[0, 2],
 			[0, 2]
-		]
+		],
+		"rewardResources": [0, 0, 0, 3]
 	},
 	"1108": {},
 	"1109": {},
@@ -2023,17 +2442,21 @@
 	},
 	"1111": {},
 	"1112": {
-		"unlock": [1114]
+		"unlock": [1114],
+		"rewardResources": [0, 0, 0, 8]
 	},
 	"1113": {},
 	"1114": {
-		"unlock": [1115]
+		"unlock": [1115],
+		"rewardResources": [0, 0, 5, 3]
 	},
 	"1115": {
-		"unlock": [976, 1116, 1124]
+		"unlock": [976, 1116, 1124],
+		"rewardResources": [0, 0, 6, 0]
 	},
 	"1116": {
-		"unlock": [981, 1117]
+		"unlock": [981, 1117],
+		"rewardResources": [0, 0, 8, 5]
 	},
 	"1117": {},
 	"1118": {
@@ -2047,7 +2470,8 @@
 			[0, 4],
 			[0, 4],
 			[0, 4]
-		]
+		],
+		"rewardResources": [0, 0, 8, 3]
 	},
 	"1121": {
 		"unlock": [1122],
@@ -2074,7 +2498,9 @@
 	"1127": {},
 	"1128": {},
 	"1129": {},
-	"1130": {},
+	"1130": {
+		"rewardResources": [0, 0, 40, 10]
+	},
 	"1131": {
 		"unlock": [994]
 	}

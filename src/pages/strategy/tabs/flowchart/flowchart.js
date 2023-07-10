@@ -164,7 +164,7 @@
 			});
 			
 			$(".questFilter").on("click", function(e) {
-				const filterTypes = ["Buckets", "DevMats", "Screws", "Torches"]
+				const filterTypes = ["Torches", "Buckets", "DevMats", "Screws"]
 					.map(str => `contains${str}`);
 				const filterId = parseInt(e.target.dataset.filterid, 10);
 				$(".flowchart .questFlowItem, .extralist .questExtraItem").each(function() {
