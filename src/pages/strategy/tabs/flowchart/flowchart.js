@@ -163,32 +163,22 @@
 				}
 			});
 			
+			const rewardFilterTypes = ["Torches", "Buckets", "DevMats", "Screws"].map(str => `contains${str}`);
 			$(".questFilter").on("click", function(e) {
-				const filterTypes = ["Torches", "Buckets", "DevMats", "Screws"]
-					.map(str => `contains${str}`);
 				const filterId = parseInt(e.target.dataset.filterid, 10);
 				$(".flowchart .questFlowItem, .extralist .questExtraItem").each(function() {
-					$(this)
-						.removeClass("containsBuckets")
-						.removeClass("containsDevMats")
-						.removeClass("containsScrews")
-						.removeClass("containsTorches")
-						.addClass("questFilterHidden");
-					const questResources = $(".questDesc:first", this).data("rewardResources");
-					if (questResources && questResources[filterId] > 0) {
-						$(this).removeClass("questFilterHidden").addClass(filterTypes[filterId]);
+					$(this).addClass("questFilterHidden").removeClass(rewardFilterTypes.join(" "));
+					const rewardItems = $(".questDesc:first", this).data("rewardConsumables");
+					if (rewardItems && rewardItems[filterId] > 0) {
+						$(this).removeClass("questFilterHidden").addClass(rewardFilterTypes[filterId]);
 						$(this).parents(".questFlowItem, .questExtraItem").removeClass("questFilterHidden");
 					}
 				});
 			});
 			
 			$(".showEverything").on("click", function() {
-				$(".questFlowItem, .questExtraItem")
-					.removeClass("questFilterHidden")
-					.removeClass("containsBuckets")
-					.removeClass("containsDevMats")
-					.removeClass("containsScrews")
-					.removeClass("containsTorches");
+				$(".flowchart .questFlowItem, .extralist .questExtraItem")
+					.removeClass("questFilterHidden").removeClass(rewardFilterTypes.join(" "));
 			});
 			
 			// Manual quest count overrides
@@ -260,7 +250,7 @@
 			$(".questDesc", thisBox)
 				.attr("title", KC3QuestManager.buildHtmlTooltip(quest_id, thisQuest, true, false))
 				.lazyInitTooltip();
-			$(".questDesc", thisBox).data("rewardResources", thisQuest.rewardResources);
+			$(".questDesc", thisBox).data("rewardConsumables", thisQuest.rewardConsumables);
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
 			$(".questRemove", thisBox).data("id", quest_id);
@@ -345,7 +335,7 @@
 			$(".questDesc", thisBox)
 				.attr("title", KC3QuestManager.buildHtmlTooltip(thisQuest.id, questMeta))
 				.lazyInitTooltip();
-			$(".questDesc", thisBox).data("rewardResources", questMeta.rewardResources);
+			$(".questDesc", thisBox).data("rewardConsumables", questMeta.rewardConsumables);
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);
 			

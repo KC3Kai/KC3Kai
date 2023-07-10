@@ -313,7 +313,7 @@
 	border-right:4px solid #fe6;
 }
 
-/* Quest Screw filter */
+/* Quest rewards filters */
 .tab_flowchart .questFlowItem.questFilterHidden,
 .tab_flowchart .questExtraItem.questFilterHidden {
 	display: none;
