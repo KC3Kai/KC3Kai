@@ -477,7 +477,10 @@ known IDs see QuestManager
 					name : questMeta.name,
 					desc : questMeta.desc,
 					memo : questMeta.memo,
-					trackingDesc : questMeta.trackingDesc
+					trackingDesc : questMeta.trackingDesc,
+					// Elements order of possible reward consumables (including selectable optional rewards):
+					// [torches, buckets, devmats, screws]
+					rewardConsumables: questMeta.rewardConsumables,
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false && Array.isArray(questMeta.tracking)) {
@@ -506,7 +509,8 @@ known IDs see QuestManager
 					name : questMeta.name,
 					desc : questMeta.desc,
 					memo : questMeta.memo,
-					trackingDesc : questMeta.trackingDesc
+					trackingDesc : questMeta.trackingDesc,
+					rewardConsumables: questMeta.rewardConsumables,
 				}; };
 			} else if(questMeta && !checkExpectedHash(questMeta)) {
 				this.meta = noMeta;

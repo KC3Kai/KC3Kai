@@ -462,6 +462,7 @@ Uses KC3Quest objects to play around with
 				.css("text-indent", "-1em")
 				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
 				.prop("outerHTML");
+			const rewardRscItems = [];
 			if(questObj && Array.isArray(questObj.materials) && questObj.materials.some(v => v > 0)){
 				const buildRscItem = (name, value) => {
 					const rsc = $("<div><img />&nbsp;<span></span></div>");
@@ -471,12 +472,25 @@ Uses KC3Quest objects to play around with
 					$("span", rsc).text(value || 0);
 					return rsc.html();
 				};
-				title += $("<p></p>").css("font-size", "11px").html(
-					["fuel", "ammo", "steel", "bauxite"]
-						.map((n, i) => buildRscItem(n, questObj.materials[i]))
-						.join("&emsp;")
-				).prop("outerHTML");
+				rewardRscItems.push(...["fuel", "ammo", "steel", "bauxite"]
+					.map((n, i) => buildRscItem(n, questObj.materials[i]))
+				);
 			}
+			if(Array.isArray(questMeta.rewardConsumables) && questMeta.rewardConsumables.some(v => v > 0)){
+				const buildConsumableItem = (name, value) => {
+					const rsc = $("<div><img />&nbsp;<span></span></div>");
+					$("img", rsc)
+						.width(11).height(11).css("margin-top", "-3px")
+						.attr("src", `/assets/img/client/${name}.png`);
+					$("span", rsc).text(value || 0);
+					return rsc.html();
+				};
+				rewardRscItems.push(...["ibuild", "bucket", "devmat", "screws"]
+					.map((n, i) => buildConsumableItem(n, questMeta.rewardConsumables[i]))
+				);
+			}
+			if(rewardRscItems.length > 0) title += $("<p></p>").css("font-size", "11px")
+				.html(rewardRscItems.join("&emsp;")).prop("outerHTML");
 			if(!!questMeta.memo){
 				title += $("<p></p>")
 					.css("font-size", "11px")
