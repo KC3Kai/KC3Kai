@@ -9614,6 +9614,13 @@
 									"4": { "soku": 15 },
 									"5": { "soku": 15 },
 								},
+								byStars: {
+									gearId: 87,
+									// to simulte x1 star>=7 and x1 star<7 still soku+10 instead of +15,
+									// but x3 star>=7 will get soku+20, just assume final speed capped at 20
+									noStarsLessThan: 7,
+									"7": { "soku": 5 },
+								}
 							},
 							{
 								flags: [ "newModelBoiler", "enhancedBoiler" ],
