@@ -276,9 +276,8 @@ Contains summary information about a fleet and its ships
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
-			if (includeEquip && !forExped && includeRibbon) {
+			if (includeRibbon) {
 				// special stats from ribbons since 2023-07-07
-				// calcs uncertain, likely, unknown if exped counted
 				const sp = ship.statsSp();
 				Object.keys(sp).forEach(stat => {
 					if (sp !== "type") ss[stat] += sp[stat];

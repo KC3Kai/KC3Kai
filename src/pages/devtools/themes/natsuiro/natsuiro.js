@@ -4384,8 +4384,8 @@
 				// TODO stats from aircraft seem be quite complex for expeditions, no proficiency level counted for now
 				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
 				var ns = ship.nakedStats();
-				var fp = ns.fp + ship.expedEquipmentTotalStats("houg"),
-					tp = ns.tp + ship.expedEquipmentTotalStats("raig"),
+				var fp = ns.fp + ship.expedEquipmentTotalStats("houg") + ship.statsSp("fp"),
+					tp = ns.tp + ship.expedEquipmentTotalStats("raig") + ship.statsSp("tp"),
 					aa = ns.aa + ship.expedEquipmentTotalStats("tyku"),
 					los = ns.ls + ship.expedEquipmentTotalStats("saku"),
 					asw = ns.as + ship.expedEquipmentTotalStats("tais");

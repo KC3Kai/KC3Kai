@@ -4503,8 +4503,8 @@
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
 				var ns = ship.nakedStats();
-				var fp = ns.fp + ship.expedEquipmentTotalStats("houg"),
-					tp = ns.tp + ship.expedEquipmentTotalStats("raig"),
+				var fp = ns.fp + ship.expedEquipmentTotalStats("houg") + ship.statsSp("fp"),
+					tp = ns.tp + ship.expedEquipmentTotalStats("raig") + ship.statsSp("tp"),
 					aa = ns.aa + ship.expedEquipmentTotalStats("tyku"),
 					los = ns.ls + ship.expedEquipmentTotalStats("saku"),
 					asw = ns.as + ship.expedEquipmentTotalStats("tais");
