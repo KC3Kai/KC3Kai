@@ -1543,7 +1543,7 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportShellingPower = function(){
 		if(this.isDummy()){ return 0; }
-		const fixedFP = this.estimateNakedStats("fp") - 1;
+		const fixedFP = this.estimateNakedStats("fp") + this.statsSp("fp") - 1;
 		var supportPower = 0;
 		// for carrier series: CV, CVL, CVB
 		if(this.isCarrier()){

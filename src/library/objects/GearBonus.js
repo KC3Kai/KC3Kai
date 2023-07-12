@@ -9630,6 +9630,11 @@
 									"3": { "soku": 5 },
 									"4": { "soku": 5 },
 								},
+								byStars: {
+									gearId: 87,
+									// to simulte x1 boiler and x1 star>=7 new model still soku+10
+									"7": { "soku": -5 },
+								},
 							},
 						],
 					},
