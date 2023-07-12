@@ -224,6 +224,11 @@ button, input, select, textarea {
 	color:#3ec0bf;
 	margin-left:1px;
 }
+.ui-tooltip-content .ship_tooltip .stat_value .sp {
+	font-size:10px;
+	color:#88f;
+	margin-left:1px;
+}
 .ui-tooltip-content .ship_tooltip .stat_value .luck {
 	font-size:10px;
 	color:#2b2;
@@ -1256,6 +1261,7 @@ button, input, select, textarea {
 }
 .tab_expcalc .ship_goal.inactive .ship_label {
 	font-size:11px;
+	white-space:nowrap;
 }
 .tab_expcalc .ship_goal.inactive .ship_value {
 	font-size:13px;

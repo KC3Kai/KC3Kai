@@ -261,7 +261,7 @@ Contains summary information about a fleet and its ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 	
-	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = false, forRadarchart = false){
+	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = false, forRadarchart = false, includeRibbon = true){
 		const stats = {
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
@@ -276,6 +276,13 @@ Contains summary information about a fleet and its ships
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
+			if (includeRibbon) {
+				// special stats from ribbons since 2023-07-07
+				const sp = ship.statsSp();
+				Object.keys(sp).forEach(stat => {
+					if (sp !== "type") ss[stat] += sp[stat];
+				});
+			}
 			if (!includeEquip) {
 				// no accuracy if excludes equipment
 				ss.ht = 0;

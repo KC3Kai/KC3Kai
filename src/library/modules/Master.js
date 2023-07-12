@@ -28,6 +28,7 @@ Saves and loads significant data for future use
 		_raw: {},
 		_abyssalShips: {},
 		_seasonalShips: {},
+		_equipExslotShips: false,
 
 		init: function( raw ){
 			this.load();
@@ -101,6 +102,9 @@ Saves and loads significant data for future use
 							}
 						}
 					});
+				} else if (Object.keys(mst_data || {}).length > 0) {
+					// Add the master map object to local raw directy
+					self._raw[short_mst_name] = mst_data;
 				}
 			});
 
@@ -241,7 +245,7 @@ Saves and loads significant data for future use
 		 * @see main.js/ShipLoader.getPath - for the method of constructing resource path and usage of `uniqueKey` above
 		 * @see main.js/SuffixUtil - for the method of calculating suffix numbers
 		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
-		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
+		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`, `port`, `powerup`] for ship;
 		 *               [`card`, `card_t`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`, `airunit_banner`, `airunit_fairy`, `airunit_name`] for slotitem
 		 * @param rscPath - `ship` or `slot`, or other known resource sub-folders
 		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
@@ -261,7 +265,7 @@ Saves and loads significant data for future use
 			})[rscPath];
 			const paddedId = String(id).padStart(padWidth || 3, "0"),
 				suffix = !["useitem", "se"].includes(rscPath) ? "_" + getFilenameSuffix(id, typeWithPrefix) : "";
-			const uniqueKey = type === "full" && rscPath === "ship" ? ((key) => (
+			const uniqueKey = ["full", "port"].includes(type) && rscPath === "ship" ? ((key) => (
 					key ? "_" + key : ""
 				))(this.graph(id).api_filename) : "";
 			const fileExt = ({ "bgm": ".mp3" })[rscPath] || ".png";
@@ -345,13 +349,65 @@ Saves and loads significant data for future use
 				generalExslotTypes.filter(type => regularSlotTypes.includes(type));
 		},
 
-		// @return different from functions above, returns a slotitem ID list, not type2 ID list
-		equip_exslot_ship :function(shipId){
+		/**
+		 * @return different from functions above, returns a slotitem ID list, not type2 ID list
+		 * @see main.js#SlotitemModelHolder.prototype.getExtraEquipShipData - reorganized structure since 2023-07-07, supports ship mst id, ctype, stype matching.
+		 */
+		equip_exslot_ship :function(shipId, matchType){
+			if(!this.available) return [];
 			const exslotShips = this._raw.equip_exslot_ship || {};
+			const shipMst = this.ship(shipId) || {};
 			// find and remap ship specified exslot items
-			return !this.available ? [] : Object.keys(exslotShips)
-				.filter(i => exslotShips[i].api_ship_ids.includes(Number(shipId)))
-				.map(i => exslotShips[i].api_slotitem_id) || [];
+			return Object.keys(exslotShips).filter(gearId => {
+				const keyDefs = exslotShips[gearId];
+				const shipIds = Object.keys(keyDefs.api_ship_ids || {}),
+					ctypes = Object.keys(keyDefs.api_ctypes || {}),
+					stypes = Object.keys(keyDefs.api_stypes || {});
+				if(matchType === "ship") return shipIds.includes(String(shipId)) ||
+					ctypes.includes(String(shipMst.api_ctype));
+				if(matchType === "stype") return stypes.some(id => id == "99") ||
+					stypes.includes(String(shipMst.api_stype));
+				return shipIds.includes(String(shipId)) ||
+					ctypes.includes(String(shipMst.api_ctype)) ||
+					// special case for [33] Improved Kanhon Type Turbine stands for all stypes
+					stypes.some(id => id == "99") ||
+					stypes.includes(String(shipMst.api_stype));
+			}).map(id => Number(id)) || [];
+		},
+
+		// find and remap gear specified ship id list (extending ctype to id for compatibility) and ship type list (extending 99 to all types)
+		equip_exslot_ships :function(gearId){
+			if(!this._equipExslotShips) {
+				this._equipExslotShips = {};
+				Object.keys(this.all_ships(false, false)).forEach(shipId => {
+					if(this.isRegularShip(shipId)) {
+						const shipMst = this.ship(shipId);
+						this.equip_exslot_ship(shipId, "ship").forEach(gearId => {
+							const info = this._equipExslotShips[gearId] = this._equipExslotShips[gearId] || {
+								ships: [],
+								stypes: [],
+							};
+							if(!info.ships.includes(Number(shipId)))
+								info.ships.push(Number(shipId));
+						});
+						this.equip_exslot_ship(shipId, "stype").forEach(gearId => {
+							const info = this._equipExslotShips[gearId] = this._equipExslotShips[gearId] || {
+								ships: [],
+								stypes: [],
+							};
+							if(!info.stypes.includes(shipMst.api_stype))
+								info.stypes.push(shipMst.api_stype);
+						});
+					}
+				});
+				// find special 99 stype to indicate it for later use
+				const exslotShips = this._raw.equip_exslot_ship || {};
+				Object.keys(this._equipExslotShips).forEach(gearId => {
+					if(Object.keys(exslotShips[gearId].api_stypes || {}).some(id => id == "99"))
+						this._equipExslotShips[gearId].generalType = true;
+				});
+			}
+			return this._equipExslotShips[gearId] || {};
 		},
 
 		/**
@@ -407,16 +463,15 @@ Saves and loads significant data for future use
 					incapableShips.push(shipId);
 			});
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
-			const isCapableToExslot = generalExslotTypes.includes(type2Id);
-			let exslotCapableShips = false;
-			if(gearId > 0) {
-				const exslotShips = this._raw.equip_exslot_ship || {};
-				const exslotGear = Object.keys(exslotShips)
-					.find(i => exslotShips[i].api_slotitem_id == gearId);
-				if(exslotGear) {
-					exslotCapableShips = exslotShips[exslotGear].api_ship_ids.slice(0);
+			let isCapableToExslot = generalExslotTypes.includes(type2Id);
+			let exslotCapableShips = [], exslotCapableStypes = [];
+			const exslotCapableInfo = gearId > 0 ? this.equip_exslot_ships(gearId) : false;
+			if(exslotCapableInfo) {
+				exslotCapableShips = exslotCapableInfo.ships;
+				if(exslotCapableInfo.generalType) {
+					isCapableToExslot = true;
 				} else {
-					exslotCapableShips = [];
+					exslotCapableStypes = exslotCapableInfo.stypes;
 				}
 			}
 			// Remove Richelieu-class Kai from Seaplane Bomber type list except Late 298B
@@ -454,10 +509,12 @@ Saves and loads significant data for future use
 				excludes: incapableShips,
 				exslot: isCapableToExslot,
 				exslotIncludes: exslotCapableShips,
+				exslotStypes: exslotCapableStypes,
 			};
 		},
 
 		/**
+		 * @deprecated since 2023-07-07 since they are no longer hard-coded, defined in #equip_exslot_ship.
 		 * @param gearMstId - slotitem to be checked, all slotitem ids returned if omitted
 		 * @param shipTypeId - stype to be checked, allowed stype ids (if any) returned if omitted
 		 * @return the array contains slotitem master ids or stype ids can be equipped on exslot by capable ships,
@@ -500,12 +557,11 @@ Saves and loads significant data for future use
 				if(equipOn.stypes.includes(stype)) result |= 1;
 				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
 			}
-			const isExslotCapableCheckedByClient = this.equip_exslot_ids(gearMstId, stype);
-			if(equipOn.exslot || isExslotCapableCheckedByClient) {
-				if(result) result |= 2;
-			} else if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) {
-				result |= 2;
-			}
+			// Equippable on ex-slot has to be fulfill with regular slots equippable either
+			if(equipOn.exslot && result) result |= 2;
+			if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype) && result) result |= 2;
+			// No equipment can be equipped on ex-slot only without regular slots so far, so result always 3 if ex-slot true
+			if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
 			return result;
 		},
 

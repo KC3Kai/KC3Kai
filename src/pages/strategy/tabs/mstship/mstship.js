@@ -498,6 +498,12 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
+				// from `main.js/isShipImageForPortScene`
+				const isShipImageForPort = [951].includes(ship_id),
+				// from `main.js/isShipImageForPowerUp`
+					isShipImageForPowerUp = [951].includes(ship_id);
+				if(isShipImageForPort) availableTypes.push('port', 'port_dmg');
+				if(isShipImageForPowerUp) availableTypes.push('powerup', 'powerup_dmg');
 				// Special cut-in (Nelson Touch, Nagato/Mutsu, Colorado Cutin) special type
 				if(KC3Meta.specialCutinIds.includes(ship_id) && !KC3Meta.kongouCutinShips.includes(ship_id)) {
 					availableTypes.push("special");
@@ -861,14 +867,8 @@
 				const exslotTypes = KC3Master.equip_exslot_type(equipTypes);
 				if (exslotTypes.length > 0) {
 					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
-					// specified items on exslot of specified ships
-					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id);
-					// `RemodelUtil.createSetListEx` hard-coded whether special ones can be equipped
-					KC3Master.equip_exslot_ids().forEach(id => {
-						const gearMst = KC3Master.slotitem(id);
-						if (KC3Master.equip_exslot_ids(id, shipData.api_stype) && equipTypes.includes(gearMst.api_type[2]) && !exslotItems.includes(id))
-							exslotItems.push(id);
-					});
+					// specified items on exslot of specified ships (or stype/ctype)
+					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id).filter(id => KC3Master.equip_on_ship(shipData.api_id, id));
 					if (exslotItems.length > 0) {
 						exslotItems.forEach(item => {
 							const gearMst = KC3Master.slotitem(item);

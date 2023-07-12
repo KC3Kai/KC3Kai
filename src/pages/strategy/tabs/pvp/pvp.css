@@ -1,26 +1,26 @@
 .tab_pvp {
 	width:680px;
-	padding:0px 0px 10px 0px;
+	padding:0 0 10px 0;
 }
 
 /* PAGE LIST
 ---------------------------------*/
 .tab_pvp .page_list {
 	width:700px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	background:#f0f5ff;
 	border-bottom:1px solid #369;
-	padding:5px 5px 0px;
+	padding:5px 5px 0;
 }
 .tab_pvp .page_list .pagination {
-	margin:0px;
+	margin:0;
 }
 
 /* TOGGLES
 ---------------------------------*/
 .tab_pvp .toggles {
 	width:700px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	background:#f0f5ff;
 	border-bottom:1px solid #369;
 	padding:5px 5px 5px 5px;
@@ -29,10 +29,10 @@
 	height:24px;
 	line-height:24px;
 	float:left;
-	margin:0px 0px 0px 10px;
+	margin:0 0 0 10px;
 	font-size:12px;
 	font-weight:bold;
-	padding:0px 10px;
+	padding:0 10px;
 }
 .tab_pvp .toggles .pvp_toggle.active{
 	background:#369;
@@ -53,7 +53,7 @@
 	height:120px;
 	background: #def;
 	border-radius: 10px;
-	margin:8px 0px 0px 0px;
+	margin:8px 0 0 0;
 	padding:5px;
 }
 .tab_pvp .pvp_column {
@@ -63,13 +63,13 @@
 
 .tab_pvp .pvp_info {
 	width:70px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 }
 .tab_pvp .pvp_info .pvp_id {
 	width:70px;
 	height:24px;
 	line-height:24px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 	font-size:18px;
 	font-weight:bold;
 	text-align:center;
@@ -79,7 +79,7 @@
 	width:70px;
 	height:16px;
 	line-height:16px;
-	margin:0px 0px 3px 0px;
+	margin:0 0 3px 0;
 	font-size:12px;
 	color:#579;
 	text-align:center;
@@ -89,7 +89,7 @@
 	width:70px;
 	height:26px;
 	line-height:26px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	text-align:center;
 }
 .tab_pvp .pvp_info .pvp_result img {
@@ -101,14 +101,14 @@
 	height:20px;
 	line-height:18px;
 	border-radius:5px;
-	margin:0px 5px 0px 5px;
+	margin:0 5px 0 5px;
 	text-align:center;
 	font-size:10px;
 }
 /* PLAYER */
 .tab_pvp .pvp_player {
 	width:290px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 }
 .tab_pvp .pvp_player .pvp_details_ship {
 }
@@ -145,7 +145,7 @@
 	width:140px;
 	height:34px;
 	float:left;
-	margin:0px 5px 3px 0px;
+	margin:0 5px 3px 0;
 	background:#fff;
 	border-radius:17px 5px 5px 17px;
 	overflow:hidden;
@@ -157,7 +157,7 @@
 
 .tab_pvp .pvp_ship_icon {
 	width:32px;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_pvp .pvp_ship_icon img {
 	width:32px;
@@ -182,8 +182,8 @@
 
 .tab_pvp .pvp_ship_info {
 	width:40px;
-	margin:0px 2px 0px 0px;
-	padding:2px 0px;
+	margin:0 2px 0 0;
+	padding:2px 0;
 }
 .tab_pvp .pvp_ship_infofield {
 	width:40px;
@@ -204,7 +204,7 @@
 
 .tab_pvp .pvp_ship_stats {
 	width:30px;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_pvp .pvp_ship_stats .pvp_ship_stat {
 	width:13px;
@@ -248,9 +248,9 @@
 /* BATTLE DETAILS
 ---------------------------------*/
 .tab_pvp .pvp_battle {
-	width:0px;
+	width:0;
 	overflow:hidden;
-	margin:0px 8px 0px 0px;
+	margin:0 8px 0 0;
 	border-left:1px solid #a9caea;
 	border-right:1px solid #a9caea;
 }
@@ -265,7 +265,7 @@
 	text-shadow:1px 1px #222;
 }
 .tab_pvp .pvp_battle_day {
-	margin:0px 0px 0px 8px;
+	margin:0 0 0 8px;
 	background-image:url('../../../../assets/img/client/map.jpg');
 	background-size: 315px 110px;
 }
@@ -295,7 +295,7 @@
 	height:15px;
 	line-height:15px;
 	font-size:11px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	white-space:nowrap;
 	overflow:hidden;
 }
@@ -319,7 +319,7 @@
 	border-radius:50%;
 }
 .tab_pvp .node_cond_value span.vs {
-	margin:0px 4px;
+	margin:0 4px;
 }
 
 .tab_pvp .node_planes {
@@ -338,13 +338,13 @@
 	height:14px;
 	line-height:14px;
 	float:left;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_pvp .node_airicon img {
 	width:16px;
 	height:16px;
 	vertical-align:top;
-	margin:-2px 1px 0px 1px;
+	margin:-2px 1px 0 1px;
 }
 .tab_pvp .node_airtext {
 	width:40px;

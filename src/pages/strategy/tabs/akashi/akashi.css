@@ -11,21 +11,21 @@
 	padding:5px 20px;
 	border:1px solid #e88;
 	background:#fee;
-	margin:5px 0px;
+	margin:5px 0;
 	font-size:13px;
 	text-align:center;
 }
 
 .tab_akashi .controls {
 	width:700px;
-	margin:0px 0px 0px 0px;
+	margin:0 0 0 0;
 	padding:5px 10px;
 }
 .tab_akashi .controls .control {
 	width:140px;
 	height:20px;
 	line-height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;
@@ -33,7 +33,7 @@
 	border-radius:7px;
 }
 .tab_akashi .controls .option {
-	margin:0px 5px 0px 5px;
+	margin:0 5px 0 5px;
 	float:left;
 }
 
@@ -57,14 +57,14 @@
 	width:680px;
 	height:34px;
 	line-height:24px;
-	padding:5px 0px;
-	margin:0px 0px 5px 0px;
+	padding:5px 0;
+	margin:0 0 5px 0;
 	font-weight:bold;
 }
 .tab_akashi .weekday {
 	width:90px;
 	height:24px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	float:left;
 	text-align:center;
 	white-space:nowrap;
@@ -79,7 +79,7 @@
 .tab_akashi .equipment {
 	width:680px;
 	line-height:24px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	padding:5px;
 }
 
@@ -141,15 +141,15 @@
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
-	margin:12px 5px 0px 0px;
+	margin:12px 5px 0 0;
 }
 
 
 .tab_akashi .equipment .eq_ships {
 	width:122px;
 	float:left;
-	padding:3px 0px;
-	margin:0px 2px 0px 0px;
+	padding:3px 0;
+	margin:0 2px 0 0;
 	min-height:24px;
 }
 
@@ -178,18 +178,18 @@
 .tab_akashi .equipment .eq_resources {
 	width:345px;
 	float:left;
-	padding:0px 0px;
+	padding:0 0;
 	min-height:78px;
 }
 
 .tab_akashi .eq_res {
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 }
 .tab_akashi .eq_res .eq_res_line {
 	width:345px;
 	min-height:24px;
 	border-radius:7px;
-	margin:0px 0px 1px 0px;
+	margin:0 0 1px 0;
 }
 
 .tab_akashi .eq_res .eq_res_label {

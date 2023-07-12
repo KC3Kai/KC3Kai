@@ -17,14 +17,14 @@
 	padding:5px;
 	border:1px solid #ccc;
 	background:#ffc;
-	border-radius: 8px 0px 0px 8px;
-	margin:10px 0px 0px 0px;
+	border-radius: 8px 0 0 8px;
+	margin:10px 0 0 0;
 }
 .tab_mstgear .gearRecord {
 	width:270px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	border-radius: 5px;
 }
 .tab_mstgear .gearRecord:hover {
@@ -43,7 +43,7 @@
 	width:250px;
 	height:20px;
 	float:left;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 	overflow:hidden;
 	font-size:12px;
 	word-wrap: break-word;
@@ -58,23 +58,23 @@
 	float:left;
 	background:#eee;
 	border:1px solid #ccc;
-	border-radius: 0px 8px 8px 0px;
-	padding:5px 5px 0px 5px;
-	margin:10px 0px 0px 0px;
+	border-radius: 0 8px 8px 0;
+	padding:5px 5px 0 5px;
+	margin:10px 0 0 0;
 }
 
 /* ASSETS */
 .tab_mstgear .gearInfo .gearAssets {
 	width:370px;
 	height:90px;
-	margin:5px 0px 10px 5px;
+	margin:5px 0 10px 5px;
 }
 .tab_mstgear .gearInfo .gearAsset {
 	width:180px;
 	height:180px;
 	line-height:85px;
 	text-align:center;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	float:left;
 }
 .tab_mstgear .gearInfo .gearAsset img {
@@ -86,7 +86,7 @@
 .tab_mstgear .gearInfo .name {
 	width:368px;
 	line-height:26px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	font-size:20px;
 	text-overflow:clip;
 	overflow:hidden;
@@ -101,7 +101,7 @@
 	width:368px;
 	min-height:20px;
 	line-height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;
@@ -112,7 +112,7 @@
 	line-height:20px;
 	font-size:20px;
 	color:#ec6;
-	margin:-2px 0px 4px 0px;
+	margin:-2px 0 4px 0;
 }
 
 /* STATS */
@@ -120,14 +120,14 @@
 	width:368px;
 	line-height:20px;
 	font-size:16px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 
 .tab_mstgear .gearInfo .stat {
 	width:56px;
 	height:20px;
 	float:left;
-	margin:0px 5px 2px 0px;
+	margin:0 5px 2px 0;
 }
 .tab_mstgear .gearInfo .stat_icon {
 	width:20px;
@@ -139,32 +139,32 @@
 .tab_mstgear .gearInfo .stat_icon img {
 	max-width:20px;
 	height:18px;
-	margin:1px 0px;
+	margin:1px 0;
 }
 .tab_mstgear .gearInfo .stat_value {
 	width:36px;
 	height:20px;
 	float:left;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 	font-weight:bold;
 	white-space:nowrap;
 }
 .tab_mstgear .gearInfo .scrap {
 	height:20px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 .tab_mstgear .gearInfo .scrap div {
 	width:60px;
 	float:left;
-	padding:0px 5px 0px 0px;
+	padding:0 5px 0 0;
 }
 .tab_mstgear .gearInfo .scrap div span {
 	font-weight:bold;
-	padding:0px 0px 0px 5px;
+	padding:0 0 0 5px;
 }
 
 .tab_mstgear .gearInfo .equippable {
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 
 .tab_mstgear .gearInfo .equippable > div {
@@ -179,7 +179,7 @@
 	height:18px;
 	line-height:18px;
 	border-radius:3px;
-	margin:0px 2px 1px 0px;
+	margin:0 2px 1px 0;
 	font-size:12px;
 	text-align:center;
 	overflow:hidden;
@@ -197,7 +197,7 @@
 .tab_mstgear .gearInfo .equippable .exslot > div.shipiconbox {
 	float:left;
 	width:36px;
-	margin:0px 0px 1px 0px;
+	margin:0 0 1px 0;
 	text-align:center;
 	overflow:hidden;
 	white-space:nowrap;
@@ -225,6 +225,6 @@
 .tab_mstgear .gearInfo .intro {
 	width:368px;
 	line-height:20px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 	font-size:13px;
 }

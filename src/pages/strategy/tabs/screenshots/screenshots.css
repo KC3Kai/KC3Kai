@@ -10,10 +10,10 @@
 .tab_screenshots .page_list {
 	/*width:700px;
 	margin:0px 0px 0px 0px;*/
-	padding:5px 5px 0px;
+	padding:5px 5px 0;
 }
 .tab_screenshots .page_list .pagination {
-	margin:0px;
+	margin:0;
 }
 
 /* SCREENSHOT THUMBS
@@ -21,7 +21,7 @@
 .tab_screenshots .ss_thumb {
 	width:166px;
 	height:116px;
-	margin:7px 0px 0px 7px;
+	margin:7px 0 0 7px;
 	padding:2px;
 	float:left;
 }

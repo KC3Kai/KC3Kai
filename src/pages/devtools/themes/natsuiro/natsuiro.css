@@ -4850,6 +4850,11 @@ ABYSS FLEET
 	color:#2b2;
 	margin-left:1px;
 }
+.ui-tooltip-content .ship_face_tooltip .stat_value .sp {
+	font-size:10px;
+	color:#00f;
+	margin-left:1px;
+}
 .ui-tooltip-content .ship_face_tooltip .stat_value .oasw {
 	color:#0cd;
 }

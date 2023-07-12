@@ -633,6 +633,13 @@ AntiAir: anti-air related calculations
 		// Kongou Class Kai Ni+
 		masterIdIn( [149, 150, 151, 152, 591, 592, 593, 954] )
 	);
+	var isYamatoClassKai =  masterIdIn([
+		136, // Yamato K
+		911, // Yamato K2
+		916, // Yamato K2J
+		148, // Musashi K
+		546, // Musashi K2
+	]);
 	var isYamatoClassKai2 = masterIdIn([
 		911, // Yamato K2
 		916, // Yamato K2J
@@ -977,11 +984,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Musashi K2, Yamato K2+
+	// Musashi Kai+, Yamato Kai+
 	declareAACI(
 		26, 6, 1, 1.4, 60, 2130, // rate 55?
 		[musashiK2Icon, haMountKaiAmg, radarIcon],
-		predAllOf(isYamatoClassKai2),
+		predAllOf(isYamatoClassKai),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleMountKaiAMG ),

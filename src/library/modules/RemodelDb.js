@@ -104,6 +104,8 @@
                 case 651: // Tan Yang
                 case 681: // Samuel B.Roberts Kai
                     return 60;
+                case 316: // Amatsukaze Kai
+                    return 65;
                 case 145: // Shigure K2
                     return 77;
                 case 208: // Shikinami
@@ -257,6 +259,7 @@
                     return 10;
                 case 692: // Fletcher Kai
                 case 628: // Fletcher Kai Mod.2
+                case 316: // Amatsukaze Kai
                     return 30;
                 case 629: // Fletcher Mk.II
                 case 681: // Samuel B.Roberts Kai

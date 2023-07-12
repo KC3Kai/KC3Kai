@@ -42,6 +42,8 @@ KC3改 Ship Object
 		// expanded to 7-length array since 2017-09-29
 		// last new twos are [hp,as]
 		this.mod = [0,0,0,0,0,0,0];
+		// fp/tp/ar/ev powerup added by ribbon item since 2023-07-07
+		this.spitems = [];
 		this.fuel = 0;
 		this.ammo = 0;
 		this.repair = [0,0,0];
@@ -132,6 +134,15 @@ KC3改 Ship Object
 				}
 				if(typeof data.api_sally_area != "undefined"){
 					this.sally = data.api_sally_area;
+				}
+				if(Array.isArray(data.api_sp_effect_items)){
+					this.spitems = data.api_sp_effect_items.map(item => ({
+						type: item.api_kind,
+						fp: item.api_houg,
+						tp: item.api_raig,
+						ar: item.api_souk,
+						ev: item.api_kaih,
+					}));
 				}
 				this.slotnum = data.api_slotnum;
 				this.slots = data.api_onslot;
@@ -286,6 +297,12 @@ KC3改 Ship Object
 			this.morale > 22 ? valuesArray[2] :
 			this.morale >= 0 ? valuesArray[1] :
 			valuesArray[0]);
+	};
+	KC3Ship.prototype.ribbonType = function() {
+		if(this.spitems && this.spitems.length > 0){
+			return this.spitems.map(i => i.type).sort((a, b) => a - b).pop();
+		}
+		return false;
 	};
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
@@ -747,6 +764,24 @@ KC3改 Ship Object
 			return [stats, statsBonus];
 		}
 		return !statAttr ? stats : stats[statAttr];
+	};
+
+	KC3Ship.prototype.statsSp = function(statAttr){
+		if(this.isDummy()) { return false; }
+		if(!this.statsCache) this.statsCache = {};
+		if(!this.statsCache.spEffects) {
+			const sp = this.statsCache.spEffects = {};
+			this.spitems.forEach(item => {
+				Object.keys(item).forEach(attr => {
+					if(attr === "type") {
+						(sp[attr] = sp[attr] || []).push(item[attr]);
+					} else {
+						sp[attr] = (sp[attr] || 0) + item[attr];
+					}
+				});
+			});
+		}
+		return !statAttr ? this.statsCache.spEffects : this.statsCache.spEffects[statAttr] || 0;
 	};
 
 	KC3Ship.prototype.statsBonusOnShip = function(statAttr){
@@ -1508,7 +1543,7 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportShellingPower = function(){
 		if(this.isDummy()){ return 0; }
-		const fixedFP = this.estimateNakedStats("fp") - 1;
+		const fixedFP = this.estimateNakedStats("fp") + this.statsSp("fp") - 1;
 		var supportPower = 0;
 		// for carrier series: CV, CVL, CVB
 		if(this.isCarrier()){
@@ -1527,7 +1562,7 @@ KC3改 Ship Object
 			// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:2354#13
 			// so better to use current fp value from `api_karyoku` (including naked fp + all equipment fp),
 			// to avoid the case that fp bonus not accurately updated in time.
-			supportPower = 5 + this.fp[0] - 1;
+			supportPower = 5 + this.fp[0] + this.statsSp("fp") - 1;
 			// should be the same value with above if `equipmentTotalStats` works properly
 			//supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
@@ -1605,7 +1640,7 @@ KC3改 Ship Object
 			// Yamashiomaru gets special if any Dive/Torpedo Bomber equipped
 			if(this.isYamashiomaruWithBomber()) isCarrierShelling = true;
 		}
-		let shellingPower = this.fp[0];
+		let shellingPower = this.fp[0] + this.statsSp("fp");
 		if(isCarrierShelling) {
 			if(isTargetLand) {
 				// https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#od036af3
@@ -1650,7 +1685,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.shellingTorpedoPower = function(combinedFleetFactor = 0){
 		if(this.isDummy()) { return 0; }
-		return 5 + this.tp[0] + combinedFleetFactor +
+		return 5 + this.tp[0] + this.statsSp("tp") + combinedFleetFactor +
 			this.equipmentTotalImprovementBonus("torpedo");
 	};
 
@@ -1665,6 +1700,7 @@ KC3改 Ship Object
 		// new night recon (acc: 2) implemented since 2022-06-30
 		const nightContact = KC3Gear.isNightContactAircraft(nightContactPlaneId, true);
 		return nightContact.powerBonus + this.fp[0] + this.tp[0]
+			+ this.statsSp("fp") + this.statsSp("tp")
 			+ this.equipmentTotalImprovementBonus("yasen");
 	};
 
@@ -1804,7 +1840,7 @@ KC3改 Ship Object
 		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
 		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699];
 		const basicPower = this.shellingFirePower(0, true);
-		const basicPowerNight = this.nightBattlePower() - this.tp[0];
+		const basicPowerNight = this.nightBattlePower() - this.tp[0] - this.statsSp("tp");
 		const resultList = [];
 		// Fill damage lists for each enemy type
 		possibleTypes.forEach(installationType => {
@@ -4094,7 +4130,8 @@ KC3改 Ship Object
 					// https://docs.google.com/spreadsheets/d/1_e0M6asJUbu9EEW4PrGCu9hOxZnY7OQEDHH2DUAzjN8/htmlview
 					const modelDK2SmallGunCnt = this.countEquipment(267),
 					      modelDK3SmallGunCnt = this.countEquipment(366);
-					// possible to equip 2 D guns for 4 slots Tashkent
+					// possible to equip 2 D guns for 4 slots Tashkent,
+					// or surface radar in ex-slot ships since 2023-06-14
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					// https://twitter.com/grapefox_zuizui/status/1664695317625819145
 					const modelDSmallGunModifier =
@@ -5170,6 +5207,7 @@ KC3改 Ship Object
 			  modLeftStats = shipObj.modernizeLeftStats();
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
 		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[0])[0];});
+		const spEffectStats = shipObj.statsSp();
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalNumber = (n, pre = '\u21d1', show0 = false) => !n && (!show0 || n !== 0) ? '' : pre + n;
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
@@ -5200,24 +5238,32 @@ KC3改 Ship Object
 		$(".stat_fp .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.fp, optionalNumber(bonusStats.fp)))
 			.toggle(!!equipDiffStats.fp || !!bonusStats.fp);
+		$(".stat_fp .sp", tooltipBox).text(signedNumber(spEffectStats.fp))
+			.toggle(!!spEffectStats.fp);
 		$(".stat_ar .current", tooltipBox).text(shipObj.ar[0]);
 		$(".stat_ar .mod", tooltipBox).text(signedNumber(modLeftStats.ar))
 			.toggle(!!modLeftStats.ar);
 		$(".stat_ar .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.ar, optionalNumber(bonusStats.ar)))
 			.toggle(!!equipDiffStats.ar || !!bonusStats.ar);
+		$(".stat_ar .sp", tooltipBox).text(signedNumber(spEffectStats.ar))
+			.toggle(!!spEffectStats.ar);
 		$(".stat_tp .current", tooltipBox).text(shipObj.tp[0]);
 		$(".stat_tp .mod", tooltipBox).text(signedNumber(modLeftStats.tp))
 			.toggle(!!modLeftStats.tp);
 		$(".stat_tp .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.tp, optionalNumber(bonusStats.tp)))
 			.toggle(!!equipDiffStats.tp || !!bonusStats.tp);
+		$(".stat_tp .sp", tooltipBox).text(signedNumber(spEffectStats.tp))
+			.toggle(!!spEffectStats.tp);
 		$(".stat_ev .current", tooltipBox).text(shipObj.ev[0]);
 		$(".stat_ev .level", tooltipBox).text(signedNumber(maxDiffStats.ev))
 			.toggle(!!maxDiffStats.ev);
 		$(".stat_ev .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.ev, optionalNumber(bonusStats.ev)))
 			.toggle(!!equipDiffStats.ev || !!bonusStats.ev);
+		$(".stat_ev .sp", tooltipBox).text(signedNumber(spEffectStats.ev))
+			.toggle(!!spEffectStats.ev);
 		$(".stat_aa .current", tooltipBox).text(shipObj.aa[0]);
 		$(".stat_aa .mod", tooltipBox).text(signedNumber(modLeftStats.aa))
 			.toggle(!!modLeftStats.aa);
