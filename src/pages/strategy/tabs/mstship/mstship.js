@@ -870,7 +870,13 @@
 					// specified items on exslot of specified ships (or stype/ctype)
 					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id).filter(id => KC3Master.equip_on_ship(shipData.api_id, id));
 					if (exslotItems.length > 0) {
-						exslotItems.forEach(item => {
+						// order items by types asc first for better readability
+						const orderByType = (a, b) => (
+							KC3Master.slotitem(a).api_type[2] - KC3Master.slotitem(b).api_type[2]
+							|| KC3Master.slotitem(a).api_type[3] - KC3Master.slotitem(b).api_type[3]
+							|| a - b
+						);
+						exslotItems.sort(orderByType).forEach(item => {
 							const gearMst = KC3Master.slotitem(item);
 							const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
 								.appendTo(".equipExSlot .equipList");
