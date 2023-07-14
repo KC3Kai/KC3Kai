@@ -214,6 +214,8 @@ known IDs see QuestManager
 						KC3QuestManager.get(356).increment(); // C65: Yearly Exercises 8
 					if(KC3QuestManager.isPrerequisiteFulfilled(357))
 						KC3QuestManager.get(357).increment(); // C66: Yearly Exercises 9
+					if(KC3QuestManager.isPrerequisiteFulfilled(368))
+						KC3QuestManager.get(368).increment(); // Cy11: Yearly Exercises 11
 				}
 				break;
 			case 4: // Dxx type, expedition success
@@ -475,7 +477,10 @@ known IDs see QuestManager
 					name : questMeta.name,
 					desc : questMeta.desc,
 					memo : questMeta.memo,
-					trackingDesc : questMeta.trackingDesc
+					trackingDesc : questMeta.trackingDesc,
+					// Elements order of possible reward consumables (including selectable optional rewards):
+					// [torches, buckets, devmats, screws]
+					rewardConsumables: questMeta.rewardConsumables,
 				}; };
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false && Array.isArray(questMeta.tracking)) {
@@ -504,7 +509,8 @@ known IDs see QuestManager
 					name : questMeta.name,
 					desc : questMeta.desc,
 					memo : questMeta.memo,
-					trackingDesc : questMeta.trackingDesc
+					trackingDesc : questMeta.trackingDesc,
+					rewardConsumables: questMeta.rewardConsumables,
 				}; };
 			} else if(questMeta && !checkExpectedHash(questMeta)) {
 				this.meta = noMeta;
@@ -637,11 +643,11 @@ known IDs see QuestManager
 			trackingData[0] = newCurrentCount;
 		};
 
-		// Special 3-times maxCount adjustment for quest C38, C42, C55, C65, C66, F7, F8, F66:
+		// Special 3-times maxCount adjustment for quest C38, C42, C55, C65, C66, Cy11, F7, F8, F66:
 		//   these quests have different behavior that 1/3 is marked as being 50% completed,
 		//   so our auto-adjustment for max < 5 won't work for them.
 		// EO74 marks them as '(internal counter) starts from 1/4', so +1 50%, +2 80%.
-		if (maxCount === 3 && [337, 339, 350, 356, 357, 607, 608, 674].indexOf(this.id) > -1) {
+		if (maxCount === 3 && [337, 339, 350, 356, 357, 368, 607, 608, 674].indexOf(this.id) > -1) {
 			// but F7/F8 still 50%, not 80% mark at 2/3, so no adjustment
 			if (currentCount !== actualPFlag && [607, 608].indexOf(this.id) == -1) {
 				announcedCorrection(actualPFlag);

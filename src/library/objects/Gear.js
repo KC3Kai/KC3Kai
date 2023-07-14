@@ -193,15 +193,19 @@ KC3改 Equipment Object
 							const gearMstId = synergy.byStars.gearId;
 							const starDist = (bonusGears[gearMstId] || {}).starsDist || [];
 							const isMultiple = !!synergy.byStars.multiple;
-							Object.keys(synergy.byStars).forEach(starStr => {
-								const minStars = parseInt(starStr);
-								if(!isNaN(minStars)) {
-									const synergyGearCount = starDist.slice(minStars).sumValues();
-									if(synergyGearCount > 0) {
-										total += ((synergy.byStars[starStr] || {})[apiName] || 0) * (isMultiple ? synergyGearCount : 1);
+							const countCap = synergy.byStars.countCap || Number.POSITIVE_INFINITY;
+							const lessStars = synergy.byStars.noStarsLessThan;
+							if(!lessStars || starDist.slice(0, lessStars).sumValues() === 0) {
+								Object.keys(synergy.byStars).forEach(starStr => {
+									const minStars = parseInt(starStr);
+									if(!isNaN(minStars)) {
+										const synergyGearCount = starDist.slice(minStars).sumValues();
+										if(synergyGearCount > 0) {
+											total += ((synergy.byStars[starStr] || {})[apiName] || 0) * Math.min(countCap, isMultiple ? synergyGearCount : 1);
+										}
 									}
-								}
-							});
+								});
+							}
 						}
 					}
 				};

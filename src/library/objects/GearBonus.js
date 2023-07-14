@@ -74,6 +74,8 @@
 				twin51cmLargeGunMount: 0,
 				twin51cmLargeGunMountIds: [281],
 				twin51cmLargeGunMountNonexist: 1,
+				triple14inch45LargeGunMount: 0,
+				triple14inch45LargeGunMountIds: [508],
 				rotorcraft: 0,
 				rotorcraftIds: [69, 324, 325, 326, 327],
 				helicopter: 0,
@@ -3696,6 +3698,84 @@
 					},
 				],
 			},
+			// 14inch/45 Twin Gun Mount
+			"507": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": {
+						stypes: [8, 9, 10],
+						multiple: { "houg": 2, "houk": 1, "houm": 1 },
+						synergy: [
+							{
+								flags: [ "usNavySurfaceRadar" ],
+								distinct: { "houg": 1, "houk": 1, "houm": 2 },
+							},
+							{
+								flags: [ "triple14inch45LargeGunMount" ],
+								single: { "houg": 1, "houk": 2, "houm": 1 },
+							},
+						],
+					},
+					"UnitedKingdom": 6,
+				},
+				byClass: {
+					// Kongou Class
+					"6": {
+						distinctGears: [507, 508],
+						single: { "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "triple14inch45LargeGunMount" ],
+							single: { "houg": 1, "houk": 1, "houm": 1 },
+						},
+					},
+					// Ise Class
+					"2": 6,
+					// Fusou Class
+					"26": 6,
+				},
+				byShip: [
+					// For any ship can equip it
+					{
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "souk": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+				],
+			},
+			// 14inch/45 Triple Gun Mount
+			"508": {
+				count: 0,
+				byNation: {
+					"UnitedStates": {
+						stypes: [8, 9, 10],
+						multiple: { "houg": 2, "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "usNavySurfaceRadar" ],
+							distinct: { "houg": 1, "houk": 1, "houm": 2 },
+						},
+					},
+					"UnitedKingdom": 6,
+				},
+				byClass: {
+					// Kongou Class
+					"6": {
+						distinctGears: [507, 508],
+						single: { "houk": 1, "houm": 1 },
+					},
+					// Ise Class
+					"2": 6,
+					// Fusou Class
+					"26": 6,
+				},
+			},
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
 				count: 0,
@@ -6768,8 +6848,8 @@
 				},
 				byShip: [
 					{
-						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, Oyashio K2, Hayashio K2
-						ids: [566, 567, 568, 656, 670, 915],
+						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, Oyashio K2, Hayashio K2, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 951],
 						single: { "houg": 1 },
 					},
 					{
@@ -6911,8 +6991,8 @@
 				},
 				byShip: [
 					{
-						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, Oyashio K2 +1 fp, +2 aa for one or two gun(s)
-						ids: [566, 567, 568, 656, 670],
+						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, Oyashio K2, Hayashio K2, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 951],
 						multiple: { "houg": 1, "tyku": 2 },
 						countCap: 2,
 					},
@@ -7533,8 +7613,8 @@
 						single: { "houg": 2, "tyku": 2, "houk": 4, "houm": 3 },
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai
-						ids: [145, 497, 656, 557, 558],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai, Amatsukaze K2
+						ids: [145, 497, 656, 557, 558, 951],
 						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
 					},
 					{
@@ -7687,7 +7767,7 @@
 					},
 				],
 			},
-			//
+			// 25mm Anti-aircraft Autocannon Mount & Machine Guns
 			"505": {
 				count: 0,
 				byShip: [
@@ -7721,8 +7801,8 @@
 						},
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Yahagi K2B
-						ids: [145, 497, 656, 668],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Yahagi K2B, Amatsukaze K2
+						ids: [145, 497, 656, 668, 951],
 						single: { "houg": 2, "tyku": 3, "houk": 4 },
 					},
 					{
@@ -7741,16 +7821,16 @@
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Hatsushimo K2
-						ids: [145, 497, 656, 419],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Hatsushimo K2, Amatsukaze K2
+						ids: [145, 497, 656, 419, 951],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "tyku": 2, "houk": 2 },
 						},
 					},
 					{
-						// Shigure K3, Yukikaze K2
-						ids: [961, 656],
+						// Shigure K3, Yukikaze K2, Amatsukaze K2
+						ids: [961, 656, 951],
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 1, "houk": 1 },
@@ -7859,59 +7939,69 @@
 			// Type 3 Shell Kai
 			"317": {
 				count: 0,
+				starsDist: [],
 				byClass: {
+					// Kongou Class
 					"6": [
 						{
-							// Kongou Class +1 fp, +1 aa
-							single: { "houg": 1, "tyku": 1 },
+							multiple: { "houg": 2, "tyku": 1 },
 						},
 						{
-							// Kongou Class K2C totally +3 fp, +3 aa
-							remodel: 3,
-							single: { "houg": 2, "tyku": 2 },
+							minStars: 8,
+							single: { "houm": 1 },
 						},
 					],
-					// Nagato Class Kai Ni +1 fp, +2 aa
-					"19": {
-						remodel: 2,
-						single: { "houg": 1, "tyku": 2 },
-					},
+					// Ise Class
+					"2": [
+						{
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houm": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
-						// Kongou K2 totally +3 fp, +3 aa
-						ids: [149],
-						single: { "houg": 2, "tyku": 2 },
+						// Kongou K2
+						ids: [149, 591, 592],
+						multiple: { "houg": 2, "tyku": 2 },
 					},
 					{
-						// Hiei K2 totally +2 fp, +2 aa
+						// Hiei K2
 						ids: [150],
-						single: { "houg": 1, "tyku": 1 },
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
-						// Haruna K2 totally +2 fp, +2 aa, +1 ev
+						// Haruna K2
 						ids: [151],
-						single: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// Haruna K2B totally +2 fp, +4 aa, +2 ev
+						// Haruna K2B
 						ids: [593],
-						single: { "houg": 1, "tyku": 3, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
 					},
 					{
-						// Haruna K2C totally +3 fp, +3 aa, +1 ev
+						// Haruna K2C
 						ids: [954],
-						single: { "houg": 2, "tyku": 2, "houk": 1 },
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 					},
 					{
-						// Kirishima K2 totally +3 fp, +2 aa
+						// Kirishima K2
 						ids: [152],
-						single: { "houg": 2, "tyku": 1 },
+						multiple: { "houg": 2, "tyku": 1 },
 					},
 					{
-						// Mutsu Kai Ni totally +2 fp, +2 aa, +1 ev
+						// Nagato K2
+						ids: [541],
+						multiple: { "houg": 1, "tyku": 2 },
+					},
+					{
+						// Mutsu K2
 						ids: [573],
-						single: { "houg": 1, "houk": 1 },
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 					},
 				],
 			},
@@ -7920,10 +8010,10 @@
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Kongou Class +1 fp, +1 aa
+					// Kongou Class
 					"6": [
 						{
-							single: { "houg": 1, "tyku": 1 },
+							single: { "houg": 2, "tyku": 3, "houm": 1 },
 						},
 						{
 							minStars: 6,
@@ -7934,45 +8024,126 @@
 							single: { "houm": 1 },
 						},
 					],
+					// Ise Class
+					"2": [
+						{
+							single: { "houg": 1, "tyku": 2, "houk": 2, "houm": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							single: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houk": 1 },
+						},
+					],
+					// Yamato Class
+					"37": [
+						{
+							minStars: 6,
+							single: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houk": 1 },
+						},
+					],
 				},
 				byShip: [
+					// All (F)BB(V)
 					{
-						// Kongou K2 totally +3 fp, +3 aa
+						stypes: [8, 9, 10],
+						minStars: 2,
+						single: { "tyku": 1 },
+					},
+					{
+						stypes: [8, 9, 10],
+						minStars: 4,
+						single: { "houg": 1 },
+					},
+					{
+						stypes: [8, 9, 10],
+						minStars: 7,
+						single: { "houk": 1 },
+					},
+					{
+						stypes: [8, 9, 10],
+						minStars: 8,
+						single: { "tyku": 1 },
+					},
+					{
+						stypes: [8, 9, 10],
+						minStars: 9,
+						single: { "houg": 1 },
+					},
+					// All CA(V)
+					{
+						stypes: [5, 6],
+						minStars: 2,
+						single: { "tyku": 1 },
+					},
+					{
+						stypes: [5, 6],
+						minStars: 4,
+						single: { "houg": 1 },
+					},
+					{
+						stypes: [5, 6],
+						minStars: 6,
+						single: { "houk": 1 },
+					},
+					{
+						stypes: [5, 6],
+						minStars: 8,
+						single: { "houm": 1 },
+					},
+					{
+						stypes: [5, 6],
+						minStars: 10,
+						single: { "houg": 1 },
+					},
+					{
+						// Kongou K2
 						ids: [149],
 						single: { "houg": 2, "tyku": 2 },
 					},
 					{
-						// Kongou K2C totally +4 fp, +4 aa, +1 ev
+						// Kongou K2C
 						ids: [591],
 						single: { "houg": 3, "tyku": 3, "houk": 1 },
 					},
 					{
-						// Hiei K2 totally +2 fp, +2 aa
+						// Hiei K2
 						ids: [150],
 						single: { "houg": 1, "tyku": 1 },
 					},
 					{
-						// Hiei K2C totally +3 fp, +3 aa, +2 ev
+						// Hiei K2C
 						ids: [592],
 						single: { "houg": 2, "tyku": 2, "houk": 2 },
 					},
 					{
-						// Haruna K2 totally +2 fp, +3 aa, +2 ev
+						// Haruna K2
 						ids: [151],
 						single: { "houg": 1, "tyku": 2, "houk": 2 },
 					},
 					{
-						// Haruna K2B totally +3 fp, +6 aa, +3 ev
+						// Haruna K2B
 						ids: [593],
 						single: { "houg": 2, "tyku": 5, "houk": 3 },
 					},
 					{
-						// Haruna K2C totally +3 fp, +5 aa, +2 ev
+						// Haruna K2C
 						ids: [954],
 						single: { "houg": 2, "tyku": 4, "houk": 2 },
 					},
 					{
-						// Kirishima K2 totally +3 fp, +3 aa
+						// Kirishima K2
 						ids: [152],
 						single: { "houg": 2, "tyku": 2 },
 					},
@@ -7984,13 +8155,25 @@
 					{
 						// Yamato-class K2+
 						ids: [911, 916, 546],
-						minStars: 8,
+						minStars: 5,
 						single: { "houm": 1 },
 					},
 					{
 						// Ise-class K2
 						ids: [553, 554],
 						single: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
+					{
+						// Ise-class K2
+						ids: [553, 554],
+						minStars: 1,
+						single: { "houm": 1 },
+					},
+					{
+						// Ise-class K2
+						ids: [553, 554],
+						minStars: 3,
+						single: { "houm": 1 },
 					},
 					{
 						// Nagato K2, Fusou-class K2
@@ -9101,10 +9284,10 @@
 				count: 0,
 				byShip: [
 					{
-						// Okinami K2, Akigumo K2, Shigure K3 with Air Radar fp +1, aa +2, ev +3
+						// Okinami K2, Akigumo K2, Shigure K3, Amatsukaze K2 with Air Radar fp +1, aa +2, ev +3
 						// btw1, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
 						// btw2, main.js's function `get_type3_nums` refers `api_type[2]` in fact, not our 't3'(`api_type[3]`), so it uses `12 || 13` for all radars.
-						ids: [569, 648, 961],
+						ids: [569, 648, 961, 951],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
@@ -9117,7 +9300,7 @@
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Kongou Class Kai Ni C
+					// Kongou Class Kai Ni B/C
 					"6": [
 						{
 							remodel: 3,
@@ -9139,12 +9322,87 @@
 							single: { "houg": 1 },
 						},
 					],
+					// Yuugumo Class
+					"38": [
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+					// Akizuki Class
+					"54": 38,
+					// Matsu Class
+					"101": 38,
 					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
 					"109": {
 						single: { "soku": 5 },
 					},
 				},
 				byShip: [
+					// Amatsukaze K2
+					{
+						ids: [951],
+						multiple: { "houg": 1, "raig": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						ids: [951],
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [951],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [951],
+						minStars: 8,
+						multiple: { "raig": 1 },
+					},
+					{
+						ids: [951],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [951],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					// Amatsukaze Kai-, Shimakaze, Shigure K3
+					{
+						ids: [181, 316, 50, 229, 961],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [181, 316, 50, 229, 961],
+						minStars: 7,
+						multiple: { "raig": 1 },
+					},
+					{
+						ids: [181, 316, 50, 229, 961],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [181, 316, 50, 229, 961],
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [181, 316, 50, 229, 961],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
 					{
 						// Houshou K2+, 1 newModelBoiler gets Fast like I-201/I-203,
 						// according tests, supposed to be Slow Group A when turbine equipped,
@@ -9161,6 +9419,14 @@
 						},
 						*/
 					},
+					{
+						// Fast Group A, speed level up without Turbine
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181],
+						excludes: [181, 316],
+						minStars: 7,
+						countCap: 2,
+						multiple: { "soku": 5 },
+					},
 				],
 			},
 			// Improved Kanhon Type Turbine, speed boost synergy with boilers
@@ -9169,8 +9435,9 @@
 				count: 0,
 				byShip: [
 					{
-						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?
-						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885],
+						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181],
+						excludes: [181, 316],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9192,7 +9459,7 @@
 					{
 						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni
 						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131],
-						excludes: [662, 131, 136, 916],
+						excludes: [662, 131, 136, 916, 951],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9276,7 +9543,7 @@
 						stypes: [2],
 						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
 						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze
-						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316],
+						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9347,6 +9614,13 @@
 									"4": { "soku": 15 },
 									"5": { "soku": 15 },
 								},
+								byStars: {
+									gearId: 87,
+									// to simulte x1 star>=7 and x1 star<7 still soku+10 instead of +15,
+									// but x3 star>=7 will get soku+20, just assume final speed capped at 20
+									noStarsLessThan: 7,
+									"7": { "soku": 5 },
+								}
 							},
 							{
 								flags: [ "newModelBoiler", "enhancedBoiler" ],
@@ -9355,6 +9629,11 @@
 									"2": { "soku": 5 },
 									"3": { "soku": 5 },
 									"4": { "soku": 5 },
+								},
+								byStars: {
+									gearId: 87,
+									// to simulte x1 boiler and x1 star>=7 new model still soku+10
+									"7": { "soku": -5 },
 								},
 							},
 						],

@@ -16,7 +16,7 @@
 .tab_experience .legend_color {
 	width:14px;
 	height:14px;
-	margin:3px 5px 0px 3px;
+	margin:3px 5px 0 3px;
 	float:left;
 }
 .tab_experience .color_exp {
@@ -28,7 +28,7 @@
 .tab_experience .legend_icon {
 	width:20px;
 	height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	float:left;
 }
 .tab_experience .legend_icon img {
@@ -43,7 +43,7 @@
 
 .tab_experience .graph_option {
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	/*background:#cfc;*/
 }
 .tab_experience .graph_option div {
@@ -56,10 +56,10 @@
 }
 /* Start at zero */
 .tab_experience .graph_check {
-	margin:0px 20px 0px 0px;
+	margin:0 20px 0 0;
 }
 .tab_experience .checkbox_input {
-	margin:0px 3px 0px 0px;
+	margin:0 3px 0 0;
 }
 .tab_experience .checkbox_label {
 	
@@ -67,7 +67,7 @@
 /* Date range */
 .tab_experience .graph_date {
 	width:160px;
-	margin:0px 15px 0px 0px;
+	margin:0 15px 0 0;
 }
 .tab_experience .date_label {
 	width:40px;
@@ -78,7 +78,7 @@
 .tab_experience .date_input input {
 	width:120px;
 	height:18px;
-	margin:1px 0px 0px 0px;
+	margin:1px 0 0 0;
 	font-size:12px;
 }
 /* Interval */
@@ -94,7 +94,7 @@
 .tab_experience .dropdown_input select {
 	width:75px;
 	height:18px;
-	margin:1px 0px 0px 0px;
+	margin:1px 0 0 0;
 	font-size:12px;
 }
 
@@ -105,21 +105,21 @@
 	float:left;
 	font-size:12px;
 	color:#aaa;
-	margin:0px 10px 0px 0px;
+	margin:0 10px 0 0;
 }
 .tab_experience .option_preset {
 	height:22px;
 	line-height:22px;
 	float:left;
 	font-size:12px;
-	margin:0px 0px 0px 20px;
+	margin:0 0 0 20px;
 }
 
 .tab_experience .main_graph {
-	margin:15px 0px 0px 0px;
+	margin:15px 0 0 0;
 }
 .tab_experience .loading {
-	margin:2px 3px 0px 0px;
+	margin:2px 3px 0 0;
 	float:left;
 	display:block;
 }

@@ -599,6 +599,7 @@
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
+				ribbon: ThisShip.ribbonType(),
 
 				hp: [ThisShip.hp[1], ThisShip.maxHp(true), MasterShip.api_taik[0] , ThisShip.maxHp(false) ],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0] + ThisShip.mod[0], ThisShip.fp[0] ],
@@ -641,8 +642,9 @@
 				canEquipLFB: ThisShip.canEquip(41),
 				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
 				canEquipMinisub: ThisShip.canEquip(22),
-				canExslotEquip8cmGun: ThisShip.canEquip(undefined, 66) >= 2
-					|| ThisShip.canEquip(undefined, 220) >= 2,
+				canExslotEquipSpec: KC3Master.equip_exslot_ship(ThisShip.masterId)
+					// Ignore exslot equippable specified by general equip types or ship types
+					.filter(id => KC3Master.equip_on(id).exslotIncludes.includes(ThisShip.masterId)).length > 0,
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
@@ -892,7 +894,7 @@
 			self.defineShipFilter(
 				"spgear",
 				savedFilterValues.spgear || 0,
-				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub", "exgun"],
+				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub", "exids"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipFCF)
@@ -901,7 +903,7 @@
 						|| (curVal === 4 && ship.canEquipLFB)
 						|| (curVal === 5 && ship.canEquipBulge)
 						|| (curVal === 6 && ship.canEquipMinisub)
-						|| (curVal === 7 && ship.canExslotEquip8cmGun);
+						|| (curVal === 7 && ship.canExslotEquipSpec);
 				});
 
 			self.defineShipFilter(
@@ -1319,6 +1321,12 @@
 							$(".ship_lock", this).toggleClass("unlock", self.heartLockMode === 2).show();
 						} else {
 							$(".ship_lock", this).hide();
+						}
+						// Reset ribbon icon
+						if(thisShip.ribbon > 0) {
+							$(".ship_ribbon", this).addClass("r-" + thisShip.ribbon).show();
+						} else {
+							$(".ship_ribbon", this).hide();
 						}
 						// Update tooltip
 						$(".ship_name", this).lazyInitTooltip();

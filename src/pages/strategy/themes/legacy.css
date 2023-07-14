@@ -212,6 +212,11 @@ body {
 	color:#3ec0bf;
 	margin-left:1px;
 }
+.ui-tooltip-content .ship_tooltip .stat_value .sp {
+	font-size:10px;
+	color:#00f;
+	margin-left:1px;
+}
 .ui-tooltip-content .ship_tooltip .stat_value .luck {
 	font-size:10px;
 	color:#2b2;

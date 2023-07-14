@@ -291,7 +291,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyJul',
 				key: 'timeToResetYearlyJulQuests',
 				resetMonth: JULY,
-				questIds: [354, 1105],
+				questIds: [354, 368, 1105],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJul.type);
 				},
@@ -462,21 +462,27 @@ Uses KC3Quest objects to play around with
 				.css("text-indent", "-1em")
 				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
 				.prop("outerHTML");
+			const rewardRscItems = [];
+			const buildRscItem = (name, value) => {
+				const rsc = $("<div><img />&nbsp;<span></span></div>");
+				$("img", rsc)
+					.width(11).height(11).css("margin-top", "-3px")
+					.attr("src", `/assets/img/client/${name}.png`);
+				$("span", rsc).text(value || 0);
+				return rsc.html();
+			};
 			if(questObj && Array.isArray(questObj.materials) && questObj.materials.some(v => v > 0)){
-				const buildRscItem = (name, value) => {
-					const rsc = $("<div><img />&nbsp;<span></span></div>");
-					$("img", rsc)
-						.width(11).height(11).css("margin-top", "-3px")
-						.attr("src", `/assets/img/client/${name}.png`);
-					$("span", rsc).text(value || 0);
-					return rsc.html();
-				};
-				title += $("<p></p>").css("font-size", "11px").html(
-					["fuel", "ammo", "steel", "bauxite"]
-						.map((n, i) => buildRscItem(n, questObj.materials[i]))
-						.join("&emsp;")
-				).prop("outerHTML");
+				rewardRscItems.push(...["fuel", "ammo", "steel", "bauxite"]
+					.map((n, i) => buildRscItem(n, questObj.materials[i]))
+				);
 			}
+			if(Array.isArray(questMeta.rewardConsumables) && questMeta.rewardConsumables.some(v => v > 0)){
+				rewardRscItems.push(...["bucket", "devmat", "screws", "ibuild"]
+					.map((n, i) => buildRscItem(n, questMeta.rewardConsumables[(i + 1) % 4]))
+				);
+			}
+			if(rewardRscItems.length > 0) title += $("<p></p>").css("font-size", "11px")
+				.html(rewardRscItems.join("&emsp;")).prop("outerHTML");
 			if(!!questMeta.memo){
 				title += $("<p></p>")
 					.css("font-size", "11px")
@@ -600,8 +606,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -843,6 +849,16 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip(10)  // Shirayuki any remodel
 							&& fleet.hasShip(32)  // Hatsuyuki any remodel
 							&& fleet.hasShip(11); // Miyuki any remodel
+					},
+				"368": // Cy11 PvP with 2 of Amatsukaze, Yukikaze, Tokitsukaze, Hatsukaze
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(181) + // Amatsukaze any remodel
+							fleet.countShip(20)  + // Yukikaze any remodel
+							fleet.countShip(186) + // Tokitsukaze any remodel
+							fleet.countShip(190)   // Hatsukaze any remodel
+						) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

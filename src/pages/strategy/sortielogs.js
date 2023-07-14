@@ -351,9 +351,14 @@
 								if(typeof element.maxhp != "undefined")
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
 										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
-								else if(!!KC3Meta.gauge(element.id))
+								else if(KC3Meta.gauge(element.id)){
+									const kills = KC3Meta.gauge(element.id);
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
-										.attr("title", KC3Meta.term("BattleHistoryKillsReqTip").format(element.killsRequired || KC3Meta.gauge(element.id)));
+										.attr("title", KC3Meta.term("BattleHistoryKillsReqTip").format(
+											kills.length > 1 ? kills.sumValues() :
+											element.killsRequired || KC3Meta.gauge(element.id, element.gaugeNum)
+										));
+								}
 							}else{
 								mapBox.addClass("notcleared");
 								// If HP-based gauge
@@ -379,15 +384,23 @@
 									}
 								// If kill-based gauge
 								}else{
-									var totalKills = element.killsRequired || KC3Meta.gauge( element.id );
-									var killsLeft = totalKills - element.kills;
+									const totalKills = element.killsRequired || KC3Meta.gauge(element.id, element.gaugeNum);
+									const totalGauges = KC3Meta.gauge(element.id).length || 1;
+									const killsLeft = totalKills - element.kills;
 									if(totalKills){
 										if(killsLeft > 1)
-											$(".map_hp_txt", mapBox).text( KC3Meta.term("BattleHistoryKillsProgress").format(killsLeft, totalKills) );
+											$(".map_hp_txt", mapBox).text(totalGauges > 1 ?
+												KC3Meta.term("BattleHistoryMultiKillsProgress").format(element.gaugeNum, killsLeft, totalKills) :
+												KC3Meta.term("BattleHistoryKillsProgress").format(killsLeft, totalKills)
+											).attr("title", totalGauges > 1 ?
+												"{0} / {1}".format(element.gaugeNum, totalGauges) : ""
+											);
 										else
 											$(".map_hp_txt", mapBox).text( KC3Meta.term("StrategyEvents1HP") )
-												.attr("title", "{0} / {1}".format(killsLeft, totalKills))
-												.lazyInitTooltip();
+												.attr("title", totalGauges > 1 ?
+													"{0} / {1}: {2} / {3}".format(element.gaugeNum, totalGauges, killsLeft, totalKills) :
+													"{0} / {1}".format(killsLeft, totalKills)
+												).lazyInitTooltip();
 										$(".map_bar", mapBox).css("width", ((killsLeft/totalKills)*80)+"px");
 									} else {
 										mapBox.addClass("noclearnogauge");
@@ -1381,12 +1394,12 @@
 			const mapId = ["m", sortieData.world, sortieData.mapnum].join("");
 			const mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
-				const maxKills = sortieData.mapinfo.api_required_defeat_count || mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
+				const maxKills = sortieData.mapinfo.api_required_defeat_count || mapData.killsRequired || KC3Meta.gauge(mapId.substr(1), mapData.gaugeNum);
 				// keep defeat_count undefined after map cleared to hide replayer gauge
 				if(!sortieData.mapinfo.api_cleared || sortieData.mapinfo.api_required_defeat_count){
 					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
 					sortieData.required_defeat_count = maxKills;
-					// pass to replayer for the 2nd gauge of 7-2
+					// pass to replayer for the 2nd/3rd gauge of world 7
 					sortieData.gauge_num = sortieData.mapinfo.api_gauge_num || 1;
 				}
 				console.debug("Map {0} boss gauge {3}: {1}/{2} kills".format(mapId,

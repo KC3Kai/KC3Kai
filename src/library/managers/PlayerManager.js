@@ -311,7 +311,7 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		// To only save consumables to localStorage without DB recording, let dataObj falsy
-		// basic 4 consumables represented in array always: [torch, buckets, devmats, screws]
+		// basic 4 consumables represented in array always: [torches, buckets, devmats, screws]
 		setConsumables :function( serverSeconds, dataObj, deltaArray ){
 			// Only for displaying, because accuracy depends on previous values
 			if(Array.isArray(deltaArray) && deltaArray.length === 4){
@@ -559,6 +559,8 @@ Does not include Ships and Gears which are managed by other Managers
 				"95": "submarineSupplyMaterial",
 				"96": "pumpkin",
 				"97": "teruteruBouzu",
+				"98": "blueRibbon",
+				"99": "whiteRibbon",
 				"901": "rankPoints",
 				"902": "boiler",
 			};

@@ -368,6 +368,8 @@ Previously known as "Reactor"
 					case 95: PlayerManager.consumables.submarineSupplyMaterial = thisItem.api_count; break;
 					case 96: PlayerManager.consumables.pumpkin = thisItem.api_count; break;
 					case 97: PlayerManager.consumables.teruteruBouzu = thisItem.api_count; break;
+					case 98: PlayerManager.consumables.blueRibbon = thisItem.api_count; break;
+					case 99: PlayerManager.consumables.whiteRibbon = thisItem.api_count; break;
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					default: break;
 				}
@@ -2834,6 +2836,19 @@ Previously known as "Reactor"
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
+				break;
+				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`
+				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End
+					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 10;
+				break;
+				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once)
+					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 11;
+				break;
+				case 113: // exchange 12 teruteruBouzu with 1 blueRibbon (twice)
+					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 12;
+				break;
+				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times)
+					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 1;
 				break;
 				default:
 					if(isNaN(exchangeType)){

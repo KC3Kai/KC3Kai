@@ -4384,8 +4384,8 @@
 				// TODO stats from aircraft seem be quite complex for expeditions, no proficiency level counted for now
 				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
 				var ns = ship.nakedStats();
-				var fp = ns.fp + ship.expedEquipmentTotalStats("houg"),
-					tp = ns.tp + ship.expedEquipmentTotalStats("raig"),
+				var fp = ns.fp + ship.expedEquipmentTotalStats("houg") + ship.statsSp("fp"),
+					tp = ns.tp + ship.expedEquipmentTotalStats("raig") + ship.statsSp("tp"),
 					aa = ns.aa + ship.expedEquipmentTotalStats("tyku"),
 					los = ns.ls + ship.expedEquipmentTotalStats("saku"),
 					asw = ns.as + ship.expedEquipmentTotalStats("tais");
@@ -5229,7 +5229,7 @@
 					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
 				// If kill-based gauge
 				}else{
-					var totalKills = thisMap.killsRequired || KC3Meta.gauge( thisMapId );
+					var totalKills = thisMap.killsRequired || KC3Meta.gauge(thisMapId, thisMap.gaugeNum);
 					console.debug("Map " + thisMapId + " total kills:", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),

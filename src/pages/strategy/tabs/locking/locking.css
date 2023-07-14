@@ -53,7 +53,7 @@
 	padding: 5px;
 }
 .tab_locking .lock_mode:last-child {
-	margin-right: 0px;
+	margin-right: 0;
 }
 
 .tab_locking .map_area {
@@ -78,7 +78,7 @@
 	width:100%;
 	height:13px;
 	line-height:13px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 	text-align:center;
 	font-size:12px;
 	font-weight:bold;
@@ -102,7 +102,7 @@
 .tab_locking .lock_mode .lship img {
 	width:28px;
 	height:28px;
-	margin:-1px 0px 0px -1px;
+	margin:-1px 0 0 -1px;
 	vertical-align:top;
 }
 .tab_locking .lock_mode .lship .level {
@@ -110,11 +110,11 @@
 	height:12px;
 	line-height:12px;
 	border-radius:6px;
-	margin:-12px 0px 0px -4px;
+	margin:-12px 0 0 -4px;
 	position:relative;
 	font-size:9px;
 	text-align:center;
-	text-shadow:0px 0px 0px rgba(0,0,0,0.7);
+	text-shadow:0 0 0 rgba(0,0,0,0.7);
 	opacity:0.85;
 	pointer-events:none;
 }
@@ -443,7 +443,7 @@
 }
 
 .tab_locking .ship_item .ship_lock {
-	width: 0px;
+	width: 0;
 	pointer-events: none;
 	overflow: visible;
 	position: absolute;

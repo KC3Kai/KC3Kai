@@ -141,9 +141,9 @@
 .tab_expedtable .exped_row .exped_view .info_col {
 	height: 100%;
 	float: left;
-	margin: 0px 3px 0px 3px;
+	margin: 0 3px 0 3px;
 	font-size: 14px;
-	padding: 5px 0px 5px 0px;
+	padding: 5px 0 5px 0;
 	text-align: center;
 }
 
@@ -201,7 +201,7 @@
 .tab_expedtable .exped_row .exped_view .modifier .view_normal img.gs {
 	width: 25px;
 	height: 25px;
-	margin: 0px 10px 0px 2px;
+	margin: 0 10px 0 2px;
 }
 
 .tab_expedtable .exped_row .exped_view .modifier .view_normal img.dht {
@@ -228,15 +228,15 @@
 }
 
 .tab_expedtable .exped_row .exped_view .cost .view_normal img {
-	margin: 0px 2px 0px 2px;
+	margin: 0 2px 0 2px;
 }
 
 .tab_expedtable .exped_row .exped_view .info_col.edit_btn {
 	width: 24px;
 	height: 24px;
 	float: right;
-	margin: 4px 4px 0px 0px;
-	padding: 2px 0px 2px 0px;
+	margin: 4px 4px 0 0;
+	padding: 2px 0 2px 0;
 	border-radius: 10px;
 	text-align: center;
 	line-height: 20px;

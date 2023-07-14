@@ -5,22 +5,22 @@
 	width:680px;
 	height:30px;
 	background:#cfc;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 .tab_fleet .fleet_list {
 	width:680px;
-	padding:10px 0px 0px;
+	padding:10px 0 0;
 }
 .tab_fleet .factory {
 	display:none;
 }
 .tab_fleet .fleet_control {
 	width:680px;
-	margin: 10px 0px 5px 0px;
+	margin: 10px 0 5px 0;
 	padding: 10px;
 }
 .tab_fleet .fleet_control .fleet_type_field {
-	margin: 0px 0px 5px 0px;
+	margin: 0 0 5px 0;
 }
 .tab_fleet .fleet_control .fleet_type_field label {
 	width: 150px;
@@ -57,7 +57,7 @@
 --------------------------------*/
 .tab_fleet .fleet_box {
 	width:680px;
-	margin:0px 0px 10px 0px;
+	margin:0 0 10px 0;
 }
 /* Info */
 .tab_fleet .fleet_info {
@@ -69,8 +69,8 @@
 	height:25px;
 	line-height:25px;
 	float:left;
-	margin:5px 0px 0px 5px;
-	padding:0px 0px 0px 5px;
+	margin:5px 0 0 5px;
+	padding:0 0 0 5px;
 	font-weight:bold;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -81,13 +81,13 @@
 	height:25px;
 	line-height:25px;
 	float:left;
-	margin:5px 0px 0px 5px;
+	margin:5px 0 0 5px;
 }
 .tab_fleet .detail_icon {
 	width:25px;
 	height:25px;
 	float:left;
-	margin:0px 2px 0px 0px;
+	margin:0 2px 0 0;
 }
 .tab_fleet .detail_icon img {
 	width:17px;
@@ -98,8 +98,8 @@
 	width:82px;
 	height:25px;
 	float:left;
-	margin:0px 5px 0px 0px;
-	padding:0px 0px 0px 5px;
+	margin:0 5px 0 0;
+	padding:0 0 0 5px;
 	font-weight:bold;
 }
 .detail_field.incomplete {
@@ -154,7 +154,7 @@
 .tab_fleet .fleet_ships {
 	width:672px;
 	height:98px;
-	margin:0px 4px;
+	margin:0 4px;
 }
 .tab_fleet .fleet_ships.horizontal {
 	height:184px;
@@ -207,7 +207,7 @@
 	width:110px;
 	height:20px;
 	line-height:20px;
-	margin:0px 0px 2px 0px;
+	margin:0 0 2px 0;
 	text-align:center;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -220,7 +220,7 @@
 	height:auto;
 	float:left;
 	line-height:17px;
-	margin:0px 0px 1px 0px;
+	margin:0 0 1px 0;
 	font-size:10px;
 	white-space:nowrap;
 	overflow:hidden;
@@ -242,7 +242,7 @@
 .tab_fleet .fleet_ship .gear_icon {
 	width:17px;
 	height:17px;
-	margin:0px 1px 0px 0px;
+	margin:0 1px 0 0;
 	float:left;
 }
 .tab_fleet .fleet_ship .gear_icon img {
@@ -266,7 +266,7 @@
 	float:right;
 	width:20px;
 	position:absolute;
-	right:0px;
+	right:0;
 	padding-right:2px;
 	text-align:right;
 	color:#45a9a5;
@@ -275,7 +275,7 @@
 	float:right;
 	width:30px;
 	position:absolute;
-	right:0px;
+	right:0;
 }
 .tab_fleet .fleet_ship .gear_ace img {
 	width:20px;

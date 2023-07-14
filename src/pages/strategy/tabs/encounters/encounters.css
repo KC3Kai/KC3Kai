@@ -6,7 +6,7 @@
 }
 
 .tab_encounters .map_switcher {
-	margin: 0px 0px 10px 0px;
+	margin: 0 0 10px 0;
 	height: 45px;
 }
 
@@ -58,7 +58,7 @@
 	
 }
 .tab_encounters .encounter_world_body {
-	padding:0px 0px 0px 20px;
+	padding:0 0 0 20px;
 }
 
 /* NODES
@@ -68,7 +68,7 @@
 	font-weight:bold;
 }
 .tab_encounters .encounter_node_body {
-	padding:0px 0px 0px 20px;
+	padding:0 0 0 20px;
 }
 
 /* RECORDS
@@ -77,7 +77,7 @@
 	width:260px;
 	height:auto;
 	float:left;
-	margin:0px 20px 10px 0px;
+	margin:0 20px 10px 0;
 	padding:3px 5px;
 	background:#def;
 	border-radius:8px;
@@ -86,7 +86,7 @@
 	width:30px;
 	height:30px;
 	line-height:30px;
-	margin:7px 5px 0px 0px;
+	margin:7px 5px 0 0;
 	float:left;
 	border-radius:15px;
 }
@@ -107,11 +107,11 @@
 	width:30px;
 	height:44px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 }
 .tab_encounters .combined .encounter_ship {
 	transform:scale(0.75);
-	transform-origin:24px 0px;
+	transform-origin:24px 0;
 	width:22px;
 	height:34px;
 }
@@ -128,16 +128,16 @@
 	height:30px;
 }
 .tab_encounters .encounter_ship .boss {
-	box-shadow:0px 0px 1px 1px #5ef, 0px 0px 3px 2px #fe5;
+	box-shadow:0 0 1px 1px #5ef, 0 0 3px 2px #fe5;
 }
 .tab_encounters .encounter_ship .kai {
-	box-shadow:0px 0px 3px 1px #2af;
+	box-shadow:0 0 3px 1px #2af;
 }
 .tab_encounters .encounter_ship .flagship {
-	box-shadow:0px 0px 3px 1px #fc3;
+	box-shadow:0 0 3px 1px #fc3;
 }
 .tab_encounters .encounter_ship .elite {
-	box-shadow:0px 0px 3px 1px #f33;
+	box-shadow:0 0 3px 1px #f33;
 }
 .tab_encounters .encounter_ship .encounter_id {
 	width:30px;

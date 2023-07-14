@@ -43,6 +43,7 @@
 			this.seedBranch( rootQuestTree, 355 ); // C62
 			this.seedBranch( rootQuestTree, 357 ); // C66
 			this.seedBranch( rootQuestTree, 362 ); // C72
+			this.seedBranch( rootQuestTree, 368 ); // Cy11
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9
@@ -76,7 +77,6 @@
 			this.seedBranch( rootQuestTree, 973 ); // By11
 			
 			// Other non-flowchart quests
-			const rootQuestList = $(".tab_flowchart .extralist ul.questList");
 			const otherQuests = [];
 			for(let ctr in KC3QuestManager.list){
 				const anotherQuest = KC3QuestManager.list[ctr];
@@ -88,7 +88,8 @@
 			for(let otherQuest of otherQuests){
 				this.addOtherQuest(otherQuest);
 			}
-			$(".tab_flowchart .extralist .complete").hide();
+			const completeExtralist = $(".tab_flowchart .extralist .complete");
+			completeExtralist.hide();
 			
 			$(".showName").on("click", function() {
 				if(!self.showQuestName) {
@@ -111,7 +112,7 @@
 				self.showingAll = false;
 				$(".tab_flowchart .extralist .complete").hide();
 			});
-			$(".tab_flowchart .extralist .complete").toggle(this.showingAll);
+			completeExtralist.toggle(this.showingAll);
 			
 			$(".resetDailies").on("click", function(){
 				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
@@ -162,9 +163,28 @@
 				}
 			});
 			
+			const rewardFilterTypes = ["Torches", "Buckets", "DevMats", "Screws"].map(str => `contains${str}`);
+			$(".questFilter").on("click", function(e) {
+				const filterId = parseInt(e.target.dataset.filterid, 10);
+				$(".flowchart .questFlowItem, .extralist .questExtraItem").each(function() {
+					$(this).addClass("questFilterHidden").removeClass(rewardFilterTypes.join(" "));
+					const rewardItems = $(".questDesc:first", this).data("rewardConsumables");
+					if (rewardItems && rewardItems[filterId] > 0) {
+						$(this).removeClass("questFilterHidden").addClass(rewardFilterTypes[filterId]);
+						$(this).parents(".questFlowItem, .questExtraItem").removeClass("questFilterHidden");
+					}
+				});
+			});
+			
+			$(".showEverything").on("click", function() {
+				$(".flowchart .questFlowItem, .extralist .questExtraItem")
+					.removeClass("questFilterHidden").removeClass(rewardFilterTypes.join(" "));
+			});
+			
 			// Manual quest count overrides
-			$(".flowchart").on("click", ".questOverride", function(){
-				var editingQuest = KC3QuestManager.get($(this).data("id"));
+			const flowchart = $(".flowchart");
+			flowchart.on("click", ".questOverride", function(){
+				const editingQuest = KC3QuestManager.get($(this).data("id"));
 				if(typeof editingQuest.tracking != "undefined"){
 					// +1
 					if( $(this).hasClass("questAdd") ){
@@ -185,8 +205,8 @@
 			});
 			
 			// Manual override quest status
-			$(".flowchart").on("click", ".questToggle", function(){
-				var editingQuest = KC3QuestManager.get($(this).data("id"));
+			flowchart.on("click", ".questToggle", function(){
+				const editingQuest = KC3QuestManager.get($(this).data("id"));
 				console.log("Quest status before", editingQuest.status);
 				editingQuest.status++;
 				if(editingQuest.status>=4){ editingQuest.status=0; }
@@ -196,7 +216,7 @@
 			
 			// Manual remove quest
 			$(".page_padding").on("click", ".questRemove", function(){
-				var removingQuest = KC3QuestManager.get($(this).data("id"));
+				const removingQuest = KC3QuestManager.get($(this).data("id"));
 				console.log("Quest to be removed", removingQuest);
 				if(KC3QuestManager.remove(removingQuest)){
 					KC3QuestManager.save();
@@ -230,13 +250,14 @@
 			$(".questDesc", thisBox)
 				.attr("title", KC3QuestManager.buildHtmlTooltip(quest_id, thisQuest, true, false))
 				.lazyInitTooltip();
+			$(".questDesc", thisBox).data("rewardConsumables", thisQuest.rewardConsumables);
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
 			$(".questRemove", thisBox).data("id", quest_id);
 			
-			// If we have player data about the quest, not just meta data from json
+			// If we have player data about the quest, not just metadata from json
 			if(KC3QuestManager.exists(quest_id)){
-				var questRecord = KC3QuestManager.get(quest_id);
+				const questRecord = KC3QuestManager.get(quest_id);
 				$(".questIcon", thisBox).addClass(questRecord.getLabelClass());
 				
 				if(!questRecord.tracking){
@@ -281,9 +302,9 @@
 				$(".questTrack", thisBox).hide();
 			}
 			
-			// If has children, show them under me
+			// If the quest has children, show them under me
 			if(typeof thisQuest.unlock != "undefined"){
-				var childContainer = $("ul.questChildren", thisBox);
+				const childContainer = $("ul.questChildren", thisBox);
 				childContainer.attr("id", "questBox_"+quest_id);
 				for(let ctr in thisQuest.unlock){
 					if(KC3QuestManager.isPeriod(thisQuest.unlock[ctr])){
@@ -314,6 +335,7 @@
 			$(".questDesc", thisBox)
 				.attr("title", KC3QuestManager.buildHtmlTooltip(thisQuest.id, questMeta))
 				.lazyInitTooltip();
+			$(".questDesc", thisBox).data("rewardConsumables", questMeta.rewardConsumables);
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);
 			
