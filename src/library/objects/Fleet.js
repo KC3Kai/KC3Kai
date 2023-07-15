@@ -1575,6 +1575,7 @@ Contains summary information about a fleet and its ships
 							sp: ship.speed
 						},
 						kyouka: ship.mod,
+						effect: ship.statsSp(),
 						equip: ship.equipment(true).map(g => g.masterId),
 						stars: ship.equipment(true).map(g => g.stars),
 						ace: ship.equipment(true).map(g => g.ace)

@@ -753,14 +753,14 @@ KC3改 Ship Object
 		}
 		if(withIndBonus) {
 			// cache stats for faster later uses
-			this.statsCache = {
+			this.statsCache = Object.assign(this.statsCache || {}, {
 				items: this.items.slice(0),
 				shipNaked: stats,
 				gearTotal: statsEquip,
 				gearBonus: statsBonus,
 				gearAsw: statsEquip.as,
 				gearLos: statsEquip.ls,
-			};
+			});
 			return [stats, statsBonus];
 		}
 		return !statAttr ? stats : stats[statAttr];
@@ -773,10 +773,12 @@ KC3改 Ship Object
 			const sp = this.statsCache.spEffects = {};
 			this.spitems.forEach(item => {
 				Object.keys(item).forEach(attr => {
-					if(attr === "type") {
-						(sp[attr] = sp[attr] || []).push(item[attr]);
-					} else {
-						sp[attr] = (sp[attr] || 0) + item[attr];
+					if(item[attr] !== undefined) {
+						if(attr === "type") {
+							(sp[attr] = sp[attr] || []).push(item[attr]);
+						} else {
+							sp[attr] = (sp[attr] || 0) + (item[attr] || 0);
+						}
 					}
 				});
 			});
@@ -5696,6 +5698,10 @@ KC3改 Ship Object
 			result.asw = this.as[0];
 			result.ev = this.ev[0];
 			result.los = this.ls[0];
+			// unused yet
+			result.spd = this.speed;
+			result.len = this.range;
+			result.effect = this.statsSp();
 		}
 
 		var gearInfo;
