@@ -459,8 +459,8 @@ KC3改 Equipment Object
 		switch(type.toLowerCase()) {
 			case "exped":
 			case "fire":
-				// Main gun/Secondary gun/AP shell/AAFD/Searchlight/Lookouts/DLC/T2Tank
-				if([1, 2, 3, 4, 19, 24, 29, 36, 39, 42, 46].includes(type2))
+				// Main gun/Secondary gun/T3/AP shell/AAFD/FCF/Searchlight/Lookouts/DLC/T2Tank
+				if([1, 2, 3, 4, 18, 19, 24, 29, 34, 36, 39, 42, 46].includes(type2))
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))
@@ -477,7 +477,13 @@ KC3改 Equipment Object
 				if([5, 32].includes(type2)) modifier = 2;
 				break;
 			case "yasen":
-				// unknown
+				// Similar with day shelling, additional Torpedo/Minisub
+				// https://twitter.com/Divinity_123/status/1680199577989685251
+				if([1, 2, 3, 4, 5, 18, 19, 22, 24, 29, 34, 36, 39, 42, 46].includes(type2))
+					modifier = 1.3;
+				// Radar
+				if([12, 13].includes(type2))
+					modifier = this.isHighAccuracyRadar() ? 1.6 : 1.3;
 				break;
 			case "asw":
 				// Sonar

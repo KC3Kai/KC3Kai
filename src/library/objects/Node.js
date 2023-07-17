@@ -774,7 +774,7 @@ Used by SortieManager
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
 					if(!ship.isAbsent()) {
-						// For anyside CF battle, cond values decreased on battle result like KCVita?
+						// For anyside CF battle, cond values decreased on yasen/battle result like KCVita?
 						if(!isPlayerCombined && !isEnemyCombined) {
 							ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
 						}
@@ -1066,6 +1066,9 @@ Used by SortieManager
 						ship.hp = [ship.afterHp[0], ship.afterHp[1]];
 						if(!isPlayerCombined && !isEnemyCombined) {
 							ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
+						} else {
+							// Reduce cond values of CF day battle
+							ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? 0 : (ship.morale < 30 ? -9 : -3))));
 						}
 						ship.afterHp[0] = hp;
 						ship.afterHp[1] = ship.hp[1];
