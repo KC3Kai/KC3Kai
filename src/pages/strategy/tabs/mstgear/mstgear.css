@@ -110,9 +110,11 @@
 	width:368px;
 	height:20px;
 	line-height:20px;
+	margin:-2px 0 4px 0;
+}
+.tab_mstgear .gearInfo .stars {
 	font-size:20px;
 	color:#ec6;
-	margin:-2px 0 4px 0;
 }
 
 /* STATS */
