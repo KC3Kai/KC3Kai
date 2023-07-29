@@ -193,7 +193,7 @@
 		},
 		"m75": {
 			"I": { "factor": 4, "lower": [ 0, "L"], "upper": [55, "M"], "note": "?" },
-			"P": { "factor": 4, "lower": [ 0, "R/S"], "upper": [58, "T"], "note": "on compo? up to 63" }
+			"P": { "factor": 4, "lower": [ 0, "R/S"], "upper": [58, "T"], "note": "up to 73, 58+5*CV(L/B)/(F)BB" }
 		}
 	},
 	"specialQuotesSizes": {

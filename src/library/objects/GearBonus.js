@@ -9438,6 +9438,7 @@
 						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni
 						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181],
 						excludes: [181, 316],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9460,6 +9461,7 @@
 						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni
 						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131],
 						excludes: [662, 131, 136, 916, 951],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9474,15 +9476,6 @@
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
 									"5": { "soku": 10 },
-								},
-							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
 								},
 							},
 						],
@@ -9503,6 +9496,7 @@
 								74, 76, 116, 102, 103, 184, 925
 							],
 						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9524,16 +9518,6 @@
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
 									"5": { "soku": 10 },
-								},
-							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"1": { "soku": -5 },
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
 								},
 							},
 						],
@@ -9544,6 +9528,7 @@
 						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
 						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze
 						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9565,21 +9550,13 @@
 									"4": { "soku": 10 },
 								},
 							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"1": { "soku": -5 },
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-								},
-							},
 						],
 					},
 					{
 						// Fast Group C: Yuubari/Yuubari Kai, Kaga, fast AV: Chitose, Chiyoda, Nisshin, Samuel B.Roberts Mk.II
 						origins: [115, 84, 102, 103, 581, 561],
 						excludes: [622, 623, 624, 108, 109, 291, 292, 296, 297, 561, 681],
+						speedCap: 5,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9589,16 +9566,13 @@
 								flags: [ "newModelBoiler" ],
 								single: { "soku": 5 },
 							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								single: { "soku": -5 },
-							},
 						],
 					},
 					{
 						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni, Yamato K2J, Houshou K2+
 						origins: [131, 143, 80, 81, 89],
 						excludes: [80, 275, 81, 276, 911, 89, 285],
+						speedCap: 15,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9649,6 +9623,7 @@
 								445, 451, 491
 							],
 						excludes: [541, 573, 888, 878, 879, 894, 899],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9672,24 +9647,6 @@
 									"5": { "soku": 10 },
 								},
 							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"1": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
-								},
-							},
-							{
-								flags: [ "enhancedBoiler", "newModelBoiler" ],
-								byCount: {
-									gear: "newModelBoiler",
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
-								},
-							},
 						],
 					},
 					{
@@ -9698,6 +9655,7 @@
 						//   equip turbine +5 if no other engines equipped, otherwise back to Slow B
 						ids: [623, 561, 681],
 						single: { "soku": 5 },
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9733,6 +9691,7 @@
 						origins: [182, 460, 161,
 							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299
 						],
+						speedCap: 5,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9741,10 +9700,6 @@
 							{
 								flags: [ "newModelBoiler" ],
 								single: { "soku": 5 },
-							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								single: { "soku": -5 },
 							},
 						],
 					},

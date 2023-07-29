@@ -215,6 +215,9 @@ KC3改 Equipment Object
 					addBonusFromSynergyGears(bonusDef.synergy);
 				}
 			}
+			if(bonusDef.speedCap && apiName === "soku") {
+				total = Math.min(bonusDef.speedCap, total);
+			}
 			// Try not to use any callback in order to let bonus table suit for a JSON
 			//if(bonusDef.callback) { total += bonusDef.callback(apiName, gearInfo, synergyGears); }
 		};

@@ -737,14 +737,8 @@
 				"id" : "alert_taiha_damecon",
 				"name" : "SettingsDisableHasDamecon",
 				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "alert_taiha_unlock",
-				"name" : "SettingsDisableUnlockShips",
-				"type" : "check",
 				"options" : {
-					"tooltip": "SettingsDisableUnlockShipsTip"
+					"tooltip": "SettingsDisableHasDameconTip"
 				}
 			},
 			{
@@ -808,6 +802,14 @@
 				"type" : "check",
 				"options" : {
 					"tooltip": "SettingsNextBlockerSecondFSTip"
+				}
+			},
+			{
+				"id" : "alert_taiha_unlock",
+				"name" : "SettingsDisableUnlockShips",
+				"type" : "check",
+				"options" : {
+					"tooltip": "SettingsDisableUnlockShipsTip"
 				}
 			}
 		]
