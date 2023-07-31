@@ -1263,6 +1263,12 @@
 				"options" : { "label" : "%" }
 			},
 			{
+				"id" : "pan_sfxnotify_eventonly",
+				"name" : "SettingsPanelPortSoundNotifyEventOnly",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "pan_pvp_friends",
 				"name" : "SettingsPanelPvPFriends",
 				"type" : "textarea",

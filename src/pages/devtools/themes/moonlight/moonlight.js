@@ -1460,14 +1460,21 @@
 				// we cannot detect: is the debuff reset?
 				//let isDebuffed = data.api_m_flag2 == 1;
 
-				// From Event Spring 2019 onwards, the home port SE is played when any step for unlocking a gimmick is complete.
-				this.ModalBox({
-					title: KC3Meta.term("BossDebuffedTitle"),
-					message: KC3Meta.term("BossDebuffedMessage").format(
-						//KC3Meta.term(isDebuffed ? "BossDebuffedYes" : "BossDebuffedNo")
-						KC3Meta.term("BossDebuffedYes")
-					)
-				});
+				// since Event Spring 2019 onwards, the home port SE (215.mp3) is played,
+				// whenever any step for unlocking a gimmick is completed.
+				// and secretary's Equip(3) line (voicenum 26) played instead of regular Return line.
+				// see `main.js#InitializeTask.prototype._playVoice`
+				// since 2023-01-20, regular map 7-5 has started to use the same map unlocking gimmicks,
+				// and home port SE. Skip notification if configuration demands.
+				if(data.isRealEvent || !ConfigManager.pan_sfxnotify_eventonly){
+					this.ModalBox({
+						title: KC3Meta.term("BossDebuffedTitle"),
+						message: KC3Meta.term("BossDebuffedMessage").format(
+							//KC3Meta.term(isDebuffed ? "BossDebuffedYes" : "BossDebuffedNo")
+							KC3Meta.term("BossDebuffedYes")
+						)
+					});
+				}
 				// this cached flag not used for now,
 				// as api_m_flag2 will be always reset to 0 if playing SE not required
 				lastApiFlag2 = data.api_m_flag2;

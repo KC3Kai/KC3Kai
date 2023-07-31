@@ -148,7 +148,7 @@
 		"m25": {
 			"G": { "factor": 1, "lower": [37, "K"], "upper": [41, "L"], "note": "?" },
 			"I": { "factor": 1, "lower": [31, "H"], "upper": [34, "O"] },
-			"J": { "factor": 1, "lower": [42, "H"], "upper": [49, "O"], "note": "?" }
+			"J": { "factor": 1, "lower": [42, "H"], "upper": [49, "O"] }
 		},
 		"m35": {
 			"G": { "factor": 4, "lower": [23, "I"], "upper": [28, "K"] },
@@ -192,8 +192,8 @@
 			"I": { "factor": 4, "lower": [63, "L"], "upper": [69, "M"] }
 		},
 		"m75": {
-			"I": { "factor": 4, "lower": [ 0, "L"], "upper": [55, "M"], "note": "?" },
-			"P": { "factor": 4, "lower": [ 0, "R/S"], "upper": [58, "T"], "note": "up to 73, 58+5*CV(L/B)/(F)BB" }
+			"I": { "factor": 4, "lower": [52, "L"], "upper": [59, "M"], "note": "?" },
+			"P": { "factor": 4, "lower": [58, "S"], "upper": [58, "T/R"], "note": "min(73, 58+5*CV(L/B)/(F)BB)" }
 		}
 	},
 	"specialQuotesSizes": {

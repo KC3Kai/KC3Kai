@@ -2631,11 +2631,11 @@ KC3改 Ship Object
 			if(isApshellApplied) result = Math.floor(result * apshellModifier);
 			// Specific ships for maps/event postcap bonuses applied here
 			result *= antiPtImpModifier;
-			if(isCritical) result = Math.floor(result * criticalModifier * proficiencyCriticalModifier);
+			if(isCritical) result = Math.floor(result * proficiencyCriticalModifier * criticalModifier);
 		} else {
 			if(isApshellApplied) result = Math.floor(result * apshellModifier);
 			// Specific ships for maps/event postcap bonuses applied here
-			if(isCritical) result = Math.floor(result * criticalModifier * proficiencyCriticalModifier);
+			if(isCritical) result = Math.floor(result * proficiencyCriticalModifier * criticalModifier);
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers
@@ -4310,7 +4310,8 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680201622356389892
 		// +0 if equipped by other ship types
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		// Unknown if TSSLO overrides SLO when they are equipped at the same time
+		// TSSLO and SLO not both counted when they are equipped at the same time
+		// https://twitter.com/agosdufovj/status/1683813931784208386
 		const skilledLookoutsCount = this.countEquipment(129),
 			torpedoSquadronSloCount = this.countEquipment(412);
 		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 8; }

@@ -2679,6 +2679,21 @@
 					},
 				},
 			},
+			// Walrus
+			"510": {
+				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+					},
+				},
+				byClass: {
+					// Nelson Class
+					"88": {
+						single: { "houg": 4, "houk": 2, "saku": 3, "houm": 2 },
+					},
+				},
+			},
 			// Kyoufuu Kai
 			"217": {
 				count: 0,
@@ -6352,6 +6367,255 @@
 								single: { "tyku": 3, "houk": 2 },
 							},
 						],
+					},
+				],
+			},
+			// 12cm Single High-angle Gun Mount Model E Kai
+			"509": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Mutsuki Class
+					"28": [
+						{
+							multiple: { "tyku": 2, "houk": 1 },
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 1, "houk": 2 },
+								},
+								{
+									flags: [ "airRadar" ],
+									single: { "tyku": 2, "houk": 2 },
+								},
+							],
+						},
+						{
+							minStars: 1,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houk": 2 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tyku": 1 },
+						},
+					],
+					// Kamikaze Class
+					"66": "28",
+					// Matsu Class
+					"101": "28",
+				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "tais": 1, "tyku": 2, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
+						],
+					},
+					{
+						// All remodels of: Yura, Naka, Kinu
+						origins: [23, 56, 113],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Yura Kai, Naka Kai, Kinu Kai
+						ids: [220, 224, 289],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Yura Kai Ni, Naka Kai Ni, Kinu Kai Ni
+						ids: [488, 160, 487],
+						multiple: { "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						multiple: { "tyku": 3, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 3, "houk": 2 },
+							},
+						],
+					},
+					{
+						// All CL/CLT/CT
+						stypes: [3, 4, 21],
+						minStars: 2,
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 1 },
+							},
+						],
+					},
+					{
+						// Shigure K2
+						ids: [145],
+						minStars: 2,
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "tyku": 1, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 4, "houk": 2 },
+							},
+						],
+					},
+					{
+						// Shigure K3
+						ids: [961],
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "tyku": 2, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "houg": 1, "tyku": 5, "houk": 3 },
+							},
+						],
+					},
+					// Most ships and types above get stars bonus
+					{
+						stypes: [1],
+						minStars: 1,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 2,
+						multiple: { "houk": 2 },
+					},
+					{
+						stypes: [1],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 10,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 1,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 2,
+						multiple: { "houk": 2 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 10,
+						multiple: { "tyku": 1 },
+					},
+					// All other ships can equip this except ships above
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 2,
+						multiple: { "tyku": 1 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 4,
+						multiple: { "houk": 2 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 6,
+						multiple: { "houg": 1 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 10,
+						multiple: { "houm": 1 },
 					},
 				],
 			},
