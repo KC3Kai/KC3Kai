@@ -322,11 +322,12 @@
 					const minimapImg = $("<img />")
 						.attr("src", `/assets/img/client/minimaps/m${mapId}.png`)
 						.attr("width", 300).attr("height", 180)
-						.attr("alt", "Mini map not ready");
+						.attr("alt", KC3Meta.term("MinimapImageFailure"));
 					text += $("<div></div>").css("width", 300).css("height", 180)
 						.append(minimapImg).prop("outerHTML");
-					const elosBranches = KC3Meta.eLosNodeFactorBranches(mapId);
-					if(Object.keys(elosBranches).length > 0){
+					const elosBranches = KC3Meta.eLosNodeFactorBranches(mapId),
+						elosBranchesKeys = Object.keys(elosBranches);
+					if(elosBranchesKeys.length > 0){
 						text += $("<div></div>").css("font-weight", "bold")
 							.text(KC3Meta.term("BattleHistoryElosBranchesTitle")).prop("outerHTML");
 						const elosInfo = $("<div></div>").css({
@@ -334,15 +335,16 @@
 							"grid-template-columns":"auto auto auto auto auto",
 							"column-gap":"16px", "grid-column-gap":"16px",
 						});
-						Object.keys(elosBranches).forEach(nodeKey => {
+						elosBranchesKeys.forEach(nodeKey => {
 							const nodeLine = $("<div></div>");
 							const nodeInfo = elosBranches[nodeKey],
 								nodeName = nodeInfo.node || nodeKey,
-								lower = nodeInfo.lower, upper = nodeInfo.upper;
-							nodeLine.append(`<div>${nodeName}</div>`);
-							nodeLine.append(`<div>x${nodeInfo.factor}</div>`);
-							nodeLine.append(`<div>< ${lower[0] || "??"} ➡ ${lower[1]}</div>`);
-							nodeLine.append(`<div>≥ ${upper[0] || "??"} ➡ ${upper[1]}</div>`);
+								lower = nodeInfo.lower || [],
+								upper = nodeInfo.upper || [];
+							nodeLine.append(`<div>\u25c9${nodeName}</div>`);
+							nodeLine.append(`<div>\u00d7${nodeInfo.factor || "?"}</div>`);
+							nodeLine.append(`<div>\u003c ${lower[0] || "??"} \u27a1 ${lower[1] || "?"}</div>`);
+							nodeLine.append(`<div>\u2265 ${upper[0] || "??"} \u27a1 ${upper[1] || "?"}</div>`);
 							nodeLine.append(`<div style="color:orangered;">${nodeInfo.note || ""}</div>`);
 							elosInfo.append(nodeLine.html());
 						});

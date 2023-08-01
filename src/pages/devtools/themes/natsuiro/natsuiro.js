@@ -1075,6 +1075,7 @@
 		$(".module.activity .activity_battle").css("opacity", "0.25");
 		$(".module.activity .map_world").text("").attr("title", "").removeClass("debuffed");
 		$(".module.activity .map_info").removeClass("map_finisher");
+		$(".module.activity .map_gauge").removeAttr("titlealt");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
 		$(".module.activity .sortie_nodes .extra_node").remove();
@@ -5199,6 +5200,23 @@
 		if(Object.keys(thisMap).length > 0){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			$(".module.activity .map_hp").removeAttr("title");
+			if(KC3Meta.isEventWorld(KC3SortieManager.map_world)){
+				$(".module.activity .map_gauge").removeAttr("titlealt");
+			} else {
+				const minimapImg = $("<img />")
+					.attr("src", "/assets/img/client/minimaps/m{0}.png".format(thisMapId))
+					.attr("width", 300).attr("height", 180)
+					.attr("alt", KC3Meta.term("MinimapImageFailure"));
+				$(".module.activity .map_gauge").attr("titlealt",
+					$("<div></div>").css({ "width": "300px", "height": "180px" })
+						.append(minimapImg).prop("outerHTML")
+				).lazyInitTooltip({
+					position: {
+						my: "left top", at: "left bottom+2",
+						of: $(".module.activity .sortie_nodes"),
+					},
+				});
+			}
 			if( thisMap.clear && !thisMap.killsRequired ){
 				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
 				$(".module.activity .map_gauge .curhp").css('width','0%');
