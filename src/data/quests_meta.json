@@ -1014,7 +1014,7 @@
 		"tracking": [
 			[0, 3]
 		],
-		"rewardConsumables": [0, 0, 3, 0]
+		"rewardConsumables": [0, 0, 1, 0]
 	},
 	"403": {
 		"tracking": [
@@ -1024,7 +1024,8 @@
 	"404": {
 		"tracking": [
 			[0, 30]
-		]
+		],
+		"rewardConsumables": [0, 0, 3, 0]
 	},
 	"405": {
 		"unlock": [406]
