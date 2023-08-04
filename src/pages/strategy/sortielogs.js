@@ -1,12 +1,13 @@
 (function(){
 	"use strict";
 	
-	var
+	const
 		BATTLE_INVALID = 0,
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
 		BATTLE_AERIAL  = 4,
 		BATTLE_NIGHT2DAY = 8,
+		CASUAL_IMPL_WORLD = 41,
 		
 		// Sortie Boss Node Indicator
 		// FIXME: this is not for translation. to test sortie status
@@ -22,7 +23,7 @@
 			destr : "Completely destroys"
 		};
 	
-	/* KC3 Sortie Logs
+	/* KC3改 Sortie Logs
 			Arguments:
 			tabRefer -- StrategyTab object reference
 			callable -- database function
@@ -305,6 +306,53 @@
 
 				updateScrollItem(self.scrollVars[tabCode], "map", 97);
 
+				const buildMapPreviewHtml = (world, map) => {
+					var text = "";
+					const containerStyles = {
+						"font-size":"11px",
+						"white-space":"nowrap",
+					};
+					const title = KC3Meta.term("BattleHistoryMinimapPreview").format(world, map);
+					text += $("<div></div>").css({
+						"width": "100%", "text-align": "center",
+						"font-weight": "bold",
+					}).text(title).prop("outerHTML");
+					// Minimap images generated with tsunkit, eg: https://tsunkit.net/api/assets/images/maps/5-5?cleared=true&bigLetters=true&scale=0.25
+					const mapId = [world, map].join("");
+					const minimapImg = $("<img />")
+						.attr("src", `/assets/img/client/minimaps/m${mapId}.png`)
+						.attr("width", 300).attr("height", 180)
+						.attr("alt", KC3Meta.term("MinimapImageFailure"));
+					text += $("<div></div>").css("width", 300).css("height", 180)
+						.append(minimapImg).prop("outerHTML");
+					const elosBranches = KC3Meta.eLosNodeFactorBranches(mapId),
+						elosBranchesKeys = Object.keys(elosBranches);
+					if(elosBranchesKeys.length > 0){
+						text += $("<div></div>").css("font-weight", "bold")
+							.text(KC3Meta.term("BattleHistoryElosBranchesTitle")).prop("outerHTML");
+						const elosInfo = $("<div></div>").css({
+							"margin": "5px", "display":"grid",
+							"grid-template-columns":"auto auto auto auto auto",
+							"column-gap":"16px", "grid-column-gap":"16px",
+						});
+						elosBranchesKeys.forEach(nodeKey => {
+							const nodeLine = $("<div></div>");
+							const nodeInfo = elosBranches[nodeKey],
+								nodeName = nodeInfo.node || nodeKey,
+								lower = nodeInfo.lower || [],
+								upper = nodeInfo.upper || [];
+							nodeLine.append(`<div>\u25c9${nodeName}</div>`);
+							nodeLine.append(`<div>\u00d7${nodeInfo.factor || "?"}</div>`);
+							nodeLine.append(`<div>\u003c ${lower[0] || "??"} \u27a1 ${lower[1] || "?"}</div>`);
+							nodeLine.append(`<div>\u2265 ${upper[0] || "??"} \u27a1 ${upper[1] || "?"}</div>`);
+							nodeLine.append(`<div style="color:orangered;">${nodeInfo.note || ""}</div>`);
+							elosInfo.append(nodeLine.html());
+						});
+						text += elosInfo.prop("outerHTML");
+					}
+					return $("<div></div>").css(containerStyles)
+						.html(text).prop("outerHTML");
+				};
 				const diffStr = [
 					KC3Meta.term("EventRankCasualAbbr"),
 					KC3Meta.term("EventRankEasyAbbr"),
@@ -320,10 +368,14 @@
 					if(cWorld == self.selectedWorld){
 						mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
 						mapBox.attr("data-map_num", cMap);
-						$(".map_title", mapBox).text( (cWorld>=10 ? "E" : cWorld) + "-" + cMap + " " +
-						(function(x, w){
-							return diffStr[x - (w >= 41 ? 1 : 0)] || "";
-						})(element.difficulty, cWorld));
+						$(".map_title", mapBox).text(
+							(KC3Meta.isEventWorld(cWorld) ? "E" : cWorld) + "-" + cMap + " "
+							+ (diffStr[element.difficulty - (cWorld >= CASUAL_IMPL_WORLD ? 1 : 0)] || "")
+						);
+						// Add mini map preview tooltip to normal world maps
+						if(!KC3Meta.isEventWorld(cWorld) && !!cMap) {
+							$(".map_title", mapBox).attr("title", buildMapPreviewHtml(cWorld, cMap)).lazyInitTooltip();
+						}
 
 						// Check unselected difficulty
 						if(KC3Meta.isEventWorld(cWorld) && !element.difficulty) {
@@ -338,10 +390,10 @@
 							if(element.clear == 1 && !element.killsRequired){
 								$(".map_hp_txt", mapBox).text(KC3Meta.term("BattleHistoryMapCleared"));
 								mapBox.addClass("cleared");
-								if (cWorld>=10) {
+								if(KC3Meta.isEventWorld(cWorld)) {
 									mapBox.addClass((function(x, w){
 										// New difficulty 'Casual' added since Winter 2018, and ID shifted +1
-										if(w >= 41){
+										if(w >= CASUAL_IMPL_WORLD){
 											return ["", "casual", "easy", "normal", "hard"][x] || "";
 										} else {
 											return ["", "easy", "normal", "hard"][x] || "";
@@ -761,7 +813,7 @@
 						sortie.diff = sortie.diff || mapInfo.difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0) {
-						const rankMarker = ((d, w) => w >= 41 ? (d === 1 ? "1C" : d - 1) : d)(sortie.diff, sortie.world);
+						const rankMarker = ((d, w) => w >= CASUAL_IMPL_WORLD ? (d === 1 ? "1C" : d - 1) : d)(sortie.diff, sortie.world);
 						$(sortieBox).addClass("sortie_ranks")
 							.addClass("sortie_rank_" + rankMarker)
 							.attr("data-diff", KC3Meta.term("EventHistoryRank" + rankMarker));
@@ -926,7 +978,8 @@
 					$(".rfleet_lbas", sortieBox).addClass("disabled");
 					// `api_air_base_decks` not defined (or saved) for old event maps,
 					// assume all available land bases can be used
-					const lbMaxSortie = mapInfo.airBase || (sortie.world < 10 || sortie.world >= 41 ? 0 : 99);
+					const lbMaxSortie = mapInfo.airBase
+						|| (!KC3Meta.isEventWorld(sortie.world) || sortie.world >= CASUAL_IMPL_WORLD ? 0 : 99);
 					let lbi = 0, lbSortie = 0;
 					$.each(sortie.lbas || [], function(index, landbase){
 						// Skip those land bases not set to sortie or defend

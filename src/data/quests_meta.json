@@ -350,7 +350,7 @@
 		"rewardConsumables": [0, 6, 0, 0]
 	},
 	"201": {
-		"unlock": [216, 211, 212, 330, 337, 892],
+		"unlock": [216, 211, 212, 330, 337, 438, 892],
 		"tracking": [
 			[0, 1]
 		],
@@ -1014,7 +1014,7 @@
 		"tracking": [
 			[0, 3]
 		],
-		"rewardConsumables": [0, 0, 3, 0]
+		"rewardConsumables": [0, 0, 1, 0]
 	},
 	"403": {
 		"tracking": [
@@ -1024,7 +1024,8 @@
 	"404": {
 		"tracking": [
 			[0, 30]
-		]
+		],
+		"rewardConsumables": [0, 0, 3, 0]
 	},
 	"405": {
 		"unlock": [406]
@@ -2503,5 +2504,11 @@
 	},
 	"1131": {
 		"unlock": [994]
+	},
+	"EoF&RemarksOfDataFormat": {
+		"unlock": ["ID list of quests can be unlocked by this"],
+		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],
+		"hash": "hash number of title string for time-limited quest",
+		"rewardConsumables": ["torches", "buckets", "devmats", "screws"]
 	}
 }

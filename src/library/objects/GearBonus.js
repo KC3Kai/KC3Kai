@@ -2679,6 +2679,21 @@
 					},
 				},
 			},
+			// Walrus
+			"510": {
+				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+					},
+				},
+				byClass: {
+					// Nelson Class
+					"88": {
+						single: { "houg": 4, "houk": 2, "saku": 3, "houm": 2 },
+					},
+				},
+			},
 			// Kyoufuu Kai
 			"217": {
 				count: 0,
@@ -6355,6 +6370,255 @@
 					},
 				],
 			},
+			// 12cm Single High-angle Gun Mount Model E Kai
+			"509": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Mutsuki Class
+					"28": [
+						{
+							multiple: { "tyku": 2, "houk": 1 },
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 1, "houk": 2 },
+								},
+								{
+									flags: [ "airRadar" ],
+									single: { "tyku": 2, "houk": 2 },
+								},
+							],
+						},
+						{
+							minStars: 1,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houk": 2 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tyku": 1 },
+						},
+					],
+					// Kamikaze Class
+					"66": "28",
+					// Matsu Class
+					"101": "28",
+				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "tais": 1, "tyku": 2, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
+						],
+					},
+					{
+						// All remodels of: Yura, Naka, Kinu
+						origins: [23, 56, 113],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Yura Kai, Naka Kai, Kinu Kai
+						ids: [220, 224, 289],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Yura Kai Ni, Naka Kai Ni, Kinu Kai Ni
+						ids: [488, 160, 487],
+						multiple: { "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						multiple: { "tyku": 3, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 3, "houk": 2 },
+							},
+						],
+					},
+					{
+						// All CL/CLT/CT
+						stypes: [3, 4, 21],
+						minStars: 2,
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 1 },
+							},
+						],
+					},
+					{
+						// Shigure K2
+						ids: [145],
+						minStars: 2,
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "tyku": 1, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 4, "houk": 2 },
+							},
+						],
+					},
+					{
+						// Shigure K3
+						ids: [961],
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "tyku": 2, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "houg": 1, "tyku": 5, "houk": 3 },
+							},
+						],
+					},
+					// Most ships and types above get stars bonus
+					{
+						stypes: [1],
+						minStars: 1,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 2,
+						multiple: { "houk": 2 },
+					},
+					{
+						stypes: [1],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 10,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 1,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 2,
+						multiple: { "houk": 2 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [488, 656, 145, 961],
+						minStars: 10,
+						multiple: { "tyku": 1 },
+					},
+					// All other ships can equip this except ships above
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 2,
+						multiple: { "tyku": 1 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 4,
+						multiple: { "houk": 2 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 6,
+						multiple: { "houg": 1 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						excludes: [488, 656, 145, 961],
+						excludeClasses: [28, 66, 101],
+						excludeStypes: [1],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
+			},
 			// 120mm Twin Gun Mount
 			"147": {
 				count: 0,
@@ -9438,6 +9702,7 @@
 						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni
 						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181],
 						excludes: [181, 316],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9460,6 +9725,7 @@
 						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni
 						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131],
 						excludes: [662, 131, 136, 916, 951],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9474,15 +9740,6 @@
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
 									"5": { "soku": 10 },
-								},
-							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
 								},
 							},
 						],
@@ -9503,6 +9760,7 @@
 								74, 76, 116, 102, 103, 184, 925
 							],
 						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9524,16 +9782,6 @@
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
 									"5": { "soku": 10 },
-								},
-							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"1": { "soku": -5 },
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
 								},
 							},
 						],
@@ -9544,6 +9792,7 @@
 						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
 						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze
 						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9565,21 +9814,13 @@
 									"4": { "soku": 10 },
 								},
 							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"1": { "soku": -5 },
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-								},
-							},
 						],
 					},
 					{
 						// Fast Group C: Yuubari/Yuubari Kai, Kaga, fast AV: Chitose, Chiyoda, Nisshin, Samuel B.Roberts Mk.II
 						origins: [115, 84, 102, 103, 581, 561],
 						excludes: [622, 623, 624, 108, 109, 291, 292, 296, 297, 561, 681],
+						speedCap: 5,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9589,16 +9830,13 @@
 								flags: [ "newModelBoiler" ],
 								single: { "soku": 5 },
 							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								single: { "soku": -5 },
-							},
 						],
 					},
 					{
 						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni, Yamato K2J, Houshou K2+
 						origins: [131, 143, 80, 81, 89],
 						excludes: [80, 275, 81, 276, 911, 89, 285],
+						speedCap: 15,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9649,6 +9887,7 @@
 								445, 451, 491
 							],
 						excludes: [541, 573, 888, 878, 879, 894, 899],
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9672,24 +9911,6 @@
 									"5": { "soku": 10 },
 								},
 							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								byCount: {
-									gear: "enhancedBoiler",
-									"1": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
-								},
-							},
-							{
-								flags: [ "enhancedBoiler", "newModelBoiler" ],
-								byCount: {
-									gear: "newModelBoiler",
-									"2": { "soku": -5 },
-									"3": { "soku": -5 },
-									"4": { "soku": -5 },
-								},
-							},
 						],
 					},
 					{
@@ -9698,6 +9919,7 @@
 						//   equip turbine +5 if no other engines equipped, otherwise back to Slow B
 						ids: [623, 561, 681],
 						single: { "soku": 5 },
+						speedCap: 10,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9733,6 +9955,7 @@
 						origins: [182, 460, 161,
 							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299
 						],
+						speedCap: 5,
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -9741,10 +9964,6 @@
 							{
 								flags: [ "newModelBoiler" ],
 								single: { "soku": 5 },
-							},
-							{
-								flags: [ "newModelBoiler", "enhancedBoiler" ],
-								single: { "soku": -5 },
 							},
 						],
 					},

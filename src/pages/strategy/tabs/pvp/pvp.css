@@ -180,6 +180,30 @@
 	vertical-align:top;
 }
 
+.tab_pvp .pvp_ship_ribbon {
+	width:8px;
+	height:32px;
+	float:right;
+	position:relative;
+	right:-2px;
+	top:-32px;
+	pointer-events:none;
+	display:none;
+}
+.tab_pvp .pvp_ship_ribbon img {
+	width:8px;
+	height:32px;
+	vertical-align:top;
+}
+.tab_pvp .pvp_ship_ribbon.r-1 img {
+	content:url("/assets/img/client/ribbons/1.png");
+	filter:drop-shadow(-1px 0 1px rgba(255,243,140,1));
+}
+.tab_pvp .pvp_ship_ribbon.r-2 img {
+	content:url("/assets/img/client/ribbons/2.png");
+	filter:drop-shadow(-1px 0 1px rgba(255,87,112,1));
+}
+
 .tab_pvp .pvp_ship_info {
 	width:40px;
 	margin:0 2px 0 0;
@@ -266,7 +290,7 @@
 }
 .tab_pvp .pvp_battle_day {
 	margin:0 0 0 8px;
-	background-image:url('../../../../assets/img/client/map.jpg');
+	background-image:url('/assets/img/client/map.jpg');
 	background-size: 315px 110px;
 }
 .tab_pvp .pvp_battle_result {

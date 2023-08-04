@@ -15,7 +15,7 @@
 /* FLOWCHART
 --------------------------------*/
 .tab_flowchart .questControls {
-	width:700px;
+	width:auto;
 	margin:0 0 10px 0;
 	padding:5px 10px;
 }

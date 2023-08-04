@@ -1,6 +1,5 @@
 .tab_badge .export_box {
-	border-radius: 8px;
-	/*background:#def;*/
+	border-radius:8px;
 	padding:10px;
 	margin:10px 0 0 0;
 }
@@ -8,10 +7,9 @@
 /* DATA TO INCLUDE
 ------------------------------*/
 .tab_badge .export_parts {
-
+	width:100%;
 }
 .tab_badge .export_parts .export_field {
-	width:660px;
 	height:20px;
 	margin:0 0 3px 0;
 }
@@ -28,21 +26,21 @@
 	width:120px;
 }
 .tab_badge .export_parts .export_value {
-	width:500px;
+	width:calc(100% - 160px);
 	background:#f0f5fa;
 	line-height:20px;
 	font-size:12px;
 	font-weight:bold;
 	padding:0 0 0 10px;
 	overflow:hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* DATA SOURCE
 ------------------------------*/
 .tab_badge .export_method {
-
+	width:100%;
 }
 .tab_badge .export_method .method_choice  {
 	background:#f0f5fa;
