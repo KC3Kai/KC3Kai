@@ -714,6 +714,12 @@
 						[ 4, "#4"]
 					]
 				}
+			},
+			{
+				"id" : "pan_sfxnotify_eventonly",
+				"name" : "SettingsPanelPortSoundNotifyEventOnly",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -1261,12 +1267,6 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
-			},
-			{
-				"id" : "pan_sfxnotify_eventonly",
-				"name" : "SettingsPanelPortSoundNotifyEventOnly",
-				"type" : "check",
-				"options" : {}
 			},
 			{
 				"id" : "pan_pvp_friends",
