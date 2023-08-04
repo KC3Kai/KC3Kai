@@ -611,9 +611,11 @@
 }
 .tab_ships .ship_item .ship_ribbon.r-1 img {
 	content:url("/assets/img/client/ribbons/1.png");
+	filter:drop-shadow(0 0 1px rgba(255,243,140,1));
 }
 .tab_ships .ship_item .ship_ribbon.r-2 img {
 	content:url("/assets/img/client/ribbons/2.png");
+	filter:drop-shadow(0 0 1px rgba(255,87,112,1));
 }
 
 .tab_ships .more_columns .ship_item .hidden {

@@ -161,6 +161,7 @@
 					hp: pvpBattle.data.api_maxhps ? pvpBattle.data.api_maxhps[index+7] : pvpBattle.data.api_e_maxhps[index],
 					stats: pvpBattle.data.api_eParam[index],
 					level: pvpBattle.data.api_ship_lv[0] == -1 ? pvpBattle.data.api_ship_lv[index+1] : pvpBattle.data.api_ship_lv[index],
+					effect: (pvpBattle.data.api_e_effect_list || [])[index],
 					mst_id: mstId,
 				}, $(".pvp_opponent", recordBox));
 			});
@@ -190,9 +191,11 @@
 			$(".pvp_ship_name", shipBox).text(shipName)
 				.attr("title", shipName);
 			
+			let ribbonTypes = data.effect;
 			$(".pvp_ship_level span", shipBox).text(data.level);
 			if (!data.opponent) {
 				if (data.mvp) $(".pvp_ship_mvp_icon", shipBox).show();
+				ribbonTypes = data.effect && data.effect.type;
 			} else {
 				$(".pvp_ship_hp span", shipBox).text(data.hp);
 				$(".pvp_ship_level", shipBox).attr("title", "HP " + data.hp);
@@ -200,6 +203,11 @@
 				$(".pvp_ship_tp", shipBox).text(data.stats[1]);
 				$(".pvp_ship_aa", shipBox).text(data.stats[2]);
 				$(".pvp_ship_ar", shipBox).text(data.stats[3]);
+			}
+			if (Array.isArray(ribbonTypes)) {
+				const ribbonId = ribbonTypes.slice(0).sort((a, b) => a - b).pop();
+				if (ribbonId > 0) $(".pvp_ship_ribbon", shipBox).show()
+					.addClass("r-" + ribbonId);
 			}
 			
 			$.each(data.equip, function(index, itemMstId){

@@ -146,12 +146,12 @@
 				}
 			}, 0);
 
-			$(".tab_mstgear .gearInfo .rarity").empty();
-			for(let bctr = 0; bctr < gearData.api_rare; bctr++) {
-				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
-			}
-			if(gearData.api_rare === 0){
-				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
+			$(".tab_mstgear .gearInfo .rarity").html(
+				'[{0}] <span class="stars"></span>'.format(gearData.api_rare)
+			);
+			// api_rare value not fully match with the stars on card image, at least 1 star for common rare
+			for(let bctr = 0; bctr < Math.max(1, gearData.api_rare); bctr++) {
+				$(".tab_mstgear .gearInfo .rarity span").append("&#10031;");
 			}
 			if(!KC3Master.isAbyssalGear(gearId) && gearData.api_broken.length >= 4) {
 				$(".tab_mstgear .gearInfo .scrap .fuel span").text(gearData.api_broken[0]);

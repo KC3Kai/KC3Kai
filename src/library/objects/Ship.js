@@ -753,14 +753,14 @@ KC3改 Ship Object
 		}
 		if(withIndBonus) {
 			// cache stats for faster later uses
-			this.statsCache = {
+			this.statsCache = Object.assign(this.statsCache || {}, {
 				items: this.items.slice(0),
 				shipNaked: stats,
 				gearTotal: statsEquip,
 				gearBonus: statsBonus,
 				gearAsw: statsEquip.as,
 				gearLos: statsEquip.ls,
-			};
+			});
 			return [stats, statsBonus];
 		}
 		return !statAttr ? stats : stats[statAttr];
@@ -769,14 +769,17 @@ KC3改 Ship Object
 	KC3Ship.prototype.statsSp = function(statAttr){
 		if(this.isDummy()) { return false; }
 		if(!this.statsCache) this.statsCache = {};
-		if(!this.statsCache.spEffects) {
+		if(!this.statsCache.spEffects
+			|| (this.spitems || []).length !== (this.statsCache.spEffects.type || []).length) {
 			const sp = this.statsCache.spEffects = {};
-			this.spitems.forEach(item => {
+			(this.spitems || []).forEach(item => {
 				Object.keys(item).forEach(attr => {
-					if(attr === "type") {
-						(sp[attr] = sp[attr] || []).push(item[attr]);
-					} else {
-						sp[attr] = (sp[attr] || 0) + item[attr];
+					if(item[attr] !== undefined) {
+						if(attr === "type") {
+							(sp[attr] = sp[attr] || []).push(item[attr]);
+						} else {
+							sp[attr] = (sp[attr] || 0) + (item[attr] || 0);
+						}
 					}
 				});
 			});
@@ -2628,11 +2631,11 @@ KC3改 Ship Object
 			if(isApshellApplied) result = Math.floor(result * apshellModifier);
 			// Specific ships for maps/event postcap bonuses applied here
 			result *= antiPtImpModifier;
-			if(isCritical) result = Math.floor(result * criticalModifier * proficiencyCriticalModifier);
+			if(isCritical) result = Math.floor(result * proficiencyCriticalModifier * criticalModifier);
 		} else {
 			if(isApshellApplied) result = Math.floor(result * apshellModifier);
 			// Specific ships for maps/event postcap bonuses applied here
-			if(isCritical) result = Math.floor(result * criticalModifier * proficiencyCriticalModifier);
+			if(isCritical) result = Math.floor(result * proficiencyCriticalModifier * criticalModifier);
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers
@@ -4302,11 +4305,17 @@ KC3改 Ship Object
 		const isChuuhaOrWorse = (currentHp || this.hp[0]) <= (this.hp[1] / 2);
 		if (isChuuhaOrWorse) { baseValue += 18; }
 		let gearBonus = 0;
-		// Ship Personnel bonus
-		if (this.hasEquipmentType(2, 39)) { gearBonus += 5; }
-		// Torpedo Squadron Skilled Lookouts +9 in total if equipped by DD/CL/CLT
+		// Ship Personnel bonus simulator:
+		// Torpedo Squadron Skilled Lookouts +8 in total if equipped by DD/CL/CLT
+		// https://twitter.com/Divinity_123/status/1680201622356389892
+		// +0 if equipped by other ship types
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { gearBonus += 4; }
+		// TSSLO and SLO not both counted when they are equipped at the same time
+		// https://twitter.com/agosdufovj/status/1683813931784208386
+		const skilledLookoutsCount = this.countEquipment(129),
+			torpedoSquadronSloCount = this.countEquipment(412);
+		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 8; }
+		else if (skilledLookoutsCount > 0) { gearBonus += 5; }
 		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (!!fleetSearchlight) { gearBonus += 7; }
@@ -4319,8 +4328,13 @@ KC3改 Ship Object
 		if (enemyStarshell) { gearBonus += -10; }
 		// Bonuses from equipment overridden for Night Zuiun cutin like enemy gears penalty?
 		// https://twitter.com/yukicacoon/status/1635930780735266816
+		// https://twitter.com/Divinity_123/status/1680215402020741120
 		if (spType === 200) {
-			if (!!fleetSearchlight) { gearBonus -= (5 + 7); }
+			// TSSLO +0 for any ship type, SLO +8 finally
+			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 8; }
+			else if (skilledLookoutsCount > 0) { gearBonus += 3; }
+			// searchlight finally -10? or -5?
+			if (!!fleetSearchlight) { gearBonus -= (10 + 7); }
 			if (playerStarshell) { gearBonus -= (10 + 4); }
 		}
 		baseValue += gearBonus;
@@ -4800,7 +4814,7 @@ KC3改 Ship Object
 					const has203No3TwinGun = this.hasEquipment(50);
 					const has203No2TwinGun = this.hasEquipment(90);
 					// 20.3cm priority to No.3, No.2 might also
-					result += has203TwinGun ? 10 : has203No2TwinGun ? 10 : has203No3TwinGun ? 15 : 0;
+					result += has203TwinGun ? 10 : has203No2TwinGun ? 15 : has203No3TwinGun ? 15 : 0;
 				}
 				// for 15.5cm triple main mount on Mogami class
 				const isMogamiClass = ctype === 9;
@@ -5696,6 +5710,10 @@ KC3改 Ship Object
 			result.asw = this.as[0];
 			result.ev = this.ev[0];
 			result.los = this.ls[0];
+			// unused yet
+			result.spd = this.speed;
+			result.len = this.range;
+			result.effect = this.statsSp();
 		}
 
 		var gearInfo;

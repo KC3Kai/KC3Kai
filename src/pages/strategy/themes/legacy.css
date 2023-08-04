@@ -1531,6 +1531,7 @@ body {
 .tab_maps .map_list {
 	background:#f0f8ff;
 	border-bottom:1px solid #369;
+	border-right:1px solid #369;
 }
 .tab_event .map_box,
 .tab_maps .map_box {

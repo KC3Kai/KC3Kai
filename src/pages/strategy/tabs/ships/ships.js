@@ -600,6 +600,7 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 				ribbon: ThisShip.ribbonType(),
+				spEffects: ThisShip.statsSp(),
 
 				hp: [ThisShip.hp[1], ThisShip.maxHp(true), MasterShip.api_taik[0] , ThisShip.maxHp(false) ],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0] + ThisShip.mod[0], ThisShip.fp[0] ],
@@ -838,11 +839,12 @@
 				savedFilterValues.speed || 0,
 				["all","slow","fast","faster","fastest"],
 				function(curVal,ship) {
+					const spd = [ship.isp, ship.sp][self.equipMode];
 					return (curVal === 0)
-						|| (curVal === 1 && ship.sp > 0 && ship.sp < 10)
-						|| (curVal === 2 && ship.sp >= 10 && ship.sp < 15)
-						|| (curVal === 3 && ship.sp >= 15 && ship.sp < 20)
-						|| (curVal === 4 && ship.sp >= 20);
+						|| (curVal === 1 && spd > 0   && spd < 10)
+						|| (curVal === 2 && spd >= 10 && spd < 15)
+						|| (curVal === 3 && spd >= 15 && spd < 20)
+						|| (curVal === 4 && spd >= 20);
 				});
 
 			self.defineShipFilter(
@@ -936,7 +938,7 @@
 				["all","short","medium","long","verylong"],
 				function(curVal, ship) {
 					return (curVal === 0)
-						|| (curVal === ship.range);
+						|| (curVal === [ship.irange, ship.range][self.equipMode]);
 				});
 
 			const stypes = Object.keys(KC3Meta.allStypes())
@@ -1174,9 +1176,9 @@
 			define("cost", KC3Meta.term("ShipCost"),
 				   function(x) { return x.cost; });
 			define("sp", KC3Meta.term("ShipSpeed"),
-				   function(x) { return x.sp; });
+				   function(x) { return [x.isp, x.sp][this.equipMode]; });
 			define("rn", KC3Meta.term("ShipLength"),
-				   function(x) { return x.range; });
+				   function(x) { return [x.irange, x.range][this.equipMode]; });
 			define("ac", KC3Meta.term("ShipCarry"),
 				   function(x) { return x.carry; });
 			define("ctype", KC3Meta.term("ShipListGridTitleSClass"),
@@ -1311,8 +1313,8 @@
 							$(".ship_fuel", this).text( thisShip.fuel[1] );
 							$(".ship_ammo", this).text( thisShip.ammo[1] );
 							$(".ship_cost", this).text( thisShip.cost );
-							$(".ship_sp", this).text( thisShip.sp );
-							$(".ship_rn", this).text( thisShip.range );
+							$(".ship_sp", this).text( [thisShip.isp, thisShip.sp][self.equipMode] );
+							$(".ship_rn", this).text( [thisShip.irange, thisShip.range][self.equipMode] );
 							$(".ship_ac", this).text( thisShip.carry );
 						}
 						// Reset heart-lock icon

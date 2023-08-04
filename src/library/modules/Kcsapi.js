@@ -153,6 +153,7 @@ Previously known as "Reactor"
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
 			PlayerManager.friendlySettings = response.api_data.api_friendly_setting || {};
 			
+			const lastSortie = [KC3SortieManager.map_world || 0, KC3SortieManager.map_num || 0];
 			KC3SortieManager.endSortie(response.api_data);
 			
 			PlayerManager.loadBases()
@@ -166,9 +167,14 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Fleet");
 			
-			// To detect event boss debuffed sound effect
+			// To detect sound effect of event boss debuffed/map gimmick changed
 			if(response.api_data.api_event_object){
-				KC3Network.trigger("DebuffNotify", response.api_data.api_event_object);
+				const data = Object.assign({}, response.api_data.api_event_object);
+				// Since non-event EO map 7-5 implemented on Jan 2023, sound effect used too,
+				// so what is real "event object"? have to judge by previous sortie map.
+				data.lastSortieMap = lastSortie;
+				data.isRealEvent = KC3Meta.isEventWorld(lastSortie[0]);
+				KC3Network.trigger("DebuffNotify", data);
 			}
 			// To forcibly remove "next blocker" once in port
 			KC3Network.disarmNextBlock();
@@ -621,6 +627,14 @@ Previously known as "Reactor"
 			KC3Network.trigger("Fleet", { switchTo: deckId });
 		},
 		
+		// Open a new Preset slot, consuming a dock key item
+		"api_req_hensei/preset_expand":function(params, response, headers){
+			// no data in response, max slot amount is main.js#OrganizeConst.EXTENDS_MAX = 19
+			PlayerManager.consumables.dockKey -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
+		},
+		
 		/* Equipment Presets
 		-------------------------------------------------------*/
 		// List Presets
@@ -682,6 +696,13 @@ Previously known as "Reactor"
 			// Treat 1st slot as pseudo old gear since there should be 1 gear at least in a preset
 			const oldGearObj = shipObj.equipment(0);
 			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(undefined, oldGearObj, shipObj, true));
+		},
+		
+		// Expand more Preset slots, consuming a dock key item
+		"api_req_kaisou/preset_slot_expand":function(params, response, headers){
+			PlayerManager.consumables.dockKey -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Equipment list
@@ -843,6 +864,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Timers");
+		},
+		
+		/* Open a new construction dock, consuming a dock key item
+		-------------------------------------------------------*/
+		"api_req_kousyou/open_new_dock":function(params, response, headers){
+			// no data in response, cannot unlock build dock directly,
+			// have to wait for backing to homeport
+			PlayerManager.consumables.dockKey -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
 		},
 		
 		/*-------------------------------------------------------*/
@@ -1953,6 +1984,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
+		},
+		
+		/* Open a new repair dock, consuming a dock key item
+		-------------------------------------------------------*/
+		"api_req_nyukyo/open_new_dock":function(params, response, headers){
+			// no data in response, cannot unlock repair dock directly,
+			// have to wait for backing to homeport
+			PlayerManager.consumables.dockKey -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
 		},
 		
 		/*-------------------------------------------------------*/

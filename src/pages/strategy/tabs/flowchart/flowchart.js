@@ -32,38 +32,37 @@
 			const rootQuestTree = $(".tab_flowchart .flowchart ul.questTree");
 			this.flowchartIds = [];
 			this.seedBranch( rootQuestTree, 201 ); // Bd1
-			this.seedBranch( rootQuestTree, 303 ); // Cd2
-			this.seedBranch( rootQuestTree, 342 ); // C44
-			this.seedBranch( rootQuestTree, 345 ); // C49
-			this.seedBranch( rootQuestTree, 346 ); // C50
-			this.seedBranch( rootQuestTree, 348 ); // C53
-			this.seedBranch( rootQuestTree, 350 ); // C55
-			this.seedBranch( rootQuestTree, 353 ); // C58
-			this.seedBranch( rootQuestTree, 354 ); // C60
-			this.seedBranch( rootQuestTree, 355 ); // C62
-			this.seedBranch( rootQuestTree, 357 ); // C66
-			this.seedBranch( rootQuestTree, 362 ); // C72
+			this.seedBranch( rootQuestTree, 303 ); // Cd1
+			this.seedBranch( rootQuestTree, 342 ); // C44/Cq1
+			this.seedBranch( rootQuestTree, 345 ); // C49/Cy1
+			this.seedBranch( rootQuestTree, 346 ); // C50/Cy2
+			this.seedBranch( rootQuestTree, 348 ); // C53/Cy3
+			this.seedBranch( rootQuestTree, 350 ); // C55/Cy4
+			this.seedBranch( rootQuestTree, 353 ); // C58/Cy5
+			this.seedBranch( rootQuestTree, 354 ); // C60/Cy6
+			this.seedBranch( rootQuestTree, 355 ); // C62/Cy7
+			this.seedBranch( rootQuestTree, 357 ); // C66/Cy9
+			this.seedBranch( rootQuestTree, 362 ); // C72/Cy10
 			this.seedBranch( rootQuestTree, 368 ); // Cy11
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9
-			this.seedBranch( rootQuestTree, 434 ); // D32
-			this.seedBranch( rootQuestTree, 437 ); // D34
-			this.seedBranch( rootQuestTree, 438 ); // D35
-			this.seedBranch( rootQuestTree, 439 ); // D36
-			this.seedBranch( rootQuestTree, 442 ); // D38
-			this.seedBranch( rootQuestTree, 444 ); // D40
-			this.seedBranch( rootQuestTree, 503 ); // Ed3
+			this.seedBranch( rootQuestTree, 434 ); // D32/Dy1
+			this.seedBranch( rootQuestTree, 437 ); // D34/Dy3
+			this.seedBranch( rootQuestTree, 439 ); // D36/Dy5
+			this.seedBranch( rootQuestTree, 442 ); // D38/Dy7
+			this.seedBranch( rootQuestTree, 444 ); // D40/Dy8
+			this.seedBranch( rootQuestTree, 503 ); // Ed1
 			this.seedBranch( rootQuestTree, 605 ); // Fd1
-			this.seedBranch( rootQuestTree, 655 ); // F94
-			this.seedBranch( rootQuestTree, 681 ); // F95
-			this.seedBranch( rootQuestTree, 1103); // F98
-			this.seedBranch( rootQuestTree, 1105); // F100
-			this.seedBranch( rootQuestTree, 1107); // F102
-			this.seedBranch( rootQuestTree, 1120); // F113
-			this.seedBranch( rootQuestTree, 1123); // F114
-			this.seedBranch( rootQuestTree, 702 ); // Gd2
-			this.seedBranch( rootQuestTree, 716 ); // G8
+			this.seedBranch( rootQuestTree, 655 ); // F94/Fy3
+			this.seedBranch( rootQuestTree, 681 ); // F95/Fy4
+			this.seedBranch( rootQuestTree, 1103); // F98/Fy5
+			this.seedBranch( rootQuestTree, 1105); // F100/Fy7
+			this.seedBranch( rootQuestTree, 1107); // F102/Fy8
+			this.seedBranch( rootQuestTree, 1120); // F113/Fy9
+			this.seedBranch( rootQuestTree, 1123); // F114/Fy10
+			this.seedBranch( rootQuestTree, 702 ); // Gd1
+			this.seedBranch( rootQuestTree, 716 ); // G8/Gy3
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
