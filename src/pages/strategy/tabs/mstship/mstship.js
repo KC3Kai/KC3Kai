@@ -845,8 +845,8 @@
 				// Equippable Items
 				$(".equipSlots .equipList,.equipExSlot .equipList").empty();
 				const addEquipType = (listClass, typeId) => {
-					// use 2nd yellow icon instead of 1st green one if type is secondary gun
-					const firstIconId = KC3Meta.itemIconsByType2(typeId)[typeId === 4 ? 1 : 0];
+					// do not use custom icons
+					const firstIconId = KC3Meta.itemUniqueIconByType2(typeId, 0, false);
 					// skip 'VT Fuze' and event item 'Transport Device', since they are not used for now
 					if (!firstIconId || typeId === 50) return;
 					const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()

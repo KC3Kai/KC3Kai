@@ -1410,6 +1410,10 @@ button, input, select, textarea {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
+.tab_gears .slotitem .info .item_stat.item_sc img {
+	filter: drop-shadow(0 0 1px #333);
+	-webkit-filter: drop-shadow(0 0 1px #333);
+}
 .tab_gears .slotitem .holders dt {
 	margin-bottom:5px;
 }
