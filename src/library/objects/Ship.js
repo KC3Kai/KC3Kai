@@ -851,6 +851,8 @@ KC3改 Ship Object
 			if(isOnShipBonusOnly === "both") return [total + onShipBonus, onShipBonus];
 			total = isOnShipBonusOnly ? onShipBonus : total + onShipBonus;
 		}
+		// if apiName is speed `soku`, supposed to cap total at 20 (Fastest)? onShipBonus = 20 - master speed?
+		// if apiName is range `leng`, 5 may not be the upper cap?
 		return total;
 	};
 

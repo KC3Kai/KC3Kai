@@ -215,6 +215,7 @@ KC3改 Equipment Object
 					addBonusFromSynergyGears(bonusDef.synergy);
 				}
 			}
+			// Limit speed here only affect this bonus item, multiple speed bonuses could over cap
 			if(bonusDef.speedCap && apiName === "soku") {
 				total = Math.min(bonusDef.speedCap, total);
 			}

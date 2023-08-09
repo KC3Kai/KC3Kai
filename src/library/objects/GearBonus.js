@@ -108,7 +108,7 @@
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
-				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121],
+				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122],
 				"UnitedKingdom": [67, 78, 82, 88, 108, 112],
 				"Italia": [58, 61, 64, 68, 80, 92, 113],
 				"Netherlands": [98],
@@ -122,7 +122,7 @@
 					21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 					41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
 					71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
-					111, 115, 117, 119, 120
+					111, 115, 117, 119, 120, 123
 				],
 			},
 			// Ryuusei
@@ -5443,6 +5443,38 @@
 					multiple: { "raig": 1 },
 				},
 			},
+			// 21inch 4-tube Bow Torpedo Launcher (Initial Model)
+			"511": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						distinctGears: [511, 512],
+						single: { "raig": 1, "houk": 2 },
+					},
+					// Salmon Class
+					"122": {
+						distinctGears: [511, 512],
+						single: { "raig": 3, "houk": 4 },
+					},
+				},
+			},
+			// 21inch 4-tube Bow Torpedo Launcher (Late Model)
+			"512": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						distinctGears: [511, 512],
+						single: { "raig": 1, "houk": 2 },
+					},
+					// Salmon Class
+					"122": {
+						distinctGears: [511, 512],
+						single: { "raig": 3, "houk": 4 },
+					},
+				},
+			},
 			// 21inch 6-tube Bow Torpedo Launcher (Initial Model)
 			"440": {
 				count: 0,
@@ -5474,6 +5506,11 @@
 						distinctGears: [442, 443],
 						single: { "raig": 2 },
 					},
+					// Salmon Class
+					"122": {
+						distinctGears: [442, 443],
+						single: { "raig": 1, "houk": 2 },
+					},
 				},
 			},
 			// Submarine 4-tube Stern Torpedo Launcher (Late Model)
@@ -5484,6 +5521,11 @@
 					"114": {
 						distinctGears: [442, 443],
 						single: { "raig": 2 },
+					},
+					// Salmon Class
+					"122": {
+						distinctGears: [442, 443],
+						single: { "raig": 1, "houk": 2 },
 					},
 				},
 			},

@@ -189,7 +189,7 @@ Provides access to data on built-in JSON files
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
 			// 1630's image asset not uploaded so far, never fixed
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631: 1630,*/1634: 1573, 1635: 1561, 1636: 1562,
-			1637: 364,  1638: 48,
+			1637: 364,  1638: 48, /*1639: 1639,*/
 		},
 		
 		/* Initialization
@@ -656,6 +656,7 @@ Provides access to data on built-in JSON files
 				"717": 55, // Yamashiomaru K: 特設護衛空母
 				"945": 56, // No.101: 戦車揚陸艦
 				"727": 56, // No.101 K: 戦車揚陸艦
+				"953": 57, // Asahi: 練習特務艦
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);
