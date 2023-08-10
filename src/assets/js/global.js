@@ -1067,9 +1067,21 @@ Math.qckInt = function(command,value,rate,rev,magn) {
 	return (magn ? Math.sign(value) : 1) *
 		Math[command]((magn ? Math.abs(value) : value) * shift) / (rev ? shift : 1);
 };
-/* Rounding towards left side of decimal point */
+/** Rounding towards left side of decimal point */
 Math.hrdInt = function(command,value,rate,rev) {
 	return Math.qckInt(command,value,-rate,rev);
+};
+/**
+ * Simple workaround for well-known floating-point arithmetic issue,
+ * without introducing extra decimal or BigNumber library.
+ * Use this on problemtic float calculation, such as: 0.1+0.2, 1.5*1.4,
+ * default limited to less precision 7 decimals.
+ * @see https://github.com/brazzy/floating-point-gui.de
+ */
+Math.fixed = function(val, decimal){
+	return parseFloat(parseFloat(val).toFixed(
+		decimal === undefined || decimal < 0 || decimal > 20 ? 6 : decimal
+	));
 };
 
 /* CHROME NATIVE CLASS */
