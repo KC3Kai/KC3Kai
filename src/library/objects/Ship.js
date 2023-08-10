@@ -851,6 +851,8 @@ KC3改 Ship Object
 			if(isOnShipBonusOnly === "both") return [total + onShipBonus, onShipBonus];
 			total = isOnShipBonusOnly ? onShipBonus : total + onShipBonus;
 		}
+		// if apiName is speed `soku`, supposed to cap total at 20 (Fastest)? onShipBonus = 20 - master speed?
+		// if apiName is range `leng`, 5 may not be the upper cap?
 		return total;
 	};
 
@@ -2627,15 +2629,15 @@ KC3改 Ship Object
 		// https://twitter.com/hedgehog_hasira/status/1569717081016520704
 		let result = cappedPower;
 		if(isTargetInstallation || isTargetPtImp) {
-			result = Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * dayCutinModifier;
-			if(isApshellApplied) result = Math.floor(result * apshellModifier);
+			result = Math.floor(Math.fixed(cappedPower * antiLandModifier + antiLandAdditive)) * dayCutinModifier;
+			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier));
 			// Specific ships for maps/event postcap bonuses applied here
 			result *= antiPtImpModifier;
-			if(isCritical) result = Math.floor(result * proficiencyCriticalModifier * criticalModifier);
+			if(isCritical) result = Math.floor(Math.fixed(result * criticalModifier * proficiencyCriticalModifier));
 		} else {
-			if(isApshellApplied) result = Math.floor(result * apshellModifier);
+			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier));
 			// Specific ships for maps/event postcap bonuses applied here
-			if(isCritical) result = Math.floor(result * proficiencyCriticalModifier * criticalModifier);
+			if(isCritical) result = Math.floor(Math.fixed(result * criticalModifier * proficiencyCriticalModifier));
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers

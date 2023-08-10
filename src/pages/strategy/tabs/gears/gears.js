@@ -11,7 +11,7 @@
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
 		_currentItemId: 0, // keep track of item id to be focused
-		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","dc","dp","ap","rk","rm","hk"],
+		_allProperties: ["sc","fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","dc","dp","ap","rk","rm","hk"],
 		_defaultCompareMethod: {
 			// main guns
 			"t1": "fp",
@@ -239,6 +239,8 @@
 							ht: MasterItem.api_houm,
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
+							// Following not real stats, sc = super categories this icon type belonged to
+							sc: KC3Meta.itemTypesByType3(MasterItem.api_type[3]).length,
 							dc: ThisItem.isDepthCharge() & 1,
 							dp: ThisItem.isDepthChargeProjector() & 1,
 							ap: KC3GearManager.aswArmorPenetrationIds.includes(ThisItem.masterId) & 1,
@@ -470,6 +472,7 @@
 				if ((statSets[p].length <= 1 &&
 					self._defaultCompareMethod["t"+type_id] !== p)
 					|| (p==="or" && self._landPlaneTypes.indexOf(Number(type_id))<0)
+					|| p === "sc"
 				) {
 					$(q).addClass("hide");
 				} else {
@@ -494,7 +497,8 @@
 			if (type_id === "all") {
 				$(q).removeClass("hide");
 				// there are too many sorters
-				$(".tab_gears .itemSorters .sortControl.rk" +
+				$(".tab_gears .itemSorters .sortControl.sc" +
+					", .tab_gears .itemSorters .sortControl.rk" +
 					", .tab_gears .itemSorters .sortControl.hk" +
 					", .tab_gears .itemSorters .sortControl.dc" +
 					", .tab_gears .itemSorters .sortControl.dp" +
@@ -647,7 +651,17 @@
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
 		slotitem_stat :function(ItemElem, SlotItem, statName){
-			if(statName === "rk") {
+			if(statName === "sc") {
+				// show its super category icon as an indicator if this icon belonged to 2 more categories
+				$(".stats .item_sc", ItemElem).toggle(SlotItem.stats.sc > 1)
+					.attr("title", KC3Meta.gearTypeName(2, SlotItem.category));
+				$(".stats .item_sc span", ItemElem).hide()
+					.text(KC3Meta.gearTypeName(2, SlotItem.category));
+				$(".stats .item_sc img", ItemElem).attr("src",  KC3Meta.itemIcon(
+						KC3Meta.itemUniqueIconByType2(SlotItem.category, SlotItem.type_id)
+					)
+				);
+			} else if(statName === "rk") {
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
 			} else if(statName === "rm") {
 				$(".stats .item_rm", ItemElem).toggle(!!SlotItem.stats.rm);

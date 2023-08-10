@@ -1141,6 +1141,7 @@
 				lvl: ship.level,
 				morale: ship.cond || ship.morale,
 				stats: Object.fromEntries(["fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
+				ribbons: ship.statsSp(),
 				equips: ship.equipment(true).map(g => g.masterId || -1), 
 				improvements: ship.equipment(true).map(g => g.stars || -1),
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
@@ -1715,6 +1716,8 @@
 						visibleStats: Object.fromEntries(["fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
 						// Possibly changed stats before expedition return
 						prevStats: Object.fromEntries(["hp", "morale"].map((stat) => [stat, Array.isArray(ship[stat]) ? ship[stat][0] : ship[stat]])),
+						// Extra stats from items like ribbons, excluded by visible stats
+						ribbonStats: ship.statsSp(),
 						kyouka: ship.mod,
 						equips: ship.equipment(true).map(g => g.masterId || -1), 
 						improvements: ship.equipment(true).map(g => g.stars || -1),
