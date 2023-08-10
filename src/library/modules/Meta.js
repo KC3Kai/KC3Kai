@@ -189,7 +189,7 @@ Provides access to data on built-in JSON files
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
 			// 1630's image asset not uploaded so far, never fixed
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631: 1630,*/1634: 1573, 1635: 1561, 1636: 1562,
-			1637: 364,  1638: 48,
+			1637: 364,  1638: 48, /*1639: 1639,*/
 		},
 		
 		/* Initialization
@@ -370,7 +370,7 @@ Provides access to data on built-in JSON files
 				const iconMap = {};
 				$.each(KC3Master.all_slotitems(), (_, g) => {
 					if(KC3Master.isAbyssalGear(g.api_id)) return false;
-					// some items are belonged to XXX (II) type (38, 93, 94)
+					// some items are belonged to XXX (II) type (38, 93, 94, 95)
 					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
 					const iconId = g.api_type[3];
 					iconMap[t2Id] = iconMap[t2Id] || [];
@@ -381,13 +381,25 @@ Provides access to data on built-in JSON files
 			return this._type2IconMap[type2Id] || [];
 		},
 		
+		itemUniqueIconByType2 :function(type2Id, type3Id, useCustom = true){
+			const index = ({
+				4: 1, // 1=Yellow Secondary Gun; 95 (II) only green gun for now
+				48: (type3Id === 44 ? 1 : 0), // 1=LB Fighter, 0=Interceptor
+			})[type2Id] || 0;
+			const ingameIconId = this.itemIconsByType2(type2Id)[index] || 0;
+			const customIconName = useCustom
+				&& [11, 12, 13, 22, 28, 32, 38, 49, 93, 94].includes(Number(type2Id))
+				&& ("c" + type2Id);
+			return customIconName || ingameIconId;
+		},
+		
 		itemTypesByType3 :function(type3Id){
 			if(!this._type3TypeMap){
 				// Build type3 id to type2 id map from master data
 				const typeMap = {};
 				$.each(KC3Master.all_slotitems(), (_, g) => {
 					if(KC3Master.isAbyssalGear(g.api_id)) return false;
-					// some items are belonged to XXX (II) type (38, 93, 94)
+					// some items are belonged to XXX (II) type (38, 93, 94, 95)
 					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
 					const iconId = g.api_type[3];
 					typeMap[iconId] = typeMap[iconId] || [];
@@ -644,6 +656,7 @@ Provides access to data on built-in JSON files
 				"717": 55, // Yamashiomaru K: 特設護衛空母
 				"945": 56, // No.101: 戦車揚陸艦
 				"727": 56, // No.101 K: 戦車揚陸艦
+				"953": 57, // Asahi: 練習特務艦
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);
