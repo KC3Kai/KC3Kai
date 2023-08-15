@@ -4164,6 +4164,7 @@ KC3改 Ship Object
 				// [457] bow 4 tubes had been not counted: https://twitter.com/yukicacoon/status/1530850901388587013
 				// [458] even sub radar not counted: https://twitter.com/shiro_sh39/status/1530861026941448193
 				// fixed since 2022-05-30: https://twitter.com/KanColle_STAFF/status/1531162152010395649
+				// [512] 4 tubes not counted again: https://twitter.com/nagasisoumen22/status/1690298363546349568
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457, 461]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
@@ -4312,12 +4313,14 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680201622356389892
 		// +0 if equipped by other ship types
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		// TSSLO and SLO not both counted when they are equipped at the same time
+		// TSSLO and SLO may not both counted when they are equipped at the same time
 		// https://twitter.com/agosdufovj/status/1683813931784208386
+		// TSSLO might be +7, and stack with SLO +12?
+		// https://twitter.com/CC_jabberwock/status/1690759178976190465
 		const skilledLookoutsCount = this.countEquipment(129),
 			torpedoSquadronSloCount = this.countEquipment(412);
-		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 8; }
-		else if (skilledLookoutsCount > 0) { gearBonus += 5; }
+		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 7; }
+		if (skilledLookoutsCount > 0) { gearBonus += 5; }
 		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (!!fleetSearchlight) { gearBonus += 7; }
@@ -4333,8 +4336,8 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680215402020741120
 		if (spType === 200) {
 			// TSSLO +0 for any ship type, SLO +8 finally
-			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 8; }
-			else if (skilledLookoutsCount > 0) { gearBonus += 3; }
+			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 7; }
+			if (skilledLookoutsCount > 0) { gearBonus += 3; }
 			// searchlight finally -10? or -5?
 			if (!!fleetSearchlight) { gearBonus -= (10 + 7); }
 			if (playerStarshell) { gearBonus -= (10 + 4); }

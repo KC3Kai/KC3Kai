@@ -1148,7 +1148,9 @@
 								checkByShipBonusDef(bonusDef, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2));
 							list.forEach(shipBonus => {
 								found = true;
-								if (!shipBonus.minStars) {
+								if (shipBonus.minCount) {
+									countBonus.push(shipBonus);
+								} else if (!shipBonus.minStars) {
 									bonusStats = shipBonus.single || shipBonus.multiple;
 									totalStats = addObjects(totalStats, bonusStats);
 								} else {
