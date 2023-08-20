@@ -2627,17 +2627,19 @@ KC3改 Ship Object
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		// Different rounding and modifiers ordering on different targets:
 		// https://twitter.com/hedgehog_hasira/status/1569717081016520704
+		// Supposed to use 64bit precision of floating number on flooring:
+		// https://hedgehog-cp.github.io/verifyDamageFormula/floating-point-number.html
 		let result = cappedPower;
 		if(isTargetInstallation || isTargetPtImp) {
-			result = Math.floor(Math.fixed(cappedPower * antiLandModifier + antiLandAdditive)) * dayCutinModifier;
+			result = Math.floor(Math.fixed(cappedPower * antiLandModifier + antiLandAdditive, 15)) * dayCutinModifier;
 			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier));
 			// Specific ships for maps/event postcap bonuses applied here
 			result *= antiPtImpModifier;
-			if(isCritical) result = Math.floor(Math.fixed(result * criticalModifier * proficiencyCriticalModifier));
+			if(isCritical) result = Math.floor(Math.fixed(result * proficiencyCriticalModifier * criticalModifier, 15));
 		} else {
-			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier));
+			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier, 15));
 			// Specific ships for maps/event postcap bonuses applied here
-			if(isCritical) result = Math.floor(Math.fixed(result * criticalModifier * proficiencyCriticalModifier));
+			if(isCritical) result = Math.floor(Math.fixed(result * proficiencyCriticalModifier * criticalModifier, 15));
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers

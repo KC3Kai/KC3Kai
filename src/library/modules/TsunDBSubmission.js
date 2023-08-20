@@ -840,6 +840,8 @@
 			this.eventreward.rewards = apiData.api_get_eventitem;
 			if(apiData.api_select_reward_dict) {
 				this.eventreward.selectreward = apiData.api_select_reward_dict;
+			} else {
+				this.eventreward.selectreward = null;
 			}
 			
 			this.sendData(this.eventreward, 'eventreward');
