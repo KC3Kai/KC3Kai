@@ -418,14 +418,17 @@ Provides access to data on built-in JSON files
 		
 		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes", allowId = true){
 			if(this.isAF() && jpName === this.getAF(5)) jpName = this.getAF(6);
-			// Fall-over to byId method if jpName is an integer of ship's master ID
-			if(Number.isInteger(Number(jpName)) && allowId) return this.shipNameById(jpName);
+			// Fail-over to byId method if jpName is an integer of ship's master ID
+			if(allowId && Number.isInteger(Number(jpName))) return this.shipNameById(jpName);
 			// No translation needed for empty ship.json like JP
-			if(Object.keys(this._ship).length === 0){ return jpName; }
+			if(this._cache.shipKeys === undefined){
+				this._cache.shipKeys = Object.keys(this._ship).length;
+			}
+			if(this._cache.shipKeys === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
-			if(typeof this._cache[jpName] !== "undefined"){ return this._cache[jpName]; }
+			if(this._cache[jpName] !== undefined){ return this._cache[jpName]; }
 			// If full string matched, no combination needed
-			if(typeof this._ship[jpName] !== "undefined"){
+			if(this._ship[jpName] !== undefined){
 				this._cache[jpName] = this._ship[jpName];
 				return this._cache[jpName];
 			}
@@ -751,7 +754,7 @@ Provides access to data on built-in JSON files
 					case 20: // AS
 					case 22: // AO
 						return 7; // string "AV_AO_AS";
-					default: return "Unsupport type";
+					default: return "Unsupported type";
 				}
 			})(stype);
 		},

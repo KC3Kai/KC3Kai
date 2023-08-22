@@ -457,14 +457,27 @@
 					// Skip ships not heart-locked or erroneous
 					if(!settings.exportIncludesUnlocked && !ship.lock) continue;
 					if(!ship.masterId || ship.masterId <= 0) continue;
-					self.shipsToExport.push({
+					const dto = {
+						// aircalc needs member id for locking tags identifying:
+						// https://twitter.com/noro_006/status/1693571400873992501
+						api_id: ship.rosterId,
 						api_ship_id: ship.masterId,
 						api_lv: ship.level,
 						api_kyouka: ship.mod,
 						api_exp: ship.exp,
 						api_slot_ex: ship.ex_item,
 						api_sally_area: ship.sally,
-					});
+					};
+					if(Array.isArray(ship.spitems) && ship.spitems.length > 0) {
+						dto.api_sp_effect_items = ship.spitems.map(o => ({
+							api_kind: o.type,
+							api_houg: o.fp,
+							api_raig: o.tp,
+							api_souk: o.ar,
+							api_kaih: o.ev,
+						}));
+					}
+					self.shipsToExport.push(dto);
 				}
 				self.gearsToExport = [];
 				for(const idx in KC3GearManager.list) {
@@ -472,10 +485,13 @@
 					// Skip unlocked or erroneous gears
 					if(!settings.exportIncludesUnlocked && !gear.lock) continue;
 					if(!gear.masterId || gear.masterId <= 0) continue;
-					self.gearsToExport.push({
+					const dto = {
+						api_id: gear.itemId,
 						api_slotitem_id: gear.masterId,
 						api_level: gear.stars,
-					});
+					};
+					if(gear.ace >= 0) dto.api_alv = gear.ace;
+					self.gearsToExport.push(dto);
 				}
 				const objectToExport = {
 					ships: self.shipsToExport,
