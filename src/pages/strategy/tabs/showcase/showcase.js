@@ -447,7 +447,7 @@
 				return window.open(ExportSiteHost + "/#/newTab/");
 			});
 
-			$("#exportToKcwebSite").click(function(){
+			$("#exportToKcwebSite").click(function(e){
 				const settings = self.getSettings();
 				KC3ShipManager.load();
 				KC3GearManager.load();
@@ -501,7 +501,18 @@
 					"jp": "ja", "kr": "ja",
 					"scn": "ja", "tcn": "ja", "tcn-yue": "ja",
 				})[ConfigManager.language] || "en");
-				return window.open(kcwebBaseUrl + JSON.stringify(objectToExport), "kcweb");
+				const url = kcwebBaseUrl + JSON.stringify(objectToExport);
+				if(e.altKey) {
+					self.copyToClipboard(url, function(cbe) {
+						if(!cbe.clipboardData) {
+							console.warn("Browser does not support Clipboard event");
+						} else {
+							console.debug("Copied to clipboard", objectToExport);
+						}
+					});
+					return true;
+				}
+				return window.open(url, "kcweb");
 			});
 
 			// SHIPS
@@ -606,6 +617,22 @@
 			}else{
 				$(".ship_mod_"+statCode, shipBox).html( maxStat - (minStat+modStat) );
 			}
+		},
+
+		copyToClipboard :function(stringData, callback){
+			const copyHandler = function(e) {
+				e.preventDefault();
+				if(e.clipboardData) {
+					e.clipboardData.setData("text/plain", stringData);
+				}
+				if(typeof callback === "function") {
+					callback.call(this, e);
+				}
+				return true;
+			};
+			document.addEventListener("copy", copyHandler);
+			document.execCommand("copy");
+			document.removeEventListener("copy", copyHandler);
 		}
 
 	};
