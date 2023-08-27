@@ -275,8 +275,12 @@
 			// View all CG types
 			$(".tab_mstship .shipInfo .type").on("click", function(e){
 				self.showShip(self.currentShipId, false, false, true);
-			});
+			}).addClass("hover");
 			
+			// Just browser history go back
+			$(".tab_mstship .shipInfo").on("click", ".go-back", function(e){
+				window.history.back();
+			});
 			// Link to quotes developer page
 			if(ConfigManager.devOnlyPages){
 				$(".tab_mstship .shipInfo").on("click", ".to-quotes", function(e){
@@ -1148,7 +1152,9 @@
 								checkByShipBonusDef(bonusDef, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2));
 							list.forEach(shipBonus => {
 								found = true;
-								if (!shipBonus.minStars) {
+								if (shipBonus.minCount) {
+									countBonus.push(shipBonus);
+								} else if (!shipBonus.minStars) {
 									bonusStats = shipBonus.single || shipBonus.multiple;
 									totalStats = addObjects(totalStats, bonusStats);
 								} else {
@@ -1337,14 +1343,9 @@
 				$(".tab_mstship .shipInfo .encounter").hide();
 				$(".tab_mstship .shipInfo .accordion").show();
 				$(".tab_mstship .shipInfo .tokubest").show();
-				if(ConfigManager.info_salt)
-					$(".tab_mstship .shipInfo .tokubest .salty-zone").show();
-				else
-					$(".tab_mstship .shipInfo .tokubest .salty-zone").hide();
-				if(ConfigManager.devOnlyPages)
-					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
-				else
-					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
+				$(".tab_mstship .shipInfo .tokubest .salty-zone").toggle(!!ConfigManager.info_salt);
+				$(".tab_mstship .shipInfo .tokubest .to-quotes").toggle(!!ConfigManager.devOnlyPages);
+				$(".tab_mstship .shipInfo .tokubest .go-back").toggle(KC3Master.isSeasonalShip(ship_id));
 			} else if (KC3Master.isAbyssalShip(ship_id) && !showAllGraphs) {
 				// Abyssal, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
@@ -1579,7 +1580,10 @@
 				$(".tab_mstship .shipInfo .encounter").hide();
 				$(".tab_mstship .shipInfo .more").hide();
 				$(".tab_mstship .shipInfo .accordion").hide();
-				$(".tab_mstship .shipInfo .tokubest").hide();
+				$(".tab_mstship .shipInfo .tokubest").show();
+				$(".tab_mstship .shipInfo .tokubest .salty-zone").hide();
+				$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
+				$(".tab_mstship .shipInfo .tokubest .go-back").toggle(KC3Master.isSeasonalShip(ship_id));
 			}
 			
 		}

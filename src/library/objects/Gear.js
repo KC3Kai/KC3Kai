@@ -341,9 +341,9 @@ KC3改 Equipment Object
 					case 15: // Depth Charge (Projector)
 						// DCP and mortars give shelling fire power:
 						// https://twitter.com/dd_izokaze_fake/status/1164149227024334848
-						// DC not, except Hedgehog:
+						// DC too, except these items:
 						// https://twitter.com/hedgehog_hasira/status/1509928826117054469
-						modifier = [226, 227, 378, 488].includes(this.masterId) ? 0 : 0.75;
+						modifier = [226, 227, 488].includes(this.masterId) ? 0 : 0.75;
 						break;
 				}
 				break;

@@ -41,8 +41,13 @@
 .tab_iconmaker .cropped {
 	padding-top:10px;
 	padding-bottom:10px;
-	background:#f0f;
 	min-height:90px;
+	background-color:#f7f;
+	background-size:20px 20px;
+	background-position:0 0, 10px 10px;
+	background-image:
+		linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
+		linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
 }
 
 .tab_iconmaker .ship_id {

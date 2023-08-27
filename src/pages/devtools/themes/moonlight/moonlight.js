@@ -3889,13 +3889,13 @@
 			});
 			// Check CT bonus in current selected fleet
 			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
-			var ctBonus = playerFleet.lookupKatoriClassBonus();
+			var ctBonus = playerFleet.lookupKatoriClassBonus().ctBonus;
 			// Base EXP only affected by first two ships of opponent's fleet
 			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctBonus);
 			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s || "?");
 			$(".activity_pvp .pvp_base_exp").attr("title",
 				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
-				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))
+				 + (ctBonus !== 1 ? "\n{6}: {7}" : ""))
 					.format(KC3Meta.term("PvpBaseExp"),
 						baseExp.base, baseExp.s, baseExp.a, baseExp.c, baseExp.d,
 						KC3Meta.term("PvpDispBaseExpWoCT").format(ctBonus), baseExp.sIngame)

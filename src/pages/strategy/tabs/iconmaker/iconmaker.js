@@ -117,8 +117,8 @@
 				this.scale = data.zoom;
 				$(".left").val(this.pointX);
 				$(".top").val(this.pointY);
-				// keep 3 decimals for zoom percent value
-				$(".zoom").val(Math.floor(this.scale * 100000) / 1000);
+				// 2 decimals for zoom percentage value since croppie precision 5
+				$(".zoom").val(Number((this.scale * 100).toFixed(2)));
 			});
 			$(".crop_info").text("{}");
 			$(".point.left").on("blur", e => {
@@ -136,7 +136,7 @@
 				}
 			}).val(this.pointY);
 			$(".zoom").on("blur", e => {
-				const newScale = (Number($(".zoom").val()) || 100) / 100;
+				const newScale = Math.fixed((Number($(".zoom").val()) || 100) / 100);
 				if(newScale !== this.scale) {
 					this.scale = newScale;
 					this.croppie.croppie("setZoom", this.scale);

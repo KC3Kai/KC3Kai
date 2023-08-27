@@ -1028,7 +1028,7 @@ Uses KC3Quest objects to play around with
 							// replace ctype with by nation function in future?
 							&& fleet.countShipClass([
 								// US
-								65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122,
+								65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122, 125,
 								// UK
 								67, 78, 82, 88, 108, 112,
 							]) >= 3;

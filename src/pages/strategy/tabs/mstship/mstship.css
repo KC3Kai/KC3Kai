@@ -874,8 +874,8 @@
 	margin-right: 2px;
 }
 
-/* SPECIAL (Salt Check / Quotes)
--------------------------------*/
+/* SPECIAL BUTTONS
+-------------------*/
 .tab_mstship .shipInfo .tokubest {
 	display: flex;
 	flex-direction: row-reverse;
@@ -886,15 +886,14 @@
 	bottom: 4px;
 }
 
-.tab_mstship .shipInfo .tokubest .salty-zone {
-	display:none;
-	width : 120px;
+.tab_mstship .shipInfo .tokubest > div {
+	min-width: 120px;
 	height: 20px;
-	line-height: 18px;
+	line-height: 16px;
 	border-radius: 3px;
 	font-size: 12px;
 	text-align: center;
-	padding: 1px;
+	padding: 1px 4px;
 	margin: 2px;
 }
 
@@ -909,16 +908,13 @@
 }
 
 .tab_mstship .shipInfo .tokubest .to-quotes {
-	width : 120px;
-	height: 20px;
-	line-height: 18px;
-	border-radius: 3px;
-	font-size: 12px;
-	text-align: center;
-	padding: 1px;
-	margin: 2px;
 	border: 1px solid #242;
 	background: #77f;
+}
+
+.tab_mstship .shipInfo .tokubest .go-back {
+	border: 1px solid #039;
+	background: #def;
 }
 
 /* salt check */
