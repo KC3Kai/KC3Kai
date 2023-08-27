@@ -37,6 +37,7 @@
 					case 48: // LB Assault
 						s1 = 'dv'; s2 = 'tp'; break;
 					case 38: // Interceptor (ht = Anti-bomber)
+					case 56: // LB Jet Fighter
 						s1 = 'ht'; s2 = 'aa'; break;
 					case 44: // LB Fighter (ev = Interception)
 						s1 = 'aa'; s2 = 'ev'; break;
