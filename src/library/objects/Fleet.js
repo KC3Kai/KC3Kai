@@ -408,6 +408,7 @@ Contains summary information about a fleet and its ships
 					break;
 					case 436: // Panzer II/North African Spec
 					//case 482: // Panzer III?
+					//case 514: // Panzer III Ausf.J?
 						panzerCount += 1;
 						addImprove(gearObj.stars);
 					break;
@@ -1304,12 +1305,12 @@ Contains summary information about a fleet and its ships
 	/*--------------------------------------------------------*/
 	
 	/**
-	 * Look up for Katori Class Exp Bonus from current Fleet.
-	 * @return exp bonus modifier, default is 1.0
+	 * Look up for Katori Class (and other CTs) Exp Bonus from current Fleet.
+	 * @return {exp bonus modifiers}, default is 1.0
 	 * @see http://wikiwiki.jp/kancolle/?%B1%E9%BD%AC#v657609b
 	 */
 	KC3Fleet.prototype.lookupKatoriClassBonus = function() {
-		var ctBonusTable = [
+		const ctBonusTable = [
 			// ~9,  ~29,  ~59,  ~99, Married
 			[ 1.0,  1.0,  1.0,  1.0,  1.0], // No CT
 			[1.05, 1.08, 1.12, 1.15, 1.20], // CT x 1 as flagship
@@ -1319,7 +1320,8 @@ Contains summary information about a fleet and its ships
 		];
 		var fsCtLevel = 0, maxCtLevel = 0, katoriIndex = 0;
 		this.ship(function(rid, idx, ship){
-			if(ship.master().api_stype == 21){
+			// Exclude CT Asahi base remodel, since given different mechanism
+			if(ship.master().api_stype == 21 && ship.masterId !== 953){
 				if(ship.level > maxCtLevel) maxCtLevel = ship.level;
 				if(idx === 0){
 					katoriIndex = 1;
@@ -1331,13 +1333,47 @@ Contains summary information about a fleet and its ships
 			}
 		});
 		if(katoriIndex === 3) maxCtLevel = fsCtLevel;
-		var levelIndex =
-			(maxCtLevel < 10)  ? 0 :
-			(maxCtLevel < 30)  ? 1 :
-			(maxCtLevel < 60)  ? 2 :
-			(maxCtLevel < 100) ? 3 :
-			4;
-		return ctBonusTable[katoriIndex][levelIndex] || 1;
+		const levelToIndex = (level) => (
+			(level < 10)  ? 0 :
+			(level < 30)  ? 1 :
+			(level < 60)  ? 2 :
+			(level < 100) ? 3 :
+			4
+		);
+		const katoriModifier = ctBonusTable[katoriIndex][levelToIndex(maxCtLevel)] || 1;
+		var ctBonus = katoriModifier;
+		// Asahi bonus under verification
+			// with lv99 kashima:
+			// lv1~9: 1.1025, lv10~: 1.134
+			// without:
+			// lv1~9: 0.63, lv10~: 0.648
+		const asahiBonusTable = [
+			[-0.37,  -0.352, 1, 1, 1], // without Katori-class
+			[ 0.0025, 0.0340, 0.043, 1, 1], // with Katori-class
+		];
+		var asahiAdditive = 0, asahiModifierForSS = 1;
+		if(this.hasShip([953])){
+			const isAsahiFlagship = this.hasShip([953], 0);
+			// assumed the 1st asahi in fleet, ofc only 1 possible for now
+			const asahi = this.ship((rid, idx, ship) => ship.masterId === 953)[0];
+			// together with Katori-class and one of them is flagship
+			if(katoriIndex > 0 && (isAsahiFlagship || katoriIndex === 1 || katoriIndex === 3)){
+				asahiModifierForSS = 1.3806;
+				asahiAdditive = asahiBonusTable[1][levelToIndex(asahi.level)];
+				ctBonus = Math.qckInt("floor", ctBonus + asahiAdditive, 4);
+			// flagship without Katori-class
+			} else if(isAsahiFlagship){
+				asahiModifierForSS = 1.365;
+				asahiAdditive = asahiBonusTable[0][levelToIndex(asahi.level)];
+				ctBonus = Math.qckInt("floor", ctBonus + asahiAdditive, 3);
+			} // else no effect
+		}
+		return {
+			ctBonus,
+			katoriModifier,
+			asahiAdditive,
+			asahiModifierForSS,
+		};
 	};
 
 	/**
@@ -1354,33 +1390,44 @@ Contains summary information about a fleet and its ships
 	) {
 		const exps1 = KC3Meta.expShip(firstShipLevel),
 			exps2 = KC3Meta.expShip(secondShipLevel);
-		var baseExp = 3 + Math.floor(exps1[1] / 100 + exps2[1] / 300);
+		let baseExpMin = Math.floor(exps1[1] / 100 + exps2[1] / 300),
+			// random 0~3 additional, max used
+			baseExp = 3 + baseExpMin;
 		// return undefined and NaN if exp unknown, level 0 for 2nd empty slot acceptable
 		if(exps1.every(v => !v) || (secondShipLevel > 0 && exps2.every(v => !v))){
 			baseExp = undefined;
 		}
-		if(baseExp > 500){
-			baseExp = Math.floor(500 + Math.sqrt(baseExp - 500));
-		}
-		const baseExpWoCT = Math.floor(baseExp * 1.2),
-			baseExpS  = Math.floor(Math.floor(baseExp * 1.2) * ctBonus),
-			baseExpAB = Math.floor(Math.floor(baseExp * 1.0) * ctBonus),
+		const capExp = (exp) => (
+			exp > 500 ? Math.floor(500 + Math.sqrt(exp - 500)) : exp
+		);
+		baseExpMin = capExp(baseExpMin);
+		baseExp = capExp(baseExp);
+		const baseExpSwoCT = Math.floor(baseExp * 1.2),
+			baseExpS  = Math.floor(Math.floor(baseExp * 1.20) * ctBonus),
+			baseExpAB = Math.floor(Math.floor(baseExp * 1.00) * ctBonus),
 			baseExpC  = Math.floor(Math.floor(baseExp * 0.64) * ctBonus),
-			baseExpD  = Math.floor(Math.floor(Math.floor(baseExp * 0.56) * 0.8) * ctBonus),
-			// rank E is not verified by sufficient sample data
-			baseExpE  = Math.floor(Math.floor(baseExp * 0.401) * ctBonus);
+			baseExpD  = Math.floor(Math.floor(baseExp * 0.56) * ctBonus),
+			baseExpE  = Math.floor(Math.floor(baseExp * 0.40) * ctBonus);
+		// different from vita's int post ctBonus applied then mvp applied
+		const fsExpS = Math.floor(baseExpSwoCT * ctBonus * 1.5),
+			mvpExpS  = Math.floor(baseExpSwoCT * ctBonus * 2),
+			bothExpS = Math.floor(baseExpSwoCT * ctBonus * 1.5 * 2);
 		return {
 			levelFlagship: firstShipLevel,
 			level2ndship: secondShipLevel,
 			ctBonus: ctBonus,
 			base: baseExp,
-			sIngame: baseExpWoCT,
+			baseMin: baseExpMin,
+			sIngame: baseExpSwoCT,
 			s: baseExpS,
 			a: baseExpAB,
 			b: baseExpAB,
 			c: baseExpC,
 			d: baseExpD,
-			e: baseExpE
+			e: baseExpE,
+			sFs: fsExpS,
+			sMvp: mvpExpS,
+			sFsMvp: bothExpS,
 		};
 	};
 

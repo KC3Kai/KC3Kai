@@ -199,10 +199,10 @@
 			} else {
 				$(".pvp_ship_hp span", shipBox).text(data.hp);
 				$(".pvp_ship_level", shipBox).attr("title", "HP " + data.hp);
-				$(".pvp_ship_fp", shipBox).text(data.stats[0]);
-				$(".pvp_ship_tp", shipBox).text(data.stats[1]);
-				$(".pvp_ship_aa", shipBox).text(data.stats[2]);
-				$(".pvp_ship_ar", shipBox).text(data.stats[3]);
+				$(".pvp_ship_fp", shipBox).text(data.stats[0]).toggleClass("long", data.stats[0] > 99);
+				$(".pvp_ship_tp", shipBox).text(data.stats[1]).toggleClass("long", data.stats[1] > 99);
+				$(".pvp_ship_aa", shipBox).text(data.stats[2]).toggleClass("long", data.stats[2] > 99);
+				$(".pvp_ship_ar", shipBox).text(data.stats[3]).toggleClass("long", data.stats[3] > 99);
 			}
 			if (Array.isArray(ribbonTypes)) {
 				const ribbonId = ribbonTypes.slice(0).sort((a, b) => a - b).pop();

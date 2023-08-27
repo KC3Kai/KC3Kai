@@ -1905,7 +1905,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (13 gears) Daihatsu Landing Craft with known bonus:
+		// 8 types of (14 gears) Daihatsu Landing Craft with known bonus:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 1: [166,449,494] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either)
 		//  * 2: [ 68] Daihatsu Landing Craft
@@ -1914,6 +1914,7 @@ KC3改 Ship Object
 		//  * 5: [355,495] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
+		// [514] Toku Daihatsu Landing Craft + Panzer III Ausf. J
 		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, [355, 495], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
@@ -3046,9 +3047,12 @@ KC3改 Ship Object
 		const abyssalNameTypeMap = {
 			// Uncategorized event-only land installation:
 			//"北端上陸姫": 5, // Northernmost Landing Princess
+			//"トーチカ要塞棲姫": ?
 			"港湾夏姫": 5, // Summer Harbor Princess
 			"離島棲姫": 3, // Isolated Island Princess
 			"砲台小鬼": 2, // Artillery Imp
+			"トーチカ小鬼": 2, // Pillbox Imp
+			"対空小鬼": 2, // AA Guns Imp
 		};
 		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => shipJapName.startsWith(s));
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
@@ -3540,7 +3544,7 @@ KC3改 Ship Object
 
 	/**
 	 * @return the landing attack effect (animation) kind ID, return 0 if can not attack.
-	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
+	 *  Since Phase 2, defined by `getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
 	 *  new effect for 2nd Class Transporter implemented since March 2023 defined by `getKakuzaEffectType`
 	 */
@@ -3598,7 +3602,7 @@ KC3改 Ship Object
 			// Armed Daihatsu
 			if(this.hasEquipment(409)) return 8;
 			// Panzer III
-			if(this.hasEquipment(482)) return 11;
+			if(this.hasEquipment([482, 514])) return 11;
 			// Panzer II
 			if(this.hasEquipment(436)) return 9;
 			// T89 Tank
@@ -4319,6 +4323,7 @@ KC3改 Ship Object
 		// https://twitter.com/agosdufovj/status/1683813931784208386
 		// TSSLO might be +7, and stack with SLO +12?
 		// https://twitter.com/CC_jabberwock/status/1690759178976190465
+		// https://twitter.com/CC_jabberwock/status/1695032669741179302
 		const skilledLookoutsCount = this.countEquipment(129),
 			torpedoSquadronSloCount = this.countEquipment(412);
 		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 7; }

@@ -108,9 +108,9 @@
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
-				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122],
+				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122, 125],
 				"UnitedKingdom": [67, 78, 82, 88, 108, 112],
-				"Italia": [58, 61, 64, 68, 80, 92, 113],
+				"Italia": [58, 61, 64, 68, 80, 92, 113, 124],
 				"Netherlands": [98],
 				"Australia": [96],
 				"Sweden": [89],
@@ -2487,6 +2487,8 @@
 					"102": "65",
 					// North Carolina Class
 					"107": "65",
+					// Nevada Class
+					"125": "65",
 				},
 			},
 			// SOC Seagull
@@ -3748,6 +3750,15 @@
 					"2": 6,
 					// Fusou Class
 					"26": 6,
+					// Nevada Class
+					"125": {
+						distinctGears: [507, 508],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "triple14inch45LargeGunMount" ],
+							single: { "houg": 1, "houm": 1 },
+						},
+					},
 				},
 				byShip: [
 					// For any ship can equip it
@@ -3789,6 +3800,11 @@
 					"2": 6,
 					// Fusou Class
 					"26": 6,
+					// Nevada Class
+					"125": {
+						distinctGears: [507, 508],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
 				},
 			},
 			// 16inch Mk.I Triple Gun Mount
@@ -4767,6 +4783,8 @@
 					"68": "58",
 					// L.d.S.D.d.Abruzzi Class
 					"92": "58",
+					// Marcello Class
+					"124": "58",
 				},
 			},
 			// Bofors 15.2cm Twin Gun Mount Model 1930
@@ -4904,6 +4922,8 @@
 					"102": "65",
 					// North Carolina Class
 					"107": "65",
+					// Nevada Class
+					"125": "65",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -9132,6 +9152,8 @@
 					"68": "58",
 					// Conte di Cavour Class
 					"113": "58",
+					// Marcello Class
+					"124": "58",
 				},
 				byShip: {
 						// Conte di Cavour Nuovo

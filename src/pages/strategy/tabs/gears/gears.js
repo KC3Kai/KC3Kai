@@ -83,7 +83,7 @@
 			"t36": "overall",
 			// land base bomber
 			"t37": "overall",
-			// interceptor
+			// land base interceptor (navy)
 			"t38": "ht",
 			// jet bomber (keiun)
 			"t39": "dv",
@@ -95,7 +95,7 @@
 			"t42": "ev",
 			// seaplane fighter
 			"t43": "aa",
-			// land base fighter (new interceptor)
+			// land base fighter (army)
 			"t44": "aa",
 			// night fighter
 			"t45": "aa",
@@ -115,6 +115,10 @@
 			"t52": "overall",
 			// smoke generator
 			"t54": "overall",
+			// barrage balloon
+			"t55": "overall",
+			// land base jet fighter
+			"t56": "aa",
 			// all types
 			"tall": "type",
 		},

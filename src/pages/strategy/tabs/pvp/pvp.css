@@ -253,7 +253,11 @@
 .tab_pvp .pvp_ship_stats .pvp_ship_ar {
 	background:#ffcc00;
 }
-
+.tab_pvp .pvp_ship_stats .pvp_ship_stat.long {
+	font-size:9px;
+	width:15px;
+	margin:1px 0;
+}
 
 .tab_pvp .pvp_ship_items {
 	width:30px;

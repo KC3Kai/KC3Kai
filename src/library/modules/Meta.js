@@ -105,10 +105,10 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊'
+			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
-		specialPtImpPackNames: ['PT小鬼群'],
+		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
 		// key: slotitem ID, value: special type2 ID. from:
 		//   Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
 		//   Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
@@ -189,7 +189,7 @@ Provides access to data on built-in JSON files
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
 			// 1630's image asset not uploaded so far, never fixed
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631: 1630,*/1634: 1573, 1635: 1561, 1636: 1562,
-			1637: 364,  1638: 48, /*1639: 1639,*/
+			1637: 364,  1638: 48,/*1639: 1639,*/1640: 513,  1641: 507,  1642: 508,  1643: 85,
 		},
 		
 		/* Initialization
