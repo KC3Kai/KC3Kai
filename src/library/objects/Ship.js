@@ -2823,6 +2823,7 @@ KC3改 Ship Object
 				478, // Tatsuta Kai Ni
 				394, // Jervis Kai
 				893, // Janus Kai
+				906, // Javelin Kai?
 				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, 726, // all remodels of Fletcher-class (except Heywood base)
 				624, // Yuubari Kai Ni D
@@ -3047,10 +3048,10 @@ KC3改 Ship Object
 		const abyssalNameTypeMap = {
 			// Uncategorized event-only land installation:
 			//"北端上陸姫": 5, // Northernmost Landing Princess
-			//"トーチカ要塞棲姫": ?
 			"港湾夏姫": 5, // Summer Harbor Princess
 			"離島棲姫": 3, // Isolated Island Princess
 			"砲台小鬼": 2, // Artillery Imp
+			"トーチカ要塞棲姫": 2, // Fortified Pillbox Princess
 			"トーチカ小鬼": 2, // Pillbox Imp
 			"対空小鬼": 2, // AA Guns Imp
 		};
@@ -3108,7 +3109,7 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Nelson, Double Line (forward) formation selected.
+	 * Flagship is healthy Nelson-class, Double Line (forward) formation selected.
 	 * Minimum 6 surface ships fleet needed, main fleet only for Combined Fleet.
 	 * 3rd, 5th ship not carrier or submarine.
 	 * No AS/AS+ air battle needed like regular Artillery Spotting.
@@ -3122,7 +3123,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoNelsonTouch = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Nelson and not even Chuuha
+		// is this ship Nelson-class and not even Chuuha
 		// still okay even 3th and 5th ship are Taiha
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
@@ -3694,6 +3695,7 @@ KC3改 Ship Object
 		// Special cutins do not need isAirSuperiorityBetter
 		if(trySpTypeFirst) {
 			// Nelson Touch since 2018-09-15
+			// Rodney extended since 2023-08-28
 			if(this.canDoNelsonTouch()) {
 				const isRedT = this.collectBattleConditions().engagementId === 4;
 				results.push(KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0));

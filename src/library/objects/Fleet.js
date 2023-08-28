@@ -407,7 +407,7 @@ Contains summary information about a fleet and its ships
 						addImprove(gearObj.stars);
 					break;
 					case 436: // Panzer II/North African Spec
-					//case 482: // Panzer III?
+					//case 482: // Panzer III/North African Spec?
 					//case 514: // Panzer III Ausf.J?
 						panzerCount += 1;
 						addImprove(gearObj.stars);
@@ -1344,12 +1344,17 @@ Contains summary information about a fleet and its ships
 		var ctBonus = katoriModifier;
 		// Asahi bonus under verification
 			// with lv99 kashima:
-			// lv1~9: 1.1025, lv10~: 1.134
+			// lv1~9: 1.1025, lv10~: 1.1340, lv30~: 1.1758
+			// with lv99 kashima fs:
+			//                lv10~: 1.2075, lv30~: 1.2075
 			// without:
-			// lv1~9: 0.63, lv10~: 0.648
+			// lv1~9: 0.630, lv10~: 0.648, lv30~: 0.672
 		const asahiBonusTable = [
-			[-0.37,  -0.352, 1, 1, 1], // without Katori-class
-			[ 0.0025, 0.0340, 0.043, 1, 1], // with Katori-class
+			[-0.370, -0.352,  -0.328, 0, 0], // without Katori-class
+			[ 0,      0.0575, 0.0575, 0, 0], // with 1 Katori-class as flagship
+			[ 0.0025, 0.0340, 0.0758, 0, 0], // with 1 Katori-class
+			[ 0,      0,      0     , 0, 0], // with 2 Katori-class, 1 flagship
+			[ 0,      0,      0.0430, 0, 0], // with 2 Katori-class
 		];
 		var asahiAdditive = 0, asahiModifierForSS = 1;
 		if(this.hasShip([953])){
@@ -1358,8 +1363,8 @@ Contains summary information about a fleet and its ships
 			const asahi = this.ship((rid, idx, ship) => ship.masterId === 953)[0];
 			// together with Katori-class and one of them is flagship
 			if(katoriIndex > 0 && (isAsahiFlagship || katoriIndex === 1 || katoriIndex === 3)){
-				asahiModifierForSS = 1.3806;
-				asahiAdditive = asahiBonusTable[1][levelToIndex(asahi.level)];
+				asahiModifierForSS = 1.3809;
+				asahiAdditive = asahiBonusTable[katoriIndex][levelToIndex(asahi.level)];
 				ctBonus = Math.qckInt("floor", ctBonus + asahiAdditive, 4);
 			// flagship without Katori-class
 			} else if(isAsahiFlagship){
