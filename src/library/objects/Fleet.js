@@ -1344,7 +1344,7 @@ Contains summary information about a fleet and its ships
 		var ctBonus = katoriModifier;
 		// Asahi bonus under verification
 			// with lv99 kashima:
-			// lv1~9: 1.1025 (x1.00228), lv10~: 1.1340 (x1.031), lv30~: 1.1759 (x1.069)
+			// lv1~9: 1.1025 (x1.00228), lv10~: 1.1340 (x1.031), lv30~: 1.176 (x1.0691)
 			// with lv99 kashima fs:
 			//                lv10~: 1.2075, lv30~: 1.2075 (x1.05)
 			// without:
@@ -1353,7 +1353,7 @@ Contains summary information about a fleet and its ships
 			// ~9,     ~29,    ~59,    ~99, Married
 			[ 0.630,   0.648,  0.672,  1,   1], // without Katori-class
 			[ 1.05,    1.05,   1.05,   1,   1], // with 1 Katori-class as flagship
-			[ 1.00228, 1.031,  1.069,  1,   1], // with 1 Katori-class
+			[ 1.00228, 1.031,  1.0691, 1,   1], // with 1 Katori-class
 			[ 1,       1,      1     , 1,   1], // with 2 Katori-class, 1 flagship
 			[ 1,       1,      1.0366, 1,   1], // with 2 Katori-class
 		];

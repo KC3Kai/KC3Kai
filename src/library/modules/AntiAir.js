@@ -588,6 +588,7 @@ AntiAir: anti-air related calculations
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
 	var isUit25 = masterIdEq( uit25Icon );
 	var isI504 = masterIdEq( i504Icon );
+	var isUit24I503 = masterIdIn ([939, 940]);
 	var isTenryuuK2 = masterIdEq( tenryuuK2Icon );
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
 	var isOoyodoKai = masterIdEq ( ooyodoKaiIcon );
@@ -949,11 +950,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// UIT-25, I-504
+	// UIT-25, I-504, UIT-24/I-503?
 	declareAACI(
 		23, 1, 1, 1.05, 80, 2760, // fixed referred from abyssal resist: [1, 1]
 		[uit25Icon, aaGunNotCdIcon],
-		predAnyOf(isUit25, isI504),
+		predAnyOf(isUit25, isI504, isUit24I503),
 		withEquipmentMsts(
 			hasSome( isAAGunNotCD )
 		)
