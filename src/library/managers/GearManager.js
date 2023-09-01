@@ -17,7 +17,7 @@ Saves and loads list to and from localStorage
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46,50,51],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		// Type 21, 22 extended since 2023-02-14
-		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51],
+		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56],
 		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58],
 		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474],
@@ -30,7 +30,7 @@ Saves and loads list to and from localStorage
 		aswDepthChargeIds: [226,227,378,439,488],
 		aswDepthChargeProjectorIds: [44,45,287,288,377,472],
 		aswArmorPenetrationIds: [226,227,377,378,439,472,488],
-		interceptorsType3Ids: [38,44],
+		interceptorsType3Ids: [38,44,56],
 		interceptorsType2Ids: [48],
 		nightAircraftType3Ids: [45,46],
 
@@ -64,10 +64,9 @@ Saves and loads list to and from localStorage
 		},
 
 		// Daihatsu landing craft anti-installation power modifiers per types
-		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus, normalBonus, shikonBonus/panzer3Bonus, tokuBonus, m4a1ddBonus/chihaBonus, abBonus/armedBonus, panzer2Bonus]
+		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus/panzer3Bonus, normalBonus, shikonBonus, tokuBonus/panzer3Bonus, m4a1ddBonus/chihaBonus, abBonus/armedBonus, panzer2Bonus]
 		// see also: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AllBonusTable
 		// All base modifiers for T2 Tank are fixed to 1.0 since only 1 item of this category implemented
-		// All players have only 1 piece of M4A1 DD/Panzer2/3 for now, so no info for its count2 modifier
 		landingCraftModifiers: {
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {

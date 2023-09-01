@@ -3315,17 +3315,16 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${rankLetter}.png`);
 				const dmgGauge = thisNode.predictedDamageGauge || thisNode.predictedDamageGaugeNight || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}\n{2}{3}".format(
+				$(".module.activity .battle_rating").attr("title", [
 					KC3Meta.term("BattleRating"),
 					KC3Meta.term("BattleDamageGauges").format(
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
 					),
-					thisNode.smokeType > 0 ? "{0}\n".format(
-						KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType)
-					) : "",
+					(thisNode.smokeType > 0 ? KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType) : ""),
+					(thisNode.balloonNode ? KC3Meta.term("BattleBalloonNode") : ""),
 					thisNode.buildUnexpectedDamageMessage()
-				)).lazyInitTooltip();
+				].filter(s => !!s).join("\n")).lazyInitTooltip();
 			}
 
 			// Show battle activity if `info_compass` enabled, `info_battle` only affects enemy HP prediction
@@ -3765,16 +3764,16 @@
 			});
 			// Check CT bonus in current selected fleet
 			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
-			var ctBonus = playerFleet.lookupKatoriClassBonus();
+			var ctInfo = playerFleet.lookupKatoriClassBonus();
 			// Base EXP only affected by first two ships of opponent's fleet
-			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctBonus);
-			$(".activity_pvp .pvp_base_exp .value").text(baseExp.s || "?");
+			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctInfo.ctBonus, ctInfo.asahiModifierForSS);
+			$(".activity_pvp .pvp_base_exp .value").text(baseExp.rankS || "?");
 			$(".activity_pvp .pvp_base_exp").attr("title",
 				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
-				 + (ctBonus > 1 ? "\n{6}: {7}" : ""))
+				 + (ctInfo.ctBonus !== 1 ? "\n{6}: {7}" : ""))
 					.format(KC3Meta.term("PvpBaseExp"),
-						baseExp.base, baseExp.s, baseExp.a, baseExp.c, baseExp.d,
-						KC3Meta.term("PvpDispBaseExpWoCT").format(ctBonus), baseExp.sIngame)
+						baseExp.base, baseExp.rankS, baseExp.rankA, baseExp.rankC, baseExp.rankD,
+						KC3Meta.term("PvpDispBaseExpWoCT").format(ctInfo.ctBonus), baseExp.rankSingame)
 			).lazyInitTooltip();
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements

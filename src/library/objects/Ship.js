@@ -1905,16 +1905,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (13 gears) Daihatsu Landing Craft with known bonus:
+		// 8 types of (14 gears) Daihatsu Landing Craft with known bonus:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
-		//  * 1: [166,449,494] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either)
-		//  * 2: [ 68] Daihatsu Landing Craft
-		//  * 3: [230,482] Toku Daihatsu Landing Craft + 11th Tank Regiment, Toku Daihatsu Landing Craft + Panzer III (North African Specification)
-		//  * 4: [193] Toku Daihatsu Landing Craft
+		//  * 1: [166,449,494,495,482,514] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either), Panzer III
+		//  * 2: [68] Daihatsu Landing Craft
+		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
+		//  * 4: [193,482,514] Toku Daihatsu Landing Craft, Toku Daihatsu Landing Craft + Panzer III (North African Specification), Toku Daihatsu Landing Craft + Panzer III Ausf. J?
 		//  * 5: [355,495] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, [355, 495], [408, 409], 436];
+		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1964,9 +1964,10 @@ KC3改 Ship Object
 		if(forSdpPostcap) {
 			const hasType89LandingForce = this.hasEquipment([166, 494, 495]);
 			const hasHoni1 = this.hasEquipment(449);
-			const hasPanzer2 = landingCraftCounts[7] > 0;
-			// When T89Tank/Honi1/Panzer2 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
-			sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1) & 1) + ((hasType89LandingForce && hasPanzer2) & 1);
+			const hasPanzer2 = this.hasEquipment(436);
+			const hasPanzer3 = this.hasEquipment([482, 514]);
+			// When T89Tank/Honi1/Panzer2/Panzer3 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
+			sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1 || hasPanzer3) & 1) + ((hasType89LandingForce && hasPanzer2) & 1);
 		}
 		if(landingGroupCount > 0) improvementBonus *= Math.pow(
 			landingGroupStars / landingGroupCount / 50 + 1,
@@ -2627,17 +2628,19 @@ KC3改 Ship Object
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		// Different rounding and modifiers ordering on different targets:
 		// https://twitter.com/hedgehog_hasira/status/1569717081016520704
+		// Supposed to use 64bit precision of floating number on flooring:
+		// https://hedgehog-cp.github.io/verifyDamageFormula/floating-point-number.html
 		let result = cappedPower;
 		if(isTargetInstallation || isTargetPtImp) {
-			result = Math.floor(Math.fixed(cappedPower * antiLandModifier + antiLandAdditive)) * dayCutinModifier;
+			result = Math.floor(Math.fixed(cappedPower * antiLandModifier + antiLandAdditive, 15)) * dayCutinModifier;
 			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier));
 			// Specific ships for maps/event postcap bonuses applied here
 			result *= antiPtImpModifier;
-			if(isCritical) result = Math.floor(Math.fixed(result * criticalModifier * proficiencyCriticalModifier));
+			if(isCritical) result = Math.floor(Math.fixed(result * proficiencyCriticalModifier * criticalModifier, 15));
 		} else {
-			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier));
+			if(isApshellApplied) result = Math.floor(Math.fixed(result * apshellModifier, 15));
 			// Specific ships for maps/event postcap bonuses applied here
-			if(isCritical) result = Math.floor(Math.fixed(result * criticalModifier * proficiencyCriticalModifier));
+			if(isCritical) result = Math.floor(Math.fixed(result * proficiencyCriticalModifier * criticalModifier, 15));
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers
@@ -2820,6 +2823,7 @@ KC3改 Ship Object
 				478, // Tatsuta Kai Ni
 				394, // Jervis Kai
 				893, // Janus Kai
+				906, // Javelin Kai?
 				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, 726, // all remodels of Fletcher-class (except Heywood base)
 				624, // Yuubari Kai Ni D
@@ -3047,6 +3051,9 @@ KC3改 Ship Object
 			"港湾夏姫": 5, // Summer Harbor Princess
 			"離島棲姫": 3, // Isolated Island Princess
 			"砲台小鬼": 2, // Artillery Imp
+			"トーチカ要塞棲姫": 2, // Fortified Pillbox Princess
+			"トーチカ小鬼": 2, // Pillbox Imp
+			"対空小鬼": 2, // AA Guns Imp
 		};
 		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => shipJapName.startsWith(s));
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
@@ -3102,7 +3109,7 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Nelson, Double Line (forward) formation selected.
+	 * Flagship is healthy Nelson-class, Double Line (forward) formation selected.
 	 * Minimum 6 surface ships fleet needed, main fleet only for Combined Fleet.
 	 * 3rd, 5th ship not carrier or submarine.
 	 * No AS/AS+ air battle needed like regular Artillery Spotting.
@@ -3116,7 +3123,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoNelsonTouch = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Nelson and not even Chuuha
+		// is this ship Nelson-class and not even Chuuha
 		// still okay even 3th and 5th ship are Taiha
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
@@ -3538,7 +3545,7 @@ KC3改 Ship Object
 
 	/**
 	 * @return the landing attack effect (animation) kind ID, return 0 if can not attack.
-	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
+	 *  Since Phase 2, defined by `getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
 	 *  new effect for 2nd Class Transporter implemented since March 2023 defined by `getKakuzaEffectType`
 	 */
@@ -3596,7 +3603,7 @@ KC3改 Ship Object
 			// Armed Daihatsu
 			if(this.hasEquipment(409)) return 8;
 			// Panzer III
-			if(this.hasEquipment(482)) return 11;
+			if(this.hasEquipment([482, 514])) return 11;
 			// Panzer II
 			if(this.hasEquipment(436)) return 9;
 			// T89 Tank
@@ -3688,6 +3695,7 @@ KC3改 Ship Object
 		// Special cutins do not need isAirSuperiorityBetter
 		if(trySpTypeFirst) {
 			// Nelson Touch since 2018-09-15
+			// Rodney extended since 2023-08-28
 			if(this.canDoNelsonTouch()) {
 				const isRedT = this.collectBattleConditions().engagementId === 4;
 				results.push(KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0));
@@ -4164,6 +4172,7 @@ KC3改 Ship Object
 				// [457] bow 4 tubes had been not counted: https://twitter.com/yukicacoon/status/1530850901388587013
 				// [458] even sub radar not counted: https://twitter.com/shiro_sh39/status/1530861026941448193
 				// fixed since 2022-05-30: https://twitter.com/KanColle_STAFF/status/1531162152010395649
+				// [512] 4 tubes not counted again: https://twitter.com/nagasisoumen22/status/1690298363546349568
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457, 461]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
@@ -4312,12 +4321,15 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680201622356389892
 		// +0 if equipped by other ship types
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		// TSSLO and SLO not both counted when they are equipped at the same time
+		// TSSLO and SLO may not both counted when they are equipped at the same time
 		// https://twitter.com/agosdufovj/status/1683813931784208386
+		// TSSLO might be +7, and stack with SLO +12?
+		// https://twitter.com/CC_jabberwock/status/1690759178976190465
+		// https://twitter.com/CC_jabberwock/status/1695032669741179302
 		const skilledLookoutsCount = this.countEquipment(129),
 			torpedoSquadronSloCount = this.countEquipment(412);
-		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 8; }
-		else if (skilledLookoutsCount > 0) { gearBonus += 5; }
+		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 7; }
+		if (skilledLookoutsCount > 0) { gearBonus += 5; }
 		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (!!fleetSearchlight) { gearBonus += 7; }
@@ -4333,8 +4345,8 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680215402020741120
 		if (spType === 200) {
 			// TSSLO +0 for any ship type, SLO +8 finally
-			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 8; }
-			else if (skilledLookoutsCount > 0) { gearBonus += 3; }
+			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 7; }
+			if (skilledLookoutsCount > 0) { gearBonus += 3; }
 			// searchlight finally -10? or -5?
 			if (!!fleetSearchlight) { gearBonus -= (10 + 7); }
 			if (playerStarshell) { gearBonus -= (10 + 4); }

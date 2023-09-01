@@ -325,6 +325,15 @@
 						.attr("alt", KC3Meta.term("MinimapImageFailure"));
 					text += $("<div></div>").css("width", 300).css("height", 180)
 						.append(minimapImg).prop("outerHTML");
+					// Add LBAS range map if any, image generator: https://tsunkit.net/api/assets/images/maps/7-4?cleared=true&lbas=0&scale=0.25
+					if(self.maps["m" + mapId].airBase > 0){
+						const lbasMapImg = $("<img />")
+							.attr("src", `/assets/img/client/minimaps/ab${mapId}.png`)
+							.attr("width", 300).attr("height", 180)
+							.attr("alt", KC3Meta.term("LbasRangeImageFailure"));
+						text += $("<div></div>").css("width", 300).css("height", 180)
+							.append(lbasMapImg).prop("outerHTML");
+					}
 					const elosBranches = KC3Meta.eLosNodeFactorBranches(mapId),
 						elosBranchesKeys = Object.keys(elosBranches);
 					if(elosBranchesKeys.length > 0){

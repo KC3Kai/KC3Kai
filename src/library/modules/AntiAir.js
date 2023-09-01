@@ -33,7 +33,7 @@ AntiAir: anti-air related calculations
 	- shipPossibleAACIs(shipObj) / fleetPossibleAACIs(fleetObj)
 	  returns a list of possible AACI API Ids that ship / fleet could perform.
 	- shipAllPossibleAACIs(mst)
-	  returns a list of possible AACI API Ids that type of ship could perform ignored equipments.
+	  returns a list of possible AACI API Ids that type of ship could perform ignored equipment.
 	- sortedPossibleAaciList(aaciIdList)
 	  return a list of AACI object sorted by shot down bonus descended.
 	- AACITable[<AACI API>] returns a record of AACI info:
@@ -41,7 +41,7 @@ AntiAir: anti-air related calculations
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
 		- icon: IDs of icons representing this kind of AACI
-		- predicateShipMst: test whether "mst" can perform this kind of AACI ignoring equipments
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ignoring equipment
 		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
@@ -230,7 +230,7 @@ AntiAir: anti-air related calculations
 	// 35.6cm Twin Gun Mount Kai 3 (Dazzle Camouflage) or Kai 4
 	var is356mmTwinGunMountKai3Plus = masterIdIn([502, 503]);
 
-	// for equipments the coefficient is different for
+	// for equipment the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
 	//
@@ -239,7 +239,7 @@ AntiAir: anti-air related calculations
 	//
 	// verbs might change but the same convention should follow.
 
-	// TODO: abyssal equipments into consideration?
+	// TODO: abyssal equipment into consideration?
 
 	// it is possible for conditions to have overlap:
 	// Akizuki-gun for example is both high angle mount and short caliber main gun.
@@ -333,7 +333,7 @@ AntiAir: anti-air related calculations
 	// - q = 2 otherwise
 	function specialFloor(shipObj) {
 		var q = 1;
-		var allItems = allShipEquipments(shipObj);
+		var allItems = allShipEquipment(shipObj);
 		for (var itemInd in allItems) {
 			var item = allItems[itemInd];
 			if (item.masterId !== 0) {
@@ -347,7 +347,7 @@ AntiAir: anti-air related calculations
 		};
 	}
 
-	function allShipEquipments(shipObj) {
+	function allShipEquipment(shipObj) {
 		return shipObj.equipment(true);
 	}
 
@@ -358,7 +358,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
 			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
-		var allItems = allShipEquipments(shipObj);
+		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
 		}, 0);
@@ -502,7 +502,7 @@ AntiAir: anti-air related calculations
 	// typeIcons is a array including [ship icon, equip icon, ...]
 	// predicateShipMst is a function f: f(mst)
 	// predicateShipObj is a function f: f(shipObj)
-	// returns a boolean to indicate whether the ship in question (with equipments)
+	// returns a boolean to indicate whether the ship in question (with equipment)
 	// is capable of performing such type of AACI
 	function declareAACI(
 		apiId,
@@ -588,6 +588,7 @@ AntiAir: anti-air related calculations
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
 	var isUit25 = masterIdEq( uit25Icon );
 	var isI504 = masterIdEq( i504Icon );
+	var isUit24I503 = masterIdIn ([939, 940]);
 	var isTenryuuK2 = masterIdEq( tenryuuK2Icon );
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
 	var isOoyodoKai = masterIdEq ( ooyodoKaiIcon );
@@ -646,11 +647,11 @@ AntiAir: anti-air related calculations
 		546, // Musashi K2
 	]);
 
-	// turns a "shipObj" into the list of her equipments
+	// turns a "shipObj" into the list of her equipment
 	// for its parameter function "pred"
 	function withEquipmentMsts( pred ) {
 		return function(shipObj) {
-			var gears = allShipEquipments(shipObj)
+			var gears = allShipEquipment(shipObj)
 				.filter( function(g) { return g.masterId !== 0; } )
 				.map( function(g) { return g.master(); });
 			return pred(gears);
@@ -674,7 +675,9 @@ AntiAir: anti-air related calculations
 	}
 
 	// check if slot num of ship (excluding ex-slot) equals or greater
-	// note: 8cm HA mount variants and AA machine guns can be equipped in ex-slot
+	// note: most of following checks are requirement - 1 because many AA gears now can be put into ex-slot:
+	// 8cm HA mount variants for some ships, AAFD and AA machine guns can be equipped in ex-slot
+	// some air radars for some ships, T3 shells for some ships can be equipped in ex-slot
 	function slotNumAtLeast(n) {
 		return function(mst) {
 			var slotnum = mst.api_slot_num;
@@ -697,7 +700,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		1, 3, 5, 1.7, 65, 2100, // vita value: [3.0, 5.0, 1.75]
 		[akizukiIcon, haMountIcon, haMountIcon, radarIcon],
-		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
+		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 2 ),
@@ -707,7 +710,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		2, 3, 4, 1.7, 58, 2200, // vita value
 		[akizukiIcon, haMountIcon, radarIcon],
-		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
+		predAllOf(isAkizukiClass, slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -727,7 +730,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		4, 5, 2, 1.5, 52, 2150, // vita value
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon, radarIcon],
-		predAllOf(isBattleship, slotNumAtLeast(4)),
+		predAllOf(isBattleship, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isLargeCaliberMainGun ),
@@ -739,7 +742,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		6, 4, 1, 1.45, 40, 2410, // vita value: [4.0, 1.0, 1.5]
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon],
-		predAllOf(isBattleship, slotNumAtLeast(3)),
+		predAllOf(isBattleship, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isLargeCaliberMainGun ),
@@ -754,7 +757,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		5, 2, 3, 1.5, 50, 2400, // vita value: [2.0, 3.0, 1.55]
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast(isBuiltinHighAngleMount, 2),
@@ -764,9 +767,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		7, 2, 2, 1.35, 45, 2600, // vita value
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
-		// 8cm HA variants can be equipped on ex-slot for some ships, min slots can be 2
-		// but for now, these ships are all not 2-slot DD
-		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -777,7 +778,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		8, 2, 3, 1.4, 50, 2500, // vita value: [2.0, 3.0, 1.45]
 		[surfaceShipIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, isNotAkizukiClass, slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isBuiltinHighAngleMount ),
@@ -949,11 +950,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// UIT-25, I-504
+	// UIT-25, I-504, UIT-24/I-503?
 	declareAACI(
 		23, 1, 1, 1.05, 80, 2760, // fixed referred from abyssal resist: [1, 1]
 		[uit25Icon, aaGunNotCdIcon],
-		predAnyOf(isUit25, isI504),
+		predAnyOf(isUit25, isI504, isUit24I503),
 		withEquipmentMsts(
 			hasSome( isAAGunNotCD )
 		)
@@ -1221,7 +1222,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// return a list of possible AACI APIs based on ship and her equipments
+	// return a list of possible AACI APIs based on ship and her equipment
 	// - returns a list of **strings**, not numbers
 	//   (since object keys has to be strings, and AACITable[key] accepts keys
 	//   of both number and string anyway)
@@ -1238,7 +1239,9 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
-	// return a list of all possible AACI based on master ship only, equipments ignored
+	// return a list of all possible AACI based on master ship only, equipment ignored.
+	// since many AA gears now possible to be put into ex-slot, to check more accurately,
+	// rather than slotnum only, should also take ex-slot capability of required equipment into account.
 	function shipAllPossibleAACIs(shipMst) {
 		var result = [];
 		$.each( AACITable, function(k, entry) {

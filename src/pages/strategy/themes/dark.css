@@ -1453,7 +1453,7 @@ button, input, select, textarea {
 
 /* Aircraft */
 .tab_aircraft .item_types {
-	padding:8px 5px 5px 5px;
+	padding:5px 0;
 }
 .tab_aircraft .item_types .item_type.active {
 	background:#555555;
@@ -2192,8 +2192,12 @@ button, input, select, textarea {
 .tab_mstship .shipInfo .tokubest .to-quotes {
 	background: #2b2b5a;
 }
+.tab_mstship .shipInfo .tokubest .go-back {
+	background: #222;
+	border: 1px solid #3e3e3e;
+}
 .tab_mstship .shipInfo .bonusList hr {
-	border-color: #FFF;
+	border-color: #fff;
 }
 /* GEARS LIBRARY
 --------------------------------*/

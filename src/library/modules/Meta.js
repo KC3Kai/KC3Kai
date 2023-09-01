@@ -105,10 +105,10 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊'
+			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
-		specialPtImpPackNames: ['PT小鬼群'],
+		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
 		// key: slotitem ID, value: special type2 ID. from:
 		//   Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
 		//   Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
@@ -161,8 +161,8 @@ Provides access to data on built-in JSON files
 			316, // Amatsukaze Kai -> K2
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
-		nelsonTouchShips: [571, 576],
+		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
+		nelsonTouchShips: [571, 576, 572, 577],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
@@ -189,7 +189,7 @@ Provides access to data on built-in JSON files
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
 			// 1630's image asset not uploaded so far, never fixed
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631: 1630,*/1634: 1573, 1635: 1561, 1636: 1562,
-			1637: 364,  1638: 48, /*1639: 1639,*/
+			1637: 364,  1638: 48,/*1639: 1639,*/1640: 513,  1641: 507,  1642: 508,  1643: 85,
 		},
 		
 		/* Initialization
@@ -418,14 +418,17 @@ Provides access to data on built-in JSON files
 		
 		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes", allowId = true){
 			if(this.isAF() && jpName === this.getAF(5)) jpName = this.getAF(6);
-			// Fall-over to byId method if jpName is an integer of ship's master ID
-			if(Number.isInteger(Number(jpName)) && allowId) return this.shipNameById(jpName);
+			// Fail-over to byId method if jpName is an integer of ship's master ID
+			if(allowId && Number.isInteger(Number(jpName))) return this.shipNameById(jpName);
 			// No translation needed for empty ship.json like JP
-			if(Object.keys(this._ship).length === 0){ return jpName; }
+			if(this._cache.shipKeys === undefined){
+				this._cache.shipKeys = Object.keys(this._ship).length;
+			}
+			if(this._cache.shipKeys === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
-			if(typeof this._cache[jpName] !== "undefined"){ return this._cache[jpName]; }
+			if(this._cache[jpName] !== undefined){ return this._cache[jpName]; }
 			// If full string matched, no combination needed
-			if(typeof this._ship[jpName] !== "undefined"){
+			if(this._ship[jpName] !== undefined){
 				this._cache[jpName] = this._ship[jpName];
 				return this._cache[jpName];
 			}
@@ -751,7 +754,7 @@ Provides access to data on built-in JSON files
 					case 20: // AS
 					case 22: // AO
 						return 7; // string "AV_AO_AS";
-					default: return "Unsupport type";
+					default: return "Unsupported type";
 				}
 			})(stype);
 		},
