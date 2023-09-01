@@ -139,7 +139,10 @@
 					$(".gear_cg img", gearBox).attr("src",
 						`http://${self.myServerIp}/kcs2/resources${cardPng}`);
 				} else {
-					$(".gear_cg img", gearBox).hide();
+					$(".gear_cg img", gearBox).attr("src", KC3Meta.itemIcon(gearData.api_type[3]))
+						.error(function(e) {
+							$(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
+						});
 				}
 				
 				$(".gear_name", gearBox).text( KC3Meta.gearName( gearData.api_name ) )

@@ -161,8 +161,8 @@ Provides access to data on built-in JSON files
 			316, // Amatsukaze Kai -> K2
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
-		nelsonTouchShips: [571, 576],
+		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
+		nelsonTouchShips: [571, 576, 572, 577],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],

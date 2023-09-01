@@ -11,7 +11,7 @@
     volume: 1,
 
     // Current known implementation of battle BGM IDs
-    maxBattleId: 231,
+    maxBattleId: 235,
     missingBattleIds: [24],
 
     /**

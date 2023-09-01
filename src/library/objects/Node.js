@@ -508,6 +508,7 @@ Used by SortieManager
 		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.smokeType = battleData.api_smoke_type || 0;
+		this.balloonNode = !!battleData.api_balloon_cell;
 		
 		if((battleData.api_name || "").includes("ld_airbattle") || this.eventKind === 6) {
 			this.isLongDistanceAirRaid = true;
@@ -977,6 +978,7 @@ Used by SortieManager
 			nightData.api_nowhps[7] : nightData.api_e_nowhps[0]);
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
+		this.balloonNode = !!nightData.api_balloon_cell;
 		this.fcontactId = nightData.api_touch_plane[0]; // masterId of slotitem, starts from 1
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = nightData.api_touch_plane[1];

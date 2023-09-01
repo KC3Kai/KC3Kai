@@ -36,16 +36,22 @@
 	width:218px;
 	height:300px;
 	background:#006c91;
+	display:flex;
 	text-align:center;
+	justify-content:center;
+	align-items:center;
 	overflow:hidden;
 }
 .tab_mstupdate .mstship .ship_cg.char_image {
 	background:#052f91;
 }
 .tab_mstupdate .mstship .ship_cg img {
-	max-width:300px;
-	height:300px;
+	flex:none;
+	max-height:300px;
 	vertical-align:top;
+}
+.tab_mstupdate .mstships .mstship .ship_cg img {
+	width:218px;
 }
 .tab_mstupdate .mstship .ship_name {
 	width:218px;
@@ -85,10 +91,17 @@
 .tab_mstupdate .mstgear .gear_cg {
 	width:150px;
 	height:150px;
+	background:#006c91;
+	text-align:center;
+	display:flex;
+	justify-content:center;
+	align-items:center;
 }
 .tab_mstupdate .mstgear .gear_cg img {
-	width:150px;
-	height:150px;
+	flex:none;
+	max-width:150px;
+	max-height:150px;
+	vertical-align:top;
 }
 .tab_mstupdate .mstgear .gear_name {
 	width:150px;
