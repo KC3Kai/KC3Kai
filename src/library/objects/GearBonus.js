@@ -3544,7 +3544,7 @@
 				},
 				byShip: [
 					{
-						// Haruna Kai Ni ?
+						// Haruna Kai Ni
 						ids: [593],
 						multiple: { "houg": -1, "raig": -1, "tyku": 2 },
 					},
@@ -9942,11 +9942,11 @@
 					},
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi
-						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Maryland, Gangut, Conte di Cavour (base remodel)
+						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900, 943, 945, 953,
-								26, 27, 77, 87, 80, 81, 439, 571, 601, 918, 511, 877,
+								26, 27, 77, 87, 80, 81, 439, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
@@ -10015,9 +10015,9 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201, I-203, Scamp, Salmon?
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, Scamp, Salmon?
 						origins: [182, 460, 161,
-							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299, 891
+							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 299, 891
 						],
 						speedCap: 5,
 						synergy: [

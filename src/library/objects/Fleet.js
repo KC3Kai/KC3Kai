@@ -351,6 +351,7 @@ Contains summary information about a fleet and its ships
 	// calculate accurate landing craft bonus
 	// formula taken from 
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
+	// https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99%E6%9C%80%E5%A4%A7%E5%80%A4/%E5%A4%A7%E7%99%BA%E7%B3%BB%E8%A3%85%E5%82%99%E6%97%A9%E8%A6%8B%E8%A1%A8/%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB
 	// as of Dec 23th, 2016
 	KC3Fleet.prototype.calcLandingCraftInfo = function() {
 		const self = this;
@@ -407,8 +408,8 @@ Contains summary information about a fleet and its ships
 						addImprove(gearObj.stars);
 					break;
 					case 436: // Panzer II/North African Spec
-					//case 482: // Panzer III/North African Spec?
-					//case 514: // Panzer III Ausf.J?
+					// [482] Panzer III/North African Spec not counted
+					// [514] Panzer III Ausf.J not counted?
 						panzerCount += 1;
 						addImprove(gearObj.stars);
 					break;
@@ -417,7 +418,7 @@ Contains summary information about a fleet and its ships
 						// improvement unknown
 						addImprove(gearObj.stars);
 					// [494] Toku DLC + Chi-Ha not counted
-					// [495] Toku DLC + Chi-Ha Kai?
+					// [495] Toku DLC + Chi-Ha Kai not counted?
 					break;
 				}
 			});
