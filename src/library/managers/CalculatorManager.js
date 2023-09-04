@@ -505,6 +505,7 @@
         const isStartFromNight = currentNode.startsFromNight;
         const playerFlarePos = currentNode.flarePos;
         const enemyFlarePos = currentNode.eFlarePos;
+        const isBalloonNode = currentNode.balloonNode;
         return {
             isOnBattle,
             eventIdKind,
@@ -519,7 +520,8 @@
             isEnemyCombined,
             isStartFromNight,
             playerFlarePos,
-            enemyFlarePos
+            enemyFlarePos,
+            isBalloonNode,
         };
     };
 

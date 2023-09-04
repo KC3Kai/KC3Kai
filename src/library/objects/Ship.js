@@ -232,6 +232,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.getSpeed = function(){ return this.speed || this.master().api_soku; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
+	KC3Ship.prototype.isShouha = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.75); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	// Current HP < 25% but already in the repair dock not counted
 	KC3Ship.prototype.isTaiha = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepairing(); };
@@ -2619,6 +2620,14 @@ KC3改 Ship Object
 			const abDaihatsuBonus = abDaihatsuCount > 0 ? 1.2 * (abDaihatsuCount > 1 ? 1.1 : 1) : 1;
 			antiPtImpModifier *= abDaihatsuBonus;
 		}
+		// Barrage Balloon day shelling modifier for whole fleet
+		let balloonModifier = 1;
+		if(!isNightBattle && warfareType === "Shelling") {
+			const battleConds = this.collectBattleConditions();
+			if(battleConds.isBalloonNode) {
+				balloonModifier += this.findFleetBalloonShips() / 50;
+			}
+		}
 		// Fixed modifier for aerial type exped support
 		const aerialSupportModifier = warfareType === "SupportAerial" ? 1.35 : 1;
 		// Fixed modifier for antisub type exped support
@@ -2644,7 +2653,7 @@ KC3改 Ship Object
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers
-		result *= airstrikeConcatModifier * aerialSupportModifier * antisubSupportModifier;
+		result *= balloonModifier * airstrikeConcatModifier * aerialSupportModifier * antisubSupportModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -2673,6 +2682,7 @@ KC3改 Ship Object
 			criticalModifier,
 			proficiencyCriticalModifier,
 			dayCutinModifier,
+			balloonModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
 			antiPtImpModifier,
@@ -2681,6 +2691,28 @@ KC3改 Ship Object
 			newDepthChargeBonus,
 			remainingAmmoModifier,
 		};
+	};
+
+	/**
+	 * Look for Barrage Balloon equipped among (combined) fleet(s) on where this ship is.
+	 * @return the amount up to cap (3) of ships equipping balloon type.
+	 */
+	KC3Ship.prototype.findFleetBalloonShips = function(maxCap = 3){
+		const fleetNum = this.onFleet();
+		const locatedFleet = PlayerManager.fleets[fleetNum - 1];
+		// not on any fleet, just return balloon of her own
+		if(!locatedFleet) return this.hasEquipmentType(2, 54) & 1;
+		const countBalloonShips = (fleet) => (
+			fleet.shipsUnescaped().reduce((cnt, s) => (
+				cnt + (s.hasEquipmentType(2, 54) & 1)
+			), 0)
+		);
+		if(PlayerManager.isCombined && [1, 2].includes(fleetNum)) {
+			return Math.min(maxCap, PlayerManager.fleets.slice(0, 2).reduce((cnt, f) => (
+				cnt + countBalloonShips(f)
+			), 0));
+		}
+		return Math.min(maxCap, countBalloonShips(locatedFleet));
 	};
 
 	/**
@@ -2823,7 +2855,7 @@ KC3改 Ship Object
 				478, // Tatsuta Kai Ni
 				394, // Jervis Kai
 				893, // Janus Kai
-				906, // Javelin Kai?
+				906, // Javelin Kai
 				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, 726, // all remodels of Fletcher-class (except Heywood base)
 				624, // Yuubari Kai Ni D
@@ -3182,6 +3214,30 @@ KC3改 Ship Object
 			}
 		}
 		return false;
+	};
+
+	/**
+	 * Nelson + Rodney together modifiers variant.
+	 * @param forShipPos - to indicate the returned modifier is used for flagship or 3nd/5th ship.
+	 * @return the modifier, 1 by default for unknown conditions.
+	 * @see https://twitter.com/hojo_rennka/status/1697963510800801842
+	 */
+	KC3Ship.prototype.estimateNelsonTouchModifier = function(forShipPos = 0) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.nelsonTouchShips.includes(flagshipMstId)) return 1;
+		const posModifier = [1, 0, 1, 0, 1];
+		[2, 4].forEach(pos => {
+			const shipMstId = locatedFleet.ship(pos).masterId;
+			if(KC3Meta.nelsonTouchShips.includes(shipMstId)) {
+				posModifier[0] = 1.15;
+				posModifier[pos] = 1.2;
+			}
+		});
+		const isRedT = this.collectBattleConditions().engagementId === 4;
+		const baseModifier = isRedT ? 2.5 : 2.0;
+		return baseModifier * (posModifier[forShipPos] || 1);
 	};
 
 	/**
@@ -3697,8 +3753,7 @@ KC3改 Ship Object
 			// Nelson Touch since 2018-09-15
 			// Rodney extended since 2023-08-28
 			if(this.canDoNelsonTouch()) {
-				const isRedT = this.collectBattleConditions().engagementId === 4;
-				results.push(KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0));
+				results.push(KC3Ship.specialAttackTypeDay(100, null, this.estimateNelsonTouchModifier()));
 			}
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
@@ -3974,7 +4029,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.specialAttackExtendInfo = function(attackType){
 		const knownAttackTypes = {
-			100: { posIndex: [0, 2, 4], partIndex: [2, 4], },
+			100: { posIndex: [0, 2, 4], partIndex: [2, 4], modFunc: "estimateNelsonTouchModifier", },
 			101: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
