@@ -116,7 +116,9 @@
             for (let i = 0; i < this.lockLimit; i++) {
                 const lockBox = $(".factory .lock_mode", this.tab).clone();
                 lockBox.addClass("lock_mode_" + (i + 1));
-                $(".drop_area", lockBox).attr("data-boxId", i);
+                $(".drop_area", lockBox).attr("data-boxId", i).attr("title", "#{0}: {1}"
+                    .format(i + 1, KC3Meta.term("EventLockingTagName{0}".format(i + 1)))
+                ).lazyInitTooltip();
                 lockBox.appendTo(currentTab);
                 if (this.moLocks.includes(i) || !this.eoLocks.length) {
                     lockBox.addClass("lock_mo");

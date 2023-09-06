@@ -149,10 +149,9 @@
 						.appendTo( formPart );
 				});
 
-				var actionPath = $('input[name=lang]:checked', "#lang").val();
-				if (!actionPath)
-					actionPath = $('#radio_en', "#lang").val();
-				formPart.attr("action",	 "https://tsunkit.net/fleet/"+actionPath);
+				var lang = $('input[name=lang]:checked', "#lang").val()
+					|| $('#radio_en', "#lang").val();
+				formPart.attr("action", "https://tsunkit.net/fleet/post?lang=" + lang);
 				// starting from chrome 56, a form needs to be attached to document
 				// for the submit action to work. see https://github.com/KC3Kai/KC3Kai/issues/1781
 				$(".tab_badge .page_section.dummy_section")
@@ -162,14 +161,14 @@
 			});
 
 			// select language based on user preference
-			var kcLang = ConfigManager.language;
-			var lang =
-				kcLang === "en" ? "en"
-				: kcLang === "jp" ? "jp"
-				: kcLang === "scn" ? "cn"
-				: kcLang === "tcn" ? "tw"
-			: "en";
-			$("#radio_"+lang, ".export_lang #lang").click();
+			var supportedLang = ({
+				"en": "en",
+				"jp": "jp",
+				"scn": "cn",
+				"tcn": "tw",
+				"tcn-yue": "tw",
+			})[ConfigManager.language] || "en";
+			$("#radio_" + supportedLang, ".export_lang #lang").click();
 		},
 		exportFromIdList: function(ids) {
 			return {
