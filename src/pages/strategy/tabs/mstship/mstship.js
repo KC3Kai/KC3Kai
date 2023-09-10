@@ -991,16 +991,11 @@
 				const bonusDefs = KC3Gear.explicitStatsBonusGears();
 				const bonusList = [];
 				const synergyList = bonusDefs.synergyGears;
-				const countryCtypeMap = bonusDefs.countryCtypeMap;
 				
 				const ensureArray = array => Array.isArray(array) ? array : [array];
 				const mergeCtypesInNations = (defMap) => Object.keys(defMap).reduce((arr, key) => (
-					arr.push(...(countryCtypeMap[key] || [])), arr
+					arr.push(...KC3Meta.ctypesByCountryName(key)), arr
 				), []);
-				const findNationByShipClass = (shipClassId) => (
-					Object.keys(countryCtypeMap).find(key =>
-						countryCtypeMap[key].includes(shipClassId)) || "Japan"
-				);
 				const checkBonusExtraRequirements = (bonusDef, shipId, originId, ctype, stype) => {
 					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
 					if (bonusDef.excludeOrigins && bonusDef.excludeOrigins.includes(originId)) { return false; }
@@ -1105,7 +1100,7 @@
 							classBonus = ensureArray(classBonus);
 						}
 						if (gear.byNation) {
-							let nationBonus = gear.byNation[findNationByShipClass(shipData.api_ctype)];
+							let nationBonus = gear.byNation[KC3Meta.countryNameByCtype(shipData.api_ctype)];
 							if (typeof nationBonus === "string") { nationBonus = gear.byNation[nationBonus]; }
 							if (typeof nationBonus === "number") { nationBonus = gear.byClass[nationBonus]; }
 							if (!nationBonus) { nationBonus = []; } else { nationBonus = ensureArray(nationBonus); }

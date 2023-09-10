@@ -174,6 +174,41 @@ Provides access to data on built-in JSON files
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392],
 		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918],
+		// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
+		countryCtypeMap: {
+			"UnitedStates": [
+				65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110,
+				114, 116, 118, 121, 122, 125
+			],
+			"UnitedKingdom": [67, 78, 82, 88, 108, 112],
+			"Italy": [58, 61, 64, 68, 80, 92, 113, 124],
+			"Netherlands": [98],
+			"Australia": [96],
+			"Sweden": [89],
+			"Germany": [47, 48, 55, 57, 63],
+			"France": [70, 79],
+			"Russia": [73, 81],
+			"Japan": [
+				1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+				41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
+				71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
+				111, 115, 117, 119, 120, 123
+			],
+		},
+		// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+		countryNameIsoCode: {
+			"UnitedStates": "us",
+			"UnitedKingdom": "gb",
+			"Italy": "it",
+			"Netherlands": "nl",
+			"Australia": "au",
+			"Sweden": "se",
+			"Germany": "de",
+			"France": "fr",
+			"Russia": "ru",
+			"Japan": "jp",
+		},
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			1516: 1516, 1517: 1517, 1518: 1518, 1519: 1516, 1520: 1517, 1521: 1518, 1522: 1516, 1523: 1516,
@@ -765,6 +800,22 @@ Provides access to data on built-in JSON files
 		
 		ctypeName :function(id){
 			return this.shipName(this.ctype(id), "ctype");
+		},
+		
+		/** @param name - have to be the right spelling and capitalizing, see this.countryCtypeMap */
+		ctypesByCountryName :function(name){
+			// default to unknown empty list, thank to lack of nation attribute in ship master data
+			return this.countryCtypeMap[name] || [];
+		},
+		
+		codeByCountryName :function(name){
+			return this.countryNameIsoCode[name] || "";
+		},
+		
+		countryNameByCtype :function(ctype){
+			// mainly used by visible bonuses, default to Japan for unknown new ctype
+			return Object.keys(this.countryCtypeMap).find(key =>
+				this.countryCtypeMap[key].includes(ctype)) || "Japan";
 		},
 		
 		server :function(ip){

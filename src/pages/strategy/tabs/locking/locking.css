@@ -332,16 +332,28 @@
 
 .tab_locking .ship_item .ship_name {
 	width: auto;
-	min-width: 92px;
+	min-width: 70px;
 	flex-grow: 1;
 	overflow: hidden;
 	position: relative;
 	white-space: nowrap;
 }
 
+.tab_locking .ship_header .ship_item .ship_sortno {
+	width: 20px;
+	min-width: 20px;
+	text-align: center;
+}
+
 .tab_locking .ship_item .ship_type {
 	width: 30px;
 	min-width: 30px;
+	text-align: center;
+}
+
+.tab_locking .ship_item .ship_nation {
+	width: 16px;
+	min-width: 16px;
 	text-align: center;
 }
 

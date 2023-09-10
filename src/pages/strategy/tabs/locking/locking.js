@@ -28,6 +28,7 @@
             this.showShipLevel = true;
             this.scrollFixed = !!ConfigManager.sr_locking_fscroll;
             this.currentTab = "all";
+            this.isAutoWidthName = true;
         }
 
         /* RELOAD
@@ -223,7 +224,8 @@
 
                 canEquipDaihatsu: shipObj.canEquipDaihatsu(),
                 canEquipTank: shipObj.canEquipTank(),
-                canEquipFCF: shipObj.canEquipFCF()
+                canEquipFCF: shipObj.canEquipFCF(),
+                canEquipSPF: shipObj.canEquip(45),
             });
 
             this.lockPlans.forEach((tagPlan, tagId) => {
@@ -322,6 +324,8 @@
                 }
             });
 
+            $(".ship_nation img", shipRow)
+                .addClass("flags flag-" + KC3Meta.codeByCountryName(ship.nation));
             [0,1,2,3,4].forEach(i => {
                 this.showEquipSlot(shipRow, i + 1, ship.slotCount,
                     ship.slotMaxSize[i], ship.slots[i], ship.equip[i]);
@@ -391,7 +395,9 @@
              KC3Meta.term("LockingPlannerFilterCanEquipDaihatsuOnly"), KC3Meta.term("LockingPlannerFilterCanEquipTank"),
              KC3Meta.term("LockingPlannerFilterCanEquipTankOnly"), KC3Meta.term("LockingPlannerFilterCanEquipBoth"),
              KC3Meta.term("LockingPlannerFilterCanEquipEither"), KC3Meta.term("LockingPlannerFilterCanEquipNeither"),
-             KC3Meta.term("LockingPlannerFilterCanEquipFcf")].forEach((val, i) => {
+             KC3Meta.term("LockingPlannerFilterCanEquipFcf"),
+             KC3Meta.term("LockingPlannerFilterCanEquipSpf"),
+            ].forEach((val, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_daihatsu")
@@ -465,7 +471,8 @@
                         || (this.filterValues.daihatsu === 5 && ship.canEquipDaihatsu && ship.canEquipTank)
                         || (this.filterValues.daihatsu === 6 && (ship.canEquipDaihatsu || ship.canEquipTank))
                         || (this.filterValues.daihatsu === 7 && !(ship.canEquipDaihatsu || ship.canEquipTank))
-                        || (this.filterValues.daihatsu === 8 && ship.canEquipFCF);
+                        || (this.filterValues.daihatsu === 8 && ship.canEquipFCF)
+                        || (this.filterValues.daihatsu === 9 && ship.canEquipSPF);
                 }
             );
             this.defineSimpleFilter("tagLocked", [], 0,

@@ -187,6 +187,8 @@ KC3改 Ship Object
 		var useAlt = ConfigManager.info_stype_cve && stype === 7 && this.isEscortLightCarrier();
 		return KC3Meta.shipTypeNameSp(this.masterId, stype, useAlt);
 	};
+	KC3Ship.prototype.ctype = function(){ return KC3Meta.ctypeName(this.master().api_ctype); };
+	KC3Ship.prototype.nation = function(){ return KC3Meta.countryNameByCtype(this.master().api_ctype); };
 	KC3Ship.prototype.equipment = function(slot){
 		switch(typeof slot) {
 			case 'number':
@@ -869,7 +871,6 @@ KC3改 Ship Object
 
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
-		const countryCtypeMap = bonusDefs.countryCtypeMap;
 		const allGears = this.equipment(true);
 		allGears.forEach(g => g.exists() && KC3Gear.accumulateShipBonusGear(bonusDefs, g));
 		const masterIdList = allGears.map(g => g.masterId)
@@ -916,7 +917,7 @@ KC3改 Ship Object
 				}
 				else if (type === "byNation") {
 					for (const key in gear[type]) {
-						if (countryCtypeMap[key] && countryCtypeMap[key].includes(ctype)) {
+						if (KC3Meta.ctypesByCountryName(key).includes(ctype)) {
 							if (Array.isArray(gear[type][key])) {
 								for (let i = 0; i < gear[type][key].length; i++) {
 									gear.path = gear.path || [];
@@ -1912,10 +1913,10 @@ KC3改 Ship Object
 		//  * 2: [68] Daihatsu Landing Craft
 		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 4: [193,482,514] Toku Daihatsu Landing Craft, Toku Daihatsu Landing Craft + Panzer III (North African Specification), Toku Daihatsu Landing Craft + Panzer III Ausf. J?
-		//  * 5: [355,495] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai
+		//  * 5: [355,495,514] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai, Panzer III Ausf. J?
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495], [408, 409], 436];
+		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -5298,7 +5299,7 @@ KC3改 Ship Object
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
 		$(".ship_full_name .ship_yomi", tooltipBox).text(ConfigManager.info_ship_class_name ?
-			KC3Meta.ctypeName(shipObj.master().api_ctype) :
+			shipObj.ctype() :
 			KC3Meta.shipReadingName(shipObj.master().api_yomi)
 		);
 		$(".ship_rosterId span", tooltipBox).text(shipObj.rosterId);

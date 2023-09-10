@@ -3890,15 +3890,21 @@
 			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
 			var ctInfo = playerFleet.lookupKatoriClassBonus();
 			// Base EXP only affected by first two ships of opponent's fleet
-			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctInfo.ctBonus, ctInfo.asahiModifierForSS);
+			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctInfo.ctBonus, ctInfo.ctBonusSub);
 			$(".activity_pvp .pvp_base_exp .value").text(baseExp.rankS || "?");
-			$(".activity_pvp .pvp_base_exp").attr("title",
-				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
-				 + (ctInfo.ctBonus !== 1 ? "\n{6}: {7}" : ""))
-					.format(KC3Meta.term("PvpBaseExp"),
-						baseExp.base, baseExp.rankS, baseExp.rankA, baseExp.rankC, baseExp.rankD,
-						KC3Meta.term("PvpDispBaseExpWoCT").format(ctInfo.ctBonus), baseExp.rankSingame)
-			).lazyInitTooltip();
+			$(".activity_pvp .pvp_base_exp").attr("title", [
+				"{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}".format(
+					KC3Meta.term("PvpBaseExp"), baseExp.base, baseExp.rankS,
+					baseExp.rankA, baseExp.rankC, baseExp.rankD
+				),
+				(ctInfo.ctBonus !== 1 ? "{0}: {1}".format(
+					KC3Meta.term("PvpDispBaseExpWoCT").format(ctInfo.ctBonus), (baseExp.baseMin < baseExp.base ?
+						"{0}~{1}".format(baseExp.rankSingameMin, baseExp.rankSingame) : baseExp.rankSingame)
+				) : ""),
+				(ctInfo.ctBonusSub !== 1 ? "{0}: {1}".format(
+					KC3Meta.term("PvpExpForSSwAsahi").format(ctInfo.ctBonusSub), baseExp.expectedSub
+				) : ""),
+			].filter(s => !!s).join("\n")).lazyInitTooltip();
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
 				data.api_deck.api_ships
