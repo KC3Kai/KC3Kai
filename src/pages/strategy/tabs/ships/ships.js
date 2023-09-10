@@ -256,7 +256,7 @@
 				self.setStyleVar("--hiddenColumnsWidth", totalWidth + "px");
 			});
 			// Auto show hidden columns if page width wide enough
-			if(ConfigManager.sr_auto_width || $("#wrapper").width() >= 1200) {
+			if($("#wrapper").width() >= 1200) {
 				$(".control_buttons .show_hidden_columns").trigger("click");
 			}
 			// Binding click event ends

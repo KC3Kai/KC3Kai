@@ -44,7 +44,7 @@
 			console.assert(this.shipListDiv.length, "ship list element not found");
 			console.assert(this.shipRowTemplateDiv, "ship row template element must be defined");
 			console.assert(this.shipRowTemplateDiv.length, "ship row template element not found");
-			const isWiderPage = ConfigManager.sr_auto_width || $("#wrapper").width() >= 1200;
+			const isWiderPage = ConfigManager.sr_auto_width && $("#wrapper").width() >= 1000;
 			this.isLoading = true;
 			this.loadStartTime = Date.now();
 			// Trigger pre-show event
