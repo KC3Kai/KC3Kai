@@ -13,6 +13,7 @@
 			this.filterDefinitions = {};
 			this.pageNo = false;
 			this.heartLockMode = 0;
+			this.isRibbonShown = true;
 			this.isLoading = false;
 			this.isAutoWidthName = false;
 		}
@@ -71,7 +72,7 @@
 					const shipRow = this.shipRowTemplateDiv.clone().appendTo(this.shipListDiv);
 					const fullName = KC3Meta.term("ShipListFullNamePattern")
 						.format(KC3Meta.ctypeName(ship.ctype), ship.name);
-					const isFullUsed = ConfigManager.info_ship_class_name || (isWiderPage && this.isAutoWidthName);
+					const isFullUsed = ConfigManager.info_ship_class_name && (isWiderPage && this.isAutoWidthName);
 					
 					shipRow.toggleClass(oddEvenClass.bind(this, shipIdx));
 					$(".ship_id", shipRow).text(ship.id);
@@ -95,6 +96,11 @@
 						$(".ship_lock img", shipRow).show();
 					} else {
 						$(".ship_lock", shipRow).hide();
+					}
+					if(this.isRibbonShown && ship.ribbon > 0) {
+						$(".ship_ribbon", shipRow).addClass("r-" + ship.ribbon).show();
+					} else {
+						$(".ship_ribbon", shipRow).hide();
 					}
 					
 					// Invoke more rendering of ship row
@@ -171,6 +177,8 @@
 				locked: shipObj.lock,
 				speed: shipObj.speed,
 				range: shipObj.range,
+				ribbon: shipObj.ribbonType(),
+				spEffects: shipObj.statsSp(),
 				fleet: shipObj.onFleet()
 			};
 			return mappedObj;

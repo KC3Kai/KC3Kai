@@ -467,6 +467,28 @@
 	height: 13px;
 }
 
+.tab_locking .ship_item .ship_ribbon {
+	width: 0;
+	pointer-events: none;
+	overflow: visible;
+	display: none;
+}
+.tab_locking .ship_item .ship_ribbon img {
+	width: 12px;
+	height: 20px;
+	margin: -4px 0 0 -10px;
+	position: relative;
+	display: inline;
+}
+.tab_locking .ship_item .ship_ribbon.r-1 img {
+	content: url("/assets/img/client/ribbons/1.png");
+	filter: drop-shadow(0 0 1px rgba(255,243,140,1));
+}
+.tab_locking .ship_item .ship_ribbon.r-2 img {
+	content: url("/assets/img/client/ribbons/2.png");
+	filter: drop-shadow(0 0 1px rgba(255,87,112,1));
+}
+
 /* FILTERS
 ------------------------------*/
 

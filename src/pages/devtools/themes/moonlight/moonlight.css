@@ -4415,6 +4415,53 @@ ABYSS FLEET
 .c .module.fleet .lship.seven .locktag {
 	top: 32px;
 }
+
+.module.fleet .lship .ribbon,
+.module.fleet .sship .ribbon {
+	width:12px;
+	height:38px;
+	float:left;
+	position:absolute;
+	left:-4px;
+	top:2px;
+	z-index:1;
+	overflow:visible;
+	opacity:0.9;
+	pointer-events:none;
+	display:none;
+}
+.module.fleet .lship .ribbon img,
+.module.fleet .sship .ribbon img {
+	width:12px;
+	height:38px;
+}
+.module.fleet .lship .ribbon.r-1 img,
+.module.fleet .sship .ribbon.r-1 img {
+	content: url("/assets/img/client/ribbons/1.png");
+	filter: drop-shadow(0 0 2px rgba(255,243,140,1));
+}
+.module.fleet .lship .ribbon.r-2 img,
+.module.fleet .sship .ribbon.r-2 img {
+	content: url("/assets/img/client/ribbons/2.png");
+	filter: drop-shadow(0 0 2px rgba(255,87,112,1));
+}
+.v .module.fleet .lship .ribbon {
+	left:50px;
+}
+.v .module.fleet .sship .ribbon {
+	top:1px;
+}
+.v .module.fleet .lship .ribbon img,
+.v .module.fleet .sship .ribbon img {
+	height:46px;
+}
+.c .module.fleet .lship .ribbon img {
+	height:35px;
+}
+.c .module.fleet .sship .ribbon img {
+	height:31px;
+}
+
 .module.fleet .lship .ship_col1 {
 	width:120px;
 	height:41px;
