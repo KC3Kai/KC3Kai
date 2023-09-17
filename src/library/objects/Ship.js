@@ -2079,7 +2079,7 @@ KC3改 Ship Object
 			// Normal, T89, Toku, Panzer2, Honi1
 			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449]);
 			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
-			const dlcGroup2Count = this.countEquipment([167, 230, 482, 494, 495]);
+			const dlcGroup2Count = this.countEquipment([167, 230, 482, 514, 494, 495]);
 			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
 			const doubleSynergyFlag = abCount >= 1 && armedCount >= 1;
@@ -2621,12 +2621,15 @@ KC3改 Ship Object
 			const abDaihatsuBonus = abDaihatsuCount > 0 ? 1.2 * (abDaihatsuCount > 1 ? 1.1 : 1) : 1;
 			antiPtImpModifier *= abDaihatsuBonus;
 		}
-		// Barrage Balloon day shelling modifier for whole fleet
+		// Barrage Balloon day shelling / opening airstrike modifier for whole fleet
 		let balloonModifier = 1;
-		if(!isNightBattle && warfareType === "Shelling") {
+		if(!isNightBattle && (warfareType === "Shelling" || warfareType === "Aerial")) {
 			const battleConds = this.collectBattleConditions();
 			if(battleConds.isBalloonNode) {
 				balloonModifier += this.findFleetBalloonShips() / 50;
+				// Power, accuracy, shootdown on LBAS and antiair from enemy balloons found either
+				//if(warfareType === "Aerial")
+				//	balloonModifier *= (1 - KC3Calc.findAbyssalFleetBalloonShips() / 20);
 			}
 		}
 		// Fixed modifier for aerial type exped support
