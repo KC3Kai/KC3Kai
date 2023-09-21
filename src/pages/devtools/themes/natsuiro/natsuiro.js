@@ -1108,10 +1108,11 @@
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
 		$(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
-		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+		$(".module.activity .battle_support > img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
+		$(".module.activity .battle_support .support_balloon").hide();
 		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
@@ -3157,10 +3158,7 @@
 
 			// If support expedition or LBAS is triggered on this battle
 			if (thisNode.supportFlag || thisNode.nightSupportFlag || thisNode.lbasFlag) {
-				$(".module.activity .battle_support img").attr(
-					"src",
-					"../../../../assets/img/ui/dark_support.png"
-				);
+				$(".module.activity .battle_support > img").attr("src", "/assets/img/ui/dark_support.png");
 
 				if (thisNode.nightSupportInfo || (!thisNode.startsFromNight && thisNode.supportInfo)) {
 					const supportInfo = thisNode.supportInfo || thisNode.nightSupportInfo;
@@ -3177,12 +3175,12 @@
 						|| KC3Meta.term("BattleSupportExped")
 				).lazyInitTooltip();
 			} else {
-				$(".module.activity .battle_support img").attr(
-					"src",
-					"../../../../assets/img/ui/dark_support-x.png"
-				);
+				$(".module.activity .battle_support > img").attr("src", "/assets/img/ui/dark_support-x.png");
 			}
 			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
+			$(".module.activity .battle_support .support_balloon").toggle(thisNode.balloonNode);
+			if(thisNode.balloonNode) $(".module.activity .battle_support .support_balloon")
+				.toggleClass("deployed", KC3Calc.countFleetBalloonShips(KC3SortieManager.fleetSent) > 0);
 
 			// Day only / Night to day battle environment
 			if(!thisNode.startsFromNight || thisNode.isNightToDay){
@@ -3322,7 +3320,6 @@
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
 					),
 					(thisNode.smokeType > 0 ? KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType) : ""),
-					(thisNode.balloonNode ? KC3Meta.term("BattleBalloonNode") : ""),
 					thisNode.buildUnexpectedDamageMessage()
 				].filter(s => !!s).join("\n")).lazyInitTooltip();
 			}
@@ -3818,8 +3815,8 @@
 			$(".module.activity .abyss_combined").hide();
 
 			// Hide useless information
-			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
-			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
+			$(".module.activity .battle_support > img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
+			$(".module.activity .battle_drop      img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();

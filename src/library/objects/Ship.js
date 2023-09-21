@@ -2628,8 +2628,8 @@ KC3改 Ship Object
 			if(battleConds.isBalloonNode) {
 				balloonModifier += this.findFleetBalloonShips() / 50;
 				// Power, accuracy, shootdown on LBAS and antiair from enemy balloons found either
-				//if(warfareType === "Aerial")
-				//	balloonModifier *= (1 - KC3Calc.findAbyssalFleetBalloonShips() / 20);
+				if(warfareType === "Aerial")
+					balloonModifier *= (1 - KC3Calc.countEnemyFleetBalloonShips(battleConds.nodeData.eSlot) / 20);
 			}
 		}
 		// Fixed modifier for aerial type exped support
@@ -2701,22 +2701,12 @@ KC3改 Ship Object
 	 * Look for Barrage Balloon equipped among (combined) fleet(s) on where this ship is.
 	 * @return the amount up to cap (3) of ships equipping balloon type.
 	 */
-	KC3Ship.prototype.findFleetBalloonShips = function(maxCap = 3){
+	KC3Ship.prototype.findFleetBalloonShips = function(maxCap){
 		const fleetNum = this.onFleet();
 		const locatedFleet = PlayerManager.fleets[fleetNum - 1];
 		// not on any fleet, just return balloon of her own
-		if(!locatedFleet) return this.hasEquipmentType(2, 54) & 1;
-		const countBalloonShips = (fleet) => (
-			fleet.shipsUnescaped().reduce((cnt, s) => (
-				cnt + (s.hasEquipmentType(2, 54) & 1)
-			), 0)
-		);
-		if(PlayerManager.isCombined && [1, 2].includes(fleetNum)) {
-			return Math.min(maxCap, PlayerManager.fleets.slice(0, 2).reduce((cnt, f) => (
-				cnt + countBalloonShips(f)
-			), 0));
-		}
-		return Math.min(maxCap, countBalloonShips(locatedFleet));
+		if(!locatedFleet) return this.hasEquipmentType(3, 55) & 1;
+		return KC3Calc.countFleetBalloonShips(fleetNum, maxCap);
 	};
 
 	/**
@@ -3258,6 +3248,7 @@ KC3改 Ship Object
 		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
 		// Nelson base form not counted: https://twitter.com/CC_jabberwock/status/1538234446024847360
+		// Rodney Kai not counted too: https://twitter.com/ych0701/status/1703333186598826214
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
 			(forShipPos > 0 ? {
 				"573": 1.4,               // Mutsu Kai Ni

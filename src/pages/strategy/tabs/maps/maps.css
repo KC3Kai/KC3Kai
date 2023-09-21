@@ -680,6 +680,28 @@
 	display:none;
 }
 
+.tab_maps .sortie_list .node_result_box.node_smoke {
+	width:15px;
+	height:15px;
+	position:absolute;
+	margin:76px 0 0 78px;
+	border-radius:50%;
+	display:none;
+}
+.tab_maps .sortie_list .node_result_box.node_balloon {
+	width:15px;
+	height:15px;
+	position:absolute;
+	margin:76px 0 0 60px;
+	border-radius:50%;
+	display:none;
+}
+.tab_maps .sortie_list .node_result_box.node_smoke img,
+.tab_maps .sortie_list .node_result_box.node_balloon img {
+	width:15px;
+	height:15px;
+}
+
 .tab_maps .sortie_list .node_enemy {
 	width:120px;
 	height:40px;
