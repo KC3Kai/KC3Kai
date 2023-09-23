@@ -38,22 +38,19 @@
 .tab_locking .lock_modes .tabs {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-start;
+	align-items: stretch;
 	flex-wrap: wrap;
 	width: 100%;
 	height: auto;
+	gap: 10px;
 }
 .tab_locking .lock_modes .tab_mo {
 }
 .tab_locking .lock_modes .tab_eo {
 }
 .tab_locking .lock_mode {
-	width: var(--lockModeWidth);
-	float: left;
+	flex: 1 1 70px;
 	padding: 5px;
-}
-.tab_locking .lock_mode:last-child {
-	margin-right: 0;
 }
 
 .tab_locking .map_area {
@@ -86,12 +83,20 @@
 	overflow:hidden;
 }
 
+.tab_locking .lock_mode .ships_area {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	justify-content: space-evenly;
+	height: calc(100% - 18px - 55px); /* 18px for header, 55px for drag & drop area */
+	gap: 5px;
+}
+
 .tab_locking .lock_mode .lship {
-	width:28px;
-	height:28px;
-	line-height:28px;
-	float:left;
-	margin:0 2px 2px 0;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	position: relative;
 }
 .tab_locking .lock_mode .lship.gamelocked {
 	opacity:0.5;
@@ -100,9 +105,11 @@
 	cursor:move;
 }
 .tab_locking .lock_mode .lship img {
-	width:28px;
-	height:28px;
-	margin:-1px 0 0 -1px;
+	width: 30px;
+	height: 30px;
+	position: relative;
+	left: -1px;
+	bottom: -1px;
 	vertical-align:top;
 }
 .tab_locking .lock_mode .lship .level {
