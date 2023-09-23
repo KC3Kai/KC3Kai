@@ -501,10 +501,6 @@
 	background: #000;
 }
 
-.tab_locking .scroll_fix {
-	height: calc(100vh - var(--shipListOffsetTop) - 5px);
-}
-
 .tab_locking .vscroll::-webkit-scrollbar {
 	width: 5px;
 }
