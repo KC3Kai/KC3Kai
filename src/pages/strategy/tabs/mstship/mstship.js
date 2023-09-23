@@ -560,8 +560,17 @@
 					this.croppie.croppie("bind", {
 						url: KC3Meta.isAF() && ship_id == KC3Meta.getAF(4) ? KC3Meta.getAF(3).format("bk") : kcs2Src,
 						zoom: cgswf.attr("scale"),
+					}).then(() => {
+						$(".tab_mstship .shipInfo .cgswf .big_mode, .tab_mstship .shipInfo .cgswf .dmg_mode").show();
 					}).catch(err => {
 						$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "ERROR: failed to load image");
+						$(".tab_mstship .shipInfo .cgswf .big_mode, .tab_mstship .shipInfo .cgswf .dmg_mode").hide();
+						// unable to handle errors other than status 404 since error type unknown
+						/*
+						console.debug("Image loading error", err, err.path[0]);
+						this.croppie.croppie("destroy");
+						$(".tab_mstship .shipInfo .cgswf .image").html($("<img>").attr("src", kcs2Src));
+						*/
 					});
 				}, 250);
 			}
