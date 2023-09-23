@@ -180,10 +180,6 @@
             const tabLockCount = this.currentTab === "all"
                 ? this.lockLimit
                 : $(".tab_locking .lock_modes .tabs" + ` .${lockTypeClass}`).length;
-            const tabLockContainerWidth = $(".tab_locking .lock_modes").width();
-            const tabLockFixedWidth = [670, 670, 310, 220, 160, 130, 100, 90, 70, 70][tabLockCount] || 70;
-            const tabLockAutoWidth = Math.max(70, Math.floor(tabLockContainerWidth / tabLockCount) - 5);
-            this.setStyleVar(`--lockModeWidth`, (tabLockContainerWidth > 800 ? tabLockAutoWidth : tabLockFixedWidth) + "px");
         }
 
         adjustHeight() {
@@ -532,11 +528,12 @@
                 shipBox.off("dblclick");
             } else {
                 shipBox.addClass("plannedlock");
-                shipBox.on("dblclick", () => {this.cleanupPlannedLock(ship);} );
+                shipBox.on("dblclick", () => { this.cleanupPlannedLock(ship); } );
                 shipBox.draggable({
                     revert: (valid) => {
                         if(!valid) this.cleanupPlannedLock(ship);
                     },
+                    helper: () => shipBox.addClass("ship_icon_dragged"),
                     containment: $(".planner_area"),
                     cursor: "move",
                     start: (e, ui) => {

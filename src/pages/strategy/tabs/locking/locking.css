@@ -42,7 +42,6 @@
 	flex-wrap: wrap;
 	width: 100%;
 	height: auto;
-	gap: 10px;
 }
 .tab_locking .lock_modes .tab_mo {
 }
@@ -51,8 +50,8 @@
 .tab_locking .lock_mode {
 	flex: 1 1 70px;
 	padding: 5px;
+	margin: 0 0 5px 5px;
 }
-
 .tab_locking .map_area {
 	width:100%;
 	margin:0;
@@ -88,15 +87,15 @@
 	flex-wrap: wrap;
 	align-content: flex-start;
 	justify-content: space-evenly;
-	height: calc(100% - 18px - 55px); /* 18px for header, 55px for drag & drop area */
-	gap: 5px;
+	/* 18px for header, 55px for drag & drop area */
+	height: calc(100% - 18px - 55px);
 }
 
 .tab_locking .lock_mode .lship {
-	width: 30px;
-	height: 30px;
-	line-height: 30px;
-	position: relative;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	margin: 0 2px 2px 0;
 }
 .tab_locking .lock_mode .lship.gamelocked {
 	opacity:0.5;
@@ -105,12 +104,10 @@
 	cursor:move;
 }
 .tab_locking .lock_mode .lship img {
-	width: 30px;
-	height: 30px;
-	position: relative;
-	left: -1px;
-	bottom: -1px;
-	vertical-align:top;
+	width: 28px;
+	height: 28px;
+	vertical-align: top;
+	border-radius: 3px;
 }
 .tab_locking .lock_mode .lship .level {
 	width:18px;
@@ -198,6 +195,12 @@
 .tab_locking .lock_mode_16 {
 	background: var(--lockColor16) !important;
 }
+.tab_locking .lock_mode_17 {
+	background: var(--lockColor17) !important;
+}
+.tab_locking .lock_mode_18 {
+	background: var(--lockColor18) !important;
+}
 
 .tab_locking .lock_mode_1 .drop_area {
 	background-image: url('/assets/img/client/tags/sally1.png');
@@ -246,6 +249,12 @@
 }
 .tab_locking .lock_mode_16 .drop_area {
 	background-image: url('/assets/img/client/tags/sally16.png');
+}
+.tab_locking .lock_mode_17 .drop_area {
+	background-image: url('/assets/img/client/tags/sally17.png');
+}
+.tab_locking .lock_mode_18 .drop_area {
+	background-image: url('/assets/img/client/tags/sally18.png');
 }
 
 /* SHIP LIST - HEADER
@@ -508,6 +517,10 @@
 	background: #000;
 }
 
+.tab_locking .scroll_fix {
+	height: calc(100vh - var(--shipListOffsetTop) - 5px);
+}
+
 .tab_locking .vscroll::-webkit-scrollbar {
 	width: 5px;
 }
@@ -531,6 +544,8 @@
 .tab_locking .planner_area .ship_icon_dragged {
 	width: 28px;
 	height: 28px;
+	border-radius: 3px;
+	z-index: 99;
 }
 
 .tab_locking .ship_list .ship_item .lock_plan {
