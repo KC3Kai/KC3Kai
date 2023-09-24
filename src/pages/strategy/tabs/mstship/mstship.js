@@ -560,8 +560,17 @@
 					this.croppie.croppie("bind", {
 						url: KC3Meta.isAF() && ship_id == KC3Meta.getAF(4) ? KC3Meta.getAF(3).format("bk") : kcs2Src,
 						zoom: cgswf.attr("scale"),
+					}).then(() => {
+						$(".tab_mstship .shipInfo .cgswf .big_mode, .tab_mstship .shipInfo .cgswf .dmg_mode").show();
 					}).catch(err => {
 						$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "ERROR: failed to load image");
+						$(".tab_mstship .shipInfo .cgswf .big_mode, .tab_mstship .shipInfo .cgswf .dmg_mode").hide();
+						// unable to handle errors other than status 404 since error type unknown
+						/*
+						console.debug("Image loading error", err, err.path[0]);
+						this.croppie.croppie("destroy");
+						$(".tab_mstship .shipInfo .cgswf .image").html($("<img>").attr("src", kcs2Src));
+						*/
 					});
 				}, 250);
 			}
@@ -991,16 +1000,11 @@
 				const bonusDefs = KC3Gear.explicitStatsBonusGears();
 				const bonusList = [];
 				const synergyList = bonusDefs.synergyGears;
-				const countryCtypeMap = bonusDefs.countryCtypeMap;
 				
 				const ensureArray = array => Array.isArray(array) ? array : [array];
 				const mergeCtypesInNations = (defMap) => Object.keys(defMap).reduce((arr, key) => (
-					arr.push(...(countryCtypeMap[key] || [])), arr
+					arr.push(...KC3Meta.ctypesByCountryName(key)), arr
 				), []);
-				const findNationByShipClass = (shipClassId) => (
-					Object.keys(countryCtypeMap).find(key =>
-						countryCtypeMap[key].includes(shipClassId)) || "Japan"
-				);
 				const checkBonusExtraRequirements = (bonusDef, shipId, originId, ctype, stype) => {
 					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
 					if (bonusDef.excludeOrigins && bonusDef.excludeOrigins.includes(originId)) { return false; }
@@ -1105,7 +1109,7 @@
 							classBonus = ensureArray(classBonus);
 						}
 						if (gear.byNation) {
-							let nationBonus = gear.byNation[findNationByShipClass(shipData.api_ctype)];
+							let nationBonus = gear.byNation[KC3Meta.countryNameByCtype(shipData.api_ctype)];
 							if (typeof nationBonus === "string") { nationBonus = gear.byNation[nationBonus]; }
 							if (typeof nationBonus === "number") { nationBonus = gear.byClass[nationBonus]; }
 							if (!nationBonus) { nationBonus = []; } else { nationBonus = ensureArray(nationBonus); }

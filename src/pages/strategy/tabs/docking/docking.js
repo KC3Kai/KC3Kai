@@ -14,6 +14,7 @@
 			this.sorters = [{name:"repair_docking", reverse:false}];
 			this.showListRowCallback = this.showShipDockingStatus;
 			this.pageNo = true;
+			this.isAutoWidthName = true;
 		}
 
 		/* RELOAD

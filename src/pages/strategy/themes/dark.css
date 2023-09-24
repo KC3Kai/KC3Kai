@@ -2059,6 +2059,12 @@ button, input, select, textarea {
 .tab_event .sortie_list .sortie_box.sortie_rank_3:after {
 	color:rgb(255,0,0);
 }
+.tab_event .sortie_list .node_result_box.node_smoke,
+.tab_event .sortie_list .node_result_box.node_balloon.deployed,
+.tab_maps .sortie_list .node_result_box.node_smoke,
+.tab_maps .sortie_list .node_result_box.node_balloon.deployed {
+	background: #fc2;
+}
 
 /* ENCOUNTERS
 --------------------------------*/

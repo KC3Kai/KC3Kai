@@ -60,7 +60,7 @@
 					$(".expedCheck input", row).attr("world", curVal.api_maparea_id);
 					$(".expedText .disp", row).text(curVal.api_disp_no);
 					// Support fleet expeditions (33, 34) cannot be cancelled
-					$(".expedText .flag", row).text(!curVal.api_return_flag ? "*" : "");
+					$(".expedText .retflag", row).text(!curVal.api_return_flag ? "*" : "");
 					$(".expedTime", row).text(
 						(curVal.api_time * 60).toString().toHHMMSS().substring(0,5)
 					);

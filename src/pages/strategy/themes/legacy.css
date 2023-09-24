@@ -1646,6 +1646,12 @@ body {
 .tab_maps .sortie_list .node_exp .unit {
 	color: cornflowerblue;
 }
+.tab_event .sortie_list .node_result_box.node_smoke,
+.tab_event .sortie_list .node_result_box.node_balloon.deployed,
+.tab_maps .sortie_list .node_result_box.node_smoke,
+.tab_maps .sortie_list .node_result_box.node_balloon.deployed {
+	background: #fe7;
+}
 
 /* ENCOUNTERS
 --------------------------------*/

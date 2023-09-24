@@ -187,6 +187,14 @@
 			$(".locktag", this.element).hide();
 		}
 		
+		// Ribbon sash
+		var ribbonType = this.shipData.ribbonType();
+		if(ribbonType > 0){
+			$(".ribbon", this.element).addClass("r-" + ribbonType).show();
+		} else {
+			$(".ribbon", this.element).hide();
+		}
+		
 		return this;
 	};
 	

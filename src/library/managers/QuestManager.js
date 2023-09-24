@@ -1025,13 +1025,11 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType([7, 11, 18]) === 0
-							// replace ctype with by nation function in future?
-							&& fleet.countShipClass([
-								// US
-								65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122, 125,
-								// UK
-								67, 78, 82, 88, 108, 112,
-							]) >= 3;
+							&& fleet.countShipClass(
+								KC3Meta.ctypesByCountryName("UnitedStates").concat(
+									KC3Meta.ctypesByCountryName("UnitedKingdom")
+								)
+							) >= 3;
 					},
 				"975": // By12 Sortie Isonami K2, Uranami K2, Ayanami K2, Shikinami K2
 					({fleetSent = KC3SortieManager.fleetSent}) => {
