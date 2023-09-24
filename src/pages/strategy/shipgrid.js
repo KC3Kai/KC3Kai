@@ -13,7 +13,9 @@
 			this.filterDefinitions = {};
 			this.pageNo = false;
 			this.heartLockMode = 0;
+			this.isRibbonShown = true;
 			this.isLoading = false;
+			this.isAutoWidthName = false;
 		}
 
 		registerShipListHeaderEvent(shipHeaderDiv) {
@@ -43,6 +45,7 @@
 			console.assert(this.shipListDiv.length, "ship list element not found");
 			console.assert(this.shipRowTemplateDiv, "ship row template element must be defined");
 			console.assert(this.shipRowTemplateDiv.length, "ship row template element not found");
+			const isWiderPage = ConfigManager.sr_auto_width && $("#wrapper").width() >= 1000;
 			this.isLoading = true;
 			this.loadStartTime = Date.now();
 			// Trigger pre-show event
@@ -67,6 +70,9 @@
 					}
 					const ship = filteredShipList[shipIdx];
 					const shipRow = this.shipRowTemplateDiv.clone().appendTo(this.shipListDiv);
+					const fullName = KC3Meta.term("ShipListFullNamePattern")
+						.format(KC3Meta.ctypeName(ship.ctype), ship.name);
+					const isFullUsed = ConfigManager.info_ship_class_name && (isWiderPage && this.isAutoWidthName);
 					
 					shipRow.toggleClass(oddEvenClass.bind(this, shipIdx));
 					$(".ship_id", shipRow).text(ship.id);
@@ -74,7 +80,7 @@
 						.attr("src", KC3Ship.shipIcon(ship.masterId))
 						.attr("alt", ship.masterId)
 						.click(this.shipClickFunc);
-					$(".ship_name", shipRow).text(ship.name)
+					$(".ship_name", shipRow).text(isFullUsed ? fullName : ship.name)
 						.toggleClass("ship_kekkon-color", ship.level >= 100);
 					$(".ship_type", shipRow).text(
 						KC3Meta.stype(ship.stype, ConfigManager.info_stype_cve && ship.isCve)
@@ -90,6 +96,11 @@
 						$(".ship_lock img", shipRow).show();
 					} else {
 						$(".ship_lock", shipRow).hide();
+					}
+					if(this.isRibbonShown && ship.ribbon > 0) {
+						$(".ship_ribbon", shipRow).addClass("r-" + ship.ribbon).show();
+					} else {
+						$(".ship_ribbon", shipRow).hide();
 					}
 					
 					// Invoke more rendering of ship row
@@ -154,6 +165,7 @@
 				stype: shipMaster.api_stype,
 				isCve: shipObj.isEscortLightCarrier(),
 				ctype: shipMaster.api_ctype,
+				nation: KC3Meta.countryNameByCtype(shipMaster.api_ctype),
 				sortno: shipMaster.api_sortno,
 				sortId: shipMaster.api_sort_id,
 				name: shipObj.name(),
@@ -165,6 +177,8 @@
 				locked: shipObj.lock,
 				speed: shipObj.speed,
 				range: shipObj.range,
+				ribbon: shipObj.ribbonType(),
+				spEffects: shipObj.statsSp(),
 				fleet: shipObj.onFleet()
 			};
 			return mappedObj;
@@ -180,6 +194,7 @@
 			define("lv", KC3Meta.term("ShipListGridTitleLevel"), ship => -ship.level);
 			define("sortno", KC3Meta.term("ShipListGridTitleSortNo"), ship => ship.sortId);
 			define("morale", KC3Meta.term("ShipMorale"), ship => -ship.morale);
+			define("nation", KC3Meta.term("ShipListGridTitleNation"), ship => ship.nation);
 		}
 
 		defineSimpleFilter(filterName, optionValues, defaultIndex, testShipFunc) {

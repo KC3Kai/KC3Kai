@@ -1222,10 +1222,11 @@
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
 		$(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
-		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+		$(".module.activity .battle_support > img").attr("src", "../../../../assets/img/ui/dark_support.png");
 		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
+		$(".module.activity .battle_support .support_balloon").hide();
 		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
@@ -3285,7 +3286,7 @@
 
 			// If support expedition or LBAS is triggered on this battle
 			if (thisNode.supportFlag || thisNode.nightSupportFlag || thisNode.lbasFlag) {
-				$(".module.activity .battle_support img").attr(
+				$(".module.activity .battle_support > img").attr(
 					"src",
 					"../../../../assets/img/ui/dark_support.png"
 				);
@@ -3305,12 +3306,15 @@
 						|| KC3Meta.term("BattleSupportExped")
 				).lazyInitTooltip();
 			} else {
-				$(".module.activity .battle_support img").attr(
+				$(".module.activity .battle_support > img").attr(
 					"src",
 					"../../../../assets/img/ui/dark_support-x.png"
 				);
 			}
 			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
+			$(".module.activity .battle_support .support_balloon").toggle(thisNode.balloonNode);
+			if(thisNode.balloonNode) $(".module.activity .battle_support .support_balloon")
+				.toggleClass("deployed", KC3Calc.countFleetBalloonShips(KC3SortieManager.fleetSent) > 0);
 
 			// Day only / Night to day battle environment
 			if(!thisNode.startsFromNight || thisNode.isNightToDay){
@@ -3450,7 +3454,6 @@
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
 					),
 					(thisNode.smokeType > 0 ? KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType) : ""),
-					(thisNode.balloonNode ? KC3Meta.term("BattleBalloonNode") : ""),
 					thisNode.buildUnexpectedDamageMessage()
 				].filter(s => !!s).join("\n")).lazyInitTooltip();
 			}
@@ -3890,15 +3893,21 @@
 			var playerFleet = PlayerManager.fleets[selectedFleet > 4 ? 0 : selectedFleet - 1];
 			var ctInfo = playerFleet.lookupKatoriClassBonus();
 			// Base EXP only affected by first two ships of opponent's fleet
-			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctInfo.ctBonus, ctInfo.asahiModifierForSS);
+			var baseExp = playerFleet.estimatePvpBaseExp(levelFlagship, level2ndShip, ctInfo.ctBonus, ctInfo.ctBonusSub);
 			$(".activity_pvp .pvp_base_exp .value").text(baseExp.rankS || "?");
-			$(".activity_pvp .pvp_base_exp").attr("title",
-				("{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}"
-				 + (ctInfo.ctBonus !== 1 ? "\n{6}: {7}" : ""))
-					.format(KC3Meta.term("PvpBaseExp"),
-						baseExp.base, baseExp.rankS, baseExp.rankA, baseExp.rankC, baseExp.rankD,
-						KC3Meta.term("PvpDispBaseExpWoCT").format(ctInfo.ctBonus), baseExp.rankSingame)
-			).lazyInitTooltip();
+			$(".activity_pvp .pvp_base_exp").attr("title", [
+				"{0}: {1}\nSS/S: {2}\nA/B: {3}\nC: {4}\nD: {5}".format(
+					KC3Meta.term("PvpBaseExp"), baseExp.base, baseExp.rankS,
+					baseExp.rankA, baseExp.rankC, baseExp.rankD
+				),
+				(ctInfo.ctBonus !== 1 ? "{0}: {1}".format(
+					KC3Meta.term("PvpDispBaseExpWoCT").format(ctInfo.ctBonus), (baseExp.baseMin < baseExp.base ?
+						"{0}~{1}".format(baseExp.rankSingameMin, baseExp.rankSingame) : baseExp.rankSingame)
+				) : ""),
+				(ctInfo.ctBonusSub !== 1 ? "{0}: {1}".format(
+					KC3Meta.term("PvpExpForSSwAsahi").format(ctInfo.ctBonusSub), baseExp.expectedSub
+				) : ""),
+			].filter(s => !!s).join("\n")).lazyInitTooltip();
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
 				data.api_deck.api_ships
@@ -3936,8 +3945,8 @@
 			$(".module.activity .abyss_combined").hide();
 
 			// Hide useless information
-			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
-			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
+			$(".module.activity .battle_support > img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
+			$(".module.activity .battle_drop      img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();

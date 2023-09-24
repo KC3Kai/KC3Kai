@@ -1333,6 +1333,30 @@
 								$(".node_friend", nodeBox).hide();
 							}
 							
+							// Smoke Screen indicator, daytime only for now
+							if(thisNode.smokeType > 0){
+								$(".node_smoke img", nodeBox).attr("src", KC3Meta.itemIcon(54));
+								$(".node_smoke", nodeBox).show().attr("title", KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType));
+							} else {
+								$(".node_smoke", nodeBox).hide();
+							}
+							
+							// Barrage Balloon indicator, daytime only for now
+							if(!!battle.data.api_balloon_cell){
+								$(".node_balloon img", nodeBox).attr("src", KC3Meta.itemIcon(55));
+								const fleetStates = battle.fleetStates || [];
+								// count equipped gears from node battle data, even sunk or retreated
+								const friendBalloons = KC3Calc.countEnemyFleetBalloonShips((fleetStates[0] || {}).equip, (fleetStates[1] || {}).equip);
+								const enemyBalloons = KC3Calc.countEnemyFleetBalloonShips(battle.data.api_eSlot, battle.data.api_eSlot_combined);
+								const isDeployed = friendBalloons + enemyBalloons > 0;
+								$(".node_balloon", nodeBox).show().attr("title", [
+									KC3Meta.term("BattleBalloonNode"),
+									(isDeployed ? "{0} vs {1}".format(friendBalloons, enemyBalloons) :"")
+								].join("\n")).toggleClass("deployed", isDeployed);
+							} else {
+								$(".node_balloon", nodeBox).hide();
+							}
+							
 							// Conditions
 							$(".node_engage", nodeBox).text( thisNode.engagement[2] );
 							$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );

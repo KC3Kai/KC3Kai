@@ -106,25 +106,6 @@
 				frenchYellowSecGunMount: 0,
 				frenchYellowSecGunMountIds: [247],
 			},
-			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
-			"countryCtypeMap": {
-				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118, 121, 122, 125],
-				"UnitedKingdom": [67, 78, 82, 88, 108, 112],
-				"Italia": [58, 61, 64, 68, 80, 92, 113, 124],
-				"Netherlands": [98],
-				"Australia": [96],
-				"Sweden": [89],
-				"Germany": [47, 48, 55, 57, 63],
-				"France": [70, 79],
-				"Russia": [73, 81],
-				"Japan": [
-					1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-					21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-					41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
-					71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
-					111, 115, 117, 119, 120, 123
-				],
-			},
 			// Ryuusei
 			"18": {
 				count: 0,
@@ -3544,7 +3525,7 @@
 				},
 				byShip: [
 					{
-						// Haruna Kai Ni ?
+						// Haruna Kai Ni
 						ids: [593],
 						multiple: { "houg": -1, "raig": -1, "tyku": 2 },
 					},
@@ -8033,7 +8014,7 @@
 				count: 0,
 				starsDist: [],
 				byNation: {
-					"Italia": [
+					"Italy": [
 						{
 							minStars: 4,
 							multiple: { "tyku": 1, "houk": 1 },
@@ -8043,7 +8024,7 @@
 							single: { "houg": 1 },
 						},
 					],
-					"Germany": "Italia",
+					"Germany": "Italy",
 				},
 				byShip: [
 					{
@@ -9942,11 +9923,11 @@
 					},
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi
-						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Maryland, Gangut, Conte di Cavour (base remodel)
+						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900, 943, 945, 953,
-								26, 27, 77, 87, 80, 81, 439, 571, 601, 918, 511, 877,
+								26, 27, 77, 87, 80, 81, 439, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
@@ -10015,9 +9996,9 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201, I-203, Scamp, Salmon?
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, Scamp, Salmon?
 						origins: [182, 460, 161,
-							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299, 891
+							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 299, 891
 						],
 						speedCap: 5,
 						synergy: [

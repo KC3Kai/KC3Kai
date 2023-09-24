@@ -481,6 +481,37 @@
     };
 
     /**
+     * @return the amount up to cap (3) of ships equipping balloon type.
+     */
+    const countFleetBalloonShips = (fleetNum, maxCap = 3) => {
+        const locatedFleet = PlayerManager.fleets[fleetNum - 1];
+        if(!locatedFleet) return 0;
+        const countBalloonShips = (fleet) => (
+            fleet.shipsUnescaped().reduce((cnt, s) => (
+                // note: don't count type2: 54, because smoke generator 54 too
+                cnt + (s.hasEquipmentType(3, 55) & 1)
+            ), 0)
+        );
+        if(PlayerManager.isCombined && [1, 2].includes(fleetNum)) {
+            return Math.min(maxCap, PlayerManager.fleets.slice(0, 2).reduce((cnt, f) => (
+                cnt + countBalloonShips(f)
+            ), 0));
+        }
+        return Math.min(maxCap, countBalloonShips(locatedFleet));
+    };
+
+    /**
+     * TODO takes sunk or escaped ships into account if possible
+     * @return the amount up to cap (3) of ships equipping balloon type.
+     */
+    const countEnemyFleetBalloonShips = (mainShipSlots, escortShipSlots, maxCap = 3) => {
+        const countBalloonShips = (slotArr) => ((slotArr || []).map(arr =>
+            (arr || []).some(id => KC3Master.slotitem(id).api_type && KC3Master.slotitem(id).api_type[3] === 55) & 1
+        ).sumValues());
+        return Math.min(maxCap, countBalloonShips(mainShipSlots) + countBalloonShips(escortShipSlots));
+    };
+
+    /**
      * Collect battle conditions from current battle node if available.
      * Do not fall-back to default value here if not available, leave it to appliers.
      * @return an object contains battle properties we concern at.
@@ -505,7 +536,9 @@
         const isStartFromNight = currentNode.startsFromNight;
         const playerFlarePos = currentNode.flarePos;
         const enemyFlarePos = currentNode.eFlarePos;
+        const isBalloonNode = currentNode.balloonNode;
         return {
+            nodeData: currentNode,
             isOnBattle,
             eventIdKind,
             engagementId,
@@ -519,7 +552,8 @@
             isEnemyCombined,
             isStartFromNight,
             playerFlarePos,
-            enemyFlarePos
+            enemyFlarePos,
+            isBalloonNode,
         };
     };
 
@@ -901,6 +935,8 @@
         buildFleetsSpeedText,
         buildFleetsElosText,
         buildFleetExpedSupportText,
+        countFleetBalloonShips,
+        countEnemyFleetBalloonShips,
         collectBattleConditions,
         
         getLandBasesResupplyCost,

@@ -38,7 +38,7 @@
 .tab_locking .lock_modes .tabs {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-start;
+	align-items: stretch;
 	flex-wrap: wrap;
 	width: 100%;
 	height: auto;
@@ -48,14 +48,10 @@
 .tab_locking .lock_modes .tab_eo {
 }
 .tab_locking .lock_mode {
-	width: var(--lockModeWidth);
-	float: left;
+	flex: 1 1 70px;
 	padding: 5px;
+	margin: 0 0 5px 5px;
 }
-.tab_locking .lock_mode:last-child {
-	margin-right: 0;
-}
-
 .tab_locking .map_area {
 	width:100%;
 	margin:0;
@@ -86,12 +82,20 @@
 	overflow:hidden;
 }
 
+.tab_locking .lock_mode .ships_area {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	justify-content: space-evenly;
+	/* 18px for header, 55px for drag & drop area */
+	height: calc(100% - 18px - 55px);
+}
+
 .tab_locking .lock_mode .lship {
-	width:28px;
-	height:28px;
-	line-height:28px;
-	float:left;
-	margin:0 2px 2px 0;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	margin: 0 2px 2px 0;
 }
 .tab_locking .lock_mode .lship.gamelocked {
 	opacity:0.5;
@@ -100,10 +104,10 @@
 	cursor:move;
 }
 .tab_locking .lock_mode .lship img {
-	width:28px;
-	height:28px;
-	margin:-1px 0 0 -1px;
-	vertical-align:top;
+	width: 28px;
+	height: 28px;
+	vertical-align: top;
+	border-radius: 3px;
 }
 .tab_locking .lock_mode .lship .level {
 	width:18px;
@@ -191,6 +195,12 @@
 .tab_locking .lock_mode_16 {
 	background: var(--lockColor16) !important;
 }
+.tab_locking .lock_mode_17 {
+	background: var(--lockColor17) !important;
+}
+.tab_locking .lock_mode_18 {
+	background: var(--lockColor18) !important;
+}
 
 .tab_locking .lock_mode_1 .drop_area {
 	background-image: url('/assets/img/client/tags/sally1.png');
@@ -239,6 +249,12 @@
 }
 .tab_locking .lock_mode_16 .drop_area {
 	background-image: url('/assets/img/client/tags/sally16.png');
+}
+.tab_locking .lock_mode_17 .drop_area {
+	background-image: url('/assets/img/client/tags/sally17.png');
+}
+.tab_locking .lock_mode_18 .drop_area {
+	background-image: url('/assets/img/client/tags/sally18.png');
 }
 
 /* SHIP LIST - HEADER
@@ -332,16 +348,28 @@
 
 .tab_locking .ship_item .ship_name {
 	width: auto;
-	min-width: 92px;
+	min-width: 70px;
 	flex-grow: 1;
 	overflow: hidden;
 	position: relative;
 	white-space: nowrap;
 }
 
+.tab_locking .ship_header .ship_item .ship_sortno {
+	width: 20px;
+	min-width: 20px;
+	text-align: center;
+}
+
 .tab_locking .ship_item .ship_type {
 	width: 30px;
 	min-width: 30px;
+	text-align: center;
+}
+
+.tab_locking .ship_item .ship_nation {
+	width: 16px;
+	min-width: 16px;
 	text-align: center;
 }
 
@@ -455,6 +483,28 @@
 	height: 13px;
 }
 
+.tab_locking .ship_item .ship_ribbon {
+	width: 0;
+	pointer-events: none;
+	overflow: visible;
+	display: none;
+}
+.tab_locking .ship_item .ship_ribbon img {
+	width: 12px;
+	height: 20px;
+	margin: -4px 0 0 -10px;
+	position: relative;
+	display: inline;
+}
+.tab_locking .ship_item .ship_ribbon.r-1 img {
+	content: url("/assets/img/client/ribbons/1.png");
+	filter: drop-shadow(0 0 1px rgba(255,243,140,1));
+}
+.tab_locking .ship_item .ship_ribbon.r-2 img {
+	content: url("/assets/img/client/ribbons/2.png");
+	filter: drop-shadow(0 0 1px rgba(255,87,112,1));
+}
+
 /* FILTERS
 ------------------------------*/
 
@@ -528,6 +578,8 @@
 .tab_locking .planner_area .ship_icon_dragged {
 	width: 28px;
 	height: 28px;
+	border-radius: 3px;
+	z-index: 99;
 }
 
 .tab_locking .ship_list .ship_item .lock_plan {

@@ -29,6 +29,7 @@
   <div class="help_a">
     <p>Since game phase 2 has changed the experience distribution of normal maps, now exps gained from battles are different by enemy composites, no longer the same value by maps.</p>
     <p>So instead of choosing a map to get the mapped Base Exp, now you can directly input the expected (maybe average) Base Exp value of the node(s) from where you are going to grind. <code>Base Exp</code> value can be found at right-top of in-game battle result screen, or the <code>Node EXP</code> after expanding Nodes in your Strategy Room Maps History page.</p>
+    <p>To account <code>Base Exp</code> from PvP battles, just use the one at right-top of in-game PvP battle result screen, or hover on the battle rank in your Strategy Room PvP History page, if no training cruiser involved. For average exp among PvP battles, you have to evaluate it by yourself, and take training cruiser modifier into account if any.</p>
   </div>
   <div class="help_q">How goal template works?</div>
   <div class="help_a">
@@ -145,7 +146,7 @@
     <div class="ship_col ship_target">
       <div class="ship_label i18n">ExpcalcLevelGoalLabel</div>
       <div class="ship_value"></div>
-      <div class="ship_input"><input type="textbox"></div>
+      <div class="ship_input"><input type="text"></div>
     </div>
     <div class="ship_col ship_exp ship_activeOnly">
       <div class="ship_label i18n">ExpcalcExpLeftLabel</div>
@@ -166,7 +167,7 @@
       <div class="ship_label i18n">ExpcalcBaseExpLabel</div>
       <div class="ship_value"></div>
       <div class="ship_input">
-          <input type="textbox">
+          <input type="text">
       </div>
     </div>
     <div class="ship_col ship_rank ship_activeOnly">
@@ -221,7 +222,7 @@
         <div class="goal_label i18n">ExpcalcBaseExpLabel</div>
         <div class="goal_value"></div>
         <div class="goal_input">
-          <input type="text" name="baseexp">
+          <input type="number" name="baseexp">
         </div>
       </div>
       <div class="goal_col goal_rank">

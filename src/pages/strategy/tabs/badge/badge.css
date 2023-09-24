@@ -65,14 +65,18 @@
 
 /* LANGUAGE
 ------------------------------*/
-.tab_badge .export_lang .lang_choice  {
+.tab_badge .export_lang .lang_choice {
 	background:#f0f5fa;
 	padding:2px 5px;
 	height:24px;
 	float:left;
 	width:140px;
-	margin:0 20px 10px 0;
+	margin:0 20px 5px 0;
 	border-radius:7px;
+}
+.tab_badge .export_lang .lang_choice span {
+	vertical-align:text-bottom;
+	margin-left:3px;
 }
 
 .tab_badge .page_section.dummy_section {

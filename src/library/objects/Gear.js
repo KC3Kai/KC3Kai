@@ -129,11 +129,6 @@ KC3改 Equipment Object
 		const shipClassId = ship.master().api_ctype;
 		const shipTypeId = ship.master().api_stype;
 		const synergyGears = bonusGears.synergyGears || {};
-		const countryCtypeMap = bonusGears.countryCtypeMap || {};
-		const findNationByShipClass = (shipClassId) => (
-			Object.keys(countryCtypeMap).find(key =>
-				countryCtypeMap[key].includes(shipClassId)) || "Japan"
-		);
 		const addBonusToTotalIfNecessary = (bonusDef, gearInfo) => {
 			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
@@ -240,7 +235,7 @@ KC3改 Equipment Object
 					}
 				}
 				if(gearInfo.byNation) {
-					const nationName = findNationByShipClass(shipClassId);
+					const nationName = KC3Meta.countryNameByCtype(shipClassId);
 					let byNation = gearInfo.byNation[nationName];
 					if(byNation) {
 						if(typeof byNation === "string") {

@@ -90,7 +90,7 @@
 	text-align:center;
 	display:none;
 }
-.tab_expcalc .ship_goal .ship_input input[type=textbox] {
+.tab_expcalc .ship_goal .ship_input input[type=text] {
 	width:50px;
 	height:20px;
 	border:1px solid #a9a9a9;
@@ -293,15 +293,22 @@
 	color: #039;
 }
 
-
 .tab_expcalc .goal_template .goal_input {
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
 }
-
-.tab_expcalc .goal_template .goal_input input {
+.tab_expcalc .goal_template .goal_input input[type=text],
+.tab_expcalc .goal_template .goal_input input[type=number] {
 	width: 90%;
+	height: 20px;
+	border:1px solid #a9a9a9;
+}
+.tab_expcalc .goal_template .goal_input select {
+	height: 20px;
+}
+.tab_expcalc .goal_template .goal_baseexp .goal_input input {
+	text-align: center;
 }
 
 .tab_expcalc .goal_template .goal_up {

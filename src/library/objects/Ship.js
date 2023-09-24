@@ -187,6 +187,8 @@ KC3改 Ship Object
 		var useAlt = ConfigManager.info_stype_cve && stype === 7 && this.isEscortLightCarrier();
 		return KC3Meta.shipTypeNameSp(this.masterId, stype, useAlt);
 	};
+	KC3Ship.prototype.ctype = function(){ return KC3Meta.ctypeName(this.master().api_ctype); };
+	KC3Ship.prototype.nation = function(){ return KC3Meta.countryNameByCtype(this.master().api_ctype); };
 	KC3Ship.prototype.equipment = function(slot){
 		switch(typeof slot) {
 			case 'number':
@@ -232,6 +234,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.getSpeed = function(){ return this.speed || this.master().api_soku; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
+	KC3Ship.prototype.isShouha = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.75); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	// Current HP < 25% but already in the repair dock not counted
 	KC3Ship.prototype.isTaiha = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepairing(); };
@@ -868,7 +871,6 @@ KC3改 Ship Object
 
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
-		const countryCtypeMap = bonusDefs.countryCtypeMap;
 		const allGears = this.equipment(true);
 		allGears.forEach(g => g.exists() && KC3Gear.accumulateShipBonusGear(bonusDefs, g));
 		const masterIdList = allGears.map(g => g.masterId)
@@ -915,7 +917,7 @@ KC3改 Ship Object
 				}
 				else if (type === "byNation") {
 					for (const key in gear[type]) {
-						if (countryCtypeMap[key] && countryCtypeMap[key].includes(ctype)) {
+						if (KC3Meta.ctypesByCountryName(key).includes(ctype)) {
 							if (Array.isArray(gear[type][key])) {
 								for (let i = 0; i < gear[type][key].length; i++) {
 									gear.path = gear.path || [];
@@ -1911,10 +1913,10 @@ KC3改 Ship Object
 		//  * 2: [68] Daihatsu Landing Craft
 		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 4: [193,482,514] Toku Daihatsu Landing Craft, Toku Daihatsu Landing Craft + Panzer III (North African Specification), Toku Daihatsu Landing Craft + Panzer III Ausf. J?
-		//  * 5: [355,495] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai
+		//  * 5: [355,495,514] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai, Panzer III Ausf. J?
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495], [408, 409], 436];
+		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2077,7 +2079,7 @@ KC3改 Ship Object
 			// Normal, T89, Toku, Panzer2, Honi1
 			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449]);
 			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
-			const dlcGroup2Count = this.countEquipment([167, 230, 482, 494, 495]);
+			const dlcGroup2Count = this.countEquipment([167, 230, 482, 514, 494, 495]);
 			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
 			const doubleSynergyFlag = abCount >= 1 && armedCount >= 1;
@@ -2619,6 +2621,17 @@ KC3改 Ship Object
 			const abDaihatsuBonus = abDaihatsuCount > 0 ? 1.2 * (abDaihatsuCount > 1 ? 1.1 : 1) : 1;
 			antiPtImpModifier *= abDaihatsuBonus;
 		}
+		// Barrage Balloon day shelling / opening airstrike modifier for whole fleet
+		let balloonModifier = 1;
+		if(!isNightBattle && (warfareType === "Shelling" || warfareType === "Aerial")) {
+			const battleConds = this.collectBattleConditions();
+			if(battleConds.isBalloonNode) {
+				balloonModifier += this.findFleetBalloonShips() / 50;
+				// Power, accuracy, shootdown on LBAS and antiair from enemy balloons found either
+				if(warfareType === "Aerial")
+					balloonModifier *= (1 - KC3Calc.countEnemyFleetBalloonShips(battleConds.nodeData.eSlot) / 20);
+			}
+		}
 		// Fixed modifier for aerial type exped support
 		const aerialSupportModifier = warfareType === "SupportAerial" ? 1.35 : 1;
 		// Fixed modifier for antisub type exped support
@@ -2644,7 +2657,7 @@ KC3改 Ship Object
 			result *= dayCutinModifier;
 		}
 		// Uncertain rounding and ordering for other modifiers
-		result *= airstrikeConcatModifier * aerialSupportModifier * antisubSupportModifier;
+		result *= balloonModifier * airstrikeConcatModifier * aerialSupportModifier * antisubSupportModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -2673,6 +2686,7 @@ KC3改 Ship Object
 			criticalModifier,
 			proficiencyCriticalModifier,
 			dayCutinModifier,
+			balloonModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
 			antiPtImpModifier,
@@ -2681,6 +2695,18 @@ KC3改 Ship Object
 			newDepthChargeBonus,
 			remainingAmmoModifier,
 		};
+	};
+
+	/**
+	 * Look for Barrage Balloon equipped among (combined) fleet(s) on where this ship is.
+	 * @return the amount up to cap (3) of ships equipping balloon type.
+	 */
+	KC3Ship.prototype.findFleetBalloonShips = function(maxCap){
+		const fleetNum = this.onFleet();
+		const locatedFleet = PlayerManager.fleets[fleetNum - 1];
+		// not on any fleet, just return balloon of her own
+		if(!locatedFleet) return this.hasEquipmentType(3, 55) & 1;
+		return KC3Calc.countFleetBalloonShips(fleetNum, maxCap);
 	};
 
 	/**
@@ -2823,7 +2849,7 @@ KC3改 Ship Object
 				478, // Tatsuta Kai Ni
 				394, // Jervis Kai
 				893, // Janus Kai
-				906, // Javelin Kai?
+				906, // Javelin Kai
 				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, 726, // all remodels of Fletcher-class (except Heywood base)
 				624, // Yuubari Kai Ni D
@@ -3185,6 +3211,30 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Nelson + Rodney together modifiers variant.
+	 * @param forShipPos - to indicate the returned modifier is used for flagship or 3nd/5th ship.
+	 * @return the modifier, 1 by default for unknown conditions.
+	 * @see https://twitter.com/hojo_rennka/status/1697963510800801842
+	 */
+	KC3Ship.prototype.estimateNelsonTouchModifier = function(forShipPos = 0) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.nelsonTouchShips.includes(flagshipMstId)) return 1;
+		const posModifier = [1, 0, 1, 0, 1];
+		[2, 4].forEach(pos => {
+			const shipMstId = locatedFleet.ship(pos).masterId;
+			if(KC3Meta.nelsonTouchShips.includes(shipMstId)) {
+				posModifier[0] = 1.15;
+				posModifier[pos] = 1.2;
+			}
+		});
+		const isRedT = this.collectBattleConditions().engagementId === 4;
+		const baseModifier = isRedT ? 2.5 : 2.0;
+		return baseModifier * (posModifier[forShipPos] || 1);
+	};
+
+	/**
 	 * Nagato/Mutsu Kai Ni special cut-in attack modifiers are variant depending on the fleet 2nd ship.
 	 * And there are different modifiers for 2nd ship's 3rd attack.
 	 * @param forShipPos - to indicate the returned modifier is used for flagship or 2nd ship.
@@ -3198,6 +3248,7 @@ KC3改 Ship Object
 		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
 		// Nelson base form not counted: https://twitter.com/CC_jabberwock/status/1538234446024847360
+		// Rodney Kai not counted too: https://twitter.com/ych0701/status/1703333186598826214
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
 			(forShipPos > 0 ? {
 				"573": 1.4,               // Mutsu Kai Ni
@@ -3697,8 +3748,7 @@ KC3改 Ship Object
 			// Nelson Touch since 2018-09-15
 			// Rodney extended since 2023-08-28
 			if(this.canDoNelsonTouch()) {
-				const isRedT = this.collectBattleConditions().engagementId === 4;
-				results.push(KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0));
+				results.push(KC3Ship.specialAttackTypeDay(100, null, this.estimateNelsonTouchModifier()));
 			}
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
@@ -3974,7 +4024,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.specialAttackExtendInfo = function(attackType){
 		const knownAttackTypes = {
-			100: { posIndex: [0, 2, 4], partIndex: [2, 4], },
+			100: { posIndex: [0, 2, 4], partIndex: [2, 4], modFunc: "estimateNelsonTouchModifier", },
 			101: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
@@ -5243,7 +5293,7 @@ KC3改 Ship Object
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
 		$(".ship_full_name .ship_yomi", tooltipBox).text(ConfigManager.info_ship_class_name ?
-			KC3Meta.ctypeName(shipObj.master().api_ctype) :
+			shipObj.ctype() :
 			KC3Meta.shipReadingName(shipObj.master().api_yomi)
 		);
 		$(".ship_rosterId span", tooltipBox).text(shipObj.rosterId);

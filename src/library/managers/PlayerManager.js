@@ -25,7 +25,10 @@ Does not include Ships and Gears which are managed by other Managers
 		statistics: {},
 		maxResource: 350000,
 		maxConsumable: 3000,
-		maxUseitem: 9999,
+		// for furniture boxes, some are capped at 99
+		maxUseitem: 10000,
+		// display cap only, unknown cap for usable slotitem
+		maxPayitem: 99,
 		maxCoin: 350000,
 
 		init :function(){

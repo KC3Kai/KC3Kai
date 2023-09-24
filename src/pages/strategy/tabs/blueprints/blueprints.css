@@ -187,10 +187,16 @@
 
 .tab_blueprints .summary {
 	margin:5px 0 5px 0;
-	display:none;
+	display:flex;
+	flex-wrap:wrap;
+	flex-direction:row;
+}
+.tab_blueprints .summary .total_items,
+.tab_blueprints .summary .owned_items {
+	display:flex;
+	flex-wrap:wrap;
 }
 .tab_blueprints .summary .summary_item {
-	float:left;
 	margin:0 5px 0 0;
 }
 .tab_blueprints .summary .summary_item.l10n {
