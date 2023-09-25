@@ -505,8 +505,10 @@
      * @return the amount up to cap (3) of ships equipping balloon type.
      */
     const countEnemyFleetBalloonShips = (mainShipSlots, escortShipSlots, maxCap = 3) => {
-        const countBalloonShips = (slotArr) => ((slotArr || []).map(arr =>
-            (arr || []).some(id => KC3Master.slotitem(id).api_type && KC3Master.slotitem(id).api_type[3] === 55) & 1
+        const countBalloonShips = (slotArr) => (!Array.isArray(slotArr) ? 0 : slotArr.map(arr =>
+            !Array.isArray(arr) ? 0 : (
+                arr.some(id => KC3Master.slotitem(id).api_type && KC3Master.slotitem(id).api_type[3] === 55) & 1
+            )
         ).sumValues());
         return Math.min(maxCap, countBalloonShips(mainShipSlots) + countBalloonShips(escortShipSlots));
     };
