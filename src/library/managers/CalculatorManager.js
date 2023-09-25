@@ -688,19 +688,20 @@
      */
     const estimateNightActiveCombinedEnemy = (node = KC3SortieManager.currentNode()) => {
         if(node && node.predictedFleetsDay && node.maxHPs && Array.isArray(node.maxHPs.enemyEscort)) {
-            if(node.maxHPs.enemyEscort.length !== node.predictedFleetsDay.enemyEscort.length) return;
-            let score = 0;
-            node.maxHPs.enemyEscort.forEach((mhp, idx) => {
-                const enemy = node.predictedFleetsDay.enemyEscort[idx],
-                      chp = enemy.hp, isSunk = enemy.sunk;
-                if(mhp > 0 && !isSunk) {
-                    if(idx == 0) score += 1;
-                    score += (chp / mhp) > 0.5  ? 1
-                           // might be 0.5 instead for PT imp pack?
-                           : (chp / mhp) > 0.25 ? 0.7
-                           : 0;
+            const score = node.maxHPs.enemyEscort.reduce((acc, mhp, idx) => {
+                const enemy = node.predictedFleetsDay.enemyEscort[idx];
+                if(enemy && mhp > 0) {
+                    const chp = enemy.hp, isSunk = enemy.sunk;
+                    if(!isSunk) {
+                        if(idx == 0) acc += 1;
+                        acc += (chp / mhp) > 0.5  ? 1
+                             // might be 0.5 instead for PT imp pack?
+                             : (chp / mhp) > 0.25 ? 0.7
+                             : 0;
+                    }
                 }
-            });
+                return acc;
+            }, 0);
             return score < 3 ? 1 : 2;
         }
         return;
