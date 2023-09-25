@@ -684,19 +684,19 @@
      * @return 1=main fleet, 2=escort fleet, undefined if judgement conditions not met
      * @see predicted version of `api_active_deck[1]` in /api_req_combined_battle/ec_midnight_battle
      * @see https://wikiwiki.jp/kancolle/%E9%80%A3%E5%90%88%E8%89%A6%E9%9A%8A#wd314cc2
+     * @see https://en.kancollewiki.net/w/index.php?title=Enemy_Combined_Fleet&diff=110224&oldid=110223
      */
     const estimateNightActiveCombinedEnemy = (node = KC3SortieManager.currentNode()) => {
-        if(node && node.predictedFleetsDay && Array.isArray(node.eParamEscort)) {
-            if(node.eParamEscort.length !== node.predictedFleetsDay.enemyEscort.length) return;
+        if(node && node.predictedFleetsDay && node.maxHPs && Array.isArray(node.maxHPs.enemyEscort)) {
+            if(node.maxHPs.enemyEscort.length !== node.predictedFleetsDay.enemyEscort.length) return;
             let score = 0;
-            node.eParamEscort.forEach((param, idx) => {
-                if(!Array.isArray(param)) return;
-                const mhp = param[0];
+            node.maxHPs.enemyEscort.forEach((mhp, idx) => {
                 const enemy = node.predictedFleetsDay.enemyEscort[idx],
                       chp = enemy.hp, isSunk = enemy.sunk;
-                if(!isSunk) {
+                if(mhp > 0 && !isSunk) {
                     if(idx == 0) score += 1;
                     score += (chp / mhp) > 0.5  ? 1
+                           // might be 0.5 instead for PT imp pack?
                            : (chp / mhp) > 0.25 ? 0.7
                            : 0;
                 }
