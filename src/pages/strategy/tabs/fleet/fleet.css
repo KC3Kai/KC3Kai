@@ -191,6 +191,33 @@
 }
 .tab_fleet .fleet_ship .ship_pic img {
 }
+.tab_fleet .fleet_ship .ship_ribbon {
+	width:12px;
+	height:32px;
+	float:left;
+	position:absolute;
+	left:6px;
+	top:12px;
+	transform:rotate(34deg);
+	z-index:9;
+	overflow:visible;
+	opacity:0.8;
+	pointer-events:none;
+	display:none;
+}
+.tab_fleet .fleet_ship .ship_ribbon img {
+	width:12px;
+	height:32px;
+	vertical-align:top;
+}
+.tab_fleet .fleet_ship .ship_ribbon.r-1 img {
+	content:url("/assets/img/client/ribbons/1.png");
+	filter:drop-shadow(0 0 2px rgba(255,243,140,1));
+}
+.tab_fleet .fleet_ship .ship_ribbon.r-2 img {
+	content:url("/assets/img/client/ribbons/2.png");
+	filter:drop-shadow(0 0 2px rgba(255,87,112,1));
+}
 
 .tab_fleet .fleet_ship .ship_lv {
 }

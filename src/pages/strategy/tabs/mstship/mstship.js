@@ -35,7 +35,7 @@
 		currentShipId: 0,
 		currentCardVersion: "",
 		audio: false,
-		server_ip: "",
+		gameServer: {},
 		atLvlSlider: null,
 		// placeholder, the real function is set during "execute()"
 		// atLevelChange(newLevel) updates info on UI
@@ -50,8 +50,7 @@
 		---------------------------------*/
 		init :function(){
 			KC3Meta.loadQuotes();
-			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			this.server_ip = MyServer.ip;
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 			// Ship master data will not changed frequently
 			this.mergedMasterShips = KC3Master.all_ships(true, true);
 		},
@@ -165,7 +164,7 @@
 				var isPortVoices = vnum >= 2 && vnum <= 4;
 				// 0: ship card version, 1: voice version, 2: poke voice version?
 				var soundVersion = shipVersions[isPortVoices ? 2 : 1] || 1;
-				var voiceSrc = "http://"+self.server_ip
+				var voiceSrc = self.gameServer.urlPrefix
 							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
 							+ (soundVersion > 1 ? "?version=" + soundVersion : "");
 				var voiceSize = 0;
@@ -432,7 +431,7 @@
 			this.currentCardVersion = shipVersions[0];
 			
 			// old swf url
-			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.server_ip
+			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.gameServer.ip
 					+ ("&shipFile=" + shipFile + (tryDamagedGraph ? this.damagedBossFileSuffix : ""))
 					+ ("&abyss=" + (KC3Master.isAbyssalShip(ship_id) ? 1 : 0))
 					+ (!this.currentCardVersion ? "" : "&ver=" + this.currentCardVersion);
@@ -457,7 +456,7 @@
 			var cgType = KC3Master.isSeasonalShip(ship_id) ? "character_full" :
 				KC3Master.isAbyssalShip(ship_id) || viewCgMode ? "full" :
 				"card";
-			var kcs2Src = `http://${this.server_ip}/kcs2/resources` +
+			var kcs2Src = this.gameServer.urlPrefix + "/kcs2/resources" +
 				KC3Master.png_file(ship_id, cgType, "ship", tryDamagedGraph);
 			if(this.currentCardVersion) kcs2Src += `?version=${this.currentCardVersion}`;
 			
@@ -533,7 +532,7 @@
 					const img = $("<img />"),
 						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged,
 							isDebuffedBoss ? this.damagedBossFileSuffix : "");
-					const url = `http://${this.server_ip}/kcs2/resources${imgUri}`
+					const url = `${this.gameServer.urlPrefix}/kcs2/resources${imgUri}`
 						+ (this.currentCardVersion ? `?version=${this.currentCardVersion}` : "");
 					img.attr("src", url).attr("alt", imgUri).attr("title", type)
 						.css("max-width", "100%")

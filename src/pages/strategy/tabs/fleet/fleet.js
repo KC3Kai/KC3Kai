@@ -556,6 +556,8 @@
 			$(".ship_pic img", shipBox).click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			});
+			const ribbon = kcShip.ribbonType && kcShip.ribbonType();
+			$(".ship_ribbon", shipBox).addClass(ribbon > 0 ? "r-" + ribbon : "").toggle(ribbon > 0);
 			$(".ship_lv_val", shipBox).text( kcShip.level );
 			$(".ship_lk_val", shipBox).text( kcShip.lk[0] );
 			$(".ship_luck", shipBox).toggle(kcShip.lk[0] !== undefined);
@@ -694,6 +696,7 @@
 						tp: ship.tp[0],
 						sp: ship.speed,
 						mod: ship.mod,
+						spitems: ship.spitems,
 						equipments: convertEquipmentsOf(ship)
 					};
 					fleetObjShips.push( shipObj );

@@ -505,8 +505,10 @@
      * @return the amount up to cap (3) of ships equipping balloon type.
      */
     const countEnemyFleetBalloonShips = (mainShipSlots, escortShipSlots, maxCap = 3) => {
-        const countBalloonShips = (slotArr) => ((slotArr || []).map(arr =>
-            (arr || []).some(id => KC3Master.slotitem(id).api_type && KC3Master.slotitem(id).api_type[3] === 55) & 1
+        const countBalloonShips = (slotArr) => (!Array.isArray(slotArr) ? 0 : slotArr.map(arr =>
+            !Array.isArray(arr) ? 0 : (
+                arr.some(id => KC3Master.slotitem(id).api_type && KC3Master.slotitem(id).api_type[3] === 55) & 1
+            )
         ).sumValues());
         return Math.min(maxCap, countBalloonShips(mainShipSlots) + countBalloonShips(escortShipSlots));
     };
@@ -684,23 +686,24 @@
      * @return 1=main fleet, 2=escort fleet, undefined if judgement conditions not met
      * @see predicted version of `api_active_deck[1]` in /api_req_combined_battle/ec_midnight_battle
      * @see https://wikiwiki.jp/kancolle/%E9%80%A3%E5%90%88%E8%89%A6%E9%9A%8A#wd314cc2
+     * @see https://en.kancollewiki.net/w/index.php?title=Enemy_Combined_Fleet&diff=110224&oldid=110223
      */
     const estimateNightActiveCombinedEnemy = (node = KC3SortieManager.currentNode()) => {
-        if(node && node.predictedFleetsDay && Array.isArray(node.eParamEscort)) {
-            if(node.eParamEscort.length !== node.predictedFleetsDay.enemyEscort.length) return;
-            let score = 0;
-            node.eParamEscort.forEach((param, idx) => {
-                if(!Array.isArray(param)) return;
-                const mhp = param[0];
-                const enemy = node.predictedFleetsDay.enemyEscort[idx],
-                      chp = enemy.hp, isSunk = enemy.sunk;
-                if(!isSunk) {
-                    if(idx == 0) score += 1;
-                    score += (chp / mhp) > 0.5  ? 1
-                           : (chp / mhp) > 0.25 ? 0.7
-                           : 0;
+        if(node && node.predictedFleetsDay && node.maxHPs && Array.isArray(node.maxHPs.enemyEscort)) {
+            const score = node.maxHPs.enemyEscort.reduce((acc, mhp, idx) => {
+                const enemy = node.predictedFleetsDay.enemyEscort[idx];
+                if(enemy && mhp > 0) {
+                    const chp = enemy.hp, isSunk = enemy.sunk;
+                    if(!isSunk) {
+                        if(idx == 0) acc += 1;
+                        acc += (chp / mhp) > 0.5  ? 1
+                             // might be 0.5 instead for PT imp pack?
+                             : (chp / mhp) > 0.25 ? 0.7
+                             : 0;
+                    }
                 }
-            });
+                return acc;
+            }, 0);
             return score < 3 ? 1 : 2;
         }
         return;

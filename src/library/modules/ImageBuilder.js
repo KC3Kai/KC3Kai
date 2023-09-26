@@ -199,6 +199,22 @@
     shipObj.mod = shipData.kyouka;
     shipObj.stats = shipData.stats;
     shipObj.equipments = [];
+    if(shipData.effect && Array.isArray(shipData.effect.type)) {
+      shipObj.spitems = shipData.effect.type.map(type => {
+        const  spitems = { type: type };
+        switch(type) {
+          case 1:
+            spitems.tp = 1;
+            spitems.ar = 1;
+            break;
+          case 2:
+            spitems.fp = 2;
+            spitems.ev = 2;
+            break;
+        }
+        return spitems;
+      });
+    }
 
     $.each(shipData.equip, function (i, gearId) {
       if (gearId <= 0) {
@@ -258,6 +274,7 @@
       ship.level = shipObj.level;
       ship.morale = shipObj.morale;
       ship.cond = shipObj.morale;
+      if(Array.isArray(shipObj.spitems)) ship.spitems = shipObj.spitems;
 
       ship.items = [-1, -1, -1, -1, -1];
       // slot sizes are not saved for now, use the copy of master data

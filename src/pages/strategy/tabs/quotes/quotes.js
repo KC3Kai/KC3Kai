@@ -4,15 +4,14 @@
 	KC3StrategyTabs.quotes = new KC3StrategyTab("quotes");
 	
 	KC3StrategyTabs.quotes.definition = {
-		server_ip: "",
+		gameServer: {},
 		repo_loc: "../../data/",
 		enQuotes: [],
 		jpQuotes: [],
 		showFriendLines: false,
 		
 		init :function() {
-			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			this.server_ip = MyServer.ip;
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 		},
 		reload: function() {
 			ConfigManager.load();
@@ -106,7 +105,7 @@
 					var voiceLine = $(this).data("voiceLine");
 					console.debug("VOICE: shipId, voiceNum, voiceFile, voiceLine", masterId,
 						voiceNum, voiceFile, voiceLine);
-					var voiceSrc = `http://${self.server_ip}/kcs/sound/kc${currentGraph}/${voiceFile}.mp3`;
+					var voiceSrc = `${self.gameServer.urlPrefix}/kcs/sound/kc${currentGraph}/${voiceFile}.mp3`;
 					if($(".voice_list .player audio").length){
 						$(".voice_list .player audio").each((_, a) => {a.pause();});
 					}
