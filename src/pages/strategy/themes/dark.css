@@ -1665,6 +1665,13 @@ button, input, select, textarea {
 	height:120%;
 	margin:-14px 0px 0px -24px;
 }
+.tab_fleet .fleet_ship .ship_ribbon {
+	height:30px;
+	left:56px;
+	top:73px;
+	transform:unset;
+	overflow:hidden;
+}
 .tab_fleet .fleet_ship .ship_tiny_stats {
 	pointer-events:none;
 	height:33px;

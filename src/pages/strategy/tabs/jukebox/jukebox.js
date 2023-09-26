@@ -19,8 +19,7 @@
      * Prepares initial static data needed.
      */
     init() {
-      const myServer = (new KC3Server()).setNum(PlayerManager.hq.server);
-      this.serverIp = myServer.ip;
+      this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
     },
 
     /**
@@ -199,7 +198,7 @@
         const target = ev.currentTarget;
         const id = $(target).attr('bgm-id');
         const type = $(target).attr('bgm-type');
-        const src = `http://${this.serverIp}/kcs2/resources${KC3Master.bgm_file(id, type)}`;
+        const src = `${this.gameServer.urlPrefix}/kcs2/resources${KC3Master.bgm_file(id, type)}`;
         this.playAudio(src);
 
         $('.music-list .track').removeClass('active');

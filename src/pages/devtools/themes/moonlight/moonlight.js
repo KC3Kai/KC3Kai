@@ -438,8 +438,8 @@
 		KC3QuestSync.init();
 
 		myKcServerHost = myKcServerHost || (() => {
-			let host = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
-			return host ? `http://${host}` : "";
+			const server = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+			return server.urlPrefix;
 		})();
 
 		// Live translations of Quests, only work for EN

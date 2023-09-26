@@ -27,7 +27,7 @@
 			this.pointY = 0;
 			this.scale = 0.5;
 			this.isLoading = false;
-			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 		},
 
 		/* RELOAD: optional
@@ -81,7 +81,7 @@
 				const baseUrl = [
 					"http://fleet.diablohu.com/!/pics-ships/",
 					"http://fleet.diablohu.com/!/pics-ships-extra/",
-					`http://${this.serverIp}/kcs2/resources`
+					`${this.gameServer.urlPrefix}/kcs2/resources`
 				][this.isOfficial ? 2 : 1 & (this.seasonalIdx > 0)];
 				this.imgUrl = this.isOfficial ?
 					baseUrl + KC3Master.png_file(this.shipId, "full", "ship", this.isDamaged) :
