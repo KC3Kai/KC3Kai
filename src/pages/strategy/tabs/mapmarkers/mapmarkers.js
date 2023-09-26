@@ -11,7 +11,7 @@
 		---------------------------------*/
 		init: function() {
 			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.8/pixi.min.js";
-			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 			this.jsonMaxLength = 60;
 			this.world = 0;
 			this.map = 1;
@@ -171,7 +171,7 @@
 			const getMapRscUrl = (world, map, file) => {
 				const worldStr = String(world).pad(3, '0');
 				const mapStr = String(map).pad(2, '0');
-				return `http://${this.serverIp}/kcs2/resources/map/${worldStr}/${mapStr}_${file}`;
+				return `${this.gameServer.urlPrefix}/kcs2/resources/map/${worldStr}/${mapStr}_${file}`;
 			};
 			// api_color_no to common image texture, see `SpotPointImage.prototype._getTexture`
 			const getTextureByColorNo = colorNo => {
@@ -428,7 +428,7 @@
 				$(".loading").css("visibility", "hidden");
 			});
 			loader.add(this.mapImgMetaUrl)
-			.add(`http://${this.serverIp}/kcs2/img/map/map_main.json`)
+			.add(`${this.gameServer.urlPrefix}/kcs2/img/map/map_main.json`)
 			.load((thisLoader, res) => {
 				if(!this.isLoading) {
 					clearStage();

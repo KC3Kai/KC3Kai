@@ -9,7 +9,7 @@
 		newGears: [],
 		newCgs: [],
 		archivedCgs: [],
-		myServerIp: "",
+		gameServer: {},
 		listedShipId: 1,
 		shipsPerPage: 18,
 		
@@ -17,7 +17,7 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			this.myServerIp = (new KC3Server()).setNum( PlayerManager.hq.server ).ip;
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 		},
 		
 		/* RELOAD
@@ -86,7 +86,7 @@
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
 				shipVersion = (KC3Master.graph(shipData.api_id).api_version || [])[0];
-				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
+				shipSrc = "/assets/swf/card.swf?sip=" + self.gameServer.ip + "&shipFile=" + shipFile;
 				
 				if (KC3Master.isSeasonalShip(shipData.api_id)) {
 					// SEASONAL CG, no longer work since 2017-04-05 no seasonal item leak
@@ -116,7 +116,7 @@
 				if(KC3Meta.isAF() && shipData.api_id == KC3Meta.getAF(4)) {
 					$(".ship_cg img", shipBox).attr("src", KC3Meta.getAF(3).format("bk"));
 				} else {
-					$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
+					$(".ship_cg img", shipBox).attr("src", `${self.gameServer.urlPrefix}/kcs2/resources${shipPng}`);
 				}
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_id ) )
 					.data("tab", "mstship")
@@ -137,7 +137,7 @@
 				if(!KC3Master.isAbyssalGear(gearData.api_id)) {
 					const cardPng = KC3Master.png_file(gearData.api_id, "card", "slot");
 					$(".gear_cg img", gearBox).attr("src",
-						`http://${self.myServerIp}/kcs2/resources${cardPng}`);
+						`${self.gameServer.urlPrefix}/kcs2/resources${cardPng}`);
 				} else {
 					$(".gear_cg img", gearBox).attr("src", KC3Meta.itemIcon(gearData.api_type[3]))
 						.error(function(e) {
@@ -161,7 +161,7 @@
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
 				shipVersion = (KC3Master.graph(shipData.api_id).api_version || [])[0];
-				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
+				shipSrc = "/assets/swf/card.swf?sip=" + self.gameServer.ip + "&shipFile=" + shipFile;
 				shipSrc += "&abyss=0&forceFrame=10";
 				// try to fix seasonal CG coordinate offset based on battle values
 				const [coordX, coordY] = KC3Master.graph(shipData.api_id).api_battle_n;
@@ -170,7 +170,7 @@
 				shipPng = KC3Master.png_file(shipData.api_id, "full", "ship");
 				shipPng += !shipVersion ? "" : "?version=" + shipVersion;
 				
-				$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
+				$(".ship_cg img", shipBox).attr("src", `${self.gameServer.urlPrefix}/kcs2/resources${shipPng}`);
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_id ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
@@ -191,7 +191,7 @@
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipId).api_filename;
 				shipVersion = (KC3Master.graph(shipId).api_version || [])[0];
-				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
+				shipSrc = "/assets/swf/card.swf?sip=" + self.gameServer.ip + "&shipFile=" + shipFile;
 				shipSrc += "&abyss=0&forceFrame=8";
 				shipSrc += "&forceX=-40&forceY=-30";
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
@@ -199,7 +199,7 @@
 				shipPng = KC3Master.png_file(shipId, "character_full", "ship");
 				shipPng += !shipVersion ? "" : "?version=" + shipVersion;
 				
-				$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
+				$(".ship_cg img", shipBox).attr("src", `${self.gameServer.urlPrefix}/kcs2/resources${shipPng}`);
 				$(".ship_name", shipBox).text(seasonalData && seasonalData.api_name ?
 					seasonalData.api_name : "Not available")
 					.data("tab", "mstship")
@@ -234,8 +234,8 @@
 							+ (!version ? "" : "?version=" + version),
 						imgFileChar = KC3Master.png_file(shipData.api_id, "character_full", "ship")
 							+ (!version ? "" : "?version=" + version),
-						fullUrl = `http://${self.myServerIp}/kcs2/resources${imgFileFull}`,
-						charUrl = `http://${self.myServerIp}/kcs2/resources${imgFileChar}`;
+						fullUrl = `${self.gameServer.urlPrefix}/kcs2/resources${imgFileFull}`,
+						charUrl = `${self.gameServer.urlPrefix}/kcs2/resources${imgFileChar}`;
 					$(".ship_cg img", shipBox).attr("src", fullUrl);
 					$(".ship_cg", shipBox).addClass("hover").click(toggleImageFunc)
 						.attr("data-full", fullUrl)

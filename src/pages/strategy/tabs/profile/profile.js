@@ -58,8 +58,8 @@
 			$(".hq_name .hq_content").text(PlayerManager.hq.name);
 			$(".hq_desc .hq_content").text(PlayerManager.hq.desc);
 			
-			const myServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			$(".hq_server .hq_content").text( myServer.name );
+			const myServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+			$(".hq_server .hq_content").text(myServer.name).attr("title", myServer.urlPrefix);
 			
 			$(".hq_rank .hq_content").text(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").text(PlayerManager.hq.level);

@@ -819,16 +819,16 @@ Provides access to data on built-in JSON files
 		},
 		
 		server :function(ip){
-			return this._servers[ip] || {name:"Unknown Server", num:0, ip:ip };
+			return this._servers[ip] || { name: "Unknown Server", num: 0, ip: ip };
 		},
 		
 		serverByNum :function(num){
 			for(var ctr in this._servers){
-				if(this._servers[ctr].num==num){
+				if(this._servers[ctr].num == num){
 					return this._servers[ctr];
 				}
 			}
-			return {name:"Unknown Server", num:num, ip:"0.0.0.0" };
+			return { name: "Unknown Server", num: num, ip: "127.0.0.1" };
 		},
 		
 		gauge :function(mapId, gaugeNum){

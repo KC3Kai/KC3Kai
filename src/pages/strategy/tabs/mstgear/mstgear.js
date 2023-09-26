@@ -7,14 +7,13 @@
 		tabSelf: KC3StrategyTabs.mstgear,
 		
 		currentGearId: 0,
-		server_ip: "",
+		gameServer: {},
 		
 		/* INIT
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			this.server_ip = MyServer.ip;
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 		},
 		
 		/* RELOAD
@@ -94,7 +93,7 @@
 			const gearData = KC3Master.slotitem(gearId);
 			console.debug("Viewing gearData", gearData);
 			self.currentGearId = gearId;
-			const gearHost = `http://${this.server_ip}/kcs2/resources`;
+			const gearHost = `${this.gameServer.urlPrefix}/kcs2/resources`;
 			const appendRscVer = (url) => (url && gearData.api_version ? url + `?version=${gearData.api_version}` : url);
 			// see the same name in main.js to exclude loading some special types
 			const EXCLUDE_RES = {
