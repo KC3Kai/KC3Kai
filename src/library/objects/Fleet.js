@@ -1609,7 +1609,8 @@ Contains summary information about a fleet and its ships
 			ship.equipment().forEach((equip, index) => {
 				const master = equip.master();
 				if (master && [10, 11].includes(master.api_type[2])) {
-					// Unknown if explicit on ship LoS bonus gets in here or not
+					// LoS visible bonus on ship not counted
+					// https://twitter.com/Matsu_class_DD/status/1245457218956226560
 					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
 				}
 			});

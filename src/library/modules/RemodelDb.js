@@ -150,6 +150,8 @@
                     return 20;
                 case 520: // Janus
                     return 90;
+                case 901: // Javelin
+                    return 95;
                 case 597: // Atlanta
                     return 100;
                 case 293: // Yuubari Kai
@@ -250,6 +252,7 @@
                 case 562: // Johnston
                 case 596: // Fletcher
                 case 520: // Janus
+                case 901: // Javelin
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
                 case 390: // Amagiri Kai
