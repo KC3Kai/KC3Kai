@@ -3313,8 +3313,8 @@
 			}
 			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
 			$(".module.activity .battle_support .support_balloon").toggle(thisNode.balloonNode);
-			if(thisNode.balloonNode) $(".module.activity .battle_support .support_balloon")
-				.toggleClass("deployed", KC3Calc.countFleetBalloonShips(KC3SortieManager.fleetSent) > 0);
+			if(thisNode.balloonNode) $(".module.activity .battle_support .support_balloon").toggleClass("deployed",
+				KC3Calc.countFleetBalloonShips(KC3SortieManager.fleetSent, KC3SortieManager.isCombinedSortie()) > 0);
 
 			// Day only / Night to day battle environment
 			if(!thisNode.startsFromNight || thisNode.isNightToDay){
