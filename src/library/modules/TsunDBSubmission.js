@@ -642,7 +642,7 @@
 			};
 
 			if (KC3SortieManager.isCombinedSortie()) {
-				this.friendlyFleetCount.playerfleet.concat((this.data.fleet2 || []).filter(ship => !ship.flee).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b));
+				this.friendlyFleetCount.playerfleet.push(...(this.data.fleet2 || []).filter(ship => !ship.flee).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b));
 			}
 
 			if(friendlyInfo) { 
@@ -1792,10 +1792,14 @@
 			const kamoiCount = modFod.filter((s) => s.api_ctype === 72).length;
 			const isKamoiHPAble = [72, 62, 41, 37].includes(ship.master().api_ctype);
 
-			// DE / Mizuho / Kamoi mod filter
+			// known feed type: 1 = pumpkin mod
+			const limitedFeedType = parseInt(data.limitedFeedType);
+
+			// DE / Mizuho / Kamoi / pumpkin mod filter
 			if (deCount === 0 &&
 				!(isMizuhoHPAble && mizuhoCount >= 2) &&
-				!(isKamoiHPAble && kamoiCount >= 2)
+				!(isKamoiHPAble && kamoiCount >= 2) &&
+				!limitedFeedType
 			) return;
 
 			this.lolimodfod = {
@@ -1808,6 +1812,11 @@
 				modafter: data.newMod,
 				modleft: data.left
 			};
+			if (limitedFeedType > 0) {
+				this.lolimodfod.modids.push(-limitedFeedType);
+				this.lolimodfod.modlvls.push(-limitedFeedType);
+			}
+
 			//console.debug(this.lolimodfod);
 			this.sendData(this.lolimodfod, 'lolimodfod');
 		},

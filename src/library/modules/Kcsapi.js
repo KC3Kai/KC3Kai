@@ -2659,7 +2659,8 @@ Previously known as "Reactor"
 				oldMod: OldShipObj.mod,
 				newMod: newShipMod,
 				consumedMasterIds: consumedShips.map(s => s.masterId),
-				consumedMasterLevels: consumedShips.map(s => s.level)
+				consumedMasterLevels: consumedShips.map(s => s.level),
+				limitedFeedType
 			});
 			
 			// Check if successful modernization
