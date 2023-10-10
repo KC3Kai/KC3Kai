@@ -665,6 +665,12 @@
 					voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
 				};
 				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
+				// might be needed
+				/*
+				this.friendlyFleet.fleet.mapCleared = this.data.cleared;
+				this.friendlyFleet.fleet.currentMapHP = this.data.currentMapHP;
+				this.friendlyFleet.fleet.maxMapHP = this.data.maxMapHP;
+				*/
 				this.sendData(this.friendlyFleet, 'friendlyfleet');
 				
 				this.friendlyFleetCount.friendlyfleet = friendlyInfo.api_ship_id;
@@ -707,7 +713,8 @@
 				cleared: this.data.cleared,
 				gaugeNum: this.data.gaugeNum,
 				currentHP: this.data.currentMapHP,
-				maxHP: this.data.maxMapHP
+				maxHP: this.data.maxMapHP,
+				amountOfNodes: this.data.nodeInfo.amountOfNodes,
 			};
 			if(apiData.api_ship_ke_combined) {
 				this.enemyComp.enemyComp.shipEscort = apiData.api_ship_ke_combined;
@@ -1176,6 +1183,7 @@
 				lbas: PlayerManager.bases.filter(b => b.map === this.currentMap[0] && b.action === 1).map(b => formatLandBase(b.sortieJson())),
 				support: null,
 				fleettype: this.data.fleetType,
+				gaugenum: this.data.gaugeNum,
 				smokeused: http.params.api_smoke_flag == 1,
 				checksum: this.sortieFleetChecksum || null
 			};
