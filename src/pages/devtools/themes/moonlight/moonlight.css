@@ -911,7 +911,7 @@ html,body {
 	box-shadow:0px 0px 1px 2px #d0b;
 }
 .module.activity .sortie_node.smoke_screen {
-	box-shadow:0px 0px 1px 2px #7b7b7b;
+	box-shadow:0px 0px 1px 2px #888;
 }
 .module.activity .sortie_nodes .boss_node {
 	float:left;
@@ -1382,7 +1382,6 @@ ABYSS FLEET
 	position:absolute;
 	margin:-35px 0px 0px 21px;
 	filter:drop-shadow(0 0 2px #222);
-	opacity:0.7;
 	z-index:2;
 }
 .module.activity .battle_cond_extra.smoke_screen .smoke_icon {
@@ -1393,6 +1392,7 @@ ABYSS FLEET
 	margin:0 2px 0 0;
 	overflow:hidden;
 	vertical-align:top;
+	opacity:0.7;
 }
 .module.activity .battle_cond_extra.smoke_screen .smoke_icon.triggered {
 	background:#fe5;

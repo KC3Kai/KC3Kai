@@ -1196,7 +1196,7 @@
 		$(".module.activity .sortie_nodes").removeAttr("style");
 		$(".module.activity .sortie_node").text("").removeAttr("title")
 			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
-			.removeClass("special_cutin")
+			.removeClass("special_cutin smoke_screen")
 			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();

@@ -5987,5 +5987,69 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5748": {
+		"api_id": 5748,
+		"api_name": "水着時雨改三",
+		"api_yomi": "しぐれ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5749": {
+		"api_id": 5749,
+		"api_name": "夏榛名改二乙",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5750": {
+		"api_id": 5750,
+		"api_name": "夏榛名改二丙",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5751": {
+		"api_id": 5751,
+		"api_name": "水着Samuel B.Roberts Mk.II",
+		"api_yomi": "サミュエル・B・ロバーツ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5752": {
+		"api_id": 5752,
+		"api_name": "水着Brooklyn",
+		"api_yomi": "ブルックリン",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5753": {
+		"api_id": 5753,
+		"api_name": "水着熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5754": {
+		"api_id": 5754,
+		"api_name": "水着熊野丸改",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5755": {
+		"api_id": 5755,
+		"api_name": "水着平戸",
+		"api_yomi": "ひらと",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
 	}
 }
