@@ -292,7 +292,9 @@
 				};
 				addEquipShips(equipOn.includes, ".tab_mstgear .gearInfo .equippable .ships");
 				addEquipShips(equipOn.excludes, ".tab_mstgear .gearInfo .equippable .ships", true);
-				const hasExslotCapableShips = Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.length > 0;
+				const exslotCapableShips = !Array.isArray(equipOn.exslotIncludes) ? [] :
+					equipOn.exslotIncludes.filter(id => KC3Master.equip_on_ship(id, gearId) & 2);
+				const hasExslotCapableShips = exslotCapableShips.length > 0;
 				const hasExslotCapableStypes = Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.length > 0;
 				$('<div class="reicon"><img src="/assets/img/useitems/64.png" /></div>')
 					.toggleClass("incapable", !equipOn.exslot)
@@ -300,7 +302,7 @@
 					.attr("title", "[Lighted] Capable on ex-slot of ships or types above\n[Greyed] Capable on ex-slot of following ships or types")
 					.lazyInitTooltip()
 					.appendTo(".tab_mstgear .gearInfo .equippable .exslot");
-				addEquipShips(equipOn.exslotIncludes, ".tab_mstgear .gearInfo .equippable .exslot");
+				addEquipShips(exslotCapableShips, ".tab_mstgear .gearInfo .equippable .exslot");
 				if(hasExslotCapableStypes) addEquipStypes(equipOn.exslotStypes, ".tab_mstgear .gearInfo .equippable .exslot");
 			}
 			

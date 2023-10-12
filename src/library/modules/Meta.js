@@ -159,6 +159,9 @@ Provides access to data on built-in JSON files
 			954, // Haruna K2C -> K2B
 			145, // Shigure K2 -> K3
 			316, // Amatsukaze Kai -> K2
+			325, // Kiyoshimo Kai -> K2
+			955, // Kiyoshimo K2 -> K2D
+			960, // Kiyoshimo K2D -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],

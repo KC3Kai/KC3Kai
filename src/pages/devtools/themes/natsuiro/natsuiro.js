@@ -1132,6 +1132,7 @@
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
 		$(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
 		$(".module.activity .battle_detection").attr("title", "").lazyInitTooltip();
+		$(".module.activity .battle_cond_extra.smoke_screen").hide().attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
 		$(".module.activity .battle_airbattle").attr("title", "").lazyInitTooltip();
 		$(".module.activity .plane_text span").text("");
@@ -3238,6 +3239,16 @@
 					thisNode.buildAirPowerMessage()
 				).lazyInitTooltip();
 
+				// Extra indicator for smoke screen
+				if(KC3SortieManager.smokeRequested || thisNode.smokeType > 0){
+					$(".module.activity .battle_cond_extra.smoke_screen .smoke_icon").toggleClass("triggered", thisNode.smokeType > 0);
+					$(".module.activity .battle_cond_extra.smoke_screen .smoke_level").text(thisNode.smokeType || 0);
+					$(".module.activity .battle_cond_extra.smoke_screen").show()
+						.attr("title", KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType));
+				} else {
+					$(".module.activity .battle_cond_extra.smoke_screen").hide();
+				}
+
 				// Fighter phase
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
@@ -3319,7 +3330,7 @@
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
 					),
-					(thisNode.smokeType > 0 ? KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType) : ""),
+					//(thisNode.smokeType > 0 ? KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType) : ""),
 					thisNode.buildUnexpectedDamageMessage()
 				].filter(s => !!s).join("\n")).lazyInitTooltip();
 			}
@@ -3505,11 +3516,15 @@
 				});
 			}
 
-			// Add glow to node letter if one-time special cut-in per sortie was used
-			if(ConfigManager.info_compass && Array.isArray(thisNode.sortieSpecialCutins)) {
+			// Add glow to node letter if one-time (special cut-in/smoke screen) per sortie was used
+			if(ConfigManager.info_compass) {
 				const numNodes = KC3SortieManager.countNodes();
+				if(Array.isArray(thisNode.sortieSpecialCutins)) {
+					$(".module.activity .sortie_node_" + numNodes)
+						.toggleClass("special_cutin", thisNode.sortieSpecialCutins.some(v => !!v));
+				}
 				$(".module.activity .sortie_node_" + numNodes)
-					.toggleClass("special_cutin", thisNode.sortieSpecialCutins.some(v => !!v));
+					.toggleClass("smoke_screen", thisNode.smokeType > 0);
 			}
 		},
 

@@ -192,6 +192,11 @@
                 case 878: // Conte di Cavour Kai
                 case 916: // Yamato Kai Ni Juu
                     return 50;
+                case 325: // Kiyoshimo Kai
+                    return 30;
+                case 955: // Kiyoshimo Kai Ni
+                case 960: // Kiyoshimo K2D
+                    return 10;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -259,6 +264,8 @@
                 case 903: // Amagiri K2
                 case 908: // Amagiri K2D
                 case 941: // Heywood
+                case 955: // Kiyoshimo K2
+                case 960: // Kiyoshimo K2D
                     return 10;
                 case 692: // Fletcher Kai
                 case 628: // Fletcher Kai Mod.2

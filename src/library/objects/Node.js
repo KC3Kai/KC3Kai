@@ -1131,8 +1131,8 @@ Used by SortieManager
 		this.engageNight(nightData, null, false);
 	};
 	
-	KC3Node.prototype.results = function( resultData ){
-		//console.debug("Raw battle result data", resultData);
+	KC3Node.prototype.results = function( resultData, requestData ){
+		//console.debug("Raw battle result data", resultData, requestData);
 		try {
 			this.rating = resultData.api_win_rank;
 			this.nodalXP = resultData.api_get_base_exp;
