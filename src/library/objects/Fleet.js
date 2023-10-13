@@ -1320,10 +1320,11 @@ Contains summary information about a fleet and its ships
 			[1.10, 1.13, 1.16, 1.20, 1.25], // CT x 2, 1 flagship
 			[1.04, 1.06, 1.08, 1.12, 1.175] // CT x 2
 		];
+		const ctAsahiMstId = 953;
 		var fsCtLevel = 0, maxCtLevel = 0, katoriIndex = 0;
 		this.ship(function(rid, idx, ship){
 			// Exclude CT Asahi base remodel, since given different mechanism
-			if(ship.master().api_stype == 21 && ship.masterId !== 953){
+			if(ship.master().api_stype == 21 && ship.masterId !== ctAsahiMstId){
 				if(ship.level > maxCtLevel) maxCtLevel = ship.level;
 				if(idx === 0){
 					katoriIndex = 1;
@@ -1346,10 +1347,10 @@ Contains summary information about a fleet and its ships
 		var ctBonus = katoriModifier, ctBonusBase = katoriModifier, ctBonusSub = 1;
 		// asahi modifiers: https://twitter.com/yukicacoon/status/1700319740391236090
 		var asahiModifier = 1, asahiModifierForSS = 1;
-		if(this.hasShip([953])){
-			const isAsahiFlagship = this.hasShip([953], 0);
+		if(this.hasShip([ctAsahiMstId])){
+			const isAsahiFlagship = this.hasShip([ctAsahiMstId], 0);
 			// assumed the 1st asahi in fleet, ofc only 1 possible for now
-			const asahi = this.ship().find((ship) => ship.masterId === 953);
+			const asahi = this.ship().find((ship) => ship.masterId === ctAsahiMstId);
 			// asahi flagship, or together with Katori-class and one of them is flagship
 			if(isAsahiFlagship || katoriIndex === 1 || katoriIndex === 3){
 				asahiModifier = 0.6;
@@ -1403,6 +1404,7 @@ Contains summary information about a fleet and its ships
 			baseExp = 3 + baseExpMin;
 		// return undefined and NaN if exp unknown, level 0 for 2nd empty slot acceptable
 		if(exps1.every(v => !v) || (secondShipLevel > 0 && exps2.every(v => !v))){
+			baseExpMin = undefined;
 			baseExp = undefined;
 		}
 		const capExp = (exp) => (
@@ -1609,7 +1611,8 @@ Contains summary information about a fleet and its ships
 			ship.equipment().forEach((equip, index) => {
 				const master = equip.master();
 				if (master && [10, 11].includes(master.api_type[2])) {
-					// Unknown if explicit on ship LoS bonus gets in here or not
+					// LoS visible bonus on ship not counted
+					// https://twitter.com/Matsu_class_DD/status/1245457218956226560
 					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
 				}
 			});

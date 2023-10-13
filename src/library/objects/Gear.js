@@ -404,13 +404,16 @@ KC3改 Equipment Object
 				// https://twitter.com/CC_jabberwock/status/1621947944596557824
 				if(type2 === 26)
 					return (this.master().api_tais > 7 ? 0.3 : 0.2) * stars;
+				// Toukai variants lbas airstrike against sub might be 0.66
+				//if(type2 === 47)
+				//	return 0.66;
 				break;
 			case "airstrike":
 			case "lbas":
 				// for normal opening airstrike and lbas, dive/torpedo/seaplane bomber bonus confirmed
 				if([7, 57].includes(type2) && !this.isFighterBomber()) return 0.2 * stars;
 				if([8, 58, 11].includes(type2)) return 0.2 * stars;
-				// land-base attacker/heavybomber
+				// land-base attacker/heavybomber against surface
 				if([47, 53].includes(type2)) modifier = 0.7;
 				break;
 			case "support":

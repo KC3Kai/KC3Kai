@@ -25,6 +25,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		materialGain: Array.apply(null, {length:8}).map(v => 0),
 		sinkList: {main:[], escr:[]},
 		slotitemConsumed: false,
+		smokeRequested: false,
 		sortieTime: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime, eventData){
@@ -47,6 +48,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				PlayerManager.consumables.screws
 			);
 			this.slotitemConsumed = false;
+			this.smokeRequested = false;
 			this.boss = {
 				info: false,
 				bosscell: -1,
@@ -276,12 +278,16 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		setSlotitemConsumed :function(cond, requestParams){
+			// no direct cond setting, looks into request parameters of battle api calls
 			if(cond === undefined && !!requestParams){
 				const dameconUsedType = parseInt(requestParams.api_recovery_type, 10) || 0,
 					resupplyUsedFlag = requestParams.api_supply_flag == 1,
-					rationUsedFlag = requestParams.api_ration_flag == 1;
+					rationUsedFlag = requestParams.api_ration_flag == 1,
+					smokeUsedFlag = requestParams.api_smoke_flag == 1;
 				// 1: repair team used, 2: repair goddess used
 				cond = dameconUsedType > 0 || resupplyUsedFlag || rationUsedFlag;
+				// record timing of using smoke generator, despite not a consumable item
+				this.smokeRequested = smokeUsedFlag;
 			}
 			if(typeof cond === "function"){
 				this.slotitemConsumed = this.slotitemConsumed || !!cond.call(this);
@@ -452,18 +458,18 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.currentNode().engageNight( nightData, this.fleetSent );
 		},
 		
-		engageNight :function( nightData ){
+		engageNight :function( nightData, stime ){
 			if(this.currentNode().type != "battle"){ console.warn("Wrong node handling"); return false; }
 			this.currentNode().night( nightData );
 		},
 		
-		resultScreen :function( resultData ){
+		resultScreen :function( resultData, requestParams ){
 			if(this.currentNode().type != "battle"){ console.warn("Wrong node handling"); return false; }
 			this.hqExpGained += resultData.api_get_exp;
 			if(this.isPvP()){
 				this.currentNode().resultsPvP( resultData );
 			} else {
-				this.currentNode().results( resultData );
+				this.currentNode().results( resultData, requestParams );
 				this.addSunk(this.currentNode().lostShips);
 				this.checkFCF( resultData.api_escape );
 			}
@@ -971,6 +977,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.onPvP = false;
 			this.onCat = false;
 			this.slotitemConsumed = false;
+			this.smokeRequested = false;
 			this.sortieTime = 0;
 			this.save();
 		},

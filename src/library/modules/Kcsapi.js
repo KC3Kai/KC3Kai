@@ -1487,7 +1487,10 @@ Previously known as "Reactor"
 		"api_req_battle_midnight/battle":function(params, response, headers){
 			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = response.api_data.api_name || "midnight_battle";
-			KC3SortieManager.engageNight( response.api_data );
+			KC3SortieManager.engageNight(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
 			KC3Network.setBattleEvent(true, "night", response.api_data.api_name);
 			KC3Network.trigger("BattleNight");
 		},
@@ -1551,10 +1554,10 @@ Previously known as "Reactor"
 		
 		/* BATTLE RESULT SCREENS
 		-------------------------------------------------------*/
-		"api_req_sortie/battleresult":function(params, response, headers){
+		"api_req_sortie/battleresult":function(params, response, headers, decodedParams){
 			resultScreenQuestFulfillment(response.api_data);
 			
-			KC3SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.resultScreen(response.api_data, decodedParams);
 			KC3SortieManager.applyShipsAfterHp();
 			
 			KC3Network.setBattleEvent(false, "result", "battleresult", true);
@@ -1569,10 +1572,10 @@ Previously known as "Reactor"
 				KC3Network.trigger("DebuffNotify", response.api_data);
 			}
 		},
-		"api_req_combined_battle/battleresult":function(params, response, headers){
+		"api_req_combined_battle/battleresult":function(params, response, headers, decodedParams){
 			resultScreenQuestFulfillment(response.api_data);
 			
-			KC3SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.resultScreen(response.api_data, decodedParams);
 			KC3SortieManager.applyShipsAfterHp();
 			
 			KC3Network.setBattleEvent(false, "result", "cf_battleresult", true);
@@ -2659,7 +2662,8 @@ Previously known as "Reactor"
 				oldMod: OldShipObj.mod,
 				newMod: newShipMod,
 				consumedMasterIds: consumedShips.map(s => s.masterId),
-				consumedMasterLevels: consumedShips.map(s => s.level)
+				consumedMasterLevels: consumedShips.map(s => s.level),
+				limitedFeedType
 			});
 			
 			// Check if successful modernization
@@ -2872,7 +2876,8 @@ Previously known as "Reactor"
 				case 93: // exchange 30 sardine with a Type 2 12cm Mortar Kai and 3 devmats
 					//if(itemId === 93) PlayerManager.consumables.sardine -= 30;
 				break;
-				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni (once)
+				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni in 2022 (once)
+					// 6 pumpkins with 2 Irako and a Type 1 Shell Kai in 2023 (once)
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
