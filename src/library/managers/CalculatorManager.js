@@ -483,7 +483,7 @@
     /**
      * @return the amount up to cap (3) of ships equipping balloon type.
      */
-    const countFleetBalloonShips = (fleetNum, maxCap = 3) => {
+    const countFleetBalloonShips = (fleetNum, isCombined = false, maxCap = 3) => {
         const locatedFleet = PlayerManager.fleets[fleetNum - 1];
         if(!locatedFleet) return 0;
         const countBalloonShips = (fleet) => (
@@ -492,7 +492,7 @@
                 cnt + (s.hasEquipmentType(3, 55) & 1)
             ), 0)
         );
-        if(PlayerManager.isCombined && [1, 2].includes(fleetNum)) {
+        if(isCombined && [1, 2].includes(fleetNum)) {
             return Math.min(maxCap, PlayerManager.fleets.slice(0, 2).reduce((cnt, f) => (
                 cnt + countBalloonShips(f)
             ), 0));

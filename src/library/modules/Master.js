@@ -465,6 +465,7 @@ Saves and loads significant data for future use
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
 			let isCapableToExslot = generalExslotTypes.includes(type2Id);
 			let exslotCapableShips = [], exslotCapableStypes = [];
+			// note: #equip_exslot_ships method extends ctype to all ships in that class, which may include some ships not really capable with both regular and exslot. have to use #equip_on_ship method to re-verify
 			const exslotCapableInfo = gearId > 0 ? this.equip_exslot_ships(gearId) : false;
 			if(exslotCapableInfo) {
 				exslotCapableShips = exslotCapableInfo.ships;
@@ -558,10 +559,12 @@ Saves and loads significant data for future use
 				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
 			}
 			// Equippable on ex-slot has to be fulfill with regular slots equippable either
-			if(equipOn.exslot && result) result |= 2;
-			if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype) && result) result |= 2;
 			// No equipment can be equipped on ex-slot only without regular slots so far, so result always 3 if ex-slot true
-			if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
+			if(result) {
+				if(equipOn.exslot) result |= 2;
+				if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
+				if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
+			}
 			return result;
 		},
 

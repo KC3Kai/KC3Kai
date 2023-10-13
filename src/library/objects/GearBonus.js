@@ -83,6 +83,8 @@
 				twin127SmallGunMountModelDK2: 0,
 				twin127SmallGunMountModelDK2Nonexist: 1,
 				twin127SmallGunMountModelDK2Ids: [267],
+				twin127SmallGunMountModelDK3: 0,
+				twin127SmallGunMountModelDK3Ids: [366],
 				ru130mmB13SmallGunMount: 0,
 				ru130mmB13SmallGunMountIds: [282],
 				skilledLookouts: 0,
@@ -95,6 +97,8 @@
 				type21AirRadarK2Ids: [410],
 				type42AirRadarK2: 0,
 				type42AirRadarK2Ids: [411],
+				type13AirRadarKaiLateModel: 0,
+				type13AirRadarKaiLateModelIds: [450],
 				rangefinderAirRadar: 0,
 				rangefinderAirRadarIds: [142, 460],
 				rangefinderKaiAirRadar: 0,
@@ -7101,6 +7105,7 @@
 			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2D%E5%9E%8B%E6%94%B9%E4%BA%8C
 			"267": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Shimakaze Class
 					"22": [
@@ -7129,19 +7134,6 @@
 								single: { "houg": 2, "raig": 3, "houk": 1 },
 							},
 						},
-						// A code typo suspected in both sides, which supposed to give non-K2 ships +2 tp, instead of giving all,
-						// see https://github.com/Tibowl/KCBugTracker/issues/42
-						// here should follow server-side's value, so +2 tp has been added to previous line, and Akigumo K2's synergy
-						/*
-						{
-							// remodels except all of Yuugumo Class K2
-							excludes: [542, 543, 563, 564, 569, 578],
-							synergy: {
-								flags: [ "surfaceRadar" ],
-								single: { "raig": 2 },
-							},
-						},
-						*/
 						{
 							// Yuugumo Class K2
 							remodel: 2,
@@ -7182,6 +7174,22 @@
 						// Takanami K2
 						ids: [649],
 						multiple: { "houg": 1 },
+					},
+					{
+						// Kiyoshimo K2
+						ids: [955],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "raig": -1 },
+						},
+					},
+					{
+						// Kiyoshimo K2D
+						ids: [960],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "raig": -2 },
+						},
 					},
 				]
 			},
@@ -7346,6 +7354,20 @@
 						// Takanami K2
 						ids: [649],
 						multiple: { "houg": 1 },
+					},
+					{
+						// Kiyoshimo K2
+						ids: [650],
+						single: { "houg": 1 },
+						minCount: 2,
+					},
+					{
+						// Kiyoshimo K2D
+						ids: [960],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "raig": -1  },
+						},
 					},
 				],
 			},
@@ -7867,6 +7889,7 @@
 			// Type 13 Air Radar Kai Late Model
 			"450": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Matsu Class
 					"101": {
@@ -7925,9 +7948,99 @@
 						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
 					},
 					{
-						// Asashimo K2, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai
-						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537],
+						// Asashimo K2, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D
+						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960],
 						single: { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
+					},
+				],
+			},
+			// Passive Radiolocator (E27) + Type 22 Surface Radar Kai 4 (Calibrated Late Model)
+			"517": {
+				count: 0,
+				byClass: {
+					// Class group "JDD": [66,28,12,1,5,10,23,18,30,38,22,54,101]
+					// Yuugumo Class 38 see below
+					"1": {
+						single: { "houk": 1, "houm": 1, "saku": 1 },
+					},
+					"5": "1",
+					"10": "1",
+					"12": "1",
+					"18": "1",
+					"22": "1",
+					"23": "1",
+					"28": "1",
+					"30": "1",
+					"54": "1",
+					"66": "1",
+					"101": "1",
+					// Shimushu Class
+					"74": "1",
+					// Etorofu Class
+					"77": "1",
+					// Hiburi Class
+					"85": "1",
+					// Type D CD Class
+					"104": "1",
+					// Ukuru Class
+					"117": "1",
+					// Yuugumo Class
+					"38": {
+						single: { "houg": 1, "houk": 1, "houm": 2, "saku": 1 },
+						synergy: [
+							{
+								flags: [ "twin127SmallGunMountModelDK2" ],
+								byStars: {
+									gearId: 267,
+									3: { "houg": 1, "houm": 1 },
+								},
+							},
+							{
+								flags: [ "twin127SmallGunMountModelDK3", "twin127SmallGunMountModelDK2Nonexist" ],
+								byStars: {
+									gearId: 366,
+									3: { "houg": 1, "houm": 1 },
+								},
+							},
+						],
+					},
+				},
+				byShip: [
+					{
+						// Kiyoshimo K2D
+						ids: [960],
+						single: { "houg": 2, "houk": 3, "houm": 1, "saku": 2 },
+					},
+					{
+						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2, Kiyoshimo K2
+						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955],
+						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
+					},
+					{
+						// All ships can equip this radar synergy with guns/radar +stars
+						synergy: [
+							{
+								flags: [ "twin127SmallGunMountModelDK2" ],
+								byStars: {
+									gearId: 267,
+									3: { "houg": 1, "houm": 1 },
+								},
+							},
+							{
+								flags: [ "twin127SmallGunMountModelDK3", "twin127SmallGunMountModelDK2Nonexist" ],
+								byStars: {
+									gearId: 366,
+									3: { "houg": 1, "houm": 1 },
+								},
+							},
+							{
+								flags: [ "type13AirRadarKaiLateModel" ],
+								byStars: {
+									gearId: 450,
+									4: { "houg": 1, "tyku": 4, "houk": 3, "houm": 1 },
+								},
+							},
+						],
 					},
 				],
 			},
@@ -8123,8 +8236,8 @@
 						single: { "tyku": 1, "houk": 2 },
 					},
 					{
-						// Kasumi K2B/K2, Hibiki Kai+, Asashimo K2, Isokaze B Kai, Hamakaze B Kai, Ushio K2, Hatsushimo K2
-						ids: [470, 464, 235, 147, 578, 557, 558, 407, 419],
+						// Kasumi K2B/K2, Hibiki Kai+, Asashimo K2, Isokaze B Kai, Hamakaze B Kai, Ushio K2, Hatsushimo K2, Kiyoshimo K2+
+						ids: [470, 464, 235, 147, 578, 557, 558, 407, 419, 955, 960],
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
@@ -9589,18 +9702,34 @@
 				],
 			},
 			// All Radars
+			// main.js's function `get_type3_nums` refers `api_type[2]` in fact, not our 't3'(`api_type[3]`), so it uses `12 || 13` for all radars.
 			"t3_11": {
 				count: 0,
 				byShip: [
 					{
-						// Okinami K2, Akigumo K2, Shigure K3, Amatsukaze K2 with Air Radar fp +1, aa +2, ev +3
-						// btw1, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
-						// btw2, main.js's function `get_type3_nums` refers `api_type[2]` in fact, not our 't3'(`api_type[3]`), so it uses `12 || 13` for all radars.
+						// Okinami K2, Akigumo K2, Shigure K3, Amatsukaze K2 with Air Radar
 						ids: [569, 648, 961, 951],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
 						},
+					},
+					{
+						// Kiyoshimo K2/K2D
+						ids: [955, 960],
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 1 },
+							},
+							{
+								flags: [ "type13AirRadarKaiLateModel" ],
+								byStars: {
+									gearId: 450,
+									 "4": { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
+								},
+							},
+						],
 					},
 				],
 			},

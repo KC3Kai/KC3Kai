@@ -910,6 +910,9 @@ html,body {
 .module.activity .sortie_node.special_cutin {
 	box-shadow:0px 0px 1px 2px #d0b;
 }
+.module.activity .sortie_node.smoke_screen {
+	box-shadow:0px 0px 1px 2px #888;
+}
 .module.activity .sortie_nodes .boss_node {
 	float:left;
 	position:absolute;
@@ -1367,6 +1370,35 @@ ABYSS FLEET
 }
 .module.activity .battle_cond_value.worst {
 	color:#f44;
+}
+.module.activity .battle_cond_extra {
+	line-height:14px;
+	font-size:11px;
+	white-space:nowrap;
+	color:#fff;
+	display:none;
+}
+.module.activity .battle_cond_extra.smoke_screen {
+	position:absolute;
+	margin:-35px 0px 0px 21px;
+	filter:drop-shadow(0 0 2px #222);
+	z-index:2;
+}
+.module.activity .battle_cond_extra.smoke_screen .smoke_icon {
+	width:13px;
+	height:13px;
+	border-radius:50%;
+	background:#fff;
+	margin:0 2px 0 0;
+	overflow:hidden;
+	vertical-align:top;
+	opacity:0.7;
+}
+.module.activity .battle_cond_extra.smoke_screen .smoke_icon.triggered {
+	background:#fe5;
+}
+.module.activity .battle_cond_extra.smoke_screen .smoke_level {
+	pointer-events:none;
 }
 .module.activity .battle_contact img {
 	width:15px;

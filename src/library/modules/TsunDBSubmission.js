@@ -642,7 +642,7 @@
 			};
 
 			if (KC3SortieManager.isCombinedSortie()) {
-				this.friendlyFleetCount.playerfleet.concat((this.data.fleet2 || []).filter(ship => !ship.flee).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b));
+				this.friendlyFleetCount.playerfleet.push(...(this.data.fleet2 || []).filter(ship => !ship.flee).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b));
 			}
 
 			if(friendlyInfo) { 
@@ -665,6 +665,12 @@
 					voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
 				};
 				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
+				// might be needed
+				/*
+				this.friendlyFleet.fleet.mapCleared = this.data.cleared;
+				this.friendlyFleet.fleet.currentMapHP = this.data.currentMapHP;
+				this.friendlyFleet.fleet.maxMapHP = this.data.maxMapHP;
+				*/
 				this.sendData(this.friendlyFleet, 'friendlyfleet');
 				
 				this.friendlyFleetCount.friendlyfleet = friendlyInfo.api_ship_id;
@@ -707,7 +713,8 @@
 				cleared: this.data.cleared,
 				gaugeNum: this.data.gaugeNum,
 				currentHP: this.data.currentMapHP,
-				maxHP: this.data.maxMapHP
+				maxHP: this.data.maxMapHP,
+				amountOfNodes: this.data.nodeInfo.amountOfNodes,
 			};
 			if(apiData.api_ship_ke_combined) {
 				this.enemyComp.enemyComp.shipEscort = apiData.api_ship_ke_combined;
@@ -1176,6 +1183,7 @@
 				lbas: PlayerManager.bases.filter(b => b.map === this.currentMap[0] && b.action === 1).map(b => formatLandBase(b.sortieJson())),
 				support: null,
 				fleettype: this.data.fleetType,
+				gaugenum: this.data.gaugeNum,
 				smokeused: http.params.api_smoke_flag == 1,
 				checksum: this.sortieFleetChecksum || null
 			};
@@ -1792,10 +1800,14 @@
 			const kamoiCount = modFod.filter((s) => s.api_ctype === 72).length;
 			const isKamoiHPAble = [72, 62, 41, 37].includes(ship.master().api_ctype);
 
-			// DE / Mizuho / Kamoi mod filter
+			// known feed type: 1 = pumpkin mod
+			const limitedFeedType = parseInt(data.limitedFeedType);
+
+			// DE / Mizuho / Kamoi / pumpkin mod filter
 			if (deCount === 0 &&
 				!(isMizuhoHPAble && mizuhoCount >= 2) &&
-				!(isKamoiHPAble && kamoiCount >= 2)
+				!(isKamoiHPAble && kamoiCount >= 2) &&
+				!limitedFeedType
 			) return;
 
 			this.lolimodfod = {
@@ -1808,6 +1820,11 @@
 				modafter: data.newMod,
 				modleft: data.left
 			};
+			if (limitedFeedType > 0) {
+				this.lolimodfod.modids.push(-limitedFeedType);
+				this.lolimodfod.modlvls.push(-limitedFeedType);
+			}
+
 			//console.debug(this.lolimodfod);
 			this.sendData(this.lolimodfod, 'lolimodfod');
 		},

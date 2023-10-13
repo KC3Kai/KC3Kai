@@ -1104,15 +1104,16 @@ Used by SortieManager
 			this.checkSortieSpecialAttacks(result.fleets, true, isPlayerCombined);
 		}
 		
-		if(this.gaugeDamage > -1
-			&& (!isEnemyCombined || this.activatedEnemyFleet == 1) ) {
+		if(this.gaugeDamage > -1) {
 			let bossCurrentHp = nightData.api_e_nowhps[0];
 			// boss now hp will be the one after friendly fleet battle,
 			// so have to find the damage made by friend fleet back.
 			if(bossCurrentHp + this.gaugeDamage < nightData.api_e_maxhps[0])
 				bossCurrentHp = nightData.api_e_maxhps[0] - this.gaugeDamage;
-			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
-			this.mainFlagshipKilled = this.enemyHP[0].hp <= 0;
+			// boss predicted final hp always from main fleet flagship even against escort
+			const bossEndHp = isAgainstEnemyEscort ? this.predictedFleetsNight.enemyMain[0].hp : this.enemyHP[0].hp;
+			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - bossEndHp);
+			this.mainFlagshipKilled = bossEndHp <= 0;
 		}
 		
 		// Record encounters only if on sortie and starts from night
@@ -1130,8 +1131,8 @@ Used by SortieManager
 		this.engageNight(nightData, null, false);
 	};
 	
-	KC3Node.prototype.results = function( resultData ){
-		//console.debug("Raw battle result data", resultData);
+	KC3Node.prototype.results = function( resultData, requestData ){
+		//console.debug("Raw battle result data", resultData, requestData);
 		try {
 			this.rating = resultData.api_win_rank;
 			this.nodalXP = resultData.api_get_base_exp;

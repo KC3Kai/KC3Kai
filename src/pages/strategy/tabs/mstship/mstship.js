@@ -880,7 +880,7 @@
 				if (exslotTypes.length > 0) {
 					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
 					// specified items on exslot of specified ships (or stype/ctype)
-					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id).filter(id => KC3Master.equip_on_ship(shipData.api_id, id));
+					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id).filter(id => KC3Master.equip_on_ship(shipData.api_id, id) & 2);
 					if (exslotItems.length > 0) {
 						// order items by types asc first for better readability
 						const orderByType = (a, b) => (
