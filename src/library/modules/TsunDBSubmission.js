@@ -156,7 +156,10 @@
 			gaugeNum: null,
 			variation: null,
 			fleet: null,
-			uniquekey: null
+			uniquekey: null,
+			cleared: null,
+			currentMapHP: null,
+			maxMapHP: null
 		},
 		friendlyFleetCount: {
 			map: null,
@@ -167,7 +170,10 @@
 			fleet: null,
 			requesttype: null,
 			configversion: null,
-			torchcount: null
+			torchcount: null,
+			cleared: null,
+			currentMapHP: null,
+			maxMapHP: null
 		},
 		eventAccuracy: {
 			ship: null,
@@ -652,6 +658,9 @@
 				this.friendlyFleet.node = this.data.edgeID[this.data.edgeID.length - 1];
 				this.friendlyFleet.difficulty = this.data.difficulty;
 				this.friendlyFleet.gaugeNum = this.data.gaugeNum;
+				this.friendlyFleet.cleared = this.data.cleared;
+				this.friendlyFleet.currentMapHP = this.data.currentMapHP;
+				this.friendlyFleet.maxMapHP = this.data.maxMapHP;
 				this.friendlyFleet.variation = friendlyInfo.api_production_type;
 				this.friendlyFleet.fleet = {
 					ship: friendlyInfo.api_ship_id,
@@ -665,12 +674,6 @@
 					voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
 				};
 				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
-				// might be needed
-				/*
-				this.friendlyFleet.fleet.mapCleared = this.data.cleared;
-				this.friendlyFleet.fleet.currentMapHP = this.data.currentMapHP;
-				this.friendlyFleet.fleet.maxMapHP = this.data.maxMapHP;
-				*/
 				this.sendData(this.friendlyFleet, 'friendlyfleet');
 				
 				this.friendlyFleetCount.friendlyfleet = friendlyInfo.api_ship_id;
