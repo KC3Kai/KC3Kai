@@ -31,12 +31,12 @@
 	KC3GearBonus.explicitStatsBonusGears = function(){
 		return {
 			"synergyGears": {
-				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
-				airRadar: 0,
+				surfaceRadar: 0, // saku >= 5
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 517],
+				airRadar: 0, // tyku >= 2
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
-				highAccuracyRadar: 0,
-				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460],
+				highAccuracyRadar: 0, // houm >= 8
+				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460, 517],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301, 505],
 				improvedTurbine: 0,

@@ -71,6 +71,7 @@ KC3改 Equipment Object
 							if(gear.isAirRadar()) synergyGears.airRadar += 1;
 						break;
 						case "highAccuracyRadarIds":
+							// caution: different definition with #isHighAccuracyRadar (>= 3)
 							if(gear.master().api_houm >= 8) synergyGears.highAccuracyRadar += 1;
 						break;
 						case "rotorcraftIds":
