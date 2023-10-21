@@ -537,6 +537,15 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * @return true if this ship is 2nd Class Transporter class (as is No.101 Transport Ship)
+	 */
+	 KC3Ship.prototype.is2ndClassTransporter = function(){
+		if(this.isDummy()) return false;
+		const ctype = this.master().api_ctype;
+		return ctype === 120;
+	};
+
+	/**
 	 * @return true if this ship is Hayasui Kai with any (Jet) Torpedo Bomber equipped
 	 */
 	KC3Ship.prototype.isHayasuiKaiWithTorpedoBomber = function(){
@@ -2988,8 +2997,13 @@ KC3改 Ship Object
 			// only CVL can ASW with depth charge if naked asw is not 0 and not taiha,
 			// even no plane equipped or survived, such as Taiyou Kai Ni, Hayasui Kai.
 			// but CVE will attack surface target first if NCVCI met.
-			// *Some Abyssal AV/BBV can do ASW with air attack at night.
-			if(time === "Night") return isCvlLike && !this.isTaiha() && this.as[1] > 0;
+			//  * Kaga K2Go/Fusou-class K2 do ASW with depth charge animation even asw aircraft equiped.
+			//  * 2nd Class Transporter do ASW with depth charge equipped.
+			//  * Some Abyssal AV/BBV can do ASW with air attack at night.
+			if(time === "Night") {
+				if(this.is2ndClassTransporter()) return this.hasEquipmentType(2, 15);
+				return isCvlLike && !this.isTaiha() && this.as[1] > 0;
+			}
 			// For day time, false if CVL or CVL-like chuuha
 			// Yamashiomaru can air attack even taiha, but power calc seems fall back to depth charge?
 			// https://twitter.com/yukicacoon/status/1505719117260550147
@@ -2997,8 +3011,9 @@ KC3改 Ship Object
 			// https://twitter.com/CC_jabberwock/status/1650452631398256640
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
-			// or if Fusou-class K2 equipped Depth Charge
-			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike)) || (isFusouClassKaiNi && this.hasEquipmentType(2, 15));
+			// or if Fusou-class K2/2nd Class Transporter equipped Depth Charge
+			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike))
+				|| ((isFusouClassKaiNi || this.is2ndClassTransporter()) && this.hasEquipmentType(2, 15));
 		}
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
@@ -3605,7 +3620,7 @@ KC3改 Ship Object
 		if(!this.masterId || !targetShip) return 0;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		// to differentiate Kakuza kind ID, added 100 to final result
-		if(targetShipType.isLand && this.master().api_ctype === 120) {
+		if(targetShipType.isLand && this.is2ndClassTransporter()) {
 			const armyUnit1Cnt = this.countEquipment(496), // Infantry
 				armyUnit2Cnt = this.countEquipment(497),   // Chiha
 				armyUnit3Cnt = this.countEquipment(498),   // Chiha Kai
@@ -3900,7 +3915,7 @@ KC3改 Ship Object
 				pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			}
 		// 2nd Class Transporter against submarine
-		} else if(targetShipType.isSubmarine && this.master().api_ctype === 120) {
+		} else if(targetShipType.isSubmarine && this.is2ndClassTransporter()) {
 			results.push(["DepthCharge", 2]);
 		} else if(isThisCarrier) {
 			results.push(["AirAttack", 1]);
@@ -4067,6 +4082,7 @@ KC3改 Ship Object
 		const isThisLightCarrier = stype === 7;
 		const isThisDestroyer = stype === 2;
 		const isThisKagaK2Go = this.masterId === 646;
+		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
 		// simulate server-side night air attack flag: `api_n_mother_list`
@@ -4272,9 +4288,9 @@ KC3改 Ship Object
 		// priority to use server flag
 		if(isCarrierNightAirAttack) {
 			results.push(["AirAttack", 1, true]);
-		} else if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go)) {
+		} else if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go || isFusouClassKaiNi)) {
 			results.push(["DepthCharge", 2]);
-		} else if(targetShipType.isSubmarine && this.master().api_ctype === 120) {
+		} else if(targetShipType.isSubmarine && this.is2ndClassTransporter()) {
 			results.push(["DepthCharge", 2]);
 		} else if(isThisCarrier) {
 			// these abyssal ships can only be shelling attacked,
@@ -4378,7 +4394,7 @@ KC3改 Ship Object
 		// https://twitter.com/CC_jabberwock/status/1695032669741179302
 		const skilledLookoutsCount = this.countEquipment(129),
 			torpedoSquadronSloCount = this.countEquipment(412);
-		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 7; }
+		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 8; }
 		if (skilledLookoutsCount > 0) { gearBonus += 5; }
 		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
@@ -4395,7 +4411,7 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680215402020741120
 		if (spType === 200) {
 			// TSSLO +0 for any ship type, SLO +8 finally
-			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 7; }
+			if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus -= 8; }
 			if (skilledLookoutsCount > 0) { gearBonus += 3; }
 			// searchlight finally -10? or -5?
 			if (!!fleetSearchlight) { gearBonus -= (10 + 7); }

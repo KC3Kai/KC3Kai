@@ -296,13 +296,15 @@
 						const holder = ThisPlane.MyHolder();
 						if(holder instanceof KC3LandBase){
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
-							$(".holder_name", PlaneBox).html(KC3Meta.term("AircraftListLbasWorld").format(holder.map));
-							$(".holder_level", PlaneBox).text("#"+holder.rid);
+							$(".holder_name", PlaneBox).removeAttr("title")
+								.html(KC3Meta.term("AircraftListLbasWorld").format(holder.map));
+							$(".holder_level", PlaneBox).text("#" + holder.rid);
 							ThisCapacity = (holder.planes
 								.find(s => s.api_slotid === rosterId) || {}).api_max_count || "?";
 						} else if(holder === "LbasMoving"){
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
-							$(".holder_name", PlaneBox).html(KC3Meta.term("AircraftListLbasMoving"));
+							$(".holder_name", PlaneBox).removeAttr("title")
+								.html(KC3Meta.term("AircraftListLbasMoving"));
 							$(".holder_level", PlaneBox).text("");
 							ThisCapacity = "";
 						} else {
@@ -314,9 +316,10 @@
 								.click(function(e){
 									KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 								});
-							$(".holder_name", PlaneBox).text(holder.name());
-							$(".holder_level", PlaneBox).text("Lv"+holder.level);
-							ThisCapacity = holder.slotSize( this._slotNums["s"+rosterId]);
+							$(".holder_name", PlaneBox).attr("title", holder.name())
+								.text(holder.name());
+							$(".holder_level", PlaneBox).text(KC3Meta.term("LevelShort") + holder.level);
+							ThisCapacity = holder.slotSize(this._slotNums["s" + rosterId]);
 						}
 						if(ThisCapacity > 0){
 							// Compute fighter power for ace & improvement according setting
