@@ -1403,7 +1403,7 @@
 						// To check the ordinal number of multiple hits attack (and multiple targets for night Zuiun)
 						misc.attackHit = num;
 					}
-					if (Object.keys(misc).length === 0) { continue; }
+					if (!Object.notEmpty(misc)) { continue; }
 					// Attacker HP and fleet type for hit/miss prediction
 					shipInfo.hp = attack.hp;
 					shipInfo.maxhp = ship.hp[1];

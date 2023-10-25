@@ -1091,7 +1091,7 @@
 					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2)) {
 						bonus = Object.assign(bonus, def);
 					}
-					if (Object.keys(bonus).length) {
+					if (Object.notEmpty(bonus)) {
 						bonus.id = mstId;
 						bonusList.push(bonus);
 					}
@@ -1224,7 +1224,7 @@
 								$(".gearName", gearBox).text(gearName).attr("title", gearName);
 							}
 							
-							if (Object.keys(totalStats).length > 0) {
+							if (Object.notEmpty(totalStats)) {
 								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
 								addStatsToBox(totalStats, levelBox);
 								$(".leveledBonusStatsList", gearBox).append(levelBox);

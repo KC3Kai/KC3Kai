@@ -639,7 +639,7 @@
             this.rowParams.width = 250;
         }
         var gears = this._getGears();
-        if(Object.keys(gears).length === 0){
+        if(!Object.notEmpty(gears)){
             return this._heartLockAlert();
         }
         var self = this;
@@ -857,7 +857,7 @@
             }
         }
 
-        var typeCount = Object.keys(group.types).length;
+        var typeCount = Object.size(group.types);
 
         var y = 0;
         var fontSize = 20;
@@ -910,7 +910,7 @@
     };
 
     ShowcaseExporter.prototype._drawEquipGroup = function (group) {
-        var typeCount = Object.keys(group.types).length;
+        var typeCount = Object.size(group.types);
 
         var height = 0;
         for (var i in group.types) {

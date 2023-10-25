@@ -1701,7 +1701,7 @@ Used by SortieManager
 			}
 			// also may try to infer something from jet assault phase, if abyssal has one
 		}
-		if(Object.keys(apTuple[4]).length > 0){
+		if(Object.notEmpty(apTuple[4])){
 			tooltip += "\n" + KC3Meta.term("InferredExceptions").format(JSON.stringify(apTuple[4]));
 		}
 		return $("<p></p>")
@@ -1735,7 +1735,7 @@ Used by SortieManager
 			const shipMaster = KC3Master.ship(masterId);
 			const abyssMaster = KC3Master.abyssalShip(masterId, true);
 			const isCurrentHpShown = ConfigManager.info_battle
-				&& this.enemyHP && Object.keys(this.enemyHP[index] || {}).length > 0
+				&& this.enemyHP && Object.notEmpty(this.enemyHP[index])
 				// unnecessary to show current hp if max hp is "N/A"
 				&& !isNaN(maxHp);
 			tooltip += "{0}: {1}\n".format(masterId,

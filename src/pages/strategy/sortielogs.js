@@ -742,7 +742,7 @@
 				const eships = airRaid.api_ship_ke || [];
 				const airpow = KC3Calc.enemyFighterPower(eships, airRaid.api_eSlot, undefined, true);
 				const airpowIntervals = KC3Calc.fighterPowerIntervals(airpow[0]);
-				if(Object.keys(airpow[4]).length) {
+				if(Object.notEmpty(airpow[4])) {
 					// add a question mark if there is inferring exception
 					airpowIntervals[0] = "{0}?".format(airpowIntervals[0]);
 				}

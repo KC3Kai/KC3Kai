@@ -49,7 +49,7 @@ Saves and loads significant data for future use
 		-------------------------------------*/
 		processRaw :function(raw){
 			var beforeCounts = false;
-			if( Object.size(this._raw) > 0) {
+			if(Object.notEmpty(this._raw)) {
 				beforeCounts = [ Object.size(this._raw.ship), Object.size(this._raw.slotitem) ];
 			}
 			this._raw.newShips = this._raw.newShips || {};
@@ -102,7 +102,7 @@ Saves and loads significant data for future use
 							}
 						}
 					});
-				} else if (Object.keys(mst_data || {}).length > 0) {
+				} else if (Object.notEmpty(mst_data)) {
 					// Add the master map object to local raw directy
 					self._raw[short_mst_name] = mst_data;
 				}
@@ -164,21 +164,19 @@ Saves and loads significant data for future use
 		all_ships :function(withAbyssals, withSeasonals){
 			var id, ss, as;
 			var ships = $.extend(true, {}, this._raw.ship);
-			if(!!withAbyssals && Object.keys(ships).length > 0
-				&& Object.keys(this._abyssalShips).length > 0){
+			if(!!withAbyssals && Object.notEmpty(ships) && Object.notEmpty(this._abyssalShips)){
 				for(id in this._abyssalShips){
 					ss = ships[id];
 					as = this._abyssalShips[id];
 					if(!!ss && !!as){
 						for(var k in as){
-							if(k !== "api_id" && !ss.hasOwnProperty(k))
+							if(k !== "api_id" && !Object.hasOwn(ss, k))
 								ss[k] = as[k];
 						}
 					}
 				}
 			}
-			if(!!withSeasonals && Object.keys(ships).length > 0
-				&& Object.keys(this._seasonalShips).length > 0){
+			if(!!withSeasonals && Object.notEmpty(ships) && Object.notEmpty(this._seasonalShips)){
 				for(id in this._seasonalShips){
 					ss = ships[id];
 					if(!ss) { ships[id] = this._seasonalShips[id]; }
@@ -311,7 +309,7 @@ Saves and loads significant data for future use
 		},
 
 		stype_count :function(){
-			this.maxStypeCount = this.maxStypeCount || (!this.available ? 22 : Object.keys(this._raw.stype).length || 22);
+			this.maxStypeCount = this.maxStypeCount || (!this.available ? 22 : Object.size(this._raw.stype) || 22);
 			return this.maxStypeCount;
 		},
 
@@ -658,8 +656,8 @@ Saves and loads significant data for future use
 
 		abyssalShip :function(id, isMasterMerged){
 			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend(true, {}, this.ship(id)) || {};
-			return Object.keys(master).length === 0 &&
-				(Object.keys(this._abyssalShips).length === 0 || !this._abyssalShips[id]) ?
+			return !Object.notEmpty(master) &&
+				(!Object.notEmpty(this._abyssalShips) || !this._abyssalShips[id]) ?
 				false : $.extend(master, this._abyssalShips[id]);
 		},
 

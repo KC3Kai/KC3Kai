@@ -231,7 +231,7 @@
 					const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
 					let battleData = time !== "night" ? battle.data : battle.yasen;
 					// missing battle data, F5?
-					if (!Object.keys(battleData).length) { return; }
+					if (!Object.notEmpty(battleData)) { return; }
 					const battleType = {
 						player: { 0: "single", 1: "ctf", 2: "stf", 3: "ctf" }[sortie.combined],
 						enemy: !battleData.api_ship_ke_combined ? "single" : "combined",
@@ -273,7 +273,7 @@
 						this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
 					});
 					checkFleetAttacks(player, ships, checkForLastHit, mapnum);
-					if (Object.keys(battle.yasen).length > 0 && time === "day") {
+					if (Object.notEmpty(battle.yasen) && time === "day") {
 						battleType.time = "night";
 						if (battle.yasen.api_e_nowhps.length > 6) { // Old API entries
 							battle.yasen.api_e_nowhps = battle.yasen.api_e_nowhps.slice(0, 6);
@@ -354,7 +354,7 @@
 		},
 
 		displayEventStatistics: function() {
-			if (!Object.keys(this.stats.sortieCount).length) {
+			if (!Object.notEmpty(this.stats.sortieCount)) {
 				$(".loading").hide();
 				$(".map_list").text("No data available for this event").show();
 				return;
@@ -473,7 +473,7 @@
 			$(".table5").show();
 			$(".lbcons").show();
 			$(".map_list").show();
-			$(".memorial").toggle(Object.keys(this.stats.kuso).length > 0);
+			$(".memorial").toggle(Object.notEmpty(this.stats.kuso));
 		},
 	};
 

@@ -5808,7 +5808,7 @@ KC3改 Ship Object
 		if (gearInfo) {
 			// #1726 Deckbuilder: if max slot not reach 5, `ix` will not be used,
 			// which means i? > ship.api_slot_num will be considered as the ex-slot.
-			var usedSlot = Object.keys(itemsInfo).length;
+			var usedSlot = Object.size(itemsInfo);
 			if(usedSlot < 5) {
 				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
 			} else {

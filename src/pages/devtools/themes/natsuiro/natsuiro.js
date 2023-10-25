@@ -5214,7 +5214,7 @@
 		// Normalize Parameters
 		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
 
-		if(Object.keys(thisMap).length > 0){
+		if(Object.notEmpty(thisMap)){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			$(".module.activity .map_hp").removeAttr("title");
 			if(KC3SortieManager.isPvP() || KC3Meta.isEventWorld(KC3SortieManager.map_world)){

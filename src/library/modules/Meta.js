@@ -460,7 +460,7 @@ Provides access to data on built-in JSON files
 			if(allowId && Number.isInteger(Number(jpName))) return this.shipNameById(jpName);
 			// No translation needed for empty ship.json like JP
 			if(this._cache.shipKeys === undefined){
-				this._cache.shipKeys = Object.keys(this._ship).length;
+				this._cache.shipKeys = Object.size(this._ship);
 			}
 			if(this._cache.shipKeys === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly

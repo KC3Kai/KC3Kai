@@ -1009,7 +1009,7 @@
 				KC3ShipManager.load();
 				const badStateShips = KC3ShipManager.find(ship => {
 					const sortieCnt = ship.lastSortie.length,
-						pendingCnt = Object.keys(ship.pendingConsumption).length;
+						pendingCnt = Object.size(ship.pendingConsumption);
 					return sortieCnt > 1 && pendingCnt > 0 && pendingCnt !== (sortieCnt - 1);
 				});
 				if(!badStateShips.length) {
@@ -1030,7 +1030,7 @@
 				}
 				// Extra fix if there are some IDs left in `lastSortie` but no `pendingConsumption` record
 				const obsoleteSortieShips = KC3ShipManager.find(ship => ship.lastSortie.length > 2
-					&& Object.keys(ship.pendingConsumption).length === 0);
+					&& Object.size(ship.pendingConsumption) === 0);
 				if(obsoleteSortieShips.length) {
 					obsoleteSortieShips.forEach(ship => {
 						ship.lastSortie = ["sortie0"];
@@ -1138,7 +1138,7 @@
 		
 		refreshHealthMetric: function(){
 			const bc = this.battleCounts;
-			if(Object.keys(bc).length < 2) return;
+			if(Object.size(bc) < 2) return;
 			$(".day_battle_total_24 .rank_content").html(
 				KC3Meta.term("ProfileBattlesDuringSorties")
 					.format(bc.lastDayBattle, bc.lastDaySortie)

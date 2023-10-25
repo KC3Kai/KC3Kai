@@ -440,7 +440,7 @@
 					this.mapInfoMeta = info;
 					const initSpotCnt = this.mapInfoMeta.spots.length;
 					let currentSpotCnt = initSpotCnt, addedSpotCnt = 0;
-					const knownTotalSpotCnt = Object.keys(KC3Master.mapCell(this.world, this.map)).length;
+					const knownTotalSpotCnt = Object.size(KC3Master.mapCell(this.world, this.map));
 					info.initSpotCnt = initSpotCnt;
 					info.knownTotalSpotCnt = knownTotalSpotCnt;
 					info.totalSpotCnt = currentSpotCnt;
@@ -539,9 +539,9 @@
 					{maxLength: this.jsonMaxLength})
 			);
 			const letters = mapNodes.letters || {};
-			const lettersFound = !!letters && Object.keys(letters).length > 0;
+			const lettersFound = Object.notEmpty(letters);
 			const icons = mapNodes.markers || [];
-			const iconsFound = !!icons.length && icons.length > 0;
+			const iconsFound = Object.notEmpty(icons);
 			let dragging = null;
 			const pointerDownFunc = (e) => {
 				// only LMB accepted

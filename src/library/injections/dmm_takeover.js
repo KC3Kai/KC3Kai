@@ -684,9 +684,9 @@
 					$(".overlay_markers").show();
 				} else {
 					var letters = meta.nodeLetters(request.worldId, request.mapId);
-					var lettersFound = (!!letters && Object.keys(letters).length > 0);
+					var lettersFound = Object.notEmpty(letters);
 					var icons = meta.nodeMarkers(request.worldId, request.mapId);
-					var iconsFound = (!!icons.length && icons.length > 0);
+					var iconsFound = Object.notEmpty(icons);
 					$(".overlay_markers").hide().empty();
 					if(lettersFound && thisConfig.map_letters){
 						// Show node letters
