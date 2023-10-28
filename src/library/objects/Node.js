@@ -505,7 +505,8 @@ Used by SortieManager
 			}
 		}
 
-		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
+		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] || 0 : 0 );
+		this.edetection = KC3Meta.detection( battleData.api_search ? battleData.api_search[1] || 0 : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.smokeType = battleData.api_smoke_type || 0;
 		this.balloonNode = !!battleData.api_balloon_cell;
