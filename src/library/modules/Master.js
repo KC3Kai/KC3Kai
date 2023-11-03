@@ -193,6 +193,11 @@ Saves and loads significant data for future use
 			return ships;
 		},
 
+		find_ships :function(filterFunc, withAbyssals, withSeasonals){
+			return Object.values(this.all_ships(withAbyssals, withSeasonals))
+				.filter(filterFunc || ((s) => false));
+		},
+
 		seasonal_ship :function(id){
 			return this._seasonalShips[id] || false;
 		},
@@ -282,6 +287,10 @@ Saves and loads significant data for future use
 
 		all_slotitems :function(){
 			return this._raw.slotitem || {};
+		},
+
+		find_slotitems :function(filterFunc){
+			return Object.values(this.all_slotitems).filter(filterFunc || ((g) => false));
 		},
 
 		new_slotitems :function(){
@@ -398,11 +407,14 @@ Saves and loads significant data for future use
 						});
 					}
 				});
-				// find special 99 stype to indicate it for later use
 				const exslotShips = this._raw.equip_exslot_ship || {};
 				Object.keys(this._equipExslotShips).forEach(gearId => {
+					// find special 99 stype to indicate it for later use
 					if(Object.keys(exslotShips[gearId].api_stypes || {}).some(id => id == "99"))
 						this._equipExslotShips[gearId].generalType = true;
+					// some gear requires minimal improvement stars to be equipped, since 2023-11-02
+					if(exslotShips[gearId].api_req_level > 0)
+						this._equipExslotShips[gearId].minStars = exslotShips[gearId].api_req_level;
 				});
 			}
 			return this._equipExslotShips[gearId] || {};
@@ -462,7 +474,7 @@ Saves and loads significant data for future use
 			});
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
 			let isCapableToExslot = generalExslotTypes.includes(type2Id);
-			let exslotCapableShips = [], exslotCapableStypes = [];
+			let exslotCapableShips = [], exslotCapableStypes = [], exslotMinStars = 0;
 			// note: #equip_exslot_ships method extends ctype to all ships in that class, which may include some ships not really capable with both regular and exslot. have to use #equip_on_ship method to re-verify
 			const exslotCapableInfo = gearId > 0 ? this.equip_exslot_ships(gearId) : false;
 			if(exslotCapableInfo) {
@@ -471,6 +483,9 @@ Saves and loads significant data for future use
 					isCapableToExslot = true;
 				} else {
 					exslotCapableStypes = exslotCapableInfo.stypes;
+				}
+				if(exslotCapableInfo.minStars) {
+					exslotMinStars = exslotCapableInfo.minStars;
 				}
 			}
 			// Remove Richelieu-class Kai from Seaplane Bomber type list except Late 298B
@@ -509,6 +524,7 @@ Saves and loads significant data for future use
 				exslot: isCapableToExslot,
 				exslotIncludes: exslotCapableShips,
 				exslotStypes: exslotCapableStypes,
+				exslotMinStars: exslotMinStars,
 			};
 		},
 
@@ -538,10 +554,11 @@ Saves and loads significant data for future use
 		 * @param {number} shipId - the master ID of ship to be checked.
 		 * @param {number} gearId - the master ID of a gear to be checked. if omitted, will be checked by equip type.
 		 * @param {number} gearType2 - the equip type ID of api_type[2] value, optional, but cannot be omitted at the same time with gearId.
+		 * @param {number} gearStars - the current improved level to be equipped, optional, assumed to be equippable for library display if omitted.
 		 * @return 1 indicates can be equipped on (some) regular slots, 2: ex-slot, 3: both, 0: cannot equip. false on exception.
 		 * @see #equip_on
 		 */
-		equip_on_ship :function(shipId, gearId, gearType2) {
+		equip_on_ship :function(shipId, gearId, gearType2, gearStars) {
 			if(!this.available) return false;
 			if(!shipId) return false;
 			const gearMstId = Number(gearId),
@@ -560,6 +577,10 @@ Saves and loads significant data for future use
 			// No equipment can be equipped on ex-slot only without regular slots so far, so result always 3 if ex-slot true
 			if(result) {
 				if(equipOn.exslot) result |= 2;
+				// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
+				if(equipOn.exslotMinStars > 0) {
+					if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
+				}
 				if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
 				if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
 			}

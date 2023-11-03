@@ -2778,8 +2778,8 @@ KC3改 Ship Object
 
 	// check if specified equipment (or equip type) can be equipped on this ship.
 	// equipment defined by ID in master data (like 8cm HA gun in exslot) cannot be hit by type.
-	KC3Ship.prototype.canEquip = function(gearType2, gearMstId) {
-		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
+	KC3Ship.prototype.canEquip = function(gearType2, gearMstId, gearStars) {
+		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2, gearStars);
 	};
 
 	// check if this ship is capable of equipping Amphibious Tank (Ka-Mi tank only for now, no landing craft variants)

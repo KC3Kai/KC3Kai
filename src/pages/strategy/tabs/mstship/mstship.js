@@ -890,6 +890,7 @@
 						);
 						exslotItems.sort(orderByType).forEach(item => {
 							const gearMst = KC3Master.slotitem(item);
+							const exslotShip = KC3Master.equip_exslot_ships(item);
 							const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
 								.appendTo(".equipExSlot .equipList");
 							$(".typeIcon img", equipTypeBox)
@@ -899,6 +900,15 @@
 							$(".typeIcon", equipTypeBox).addClass("hover");
 							$(".typeName", equipTypeBox).text(KC3Meta.gearName(gearMst.api_name))
 								.attr("title", KC3Meta.gearName(gearMst.api_name));
+							// some items with specified stars can be equipped on exslot since 2023-11-02
+							if(exslotShip.minStars > 0) {
+								$(".typeName", equipTypeBox).html(
+									'<span class="star">\u2605{0}</span>{1}'.format(
+										(exslotShip.minStars >= 10 ? "m" : exslotShip.minStars),
+										KC3Meta.gearName(gearMst.api_name)
+									)
+								);
+							}
 						});
 					}
 					$(".equipExSlot").show().createChildrenTooltips();

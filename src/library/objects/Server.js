@@ -44,8 +44,9 @@ Represent KanColle game server instance.
 		this.num = serverInfo.num;
 		this.ip = serverInfo.ip;
 		this.name = serverInfo.name;
+		// update this if real domain used in future
 		this.host = `world${this.num}.kan-colle.com`;
-		this.protocol = "http:";
+		this.protocol = isDomain ? "https:" : "http:";
 		this.urlPrefix = `${this.protocol}//${isDomain ? this.host : this.ip}`;
 		return this;
 	};
