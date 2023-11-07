@@ -4239,7 +4239,8 @@ KC3改 Ship Object
 				// [458] even sub radar not counted: https://twitter.com/shiro_sh39/status/1530861026941448193
 				// fixed since 2022-05-30: https://twitter.com/KanColle_STAFF/status/1531162152010395649
 				// [512] 4 tubes not counted again: https://twitter.com/nagasisoumen22/status/1690298363546349568
-				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457, 461]);
+				// fixed since 2023-11-03
+				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457, 461, 512]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				const secondaryCnt = this.countEquipmentType(2, 4);

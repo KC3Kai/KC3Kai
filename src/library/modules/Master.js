@@ -290,7 +290,7 @@ Saves and loads significant data for future use
 		},
 
 		find_slotitems :function(filterFunc){
-			return Object.values(this.all_slotitems).filter(filterFunc || ((g) => false));
+			return Object.values(this.all_slotitems()).filter(filterFunc || ((g) => false));
 		},
 
 		new_slotitems :function(){
