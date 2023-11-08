@@ -204,27 +204,32 @@ Contains summary information about a fleet and its ships
 	/*-------------------[ AKASHI REPAIR ]--------------------*/
 	/*--------------------------------------------------------*/
 
-	// Mark the fleet's ships as being repaired (or not)
-	// Called when the fleet changes, or their equipment does
+	/** Mark the fleet's ships as being repaired (or not)
+	 *  Called when the fleet changes, or their equipment does
+	 */
 	KC3Fleet.prototype.updateAkashiRepairDisplay = function () {
 		var repairSlots = this._getRepairSlots();
 		this.ship(this._updateRepairStatus(repairSlots));
 	};
 
+	/** @return true if fleet flagship can start homeport anchorage repair */
 	KC3Fleet.prototype._canDoRepair = function (flagship) {
 		return this._isRepairShip(flagship) && !flagship.isStriped() && flagship.isFree();
 	};
 
+	/** @return true if ship is Akashi-class or other AR (Asahi Kai) with atleast one crane */
 	KC3Fleet.prototype._isRepairShip = function (ship) {
-		return ship.master().api_stype === 19;
+		return ship.master().api_stype === 19
+			&& (this._isAkashi(ship) || this._hasRepairFacility(ship));
 	};
-
 	KC3Fleet.prototype._isAkashi = function (ship) {
 		return ship.master().api_ctype === 49;
 	};
-
 	KC3Fleet.prototype._isAsahiKai = function (ship) {
 		return ship.masterId === 958;
+	};
+	KC3Fleet.prototype._hasRepairFacility = function (ship) {
+		return ship.hasEquipmentType(2, 31);
 	};
 
 	/**
@@ -247,7 +252,7 @@ Contains summary information about a fleet and its ships
 		return cranesEquipped;
 	};
 
-	// Return a function to pass to this.ship() that will update the ships' repair status 
+	/** @return a function to pass to this.ship() that will update the ships' repair status */
 	KC3Fleet.prototype._updateRepairStatus = function (repairSlotCount) {
 		return function (rosterId, position, ship) {
 			var inRange = position < repairSlotCount;

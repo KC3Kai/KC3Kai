@@ -584,8 +584,8 @@ KC3改 Ship Object
 			var dockTimeMillis = optAfterHp ?
 				RepairCalc.dockingInSecJSNum(this.master().api_stype, this.level, hpArr[0], hpArr[1]) * 1000 :
 				this.repair[0];
-			var repairTime = KC3AkashiRepair.calculateRepairTime(dockTimeMillis);
 			// TODO implement akashi repair time boost by 2 AR ships (Asahi Kai)
+			var repairTime = KC3AkashiRepair.calculateRepairTime(dockTimeMillis);
 			result.akashi = Math.max(
 				Math.hrdInt('floor', repairTime, 3, 1), // convert to seconds
 				20 * 60 // should be at least 20 minutes

@@ -1,8 +1,9 @@
 /* AkashiRepair.js
 
 Manages the timer for a player's Akashi repairs.
-NOTE: new repair mechanic, happens on event sortie node, called 'Emergency Anchorage Repair',
+NOTE1: new repair mechanic, happens on event sortie node, called 'Emergency Anchorage Repair',
 has been implemented since 2019-8, so don't just simply word this 'home port' one with 'Anchorage Repair'.
+NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home port repairs, no longer Akashi only.
 */
 (function () {
   "use strict";
@@ -81,8 +82,11 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
   /*-------------------[ PUBLIC HELPERS ]-------------------*/
   /*--------------------------------------------------------*/
 
-  // Calculate the length of an Akashi repair in ms, 
-  // based on the length of an equivalent dock repair
+  // Calculate the length of an Akashi repair in ms,
+  // based on the length of an equivalent dock repair.
+  // Required repair time (speed) boosted to about 85% by 2 repair ships,
+  // Asahi Kai with atleast 1 crane, modifier relevant to ship level?
+  // https://twitter.com/Schmeichel20/status/1703728038700278122
   KC3AkashiRepair.calculateRepairTime = function (dockTime) {
     return roundUpToMinute(dockTime - 30 * MS_PER_SECOND);
   };
@@ -136,14 +140,14 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
   // Returns true if the fleet's flagship is of the Repair Ship class, false otherwise
   KC3AkashiRepair.hasRepairFlagship = function (fleet) {
     var flagship = fleet.ship(0);
-    return flagship.master().api_stype === 19;
+    return flagship.master().api_stype === 19 && KC3AkashiRepair.hasRepairFacility(flagship);
   };
   KC3AkashiRepair.hasRepair2ndShip = function (fleet) {
     var ship2nd = fleet.ship(1);
-    return ship2nd.master().api_stype === 19;
+    return ship2nd.master().api_stype === 19 && KC3AkashiRepair.hasRepairFacility(ship2nd);
   };
   KC3AkashiRepair.hasRepairFacility = function (ship) {
-    return ship.master().api_ctype === 49 || ship.countEquipmentType(2, 31) > 0;
+    return ship.master().api_ctype === 49 || ship.hasEquipmentType(2, 31);
   };
 
   /*------------------[ REPAIR PROGRESS ]-------------------*/
@@ -155,13 +159,9 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
   };
 
   // Calculate progress when no repairs are ready yet.
-  // Required repair time (speed) boosted to ~85% (17mins?) by 2 repair ships,
-  // Asahi Kai with atleast 1 crane, relevant to ship level?
-  // https://twitter.com/Schmeichel20/status/1703728038700278122
   KC3AkashiRepair.calculatePreRepairProgress = function (dt) {
     return {
       repairedHp: 0,
-      // TODO no longer fixed to 20, have to computed by first 2 repair ships
       timeToNextRepair: 20 * MS_PER_MINUTE - dt.ms(),
     };
   };
