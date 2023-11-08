@@ -212,21 +212,39 @@ Contains summary information about a fleet and its ships
 	};
 
 	KC3Fleet.prototype._canDoRepair = function (flagship) {
-		return this._isAkashi(flagship) && !flagship.isStriped() && flagship.isFree();
+		return this._isRepairShip(flagship) && !flagship.isStriped() && flagship.isFree();
 	};
 
-	KC3Fleet.prototype._isAkashi = function (ship) {
+	KC3Fleet.prototype._isRepairShip = function (ship) {
 		return ship.master().api_stype === 19;
 	};
 
-	// Return the number of ships that will be targeted by an Akashi repair
+	KC3Fleet.prototype._isAkashi = function (ship) {
+		return ship.master().api_ctype === 49;
+	};
+
+	KC3Fleet.prototype._isAsahiKai = function (ship) {
+		return ship.masterId === 958;
+	};
+
+	/**
+	 * Asahi Kai can be combined with Akashi in first 2 slots, and only Akashi-class has 2 embedded cranes.
+	 * https://twitter.com/Schmeichel20/status/1703728038700278122
+	 * @return the number of ships that will be targeted by Akashi/AsahiKai repair
+	 */
 	KC3Fleet.prototype._getRepairSlots = function () {
-		var flagship = this.ship(0);
+		var flagship = this.ship(0), ship2nd = this.ship(1);
 		if (!this._canDoRepair(flagship)) {
 			return 0;
 		}
-		var cranesEquipped = flagship.countEquipment(86);
-		return cranesEquipped + 2;
+		var cranesEquipped = 0;
+		[flagship, ship2nd].forEach(ship => {
+			if(this._canDoRepair(ship)) {
+				cranesEquipped += ship.countEquipmentType(2, 31);
+				cranesEquipped += (this._isAkashi(ship) & 1) * 2;
+			}
+		});
+		return cranesEquipped;
 	};
 
 	// Return a function to pass to this.ship() that will update the ships' repair status 

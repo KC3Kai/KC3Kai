@@ -138,6 +138,13 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
     var flagship = fleet.ship(0);
     return flagship.master().api_stype === 19;
   };
+  KC3AkashiRepair.hasRepair2ndShip = function (fleet) {
+    var ship2nd = fleet.ship(1);
+    return ship2nd.master().api_stype === 19;
+  };
+  KC3AkashiRepair.hasRepairFacility = function (ship) {
+    return ship.master().api_ctype === 49 || ship.countEquipmentType(2, 31) > 0;
+  };
 
   /*------------------[ REPAIR PROGRESS ]-------------------*/
 
@@ -147,10 +154,14 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
     return Math.ceil(repairTime / hpLost);
   };
 
-  // Calculate progress when no repairs are ready yet
+  // Calculate progress when no repairs are ready yet.
+  // Required repair time (speed) boosted to ~85% (17mins?) by 2 repair ships,
+  // Asahi Kai with atleast 1 crane, relevant to ship level?
+  // https://twitter.com/Schmeichel20/status/1703728038700278122
   KC3AkashiRepair.calculatePreRepairProgress = function (dt) {
     return {
       repairedHp: 0,
+      // TODO no longer fixed to 20, have to computed by first 2 repair ships
       timeToNextRepair: 20 * MS_PER_MINUTE - dt.ms(),
     };
   };
