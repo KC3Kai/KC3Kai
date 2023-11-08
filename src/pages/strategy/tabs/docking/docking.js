@@ -96,22 +96,16 @@
 		// assuming PlayerManager.fleets is up-to-date
 		// return akashi coverage. (an array of ship ids)
 		getAnchoredShips() {
-			let results = [];
-			$.each( PlayerManager.fleets, function(_, fleet) {
-				const fs = KC3ShipManager.get(fleet.ships[0]);
-				// check if current fleet's flagship is Akashi (or Kai)
-				if ([182, 187].indexOf( fs.masterId ) === -1) {
-					return;
-				}
+			const results = [];
+			PlayerManager.fleets.forEach(fleet => {
+				const fs = fleet.ship(0);
+				// check if fleet flagship is repair ship (Akashi-class or Asahi Kai)
+				if (!fleet._canDoRepair(fs)) return;
 				// count of equipped Repair Facility
-				const facCount = fs.items.filter(
-					id => KC3GearManager.get(id).masterId === 86
-				).length;
-				// max num of ships this Akashi can repair
-				const repairCap = 2 + facCount;
+				const repairCap = fleet._getRepairSlots();
 				const coveredShipIds = fleet.ships.filter(id => id !== -1)
 					.slice(0, repairCap);
-				results = results.concat( coveredShipIds );
+				results.push(...coveredShipIds);
 			});
 			return results;
 		}
