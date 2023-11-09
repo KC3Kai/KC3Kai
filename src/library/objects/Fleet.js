@@ -15,6 +15,7 @@ Contains summary information about a fleet and its ships
 		// might be 7-length for 3rd fleet since 2017-11-17
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.repairTimeMod = 1;
 
 		// Define properties not included in stringifications
 		Object.defineProperties(this,{
@@ -122,6 +123,9 @@ Contains summary information about a fleet and its ships
 		this.name = data.name;
 		this.ships = data.ships;
 		this.mission = data.mission;
+		this.fastFleet = data.fastFleet;
+		this.minSpeed = data.minSpeed;
+		this.repairTimeMod = data.repairTimeMod;
 		return this;
 	};
 	

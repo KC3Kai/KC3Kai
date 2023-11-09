@@ -8,8 +8,8 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 (function () {
   "use strict";
 
-  var MS_PER_SECOND = 1000;
-  var MS_PER_MINUTE = 60 * MS_PER_SECOND;
+  const MS_PER_SECOND = 1000;
+  const MS_PER_MINUTE = 60 * MS_PER_SECOND;
 
   window.KC3AkashiRepair = function () {
     this.timer = new KC3AkashiRepair.Timer();
@@ -21,7 +21,7 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   // Calculate the amount of HP that can be repaired,
   // and the amount of time until the next point of HP can be repaired
-  KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost) {
+  KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost, fleet) {
     if (hpLost === 0) { return { repairedHp: 0, timeToNextRepair: 0 }; }
     // if we don't have enough information, just give up
     if (!Number.isInteger(hpLost) || !Number.isInteger(dockTime) || !this.timer.isRunning()) {
@@ -33,7 +33,13 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
       return KC3AkashiRepair.calculatePreRepairProgress(elapsed);
     }
 
-    var repairTime = KC3AkashiRepair.calculateRepairTime(dockTime);
+    var repairTimeModifier = 1;
+    if (fleet) {
+      // actual modifier decided on doing first repair? in case of conditions unmet, like crane unequipped
+      KC3AkashiRepair.updateRepairTimeModifier(fleet);
+      repairTimeModifier = fleet.repairTimeMod;
+    }
+    var repairTime = KC3AkashiRepair.calculateRepairTime(dockTime, repairTimeModifier);
     var tickLength = KC3AkashiRepair.calculateTickLength(repairTime, hpLost);
     return KC3AkashiRepair.calculateProgress(elapsed, tickLength, hpLost);
   };
@@ -54,6 +60,7 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   // Listener for api_req_hensei/change
   KC3AkashiRepair.prototype.onChange = function (fleet) {
+    KC3AkashiRepair.updateRepairTimeModifier(fleet);
     if (KC3AkashiRepair.hasRepairFlagship(fleet)) {
       this.timer.start();
     }
@@ -61,6 +68,7 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   // Listener for api_req_hensei/preset_select
   KC3AkashiRepair.prototype.onPresetSelect = function (fleet) {
+    KC3AkashiRepair.updateRepairTimeModifier(fleet);
     if (KC3AkashiRepair.hasRepairFlagship(fleet) && !this.timer.isRunning()) {
       this.timer.start();
     }
@@ -68,6 +76,7 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   // Listener for api_port/port
   KC3AkashiRepair.prototype.onPort = function (fleets) {
+    fleets.forEach(KC3AkashiRepair.updateRepairTimeModifier);
     if (this.timer.getElapsed().canDoRepair()) {
       var akashiFlagExists = fleets.some(KC3AkashiRepair.hasRepairFlagship);
       if (akashiFlagExists) {
@@ -84,11 +93,20 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   // Calculate the length of an Akashi repair in ms,
   // based on the length of an equivalent dock repair.
-  // Required repair time (speed) boosted to about 85% by 2 repair ships,
-  // Asahi Kai with atleast 1 crane, modifier relevant to ship level?
+  // Required repair time reduced to about 85% by 2 repair ships (Asahi Kai with atleast 1 crane)
+  // Modifier might be relevant to repair ship level? calculating and rounding unknown yet
   // https://twitter.com/Schmeichel20/status/1703728038700278122
-  KC3AkashiRepair.calculateRepairTime = function (dockTime) {
-    return roundUpToMinute(dockTime - 30 * MS_PER_SECOND);
+  KC3AkashiRepair.calculateRepairTime = function (dockTime, modifier = 1) {
+    return roundUpToMinute((dockTime - 30 * MS_PER_SECOND) * modifier);
+  };
+
+  // Set new repair time modifier to fleet if 2 repair ships found
+  // Uncertain if repair time modifier applied to individual fleet or all fleets share one mod
+  KC3AkashiRepair.updateRepairTimeModifier = function (fleet) {
+    fleet.repairTimeMod = 1;
+    if (KC3AkashiRepair.hasRepairFlagship(fleet) && KC3AkashiRepair.hasRepair2ndShip(fleet)) {
+      fleet.repairTimeMod = 0.85;
+    }
   };
 
   /*--------------------------------------------------------*/
@@ -97,9 +115,9 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   /*-----------------------[ TIMER ]------------------------*/
 
-  var LOCAL_STORAGE_KEY = 'akashiRepairStartTime';
+  const LOCAL_STORAGE_KEY = 'akashiRepairStartTime';
 
-  var Timer = function () {
+  const Timer = function () {
     this.startTime = parseInt(localStorage.getItem(LOCAL_STORAGE_KEY), 10) || undefined;
   };
 
@@ -121,7 +139,7 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
 
   /*---------------------[ DELTA TIME ]---------------------*/
 
-  var DeltaTime = function (startTime) {
+  const DeltaTime = function (startTime) {
     this.startTime = startTime;
     this.now = Date.now();
   };
@@ -166,10 +184,10 @@ NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home po
     };
   };
 
-  var roundUpToMinute = function (ms) {
+  const roundUpToMinute = function (ms) {
     return Math.ceil(ms / MS_PER_MINUTE) * MS_PER_MINUTE;
   };
-  var roundDownToMinute = function (ms) {
+  const roundDownToMinute = function (ms) {
     return Math.floor(ms / MS_PER_MINUTE) * MS_PER_MINUTE;
   };
 

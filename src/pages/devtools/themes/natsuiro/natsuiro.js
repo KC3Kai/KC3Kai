@@ -373,7 +373,8 @@
 				const shipData = KC3ShipManager.get(repairBox.data('sid')),
 					hpLost = shipData.hp[1] - shipData.hp[0],
 					dockTime = shipData.repair[0],
-					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
+					fleet = PlayerManager.fleets[scopedFleetIds[index]],
+					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost, fleet);
 
 				$('.ship_repair_tick', shipBox).attr('data-tick',
 					Number.isInteger(repairProgress.repairedHp) ? repairProgress.repairedHp : '?');
