@@ -15,6 +15,7 @@ Contains summary information about a fleet and its ships
 		// might be 7-length for 3rd fleet since 2017-11-17
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.repairTimeMod = 1;
 
 		// Define properties not included in stringifications
 		Object.defineProperties(this,{
@@ -122,6 +123,9 @@ Contains summary information about a fleet and its ships
 		this.name = data.name;
 		this.ships = data.ships;
 		this.mission = data.mission;
+		this.fastFleet = data.fastFleet;
+		this.minSpeed = data.minSpeed;
+		this.repairTimeMod = data.repairTimeMod;
 		return this;
 	};
 	
@@ -204,32 +208,55 @@ Contains summary information about a fleet and its ships
 	/*-------------------[ AKASHI REPAIR ]--------------------*/
 	/*--------------------------------------------------------*/
 
-	// Mark the fleet's ships as being repaired (or not)
-	// Called when the fleet changes, or their equipment does
+	/** Mark the fleet's ships as being repaired (or not)
+	 *  Called when the fleet changes, or their equipment does
+	 */
 	KC3Fleet.prototype.updateAkashiRepairDisplay = function () {
 		var repairSlots = this._getRepairSlots();
 		this.ship(this._updateRepairStatus(repairSlots));
 	};
 
+	/** @return true if fleet flagship can start homeport anchorage repair */
 	KC3Fleet.prototype._canDoRepair = function (flagship) {
-		return this._isAkashi(flagship) && !flagship.isStriped() && flagship.isFree();
+		return this._isRepairShip(flagship) && !flagship.isStriped() && flagship.isFree();
 	};
 
+	/** @return true if ship is Akashi-class or other AR (Asahi Kai) with atleast one crane */
+	KC3Fleet.prototype._isRepairShip = function (ship) {
+		return ship.master().api_stype === 19
+			&& (this._isAkashi(ship) || this._hasRepairFacility(ship));
+	};
 	KC3Fleet.prototype._isAkashi = function (ship) {
-		return ship.master().api_stype === 19;
+		return ship.master().api_ctype === 49;
+	};
+	KC3Fleet.prototype._isAsahiKai = function (ship) {
+		return ship.masterId === 958;
+	};
+	KC3Fleet.prototype._hasRepairFacility = function (ship) {
+		return ship.hasEquipmentType(2, 31);
 	};
 
-	// Return the number of ships that will be targeted by an Akashi repair
+	/**
+	 * Asahi Kai can be combined with Akashi in first 2 slots, and only Akashi-class has 2 embedded cranes.
+	 * https://twitter.com/Schmeichel20/status/1703728038700278122
+	 * @return the number of ships that will be targeted by Akashi/AsahiKai repair
+	 */
 	KC3Fleet.prototype._getRepairSlots = function () {
-		var flagship = this.ship(0);
+		var flagship = this.ship(0), ship2nd = this.ship(1);
 		if (!this._canDoRepair(flagship)) {
 			return 0;
 		}
-		var cranesEquipped = flagship.countEquipment(86);
-		return cranesEquipped + 2;
+		var cranesEquipped = 0;
+		[flagship, ship2nd].forEach(ship => {
+			if(this._canDoRepair(ship)) {
+				cranesEquipped += ship.countEquipmentType(2, 31);
+				cranesEquipped += (this._isAkashi(ship) & 1) * 2;
+			}
+		});
+		return cranesEquipped;
 	};
 
-	// Return a function to pass to this.ship() that will update the ships' repair status 
+	/** @return a function to pass to this.ship() that will update the ships' repair status */
 	KC3Fleet.prototype._updateRepairStatus = function (repairSlotCount) {
 		return function (rosterId, position, ship) {
 			var inRange = position < repairSlotCount;

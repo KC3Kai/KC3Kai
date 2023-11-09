@@ -2757,7 +2757,8 @@ Previously known as "Reactor"
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
 				break;
 				case 34: // exchange 22 saury (curry) with 1 Zuiun (634 Air Group / Skilled) (up to twice)
-					//if(itemId === 68) PlayerManager.consumables.mackerel -= 22;
+					// exchange 46 saury (curry k2) with 1 T1 Fighter Hayabusa Model II (64 Squad) in 2023 (once)
+					//if(itemId === 68) PlayerManager.consumables.mackerel -= 46;
 				break;
 				case 41: // exchange all boxes with fcoins
 					//if(itemId === 10) PlayerManager.consumables.furniture200 = 0;

@@ -435,9 +435,9 @@ var interactions = {
 			$(".overlay_markers").show();
 		} else {
 			var letters = KC3Meta.nodeLetters(request.worldId, request.mapId);
-			var lettersFound = (!!letters && Object.keys(letters).length > 0);
+			var lettersFound = Object.notEmpty(letters);
 			var icons = KC3Meta.nodeMarkers(request.worldId, request.mapId);
-			var iconsFound = (!!icons.length && icons.length > 0);
+			var iconsFound = Object.notEmpty(icons);
 			$(".overlay_markers").hide().empty();
 			if(lettersFound && ConfigManager.map_letters){
 				// Show node letters

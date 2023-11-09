@@ -556,6 +556,11 @@
 	overflow:hidden;
 	white-space:nowrap;
 }
+.tab_mstship .shipInfo .equipExSlot .typeName .star {
+	color:#45a9a5;
+	font-size:11px;
+	margin-right:2px;
+}
 .tab_mstship .shipInfo .equipExSlot .label {
 	color:inherit;
 }
