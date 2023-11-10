@@ -127,13 +127,13 @@
 				const
 					filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked'),
 					worldNum     = $(this).attr("world"),
-					context      = ".tab_expedpast .expedNumBox_"+worldNum;
+					context      = ".tab_expedpast .expedNumBox_" + worldNum;
 				let parentCheck  = true;
-				self.exped_filters = [];
-				$(".expedNum   input",context).each(function(i,x){ parentCheck &= $(x).prop("checked"); });
+				self.exped_filters.length = 0;
+				$(".expedNum   input",context).each(function(i, x) { parentCheck &= $(x).prop("checked"); });
 				$(".expedWhole input",context).prop("checked",parentCheck);
-				filterExpeds.each( function() {
-					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
+				filterExpeds.each(function() {
+					self.exped_filters.push(parseInt($(this).attr("value"), 10));
 				});
 				self.refreshList();
 			}).on("click", ".expedWhole input", function(e) {
@@ -142,42 +142,30 @@
 					+',.tab_expedpast .expedNumBox .expedWhole input').prop("checked", false);
 					$(this).prop("checked", true);
 				}
-				const
-					worldNum = $(this).val(),
-					state    = $(this).prop("checked"),
-					expeds   = $(".tab_expedpast .expedNumBox_"+worldNum+" .expedNum input");
-				expeds.each(function(i,x){
-					const
-						elmState = $(x).prop("checked"),
-						expedNum = parseInt($(x).val());
-					if(elmState ^ state) { // check different state
-						if(elmState) { // set -> unset
-							self.exped_filters.splice(self.exped_filters.indexOf(expedNum),1);
-						} else { // unset -> set
-							self.exped_filters.push(expedNum);
-						}
-						$(x).prop("checked",state);
-					}
+				const worldNum = $(this).val(), state = $(this).prop("checked");
+				$(".tab_expedpast .expedNumBox_" + worldNum + " .expedNum input").prop("checked", state);
+				self.exped_filters.length = 0;
+				$('.tab_expedpast .expedNumBox .expedNum input:checked').each(function() {
+					self.exped_filters.push(parseInt($(this).attr("value"), 10));
 				});
-				self.exped_filters.sort(function(a,b){return a-b;});
 				self.refreshList();
 			});
 			
 			// Fleet Number Filter
 			this.fleet_filters = [2, 3, 4];
-			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(e){
+			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(e) {
 				if(e.altKey) {
 					$('.tab_expedpast .expedNumBox .fleetRadio input').prop("checked", false);
 					$(this).prop("checked", true);
 				}
 				const filterFleets = $('.tab_expedpast .expedNumBox .fleetRadio input:checked');
 				self.fleet_filters.length = 0;
-				filterFleets.each( function() {
-					self.fleet_filters.push( parseInt( $(this).attr("value"),10) );
+				filterFleets.each(function() {
+					self.fleet_filters.push(parseInt($(this).attr("value"), 10));
 				});
 				self.refreshList();
 			});
-			$(".tab_expedpast .expedNumBox").on("change", '.fleetSparkles', function(){
+			$(".tab_expedpast .expedNumBox").on("change", '.fleetSparkles', function() {
 				self.refreshList();
 			});
 			
