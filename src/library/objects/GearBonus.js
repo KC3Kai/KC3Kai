@@ -32,13 +32,24 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
+				// Array constants used instead for faster executions:
+				// surfaceRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_saku >= 5 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 517],
 				airRadar: 0,
+				// airRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_tyku >= 2 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
 				highAccuracyRadar: 0,
-				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460],
+				// highAccuracyRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_houm >= 8 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
+				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460, 517],
 				aaMachineGun: 0,
+				// aaMachineGunIds: KC3Master.find_slotitems(g => g.api_type[2] == 21 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301, 505],
+				rotorcraft: 0,
+				// rotorcraftIds: KC3Master.find_slotitems(g => g.api_type[2] == 25 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
+				rotorcraftIds: [69, 324, 325, 326, 327],
+				helicopter: 0,
+				// helicopterIds: KC3Master.find_slotitems(g => g.api_type[1] == 44 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
+				helicopterIds: [326, 327],
 				improvedTurbine: 0,
 				improvedTurbineNonexist: 1,
 				improvedTurbineIds: [33],
@@ -76,10 +87,6 @@
 				twin51cmLargeGunMountNonexist: 1,
 				triple14inch45LargeGunMount: 0,
 				triple14inch45LargeGunMountIds: [508],
-				rotorcraft: 0,
-				rotorcraftIds: [69, 324, 325, 326, 327],
-				helicopter: 0,
-				helicopterIds: [326, 327],
 				twin127SmallGunMountModelDK2: 0,
 				twin127SmallGunMountModelDK2Nonexist: 1,
 				twin127SmallGunMountModelDK2Ids: [267],
@@ -5428,25 +5435,59 @@
 			// Late Model 53cm Bow Torpedo Mount (8 tubes)
 			"383": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// I-58 Class
-					"36": {
+					"36": [
+						{
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houm": 1 },
+						},
+					],
+					// I-400 Class
+					"44": [
+						{
+							multiple: { "raig": 2 },
+						},
+						{
+							minStars: 4,
+							single: { "raig": 1 },
+						},
+						{
+							minStars: 6,
+							single: { "houm": 1 },
+						},
+					],
+					// I-47 Class
+					"103": [
+						{
+							multiple: { "raig": 3 },
+						},
+						{
+							minStars: 5,
+							single: { "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// I-47 Kai
+						ids: [607],
 						multiple: { "raig": 1 },
 					},
-					// I-400 Class
-					"44": {
-						multiple: { "raig": 2 },
+					// For any ship
+					{
+						minStars: 8,
+						single: { "raig": 1 },
 					},
-					// I-47 Class
-					"103": {
-						multiple: { "raig": 3 },
+					{
+						minStars: 10,
+						single: { "houm": 1 },
 					},
-				},
-				byShip: {
-					// I-47 Kai
-					ids: [607],
-					multiple: { "raig": 1 },
-				},
+				],
 			},
 			// 21inch 4-tube Bow Torpedo Launcher (Initial Model)
 			"511": {
@@ -7957,6 +7998,7 @@
 			// Passive Radiolocator (E27) + Type 22 Surface Radar Kai 4 (Calibrated Late Model)
 			"517": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Class group "JDD": [66,28,12,1,5,10,23,18,30,38,22,54,101]
 					// Yuugumo Class 38 see below
@@ -8015,6 +8057,22 @@
 						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2, Kiyoshimo K2
 						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955],
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
+					},
+					{
+						minStars: 7,
+						single: { "houm": 1 },
+					},
+					{
+						minStars: 8,
+						single: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						single: { "houg": 1 },
+					},
+					{
+						minStars: 10,
+						single: { "houm": 1 },
 					},
 					{
 						// All ships can equip this radar synergy with guns/radar +stars

@@ -364,7 +364,8 @@
 				const shipData = KC3ShipManager.get(repairBox.data('sid')),
 					hpLost = shipData.hp[1] - shipData.hp[0],
 					dockTime = shipData.repair[0],
-					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
+					fleet = PlayerManager.fleets[scopedFleetIds[index]],
+					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost, fleet);
 
 				$('.ship_repair_tick', shipBox).attr('data-tick',
 					Number.isInteger(repairProgress.repairedHp) ? repairProgress.repairedHp : '?');
@@ -5319,7 +5320,7 @@
 		// Normalize Parameters
 		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
 
-		if(Object.keys(thisMap).length > 0){
+		if(Object.notEmpty(thisMap)){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			$(".module.activity .map_hp").removeAttr("title");
 			if(KC3SortieManager.isPvP() || KC3Meta.isEventWorld(KC3SortieManager.map_world)){

@@ -1,14 +1,15 @@
 /* AkashiRepair.js
 
 Manages the timer for a player's Akashi repairs.
-NOTE: new repair mechanic, happens on event sortie node, called 'Emergency Anchorage Repair',
+NOTE1: new repair mechanic, happens on event sortie node, called 'Emergency Anchorage Repair',
 has been implemented since 2019-8, so don't just simply word this 'home port' one with 'Anchorage Repair'.
+NOTE2: Asahi Kai has implemented since 2023-8, who can start and 'boost' home port repairs, no longer Akashi only.
 */
 (function () {
   "use strict";
 
-  var MS_PER_SECOND = 1000;
-  var MS_PER_MINUTE = 60 * MS_PER_SECOND;
+  const MS_PER_SECOND = 1000;
+  const MS_PER_MINUTE = 60 * MS_PER_SECOND;
 
   window.KC3AkashiRepair = function () {
     this.timer = new KC3AkashiRepair.Timer();
@@ -20,7 +21,7 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
 
   // Calculate the amount of HP that can be repaired,
   // and the amount of time until the next point of HP can be repaired
-  KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost) {
+  KC3AkashiRepair.prototype.getProgress = function (dockTime, hpLost, fleet) {
     if (hpLost === 0) { return { repairedHp: 0, timeToNextRepair: 0 }; }
     // if we don't have enough information, just give up
     if (!Number.isInteger(hpLost) || !Number.isInteger(dockTime) || !this.timer.isRunning()) {
@@ -32,7 +33,13 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
       return KC3AkashiRepair.calculatePreRepairProgress(elapsed);
     }
 
-    var repairTime = KC3AkashiRepair.calculateRepairTime(dockTime);
+    var repairTimeModifier = 1;
+    if (fleet) {
+      // actual modifier decided on doing first repair? in case of conditions unmet, like crane unequipped
+      KC3AkashiRepair.updateRepairTimeModifier(fleet);
+      repairTimeModifier = fleet.repairTimeMod;
+    }
+    var repairTime = KC3AkashiRepair.calculateRepairTime(dockTime, repairTimeModifier);
     var tickLength = KC3AkashiRepair.calculateTickLength(repairTime, hpLost);
     return KC3AkashiRepair.calculateProgress(elapsed, tickLength, hpLost);
   };
@@ -53,6 +60,7 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
 
   // Listener for api_req_hensei/change
   KC3AkashiRepair.prototype.onChange = function (fleet) {
+    KC3AkashiRepair.updateRepairTimeModifier(fleet);
     if (KC3AkashiRepair.hasRepairFlagship(fleet)) {
       this.timer.start();
     }
@@ -60,6 +68,7 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
 
   // Listener for api_req_hensei/preset_select
   KC3AkashiRepair.prototype.onPresetSelect = function (fleet) {
+    KC3AkashiRepair.updateRepairTimeModifier(fleet);
     if (KC3AkashiRepair.hasRepairFlagship(fleet) && !this.timer.isRunning()) {
       this.timer.start();
     }
@@ -67,6 +76,7 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
 
   // Listener for api_port/port
   KC3AkashiRepair.prototype.onPort = function (fleets) {
+    fleets.forEach(KC3AkashiRepair.updateRepairTimeModifier);
     if (this.timer.getElapsed().canDoRepair()) {
       var akashiFlagExists = fleets.some(KC3AkashiRepair.hasRepairFlagship);
       if (akashiFlagExists) {
@@ -81,10 +91,22 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
   /*-------------------[ PUBLIC HELPERS ]-------------------*/
   /*--------------------------------------------------------*/
 
-  // Calculate the length of an Akashi repair in ms, 
-  // based on the length of an equivalent dock repair
-  KC3AkashiRepair.calculateRepairTime = function (dockTime) {
-    return roundUpToMinute(dockTime - 30 * MS_PER_SECOND);
+  // Calculate the length of an Akashi repair in ms,
+  // based on the length of an equivalent dock repair.
+  // Required repair time reduced to about 85% by 2 repair ships (Asahi Kai with atleast 1 crane)
+  // Modifier might be relevant to repair ship level? calculating and rounding unknown yet
+  // https://twitter.com/Schmeichel20/status/1703728038700278122
+  KC3AkashiRepair.calculateRepairTime = function (dockTime, modifier = 1) {
+    return roundUpToMinute((dockTime - 30 * MS_PER_SECOND) * modifier);
+  };
+
+  // Set new repair time modifier to fleet if 2 repair ships found
+  // Uncertain if repair time modifier applied to individual fleet or all fleets share one mod
+  KC3AkashiRepair.updateRepairTimeModifier = function (fleet) {
+    fleet.repairTimeMod = 1;
+    if (KC3AkashiRepair.hasRepairFlagship(fleet) && KC3AkashiRepair.hasRepair2ndShip(fleet)) {
+      fleet.repairTimeMod = 0.85;
+    }
   };
 
   /*--------------------------------------------------------*/
@@ -93,9 +115,9 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
 
   /*-----------------------[ TIMER ]------------------------*/
 
-  var LOCAL_STORAGE_KEY = 'akashiRepairStartTime';
+  const LOCAL_STORAGE_KEY = 'akashiRepairStartTime';
 
-  var Timer = function () {
+  const Timer = function () {
     this.startTime = parseInt(localStorage.getItem(LOCAL_STORAGE_KEY), 10) || undefined;
   };
 
@@ -117,7 +139,7 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
 
   /*---------------------[ DELTA TIME ]---------------------*/
 
-  var DeltaTime = function (startTime) {
+  const DeltaTime = function (startTime) {
     this.startTime = startTime;
     this.now = Date.now();
   };
@@ -136,7 +158,14 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
   // Returns true if the fleet's flagship is of the Repair Ship class, false otherwise
   KC3AkashiRepair.hasRepairFlagship = function (fleet) {
     var flagship = fleet.ship(0);
-    return flagship.master().api_stype === 19;
+    return flagship.master().api_stype === 19 && KC3AkashiRepair.hasRepairFacility(flagship);
+  };
+  KC3AkashiRepair.hasRepair2ndShip = function (fleet) {
+    var ship2nd = fleet.ship(1);
+    return ship2nd.master().api_stype === 19 && KC3AkashiRepair.hasRepairFacility(ship2nd);
+  };
+  KC3AkashiRepair.hasRepairFacility = function (ship) {
+    return ship.master().api_ctype === 49 || ship.hasEquipmentType(2, 31);
   };
 
   /*------------------[ REPAIR PROGRESS ]-------------------*/
@@ -147,7 +176,7 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
     return Math.ceil(repairTime / hpLost);
   };
 
-  // Calculate progress when no repairs are ready yet
+  // Calculate progress when no repairs are ready yet.
   KC3AkashiRepair.calculatePreRepairProgress = function (dt) {
     return {
       repairedHp: 0,
@@ -155,10 +184,10 @@ has been implemented since 2019-8, so don't just simply word this 'home port' on
     };
   };
 
-  var roundUpToMinute = function (ms) {
+  const roundUpToMinute = function (ms) {
     return Math.ceil(ms / MS_PER_MINUTE) * MS_PER_MINUTE;
   };
-  var roundDownToMinute = function (ms) {
+  const roundDownToMinute = function (ms) {
     return Math.floor(ms / MS_PER_MINUTE) * MS_PER_MINUTE;
   };
 

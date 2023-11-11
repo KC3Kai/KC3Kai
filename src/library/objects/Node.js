@@ -505,7 +505,8 @@ Used by SortieManager
 			}
 		}
 
-		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
+		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] || 0 : 0 );
+		this.edetection = KC3Meta.detection( battleData.api_search ? battleData.api_search[1] || 0 : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.smokeType = battleData.api_smoke_type || 0;
 		this.balloonNode = !!battleData.api_balloon_cell;
@@ -1701,7 +1702,7 @@ Used by SortieManager
 			}
 			// also may try to infer something from jet assault phase, if abyssal has one
 		}
-		if(Object.keys(apTuple[4]).length > 0){
+		if(Object.notEmpty(apTuple[4])){
 			tooltip += "\n" + KC3Meta.term("InferredExceptions").format(JSON.stringify(apTuple[4]));
 		}
 		return $("<p></p>")
@@ -1735,7 +1736,7 @@ Used by SortieManager
 			const shipMaster = KC3Master.ship(masterId);
 			const abyssMaster = KC3Master.abyssalShip(masterId, true);
 			const isCurrentHpShown = ConfigManager.info_battle
-				&& this.enemyHP && Object.keys(this.enemyHP[index] || {}).length > 0
+				&& this.enemyHP && Object.notEmpty(this.enemyHP[index])
 				// unnecessary to show current hp if max hp is "N/A"
 				&& !isNaN(maxHp);
 			tooltip += "{0}: {1}\n".format(masterId,

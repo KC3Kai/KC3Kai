@@ -742,7 +742,7 @@
 				const eships = airRaid.api_ship_ke || [];
 				const airpow = KC3Calc.enemyFighterPower(eships, airRaid.api_eSlot, undefined, true);
 				const airpowIntervals = KC3Calc.fighterPowerIntervals(airpow[0]);
-				if(Object.keys(airpow[4]).length) {
+				if(Object.notEmpty(airpow[4])) {
 					// add a question mark if there is inferring exception
 					airpowIntervals[0] = "{0}?".format(airpowIntervals[0]);
 				}
@@ -1369,13 +1369,9 @@
 								if(thisNode.detection[0]){
 									$(".node_detect", nodeBox).text( thisNode.detection[0] )
 										.addClass( thisNode.detection[1] )
-										.attr("title", (thisNode.battleDay.api_name || "").includes("ld_shooting")
-											|| !thisNode.battleDay.api_search ?
+										.attr("title", thisNode.isLongRangeRaid ?
 											KC3Meta.term("BattleKindLongRangeRaid") :
-											"{0} vs {1}".format(
-												thisNode.detection[0],
-												KC3Meta.detection(thisNode.battleDay.api_search[1])[0]
-											)
+											"{0} vs {1}".format(thisNode.detection[0], thisNode.edetection[0])
 										);
 								}
 								

@@ -223,6 +223,16 @@
 	border-radius: 50%;
 }
 
+.tab_mstgear .gearInfo .equippable .exslot > div.reicon .star {
+	position:absolute;
+	margin:-15px 0 0 18px;
+	font-size:11px;
+	color:#45a9a5;
+	background:#fff;
+	border-radius:50%;
+	pointer-events:none;
+}
+
 /* INTRO */
 .tab_mstgear .gearInfo .intro {
 	width:368px;

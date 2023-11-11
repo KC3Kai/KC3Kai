@@ -206,13 +206,24 @@ Date.toUTChours = function(dateStr) {
 /*******************************\
 |*** Object                     |
 \*******************************/
+// safe for null and undefined, lower memory footprint,
+// but might be slower than Object.keys(obj).length?
 Object.size = function(obj) {
 	var size = 0, key;
 	for (key in obj) {
-		if (obj.hasOwnProperty(key)) size++;
+		if(Object.hasOwn(obj, key)) size++;
 	}
 	return size;
 };
+// faster on both empty and large object/array
+Object.notEmpty = function(obj) {
+	var key;
+	for (key in obj) {
+		if(Object.hasOwn(obj, key)) return true;
+	}
+	return false;
+};
+/** to update property only if new value effective */
 Object.assignIfDefined = function(target, key, value) {
 	if(value !== undefined && typeof target === "object") {
 		target[key] = value;
@@ -246,7 +257,7 @@ Object.safePropertyPath = function(isGetProp, root, props) {
 	var prop;
 	while( !!(prop = path.shift()) ) {
 		try {
-			// can use hasOwnProperty not to match props inherited
+			// can use hasOwn not to match props inherited
 			if(typeof prop === "string" && prop in root) {
 				root = root[prop];
 			} else {
@@ -263,7 +274,7 @@ Object.safePropertyPath = function(isGetProp, root, props) {
 Object.sumValuesByKey = function(){
 	return Array.from(arguments).reduce(function(acc, o){
 		for(var k in o){
-			if(o.hasOwnProperty(k))
+			if(Object.hasOwn(o, k))
 				acc[k] = Number(acc[k] || 0) + Number(o[k]);
 		}
 		return acc;
@@ -340,6 +351,23 @@ if (!Object.fromEntries) {
 			}
 		}
 		return result;
+	};
+}
+
+/**
+ * Legacy polyfill for `Object.hasOwn` (since m93), better accessibility to `prototype.hasOwnProperty`
+ * No exception will be thrown, undefined or null always return false
+ * @see https://github.com/es-shims/Object.hasOwn
+ */
+if (!Object.hasOwn) {
+	Object.hasOwn = function(obj, prop) {
+		if(obj == null){
+			// throw new TypeError("Cannot convert undefined or null to object");
+			return false;
+		}
+		return Object.prototype.hasOwnProperty.call(
+			typeof obj == "object" ? obj : Object(obj), prop
+		);
 	};
 }
 
@@ -1122,7 +1150,7 @@ Storage.prototype.quotaLength = 1024 * 1024 * 5;
 Storage.prototype.usedSpace = function() {
 	var total = 0, key;
 	for(key in this)
-		if(this.hasOwnProperty(key))
+		if(Object.hasOwn(this, key))
 			total += (this[key].length + key.length);
 	return total;
 };

@@ -1056,7 +1056,7 @@ Uses KC3Quest objects to play around with
 			
 			// Check if synchronization is enabled and quests list is not empty
 			ConfigManager.loadIfNecessary();
-			if (ConfigManager.chromeSyncQuests && Object.keys(this.list).length > 0) {
+			if (ConfigManager.chromeSyncQuests && Object.notEmpty(this.list)) {
 				const now = Date.now();
 				KC3QuestSync.save(Object.assign(KC3QuestManager.getRepeatableResetTimes(now), {
 					quests: localStorage.quests,

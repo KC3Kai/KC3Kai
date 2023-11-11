@@ -6051,5 +6051,101 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5756": {
+		"api_id": 5756,
+		"api_name": "ハロウィン朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5757": {
+		"api_id": 5757,
+		"api_name": "ハロウィン第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5758": {
+		"api_id": 5758,
+		"api_name": "ハロウィン鵜来",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5759": {
+		"api_id": 5759,
+		"api_name": "ハロウィン稲木",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5760": {
+		"api_id": 5760,
+		"api_name": "ハロウィン宗谷(特務艦)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5761": {
+		"api_id": 5761,
+		"api_name": "ハロウィン宗谷(灯台補給船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5762": {
+		"api_id": 5762,
+		"api_name": "ハロウィン宗谷(南極観測船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5763": {
+		"api_id": 5763,
+		"api_name": "ハロウィンC.Cappellini",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5764": {
+		"api_id": 5764,
+		"api_name": "ハロウィンUIT-24",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5765": {
+		"api_id": 5765,
+		"api_name": "ハロウィン伊503",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5766": {
+		"api_id": 5766,
+		"api_name": "浴衣八丈",
+		"api_yomi": "はちじょう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5767": {
+		"api_id": 5767,
+		"api_name": "浴衣白雲",
+		"api_yomi": "しらくも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }
