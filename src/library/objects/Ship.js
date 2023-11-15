@@ -3813,8 +3813,9 @@ KC3改 Ship Object
 				if(spSuiseiCnt > 1) results.push(KC3Ship.specialAttackTypeDay(201));
 			}
 		}
-		// Rotorcraft and ASW Patrol can trigger Artillery Spotting too since 2023-02-14
-		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11, 25, 26]);
+		// ~Rotorcraft and ASW Patrol can trigger Artillery Spotting too~ since 2023-02-14?
+		// unable to reproduce (on Ise-class) for now, was probably misunderstanding tests
+		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11/*, 25, 26*/]);
 		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
 			/*
 			 * To estimate if can do day time special attacks (aka Artillery Spotting).
