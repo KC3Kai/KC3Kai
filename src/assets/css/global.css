@@ -29,13 +29,16 @@ can be enabled via `chrome://flags/#enable-experimental-web-platform-features`.
 	}
 }
 /*
-Common styles for ship icon images, to fit large square -> smaller circle.
+Common styles for ship icon images, to fit large rectangle -> smaller circle.
 Known pixelated image issue (downsized <50%?) found,
-if `object-fit: cover` used since Chrome 103, no solution for now.
+if `object-fit: cover` used since Chrome 103.
+Applying `overflow-clip-margin` (since 90) workaround for now. (tested on 119)
+https://stackoverflow.com/questions/74502978/object-fit-cover-gives-pixelated-images-on-chrome
 */
 .shipiconbox img,
 img.shipiconimg {
 	object-fit: cover;
 	object-position: center;
 	image-rendering: auto;
+	overflow-clip-margin: unset;
 }
