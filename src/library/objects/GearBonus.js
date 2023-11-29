@@ -79,6 +79,9 @@
 				triple305mm46LargeGunMountIds: [427],
 				triple320mm44LargeGunMount: 0,
 				triple320mm44LargeGunMountIds: [429],
+				twin14cmMediumGunMountK2: 0,
+				twin14cmMediumGunMountK2Nonexist: 1,
+				twin14cmMediumGunMountK2Ids: [518],
 				twin203MediumGunMountNo2: 0,
 				twin203MediumGunMountNo2Nonexist: 1,
 				twin203MediumGunMountNo2Ids: [90],
@@ -1899,10 +1902,29 @@
 							minStars: 6,
 							multiple: { "houg": 1 },
 						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
 					],
 					// Illustrious Class
 					"112": "78",
+					// Queen Elizabeth Class (not capable)
+					"67": "78",
+					// J Class (not capable)
+					"82": "78",
+					// Nelson Class (not capable)
+					"88": "78",
+					// Town Class (not capable)
+					"108": "78",
 				},
+				"byShip": [
+					// For any ship can equip it
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Barracuda Mk.III
 			"425": {
@@ -1927,8 +1949,16 @@
 							multiple: { "tais": 1 },
 						},
 						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
 							minStars: 8,
 							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
 						},
 						{
 							minStars: 10,
@@ -1937,7 +1967,34 @@
 					],
 					// Illustrious Class
 					"112": "78",
+					// Queen Elizabeth Class (not capable)
+					"67": "78",
+					// J Class (not capable)
+					"82": "78",
+					// Nelson Class (not capable)
+					"88": "78",
+					// Town Class (not capable)
+					"108": "78",
 				},
+				"byShip": [
+					// For any ship can equip it
+					{
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Zuiun
 			"26": {
@@ -4425,7 +4482,7 @@
 							remodel: 2,
 							multiple: { "houg": 2, "tais": 1, "houk": 1 },
 							synergy: {
-								flags: [ "surfaceRadar" ],
+								flags: [ "surfaceRadar", "twin14cmMediumGunMountK2Nonexist" ],
 								single: { "houg": 3, "raig": 2, "houk": 2 },
 							},
 						},
@@ -4457,6 +4514,75 @@
 						},
 					],
 				},
+			},
+			// 14cm Twin Gun Mount Kai Ni
+			"518": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Yuubari Class
+					"34": [
+						{
+							multiple: { "houg": 3, "tyku": 2, "tais": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 2 },
+						},
+						// Yuubari Kai Ni+
+						{
+							remodel: 2,
+							multiple: { "houg": 3, "tais": 1, "houk": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 2, "houk": 2 },
+							},
+						},
+						// Yuubari Kai Ni+ with stars >= 7
+						{
+							remodel: 2,
+							minStars: 7,
+							multiple: { "houg": 1, "raig": 1 },
+						},
+					],
+					// Katori Class
+					"56": [
+						{
+							multiple: { "houg": 3, "tyku": 1, "tais": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 2, "houk": 2 },
+						},
+					],
+					// Nisshin Class
+					"90": [
+						{
+							multiple: { "houg": 3, "raig": 2, "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "raig": 1 },
+						},
+					],
+				},
+				"byShip": [
+					{
+						// All AVs
+						stypes: [16],
+						multiple: { "houg": 1, "raig": 1, "houk": 1 },
+					},
+					{
+						// Yuubari K2/K2D
+						ids: [622, 624],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Yuubari K2D
+						ids: [624],
+						multiple: { "tais": 2 },
+					},
+				],
 			},
 			// 15.5cm Triple Gun Mount
 			"5": {

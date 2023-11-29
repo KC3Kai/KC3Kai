@@ -6147,5 +6147,69 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5768": {
+		"api_id": 5768,
+		"api_name": "秋刀魚時雨改三",
+		"api_yomi": "しぐれ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5769": {
+		"api_id": 5769,
+		"api_name": "秋刀魚熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5770": {
+		"api_id": 5770,
+		"api_name": "秋刀魚山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5771": {
+		"api_id": 5771,
+		"api_name": "秋刀魚白雪",
+		"api_yomi": "しらゆき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5772": {
+		"api_id": 5772,
+		"api_name": "秋刀魚Nevada",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5773": {
+		"api_id": 5773,
+		"api_name": "秋刀魚Nevada改",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5774": {
+		"api_id": 5773,
+		"api_name": "秋刀魚Nevada改 Mod.2",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5775": {
+		"api_id": 5775,
+		"api_name": "秋刀魚Javelin",
+		"api_yomi": "ジャヴェリン",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

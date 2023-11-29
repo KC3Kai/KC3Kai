@@ -2420,6 +2420,7 @@ KC3改 Ship Object
 		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
 			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
+			// [518] 14cm Twin Kai2 forgotten: https://twitter.com/yukicacoon/status/1729696346179813382
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
@@ -4945,7 +4946,8 @@ KC3改 Ship Object
 				const isTargetAv = [581, 690, 586, 491, 372, 499].includes(this.masterId);
 				if(isTargetAv) {
 					// Can't clarify all guns belong to which category exactly via tweets and spreadsheets,
-					// and newly implemented guns may not verified, eg: [303] Bofors 15.2cm, [407] 15.2cm Twin Kai2
+					// and newly implemented guns may not verified
+					// eg: [303] Bofors 15.2cm, [407] 15.2cm Twin Kai2, [518] 14cm Twin Kai2
 					const count14cm15cmMainGunVars = this.countEquipment([4, 119, 310, 11, 65, 139, 247]);
 					result -= 6 * count14cm15cmMainGunVars;
 					// also includes: Italian 203mm/53, 152mm/55 rapid fire
