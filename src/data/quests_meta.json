@@ -2275,15 +2275,18 @@
 	},
 	"962": {
 		"unlock": [963],
-		"hash": 338173741
+		"hash": 338173741,
+		"rewardConsumables": [0, 0, 10, 4]
 	},
 	"963": {
 		"unlock": [964],
-		"hash": 1833624771
+		"hash": 1833624771,
+		"rewardConsumables": [0, 6, 0, 0]
 	},
 	"964": {
 		"unlock": [965],
-		"hash": 79246040
+		"hash": 79246040,
+		"rewardConsumables": [0, 0, 0, 6]
 	},
 	"965": {
 		"hash": 424592982
