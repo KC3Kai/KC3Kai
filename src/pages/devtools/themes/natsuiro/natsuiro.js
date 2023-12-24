@@ -2129,7 +2129,7 @@
 			$(".summary-level .summary_text").text(FleetSummary.lv)
 				.attr("titlealt", "{0}{1}".format(
 					selectedFleet > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s) + "\n",
+						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.rankSingame) + "\n",
 					KC3Calc.buildFleetsTotalStatsText(MainFleet, EscortFleet)
 				)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",

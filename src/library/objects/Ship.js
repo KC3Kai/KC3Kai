@@ -4377,6 +4377,7 @@ KC3改 Ship Object
 			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
 		}
 		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
+		// Here rounding possible? https://twitter.com/Xe_UCH/status/1736215714913276144
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		const stype = this.master().api_stype;
