@@ -55,7 +55,9 @@
         mapBgmIds.push(...o.api_map_bgm);
         mapBgmIds.push(...o.api_boss_bgm);
       });
+      const prev = this.maxBattleId;
       this.maxBattleId = Math.max(this.maxBattleId, ...mapBgmIds);
+      if (prev !== this.maxBattleId) { console.debug('Previous maxBattleId', prev); }
       console.debug('Current maxBattleId', this.maxBattleId);
       // Checks if missing ID implemented someday by the way
       this.missingBattleIds.forEach(id => {

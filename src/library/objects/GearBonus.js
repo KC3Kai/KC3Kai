@@ -5915,6 +5915,20 @@
 					},
 				],
 			},
+			// SJ Radar + Submarine Conning Tower Equipment
+			"519": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						single: { "raig": 1, "houk": 2, "houm": 2 },
+					},
+					// Salmon Class
+					"122": {
+						single: { "houk": 2, "houm": 2 },
+					},
+				},
+			},
 			// Type D Kai Kouhyouteki
 			"364": {
 				count: 0,
@@ -8342,6 +8356,42 @@
 						// All ships can equip this gun stars+10
 						minStars: 10,
 						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
+			},
+			// 3.7cm FlaK M42
+			"85": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Italy": [
+						{
+							minStars: 8,
+							multiple: { "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					"Germany": "Italy",
+				},
+				byShip: [
+					{
+						minStars: 6,
+						multiple: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2 },
+						},
+					},
+					{
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houk": 1, "houm": 1 },
 					},
 				],
 			},
