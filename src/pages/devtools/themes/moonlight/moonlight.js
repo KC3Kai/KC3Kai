@@ -2229,7 +2229,7 @@
 			$(".module.admiral .admiral_rank")
 				.attr("title", (fleetNum => {
 					let tips = fleetNum > 1 ? "" :
-						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s) + "\n";
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.rankSingame) + "\n";
 					tips += KC3Calc.buildFleetsTotalStatsText(MainFleet, EscortFleet);
 					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, false);

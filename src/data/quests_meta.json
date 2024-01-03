@@ -802,7 +802,7 @@
 	},
 	"314": {
 		"unlock": [441],
-		"rewardConsumables": [0, 2, 0, 0]
+		"rewardConsumables": [0, 3, 0, 0]
 	},
 	"315": {},
 	"316": {
@@ -981,6 +981,7 @@
 	},
 	"360": {},
 	"361": {
+		"unlock": [990],
 		"hash": -1249807866
 	},
 	"362": {
@@ -1010,6 +1011,10 @@
 	},
 	"369": {
 		"hash": 953941293
+	},
+	"370": {
+		"hash": 591302489,
+		"rewardConsumables": [0, 3, 3, 2]
 	},
 	"401": {},
 	"402": {
@@ -1514,7 +1519,7 @@
 			[0, 3],
 			[0, 1]
 		],
-		"unlock": [318, 804],
+		"unlock": [318],
 		"rewardConsumables": [0, 1, 7, 0]
 	},
 	"677": {
@@ -1675,18 +1680,19 @@
 	},
 	"801": {
 		"unlock": [803],
-		"hash": 1796193154
+		"hash": 1376068225,
+		"rewardConsumables": [0, 0, 10, 4]
 	},
 	"802": {
 		"unlock": [803],
-		"hash": 926655506
+		"hash": 700576890
 	},
 	"803": {
 		"unlock": [804],
-		"hash": -2058485116
+		"hash": -764828873
 	},
 	"804": {
-		"hash": -19737620
+		"hash": -158401754
 	},
 	"805": {
 		"unlock": [806]
@@ -2069,7 +2075,9 @@
 		"hash": -2052429074
 	},
 	"910": {
-		"hash": -1052875248
+		"unlock": [990],
+		"hash": 1650585027,
+		"rewardConsumables": [0, 3, 4, 2]
 	},
 	"911": {
 		"rewardConsumables": [0, 6, 0, 0]
@@ -2270,19 +2278,22 @@
 		"rewardConsumables": [0, 0, 0, 5]
 	},
 	"962": {
-		"unlock": [963, 964],
-		"hash": 333074288
+		"unlock": [963],
+		"hash": 338173741,
+		"rewardConsumables": [0, 0, 10, 4]
 	},
 	"963": {
-		"unlock": [965],
-		"hash": -983681648
+		"unlock": [964],
+		"hash": 1833624771,
+		"rewardConsumables": [0, 6, 0, 0]
 	},
 	"964": {
 		"unlock": [965],
-		"hash": 1381539886
+		"hash": 79246040,
+		"rewardConsumables": [0, 0, 0, 6]
 	},
 	"965": {
-		"hash": 155966612
+		"hash": 424592982
 	},
 	"966": {
 		"unlock": [967],
@@ -2377,7 +2388,8 @@
 	},
 	"990": {
 		"unlock": [1122],
-		"hash": -78932396
+		"hash": 625461771,
+		"rewardConsumables": [0, 0, 10, 0]
 	},
 	"991": {
 		"unlock": [1125],
@@ -2408,6 +2420,7 @@
 	"1002": {
 		"hash": -1091721978
 	},
+	"1003": {},
 	"1101": {
 		"unlock": [1102, 1103],
 		"rewardConsumables": [8, 0, 8, 4]
@@ -2486,10 +2499,12 @@
 	},
 	"1121": {
 		"unlock": [1122],
-		"hash": -92236394
+		"hash": -92236394,
+		"rewardConsumables": [0, 0, 12, 5]
 	},
 	"1122": {
-		"hash": 480618028
+		"unlock": [1135],
+		"hash": -872405297
 	},
 	"1123": {
 		"tracking": [
@@ -2520,6 +2535,9 @@
 	"1132": {},
 	"1133": {},
 	"1134": {},
+	"1135": {
+		"hash": -1834224277
+	},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],

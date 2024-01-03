@@ -798,6 +798,24 @@
 				"links" : {
 					"gh" : "https://github.com/yuanmaxmax"
 				}
+			},
+			{
+				"name": "LydenVaro",
+				"avatar" : "https://avatars.githubusercontent.com/u/83474668?v=4",
+				"desc" : "한국어",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/LydenVaro"
+				}
+			},
+			{
+				"name": "nizhf",
+				"avatar" : "https://avatars.githubusercontent.com/u/29960874?v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/nizhf"
+				}
 			}
 		],
 		"AboutTesters": [
