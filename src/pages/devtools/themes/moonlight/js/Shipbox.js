@@ -459,6 +459,12 @@
 			"morale_mamiya", "morale_orange", "morale_red", ].join(" ");
 		$(".ship_morale", this.element).text(this.shipData.morale).removeClass(moraleClasses);
 		switch(true){
+			case this.shipData.morale > 70: // in-game 2 more sparkles
+				$(".ship_morale", this.element).addClass("morale_sparkle glowing strongplus");
+				break;
+			case this.shipData.morale > 57: // in-game 1 more sparkle
+				$(".ship_morale", this.element).addClass("morale_sparkle glowing strong");
+				break;
 			case this.shipData.morale > 52: // sparkle and get buff
 				$(".ship_morale", this.element).addClass("morale_sparkle glowing");
 				break;

@@ -416,7 +416,9 @@ KC3改 Equipment Object
 				if([7, 57].includes(type2) && !this.isFighterBomber()) return 0.2 * stars;
 				if([8, 58, 11].includes(type2)) return 0.2 * stars;
 				// land-base attacker/heavybomber against surface
-				if([47, 53].includes(type2)) modifier = 0.7;
+				// Type 4 Heavy Bomber Hiryuu (Skilled) + I-go Model 1A Guided Missile seems be different:
+				// https://twitter.com/kancolle_aki/status/1732452282611154982
+				if([47, 53].includes(type2)) modifier = [484].includes(this.masterId) ? 0.75 : 0.7;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now

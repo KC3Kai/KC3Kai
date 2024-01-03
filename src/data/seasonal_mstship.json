@@ -6147,5 +6147,245 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5768": {
+		"api_id": 5768,
+		"api_name": "秋刀魚時雨改三",
+		"api_yomi": "しぐれ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5769": {
+		"api_id": 5769,
+		"api_name": "秋刀魚熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5770": {
+		"api_id": 5770,
+		"api_name": "秋刀魚山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5771": {
+		"api_id": 5771,
+		"api_name": "秋刀魚白雪",
+		"api_yomi": "しらゆき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5772": {
+		"api_id": 5772,
+		"api_name": "秋刀魚Nevada",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5773": {
+		"api_id": 5773,
+		"api_name": "秋刀魚Nevada改",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5774": {
+		"api_id": 5773,
+		"api_name": "秋刀魚Nevada改 Mod.2",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5775": {
+		"api_id": 5775,
+		"api_name": "秋刀魚Javelin",
+		"api_yomi": "ジャヴェリン",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5776": {
+		"api_id": 5776,
+		"api_name": "クリスマス曙",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5777": {
+		"api_id": 5777,
+		"api_name": "クリスマス曙改",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5778": {
+		"api_id": 5778,
+		"api_name": "クリスマス曙改二",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5779": {
+		"api_id": 5779,
+		"api_name": "クリスマス夕雲",
+		"api_yomi": "ゆうぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5780": {
+		"api_id": 5780,
+		"api_name": "クリスマス夕雲改二",
+		"api_yomi": "ゆうぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5781": {
+		"api_id": 5781,
+		"api_name": "クリスマス早波",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5782": {
+		"api_id": 5782,
+		"api_name": "クリスマス朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5783": {
+		"api_id": 5783,
+		"api_name": "クリスマス朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5784": {
+		"api_id": 5784,
+		"api_name": "Xmas第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5785": {
+		"api_id": 5785,
+		"api_name": "クリスマスSalmon",
+		"api_yomi": "サーモン",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5786": {
+		"api_id": 5786,
+		"api_name": "Xmas宗谷(特務艦)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5787": {
+		"api_id": 5787,
+		"api_name": "Xmas宗谷(灯台補給船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5788": {
+		"api_id": 5788,
+		"api_name": "Xmas宗谷(南極観測船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5789": {
+		"api_id": 5789,
+		"api_name": "クリスマスNevada",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5790": {
+		"api_id": 5790,
+		"api_name": "クリスマスNevada改",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5791": {
+		"api_id": 5791,
+		"api_name": "クリスマスNevada改 Mod.2",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5792": {
+		"api_id": 5792,
+		"api_name": "クリスマスWarspite",
+		"api_yomi": "ウォースパイト",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5793": {
+		"api_id": 5793,
+		"api_name": "クリスマスAtlanta",
+		"api_yomi": "アトランタ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5794": {
+		"api_id": 5794,
+		"api_name": "クリスマスLangley",
+		"api_yomi": "ラングレー",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5795": {
+		"api_id": 5795,
+		"api_name": "クリスマスLangley改",
+		"api_yomi": "ラングレー",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5796": {
+		"api_id": 5796,
+		"api_name": "Xmas稲木",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5797": {
+		"api_id": 5797,
+		"api_name": "夏制服時雨改三",
+		"api_yomi": "しぐれ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

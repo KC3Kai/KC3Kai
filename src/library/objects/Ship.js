@@ -2420,6 +2420,7 @@ KC3改 Ship Object
 		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
 			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
+			// [518] 14cm Twin Kai2 forgotten: https://twitter.com/yukicacoon/status/1729696346179813382
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
@@ -3813,8 +3814,9 @@ KC3改 Ship Object
 				if(spSuiseiCnt > 1) results.push(KC3Ship.specialAttackTypeDay(201));
 			}
 		}
-		// Rotorcraft and ASW Patrol can trigger Artillery Spotting too since 2023-02-14
-		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11, 25, 26]);
+		// ~Rotorcraft and ASW Patrol can trigger Artillery Spotting too~ since 2023-02-14?
+		// unable to reproduce (on Ise-class) for now, was probably misunderstanding tests
+		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11/*, 25, 26*/]);
 		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
 			/*
 			 * To estimate if can do day time special attacks (aka Artillery Spotting).
@@ -4375,6 +4377,7 @@ KC3改 Ship Object
 			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
 		}
 		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
+		// Here rounding possible? https://twitter.com/Xe_UCH/status/1736215714913276144
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		const stype = this.master().api_stype;
@@ -4944,7 +4947,8 @@ KC3改 Ship Object
 				const isTargetAv = [581, 690, 586, 491, 372, 499].includes(this.masterId);
 				if(isTargetAv) {
 					// Can't clarify all guns belong to which category exactly via tweets and spreadsheets,
-					// and newly implemented guns may not verified, eg: [303] Bofors 15.2cm, [407] 15.2cm Twin Kai2
+					// and newly implemented guns may not verified
+					// eg: [303] Bofors 15.2cm, [407] 15.2cm Twin Kai2, [518] 14cm Twin Kai2
 					const count14cm15cmMainGunVars = this.countEquipment([4, 119, 310, 11, 65, 139, 247]);
 					result -= 6 * count14cm15cmMainGunVars;
 					// also includes: Italian 203mm/53, 152mm/55 rapid fire
