@@ -580,6 +580,9 @@
 		prepareShipData: function(ship) {
 			const ThisShip = ship;
 			const MasterShip = ThisShip.master();
+			const marriageConserve = (cost) => (
+				ThisShip.level >= 100 && cost > 1 ? Math.floor(cost * 0.85) : cost
+			);
 			const cached = {
 				id: ThisShip.rosterId,
 				bid : ThisShip.masterId,
@@ -596,6 +599,7 @@
 					.format(KC3Meta.ctypeName(MasterShip.api_ctype), ThisShip.name()),
 				level: ThisShip.level,
 				levelClass: ThisShip.levelClass(),
+				isMarried: ThisShip.level >= 100,
 				morale: ThisShip.morale,
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
@@ -616,9 +620,9 @@
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
-				fuel: [MasterShip.api_fuel_max, ThisShip.fuel],
-				ammo: [MasterShip.api_bull_max, ThisShip.ammo],
-				cost: MasterShip.api_fuel_max + MasterShip.api_bull_max,
+				fuel: [MasterShip.api_fuel_max, ThisShip.fuel, marriageConserve(MasterShip.api_fuel_max - ThisShip.fuel)],
+				ammo: [MasterShip.api_bull_max, ThisShip.ammo, marriageConserve(MasterShip.api_bull_max - ThisShip.ammo)],
+				cost: marriageConserve(MasterShip.api_fuel_max) + marriageConserve(MasterShip.api_bull_max),
 				sp: ThisShip.speed,
 				isp: MasterShip.api_soku,
 				range: ThisShip.range,
@@ -799,8 +803,8 @@
 				[ "in","on","ex" ],
 				function(curVal, ship) {
 					return (curVal === 0)
-						|| (curVal === 1 && ship.level >= 100)
-						|| (curVal === 2 && ship.level <  100);
+						|| (curVal === 1 && ship.isMarried)
+						|| (curVal === 2 && !ship.isMarried);
 				});
 
 			self.defineShipFilter(
@@ -1250,7 +1254,7 @@
 						.attr("data-jpname", cShip.jpName)
 						.attr("data-jpname-kana", cShip.jpNameKana)
 						.attr("data-jpname-romaji", cShip.jpNameRomaji);
-					if(shipLevel >= 100) {
+					if(cShip.isMarried) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 						//$(".ship_marry", cElm).show();
 					}
