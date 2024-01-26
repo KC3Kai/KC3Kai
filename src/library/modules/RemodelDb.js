@@ -63,6 +63,7 @@
                 case 593: // Haruna K2B
                     return 55;
                 case 954: // Haruna K2C
+                case 507: // Mikuma Kai Ni Toku
                     return 15;
                 case 277: // Akagi Kai
                     return 100;
@@ -103,7 +104,10 @@
                     return 50;
                 case 651: // Tan Yang
                 case 681: // Samuel B.Roberts Kai
+                case 121: // Mikuma Kai
                     return 60;
+                case 502: // Mikuma K2
+                    return 35;
                 case 316: // Amatsukaze Kai
                     return 65;
                 case 145: // Shigure K2
@@ -308,6 +312,8 @@
                 case 501: // Mogami Kai Ni
                     return 60;
                 case 506: // Mogami Kai Ni Toku
+                case 502: // Mikuma Kai Ni
+                case 507: // Mikuma Kai Ni Toku
                     return 40;
                 case 699: // Souya (AGS)
                 case 650: // Souya (AGB)

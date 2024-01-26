@@ -162,6 +162,8 @@ Provides access to data on built-in JSON files
 			325, // Kiyoshimo Kai -> K2
 			955, // Kiyoshimo K2 -> K2D
 			960, // Kiyoshimo K2D -> K2
+			121, // Mikuma Kai -> K2
+			502, // Mikuma K2 -> K2T
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
