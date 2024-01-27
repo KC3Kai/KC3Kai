@@ -700,6 +700,7 @@ Provides access to data on built-in JSON files
 				"945": 56, // No.101: 戦車揚陸艦
 				"727": 56, // No.101 K: 戦車揚陸艦
 				"953": 57, // Asahi: 練習特務艦
+				"507": 58, // Mikuma K2T: 戦闘水上機母艦
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);
