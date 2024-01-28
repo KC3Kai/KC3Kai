@@ -2854,18 +2854,20 @@ Previously known as "Reactor"
 					// 7 beans with a Medal in 2021
 					// 18 beans + 28 devmats with a Type 1 Land-based Attack Aircraft Model 22A in 2022
 					// 10 beans + 8 devmats with a Type 97 Torpedo Bomber (Skilled) in 2023
+					// 16 beans + 35 devmats with a Special Type 2 Amphibious Landing Craft in 2024
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
 					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					// 20 beans + 40 devmats with a Ginga in 2021 (once)
-					// 20 beans with a Blueprint in 2022 and 2023
+					// 20 beans with a Blueprint in 2022, 2023 and 2024
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
 				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
 					// 29 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2021 (once)
 					// 27 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2022
 					// 30 beans + 60 devmats with a Type 4 Heavy Bomber Hiryuu (Skilled) in 2023 (once)
+					// 32 beans + 70 devmats with a Ginga (Skilled) in 2024 (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
@@ -3170,6 +3172,10 @@ Previously known as "Reactor"
 					[973,1,[3,3], true, true], // By11: 2nd requirement: [W3-3] A-rank+ the boss node
 					[973,2,[4,3], true, true], // By11: 3rd requirement: [W4-3] A-rank+ the boss node
 					[973,3,[7,3], true, true, [18,23,24,25]], // By11: 4th requirement: [W7-3-P] A-rank+ the boss node
+					[1005,0,[1,2], true, true], // By13: 1st requirement: [W1-2] A-rank+ the boss node
+					[1005,1,[1,3], true, true], // By13: 2nd requirement: [W1-3] A-rank+ the boss node
+					[1005,2,[1,5], true, true], // By13: 3rd requirement: [W1-5] A-rank+ the boss node
+					[1005,3,[3,2], true, true], // By13: 4th requirement: [W3-2] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)

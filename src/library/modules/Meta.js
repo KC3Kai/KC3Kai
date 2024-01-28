@@ -162,6 +162,8 @@ Provides access to data on built-in JSON files
 			325, // Kiyoshimo Kai -> K2
 			955, // Kiyoshimo K2 -> K2D
 			960, // Kiyoshimo K2D -> K2
+			121, // Mikuma Kai -> K2
+			502, // Mikuma K2 -> K2T
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
@@ -698,6 +700,7 @@ Provides access to data on built-in JSON files
 				"945": 56, // No.101: 戦車揚陸艦
 				"727": 56, // No.101 K: 戦車揚陸艦
 				"953": 57, // Asahi: 練習特務艦
+				"507": 58, // Mikuma K2T: 戦闘水上機母艦
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);

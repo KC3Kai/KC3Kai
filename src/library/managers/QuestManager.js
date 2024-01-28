@@ -213,7 +213,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyJan',
 				key: 'timeToResetYearlyJanQuests',
 				resetMonth: JANUARY,
-				questIds: [681, 1123],
+				questIds: [681, 1005, 1123],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJan.type);
 				},
@@ -1038,6 +1038,14 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip([647])  // Uranami K2
 							&& fleet.hasShip([195])  // Ayanami K2
 							&& fleet.hasShip([627]); // Shikinami K2
+					},
+				"1005": // By13 Sortie Oboro K, Sazanami K, Akebono K/K2, Ushio K/K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([231, 665])  // Akebono
+							&& fleet.hasShip([233, 407])  // Ushio
+							&& fleet.hasShip([230])       // Oboro
+							&& fleet.hasShip([232]);      // Sazanami
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

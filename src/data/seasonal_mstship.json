@@ -6387,5 +6387,141 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5798": {
+		"api_id": 5798,
+		"api_name": "正月朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5799": {
+		"api_id": 5799,
+		"api_name": "正月朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5800": {
+		"api_id": 5800,
+		"api_name": "正月第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5801": {
+		"api_id": 5801,
+		"api_name": "正月Gotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5802": {
+		"api_id": 5802,
+		"api_name": "正月Gotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5803": {
+		"api_id": 5803,
+		"api_name": "正月秋霜",
+		"api_yomi": "あきしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5804": {
+		"api_id": 5804,
+		"api_name": "正月瑞鶴",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5805": {
+		"api_id": 5805,
+		"api_name": "正月瑞鶴改",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5806": {
+		"api_id": 5806,
+		"api_name": "正月瑞鶴改二甲",
+		"api_yomi": "ずいかく",
+		"api_stype": 18,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5807": {
+		"api_id": 5807,
+		"api_name": "正月Helena",
+		"api_yomi": "ヘレナ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5808": {
+		"api_id": 5808,
+		"api_name": "正月Helena改",
+		"api_yomi": "ヘレナ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5809": {
+		"api_id": 5809,
+		"api_name": "正月Grecale",
+		"api_yomi": "グレカーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5810": {
+		"api_id": 5810,
+		"api_name": "正月Tuscaloosa",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5811": {
+		"api_id": 5811,
+		"api_name": "正月熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5812": {
+		"api_id": 5812,
+		"api_name": "正月陸奥",
+		"api_yomi": "むつ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5813": {
+		"api_id": 5813,
+		"api_name": "正月秋霜改",
+		"api_yomi": "あきしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5814": {
+		"api_id": 5814,
+		"api_name": "正月Grecale改",
+		"api_yomi": "グレカーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
