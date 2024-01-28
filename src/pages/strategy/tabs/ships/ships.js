@@ -1454,8 +1454,9 @@
 				$("img", element)
 					.attr("src", KC3Meta.itemIcon(type3))
 					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
-					.attr("alt", gear.master().api_id)
-					.show();
+					.attr("alt", gear.master().api_id);
+				// jq.show() not work on some new browser for inline case?
+				$("img", element).show().css("display", "inline");
 				sizeSpan.addClass("sub").toggle(maxSize > 0);
 				element.show();
 			} else if(slotIndex === "ex" || slotIndex <= Math.max(4, slotCount)){

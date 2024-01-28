@@ -85,8 +85,8 @@
 				twin203MediumGunMountNo2: 0,
 				twin203MediumGunMountNo2Nonexist: 1,
 				twin203MediumGunMountNo2Ids: [90],
-				antiAirSecHighAngleGunMount: 0,
-				antiAirSecHighAngleGunMountIds: [10, 66, 71, 130, 220, 275, 464],
+				antiAirGreenSecGunMount: 0,
+				antiAirGreenSecGunMountIds: [10, 66, 71, 130, 220, 275, 464],
 				twin51cmLargeGunMount: 0,
 				twin51cmLargeGunMountIds: [281],
 				twin51cmLargeGunMountNonexist: 1,
@@ -4943,7 +4943,7 @@
 								single: { "houg": 2, "raig": 2, "houk": 1, "houm": 1 },
 							},
 							{
-								flags: [ "antiAirSecHighAngleGunMount" ],
+								flags: [ "antiAirGreenSecGunMount" ],
 								single: { "houg": 1, "tyku": 4, "houk": 4, "houm": 1 },
 							},
 						],
@@ -4959,7 +4959,7 @@
 								single: { "houg": 3, "raig": 2, "houk": 2, "houm": 1 },
 							},
 							{
-								flags: [ "antiAirSecHighAngleGunMount" ],
+								flags: [ "antiAirGreenSecGunMount" ],
 								single: { "houg": 1, "tyku": 4, "houk": 4, "houm": 1 },
 							},
 						],
@@ -4976,7 +4976,7 @@
 									single: { "houg": 3, "raig": 2, "houk": 2, "houm": 1 },
 								},
 								{
-									flags: [ "antiAirSecHighAngleGunMount" ],
+									flags: [ "antiAirGreenSecGunMount" ],
 									single: { "houg": 1, "tyku": 4, "houk": 4, "houm": 1 },
 								},
 							],
