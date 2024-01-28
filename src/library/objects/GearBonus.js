@@ -85,6 +85,8 @@
 				twin203MediumGunMountNo2: 0,
 				twin203MediumGunMountNo2Nonexist: 1,
 				twin203MediumGunMountNo2Ids: [90],
+				antiAirSecHighAngleGunMount: 0,
+				antiAirSecHighAngleGunMountIds: [10, 66, 71, 130, 220, 275, 464],
 				twin51cmLargeGunMount: 0,
 				twin51cmLargeGunMountIds: [281],
 				twin51cmLargeGunMountNonexist: 1,
@@ -2013,8 +2015,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2036,8 +2044,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2076,8 +2090,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2099,8 +2119,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2139,8 +2165,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2162,8 +2194,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2185,8 +2223,14 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Yahagi Kai Ni+, Mogami Kai Ni+
-						ids: [663, 668, 501, 506],
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
+						single: { "houg": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [663, 668, 501, 506, 502, 507],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -2223,6 +2267,11 @@
 						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
+					{
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
 				],
 			},
 			// Zuiun Kai Ni (634 Air Group)
@@ -2246,6 +2295,11 @@
 						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
 						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
+					{
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
 					},
 				],
 			},
@@ -2271,6 +2325,11 @@
 						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
 					},
+					{
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
 				],
 			},
 			// Prototype Night Zuiun (Attack Equipment)
@@ -2287,6 +2346,11 @@
 						// Yahagi Kai Ni+, Mogami Kai Ni+, Ise-class Kai Ni
 						ids: [663, 668, 501, 506, 553, 554],
 						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
+					{
+						// Mikuma Kai Ni+
+						ids: [502, 507],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
 					},
 				],
 			},
@@ -2396,8 +2460,8 @@
 			"59": {
 				count: 0,
 				byShip: {
-					// Mogami Kai Ni+
-					ids: [501, 506],
+					// Mogami K2+, Mikuma K2+
+					ids: [501, 506, 502, 507],
 					single: { "tyku": 1, "houk": 1 },
 				},
 			},
@@ -2659,13 +2723,44 @@
 						},
 					],
 				},
+				byShip: [
+					{
+						// Mikuma Kai Ni Toku
+						ids: [507],
+						multiple: { "houg": 3, "houk": 2, "saku": 2 },
+					},
+					{
+						// Mikuma Kai Ni Toku
+						ids: [507],
+						minStars: 2,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Mikuma Kai Ni Toku
+						ids: [507],
+						minStars: 5,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Mikuma Kai Ni Toku
+						ids: [507],
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Mikuma Kai Ni Toku
+						ids: [507],
+						minStars: 10,
+						multiple: { "houg": 1, "raig": 1, "tyku": 1, "houk": 1, "saku": 1 },
+					},
+				],
 			},
 			// Type 2 Seaplane Fighter Kai
 			"165": {
 				count: 0,
 				byShip: {
-					// Mogami K2+
-					ids: [501, 506],
+					// Mogami K2+, Mikuma K2+
+					ids: [501, 506, 502, 507],
 					distinctGears: [165, 216],
 					single: { "tyku": 2, "houk": 2 },
 				},
@@ -2674,8 +2769,8 @@
 			"216": {
 				count: 0,
 				byShip: {
-					// Mogami K2+
-					ids: [501, 506],
+					// Mogami K2+, Mikuma K2+
+					ids: [501, 506, 502, 507],
 					distinctGears: [165, 216],
 					single: { "tyku": 2, "houk": 2 },
 				},
@@ -2684,8 +2779,8 @@
 			"238": {
 				count: 0,
 				byShip: {
-					// Mogami K2+
-					ids: [501, 506],
+					// Mogami K2+, Mikuma K2+
+					ids: [501, 506, 502, 507],
 					distinctGears: [238, 239],
 					single: { "raig": 1, "houk": 1 },
 				},
@@ -2694,8 +2789,8 @@
 			"239": {
 				count: 0,
 				byShip: {
-					// Mogami K2+
-					ids: [501, 506],
+					// Mogami K2+, Mikuma K2+
+					ids: [501, 506, 502, 507],
 					distinctGears: [238, 239],
 					single: { "raig": 1, "houk": 1 },
 				},
@@ -2748,11 +2843,18 @@
 			// Kyoufuu Kai
 			"217": {
 				count: 0,
-				byShip: {
-					// Mogami K2+
-					ids: [501, 506],
-					multiple: { "houg": 1, "tyku": 5, "houk": 3 },
-				},
+				byShip: [
+					{
+						// Mogami K2+, Mikuma K2+
+						ids: [501, 506],
+						multiple: { "houg": 1, "tyku": 5, "houk": 3 },
+					},
+					{
+						// Mikuma K2+
+						ids: [502, 507],
+						multiple: { "houg": 1, "tyku": 4, "houk": 2 },
+					},
+				],
 			},
 			// Kyoufuu Kai Ni
 			"485": {
@@ -2769,6 +2871,11 @@
 						// Mogami K2+
 						ids: [501, 506],
 						multiple: { "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Mikuma K2+
+						ids: [502, 507],
+						multiple: { "tyku": 1, "houk": 1, "houm": 1 },
 					},
 					// For any ship can equip it
 					{
@@ -4754,8 +4861,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Mogami Kai Ni+
-						ids: [501, 506],
+						// Mogami Kai Ni+, Mikuma Kai Ni+
+						ids: [501, 506, 502, 507],
 						multiple: { "houg": 1 },
 					},
 				],
@@ -4803,8 +4910,8 @@
 					"31": "9",
 				},
 				byShip: {
-					// Mogami Kai Ni+
-					ids: [501, 506],
+					// Mogami Kai Ni+, Mikuma Kai Ni+
+					ids: [501, 506, 502, 507],
 					multiple: { "houg": 1 },
 					synergy: [
 						{
@@ -4821,6 +4928,126 @@
 						},
 					],
 				},
+			},
+			// Prototype 20.3cm (No.4) Twin Gun Mount
+			"520": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Furutaka Class
+					"7": {
+						multiple: { "houg": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "raig": 2, "houk": 1, "houm": 1 },
+							},
+							{
+								flags: [ "antiAirSecHighAngleGunMount" ],
+								single: { "houg": 1, "tyku": 4, "houk": 4, "houm": 1 },
+							},
+						],
+					},
+					// Aoba Class
+					"13": "7",
+					// Takao Class
+					"8": {
+						multiple: { "houg": 2, "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 2, "houk": 2, "houm": 1 },
+							},
+							{
+								flags: [ "antiAirSecHighAngleGunMount" ],
+								single: { "houg": 1, "tyku": 4, "houk": 4, "houm": 1 },
+							},
+						],
+					},
+					// Myoukou Class
+					"29": "8",
+					// Mogami Class
+					"9": [
+						{
+							multiple: { "houg": 3, "houk": 1, "houm": 1 },
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 3, "raig": 2, "houk": 2, "houm": 1 },
+								},
+								{
+									flags: [ "antiAirSecHighAngleGunMount" ],
+									single: { "houg": 1, "tyku": 4, "houk": 4, "houm": 1 },
+								},
+							],
+						},
+						{
+							single: { "houg": 2 },
+							minCount: 2,
+						},
+						{
+							single: { "houg": 4 },
+							minCount: 3,
+						},
+					],
+					// Tone Class
+					"31": "9",
+				},
+				byShip: [
+					{
+						// Takao Kai, Myoukou Kai/K2, Mikuma K2
+						ids: [269, 265, 319, 502],
+						multiple: { "houg": 1, "houm": 1 },
+					},
+					{
+						// Mikuma Kai Ni Toku
+						ids: [507],
+						multiple: { "houg": 1, "tyku": 1, "houm": 2 },
+					},
+					{
+						// Takao Kai, Myoukou Kai/K2
+						ids: [269, 265, 319],
+						minCount: 2,
+						single: { "houg": 2 },
+					},
+					{
+						// Takao Kai, Myoukou Kai/K2
+						ids: [269, 265, 319],
+						minCount: 3,
+						single: { "houg": 2 },
+					},
+					{
+						// Mogami Class Kai Ni/Toku
+						ids: [501, 506, 502, 507, 503, 504],
+						multiple: { "houg": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1, "houm": 2 },
+							},
+							{
+								flags: [ "type21AirRadar" ],
+								single: { "houg": 1, "tyku": 3, "houk": 2, "houm": 1 },
+							},
+							{
+								flags: [ "type21AirRadarK2" ],
+								single: { "houg": 2, "tyku": 3, "houk": 2, "houm": 1 },
+							},
+						],
+					},
+					{
+						// Mogami Class Kai Ni/Toku
+						ids: [501, 506, 502, 507, 503, 504],
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Mogami Class Kai Ni/Toku
+						ids: [501, 506, 502, 507, 503, 504],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// 152mm/55 Triple Rapid Fire Gun Mount
 			"340": {
@@ -5944,14 +6171,19 @@
 						multiple: { "raig": 2, "houk": -2 },
 					},
 					{
-						// Ooi K2, Nisshin A, Kuma K2D, Mogami K2T, Yahagi K2B
-						ids: [118, 586, 657, 506, 668],
+						// Mikuma K2T
+						ids: [507],
+						multiple: { "raig": 2 },
+					},
+					{
+						// Ooi K2, Nisshin A, Kuma K2D, Mogami/Mikuma K2T, Yahagi K2B
+						ids: [118, 586, 657, 506, 507, 668],
 						multiple: { "raig": 1, "houk": -2 },
 					},
 					{
 						// All other ships who can equip it
 						stypes: [3, 4, 13, 14, 16],
-						excludes: [118, 119, 506, 586, 623, 657, 668],
+						excludes: [118, 119, 506, 507, 586, 623, 657, 668],
 						multiple: { "houg": -1, "houk": -7 },
 					},
 				],
@@ -7769,8 +8001,8 @@
 						},
 					},
 					{
-						// Mogami K2+
-						ids: [501, 506],
+						// Mogami K2+, Mikuma K2+
+						ids: [501, 506, 502, 507],
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -7803,8 +8035,8 @@
 						},
 					},
 					{
-						// Mogami K2+
-						ids: [501, 506],
+						// Mogami K2+, Mikuma K2+
+						ids: [501, 506, 502, 507],
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -7867,8 +8099,8 @@
 					},
 				},
 				byShip: {
-					// Mogami Kai+
-					ids: [73, 501, 506],
+					// Mogami Kai+, Mikuma K2+
+					ids: [73, 501, 506, 502, 507],
 					distinctGears: [30, 410],
 					single: { "tyku": 3, "houk": 2, "saku": 2 },
 				},
@@ -7891,8 +8123,8 @@
 				},
 				byShip: [
 					{
-						// Mogami Kai+
-						ids: [73, 501, 506],
+						// Mogami Kai+, Mikuma K2+
+						ids: [73, 501, 506, 502, 507],
 						distinctGears: [30, 410],
 						single: { "tyku": 3, "houk": 2, "saku": 2 },
 					},
@@ -9841,8 +10073,8 @@
 						single: { "houg": 2, "tais": 3, "houk": 1 },
 					},
 					{
-						// Mogami K2+
-						ids: [501, 506],
+						// Mogami K2+, Mikuma K2+
+						ids: [501, 506, 502, 507],
 						single: { "houg": 2 },
 					},
 				],
@@ -9857,8 +10089,8 @@
 						single: { "houg": 1, "tais": 1, "houk": 1 },
 					},
 					{
-						// Mogami K2+
-						ids: [501, 506],
+						// Mogami K2+, Mikuma K2+
+						ids: [501, 506, 502, 507],
 						single: { "houg": 1, "houk": 1 },
 					},
 				],
