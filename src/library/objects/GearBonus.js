@@ -8086,6 +8086,7 @@
 				count: 0,
 				byShip: [
 					{
+						// Known typo bug found in client which ids are changed to all mogami k2+
 						// Noshiro K2, Yahagi K2+
 						ids: [662, 663, 668],
 						multiple: { "tyku": 2, "houk": 1 },
@@ -8111,8 +8112,8 @@
 				starsDist: [],
 				byShip: [
 					{
-						// Noshiro K2, Yahagi K2+, Mogami K2+
-						ids: [662, 663, 668, 501, 506],
+						// Noshiro K2, Yahagi K2+, Mogami K2+, Mikuma K2+
+						ids: [662, 663, 668, 501, 506, 502, 507],
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -8120,7 +8121,7 @@
 						},
 					},
 					{
-						// Noshiro K2, Yahagi K2+
+						// Noshiro K2, Yahagi K2+ from [66] 8cm base
 						ids: [662, 663, 668],
 						multiple: { "tyku": 2, "houk": 1 },
 						synergy: {
@@ -8129,7 +8130,7 @@
 						},
 					},
 					{
-						// Mogami K2+, Mikuma K2+
+						// Mogami K2+, Mikuma K2+ from [66] 8cm base
 						ids: [501, 506, 502, 507],
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
