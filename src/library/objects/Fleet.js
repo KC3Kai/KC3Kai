@@ -1628,6 +1628,19 @@ Contains summary information about a fleet and its ships
 	};
 
 	/**
+	 * Estimate final trigger chance of Smoke Generator(s) in fleet.
+	 * Possibly multi-rolling for more than 1 smoke. Either for moke level rolling.
+	 * @see inferred formula: https://twitter.com/CC_jabberwock/status/1739241607659151846
+	 */
+	KC3Fleet.prototype.estimateSmokeGeneratingRate = function() {
+		const flagshipLuck = this.ship(0).lk[0];
+		// for 1 smoke equipped only, lookup the smoke and get its stars.
+		const smokeStars = 0;
+		return 0.2 * Math.max(0, Math.qckInt("ceil", Math.sqrt(flagshipLuck) - 6 + 0.3 * smokeStars));
+		// for more and level, https://twitter.com/yukicacoon/status/1739481809375895854
+	};
+
+	/**
 	 * Get fleet LoS for determining artillery spotting rate.
 	 * @see KC3Ship.prototype.daySpAttackBaseRate
 	 */

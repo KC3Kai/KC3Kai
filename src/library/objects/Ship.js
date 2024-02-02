@@ -4374,10 +4374,10 @@ KC3改 Ship Object
 		if (this.lk[0] < 50) {
 			baseValue += 15 + this.lk[0];
 		} else {
-			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
+			// Probably rounded down: https://twitter.com/CC_jabberwock/status/1743132570261631237
+			baseValue += 15 + 50 + Math.floor(Math.sqrt(this.lk[0] - 50));
 		}
 		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
-		// Here rounding possible? https://twitter.com/Xe_UCH/status/1736215714913276144
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		const stype = this.master().api_stype;
@@ -4393,11 +4393,6 @@ KC3改 Ship Object
 		// https://twitter.com/Divinity_123/status/1680201622356389892
 		// +0 if equipped by other ship types
 		// https://twitter.com/Divinity__123/status/1479343022974324739
-		// TSSLO and SLO may not both counted when they are equipped at the same time
-		// https://twitter.com/agosdufovj/status/1683813931784208386
-		// TSSLO might be +7, and stack with SLO +12?
-		// https://twitter.com/CC_jabberwock/status/1690759178976190465
-		// https://twitter.com/CC_jabberwock/status/1695032669741179302
 		const skilledLookoutsCount = this.countEquipment(129),
 			torpedoSquadronSloCount = this.countEquipment(412);
 		if (torpedoSquadronSloCount > 0 && [2, 3, 4].includes(stype)) { gearBonus += 8; }
@@ -4532,12 +4527,13 @@ KC3改 Ship Object
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
 			8: 140,
-			9: 125, // or still 122?
+			// 125 vs 126 https://twitter.com/CC_jabberwock/status/1752399982169329727
+			9: 126,
 			10: 122,
 			// Doubled hits versions
 			11: 115,
 			12: 140,
-			13: 125,
+			13: 126,
 			14: 122,
 			// 100~104 might be different, even with day one
 			// same factor for all setups with bonus gears and multi-roll for more chance?

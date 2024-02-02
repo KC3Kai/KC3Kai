@@ -74,6 +74,7 @@
 			this.seedBranch( rootQuestTree, 912 ); // By3
 			this.seedBranch( rootQuestTree, 928 ); // By5
 			this.seedBranch( rootQuestTree, 973 ); // By11
+			this.seedBranch( rootQuestTree, 1005 ); // By13
 			
 			// Other non-flowchart quests
 			const otherQuests = [];
