@@ -4527,12 +4527,13 @@ KC3改 Ship Object
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
 			8: 140,
-			9: 125, // or still 122?
+			// 125 vs 126 https://twitter.com/CC_jabberwock/status/1752399982169329727
+			9: 126,
 			10: 122,
 			// Doubled hits versions
 			11: 115,
 			12: 140,
-			13: 125,
+			13: 126,
 			14: 122,
 			// 100~104 might be different, even with day one
 			// same factor for all setups with bonus gears and multi-roll for more chance?

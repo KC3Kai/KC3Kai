@@ -2755,6 +2755,100 @@
 					},
 				],
 			},
+			// Shiun (Skilled)
+			"521": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Ooyodo Class
+					"52": [
+						{
+							// From [118] Shiun's bonuses
+							multiple: { "houg": 1, "houk": 2, "saku": 2 },
+						},
+						{
+							minStars: 1,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "raig": 1, "saku": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Ooyodo
+						ids: [183],
+						multiple: { "houg": 1, "houk": 2, "saku": 2, "houm": 1 },
+					},
+					{
+						// Ooyodo Kai
+						ids: [321],
+						multiple: { "houg": 2, "houk": 3, "saku": 3, "houm": 2 },
+					},
+					{
+						// Mikuma Kai Ni Toku, stacked with [118] Shiun's bonuses
+						ids: [507],
+						multiple: { "houg": 6, "tyku": 1, "houk": 4, "saku": 4, "houm": 3 },
+					},
+					{
+						ids: [507],
+						minStars: 1,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [507],
+						minStars: 2,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [507],
+						minStars: 3,
+						multiple: { "raig": 1, "saku": 1 },
+					},
+					{
+						ids: [507],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [507],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [507],
+						minStars: 8,
+						multiple: { "saku": 1 },
+					},
+					{
+						ids: [507],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
+			},
 			// Type 2 Seaplane Fighter Kai
 			"165": {
 				count: 0,
@@ -7992,6 +8086,7 @@
 				count: 0,
 				byShip: [
 					{
+						// Known typo bug found in client which ids are changed to all mogami k2+
 						// Noshiro K2, Yahagi K2+
 						ids: [662, 663, 668],
 						multiple: { "tyku": 2, "houk": 1 },
@@ -8017,8 +8112,8 @@
 				starsDist: [],
 				byShip: [
 					{
-						// Noshiro K2, Yahagi K2+, Mogami K2+
-						ids: [662, 663, 668, 501, 506],
+						// Noshiro K2, Yahagi K2+, Mogami K2+, Mikuma K2+
+						ids: [662, 663, 668, 501, 506, 502, 507],
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -8026,7 +8121,7 @@
 						},
 					},
 					{
-						// Noshiro K2, Yahagi K2+
+						// Noshiro K2, Yahagi K2+ from [66] 8cm base
 						ids: [662, 663, 668],
 						multiple: { "tyku": 2, "houk": 1 },
 						synergy: {
@@ -8035,7 +8130,7 @@
 						},
 					},
 					{
-						// Mogami K2+, Mikuma K2+
+						// Mogami K2+, Mikuma K2+ from [66] 8cm base
 						ids: [501, 506, 502, 507],
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
