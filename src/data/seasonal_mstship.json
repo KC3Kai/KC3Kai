@@ -6523,5 +6523,93 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5815": {
+		"api_id": 5815,
+		"api_name": "節分清霜改二",
+		"api_yomi": "きよしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5816": {
+		"api_id": 5816,
+		"api_name": "節分清霜改二丁",
+		"api_yomi": "きよしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5817": {
+		"api_id": 5817,
+		"api_name": "節分深雪改二",
+		"api_yomi": "みゆき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5818": {
+		"api_id": 5818,
+		"api_name": "節分潮",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5819": {
+		"api_id": 5819,
+		"api_name": "節分潮改二",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5820": {
+		"api_id": 5820,
+		"api_name": "節分早霜",
+		"api_yomi": "はやしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5821": {
+		"api_id": 5821,
+		"api_name": "節分長鯨",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5822": {
+		"api_id": 5822,
+		"api_name": "節分山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5823": {
+		"api_id": 5823,
+		"api_name": "節分山汐丸改",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5824": {
+		"api_id": 5824,
+		"api_name": "節分第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5825": {
+		"api_id": 5825,
+		"api_name": "節分加古",
+		"api_yomi": "かこ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
