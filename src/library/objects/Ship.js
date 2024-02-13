@@ -4525,6 +4525,7 @@ KC3改 Ship Object
 				"CutinNPx3"  : 130,   // 125?, 3 planes for mod 1.18
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
+			// https://docs.google.com/spreadsheets/d/12PddWSvDvFEncOAR6ZAPONUf7ZXzrUkPA6KQNUj3Xjc/
 			7: 115,
 			8: 140,
 			// 125 vs 126 https://twitter.com/CC_jabberwock/status/1752399982169329727
@@ -4893,9 +4894,11 @@ KC3改 Ship Object
 				// fit bonus at night battle for 20.3cm variants
 				if(time === "Night") {
 					const has203TwinGun = this.hasEquipment(6);
+					const has203No4TwinGun = this.hasEquipment(520);
 					const has203No3TwinGun = this.hasEquipment(50);
 					const has203No2TwinGun = this.hasEquipment(90);
 					// 20.3cm priority to No.3, No.2 might also
+					// No.4 unknown yet
 					result += has203TwinGun ? 10 : has203No2TwinGun ? 15 : has203No3TwinGun ? 15 : 0;
 				}
 				// for 15.5cm triple main mount on Mogami class
@@ -4948,7 +4951,8 @@ KC3改 Ship Object
 					const count14cm15cmMainGunVars = this.countEquipment([4, 119, 310, 11, 65, 139, 247]);
 					result -= 6 * count14cm15cmMainGunVars;
 					// also includes: Italian 203mm/53, 152mm/55 rapid fire
-					const count203MainGunVars = this.countEquipment([6, 50, 90, 162, 340, 341]);
+					// not fully verified: [520] 20.3cm No.4
+					const count203MainGunVars = this.countEquipment([6, 50, 90, 162, 340, 341, 520]);
 					result -= 10 * count203MainGunVars;
 					if(count203MainGunVars) {
 						// two categories not mixed, extra -8

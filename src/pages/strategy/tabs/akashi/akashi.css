@@ -36,6 +36,10 @@
 	margin:0 5px 0 5px;
 	float:left;
 }
+.tab_akashi .controls .option label {
+	vertical-align:top;
+	margin-left:2px;
+}
 
 .tab_akashi .loading {
 	float:right;
