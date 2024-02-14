@@ -38,12 +38,12 @@
 }
 .tab_akashi .controls .option label {
 	vertical-align:top;
-	margin-left:2px;
+	margin:0 0 0 2px;
 }
 
 .tab_akashi .loading {
 	float:right;
-	margin:5px 5px;
+	margin:2px 5px;
 	display:none;
 }
 .tab_akashi .loading img {
