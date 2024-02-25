@@ -363,6 +363,7 @@ Listens to network history and triggers callback if game events happen
 			//             http://203.104.209.39/kcs2/resources/voice/titlecall_1/050.mp3
 			const requestUrl = har.request.url;
 			const isV2Voice = requestUrl.includes("/kcs2/resources/voice/");
+			// there are also some voices in `/resources/se/` (eg: 332 for furniture), ignored for now
 			if(!(isV2Voice || requestUrl.includes("/kcs/sound/"))) {
 				return;
 			}

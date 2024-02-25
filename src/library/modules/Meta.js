@@ -41,6 +41,7 @@ Provides access to data on built-in JSON files
 		_defaultIcon:"",
 		
 		// Following constants nearly unchanged if no furthermore research (decompile) done
+		// search for `"resource":[` or `"voice":[` in main.js
 		resourceKeys: [
 			6657, 5699, 3371, 8909, 7719, 6229, 5449, 8561, 2987, 5501,
 			3127, 9319, 4365, 9811, 9927, 2423, 3439, 1865, 5925, 4409,
@@ -123,7 +124,8 @@ Provides access to data on built-in JSON files
 			467: 95,
 		},
 		// ships with special remodeling animation, ordered by implementated time,
-		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
+		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case,
+		// see assets in `kcs2/resources/ship/sp_remodel`
 		specialRemodelFromIds: [
 			149, // Kongou K2 -> K2C
 			150, // Hiei K2 -> K2C
@@ -179,7 +181,7 @@ Provides access to data on built-in JSON files
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392],
 		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918],
-		// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
+		// getCountryName by ctype in `main.js#SlotItemEffectParamModel.SHIP_COUNTRY`
 		countryCtypeMap: {
 			"UnitedStates": [
 				65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110,
@@ -227,9 +229,9 @@ Provides access to data on built-in JSON files
 			1601: 356,  1602: 362,  1603: 278,  1604: 294,  1605: 384,  1606: 379,  1607: 380,  1608: 279,
 			1609: 381,  1610: 1610, 1611: 1611, 1612: 387,  1613: 426,  1614: 427,  1615: 428,  1616: 429,
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
-			// 1630's image asset not uploaded so far, never fixed
-			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631: 1630,*/1634: 1573, 1635: 1561, 1636: 1562,
-			1637: 364,  1638: 48,/*1639: 1639,*/1640: 513,  1641: 507,  1642: 508,  1643: 85,
+			// [1630] 深海空超要塞's image asset not uploaded onto server so far, perhaps no fix forever?
+			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631:1630,*/1634: 1573, 1635: 1561, 1636: 1562,
+			1637: 364,  1638: 48,   1640: 513,  1641: 507,  1642: 508,  1643: 85,
 		},
 		
 		/* Initialization
@@ -805,6 +807,8 @@ Provides access to data on built-in JSON files
 		},
 		
 		ctypeName :function(id){
+			// special class name texts defined by game client on remodeling, see `main.js#ShipUtil.getShipClassTypeSpRemodelText` and assets in `kcs2/resources/ship/sp_remodel`
+			// none used here for now, unlike stype alt names
 			return this.shipName(this.ctype(id), "ctype");
 		},
 		
@@ -1175,6 +1179,7 @@ Provides access to data on built-in JSON files
 		https://github.com/KC3Kai/KC3Kai/issues/1180#issuecomment-195654746
 		Latest workingDiffs('vcKey') and algorithm can be found at decompiled swf:
 		  Core.swf/common.util.SoundUtil.createFileName
+		or anonymous function in `main.js#VoiceManager`
 		*/
 		getFilenameByVoiceLine :function(ship_id, lineNum){
 			return lineNum <= 53 ? 100000 + 17 * (ship_id + 7) * (this.workingDiffs[lineNum - 1]) % 99173 : lineNum;
