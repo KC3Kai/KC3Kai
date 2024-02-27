@@ -7173,6 +7173,62 @@
 					},
 				],
 			},
+			// 12cm Single High-angle Gun Mount + Additional 25mm Machine Guns
+			"524": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All LHA/AR/AS/CT/AO
+						stypes: [17, 19, 20, 21, 22],
+						multiple: { "houg": 1, "tyku": 2, "houk": 2, "houm": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 2,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [17, 19, 20, 21, 22],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
 			// 120mm Twin Gun Mount
 			"147": {
 				count: 0,
