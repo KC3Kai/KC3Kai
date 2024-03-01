@@ -1918,8 +1918,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (14 gears) Daihatsu Landing Craft with known bonus:
-		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
+		// 8 types of (18 gears) Daihatsu Landing Craft with known bonus:
+		//  * 0: [167,525,526] Special Type 2 Amphibious Tank, T4 Tank, T4 Tank Kai, the real 'Tank' type
 		//  * 1: [166,449,494,495,482,514] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either), Panzer III
 		//  * 2: [68] Daihatsu Landing Craft
 		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
@@ -1927,7 +1927,7 @@ KC3改 Ship Object
 		//  * 5: [355,495,514] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai, Panzer III Ausf. J?
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
+		const landingCraftIds = [[167, 525, 526], [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2089,8 +2089,8 @@ KC3改 Ship Object
 			const armedCount = this.countEquipment(409);
 			// Normal, T89, Toku, Panzer2, Honi1
 			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449]);
-			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
-			const dlcGroup2Count = this.countEquipment([167, 230, 482, 514, 494, 495]);
+			// T2 tank & T4 tanks?, T11 shikon, Panzer3, Chiha &Kai
+			const dlcGroup2Count = this.countEquipment([167, 525, 526, 230, 482, 514, 494, 495]);
 			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
 			const doubleSynergyFlag = abCount >= 1 && armedCount >= 1;
@@ -3663,7 +3663,7 @@ KC3改 Ship Object
 		// T4 Tank / Kai, show Daihatsu effect only if multiple torpedo attack conds unmet
 		if(this.hasEquipment([525, 526])) {
 			const isSpType4Ship = this.isSubmarine() || (
-				[507, 586, 348].includes(this.masterId) && this.speed() >= 10
+				[507, 586, 348].includes(this.masterId) && this.isFast()
 			);
 			const battleConds = this.collectBattleConditions();
 			const isDayAtollNode = battleConds.isAtollNode && !battleConds.nodeData.battleNight;
