@@ -372,6 +372,8 @@ Used by SortieManager
 			// [300, 302] used by submarine fleet attacks since 2021-05-08
 			// [400, 401] used by Yamato/Musashi special attacks
 			if (spApiId.inside(200, 201)) return false;
+			// 1000 used by Type4 Tank multiple torpedo attacks since 2024-03-01
+			if (spApiId === 1000) return false;
 			if (spApiId.inside(300, 302)) {
 				// it's not one-time per sortie, may be multiple times as long as resupply materials remained,
 				// to remember all its day and night time triggering.
@@ -510,6 +512,7 @@ Used by SortieManager
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		this.smokeType = battleData.api_smoke_type || 0;
 		this.balloonNode = !!battleData.api_balloon_cell;
+		this.atollNode = !!battleData.api_atoll_cell;
 		
 		if((battleData.api_name || "").includes("ld_airbattle") || this.eventKind === 6) {
 			this.isLongDistanceAirRaid = true;
@@ -980,6 +983,7 @@ Used by SortieManager
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.balloonNode = !!nightData.api_balloon_cell;
+		this.atollNode = !!nightData.api_atoll_cell;
 		this.fcontactId = nightData.api_touch_plane[0]; // masterId of slotitem, starts from 1
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = nightData.api_touch_plane[1];

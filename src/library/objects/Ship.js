@@ -3617,6 +3617,7 @@ KC3改 Ship Object
 	 *  Since Phase 2, defined by `getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
 	 *  new effect for 2nd Class Transporter implemented since March 2023 defined by `getKakuzaEffectType`
+	 *  new opening multiple torpedo attacks implemented since March 2024
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
@@ -3659,12 +3660,23 @@ KC3改 Ship Object
 		const isTargetLandable = KC3Meta.specialLandInstallationNames.includes(targetShip.api_name);
 		// M4A1 DD
 		if(this.hasEquipment(355) && isTargetLandable) return 6;
+		// T4 Tank / Kai, show Daihatsu effect only if multiple torpedo attack conds unmet
+		if(this.hasEquipment([525, 526])) {
+			const isSpType4Ship = this.isSubmarine() || (
+				[507, 586, 348].includes(this.masterId) && this.speed() >= 10
+			);
+			const battleConds = this.collectBattleConditions();
+			const isDayAtollNode = battleConds.isAtollNode && !battleConds.nodeData.battleNight;
+			if(!isDayAtollNode || !isSpType4Ship) {
+				if(this.hasEquipment(526) && (targetShipType.isLand || isTargetLandable)) return 15;
+				if(this.hasEquipment(525) && (targetShipType.isLand || isTargetLandable)) return 13;
+			}
+		}
 		// T2 Tank
 		if(this.hasEquipment(167)) {
 			const isThisSubmarine = this.isSubmarine();
 			if(isThisSubmarine && targetShipType.isLand) return 4;
 			if(isTargetLandable) return 4;
-			return 0;
 		}
 		if(isTargetLandable) {
 			// Armored Boat (AB Class)
@@ -4027,6 +4039,7 @@ KC3改 Ship Object
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.82],
 			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.63],
+			1000: ["Cutin", 1000, "CutinType4TankSpecial", 1.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];

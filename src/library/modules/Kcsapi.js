@@ -380,6 +380,7 @@ Previously known as "Reactor"
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
 					// 903/904 for max gear slots extending card assets as quest rewards
+					// 905/906 for max gear slots extending assets, as event rewards?
 					default: break;
 				}
 			}

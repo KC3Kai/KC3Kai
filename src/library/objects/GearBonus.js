@@ -2889,6 +2889,90 @@
 					single: { "raig": 1, "houk": 1 },
 				},
 			},
+			// Type 0 Small Reconnaissance Seaplane
+			"522": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All SSV
+						stypes: [14],
+						multiple: { "raig": 1, "saku": 3, "houk": 5, "houm": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 1,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 2,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 5,
+						multiple: { "saku": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
+			},
+			// Type 0 Small Reconnaissance Seaplane (Skilled)
+			"523": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All SSV
+						stypes: [14],
+						multiple: { "raig": 3, "baku": 2, "houk": 6, "houm": 2 },
+					},
+					{
+						stypes: [14],
+						minStars: 1,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 2,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 5,
+						multiple: { "saku": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [14],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
+			},
 			// Loire 130M
 			"471": {
 				count: 0,
@@ -9833,6 +9917,95 @@
 						// Akitsumaru
 						origins: [161],
 						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 2 },
+					},
+				],
+			},
+			// Special Type 4 Amphibious Tank
+			"525": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All SS/SSV
+						stypes: [13, 14],
+						multiple: { "houg": 1, "raig": 2, "houk": -1 },
+					},
+					{
+						// I-36, I-41
+						origins: [971],
+						single: { "houg": 2, "raig": 1, "houm": 2 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 1,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 3,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 10,
+						multiple: { "raig": 1 },
+					},
+				],
+			},
+			// Special Type 4 Amphibious Tank Kai
+			"526": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All SS/SSV
+						stypes: [13, 14],
+						multiple: { "houg": 2, "raig": 3, "houm": 1, "houk": -1 },
+					},
+					{
+						// I-36, I-41
+						origins: [971],
+						single: { "houg": 2, "raig": 1, "houm": 2 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 1,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 3,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 4,
+						multiple: { "raig": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						stypes: [13, 14],
+						minStars: 10,
+						multiple: { "raig": 1 },
 					},
 				],
 			},

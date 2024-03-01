@@ -106,7 +106,7 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊'
+			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
 		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
@@ -200,7 +200,7 @@ Provides access to data on built-in JSON files
 				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 				41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
 				71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
-				111, 115, 117, 119, 120, 123
+				111, 115, 117, 119, 120, 123, 126, 127
 			],
 		},
 		// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
@@ -231,7 +231,8 @@ Provides access to data on built-in JSON files
 			1617: 1581, 1618: 1582, 1619: 1583, 1620: 1620, 1621: 1620, 1622: 286,  1623: 267,  1624: 58,
 			// [1630] 深海空超要塞's image asset not uploaded onto server so far, perhaps no fix forever?
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631:1630,*/1634: 1573, 1635: 1561, 1636: 1562,
-			1637: 364,  1638: 48,   1640: 513,  1641: 507,  1642: 508,  1643: 85,
+			1637: 364,  1638: 48,   1640: 513,  1641: 507,  1642: 508,  1643: 85,   1644: 308,  1645: 376,
+			1646: 439,  1647: 363,  1648: 1648,
 		},
 		
 		/* Initialization
@@ -1013,6 +1014,7 @@ Provides access to data on built-in JSON files
 				// move Zuiun Night Cutin index 200 to 30
 				// move Submarine Fleet Cutin index 300 to 40
 				// move Yamato-class Cutin index 400 to 50
+				// move T4 Tank Torpedo Cutin index 1000 to ?
 				this._battle.cutinNight[index >= 400 ? index - 350 : index >= 300 ? index - 260 : index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
@@ -1410,7 +1412,7 @@ Provides access to data on built-in JSON files
 						seasons : ["Winter", "Spring", "Summer", "Fall"],
 						fromId : 21,
 						fromYear : 2013,
-						skippedSeasons : [[42, 2], [48, 3], [50, 4], [56, 6], [58, 8]],
+						skippedSeasons : [[42, 2], [48, 3], [50, 4], [56, 6], [58, 7]],
 					},
 					period = eventMapDefs.seasons.length,
 					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (

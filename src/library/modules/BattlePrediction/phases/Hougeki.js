@@ -110,7 +110,8 @@
 
   Hougeki.isSpecialCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) >= 100
     // Multi-angle attacks just single attacker & defender cutin, could fall into regular parsing
-    && ![200, 201].includes(api_at_type);
+    // T4 Tank night torpedo cutin, already expanded to multiple attacks by api, fall into regular parsing
+    && ![200, 201].includes(api_at_type) && ![1000].includes(api_sp_list);
   // Night Zuiun cutin (200) for api_sp_list added since 2023-02-14, single attacker, 1~2 defenders
   Hougeki.isNightZuiunCutin = ({ api_at_type, api_sp_list }) => (api_sp_list) === 200;
   Hougeki.isNelsonTouch     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
