@@ -6611,5 +6611,109 @@
 		"api_stype": 5,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5826": {
+		"api_id": 5826,
+		"api_name": "バレンタイン第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5827": {
+		"api_id": 5827,
+		"api_name": "バレンタイン涼波",
+		"api_yomi": "すずなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5828": {
+		"api_id": 5828,
+		"api_name": "バレンタイン伊201",
+		"api_yomi": "い201",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5829": {
+		"api_id": 5829,
+		"api_name": "バレンタイン伊201改",
+		"api_yomi": "い201",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5830": {
+		"api_id": 5830,
+		"api_name": "バレンタイン伊203",
+		"api_yomi": "い201",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5831": {
+		"api_id": 5831,
+		"api_name": "バレンタイン伊203改",
+		"api_yomi": "い201",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5832": {
+		"api_id": 5832,
+		"api_name": "バレンタインC.Cappellini",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5833": {
+		"api_id": 5833,
+		"api_name": "バレンタインUIT-24",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5834": {
+		"api_id": 5834,
+		"api_name": "バレンタイン伊503",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5835": {
+		"api_id": 5835,
+		"api_name": "バレンタインSouth Dakota",
+		"api_yomi": "サウスダコタ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5836": {
+		"api_id": 5836,
+		"api_name": "バレンタインSouth Dakota改",
+		"api_yomi": "サウスダコタ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5837": {
+		"api_id": 5837,
+		"api_name": "バレンタインWashington",
+		"api_yomi": "ワシントン",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5838": {
+		"api_id": 5838,
+		"api_name": "バレンタインWashington改",
+		"api_yomi": "ワシントン",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }
