@@ -647,6 +647,15 @@
 					"gh" : "https://github.com/Jurrunio",
 					"tw" : "https://twitter.com/Jurrunio"
 				}
+			},
+			{
+				"name": "scp148",
+				"avatar" : "https://avatars.githubusercontent.com/u/71865093?v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/scp148"
+				}
 			}
 		],
 		"AboutForkContributors": [
@@ -815,6 +824,15 @@
 				"active": 1,
 				"links" : {
 					"gh": "https://github.com/nizhf"
+				}
+			},
+			{
+				"name": "yang",
+				"avatar" : "https://avatars.githubusercontent.com/u/14897537?v=4",
+				"desc" : "繁體中文",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/yang85"
 				}
 			}
 		],

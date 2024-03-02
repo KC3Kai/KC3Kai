@@ -376,7 +376,11 @@ Previously known as "Reactor"
 					case 97: PlayerManager.consumables.teruteruBouzu = thisItem.api_count; break;
 					case 98: PlayerManager.consumables.blueRibbon = thisItem.api_count; break;
 					case 99: PlayerManager.consumables.whiteRibbon = thisItem.api_count; break;
+					// 901 virtual item, for 800 rank points as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
+					//     also virtual for 10 irako card assets as quest rewards
+					// 903/904 for max gear slots extending card assets as quest rewards
+					// 905/906 for max gear slots extending assets, as event rewards?
 					default: break;
 				}
 			}

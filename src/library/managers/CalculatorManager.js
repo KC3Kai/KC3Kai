@@ -539,6 +539,7 @@
         const playerFlarePos = currentNode.flarePos;
         const enemyFlarePos = currentNode.eFlarePos;
         const isBalloonNode = currentNode.balloonNode;
+        const isAtollNode = currentNode.atollNode;
         return {
             nodeData: currentNode,
             isOnBattle,
@@ -556,6 +557,7 @@
             playerFlarePos,
             enemyFlarePos,
             isBalloonNode,
+            isAtollNode,
         };
     };
 

@@ -101,6 +101,8 @@
 				"item_up": [496],
 				"item_on": [],
 			};
+			// see the same name in main.js to include special item_up2 and item_on2
+			const ADD_IMAGE_SLOTS = [525, 526];
 			
 			$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
 			if(!KC3Master.isAbyssalGear(gearId)) {
@@ -111,6 +113,13 @@
 					$(".tab_mstgear .gearInfo .ga_3 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_up", "slot")));
 				if(!EXCLUDE_RES.item_on.includes(gearId))
 					$(".tab_mstgear .gearInfo .ga_4 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_on", "slot")));
+				if(ADD_IMAGE_SLOTS.includes(gearId)) {
+					$(".tab_mstgear .gearInfo .ga_5 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_up2", "slot")));
+					$(".tab_mstgear .gearInfo .ga_6 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_on2", "slot")));
+					$(".tab_mstgear .gearInfo .ga_5, .tab_mstgear .gearInfo .ga_6").show();
+				} else {
+					$(".tab_mstgear .gearInfo .ga_5, .tab_mstgear .gearInfo .ga_6").hide();
+				}
 				$(".tab_mstgear .gearInfo .gearAssets").show();
 			} else {
 				// Map a abyssal gear to player gear for itemup image,
