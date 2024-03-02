@@ -1918,8 +1918,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (14 gears) Daihatsu Landing Craft with known bonus:
-		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
+		// 8 types of (18 gears) Daihatsu Landing Craft with known bonus:
+		//  * 0: [167,525,526] Special Type 2 Amphibious Tank, T4 Tank, T4 Tank Kai, the real 'Tank' type
 		//  * 1: [166,449,494,495,482,514] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either), Panzer III
 		//  * 2: [68] Daihatsu Landing Craft
 		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
@@ -1927,7 +1927,7 @@ KC3改 Ship Object
 		//  * 5: [355,495,514] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai, Panzer III Ausf. J?
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
+		const landingCraftIds = [[167, 525, 526], [166, 449, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2089,8 +2089,8 @@ KC3改 Ship Object
 			const armedCount = this.countEquipment(409);
 			// Normal, T89, Toku, Panzer2, Honi1
 			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449]);
-			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
-			const dlcGroup2Count = this.countEquipment([167, 230, 482, 514, 494, 495]);
+			// T2 tank & T4 tanks?, T11 shikon, Panzer3, Chiha &Kai
+			const dlcGroup2Count = this.countEquipment([167, 525, 526, 230, 482, 514, 494, 495]);
 			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
 			const doubleSynergyFlag = abCount >= 1 && armedCount >= 1;
@@ -3617,6 +3617,7 @@ KC3改 Ship Object
 	 *  Since Phase 2, defined by `getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
 	 *  new effect for 2nd Class Transporter implemented since March 2023 defined by `getKakuzaEffectType`
+	 *  new opening multiple torpedo attacks implemented since March 2024
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
@@ -3659,12 +3660,23 @@ KC3改 Ship Object
 		const isTargetLandable = KC3Meta.specialLandInstallationNames.includes(targetShip.api_name);
 		// M4A1 DD
 		if(this.hasEquipment(355) && isTargetLandable) return 6;
+		// T4 Tank / Kai, show Daihatsu effect only if multiple torpedo attack conds unmet
+		if(this.hasEquipment([525, 526])) {
+			const isSpType4Ship = this.isSubmarine() || (
+				[507, 586, 348].includes(this.masterId) && this.isFast()
+			);
+			const battleConds = this.collectBattleConditions();
+			const isDayAtollNode = battleConds.isAtollNode && !battleConds.nodeData.battleNight;
+			if(!isDayAtollNode || !isSpType4Ship) {
+				if(this.hasEquipment(526) && (targetShipType.isLand || isTargetLandable)) return 15;
+				if(this.hasEquipment(525) && (targetShipType.isLand || isTargetLandable)) return 13;
+			}
+		}
 		// T2 Tank
 		if(this.hasEquipment(167)) {
 			const isThisSubmarine = this.isSubmarine();
 			if(isThisSubmarine && targetShipType.isLand) return 4;
 			if(isTargetLandable) return 4;
-			return 0;
 		}
 		if(isTargetLandable) {
 			// Armored Boat (AB Class)
@@ -4027,6 +4039,7 @@ KC3改 Ship Object
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.82],
 			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.63],
+			1000: ["Cutin", 1000, "CutinType4TankSpecial", 1.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -4525,6 +4538,7 @@ KC3改 Ship Object
 				"CutinNPx3"  : 130,   // 125?, 3 planes for mod 1.18
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
+			// https://docs.google.com/spreadsheets/d/12PddWSvDvFEncOAR6ZAPONUf7ZXzrUkPA6KQNUj3Xjc/
 			7: 115,
 			8: 140,
 			// 125 vs 126 https://twitter.com/CC_jabberwock/status/1752399982169329727
@@ -4893,9 +4907,11 @@ KC3改 Ship Object
 				// fit bonus at night battle for 20.3cm variants
 				if(time === "Night") {
 					const has203TwinGun = this.hasEquipment(6);
+					const has203No4TwinGun = this.hasEquipment(520);
 					const has203No3TwinGun = this.hasEquipment(50);
 					const has203No2TwinGun = this.hasEquipment(90);
 					// 20.3cm priority to No.3, No.2 might also
+					// No.4 unknown yet
 					result += has203TwinGun ? 10 : has203No2TwinGun ? 15 : has203No3TwinGun ? 15 : 0;
 				}
 				// for 15.5cm triple main mount on Mogami class
@@ -4948,7 +4964,8 @@ KC3改 Ship Object
 					const count14cm15cmMainGunVars = this.countEquipment([4, 119, 310, 11, 65, 139, 247]);
 					result -= 6 * count14cm15cmMainGunVars;
 					// also includes: Italian 203mm/53, 152mm/55 rapid fire
-					const count203MainGunVars = this.countEquipment([6, 50, 90, 162, 340, 341]);
+					// not fully verified: [520] 20.3cm No.4
+					const count203MainGunVars = this.countEquipment([6, 50, 90, 162, 340, 341, 520]);
 					result -= 10 * count203MainGunVars;
 					if(count203MainGunVars) {
 						// two categories not mixed, extra -8

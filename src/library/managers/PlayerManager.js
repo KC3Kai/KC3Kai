@@ -566,6 +566,10 @@ Does not include Ships and Gears which are managed by other Managers
 				"99": "whiteRibbon",
 				"901": "rankPoints",
 				"902": "boiler",
+				"903": "gearSlots3",
+				"904": "gearSlots4",
+				"905": "gearSlots5",
+				"906": "gearSlots2",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :

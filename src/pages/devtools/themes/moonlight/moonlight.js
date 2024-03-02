@@ -3050,6 +3050,10 @@
 					var highTPGain = isNaN(thisNode.amount) ? "?" : thisNode.amount;
 					$(".module.activity .node_type_resource .node_res_text").text( "{0} ~ {1} TP".format(lowTPGain, highTPGain) );
 					$(".module.activity .node_type_resource").show().children().show();
+
+					if(thisNode.gaugeDamage > 0 && KC3SortieManager.getCurrentMapData().kind === 'gauge-tp') {
+						updateMapGauge(thisNode.gaugeDamage, true, true);
+					}
 					break;
 
 				// Battle avoided node

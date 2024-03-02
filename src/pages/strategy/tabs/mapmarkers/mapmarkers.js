@@ -179,29 +179,29 @@
 					// -99 undefined in `_getTexture`, used by land base at `AirBaseLayer.prototype.create`
 					case -99: return 'map_main_19';
 					// -100 undefined either, used by landing flag at `LandingFlag.prototype._getTexture_no`
-					case -100: return 'map_main_40';
+					case -100: return 'map_main_43';
 					// -1 indicates uncommon icon nodes like night battle, air raid, rsc finish line, etc
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
-					case 0: return 'map_main_61';
-					case 1: return 'map_main_54';
+					case 0: return 'map_main_64';
+					case 1: return 'map_main_57';
 					case 2:
-					case 6: return 'map_main_57';
-					case 3: return 'map_main_59';
-					case 4: return 'map_main_60';
-					case 5: return 'map_main_48';
-					case 7: return 'map_main_46';
-					case 8: return 'map_main_47';
-					case 9: return 'map_main_58';
-					case 10: return 'map_main_42';
-					case 11: return 'map_main_62';
-					case 12: return 'map_main_63';
+					case 6: return 'map_main_60';
+					case 3: return 'map_main_62';
+					case 4: return 'map_main_63';
+					case 5: return 'map_main_51';
+					case 7: return 'map_main_48';
+					case 8: return 'map_main_50';
+					case 9: return 'map_main_61';
+					case 10: return 'map_main_44';
+					case 11: return 'map_main_65';
+					case 12: return 'map_main_66';
 					case 13: return 'map_main_17';
 					// -2 indicates boss node red dot before actually entering map
-					case -2: return 'map_main_56';
+					case -2: return 'map_main_59';
 					// -3 indicates extra start point before actually entering map
-					case -3: return 'map_main_53';
-					case 14: return 'map_main_54';
+					case -3: return 'map_main_56';
+					case 14: return 'map_main_57';
 					case 15: return 'map_main_18';
 				}
 			};
