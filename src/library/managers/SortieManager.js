@@ -368,6 +368,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 			// Transport Node (CellTaskLanding), event only for now
 			// since event fall 2020 (E49-3 M/U), the anchor icon (api_color_no = 8, used by previous type) is used instead of green dot (api_color_no = 6)
+			// since event winter 2024 (E58-1 Q), landing node is the endline, instead of a boss node followed
 			// api_event_id = 9
 			else if (nodeData.api_event_id === 9) {
 				nodeKind = "Transport";

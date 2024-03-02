@@ -317,6 +317,13 @@ Used by SortieManager
 			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
 		);
 		console.log("TP amount when arrive TP point", this.amount);
+		// Update map gauge preview at once if the TP point is the endline (winter 2024 E1p1)
+		if (nodeData.api_next == 0 && nodeData.api_eventmap) {
+			const mapHp = KC3SortieManager.getCurrentMapData().curhp,
+				afterHp = Number(nodeData.api_eventmap.api_now_maphp) || 0,
+				hpDiff = mapHp - afterHp;
+			this.gaugeDamage = Math.min(hpDiff, this.amount);
+		}
 		return this;
 	};
 	
