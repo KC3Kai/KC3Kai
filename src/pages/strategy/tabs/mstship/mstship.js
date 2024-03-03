@@ -507,11 +507,12 @@
 					isShipImageForPowerUp = [951].includes(ship_id);
 				if(isShipImageForPort) availableTypes.push('port', 'port_dmg');
 				if(isShipImageForPowerUp) availableTypes.push('powerup', 'powerup_dmg');
-				// Special cut-in (Nelson Touch, Nagato/Mutsu, Colorado Cutin) special type
-				if(KC3Meta.specialCutinIds.includes(ship_id) && !KC3Meta.kongouCutinShips.includes(ship_id)) {
+				// Special cut-in (Nelson Touch, Nagato/Mutsu, Colorado Cutin...) special type
+				// Kongou-class special ones have no difference with regular full, used by Yamato partner
+				if(KC3Meta.specialCutinIds.includes(ship_id)) {
 					availableTypes.push("special");
 				}
-				// Special cut-in (Sub Fleet flagship Taigei/Jingei) get damaged type either
+				// Special cut-in (Sub Fleet flagship tender) get damaged type either
 				if(KC3Meta.subFleetCutinShips.includes(ship_id)) {
 					availableTypes.push("special_dmg");
 				}
