@@ -1001,6 +1001,7 @@ KC3改 Equipment Object
 				//&& this.master().api_tyku > 0
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
 				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+				// other [25] Autogyro and [26] AS Partol participate in stage1 and get proficiency, but no AA power found
 			) || [489, 491].includes(this.masterId));
 	};
 

@@ -14877,7 +14877,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [0, 0],
+		SLOTS: [0, 0, 31, 30],
 		EQUIPS: [1647, 1647, 1648, 1648],
 	},
 	2212: {
@@ -14917,7 +14917,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [0, 0, 45, 44],
+		SLOTS: [0, 0, 27, 26],
 		EQUIPS: [1647, 1647, 1648, 1648],
 	},
 	2214: {
@@ -14937,7 +14937,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [0, 0],
+		SLOTS: [0, 0, 37, 37],
 		EQUIPS: [1647, 1647, 1648, 1648],
 	},
 	2215: {
@@ -15125,7 +15125,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [],
+		SLOTS: [26, 26, 26, 26, 0],
 		EQUIPS: [1617, 1648, 1618, 1619, 1608],
 	},
 	2224: {
@@ -15146,7 +15146,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [35, 35, 34, 34, 0],
+		SLOTS: [38, 32, 36, 32, 0],
 		EQUIPS: [1617, 1648, 1618, 1619, 1608],
 	},
 	2225: {
@@ -15209,7 +15209,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [],
+		SLOTS: [45, 45, 44, 44, 0],
 		EQUIPS: [1617, 1648, 1618, 1619, 1608],
 	},
 	2228: {
@@ -15222,6 +15222,27 @@ var SHIPDATA_ = {
 		TP: 201,
 		AA: 0,
 		AR: 18,
+		EV: 0,
+		ASW: 0,
+		LOS: 0,
+		LUK: 1,
+		TACC: 80,
+		unknownstats: true,
+		RNG: 1,
+		SPD: 5,
+		SLOTS: [0, 0, 1, 0],
+		EQUIPS: [1580, 1580, 1586, 0]
+	},
+	2229: {
+		name: 'Abyssal I-go Water Princess 2',
+		nameJP: '深海伊号水姫',
+		image: 'S2228.jpg',
+		type: 'SS',
+		HP: 441,
+		FP: 65,
+		TP: 203,
+		AA: 0,
+		AR: 38,
 		EV: 0,
 		ASW: 0,
 		LOS: 0,
@@ -15251,7 +15272,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 3],
+		SLOTS: [0, 0, 1, 3],
 		EQUIPS: [1580, 1580, 1593, 1586]
 	},
 	2231: {
@@ -15275,6 +15296,27 @@ var SHIPDATA_ = {
 		SLOTS: [0, 0, 1, 0],
 		EQUIPS: [1580, 1580, 1586, 0]
 	},
+	2232: {
+		name: 'Abyssal I-go Water Princess - Damaged 2',
+		nameJP: '深海伊号水姫-壊',
+		image: 'S2231.jpg',
+		type: 'SS',
+		HP: 441,
+		FP: 79,
+		TP: 232,
+		AA: 0,
+		AR: 47,
+		EV: 0,
+		ASW: 0,
+		LOS: 0,
+		LUK: 1,
+		TACC: 80,
+		unknownstats: true,
+		RNG: 1,
+		SPD: 5,
+		SLOTS: [0, 0],
+		EQUIPS: [1580, 1580, 1586, 1586]
+	},
 	2233: {
 		name: 'Abyssal I-go Water Princess - Damaged 3',
 		nameJP: '深海伊号水姫-壊',
@@ -15293,7 +15335,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 1,
 		SPD: 5,
-		SLOTS: [0, 0],
+		SLOTS: [0, 0, 1, 6],
 		EQUIPS: [1580, 1580, 1593, 1586]
 	},
 
