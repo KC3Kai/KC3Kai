@@ -3318,9 +3318,21 @@
 				);
 			}
 			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
-			$(".module.activity .battle_support .support_balloon").toggle(thisNode.balloonNode);
-			if(thisNode.balloonNode) $(".module.activity .battle_support .support_balloon").toggleClass("deployed",
-				KC3Calc.countFleetBalloonShips(KC3SortieManager.fleetSent, KC3SortieManager.isCombinedSortie()) > 0);
+			$(".module.activity .battle_support .support_balloon").toggle(thisNode.balloonNode || thisNode.atollNode);
+			if(thisNode.balloonNode) {
+				$(".module.activity .battle_support .support_balloon img").attr("src", "/assets/img/items/55.png");
+				$(".module.activity .battle_support .support_balloon").toggleClass("deployed",
+					KC3Calc.countFleetBalloonShips(KC3SortieManager.fleetSent, KC3SortieManager.isCombinedSortie()) > 0
+				).attr("title", KC3Meta.term("BattleBalloonNode"));
+			}
+			// Reuse balloon icon to indicate atoll node
+			if(thisNode.atollNode) {
+				$(".module.activity .battle_support .support_balloon img").attr("src", "/assets/img/items/36.png");
+				$(".module.activity .battle_support .support_balloon").attr("title",
+					[(thisNode.balloonNode ? KC3Meta.term("BattleBalloonNode") : ""), KC3Meta.term("BattleAtollNode")]
+						.filter(s => !!s).join("\n")
+				);
+			}
 
 			// Day only / Night to day battle environment
 			if(!thisNode.startsFromNight || thisNode.isNightToDay){

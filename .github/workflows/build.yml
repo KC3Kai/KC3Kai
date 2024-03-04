@@ -48,13 +48,33 @@ jobs:
         grunt build
         echo KC3Kai $PACKAGE_VERSION package build/release.zip will be built
     # PACKAGE AND DEPLOY TO CHROME WEBSTORE
+# Old grunt task, can't handle IN_PROGRESS state
+#    - name: Publish to webstore
+#      timeout-minutes: 10
+#      env:
+#        WEBSTORE_CLIENT_ID: ${{ secrets.WEBSTORE_CLIENT_ID }}
+#        WEBSTORE_CLIENT_SECRET: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
+#        WEBSTORE_REFRESH_TOKEN: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
+#      run: grunt webstore
+    - name: Upload to webstore
+      # https://github.com/cardinalby/webext-buildtools-chrome-webstore-upload-action
+      uses: cardinalby/webext-buildtools-chrome-webstore-action@v1
+      with:
+        zipFilePath: 'build/release.zip'
+        extensionId: 'hkgmldnainaglpjngpajnnjfhpdjkohh'
+        apiClientId: ${{ secrets.WEBSTORE_CLIENT_ID }}
+        apiClientSecret: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
+        apiRefreshToken: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
+        waitForUploadCheckCount: 10
+        waitForUploadCheckIntervalMs: 30000
     - name: Publish to webstore
-      timeout-minutes: 10
-      env:
-        WEBSTORE_CLIENT_ID: ${{ secrets.WEBSTORE_CLIENT_ID }}
-        WEBSTORE_CLIENT_SECRET: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
-        WEBSTORE_REFRESH_TOKEN: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
-      run: grunt webstore
+      # https://github.com/cardinalby/webext-buildtools-chrome-webstore-publish-action
+      uses: cardinalby/webext-buildtools-chrome-webstore-publish-action@v1
+      with:
+        extensionId: 'hkgmldnainaglpjngpajnnjfhpdjkohh'
+        apiClientId: ${{ secrets.WEBSTORE_CLIENT_ID }}
+        apiClientSecret: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
+        apiRefreshToken: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
     # DEPLOY TO GITHUB RELEASES
     - name: Push git tag
       timeout-minutes: 10
