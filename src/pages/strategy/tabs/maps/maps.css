@@ -686,6 +686,12 @@
 	position:absolute;
 	margin:76px 0 0 78px;
 	border-radius:50%;
+	font-size:10px;
+	line-height:15px;
+	text-align:right;
+	background-size:contain;
+	background-position:-1px;
+	background-image:url(/assets/img/items/54.png);
 	display:none;
 }
 .tab_maps .sortie_list .node_result_box.node_balloon {
@@ -694,12 +700,9 @@
 	position:absolute;
 	margin:76px 0 0 60px;
 	border-radius:50%;
+	background-size:contain;
+	background-image:url(/assets/img/items/55.png);
 	display:none;
-}
-.tab_maps .sortie_list .node_result_box.node_smoke img,
-.tab_maps .sortie_list .node_result_box.node_balloon img {
-	width:15px;
-	height:15px;
 }
 
 .tab_maps .sortie_list .node_enemy {

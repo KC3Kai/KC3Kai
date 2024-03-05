@@ -1650,7 +1650,9 @@ body {
 .tab_event .sortie_list .node_result_box.node_balloon.deployed,
 .tab_maps .sortie_list .node_result_box.node_smoke,
 .tab_maps .sortie_list .node_result_box.node_balloon.deployed {
-	background: #fe7;
+	color: #777;
+	text-shadow: #fe7 -1px 1px 1px;
+	background-color: #fe7;
 }
 
 /* ENCOUNTERS
