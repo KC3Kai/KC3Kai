@@ -409,6 +409,8 @@ Contains summary information about a fleet and its ships
 				if (gearObj.isDummy()) return;
 				switch (gearObj.masterId) {
 					case 68: // normal landing craft
+					case 525: // T4 tank?
+					case 526: // T4 tank kai?
 						normalCount += 1;
 						addImprove(gearObj.stars);
 					break;
@@ -417,8 +419,6 @@ Contains summary information about a fleet and its ships
 						addImprove(gearObj.stars);
 					break;
 					case 167: // T2 tank
-					case 525: // T4 tank?
-					case 526: // T4 tank kai?
 						t2Count += 1;
 						addImprove(gearObj.stars);
 					break;
