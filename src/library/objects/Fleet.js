@@ -394,6 +394,7 @@ Contains summary information about a fleet and its ships
 		var normalCount = 0;
 		var t89Count = 0;
 		var t2Count = 0;
+		var t4Count = 0;
 		var tokuCount = 0;
 		var abCount = 0;
 		var armedCount = 0;
@@ -409,8 +410,6 @@ Contains summary information about a fleet and its ships
 				if (gearObj.isDummy()) return;
 				switch (gearObj.masterId) {
 					case 68: // normal landing craft
-					case 525: // T4 tank?
-					case 526: // T4 tank kai?
 						normalCount += 1;
 						addImprove(gearObj.stars);
 					break;
@@ -420,6 +419,11 @@ Contains summary information about a fleet and its ships
 					break;
 					case 167: // T2 tank
 						t2Count += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 525: // T4 tank?
+					case 526: // T4 tank kai?
+						t4Count += 1;
 						addImprove(gearObj.stars);
 					break;
 					case 193: // Toku landing craft
@@ -453,7 +457,7 @@ Contains summary information about a fleet and its ships
 			});
 		});
 		// without cap
-		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
+		const basicBonus= 0.05 * (normalCount + tokuCount + t4Count + bonusShipCount)
 						+ 0.02 * (t89Count + abCount + panzerCount + tokuHoni1Count)
 						+ 0.03 * armedCount
 						+ 0.01 * t2Count;
@@ -466,7 +470,7 @@ Contains summary information about a fleet and its ships
 			[0.054, 0.056, 0.058, 0.059][normalCount] || 0.06 :
 			[0.050, 0.050, 0.052, 0.054][normalCount] || 0.054;
 		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
-		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount + panzerCount + tokuHoni1Count;
+		const landingCraftCount = normalCount + t89Count + t2Count + t4Count + tokuCount + abCount + armedCount + panzerCount + tokuHoni1Count;
 		// "Bstar" in the formula
 		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
