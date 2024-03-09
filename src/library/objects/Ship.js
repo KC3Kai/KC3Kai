@@ -1918,7 +1918,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (17 gears) Daihatsu Landing Craft with known bonus, 2 unknown:
+		// 8 types of (16 gears) Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 0: [167,525,526] Special Type 2 Amphibious Tank, T4 Tank?, T4 Tank Kai?, the real 'Tank' type
 		//  * 1: [166,449,494,495,482,514] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either), Panzer III
 		//  * 2: [68] Daihatsu Landing Craft

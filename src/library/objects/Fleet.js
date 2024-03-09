@@ -459,11 +459,10 @@ Contains summary information about a fleet and its ships
 			});
 		});
 		// without cap
-		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
+		const basicBonus= 0.05 * (normalCount + tokuCount + t4kaiCount + bonusShipCount)
 						+ 0.02 * (t89Count + abCount + panzerCount + tokuHoni1Count)
 						+ 0.03 * armedCount
-						+ 0.035 * t4baseCount
-						+ 0.045 * t4kaiCount
+						+ 0.04 * t4baseCount
 						+ 0.01 * t2Count;
 		// cap at 20%
 		// "B1" in the formula (see comment link of this function)

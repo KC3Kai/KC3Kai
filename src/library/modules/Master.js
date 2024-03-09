@@ -558,17 +558,16 @@ Saves and loads significant data for future use
 				if(equipOn.stypes.includes(stype)) result |= 1;
 				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
 			}
-			// Equippable on ex-slot has to be fulfill with regular slots equippable either
-			// No equipment can be equipped on ex-slot only without regular slots so far, so result always 3 if ex-slot true
-			if(result) {
-				if(equipOn.exslot) result |= 2;
-				// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
-				if(equipOn.exslotMinStars > 0) {
-					if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
-				}
-				if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
-				if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
+			// To exclude [33] Improved Kanhon Type Turbine from general stype but DE
+			if(result && equipOn.exslot) result |= 2;
+			// Equippable on ex-slot NOT required to be fulfill with regular slots equippable,
+			// since 2024-03-03, [524] sec.gun can be equipped in ex-slot for some AO without regular slots capability
+			// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
+			if(equipOn.exslotMinStars > 0) {
+				if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
 			}
+			if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
+			if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
 			return result;
 		},
 
