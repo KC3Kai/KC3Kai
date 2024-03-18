@@ -1639,7 +1639,7 @@ Contains summary information about a fleet and its ships
 
 	/**
 	 * Estimate final trigger chance of Smoke Generator(s) in fleet.
-	 * Possibly multi-rolling for more than 1 smoke. Either for moke level rolling.
+	 * Possibly multi-rolling for more than 1 smoke. Either for smoke level rolling.
 	 * @see inferred formula: https://twitter.com/CC_jabberwock/status/1739241607659151846
 	 */
 	KC3Fleet.prototype.estimateSmokeGeneratingRate = function() {
@@ -1647,7 +1647,9 @@ Contains summary information about a fleet and its ships
 		// for 1 smoke equipped only, lookup the smoke and get its stars.
 		const smokeStars = 0;
 		return 0.2 * Math.max(0, Math.qckInt("ceil", Math.sqrt(flagshipLuck) - 6 + 0.3 * smokeStars));
-		// for more and level, https://twitter.com/yukicacoon/status/1739481809375895854
+		// for more and level
+		// https://twitter.com/yukicacoon/status/1739480992090632669
+		// https://twitter.com/Xe_UCH/status/1767407602554855730
 	};
 
 	/**

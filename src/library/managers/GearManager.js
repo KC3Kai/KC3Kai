@@ -64,9 +64,9 @@ Saves and loads list to and from localStorage
 		},
 
 		// Daihatsu landing craft anti-installation power modifiers per types
-		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus/panzer3Bonus, normalBonus, shikonBonus, tokuBonus/panzer3Bonus, m4a1ddBonus/chihaBonus/ausfJBonus, abBonus/armedBonus, panzer2Bonus]
+		// Array format is [t2Bonus/t4Kai*2, t89Bonus/tokuHoni1Bonus/panzer3Bonus, normalBonus, shikonBonus, tokuBonus/panzer3Bonus, m4a1ddBonus/chihaBonus/ausfJBonus, abBonus/armedBonus/t4Tanks*2, panzer2Bonus]
 		// see also: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AllBonusTable
-		// All base modifiers for T2 Tank are fixed to 1.0 (out of date), T4 Tank variants unknown
+		// All base modifiers for T2 Tank are fixed to 1.0 (out of date). T4 Tank variants not simply belonged to T2 Tank
 		landingCraftModifiers: {
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {

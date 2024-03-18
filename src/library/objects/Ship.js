@@ -1918,16 +1918,17 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (16 gears) Daihatsu Landing Craft with known bonus, 2 unknown:
-		//  * 0: [167,525,526] Special Type 2 Amphibious Tank, T4 Tank?, T4 Tank Kai?, the real 'Tank' type
+		// 8 types of (16 gears) Daihatsu Landing Craft with known bonus:
+		//  * 0: [167] Special Type 2 Amphibious Tank, (T4 Tank Kai *2)
 		//  * 1: [166,449,494,495,482,514] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank, Toku Daihatsu Landing Craft + Chi-Ha (conditional, Kai either), Panzer III
 		//  * 2: [68] Daihatsu Landing Craft
 		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 4: [193,482,514] Toku Daihatsu Landing Craft, Toku Daihatsu Landing Craft + Panzer III (North African Specification), Toku Daihatsu Landing Craft + Panzer III Ausf. J
 		//  * 5: [355,495,514] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai, Panzer III Ausf. J
-		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
+		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu, (T4 Tank variants *2)
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436];
+		//  * 8: [525,526] virtual type of T4 Tank special merging rules, see *2
+		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436, [525, 526]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1937,25 +1938,31 @@ KC3改 Ship Object
 		let sdpPostcapImpPow = 1;
 		let landingBaseBonus = 1, oneGearBonus = 1, moreGearBonus = 1;
 		let improvementBonus = 1;
-		let landingGroupStars = 0, tankGroupStars = 0;
-		let landingGroupCount = 0, tankGroupCount = 0;
+		let landingGroupStars = 0, tankGroupStars = 0, t4GroupStars = 0;
+		let landingGroupCount = 0, tankGroupCount = 0, t4GroupCount = 0;
 		landingCraftCounts.forEach((count, type) => {
 			if(count > 0) {
-				if(type > 0) {
-					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
-					landingGroupCount += count;
-				} else {
+				if(type === 0) {
 					// T2 Tank base bonus fixed to 1.0
 					landingBaseBonus = Math.max(landingBaseBonus, 1);
 					tankGroupCount += count;
+				} else if(type === 8) {
+					// T4 Tank variants base bonus 1.4, grouped to armed/ab DLC, independent stars bonus
+					landingBaseBonus = Math.max(landingBaseBonus, getModifier(6));
+					t4GroupCount += count;
+				} else {
+					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
+					landingGroupCount += count;
 				}
 				this.equipment().forEach((g, i) => {
 					const ids = landingCraftIds[type], mstId = g.masterId;
 					if(g.exists() && (Array.isArray(ids) ? ids.includes(mstId) : ids === mstId)) {
-						if(type > 0) {
-							landingGroupStars += g.stars;
-						} else {
+						if(type === 0) {
 							tankGroupStars += g.stars;
+						} if(type === 8) {
+							t4GroupStars += g.stars;
+						} else {
+							landingGroupStars += g.stars;
 						}
 					}
 				});
@@ -1963,13 +1970,26 @@ KC3改 Ship Object
 					// no precap bonus except the base one on yasen for type 6
 					oneGearBonus *= 1;
 				} else {
-					oneGearBonus *= getModifier(type, "count1");
-					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
-					// only get count2 bonus when chiha with t89
-					else if(type === 1) {
-						const t89Count = this.countEquipment(166),
-							chihaCount = this.countEquipment([494, 495]);
-						if(t89Count > 0 && chihaCount > 0) { moreGearBonus *= getModifier(type, "count2"); }
+					// *2: T4 Tank variants skipped count1 bonus, only count2 bonus applied
+					if(type === 8) {
+						const t4KaiCount = this.countEquipment(526);
+						// 1 T4 Tank Kai = 2 T2 Tanks, no dupe
+						if(t4KaiCount > 0 && landingCraftCounts[0] < 2) {
+							moreGearBonus *= getModifier(0, "count2");
+						}
+						// 2 T4 Tank variants = 2 armed/ab Boats, no dupe
+						if(count > 1 && landingCraftCounts[6] < 2) {
+							moreGearBonus *= getModifier(6, "count2");
+						}
+					} else {
+						oneGearBonus *= getModifier(type, "count1");
+						if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
+						// only get count2 bonus when chiha with t89
+						else if(type === 1) {
+							const t89Count = this.countEquipment(166),
+								chihaCount = this.countEquipment([494, 495]);
+							if(t89Count > 0 && chihaCount > 0) { moreGearBonus *= getModifier(type, "count2"); }
+						}
 					}
 				}
 			}
@@ -1982,10 +2002,14 @@ KC3改 Ship Object
 			// When T89Tank/Honi1/Panzer2/Panzer3 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
 			sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1 || hasPanzer3) & 1) + ((hasType89LandingForce && hasPanzer2) & 1);
 		}
-		if(landingGroupCount > 0) improvementBonus *= Math.pow(
-			landingGroupStars / landingGroupCount / 50 + 1,
-			forSdpPostcap ? sdpPostcapImpPow : 1
-		);
+		if(landingGroupCount > 0 || t4GroupCount > 0) {
+			const landingGroupMod = landingGroupCount > 0 ? landingGroupStars / landingGroupCount / 50 : 0;
+			const t4GroupMod = t4GroupCount > 0 ? t4GroupStars / t4GroupCount / 50 : 0;
+			improvementBonus *= Math.pow(
+				1 + landingGroupMod + t4GroupMod,
+				forSdpPostcap ? sdpPostcapImpPow : 1
+			);
+		}
 		if(tankGroupCount > 0) improvementBonus *= tankGroupStars / tankGroupCount / 30 + 1;
 		// Multiply modifiers
 		return landingBaseBonus * oneGearBonus * moreGearBonus * improvementBonus;
@@ -2003,7 +2027,7 @@ KC3改 Ship Object
 	 * @see https://twitter.com/KennethWWKK/status/1045315639127109634
 	 * @see https://yy406myon.hatenablog.jp/entry/2018/09/14/213114
 	 * @see https://cdn.discordapp.com/attachments/425302689887289344/614879250419417132/ECrra66VUAAzYMc.jpg_orig.jpg
-	 * @see https://bbs.nga.cn/read.php?tid=16936146
+	 * @see https://bbs.nga.cn/read.php?tid=16936146  https://bbs.nga.cn/read.php?tid=33769345
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
@@ -2016,6 +2040,8 @@ KC3改 Ship Object
 	 * 			precap gun tank,
 	 * 			precap chiha tank,
 	 * 			precap chiha tank kai,
+	 * 			precap t4 tank and kai,
+	 * 			precap t4 tank kai,
 	 * 			precap daihatsu synergy,
 	 * 		},
 	 * 		additives: {
@@ -2026,6 +2052,8 @@ KC3改 Ship Object
 	 * 			precap gun tank,
 	 * 			precap chiha tank,
 	 * 			precap chiha tank kai,
+	 * 			precap t4 tank and kai,
+	 * 			precap t4 tank kai,
 	 * 			precap daihatsu synergy,
 	* 		}
 	 * }
@@ -2041,6 +2069,8 @@ KC3改 Ship Object
 			gunTankAdditive = 0, gunTankModifier = 1,
 			chihaTankAdditive = 0, chihaTankModifier = 1,
 			chihaTankKaiAdditive = 0, chihaTankKaiModifier = 1,
+			t4TankVarAdditive = 0, t4TankVarModifier = 1,
+			t4TankKaiAdditive = 0, t4TankKaiModifier = 1,
 			synergyAdditive = 0, synergyModifier = 1;
 		
 		let wg42Bonus = 1;
@@ -2069,6 +2099,8 @@ KC3改 Ship Object
 			const panzer3Count = this.countEquipment(482);
 			const chihaCount = this.countEquipment(494);
 			const chihaKaiCount = this.countEquipment(495);
+			const t4Count = this.countEquipment(525);
+			const t4KaiCount = this.countEquipment(526);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai
@@ -2085,12 +2117,13 @@ KC3改 Ship Object
 			//   https://twitter.com/hedgehog_hasira/status/1641121541378260996
 			//   https://twitter.com/yukicacoon/status/1383313261089542152
 			//   https://twitter.com/yukicacoon/status/1368513654111408137
+			//   https://twitter.com/yukicacoon/status/1769537134753435786
 			const abCount = this.countEquipment(408);
 			const armedCount = this.countEquipment(409);
-			// Normal, T89, Toku, Panzer2, Honi1
-			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449]);
-			// T2 tank & T4 tanks?, T11 shikon, Panzer3, Chiha &Kai
-			const dlcGroup2Count = this.countEquipment([167, 525, 526, 230, 482, 514, 494, 495]);
+			// Normal, T89, Toku, Panzer2, Honi1, T4 tanks
+			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449, 525, 526]);
+			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
+			const dlcGroup2Count = this.countEquipment([167, 230, 482, 514, 494, 495]);
 			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
 			const singleSynergyFlag = abCount === 1 || armedCount === 1;
 			const doubleSynergyFlag = abCount >= 1 && armedCount >= 1;
@@ -2121,6 +2154,11 @@ KC3改 Ship Object
 			chihaTankAdditive = chihaCount ? 28 : 0;
 			chihaTankKaiModifier = chihaKaiCount ? 1.5 : 1;
 			chihaTankKaiAdditive = chihaKaiCount ? 33 : 0;
+			// https://bbs.nga.cn/read.php?tid=39595977
+			t4TankVarModifier = t4Count + t4KaiCount ? 1.2 : 1;
+			t4TankVarAdditive = t4Count + t4KaiCount ? 42 : 0;
+			t4TankKaiModifier = t4KaiCount ? 1.1 : 1;
+			t4TankKaiAdditive = t4KaiCount ? 28 : 0;
 			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -2234,6 +2272,8 @@ KC3改 Ship Object
 				gunTankModifier,
 				chihaTankModifier,
 				chihaTankKaiModifier,
+				t4TankVarModifier,
+				t4TankKaiModifier,
 				synergyModifier,
 			},
 			additives: {
@@ -2244,6 +2284,8 @@ KC3改 Ship Object
 				gunTankAdditive,
 				chihaTankAdditive,
 				chihaTankKaiAdditive,
+				t4TankVarAdditive,
+				t4TankKaiAdditive,
 				synergyAdditive,
 			}
 		};
@@ -2400,7 +2442,7 @@ KC3改 Ship Object
 		}
 		
 		// Apply modifiers, flooring unknown, anti-land modifiers get in first
-		let result = (((((((((basicPower
+		let result = (((((((((((basicPower
 			* mulBonus("stypeModifier")   + addBonus("stypeAdditive"))
 			* mulBonus("generalModifier"))
 			* mulBonus("spTankModifier")  + addBonus("spTankAdditive"))
@@ -2408,6 +2450,8 @@ KC3改 Ship Object
 			* mulBonus("gunTankModifier") + addBonus("gunTankAdditive"))
 			* mulBonus("chihaTankModifier")    + addBonus("chihaTankAdditive"))
 			* mulBonus("chihaTankKaiModifier") + addBonus("chihaTankKaiAdditive"))
+			* mulBonus("t4TankVarModifier") + addBonus("t4TankVarAdditive"))
+			* mulBonus("t4TankKaiModifier") + addBonus("t4TankKaiAdditive"))
 			* mulBonus("synergyModifier") + addBonus("synergyAdditive"))
 			+ addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
@@ -3444,7 +3488,7 @@ KC3改 Ship Object
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
 	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
-	 * Trigger-able in Striking Force, not in Combined Fleet? (too few samples to certain)
+	 * Trigger-able in Striking Force, not in Combined Fleet? (no sample to certain)
 	 *
 	 * @return API ID (300~302) if this ship can do special cut-in attack, otherwise false.
 	 */
@@ -3454,12 +3498,12 @@ KC3改 Ship Object
 		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha() && this.level >= 30) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3) {
-				const isEchelonOrLineAbreast = [4, 5, 11, 12].includes(
+				const isEchelonOrLineAbreast = [4, 5/*, 11, 12*/].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					ship2nd = fleetObj.ship(1), ship3rd = fleetObj.ship(2),
-					// 2nd and 3rd ship are SS(V) at least
+					// 2nd and 3rd ship are SS(V) at least, comfirmed any retreated fails triggering
 					validMinCombinedShips = [ship2nd, ship3rd].every(ship => !ship.isAbsent() && ship.isSubmarine()),
 					// have useitem Submarine Supply Materials remaining
 					hasSubSupply = PlayerManager.consumables.submarineSupplyMaterial > 0;
