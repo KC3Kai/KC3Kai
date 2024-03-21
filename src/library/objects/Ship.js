@@ -2676,6 +2676,10 @@ KC3改 Ship Object
 			const abDaihatsuCount = this.countEquipment([408, 409]);
 			const abDaihatsuBonus = abDaihatsuCount > 0 ? 1.2 * (abDaihatsuCount > 1 ? 1.1 : 1) : 1;
 			antiPtImpModifier *= abDaihatsuBonus;
+			// https://twitter.com/yukicacoon/status/1770007636160946603
+			const t4tankCount = this.countEquipment([525, 526]);
+			const t4tankBonus = t4tankCount > 1 ? 1.1 : 1;
+			antiPtImpModifier *= t4tankBonus;
 		}
 		// Barrage Balloon day shelling / opening airstrike modifier for whole fleet
 		let balloonModifier = 1;
