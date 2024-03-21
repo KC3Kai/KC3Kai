@@ -224,6 +224,7 @@
 		};
 
 		// Common sortie toggling method
+		const slideAnimTimeMs = 60;
 		this.toggleSortie = function(origin, globalSwitch) {
 			var targetName = $(origin).data("target");
 			var targetParent = globalSwitch ? $(".tab_"+tabCode+" .sortie_box") : $(origin).parent().parent().parent();
@@ -237,7 +238,7 @@
 					targetParent.find("[data-target=" + targetName + "]").removeClass("active");
 				}
 				// Hide the target box
-				targetBox.slideUp(undefined,function(){
+				targetBox.slideUp(slideAnimTimeMs, function(){
 					if(expandedQualif && expandedBefore < 1)
 						targetParent.addClass("expanded");
 				});
@@ -247,7 +248,7 @@
 					targetParent.find("[data-target=" + targetName + "]").addClass("active");
 				}
 				// Show the target box
-				targetBox.slideDown(undefined,function(){
+				targetBox.slideDown(slideAnimTimeMs, function(){
 					if(expandedQualif && expandedBefore < 1)
 						targetParent.addClass("expanded");
 				});
@@ -1335,15 +1336,15 @@
 							
 							// Smoke Screen indicator, daytime only for now
 							if(thisNode.smokeType > 0){
-								$(".node_smoke img", nodeBox).attr("src", KC3Meta.itemIcon(54));
-								$(".node_smoke", nodeBox).show().attr("title", KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType));
+								$(".node_smoke", nodeBox).show()
+									.text(thisNode.smokeType)
+									.attr("title", KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType));
 							} else {
 								$(".node_smoke", nodeBox).hide();
 							}
 							
 							// Barrage Balloon indicator, daytime only for now
 							if(!!battle.data.api_balloon_cell){
-								$(".node_balloon img", nodeBox).attr("src", KC3Meta.itemIcon(55));
 								const fleetStates = battle.fleetStates || [];
 								// count equipped gears from node battle data, even sunk or retreated
 								const friendBalloons = KC3Calc.countEnemyFleetBalloonShips((fleetStates[0] || {}).equip, (fleetStates[1] || {}).equip);

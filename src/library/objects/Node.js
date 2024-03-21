@@ -1380,9 +1380,10 @@ Used by SortieManager
 			KC3SortieManager.setSlotitemConsumed(isAnyDameconConsumed);
 			
 			// Consumed 'Submarine Supply Materials' if Sub Fleet Special Cutin triggered
+			// only 1 material per battle, even triggered for both day and night
 			if(Array.isArray(this.sortieSpecialSubFleetDayNight) && PlayerManager.consumables.submarineSupplyMaterial) {
 				const matsHeld = PlayerManager.consumables.submarineSupplyMaterial;
-				const matsUsed = this.sortieSpecialSubFleetDayNight.sumValues();
+				const matsUsed = this.sortieSpecialSubFleetDayNight.some(v => !!v) & 1;
 				console.info("SubFleetCI affected submarineSupplyMaterial", matsHeld, -matsUsed);
 				PlayerManager.consumables.submarineSupplyMaterial = Math.max(0, matsHeld - matsUsed);
 				PlayerManager.setConsumables();

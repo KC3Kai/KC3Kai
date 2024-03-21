@@ -394,6 +394,7 @@ Contains summary information about a fleet and its ships
 		var normalCount = 0;
 		var t89Count = 0;
 		var t2Count = 0;
+		var t4baseCount = 0, t4kaiCount = 0;
 		var tokuCount = 0;
 		var abCount = 0;
 		var armedCount = 0;
@@ -417,9 +418,15 @@ Contains summary information about a fleet and its ships
 						addImprove(gearObj.stars);
 					break;
 					case 167: // T2 tank
-					case 525: // T4 tank?
-					case 526: // T4 tank kai?
 						t2Count += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 525: // T4 tank
+						t4baseCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 526: // T4 tank kai
+						t4kaiCount += 1;
 						addImprove(gearObj.stars);
 					break;
 					case 193: // Toku landing craft
@@ -444,7 +451,6 @@ Contains summary information about a fleet and its ships
 					break;
 					case 449: // Toku DLC + Type 1 Gun Tank
 						tokuHoni1Count += 1;
-						// improvement unknown
 						addImprove(gearObj.stars);
 					// [494] Toku DLC + Chi-Ha not counted
 					// [495] Toku DLC + Chi-Ha Kai not counted?
@@ -453,9 +459,10 @@ Contains summary information about a fleet and its ships
 			});
 		});
 		// without cap
-		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
+		const basicBonus= 0.05 * (normalCount + tokuCount + t4kaiCount + bonusShipCount)
 						+ 0.02 * (t89Count + abCount + panzerCount + tokuHoni1Count)
 						+ 0.03 * armedCount
+						+ 0.04 * t4baseCount
 						+ 0.01 * t2Count;
 		// cap at 20%
 		// "B1" in the formula (see comment link of this function)
@@ -466,7 +473,8 @@ Contains summary information about a fleet and its ships
 			[0.054, 0.056, 0.058, 0.059][normalCount] || 0.06 :
 			[0.050, 0.050, 0.052, 0.054][normalCount] || 0.054;
 		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
-		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount + panzerCount + tokuHoni1Count;
+		const landingCraftCount = [normalCount, t89Count, t2Count, t4baseCount, t4kaiCount, tokuCount,
+			abCount, armedCount, panzerCount, tokuHoni1Count].sumValues();
 		// "Bstar" in the formula
 		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
@@ -1631,7 +1639,7 @@ Contains summary information about a fleet and its ships
 
 	/**
 	 * Estimate final trigger chance of Smoke Generator(s) in fleet.
-	 * Possibly multi-rolling for more than 1 smoke. Either for moke level rolling.
+	 * Possibly multi-rolling for more than 1 smoke. Either for smoke level rolling.
 	 * @see inferred formula: https://twitter.com/CC_jabberwock/status/1739241607659151846
 	 */
 	KC3Fleet.prototype.estimateSmokeGeneratingRate = function() {
@@ -1639,7 +1647,9 @@ Contains summary information about a fleet and its ships
 		// for 1 smoke equipped only, lookup the smoke and get its stars.
 		const smokeStars = 0;
 		return 0.2 * Math.max(0, Math.qckInt("ceil", Math.sqrt(flagshipLuck) - 6 + 0.3 * smokeStars));
-		// for more and level, https://twitter.com/yukicacoon/status/1739481809375895854
+		// for more and level
+		// https://twitter.com/yukicacoon/status/1739480992090632669
+		// https://twitter.com/Xe_UCH/status/1767407602554855730
 	};
 
 	/**

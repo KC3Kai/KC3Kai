@@ -2070,7 +2070,9 @@ button, input, select, textarea {
 .tab_event .sortie_list .node_result_box.node_balloon.deployed,
 .tab_maps .sortie_list .node_result_box.node_smoke,
 .tab_maps .sortie_list .node_result_box.node_balloon.deployed {
-	background: #fc2;
+	color: #555;
+	text-shadow: #fff -1px 1px 1px;
+	background-color: #fc2;
 }
 
 /* ENCOUNTERS
