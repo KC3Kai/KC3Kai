@@ -34,13 +34,13 @@
 				surfaceRadar: 0,
 				// Array constants used instead for faster executions:
 				// surfaceRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_saku >= 5 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 517],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 517, 527, 528],
 				airRadar: 0,
 				// airRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_tyku >= 2 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 527, 528],
 				highAccuracyRadar: 0,
 				// highAccuracyRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_houm >= 8 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
-				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460, 517],
+				highAccuracyRadarIds: [31, 88, 124, 141, 142, 240, 307, 315, 411, 456, 460, 517, 528],
 				aaMachineGun: 0,
 				// aaMachineGunIds: KC3Master.find_slotitems(g => g.api_type[2] == 21 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301, 505],
@@ -5650,6 +5650,78 @@
 					// Perth Class
 					"96": {
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				},
+			},
+			// Type281 Radar
+			"527": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedKingdom": [
+						{
+							single: { "tyku": 2, "houk": 1, "saku": 2, "houm": 1 },
+						},
+						{
+							minStars: 2,
+							single: { "tyku": 1 },
+						},
+						{
+							minStars: 4,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							single: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Queen Elizabeth Class
+					"67": {
+						single: { "houg": 1 },
+					},
+					// Nelson Class
+					"88": {
+						single: { "houg": 2 },
+					},
+				},
+			},
+			// Type274 Fire Control Radar
+			"528": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedKingdom": [
+						{
+							multiple: { "houg": 1, "houk": 1, "houm": 2 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Town Class
+					"108": {
+						multiple: { "houg": 1, "houk": 1 },
 					},
 				},
 			},
