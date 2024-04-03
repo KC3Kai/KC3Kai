@@ -2308,6 +2308,8 @@ KC3改 Ship Object
 				// TP bonus added since 2021-08-04, even counted from seaplane bombers, so many weird facts:
 				// https://twitter.com/myteaGuard/status/1423010128349913092
 				// https://twitter.com/yukicacoon/status/1423133193096503296
+				// TP bonus even counted from seaplane recon (added to SPB?):
+				// https://twitter.com/twillwave1024/status/1772989848359493639
 				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
 				const visibleBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [gear.masterId]);
 				if(visibleBonus > 0 && !isJetAssaultPhase) {
