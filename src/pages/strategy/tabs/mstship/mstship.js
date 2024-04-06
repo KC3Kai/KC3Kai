@@ -393,7 +393,7 @@
 			const gearClickFunc = function(e) {
 				KC3StrategyTabs.gotoTab("mstgear", $(this).data("id") || $(this).attr("alt"));
 			};
-			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}"
+			$(".tab_mstship .shipInfo .name").text("[{0}] {1} {2}"
 				.format(ship_id,
 					KC3Master.isRegularShip(ship_id) ?
 						ConfigManager.info_ship_class_name ?
@@ -404,23 +404,28 @@
 							KC3Meta.abyssShipName(ship_id) :
 							KC3Meta.shipName(shipData.api_name),
 					KC3Master.isAbyssalShip(ship_id) ? "" : KC3Meta.shipReadingName(shipData.api_yomi)
-			) ).attr("title",
-				KC3Master.isRegularShip(ship_id) ?
-					ConfigManager.info_ship_class_name ?
-						$(".tab_mstship .shipInfo .name").text() : // Show whole text field
-						KC3Meta.ctypeName(shipData.api_ctype) : // Show ship class name
-					KC3Master.isAbyssalShip(ship_id) ?
-						KC3Meta.abyssShipName(ship_id) : // For Abyssal ships
-						KC3Meta.shipName(shipData.api_name) // For Seasonal CGs
+			)).attr("title",
+				KC3Master.isRegularShip(ship_id) ? [
+					// Show whole long text field
+					ConfigManager.info_ship_class_name ? $(".tab_mstship .shipInfo .name").text() : "",
+					// Show ship class ID and name
+					"[{0}] {1}".format(shipData.api_ctype, KC3Meta.ctypeName(shipData.api_ctype))
+				].filter(v => !!v).join("\n") :
+				KC3Master.isAbyssalShip(ship_id) ?
+					KC3Meta.abyssShipName(ship_id) : // For Abyssal ships
+					KC3Meta.shipName(shipData.api_name) // For Seasonal CGs
 			).lazyInitTooltip();
-			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
+			$(".tab_mstship .shipInfo .type")
+				.text(KC3Meta.shipTypeNameSp(ship_id, shipData.api_stype, shipData.api_tais > 0))
+				.attr("title", "[{0}] {1}".format(shipData.api_stype, KC3Meta.stype(shipData.api_stype)))
+				.lazyInitTooltip();
 			$(".tab_mstship .shipInfo .name_jp").text([
 				"No.{0}".format(shipData.api_sortno),
 				KC3Master.isRegularShip(ship_id) ? KC3Meta.ctype(shipData.api_ctype) : "",
 				shipData.api_name,
 				"'{0}'".format(wanakana.toRomaji(shipData.api_yomi.replace(/^-$/, ""))),
 			].join(" ")).toggle(KC3Master.isRegularShip(ship_id));
-			$(".tab_mstship .shipInfo .json").text( '"{0}":{1}'.format(ship_id, JSON.stringify(shipData)) );
+			$(".tab_mstship .shipInfo .json").text('"{0}":{1}'.format(ship_id, JSON.stringify(shipData)));
 			
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
