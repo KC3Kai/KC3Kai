@@ -360,12 +360,16 @@ Saves and loads significant data for future use
 		 * @return different from functions above, returns a slotitem ID list, not type2 ID list
 		 * @see main.js#SlotitemModelHolder.prototype.getExtraEquipShipData - reorganized structure since 2023-07-07, supports ship mst id, ctype, stype matching.
 		 */
-		equip_exslot_ship :function(shipId, matchType){
+		equip_exslot_ship :function(shipId, matchType, equipTypeIds){
 			if(!this.available) return [];
 			const exslotShips = this._raw.equip_exslot_ship || {};
 			const shipMst = this.ship(shipId) || {};
 			// find and remap ship specified exslot items
 			return Object.keys(exslotShips).filter(gearId => {
+				if(Array.isArray(equipTypeIds)) {
+					const gearMst = this.slotitem(gearId);
+					return equipTypeIds.includes(gearMst.api_type[matchType === "type3" ? 3 : 2]);
+				}
 				const keyDefs = exslotShips[gearId];
 				const shipIds = Object.keys(keyDefs.api_ship_ids || {}),
 					ctypes = Object.keys(keyDefs.api_ctypes || {}),

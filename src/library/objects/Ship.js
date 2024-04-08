@@ -2829,13 +2829,23 @@ KC3改 Ship Object
 		return powerBonus;
 	};
 
-	// check if specified equipment (or equip type) can be equipped on this ship.
-	// equipment defined by ID in master data (like 8cm HA gun in exslot) cannot be hit by type.
+	/**
+	 * check if specified equipment (or equip type) can be equipped on this ship.
+	 * equipment defined by ID in master data (like 8cm HA gun in exslot) cannot be hit by type.
+	 * @return 0~3, false if exception
+	 */
 	KC3Ship.prototype.canEquip = function(gearType2, gearMstId, gearStars) {
 		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2, gearStars);
 	};
 
-	// check if this ship is capable of equipping Amphibious Tank (Ka-Mi tank only for now, no landing craft variants)
+	// check if any specified equipment ID in list can be equipped on this ship's exslot.
+	// min stars condition is ignored
+	KC3Ship.prototype.exslotCanEquip = function(gearMstIdList) {
+		const exslotEquippableIds = KC3Master.equip_exslot_ship(this.masterId).filter(gid => KC3Master.equip_on_ship(this.masterId, gid) & 2);
+		return Array.isArray(gearMstIdList) ? gearMstIdList.some(gid => exslotEquippableIds.includes(gid)) : false;
+	};
+
+	// check if this ship is capable of equipping Amphibious Tank
 	KC3Ship.prototype.canEquipTank = function() {
 		if(this.isDummy()) { return false; }
 		return KC3Master.equip_type(this.master().api_stype, this.masterId).includes(46);
@@ -2880,7 +2890,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship is capable of equipping (Striking Force) Fleet Command Facility.
+	 * @return true if this ship is capable of equipping any type of Fleet Command Facility.
 	 */
 	KC3Ship.prototype.canEquipFCF = function() {
 		if(this.isDummy()) { return false; }
