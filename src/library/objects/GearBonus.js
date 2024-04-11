@@ -7672,8 +7672,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shiratsuyu Kai+, Murasame Kai+
-						ids: [242, 497, 244, 498],
+						// Shiratsuyu Kai+, Murasame Kai+, Harusame K2
+						ids: [242, 497, 244, 498, 975],
 						multiple: { "houk": 1 },
 					},
 					{
@@ -7755,28 +7755,13 @@
 					// Shiratsuyu Class
 					"23": "18",
 					// Kagerou Class
-					"30": [
-						{
-							multiple: { "houg": 2 },
-							synergy: {
-								flags: [ "surfaceRadar" ],
-								single: { "houg": 2, "raig": 3, "houk": 1, "houm": 3 },
-							},
+					"30": {
+						multiple: { "houg": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "raig": 3, "houk": 1, "houm": 3 },
 						},
-						{
-							// Kagerou Class K2
-							remodel: 2,
-							excludes: [556, 557, 558, 559, 648],
-							single: { "houg": 1, "houm": 2 },
-						},
-						{
-							// Kagerou Class K2
-							remodel: 2,
-							excludes: [556, 557, 558, 559, 648],
-							single: { "houg": 2 },
-							minCount: 2,
-						},
-					],
+					},
 				},
 				byShip: [
 					{
@@ -7790,33 +7775,233 @@
 						multiple: { "houg": 3, "houk": 2, "houm": 3 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2+
-						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
-						multiple: { "houg": 1, "houm": 2 },
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						distinctGears: [470, 529],
+						single: { "houg": 1, "houm": 2 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2+
-						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
-						multiple: { "houg": 2 },
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						distinctGears: [470, 529],
 						minCount: 2,
+						single: { "houg": 2 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2+
-						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
 						minStars: 5,
 						multiple: { "houm": 1 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2+
-						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
 						minStars: 8,
 						multiple: { "houg": 1 },
 					},
 					{
-						// Kagerou Class K2, Tan Yang, Shigure K2+
-						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961],
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
 						minStars: 10,
 						multiple: { "houm": 1 },
+					},
+				],
+			},
+			// 12.7cm Twin Gun Mount Model C Kai 3 H
+			"529": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Asashio Class
+					"18": {
+						multiple: { "houg": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "raig": 3, "houk": 1, "houm": 1 },
+						},
+					},
+					// Shiratsuyu Class
+					"23": "18",
+					// Kagerou Class
+					"30": {
+						multiple: { "houg": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "raig": 3, "houk": 1, "houm": 3 },
+						},
+					},
+				},
+				byShip: [
+					{
+						// Yukikaze, Shigure, Isokaze, extra +2 ev
+						origins: [20, 43, 167],
+						multiple: { "houk": 2 },
+					},
+					{
+						// Yuudachi K2, Shigure K2, Samidare K, Harusame, Shiratsuyu K2
+						ids: [144, 145, 246, 405, 497],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						// Yuudachi K2, Shigure K2, Samidare K, Harusame, Shiratsuyu K2
+						ids: [144, 145, 246, 405, 497],
+						minCount: 2,
+						single: { "houg": 1 },
+					},
+					{
+						// Yuudachi K2, Shigure K2, Samidare K, Harusame, Shiratsuyu K2
+						ids: [144, 145, 246, 405, 497],
+						minCount: 3,
+						single: { "houg": 2 },
+					},
+					{
+						// Yuudachi K2, Shigure K2, Samidare K, Harusame, Shiratsuyu K2
+						ids: [144, 145, 246, 405, 497],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Yuudachi K2, Shigure K2, Samidare K, Harusame, Shiratsuyu K2
+						ids: [144, 145, 246, 405, 497],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Harusame K, Murasame K2, Shigure K3
+						ids: [323, 498, 961],
+						multiple: { "houg": 2, "tyku": 2, "houk": 1, "houm": 1 },
+					},
+					{
+						// Harusame K, Murasame K2, Shigure K3
+						ids: [323, 498, 961],
+						minCount: 2,
+						single: { "houg": 2 },
+					},
+					{
+						// Harusame K, Murasame K2, Shigure K3
+						ids: [323, 498, 961],
+						minCount: 3,
+						single: { "houg": 2 },
+					},
+					{
+						// Harusame K, Murasame K2, Shigure K3
+						ids: [323, 498, 961],
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Harusame K, Murasame K2, Shigure K3
+						ids: [323, 498, 961],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Harusame K, Murasame K2, Shigure K3
+						ids: [323, 498, 961],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						multiple: { "houg": 3, "tyku": 3, "houk": 2, "houm": 2 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						minCount: 2,
+						single: { "houg": 3 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						minCount: 3,
+						single: { "houg": 3 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						minStars: 6,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Harusame K3
+						ids: [975],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Shigure K3
+						ids: [961],
+						multiple: { "houg": 3, "houk": 2, "houm": 3 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						distinctGears: [470, 529],
+						single: { "houg": 1, "houm": 2 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						distinctGears: [470, 529],
+						minCount: 2,
+						single: { "houg": 2 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						minStars: 5,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kagerou Class K2, Tan Yang, Shigure K2+, Amatsukaze K2
+						ids: [566, 567, 568, 656, 670, 915, 651, 145, 961, 951],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					// For all ships can equip it
+					{
+						// To avoid error for library
+						single: {},
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+					{
+						minCount: 2,
+						single: {},
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2 },
+						},
+					},
+					{
+						minCount: 3,
+						single: {},
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2 },
+						},
 					},
 				],
 			},
@@ -8229,8 +8414,8 @@
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
-						// Murasame K2
-						ids: [498],
+						// Murasame K2, Harusame K2
+						ids: [498, 975],
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					{
@@ -8577,8 +8762,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Ushio K2, Shigure K2+, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+, Haruna K2B+
-						ids: [407,   145, 961,    419,             151,       541,       911, 916,   593, 954],
+						// Ushio K2, Shigure K2+, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+, Haruna K2B+, Harusame K2
+						ids: [407,   145, 961,    419,             151,       541,       911, 916,   593, 954,    975],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
@@ -8663,8 +8848,8 @@
 						single: { "houg": 2, "tyku": 2, "houk": 4, "houm": 3 },
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai, Amatsukaze K2
-						ids: [145, 497, 656, 557, 558, 951],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai, Amatsukaze K2, Harusame K2
+						ids: [145, 497, 656, 557, 558, 951, 975],
 						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
 					},
 					{
@@ -8733,8 +8918,8 @@
 						single: { "houg": 2, "houk": 3, "houm": 1, "saku": 2 },
 					},
 					{
-						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2, Kiyoshimo K2
-						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955],
+						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2, Kiyoshimo K2, Harusame K2
+						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955, 975],
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
 					},
 					{
@@ -8994,8 +9179,8 @@
 						},
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Yahagi K2B, Amatsukaze K2
-						ids: [145, 497, 656, 668, 951],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Yahagi K2B, Amatsukaze K2, Harusame K2
+						ids: [145, 497, 656, 668, 951, 975],
 						single: { "houg": 2, "tyku": 3, "houk": 4 },
 					},
 					{
@@ -9014,16 +9199,16 @@
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Hatsushimo K2, Amatsukaze K2
-						ids: [145, 497, 656, 419, 951],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Hatsushimo K2, Amatsukaze K2, Harusame K2
+						ids: [145, 497, 656, 419, 951, 975],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "tyku": 2, "houk": 2 },
 						},
 					},
 					{
-						// Shigure K3, Yukikaze K2, Amatsukaze K2
-						ids: [961, 656, 951],
+						// Shigure K3, Yukikaze K2, Amatsukaze K2, Harusame K2
+						ids: [961, 656, 951, 975],
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 1, "houk": 1 },

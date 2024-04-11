@@ -1222,6 +1222,9 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// Harusame K2...
+	// 47, 48
+
 	// return a list of possible AACI APIs based on ship and her equipment
 	// - returns a list of **strings**, not numbers
 	//   (since object keys has to be strings, and AACITable[key] accepts keys
