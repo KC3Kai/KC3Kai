@@ -510,6 +510,7 @@
 				const isShipImageForPort = [951].includes(ship_id),
 				// from `main.js/isShipImageForPowerUp`
 					isShipImageForPowerUp = [951].includes(ship_id);
+				// Also has special port animation under `full_animation(_dmg)`
 				if(isShipImageForPort) availableTypes.push('port', 'port_dmg');
 				if(isShipImageForPowerUp) availableTypes.push('powerup', 'powerup_dmg');
 				// Special cut-in (Nelson Touch, Nagato/Mutsu, Colorado Cutin...) special type
