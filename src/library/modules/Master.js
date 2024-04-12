@@ -360,12 +360,16 @@ Saves and loads significant data for future use
 		 * @return different from functions above, returns a slotitem ID list, not type2 ID list
 		 * @see main.js#SlotitemModelHolder.prototype.getExtraEquipShipData - reorganized structure since 2023-07-07, supports ship mst id, ctype, stype matching.
 		 */
-		equip_exslot_ship :function(shipId, matchType){
+		equip_exslot_ship :function(shipId, matchType, equipTypeIds){
 			if(!this.available) return [];
 			const exslotShips = this._raw.equip_exslot_ship || {};
 			const shipMst = this.ship(shipId) || {};
 			// find and remap ship specified exslot items
 			return Object.keys(exslotShips).filter(gearId => {
+				if(Array.isArray(equipTypeIds)) {
+					const gearMst = this.slotitem(gearId);
+					return equipTypeIds.includes(gearMst.api_type[matchType === "type3" ? 3 : 2]);
+				}
 				const keyDefs = exslotShips[gearId];
 				const shipIds = Object.keys(keyDefs.api_ship_ids || {}),
 					ctypes = Object.keys(keyDefs.api_ctypes || {}),
@@ -422,32 +426,22 @@ Saves and loads significant data for future use
 
 		/**
 		 * Special cases hard-coded at client-side:
-		 *   * [553/554] Ise-class Kai Ni can equip main gun on first 2 slots only,
+		 *   * [553/554] Ise-class Kai Ni can equip main gun in first 2 slots only,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *     * see `main.js#RemodelUtil.excludeEquipList`
-		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
+		 *     * see `main.js#SlotUtil.excludeEquipList`
+		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] in slot 4, can only equip [12, 21, 43] in slot 5,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *   * [662/663/668] Noshiro/Yahagi Kai Ni+ can NOT equip torpedo [5] in slot 4,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,
-		 *     either hard-coded the exception conndition in following codes.
-		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem` and `#excludeEquipList`
-		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
-		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
+		 *     hard-coded the exception connditions, for following items either.
+		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem`
 		 *   * [166] AkitsuMaru Kai can equip aviation personnel [402] Arctic Gear & Deck Personnel only,
-		 *     the same hard-code method with Richelieu's one
 		 *   * [945/727] No.101 Transport Ship can only equip [229, 379, 382] in small guns,
 		 *     [727] No.101 Kai can only equip [66, 220] in secondary guns.
-		 *     the same hard-code method with above, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
-		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem` and `#excludeEquipList`
-		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
-		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
-		 *     * see `main.js#PresetDeployLayer.prototype._validate`
-		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] on slot 4, can only equip [12, 21, 43] on slot 5,
-		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *     * see `main.js#RemodelUtil.excludeEquipList`
-		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
-		 *   * [662/663/668] Noshiro/Yahagi Kai Ni+ can NOT equip torpedo [5] on slot 4,
-		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *     * see `main.js#RemodelUtil.excludeEquipList`
-		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
+		 *     the same hard-code method, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
+		 *   * [460/352/699] Hayasui/Souya AGS can only equip [524] in secondary guns,
+		 *   * [699] Souya AGS can only equip [48] in small guns.
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
@@ -488,35 +482,30 @@ Saves and loads significant data for future use
 					exslotMinStars = exslotCapableInfo.minStars;
 				}
 			}
+			const excludeTypedGearsOnShips = (type2, exceptGearIds, shipIds) => {
+				if(type2Id === type2 && !exceptGearIds.includes(gearId)) {
+					shipIds.forEach(shipId => {
+						const shipIdPos = capableShips.indexOf(shipId);
+						if(shipIdPos >= 0) capableShips.splice(shipIdPos, 1);
+						const shipMst = this.ship(shipId), stype = shipMst.api_stype;
+						if(capableStypes.includes(stype) && !incapableShips.includes(shipId))
+							incapableShips.push(shipId);
+					});
+				}
+			};
+			// from `#isMstEquipShipExceptionSlotItem`
 			// Remove Richelieu-class Kai from Seaplane Bomber type list except Late 298B
-			if(type2Id === 11 && gearId !== 194) {
-				const richelieuKaiPos = capableShips.indexOf(392);
-				if(richelieuKaiPos >= 0) capableShips.splice(richelieuKaiPos, 1);
-				const jeanBartKaiPos = capableShips.indexOf(724);
-				if(jeanBartKaiPos >= 0) capableShips.splice(jeanBartKaiPos, 1);
-			}
+			excludeTypedGearsOnShips(11, [194], [392, 724]);
 			// Remove AkitsuMaru Kai from Aviation Personnel type list except Arctic Gear & Deck Personnel
-			if(type2Id === 35 && gearId !== 402) {
-				const akitsumaruKaiPos = capableShips.indexOf(166);
-				if(akitsumaruKaiPos >= 0) capableShips.splice(akitsumaruKaiPos, 1);
-			}
+			excludeTypedGearsOnShips(35, [402], [166]);
 			// Remove No.101 Transport Ship all remodels from Small Guns type list except 3 specific items
-			// Either added to incapable ships because LHA stype can equip but not excluded by master data
-			if(type2Id === 1 && ![229, 379, 382].includes(gearId)) {
-				const no101BasePos = capableShips.indexOf(945);
-				if(no101BasePos >= 0) capableShips.splice(no101BasePos, 1);
-				if(!incapableShips.includes(945)) incapableShips.push(945);
-				const no101KaiPos = capableShips.indexOf(727);
-				if(no101KaiPos >= 0) capableShips.splice(no101KaiPos, 1);
-				if(!incapableShips.includes(727)) incapableShips.push(727);
-			}
+			excludeTypedGearsOnShips(1, [229, 379, 382], [945, 727]);
 			// Remove No.101 Transport Ship Kai from Secondary Guns type list except 2 specific items
-			// Either added to incapable ships because LHA stype can equip but not excluded by master data
-			if(type2Id === 4 && ![66, 220].includes(gearId)) {
-				const no101KaiPos = capableShips.indexOf(727);
-				if(no101KaiPos >= 0) capableShips.splice(no101KaiPos, 1);
-				if(!incapableShips.includes(727)) incapableShips.push(727);
-			}
+			excludeTypedGearsOnShips(4, [66, 220], [727]);
+			// Remove Hayasui all & Souya AGS from Secondary Guns type list except 12cm Single HA + 25mm AAMG
+			excludeTypedGearsOnShips(4, [524], [460, 352, 699]);
+			// Remove Souya AGS from Smal Guns type list except 12cm Single HA
+			excludeTypedGearsOnShips(1, [48], [699]);
 			return {
 				stypes: capableStypes,
 				includes: capableShips,
@@ -532,14 +521,14 @@ Saves and loads significant data for future use
 		 * @deprecated since 2023-07-07 since they are no longer hard-coded, defined in #equip_exslot_ship.
 		 * @param gearMstId - slotitem to be checked, all slotitem ids returned if omitted
 		 * @param shipTypeId - stype to be checked, allowed stype ids (if any) returned if omitted
-		 * @return the array contains slotitem master ids or stype ids can be equipped on exslot by capable ships,
+		 * @return the array contains slotitem master ids or stype ids can be equipped in exslot by capable ships,
 		 *         which not indicated by API data, but hard-coded in client instead.
 		 * @see `#createSetListEx`/`#createSetListFromMstId`/`#createUnsetListFromMstId` in main.js
 		 */
 		equip_exslot_ids :function(gearMstId, shipTypeId) {
-			// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
-			// Submarine Stern Torpedo Launchers can be equipped on exslot, added since 2021-11-19
-			// Skilled Deck Personnel can be equipped on exslot for stype 7,11,18, added since 2022-08-26
+			// Improved Kanhon Type Turbine can be always equipped in exslot of capable ship types
+			// Submarine Stern Torpedo Launchers can be equipped in exslot, added since 2021-11-19
+			// Skilled Deck Personnel can be equipped in exslot for stype 7,11,18, added since 2022-08-26
 			const allGearIds = [33, 442, 443, 477, 478];
 			const stypeGearIds1 = [477, 478], stypes1 = [7, 11, 18];
 			if(!gearMstId) return allGearIds;
@@ -555,7 +544,7 @@ Saves and loads significant data for future use
 		 * @param {number} gearId - the master ID of a gear to be checked. if omitted, will be checked by equip type.
 		 * @param {number} gearType2 - the equip type ID of api_type[2] value, optional, but cannot be omitted at the same time with gearId.
 		 * @param {number} gearStars - the current improved level to be equipped, optional, assumed to be equippable for library display if omitted.
-		 * @return 1 indicates can be equipped on (some) regular slots, 2: ex-slot, 3: both, 0: cannot equip. false on exception.
+		 * @return 1 indicates can be equipped in (some) regular slots, 2: ex-slot, 3: both, 0: cannot equip. false on exception.
 		 * @see #equip_on
 		 */
 		equip_on_ship :function(shipId, gearId, gearType2, gearStars) {
@@ -573,17 +562,17 @@ Saves and loads significant data for future use
 				if(equipOn.stypes.includes(stype)) result |= 1;
 				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
 			}
-			// Equippable on ex-slot has to be fulfill with regular slots equippable either
-			// No equipment can be equipped on ex-slot only without regular slots so far, so result always 3 if ex-slot true
-			if(result) {
-				if(equipOn.exslot) result |= 2;
-				// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
-				if(equipOn.exslotMinStars > 0) {
-					if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
-				}
-				if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
-				if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
+			// General equip type in exslot has to be either included by regular slot stype equip type,
+			// to exclude gears like [33] Improved Kanhon Type Turbine
+			// since 2024-03-03, [524] Sec.Gun can be equipped in ex-slot for some AO without regular slots capability
+			//   and [524] can be equipped in ex-slot for LHA No.101 even banned specially by regular slots
+			if(equipOn.stypes.includes(stype) && equipOn.exslot) result |= 2;
+			// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
+			if(equipOn.exslotMinStars > 0) {
+				if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
 			}
+			if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
+			if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
 			return result;
 		},
 

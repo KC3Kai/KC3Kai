@@ -169,7 +169,7 @@
 		this.showMorale();
 		
 		// Thin bars below the ship box
-		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");		
+		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");
 		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
 		var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);

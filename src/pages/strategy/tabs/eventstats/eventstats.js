@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 
+	const handlableWorld = 40;
+
 	KC3StrategyTabs.eventstats = new KC3StrategyTab("eventstats");
 
 	KC3StrategyTabs.eventstats.definition = {
@@ -39,7 +41,7 @@
 			this.maps = {};
 			Object.keys(maps)
 				 // Modern battle API from Fall 17 (World 40) onwards
-				.filter(id => Number(id.slice(1, -1)) >= 10)
+				.filter(id => KC3Meta.isEventWorld(id.slice(1, -1)))
 				.sort((id1, id2) => {
 					const m1 = id1.slice(-1), m2 = id2.slice(-1);
 					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
@@ -96,7 +98,7 @@
 		},
 
 		loadEventStatistics: function() {
-			if (this.world < 10) { return; }
+			if (!KC3Meta.isEventWorld(this.world)) { return; }
 			$(".loading").show();
 			$(".table5").hide();
 			$(".lbcons").hide();
@@ -220,7 +222,7 @@
 
 					if (battle.boss) { this.stats.bossCount[mapnum]++; }
 					// Battle API changed from Fall 2017 onwards, skip battle simulation
-					if (this.world < 40) { return; }
+					if (this.world < handlableWorld) { return; }
 
 					// Battle analysis
 					const checkForLastHit = battle.boss && isClearSortie;
@@ -373,13 +375,18 @@
 				"shipKills": "Ship Kills",
 				"taihaMagnets": "Taiha Magnets",
 			};
-			if (this.world > 39) {
+			if (this.world >= handlableWorld) {
 				Object.keys(map).forEach(key => {
-					let str = "<tr>" + "<td>" + map[key] + "</td>";
+					let str = "<tr><td>" + map[key] + "</td>";
 					const vals = this.stats[key];
 					const topFive = getTopFive(vals);
 					for (let i = 0; i < Math.min(5, topFive.length); i++) {
-						str += "<td><img class='shipiconimg' src='" + KC3Meta.shipIcon(topFive[i].key) + "'></img><span>" + topFive[i].value + "</span></td>";
+						str += '<td><img class="shipiconimg" src="'
+							+ KC3Meta.shipIcon(topFive[i].key)
+							+ '" title="'
+							+ KC3Meta.shipNameById(topFive[i].key)
+							+ '"></img>'
+							+ `<span>${topFive[i].value}</span></td>`;
 					}
 					str += "</tr>";
 					$(".table5").append(str);
@@ -443,7 +450,7 @@
 					$(".clear_attack", curBox).append(str);
 				}
 				//$(".boss_runs", curBox).text("Boss Reaches: " + this.stats.bossCount[i]);
-				if (this.world < 39) { // eventmap not saved yet
+				if (this.world < handlableWorld) { // eventmap not saved yet
 					$(".total_runs", curBox).append("Total Runs: " + `${this.stats.sortieCount[i]}`);
 				} else {
 					$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`

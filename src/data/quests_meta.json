@@ -939,6 +939,7 @@
 		"hash": 1461662486
 	},
 	"350": {
+		"unlock": [371],
 		"tracking": [
 			[0, 3]
 		],
@@ -1022,6 +1023,13 @@
 	"370": {
 		"hash": 591302489,
 		"rewardConsumables": [0, 3, 3, 2]
+	},
+	"371": {
+		"unlock": [1008],
+		"tracking": [
+			[0, 4]
+		],
+		"rewardConsumables": [0, 2, 7, 2]
 	},
 	"401": {},
 	"402": {
@@ -1750,7 +1758,9 @@
 	"807": {
 		"rewardConsumables": [0, 0, 0, 3]
 	},
-	"808": {},
+	"808": {
+		"unlock": [1006]
+	},
 	"809": {
 		"rewardConsumables": [0, 0, 0, 3]
 	},
@@ -2478,6 +2488,16 @@
 			[0, 1]
 		],
 		"rewardConsumables": [0, 4, 7, 2]
+	},
+	"1006": {
+		"unlock": [1007, 371],
+		"rewardConsumables": [0, 2, 2, 0]
+	},
+	"1007": {
+		"rewardConsumables": [0, 0, 15, 5]
+	},
+	"1008": {
+		"rewardConsumables": [0, 0, 20, 7]
 	},
 	"1101": {
 		"unlock": [1102, 1103],

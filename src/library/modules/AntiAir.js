@@ -136,6 +136,12 @@ AntiAir: anti-air related calculations
 	var isAARadar = predAllOf(isRadar, function(mst) {
 		return mst.api_tyku >= 2;
 	});
+	// kind 47 needs AA stat >= 4
+	function isAARadarWithAtLeast(aa) {
+		return predAllOf(isRadar, function(mst) {
+			return mst.api_tyku >= aa;
+		});
+	}
 
 	// AAFD: check by category (36)
 	var isAAFD = categoryEq(36);
@@ -229,6 +235,11 @@ AntiAir: anti-air related calculations
 
 	// 35.6cm Twin Gun Mount Kai 3 (Dazzle Camouflage) or Kai 4
 	var is356mmTwinGunMountKai3Plus = masterIdIn([502, 503]);
+
+	// 12.7cm Twin Gun Mount Model C Kai 3 H
+	var is127mmTwinGunMountCK3H = masterIdEq(529);
+	// 25mm Anti-aircraft Autocannon Mount & Machine Guns or AA >= 4 AirRadar
+	var isHighAirRadarOr25mmAntiAirMachineGuns = predAnyOf(isAARadarWithAtLeast(4), masterIdEq(505));
 
 	// for equipment the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -556,10 +567,12 @@ AntiAir: anti-air related calculations
 		fletcherIcon = 596,
 		atlantaIcon = 597,
 		harunaK2BIcon = 593,
+		harusameK2Icon = 975,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
 		aaGunIcon = 15,
+		scMainGunIcon = 1,
 		lcMainGunIcon = 3,
 		type3ShellIcon = 12,
 		// Special combined icons for Build-in HA / CDMG / etc
@@ -571,7 +584,8 @@ AntiAir: anti-air related calculations
 		haMountKaiAmg = "16+15",    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
 		haMountKaiRadar = "16+11",  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37 / GFCS Mk.37 + next one
 		haMountCdIcon = "16+16",  // 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
-		rangefinderRadarIcon = "11+30";  // 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni variants
+		rangefinderRadarIcon = "11+30",  // 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni variants
+		airRadarOrAaGunIcon = "11+15"; // 25mm Anti-aircraft Autocannon Mount & Machine Guns + AirRadar
 
 	// Ships (types/classes) used to declare AACI type
 	var isNotSubmarine = predNot(stypeIdIn( [13 /* SS */, 14 /* SSV */] ));
@@ -600,6 +614,8 @@ AntiAir: anti-air related calculations
 	var isAtlantaClass = ctypeIdEq( 99 );
 	var isYuubariK2 = masterIdEq( 622 );
 	var isHarunaK2B = masterIdEq( harunaK2BIcon );
+	// Shiratsuyu-class K2+ with max AA stat >= 70
+	var isShiratsuyuClassK2 = masterIdIn([145, 497, 498, 961, 975]);
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -787,7 +803,7 @@ AntiAir: anti-air related calculations
 	);
 	// possible to trigger on Akizuki-class since 2023-05-26 for unknown reason
 	declareAACI(
-		9, 1, 2, 1.3, 40, 2750, // vita value
+		9, 1, 2, 1.3, 40, 2760, // vita value
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
 		predAllOf(isNotSubmarine, slotNumAtLeast(1)),
 		withEquipmentMsts(
@@ -886,7 +902,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		17, 2, 1, 1.25, 55, 2720, // rate 57?
+		17, 2, 1, 1.25, 55, 2730, // rate 57?
 		[kasumiK2BIcon, haMountIcon, aaGunIcon],
 		predAllOf(isKasumiK2B),
 		withEquipmentMsts(
@@ -898,7 +914,7 @@ AntiAir: anti-air related calculations
 
 	// Satsuki K2
 	declareAACI(
-		18, 2, 1, 1.2, 60, 2730, // rate 59?
+		18, 2, 1, 1.2, 60, 2740, // rate 59?
 		[satsukiK2Icon, cdmgIcon],
 		predAllOf(isSatsukiK2),
 		withEquipmentMsts(
@@ -942,7 +958,7 @@ AntiAir: anti-air related calculations
 
 	// Fumizuki K2
 	declareAACI(
-		22, 2, 1, 1.2, 60, 2740, // rate 65?
+		22, 2, 1, 1.2, 60, 2750, // rate 65?
 		[fumizukiK2Icon, cdmgIcon],
 		predAllOf(isFumizukiK2),
 		withEquipmentMsts(
@@ -952,7 +968,7 @@ AntiAir: anti-air related calculations
 
 	// UIT-25, I-504
 	declareAACI(
-		23, 1, 1, 1.05, 80, 2760, // fixed referred from abyssal resist: [1, 1]
+		23, 1, 1, 1.05, 80, 2770, // fixed referred from abyssal resist: [1, 1]
 		[uit25Icon, aaGunNotCdIcon],
 		predAnyOf(isUit25, isI504),
 		withEquipmentMsts(
@@ -1219,6 +1235,22 @@ AntiAir: anti-air related calculations
 				hasSome( is356mmTwinGunMountKai3Plus ),
 				hasSome( isAAGunCDMG ),
 				hasSome( isAARadar ))
+		)
+	);
+
+	// Harusame K2, Shiratsuyu K2, Murasame K2, Shigure K2+
+	declareAACI(
+		47, 2, 1, 1.3, 70, 2720,
+		[harusameK2Icon, scMainGunIcon, airRadarOrAaGunIcon],
+		predAnyOf(isShiratsuyuClassK2),
+		withEquipmentMsts(
+			predAnyOf(
+				predAllOf(
+					hasSome( is127mmTwinGunMountCK3H ),
+					hasSome( isHighAirRadarOr25mmAntiAirMachineGuns )),
+				predAllOf(
+					hasAtLeast( is127mmTwinGunMountCK3H, 2 ))
+			)
 		)
 	);
 

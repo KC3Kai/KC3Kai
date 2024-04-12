@@ -156,7 +156,15 @@ KC3改 Equipment Object
 				gearCount = gearInfo.starsDist.slice(bonusDef.minStars).sumValues();
 				if(!gearCount) { return; }
 			}
-			if(bonusDef.minCount && gearCount < bonusDef.minCount) { return; }
+			if(bonusDef.minCount) {
+				let reqMinCount = gearCount;
+				if(Array.isArray(bonusDef.distinctGears)) {
+					reqMinCount = bonusDef.distinctGears.reduce(
+						(acc, id) => (acc + (bonusGears[id] || {}).count || 0), 0
+					);
+				}
+				if(reqMinCount < bonusDef.minCount) { return; }
+			}
 			// Additive bonus actions
 			if(bonusDef.single) { total += bonusDef.single[apiName] || 0; }
 			if(bonusDef.multiple) {
