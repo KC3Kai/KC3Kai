@@ -860,6 +860,18 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(190)   // Hatsukaze any remodel
 						) >= 2;
 					},
+				"371": // Cy12 PvP with Harusame as flagship, 3 of Murasame, Yuudachi, Samidare, Shiratsuyu, Shigure
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShip(405, 0) && ( // Harusame flagship
+							fleet.countShip(44) + // Murasame any remodel
+							fleet.countShip(45) + // Yuudachi any remodel
+							fleet.countShip(46) + // Samidare any remodel
+							fleet.countShip(42) + // Shiratsuyu any remodel
+							fleet.countShip(43)   // Shigure any remodel
+						) >= 3;
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
