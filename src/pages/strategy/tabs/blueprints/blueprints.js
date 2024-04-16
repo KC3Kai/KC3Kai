@@ -420,7 +420,7 @@
 				.appendTo(line);
 			title.append(line);
 			
-			// Blueprints, catapults, devmats and torches
+			// Blueprints, catapults, screws, devmats and torches
 			line = $("<div />");
 			if(remodelInfo.blueprint) {
 				$("<img />")
@@ -490,6 +490,16 @@
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 10)
 					.text(remodelInfo.boiler)
+					.appendTo(line);
+			}
+			if(remodelInfo.screw) {
+				$("<img />")
+					.attr("src", "/assets/img/client/screws.png")
+					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 10)
+					.text(remodelInfo.screw)
 					.appendTo(line);
 			}
 			if(remodelInfo.devmat) {

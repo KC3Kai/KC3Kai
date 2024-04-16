@@ -198,6 +198,8 @@ known IDs see QuestManager
 						KC3QuestManager.get(350).increment(); // C55: Yearly Exercises 4
 					if(KC3QuestManager.isPrerequisiteFulfilled(362))
 						KC3QuestManager.get(362).increment(); // C72: Yearly Exercises 10
+					if(KC3QuestManager.isPrerequisiteFulfilled(371))
+						KC3QuestManager.get(371).increment(); // Cy12: Yearly Exercises 12
 				}
 				if(context.rankPt >= 5) { // S-Rank+
 					if(KC3QuestManager.isPrerequisiteFulfilled(337))

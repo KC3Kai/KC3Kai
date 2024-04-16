@@ -252,7 +252,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyApr',
 				key: 'timeToResetYearlyAprQuests',
 				resetMonth: APRIL,
-				questIds: [362],
+				questIds: [362, 371],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyApr.type);
 				},
@@ -606,8 +606,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16

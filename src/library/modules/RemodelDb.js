@@ -237,6 +237,7 @@
                 case 643: // Ume
                     return 10;
                 case 231: // Akebono
+                case 323: // Harusame
                 case 900: // Yamashiomaru
                     return 15;
                 case 943: // Kumanomaru
@@ -347,6 +348,13 @@
                 default: return 0;
             }
         },
+        calcScrew: function(ship_id_from) {
+            switch(ship_id_from) {
+                case 323: // to Harusame K2
+                    return 5;
+                default: return 0;
+            }
+        },
         mkDb: function(masterData, isRaw) {
             var self = this;
             // step 1: collect remodel info
@@ -365,6 +373,7 @@
                  , armmat: Int
                  , boiler: Int
                  , devmat: Int
+                 , screw: Int
                  , torch: Int
                  , remodel_level: Int
                  }
@@ -401,10 +410,12 @@
                       armmat: 0,
                       boiler: 0,
                       devmat: 0,
+                      screw: 0,
                       torch: 0
                     };
 
                 remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from);
+                remodel.screw = self.calcScrew(remodel.ship_id_from);
                 remodel.torch = self.calcTorch(remodel.ship_id_from);
                 remodel.gunmat = self.calcGunMat(remodel.ship_id_from);
                 remodelInfo[x.api_id] = remodel;

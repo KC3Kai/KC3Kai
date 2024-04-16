@@ -771,7 +771,9 @@
                 }
                 // for LBAS battle, recon planes participate, and their fighter power may be counted
                 if(KC3GearManager.antiAirFighterType2Ids.includes(gearMst.api_type[2])
-                    || (!!forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.includes(gearMst.api_type[2]))) {
+                    || (!!forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.includes(gearMst.api_type[2]))
+                    // Autogyro, AS Patrol participate in stage1 since Hayabusa, but 0 fight power for others
+                    || [25, 26].includes(gearMst.api_type[2])) {
                     const aaStat = gearMst.api_tyku || 0;
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {

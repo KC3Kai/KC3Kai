@@ -51,6 +51,13 @@
 			PlayerManager.loadConsumables();
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			// Prepare necessary info from master data
+			this.exslotGearsByType = {
+				secGun: KC3Master.equip_exslot_ship(0, "type2", [4]),
+				radar: KC3Master.equip_exslot_ship(0, "type3", [11]),
+				depthCharge: KC3Master.equip_exslot_ship(0, "type2", [15]),
+				landingCraft: KC3Master.equip_exslot_ship(0, "type2", [24, 46]),
+			};
 			// Cache pre-processed ship info
 			this.shipCache = [];
 			for(const key in KC3ShipManager.list){
@@ -277,7 +284,13 @@
 				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).attr("type3id")));
 			});
 			$(".massSelect dd[gearid]").each((_, elm) => {
-				$(elm).attr("title", KC3Meta.gearName(KC3Master.slotitem($(elm).attr("gearid")).api_name));
+				const ids = $(elm).attr("gearid");
+				$(elm).attr("title", ids.substr(0, 1) === "{" ?
+					(this.exslotGearsByType[ids.slice(1, -1)] || []).map(id => KC3Meta.gearNameById(id)).join(", ") :
+					ids.substr(0, 1) === "[" ?
+					JSON.parse(ids).map(id => KC3Meta.gearNameById(id)).join(", ") :
+					KC3Meta.gearNameById(parseInt(ids)) + (ids.substr(-1) === "." ? "..." : "")
+				);
 			});
 
 			// Add filter elements of ship types before `prepareFilters` executed
@@ -647,6 +660,21 @@
 				canEquipLFB: ThisShip.canEquip(41),
 				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
 				canEquipMinisub: ThisShip.canEquip(22),
+				canExslotEquipSecGun: ThisShip.exslotCanEquip(this.exslotGearsByType.secGun),
+				canExslotEquipRadar: ThisShip.exslotCanEquip(this.exslotGearsByType.radar),
+				canExslotEquipDcharge: ThisShip.exslotCanEquip(this.exslotGearsByType.depthCharge),
+				canExslotEquipLanding: ThisShip.exslotCanEquip(this.exslotGearsByType.landingCraft),
+				// Some minor pieces of ex-slot capable items:
+				canExslotEquipEtsFcf: ThisShip.exslotCanEquip([413]),
+				canExslotEquipBoiler: ThisShip.exslotCanEquip([34, 87]),
+				//canExslotEquipSubTower: ThisShip.exslotCanEquip([519]),
+				// To reduce some calcs for speed since these are equippable for specific ship types
+				/*
+				canExslotEquipT3Shell: ThisShip.exslotCanEquip([35, 317, 483]),
+				canExslotEquipSubStern: ThisShip.exslotCanEquip([442, 443]),
+				canExslotEquipSubRadar: ThisShip.exslotCanEquip([210, 211, 384, 458]),
+				canExslotEquipSdp: ThisShip.exslotCanEquip([477, 478]),
+				*/
 				canExslotEquipSpec: KC3Master.equip_exslot_ship(ThisShip.masterId)
 					// Ignore exslot equippable specified by general equip types or ship types
 					.filter(id => KC3Master.equip_on(id).exslotIncludes.includes(ThisShip.masterId)).length > 0,
@@ -909,6 +937,21 @@
 						|| (curVal === 4 && ship.canEquipLFB)
 						|| (curVal === 5 && ship.canEquipBulge)
 						|| (curVal === 6 && ship.canEquipMinisub)
+						|| (curVal === 7 && ship.canExslotEquipSpec);
+				});
+
+			self.defineShipFilter(
+				"exspgear",
+				savedFilterValues.exspgear || 0,
+				["all", "secgun", "radar", "dcharge", "landing", "etsfcf", "boiler", "exids"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canExslotEquipSecGun)
+						|| (curVal === 2 && ship.canExslotEquipRadar)
+						|| (curVal === 3 && ship.canExslotEquipDcharge)
+						|| (curVal === 4 && ship.canExslotEquipLanding)
+						|| (curVal === 5 && ship.canExslotEquipEtsFcf)
+						|| (curVal === 6 && ship.canExslotEquipBoiler)
 						|| (curVal === 7 && ship.canExslotEquipSpec);
 				});
 
