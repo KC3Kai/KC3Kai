@@ -1011,7 +1011,7 @@
 		"rewardConsumables": [0, 8, 4, 0]
 	},
 	"368": {
-		"unlock": [992],
+		"unlock": [992, 993, 1131],
 		"tracking": [
 			[0, 3]
 		],
