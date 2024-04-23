@@ -176,6 +176,10 @@ KC3改 Equipment Object
 					// All flags are true (logic AND, no logic OR/NOT yet)
 					if(synergy.flags.every(flag => synergyGears[flag] > 0)) {
 						if(synergy.single) { total += synergy.single[apiName] || 0; }
+						if(synergy.multiple) {
+							const countAmount = synergyGears[synergy.flags[0]] || 0;
+							total += (synergy.multiple[apiName] || 0) * countAmount;
+						}
 						if(synergy.distinct) {
 							const flagsKey = synergy.flags.join("_") + "Applied";
 							synergyGears[flagsKey] = (synergyGears[flagsKey] || 0) + 1;

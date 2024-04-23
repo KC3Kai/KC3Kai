@@ -441,7 +441,8 @@ Saves and loads significant data for future use
 		 *     [727] No.101 Kai can only equip [66, 220] in secondary guns.
 		 *     the same hard-code method, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
 		 *   * [460/352/699] Hayasui/Souya AGS can only equip [524] in secondary guns,
-		 *   * [699] Souya AGS can only equip [48] in small guns.
+		 *   * [699] Souya AGS can only equip [48] in small guns,
+		 *   * [179/180] Z1/Z3 Zwei can only equip [124] in large radars.
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
@@ -506,6 +507,8 @@ Saves and loads significant data for future use
 			excludeTypedGearsOnShips(4, [524], [460, 352, 699]);
 			// Remove Souya AGS from Smal Guns type list except 12cm Single HA
 			excludeTypedGearsOnShips(1, [48], [699]);
+			// Remove Z1/Z3 Zwei from Large Radar type list except FuMO25 Radar
+			excludeTypedGearsOnShips(13, [124], [179, 180]);
 			return {
 				stypes: capableStypes,
 				includes: capableShips,

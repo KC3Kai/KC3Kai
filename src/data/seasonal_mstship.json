@@ -6723,5 +6723,21 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5840": {
+		"api_id": 5840,
+		"api_name": "お出掛けTuscaloosa",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5841": {
+		"api_id": 5841,
+		"api_name": "お出掛け吹雪改二",
+		"api_yomi": "ふぶき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
