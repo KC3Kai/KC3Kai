@@ -870,15 +870,60 @@
 			// Swordfish Mk.III (Skilled)
 			"244": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ark Royal Class
-					"78": {
-						multiple: { "houg": 4, "houk": 2 },
-					},
+					"78": [
+						{
+							multiple: { "houg": 4, "houk": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Houshou Class
-					"27": {
-						multiple: { "houg": 3 },
-					},
+					"27": [
+						{
+							multiple: { "houg": 3 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 			},
 			// Ju 87C Kai Ni (w/ KMX)
@@ -1666,6 +1711,42 @@
 					// Gambier Bay Mk.II
 					ids: [707],
 					multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+				},
+			},
+			// Seafire Mk.III Kai
+			"252": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Ark Royal Class
+					"78": [
+						{
+							minStars: 4,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 1 },
+						},
+					],
+					// Illustrious Class
+					"112": "78",
 				},
 			},
 			// Corsair Mk.II
@@ -6667,9 +6748,31 @@
 				starsDist: [],
 				byClass: {
 					// Akizuki Class
-					"54": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
-					},
+					"54": [
+						{
+							multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
