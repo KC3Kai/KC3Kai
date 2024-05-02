@@ -6739,5 +6739,13 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5842": {
+		"api_id": 5842,
+		"api_name": "カクテルドレス山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
 	}
 }
