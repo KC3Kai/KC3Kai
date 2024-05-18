@@ -189,6 +189,8 @@
 				reqItemCount: response.api_req_slot_num || 0,
 				//reqUseitemId: response.api_req_useitem_id || -1,
 				//reqUseitemCount: response.api_req_useitem_num || 0,
+				//reqUseitemId2: response.api_req_useitem_id2 || -1,
+				//reqUseitemCount2: response.api_req_useitem_num2 || 0,
 				buildkit: response.api_req_buildkit || 0,
 				remodelkit: response.api_req_remodelkit || 0,
 				certainBuildkit: response.api_certain_buildkit || 0,
