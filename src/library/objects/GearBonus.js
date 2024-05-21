@@ -121,6 +121,10 @@
 				usNavyAirRadarIds: [278, 279],
 				frenchYellowSecGunMount: 0,
 				frenchYellowSecGunMountIds: [247],
+				frenchNightRecon: 0,
+				frenchNightReconIds: [471],
+				germanLargeRadar: 0,
+				germanLargeRadarIds: [124],
 			},
 			// Ryuusei
 			"18": {
@@ -866,15 +870,60 @@
 			// Swordfish Mk.III (Skilled)
 			"244": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ark Royal Class
-					"78": {
-						multiple: { "houg": 4, "houk": 2 },
-					},
+					"78": [
+						{
+							multiple: { "houg": 4, "houk": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Houshou Class
-					"27": {
-						multiple: { "houg": 3 },
-					},
+					"27": [
+						{
+							multiple: { "houg": 3 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 			},
 			// Ju 87C Kai Ni (w/ KMX)
@@ -1662,6 +1711,42 @@
 					// Gambier Bay Mk.II
 					ids: [707],
 					multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+				},
+			},
+			// Seafire Mk.III Kai
+			"252": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Ark Royal Class
+					"78": [
+						{
+							minStars: 4,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 1 },
+						},
+					],
+					// Illustrious Class
+					"112": "78",
 				},
 			},
 			// Corsair Mk.II
@@ -4633,6 +4718,63 @@
 					},
 				},
 			},
+			// 38cm Twin Gun Mount
+			"76": {
+				count: 0,
+				byNation: {
+					"Germany": {
+						multiple: { "houg": 1 },
+						synergy: {
+							flags: [ "germanLargeRadar" ],
+							byCount: {
+								gear: "germanLargeRadar",
+								distinct: true,
+								"1": { "houk": 1 },
+								"2": { "houk": 2 },
+								"3": { "houk": 3 },
+							},
+						},
+					},
+				},
+			},
+			// 38cm Twin Gun Mount Kai
+			"114": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Germany": [
+						{
+							multiple: { "houg": 1 },
+							synergy: {
+								flags: [ "germanLargeRadar" ],
+								byCount: {
+									gear: "germanLargeRadar",
+									distinct: true,
+									"1": { "houk": 1 },
+									"2": { "houk": 2 },
+									"3": { "houk": 3 },
+								},
+							},
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "souk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
 			// 38cm Quadruple Gun Mount
 			"245": {
 				count: 0,
@@ -4702,8 +4844,58 @@
 							multiple: { "houg": 1, "houm": 1 },
 						},
 						{
+							minStars: 9,
+							multiple: { "tyku": 1 },
+							synergy: [
+								{
+									flags: [ "frenchNightRecon" ],
+									byCount: {
+										gear: "frenchNightRecon",
+										"1": { "houm": 1 },
+										"2": { "houm": 2 },
+										"3": { "houm": 3 },
+									},
+								},
+								{
+									flags: [ "frenchYellowSecGunMount" ],
+									byCount: {
+										gear: "frenchYellowSecGunMount",
+										"1": { "houk": 1, "houm": 1 },
+										"2": { "houk": 2, "houm": 2 },
+										"3": { "houk": 3, "houm": 3 },
+									},
+								},
+							],
+						},
+						{
 							minStars: 10,
 							multiple: { "houm": 1 },
+							synergy: [
+								{
+									flags: [ "frenchNightRecon" ],
+									byCount: {
+										gear: "frenchNightRecon",
+										"1": { "houm": 1 },
+										"2": { "houm": 2 },
+										"3": { "houm": 3 },
+									},
+									byStars: {
+										gearId: 471,
+										isMultiple: true,
+										"7": { "houm": 1 },
+										"9": { "houk": 1 },
+									},
+								},
+								{
+									flags: [ "frenchYellowSecGunMount" ],
+									byCount: {
+										gear: "frenchYellowSecGunMount",
+										"1": { "houg": 1, "houk": 1, "houm": 1 },
+										"2": { "houg": 2, "houk": 2, "houm": 2 },
+										"3": { "houg": 3, "houk": 3, "houm": 3 },
+									},
+								},
+							],
 						},
 					],
 				},
@@ -5356,6 +5548,46 @@
 					"95": {
 						multiple: { "houg": 2 },
 					},
+				},
+			},
+			// SKC34 20.3cm Twin Gun Mount
+			"123": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Germany": [
+						{
+							synergy: {
+								flags: [ "germanLargeRadar" ],
+								multiple: { "houk": 1 },
+							},
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+							synergy: {
+								flags: [ "germanLargeRadar" ],
+								byStars: {
+									gearId: 124,
+									isMultiple: true,
+									 "8": { "houk": 1 },
+									"10": { "houm": 1 },
+								},
+							},
+						},
+					],
 				},
 			},
 			// 5inch Single High-angle Gun Mount Battery
@@ -6516,9 +6748,31 @@
 				starsDist: [],
 				byClass: {
 					// Akizuki Class
-					"54": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
-					},
+					"54": [
+						{
+							multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
@@ -7413,6 +7667,7 @@
 			// 120mm/50 Twin Gun Mount Kai A.mod.1937
 			"394": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Maestrale Class
 					"61": [
@@ -7422,13 +7677,41 @@
 						{
 							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
 					],
 				},
-				byShip: {
-					// extra +1 ev for Grecale all remodels
-					origins: [614],
-					multiple: { "houk": 1 },
-				},
+				byShip: [
+					{
+						// extra +1 ev for Grecale all remodels
+						origins: [614],
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [614],
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						origins: [614],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
 			},
 			// 130mm B-13 Twin Gun Mount
 			"282": {
@@ -8680,6 +8963,45 @@
 					},
 				],
 			},
+			// FuMO25 Radar
+			"124": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Germany": [
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+					"Italy": [
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
 			// GFCS Mk.37
 			"307": {
 				count: 0,
@@ -8898,14 +9220,14 @@
 								flags: [ "twin127SmallGunMountModelDK2" ],
 								byStars: {
 									gearId: 267,
-									3: { "houg": 1, "houm": 1 },
+									"3": { "houg": 1, "houm": 1 },
 								},
 							},
 							{
 								flags: [ "twin127SmallGunMountModelDK3", "twin127SmallGunMountModelDK2Nonexist" ],
 								byStars: {
 									gearId: 366,
-									3: { "houg": 1, "houm": 1 },
+									"3": { "houg": 1, "houm": 1 },
 								},
 							},
 						],
@@ -8945,21 +9267,21 @@
 								flags: [ "twin127SmallGunMountModelDK2" ],
 								byStars: {
 									gearId: 267,
-									3: { "houg": 1, "houm": 1 },
+									"3": { "houg": 1, "houm": 1 },
 								},
 							},
 							{
 								flags: [ "twin127SmallGunMountModelDK3", "twin127SmallGunMountModelDK2Nonexist" ],
 								byStars: {
 									gearId: 366,
-									3: { "houg": 1, "houm": 1 },
+									"3": { "houg": 1, "houm": 1 },
 								},
 							},
 							{
 								flags: [ "type13AirRadarKaiLateModel" ],
 								byStars: {
 									gearId: 450,
-									4: { "houg": 1, "tyku": 4, "houk": 3, "houm": 1 },
+									"4": { "houg": 1, "tyku": 4, "houk": 3, "houm": 1 },
 								},
 							},
 						],
@@ -10773,7 +11095,7 @@
 								flags: [ "type13AirRadarKaiLateModel" ],
 								byStars: {
 									gearId: 450,
-									 "4": { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
+									"4": { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
 								},
 							},
 						],

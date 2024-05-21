@@ -67,8 +67,7 @@
 			PlayerManager.loadBases();
 			
 			// Get squad names
-			if(typeof localStorage.planes == "undefined"){ localStorage.planes = "{}"; }
-			this.squadNames = JSON.parse(localStorage.planes);
+			this.loadCleanedSquadNames();
 			
 			// Compile equipment holders
 			for(const ctr in KC3ShipManager.list){
@@ -163,6 +162,25 @@
 				
 				// sort MasterItem by stats
 				this._items[i].sort(this.sortMasterItem);
+			}
+		},
+		
+		loadCleanedSquadNames :function(){
+			try {
+				this.squadNames = JSON.parse(localStorage.planes || "{}");
+			} catch(e) {
+				this.squadNames = {};
+				console.log("Unexpected plane names in storage: " + localStorage.planes, e);
+			} finally {
+				// Clean entries with empty squadron name or non-existent plane item
+				const isGearCached = KC3GearManager.count() > 0;
+				Object.keys(this.squadNames).forEach(pkey => {
+					if(!this.squadNames[pkey]
+						|| (isGearCached && KC3GearManager.get(pkey.substr(1)).isDummy())) {
+						delete this.squadNames[pkey];
+					}
+				});
+				localStorage.planes = JSON.stringify(this.squadNames);
 			}
 		},
 		

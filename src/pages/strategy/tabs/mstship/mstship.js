@@ -1086,6 +1086,7 @@
 					else if (flag.includes("skilledLookouts")) { return 32; }
 					else if (flag.includes("searchlight")) { return 24; }
 					else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+					else if (flag.includes("NightRecon")) { return 50; }
 					else if (flag.includes("Sonar")) { return 18; }
 					else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
 					return 0;
@@ -1304,8 +1305,8 @@
 										$(".synergyFlags", synergyBox).append(synergyFlag);
 									});
 									
-									if (syn.single || syn.distinct) {
-										const bonus = syn.single || syn.distinct;
+									if (syn.single || syn.distinct || syn.multiple) {
+										const bonus = syn.single || syn.distinct || syn.multiple;
 										const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
 										addStatsToBox(bonus, synergyBonusBox);
 										if (syn.distinct) {
