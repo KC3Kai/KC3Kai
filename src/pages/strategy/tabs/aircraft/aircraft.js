@@ -173,8 +173,10 @@
 				console.log("Unexpected plane names in storage: " + localStorage.planes, e);
 			} finally {
 				// Clean entries with empty squadron name or non-existent plane item
+				const isGearCached = KC3GearManager.count() > 0;
 				Object.keys(this.squadNames).forEach(pkey => {
-					if(KC3GearManager.get(pkey.substr(1)).isDummy() || !this.squadNames[pkey]) {
+					if(!this.squadNames[pkey]
+						|| (isGearCached && KC3GearManager.get(pkey.substr(1)).isDummy())) {
 						delete this.squadNames[pkey];
 					}
 				});

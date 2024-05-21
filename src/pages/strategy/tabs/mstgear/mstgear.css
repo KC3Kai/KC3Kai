@@ -210,8 +210,8 @@
 	margin-top:3px;
 }
 
-.tab_mstgear .gearInfo .equippable .ships > div.incapable,
-.tab_mstgear .gearInfo .equippable .exslot > div.incapable {
+.tab_mstgear .gearInfo .equippable .ships > div.incapable > img,
+.tab_mstgear .gearInfo .equippable .exslot > div.incapable > img {
 	opacity:0.5;
 }
 
