@@ -616,6 +616,7 @@ AntiAir: anti-air related calculations
 	var isHarunaK2B = masterIdEq( harunaK2BIcon );
 	// Shiratsuyu-class K2+ with max AA stat >= 70
 	var isShiratsuyuClassK2 = masterIdIn([145, 497, 498, 961, 975]);
+	var isInagiK2 = masterIdEq( 979 );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -901,10 +902,11 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadar ))
 		)
 	);
+	// Kasumi K2B, Inagi K2
 	declareAACI(
 		17, 2, 1, 1.25, 55, 2730, // rate 57?
 		[kasumiK2BIcon, haMountIcon, aaGunIcon],
-		predAllOf(isKasumiK2B),
+		predAnyOf(isKasumiK2B, isInagiK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -912,11 +914,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Satsuki K2
+	// Satsuki K2, Inagi K2
 	declareAACI(
 		18, 2, 1, 1.2, 60, 2740, // rate 59?
 		[satsukiK2Icon, cdmgIcon],
-		predAllOf(isSatsukiK2),
+		predAnyOf(isSatsukiK2, isInagiK2),
 		withEquipmentMsts(
 			hasSome( isAAGunCDMG )
 		)
@@ -1060,10 +1062,11 @@ AntiAir: anti-air related calculations
 				hasAtLeast( isHighAngleMount, 3 ))
 		)
 	);
+	// Tenryuu K2, Inagi K2
 	declareAACI(
 		31, 2, 1, 1.25, 50, 2710,
 		[tenryuuK2Icon, haMountIcon, haMountIcon],
-		predAllOf(isTenryuuK2),
+		predAnyOf(isTenryuuK2, isInagiK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 2 ))

@@ -1357,19 +1357,47 @@
 							minStars: 3,
 							multiple: { "houg": 1 },
 						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
 					],
-					// Game codes still using ctype matching, here uses country name in advance
-					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
 					"84": {
 						multiple: { "houg": 1 },
 					},
-					// Ark Royal Class
+					// Queen Elizabeth Class
+					"67": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+					"82": "67",
+					"88": "67",
+					"108": "67",
+					"112": "67",
+					// Ark Royal Class, should share with class 67 too, and fp -1
 					"78": {
-						// To cancel general British fp bonus
-						multiple: { "houg": -1 },
+						minStars: 3,
+						multiple: { "houg": 1 },
 					},
 				},
 				byShip: {
@@ -1391,18 +1419,51 @@
 							minStars: 5,
 							multiple: { "houg": 1 },
 						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
 					],
-					// Game codes still using ctype matching, here uses country name in advance
-					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
 					"84": {
 						multiple: { "houg": 1 },
 					},
-					// Ark Royal Class
+					// Queen Elizabeth Class
+					"67": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+					],
+					"82": "67",
+					"88": "67",
+					"108": "67",
+					"112": "67",
+					// Ark Royal Class, should share with class 67 too, and fp -1
 					"78": {
-						multiple: { "houg": -1 },
+						minStars: 5,
+						multiple: { "houg": 1 },
 					},
 				},
 				byShip: {
@@ -7332,6 +7393,11 @@
 							},
 						],
 					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
 				],
 			},
 			// 12cm Single High-angle Gun Mount Model E Kai
@@ -7580,6 +7646,37 @@
 						excludeStypes: [1],
 						minStars: 10,
 						multiple: { "houm": 1 },
+					},
+					{
+						// Inagi Kai Ni, extra +1 ev
+						ids: [979],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 2 },
+					},
+					// Inagi Kai Ni star bonuses
+					{
+						ids: [979],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [979],
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [979],
+						minStars: 7,
+						multiple: { "tyku": 2 },
+					},
+					{
+						ids: [979],
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -9291,6 +9388,7 @@
 			// 25mm Twin Autocannon Mount
 			"39": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9311,12 +9409,36 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 9,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
 			// 25mm Triple Autocannon Mount
 			"40": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9337,12 +9459,30 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 9,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
 			// 25mm Single Autocannon Mount
 			"49": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9363,6 +9503,41 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni, extra +2 ev
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 5 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -9444,6 +9619,7 @@
 			// 25mm Triple Autocannon Mount (Concentrated Deployment)
 			"131": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9464,6 +9640,17 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "tyku": 2 },
 					},
 				],
 			},
@@ -11234,6 +11421,11 @@
 						countCap: 2,
 						multiple: { "soku": 5 },
 					},
+					{
+						// Inagi Kai Ni (Slow Group B)
+						ids: [979],
+						single: { "soku": 5},
+					},
 				],
 			},
 			// Improved Kanhon Type Turbine, speed boost synergy with boilers
@@ -11424,12 +11616,14 @@
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
+						//   Slow DE: Inagi K2
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953,
 								26, 27, 77, 87, 80, 81, 439, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
-								445, 451, 491
+								445, 451, 491,
+								922
 							],
-						excludes: [541, 573, 888, 878, 879, 894, 899],
+						excludes: [541, 573, 888, 878, 879, 894, 899, 922, 730],
 						speedCap: 10,
 						synergy: [
 							{

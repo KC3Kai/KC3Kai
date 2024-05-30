@@ -5882,7 +5882,7 @@
 		"api_yomi": "ノーザンプトン",
 		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 4
+		"api_slot_num": 3
 	},
 	"5735": {
 		"api_id": 5735,
@@ -6745,6 +6745,166 @@
 		"api_name": "カクテルドレス山汐丸",
 		"api_yomi": "やましおまる",
 		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5843": {
+		"api_id": 5843,
+		"api_name": "お出掛け平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5844": {
+		"api_id": 5844,
+		"api_name": "お出掛け平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5845": {
+		"api_id": 5845,
+		"api_name": "記念日高波改二",
+		"api_yomi": "たかなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5846": {
+		"api_id": 5846,
+		"api_name": "記念日熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5847": {
+		"api_id": 5847,
+		"api_name": "記念日第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5848": {
+		"api_id": 5848,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5849": {
+		"api_id": 5849,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5850": {
+		"api_id": 5850,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5851": {
+		"api_id": 5851,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5852": {
+		"api_id": 5852,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5853": {
+		"api_id": 5853,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5854": {
+		"api_id": 5854,
+		"api_name": "カクテルドレス翔鶴",
+		"api_yomi": "しょうかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5855": {
+		"api_id": 5855,
+		"api_name": "カクテルドレス吹雪",
+		"api_yomi": "ふぶき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5856": {
+		"api_id": 5856,
+		"api_name": "カクテルドレス吹雪改二",
+		"api_yomi": "ふぶき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5857": {
+		"api_id": 5857,
+		"api_name": "カクテルドレスTuscaloosa",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5858": {
+		"api_id": 5858,
+		"api_name": "カクテルドレスHouston",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5859": {
+		"api_id": 5859,
+		"api_name": "カクテルドレスNorthampton",
+		"api_yomi": "ノーザンプトン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5860": {
+		"api_id": 5860,
+		"api_name": "カクテルドレスNorthampton改",
+		"api_yomi": "ノーザンプトン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5861": {
+		"api_id": 5861,
+		"api_name": "カクテルドレス大和",
+		"api_yomi": "やまと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5862": {
+		"api_id": 5862,
+		"api_name": "菖蒲第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
 	}

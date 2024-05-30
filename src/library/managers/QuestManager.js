@@ -265,7 +265,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyMay',
 				key: 'timeToResetYearlyMayQuests',
 				resetMonth: MAY,
-				questIds: [356, 437, 973, 975],
+				questIds: [356, 437, 973, 975, 1012],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMay.type);
 				},
@@ -1058,6 +1058,13 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip([233, 407])  // Ushio
 							&& fleet.hasShip([230])       // Oboro
 							&& fleet.hasShip([232]);      // Sazanami
+					},
+				"1012": // By14 Sortie Ukuru-class as flagship, 3 DE (excluding flagship DE), no other ship type
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipClass(117, 0)
+							&& fleet.countShipType(1) <= 4
+							&& fleet.countShipType(1, true, false) === 0;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

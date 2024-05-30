@@ -569,7 +569,8 @@ Saves and loads significant data for future use
 			// to exclude gears like [33] Improved Kanhon Type Turbine
 			// since 2024-03-03, [524] Sec.Gun can be equipped in ex-slot for some AO without regular slots capability
 			//   and [524] can be equipped in ex-slot for LHA No.101 even banned specially by regular slots
-			if(equipOn.stypes.includes(stype) && equipOn.exslot) result |= 2;
+			// since 2024-05-29, [33] can be equipped by DE Inagi K2 in both slot types
+			if(result && equipOn.exslot) result |= 2;
 			// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
 			if(equipOn.exslotMinStars > 0) {
 				if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
