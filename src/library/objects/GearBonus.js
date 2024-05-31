@@ -4030,6 +4030,251 @@
 					},
 				],
 			},
+			// 35.6cm Twin Gun Mount Kai 3C
+			"530": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Kongou K2, Hiei K2, Haruna K2, Kirishima K2, Haruna K2B
+						ids: [149, 150, 151, 152, 593],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Kongou K2C, Haruna K2C
+						ids: [591, 954],
+						multiple: { "houg": 3 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						multiple: { "houg": 4 },
+					},
+					{
+						// Kongou K2, Hiei K2, Haruna K2, Kirishima K2
+						ids: [149, 150, 151, 152],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Kongou K2C, Hiei K2C, Haruna K2C
+						ids: [591, 592, 954],
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Haruna K2B
+						ids: [593],
+						multiple: { "tyku": 3 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						multiple: { "houg": 1, "houm": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 6, "houk": 3, "houm": 3 },
+							},
+							{
+								flags: [ "highAccuracyRadar" ],
+								single: { "houm": 1 },
+							},
+						],
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minCount: 2,
+						single: { "houm": 2 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minCount: 3,
+						single: { "houm": 2 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minCount: 4,
+						single: { "houm": 2 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 2,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 6,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 9,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 4,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Kongou K2, Haruna K2, Haruna K2B
+						ids: [149, 151, 593],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kongou K2, Haruna K2, Haruna K2B
+						ids: [149, 151, 593],
+						minStars: 7,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Kongou K2, Haruna K2, Haruna K2B
+						ids: [149, 151, 593],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Kongou K2, Hiei K2, Haruna K2+, Kirishima K2, Kongou K2C
+						ids: [149, 150, 151, 152, 591, 954, 593],
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2, "houm": 2 },
+							},
+							{
+								flags: [ "highAccuracyRadar" ],
+								single: { "houm": 1 },
+							},
+						],
+					},
+					{
+						// Kirishima K2, Kongou K2C
+						ids: [152, 591],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3 },
+						},
+					},
+					{
+						// Hiei K2, Haruna K2C
+						ids: [150, 954],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2 },
+						},
+					},
+					{
+						// Kongou K2, Haruna K2/K2B
+						ids: [149, 151, 593],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1 },
+						},
+					},
+					{
+						// Kongou K2C, Hiei K2C, Haruna K2/K2B
+						ids: [591, 592, 593, 954],
+						synergy: [
+							{
+								flags: [ "kamikazeTwinTorpedo" ],
+								single: { "raig": 6 },
+								byStars: {
+									gearId: 174,
+									 "6": { "raig": 1 },
+									 "8": { "houm": 1 },
+									"10": { "houg": 1 },
+								},
+							},
+							{
+								flags: [ "highAccuracyRadar" ],
+								single: { "houg": 2, "raig": 2, "houk": 3, "houm": 2 },
+							},
+						],
+					},
+					{
+						// Kongou K2C, Hiei K2C, Haruna K2/K2B
+						ids: [591, 592, 593, 954],
+						minCount: 2,
+						single: { "houm": 1 },
+					},
+					{
+						// Kongou K2C, Hiei K2C
+						ids: [591, 592],
+						synergy: {
+							flags: [ "highAccuracyRadar" ],
+							single: { "houg": 2 },
+						},
+					},
+					{
+						// Haruna K2B/K2C
+						ids: [593, 954],
+						synergy: {
+							flags: [ "highAccuracyRadar" ],
+							single: { "houg": 1 },
+						},
+					},
+				],
+			},
 			// 41cm Triple Gun Mount Kai Ni
 			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
 			"290": {
