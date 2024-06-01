@@ -3499,6 +3499,26 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Kongou special night cut-in attack modifiers are depending on equipment and engagement.
+	 * Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
+	 * Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
+	 * Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
+	 * Buffed again by 35.6cm guns since 2024-05-31: https://x.com/KanColle_STAFF/status/1796504420047556807
+	 */
+	KC3Ship.prototype.estimateKongouCutinModifier = function(forShipPos = 0) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.kongouCutinShips.includes(flagshipMstId)) return 1;
+
+		const targetShip = locatedFleet.ship(forShipPos);
+		// x1.1 for K2+K3C: https://x.com/Camellia_bb/status/1796809150166683896
+		const twin356gunsMod = targetShip.hasEquipment(530) && targetShip.hasEquipment(329) ? 1.1 : 1.0;
+		const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
+		return 2.4 * engagementMod * twin356gunsMod;
+	};
+
+	/**
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
 	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
@@ -4121,7 +4141,7 @@ KC3改 Ship Object
 			101: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
-			104: { posIndex: [0, 1], partIndex: [1], nightOnly: true, },
+			104: { posIndex: [0, 1], partIndex: [1], nightOnly: true, modFunc: "estimateKongouCutinModifier" },
 			// Power mods irrelevant to ship position, not necessary yet
 			//200: { posIndex: [], partIndex: [], nightOnly: true, },
 			300: { posIndex: [1, 2], posIndex2: [1, 1, 2, 2], partIndex: [0, 1, 2], },
@@ -4247,11 +4267,7 @@ KC3改 Ship Object
 				}
 				// special Kongou-class K2C Cutin since 2020-04-23
 				if(this.canDoKongouCutin()) {
-					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
-					// Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
-					// Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
-					const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
-					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.4 * engagementMod));
+					results.push(KC3Ship.specialAttackTypeNight(104, null, this.estimateKongouCutinModifier()));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {

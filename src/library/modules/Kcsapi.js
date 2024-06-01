@@ -3003,13 +3003,18 @@ Previously known as "Reactor"
 				recipeId = parseInt(params.api_id);
 			// cache current recipe detail data
 			recipes.currentDetail = response.api_data;
-			//recipes.currentDetail.api_req_useitem_id = 75;
-			//recipes.currentDetail.api_req_useitem_num = 1;
-			//recipes.currentDetail.api_req_useitem_id2 = 78;
-			//recipes.currentDetail.api_req_useitem_num2 = 1;
 			// merge detail to cached recipe
 			const recipe = cache[recipeId];
 			cache[recipeId] = $.extend({}, recipe, recipes.currentDetail);
+			// remove omitted properties in the same recipe of different stars
+			if(recipes.currentDetail.api_req_useitem_id === undefined){
+				delete cache[recipeId].api_req_useitem_id;
+				delete cache[recipeId].api_req_useitem_num;
+			}
+			if(recipes.currentDetail.api_req_useitem_id2 === undefined){
+				delete cache[recipeId].api_req_useitem_id2;
+				delete cache[recipeId].api_req_useitem_num2;
+			}
 			// cache ID info of current item to be improved
 			recipes.rosterId = parseInt(params.api_slot_id);
 			recipes.masterId = recipe.api_slot_id;
