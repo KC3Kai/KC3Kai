@@ -3511,9 +3511,14 @@ KC3改 Ship Object
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.kongouCutinShips.includes(flagshipMstId)) return 1;
 
+		// All capable ships applied, including K2, K2B and Warspite, despite only K2C mentioned by announcement
 		const targetShip = locatedFleet.ship(forShipPos);
 		// x1.1 for K2+K3C: https://x.com/Camellia_bb/status/1796809150166683896
-		const twin356gunsMod = targetShip.hasEquipment(530) && targetShip.hasEquipment(329) ? 1.1 : 1.0;
+		// x1.15 for 2xK3C: https://x.com/Camellia_bb/status/1796956098672672861
+		const k3cTwin356gunCount = targetShip.countEquipment(530),
+			k2Twin356gunCount = targetShip.countEquipment(329);
+		const twin356gunsMod = k3cTwin356gunCount >= 2 ? 1.15 :
+			k3cTwin356gunCount > 0 && k2Twin356gunCount > 0 ? 1.1 : 1.0;
 		const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
 		return 2.4 * engagementMod * twin356gunsMod;
 	};

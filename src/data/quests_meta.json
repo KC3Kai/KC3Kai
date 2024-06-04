@@ -1383,7 +1383,7 @@
 		"rewardConsumables": [0, 0, 0, 7]
 	},
 	"619": {
-		"unlock": [637, 638, 654, 689],
+		"unlock": [637, 638, 654, 689, 1137],
 		"tracking": [
 			[0, 1]
 		],
@@ -2518,7 +2518,6 @@
 		"rewardConsumables": [0, 6, 16, 3]
 	},
 	"1013": {
-		"unlock": [1137],
 		"rewardConsumables": [0, 8, 0, 8]
 	},
 	"1101": {
