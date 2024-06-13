@@ -3503,7 +3503,7 @@ KC3改 Ship Object
 	 * Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 	 * Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
 	 * Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
-	 * Buffed again by 35.6cm K2C since 2024-05-31: https://x.com/KanColle_STAFF/status/1796504420047556807
+	 * Buffed again by 35.6cm K2C/K4 since 2024-05-31: https://x.com/KanColle_STAFF/status/1796504420047556807
 	 */
 	KC3Ship.prototype.estimateKongouCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3515,9 +3515,14 @@ KC3改 Ship Object
 		const targetShip = locatedFleet.ship(forShipPos);
 		// x1.11 for 1xK3C: https://x.com/Camellia_bb/status/1798291705378250856
 		// x1.15 for 2xK3C: https://x.com/Camellia_bb/status/1796956098672672861
-		const k3cTwin356gunCount = targetShip.countEquipment(530);
-		const twin356gunsMod = k3cTwin356gunCount >= 2 ? 1.15 :
-			k3cTwin356gunCount >= 1 ? 1.11 : 1.0;
+		// x1.15 for 1xK3C+1xK4: https://x.com/Camellia_bb/status/1799060449851560322
+		// x1.15 for 2xK3C+1xK4: https://x.com/Camellia_bb/status/1799813356934860940
+		// if x1.15 for 2xK4?
+		const k3cTwin356gunCount = targetShip.countEquipment(530),
+			k4Twin356gunCount = targetShip.countEquipment(503);
+		const twin356gunsMod = k4Twin356gunCount + k3cTwin356gunCount >= 2 ? 1.15
+			: k4Twin356gunCount + k3cTwin356gunCount >= 1 ? 1.11
+			: 1.0;
 		const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
 		return 2.4 * engagementMod * twin356gunsMod;
 	};
