@@ -194,6 +194,7 @@ AntiAir: anti-air related calculations
 	var isBuiltinHighAngleMount = predAllOf(isHighAngleMount, function(mst) {
 		return mst.api_tyku >= 8;
 	});
+	var isHighAngleMountNotBuiltinAAFD = predAllOf(isHighAngleMount, predNot(isBuiltinHighAngleMount));
 
 	// [276] 46cm Kai not counted
 	// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
@@ -932,8 +933,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				/* any HA with builtin AAFD will not work */
-				predNot( hasSome( isBuiltinHighAngleMount )),
-				hasSome( isHighAngleMount ),
+				hasSome( isHighAngleMountNotBuiltinAAFD ),
 				hasSome( isAAGunCDMG ))
 		)
 	);
