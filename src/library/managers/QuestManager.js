@@ -278,7 +278,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyJun',
 				key: 'timeToResetYearlyJunQuests',
 				resetMonth: JUNE,
-				questIds: [353, 357, 944, 945, 946, 947, 948, 1103, 1104],
+				questIds: [353, 357, 372, 944, 945, 946, 947, 948, 1103, 1104, 1138],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJun.type);
 				},
@@ -606,8 +606,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -872,6 +872,14 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(43)   // Shigure any remodel
 						) >= 3;
 					},
+				"372": // Cy13 PvP with Akizuki-class as flagship, 2 DD, 2 BBV
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShipClass(54, 0) &&   // Akizuki-class
+							fleet.countShipType(2) >= 3 && // 3 DD in total
+							fleet.countShipType(10) >= 2;
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -895,15 +903,35 @@ Uses KC3Quest objects to play around with
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
 						const firstSlotGear = firstFleet.ship(0).equipment(0);
-						const isMaxSwordfishEquipped = firstSlotGear.masterId === 242 && firstSlotGear.stars === 10;
+						const isMaxSwordfishEquipped = firstSlotGear.masterId === 242 && firstSlotGear.stars >= 10;
 						return PlayerManager.hq.lastMaterial[1] >= 1500
 							&& PlayerManager.hq.lastMaterial[4] >= 1500
 							&& PlayerManager.consumables.skilledCrew >= 1
 							&& firstFleet.hasShip(515, 0)
 							&& isMaxSwordfishEquipped;
 					},
-				"663": // F55 Have 18000 steel (scrapping not counted here)
+				"663": // F55/Fq3 Have 18000 steel (scrapping not counted here, unused)
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
+				"1123": // Fy10 Have 950 bauxite, 2 New Model Aviation Armament Materials, 2 Skilled Crew Members. Tone Kai Ni/Yura Kai Ni as secretary, 1st slot with a maxed Type 0 Reconnaissance Seaplane (scrapping only checks secretary, unused)
+					() => {
+						const firstFleet = PlayerManager.fleets[0];
+						const firstSlotGear = firstFleet.ship(0).equipment(0);
+						const isMaxType0ReconSeaplaneEquipped = firstSlotGear.masterId === 25 && firstSlotGear.stars >= 10;
+						return PlayerManager.hq.lastMaterial[4] >= 950
+							&& PlayerManager.consumables.newArmamentMaterial >= 2
+							&& PlayerManager.consumables.skilledCrew >= 2
+							&& firstFleet.hasShip([188, 488], 0)
+							&& isMaxType0ReconSeaplaneEquipped;
+					},
+				"1138": // Fy11 Have 1300 bauxite, 480 steel, 4 buckets and 16 Development Materials. Akizuki-class as secretary (scrapping only checks secretary, unsed)
+					() => {
+						const firstFleet = PlayerManager.fleets[0];
+						return PlayerManager.hq.lastMaterial[3] >= 480
+							&& PlayerManager.hq.lastMaterial[4] >= 1300
+							&& PlayerManager.consumables.buckets >= 4
+							&& PlayerManager.consumables.devmats >= 16
+							&& firstFleet.hasShipClass(54, 0);
+					},
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
 					() => KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1,
 				"861": // Bq3 Sortie 2 of BBV or AO

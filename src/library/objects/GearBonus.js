@@ -5865,6 +5865,7 @@
 						{
 							synergy: {
 								flags: [ "germanLargeRadar" ],
+								countFlag: 0,
 								multiple: { "houk": 1 },
 							},
 						},
@@ -7096,6 +7097,71 @@
 								single: { "tyku": 4, "houk": 3 },
 							},
 						],
+					},
+				]
+			},
+			// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
+			"533": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Akizuki Class
+					"54": [
+						{
+							multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 5,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 9,
+						multiple: { "houg": 1 },
 					},
 				]
 			},
@@ -9205,6 +9271,96 @@
 					},
 				],
 			},
+			// 12.7cm High-angle Gun Mount + Anti-Aircraft Fire Director
+			"130": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Maya Kai Ni
+						ids: [428],
+						minStars: 1,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 5,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Isuzu Kai Ni
+						ids: [141],
+						minStars: 2,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 4,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// All DE
+						stypes: [1],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
+			},
 			// Type 21 Air Radar
 			"30": {
 				count: 0,
@@ -9249,6 +9405,11 @@
 						// Mogami Kai+
 						ids: [73, 501, 506],
 						single: { "houg": 1, "souk": 1, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				],
 			},
@@ -9981,6 +10142,15 @@
 							flags: [ "airRadar" ],
 							single: { "tyku": 2, "houk": 2 },
 						},
+					},
+				},
+				byShip: {
+					// Hatsuzuki Kai Ni
+					ids: [968],
+					multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					synergy: {
+						flags: [ "airRadar" ],
+						multiple: { "houg": 1, "houm": 1 },
 					},
 				},
 			},
@@ -11353,6 +11523,42 @@
 						// Naganami Kai Ni
 						ids: [543],
 						single: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// Fleet Communication Antenna
+			"531": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// For any ship can equip it
+					{
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
 					},
 				],
 			},

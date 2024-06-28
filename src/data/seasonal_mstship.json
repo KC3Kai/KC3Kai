@@ -6907,5 +6907,61 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5863": {
+		"api_id": 5863,
+		"api_name": "梅雨平戸",
+		"api_yomi": "ひらと",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5864": {
+		"api_id": 5864,
+		"api_name": "梅雨第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5865": {
+		"api_id": 5865,
+		"api_name": "梅雨大淀",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5866": {
+		"api_id": 5866,
+		"api_name": "梅雨大淀改",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5867": {
+		"api_id": 5867,
+		"api_name": "梅雨Heywood L.E.",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5868": {
+		"api_id": 5868,
+		"api_name": "梅雨Heywood L.E.改",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5869": {
+		"api_id": 5869,
+		"api_name": "梅雨薄雲",
+		"api_yomi": "うすぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

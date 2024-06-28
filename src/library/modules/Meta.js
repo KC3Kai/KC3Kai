@@ -167,6 +167,7 @@ Provides access to data on built-in JSON files
 			121, // Mikuma Kai -> K2
 			502, // Mikuma K2 -> K2T
 			323, // Harusame Kai -> K2
+			357, // Hatsuzuki Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546],
@@ -596,9 +597,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		useItemName :function(id){
-			// Yamato remodel consumes [87] New Model Boiler mapped to 902,
+			// Yamato remodel consumes [87] New Model Boiler mapped to 899 (former 902),
 			// directly return slotitem name here to avoid 800+ empty string elements in json
-			if(id == 902) return this.gearNameById(87);
+			if(id == 899) return this.gearNameById(87);
 			return this._useitems[id] || (KC3Master.useitem(id) || {}).api_name || "";
 		},
 		

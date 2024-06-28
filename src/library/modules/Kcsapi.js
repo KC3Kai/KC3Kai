@@ -379,8 +379,10 @@ Previously known as "Reactor"
 					// 901 virtual item, for 800 rank points as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
+					//     moved to id 899 since 2024-06-27
 					// 903/904 for max gear slots extending card assets as quest rewards
 					// 905/906 for max gear slots extending card assets as event selectrewards
+					//     id 906 moved to id 902
 					default: break;
 				}
 			}
@@ -2891,16 +2893,19 @@ Previously known as "Reactor"
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
 				break;
 				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`
-				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End
+				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End in 2023
+					// exchange 11 teruteruBouzu with furniture and 1 Communication Equipment & Personnel (once) in 2024
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 10;
 				break;
-				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once)
+				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once) in 2023
+					// exchange 20 teruteruBouzu with 1 Fleet Communication Antenna +1 (once) in 2024
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 11;
 				break;
 				case 113: // exchange 12 teruteruBouzu with 1 blueRibbon (twice)
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 12;
 				break;
-				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times)
+				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times) in 2023
+					// exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (8 times) in 2024
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 1;
 				break;
 				default:
@@ -2943,7 +2948,7 @@ Previously known as "Reactor"
 					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2, and `api_slotitem` will appear
 					if(getitem.api_slotitem){
 						// since `api_get_member/slot_item` will not be called, have to update GearManager here
-						KC3GearManager.set([ getitem.api_slotitem ]);
+						KC3GearManager.set(Array.isArray(getitem.api_slotitem) ? getitem.api_slotitem : [ getitem.api_slotitem ]);
 						console.log("Obtained slotitem:", getitem.api_slotitem);
 					}
 					// `api_mst_id` will be the furniture ID if `api_usemst` is 1
