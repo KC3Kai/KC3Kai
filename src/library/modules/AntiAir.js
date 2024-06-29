@@ -196,6 +196,9 @@ AntiAir: anti-air related calculations
 	});
 	var isHighAngleMountNotBuiltinAAFD = predAllOf(isHighAngleMount, predNot(isBuiltinHighAngleMount));
 
+	// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
+	var is10cmTwinHighAngleMountKaiAAFDKai = masterIdEq(533);
+
 	// [276] 46cm Kai not counted
 	// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
 	var is46cmTripleMount = masterIdEq(6);
@@ -543,6 +546,7 @@ AntiAir: anti-air related calculations
 	// Icons used to declare AACI type
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
+		hatsuzukiK2Icon = 968,
 		battleShipIcon = 131, // Yamato, weigh anchor!
 		battleShipKaiIcon = 148, // Musashi Kai represents
 		yamatoK2Icon = 911,
@@ -741,6 +745,16 @@ AntiAir: anti-air related calculations
 		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			hasAtLeast( isHighAngleMount, 2 )
+		)
+	);
+	declareAACI(
+		48, 8, 1, 1.75, 65, 2000, // wip
+		[hatsuzukiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
+		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleMountKaiAAFDKai, 2 ),
+				hasSome( isAARadar ))
 		)
 	);
 
