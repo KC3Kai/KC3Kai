@@ -433,6 +433,8 @@ Saves and loads significant data for future use
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *   * [662/663/668] Noshiro/Yahagi Kai Ni+ can NOT equip torpedo [5] in slot 4,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *   * [968] Hatsuzuki Kai Ni can NOT equip small main gun/torpedo/large radar [1, 5, 13] in slot 4,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,
 		 *     hard-coded the exception connditions, for following items either.
 		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem`
@@ -569,7 +571,8 @@ Saves and loads significant data for future use
 			// to exclude gears like [33] Improved Kanhon Type Turbine
 			// since 2024-03-03, [524] Sec.Gun can be equipped in ex-slot for some AO without regular slots capability
 			//   and [524] can be equipped in ex-slot for LHA No.101 even banned specially by regular slots
-			if(equipOn.stypes.includes(stype) && equipOn.exslot) result |= 2;
+			// since 2024-05-29, [33] can be equipped by DE Inagi K2 in both slot types
+			if(result && equipOn.exslot) result |= 2;
 			// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
 			if(equipOn.exslotMinStars > 0) {
 				if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;

@@ -200,6 +200,8 @@ known IDs see QuestManager
 						KC3QuestManager.get(362).increment(); // C72: Yearly Exercises 10
 					if(KC3QuestManager.isPrerequisiteFulfilled(371))
 						KC3QuestManager.get(371).increment(); // Cy12: Yearly Exercises 12
+					if(KC3QuestManager.isPrerequisiteFulfilled(372))
+						KC3QuestManager.get(372).increment(); // Cy13: Yearly Exercises 13
 				}
 				if(context.rankPt >= 5) { // S-Rank+
 					if(KC3QuestManager.isPrerequisiteFulfilled(337))
@@ -409,10 +411,13 @@ known IDs see QuestManager
 						KC3QuestManager.get(628).increment(); // F25 monthly
 						break;
 					case 82: // Type 97 Torpedo Bomber (931 Air Group)
-						KC3QuestManager.get(1123).increment(); // F114 yearly, flagship check needed?
+						KC3QuestManager.get(1123).increment(); // Fy10 yearly, flagship check needed?
 						break;
 					case 106: // Type 13 Air Radar Kai
 						KC3QuestManager.get(1104).increment(); // F99 yearly
+						break;
+					case 120: // Type 91 Anti-Aircraft Fire Director
+						KC3QuestManager.get(1138).increment(); // Fy11 yearly, flagship check needed?
 						break;
 					case 121: // Type 94 Anti-Aircraft Fire Director
 						KC3QuestManager.get(686).increment(1); // F77 quarterly index 1, flagship check needed?

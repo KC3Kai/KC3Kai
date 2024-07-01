@@ -1357,19 +1357,47 @@
 							minStars: 3,
 							multiple: { "houg": 1 },
 						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
 					],
-					// Game codes still using ctype matching, here uses country name in advance
-					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
 					"84": {
 						multiple: { "houg": 1 },
 					},
-					// Ark Royal Class
+					// Queen Elizabeth Class
+					"67": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+					"82": "67",
+					"88": "67",
+					"108": "67",
+					"112": "67",
+					// Ark Royal Class, should share with class 67 too, and fp -1
 					"78": {
-						// To cancel general British fp bonus
-						multiple: { "houg": -1 },
+						minStars: 3,
+						multiple: { "houg": 1 },
 					},
 				},
 				byShip: {
@@ -1391,18 +1419,51 @@
 							minStars: 5,
 							multiple: { "houg": 1 },
 						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
 					],
-					// Game codes still using ctype matching, here uses country name in advance
-					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
 					"84": {
 						multiple: { "houg": 1 },
 					},
-					// Ark Royal Class
+					// Queen Elizabeth Class
+					"67": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+					],
+					"82": "67",
+					"88": "67",
+					"108": "67",
+					"112": "67",
+					// Ark Royal Class, should share with class 67 too, and fp -1
 					"78": {
-						multiple: { "houg": -1 },
+						minStars: 5,
+						multiple: { "houg": 1 },
 					},
 				},
 				byShip: {
@@ -3969,6 +4030,251 @@
 					},
 				],
 			},
+			// 35.6cm Twin Gun Mount Kai 3C
+			"530": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Kongou K2, Hiei K2, Haruna K2, Kirishima K2, Haruna K2B
+						ids: [149, 150, 151, 152, 593],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Kongou K2C, Haruna K2C
+						ids: [591, 954],
+						multiple: { "houg": 3 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						multiple: { "houg": 4 },
+					},
+					{
+						// Kongou K2, Hiei K2, Haruna K2, Kirishima K2
+						ids: [149, 150, 151, 152],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Kongou K2C, Hiei K2C, Haruna K2C
+						ids: [591, 592, 954],
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Haruna K2B
+						ids: [593],
+						multiple: { "tyku": 3 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						multiple: { "houg": 1, "houm": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 6, "houk": 3, "houm": 3 },
+							},
+							{
+								flags: [ "highAccuracyRadar" ],
+								single: { "houm": 1 },
+							},
+						],
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minCount: 2,
+						single: { "houm": 2 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minCount: 3,
+						single: { "houm": 2 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minCount: 4,
+						single: { "houm": 2 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 2,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 6,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 9,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 4,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Hiei K2, Kirishima K2, Kongou K2C, Haruna K2C
+						ids: [150, 152, 591, 954],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Kongou K2, Haruna K2, Haruna K2B
+						ids: [149, 151, 593],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kongou K2, Haruna K2, Haruna K2B
+						ids: [149, 151, 593],
+						minStars: 7,
+						multiple: { "souk": 1 },
+					},
+					{
+						// Kongou K2, Haruna K2, Haruna K2B
+						ids: [149, 151, 593],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Kongou K2, Hiei K2, Haruna K2+, Kirishima K2, Kongou K2C
+						ids: [149, 150, 151, 152, 591, 954, 593],
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2, "houm": 2 },
+							},
+							{
+								flags: [ "highAccuracyRadar" ],
+								single: { "houm": 1 },
+							},
+						],
+					},
+					{
+						// Kirishima K2, Kongou K2C
+						ids: [152, 591],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3 },
+						},
+					},
+					{
+						// Hiei K2, Haruna K2C
+						ids: [150, 954],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2 },
+						},
+					},
+					{
+						// Kongou K2, Haruna K2/K2B
+						ids: [149, 151, 593],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1 },
+						},
+					},
+					{
+						// Kongou K2C, Hiei K2C, Haruna K2/K2B
+						ids: [591, 592, 593, 954],
+						synergy: [
+							{
+								flags: [ "kamikazeTwinTorpedo" ],
+								single: { "raig": 6 },
+								byStars: {
+									gearId: 174,
+									 "6": { "raig": 1 },
+									 "8": { "houm": 1 },
+									"10": { "houg": 1 },
+								},
+							},
+							{
+								flags: [ "highAccuracyRadar" ],
+								single: { "houg": 2, "raig": 2, "houk": 3, "houm": 2 },
+							},
+						],
+					},
+					{
+						// Kongou K2C, Hiei K2C, Haruna K2/K2B
+						ids: [591, 592, 593, 954],
+						minCount: 2,
+						single: { "houm": 1 },
+					},
+					{
+						// Kongou K2C, Hiei K2C
+						ids: [591, 592],
+						synergy: {
+							flags: [ "highAccuracyRadar" ],
+							single: { "houg": 2 },
+						},
+					},
+					{
+						// Haruna K2B/K2C
+						ids: [593, 954],
+						synergy: {
+							flags: [ "highAccuracyRadar" ],
+							single: { "houg": 1 },
+						},
+					},
+				],
+			},
 			// 41cm Triple Gun Mount Kai Ni
 			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
 			"290": {
@@ -5559,6 +5865,7 @@
 						{
 							synergy: {
 								flags: [ "germanLargeRadar" ],
+								countFlag: 0,
 								multiple: { "houk": 1 },
 							},
 						},
@@ -6793,6 +7100,71 @@
 					},
 				]
 			},
+			// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
+			"533": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Akizuki Class
+					"54": [
+						{
+							multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 5,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [968],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+				]
+			},
 			// Locally Modified 12.7cm Twin High-angle Gun Mount
 			"397": {
 				count: 0,
@@ -7332,6 +7704,11 @@
 							},
 						],
 					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
 				],
 			},
 			// 12cm Single High-angle Gun Mount Model E Kai
@@ -7580,6 +7957,37 @@
 						excludeStypes: [1],
 						minStars: 10,
 						multiple: { "houm": 1 },
+					},
+					{
+						// Inagi Kai Ni, extra +1 ev
+						ids: [979],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 2 },
+					},
+					// Inagi Kai Ni star bonuses
+					{
+						ids: [979],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [979],
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [979],
+						minStars: 7,
+						multiple: { "tyku": 2 },
+					},
+					{
+						ids: [979],
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -8863,6 +9271,96 @@
 					},
 				],
 			},
+			// 12.7cm High-angle Gun Mount + Anti-Aircraft Fire Director
+			"130": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Maya Kai Ni
+						ids: [428],
+						minStars: 1,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 3,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 5,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [428],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Isuzu Kai Ni
+						ids: [141],
+						minStars: 2,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 4,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [141],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// All DE
+						stypes: [1],
+						minStars: 3,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
+			},
 			// Type 21 Air Radar
 			"30": {
 				count: 0,
@@ -8907,6 +9405,11 @@
 						// Mogami Kai+
 						ids: [73, 501, 506],
 						single: { "houg": 1, "souk": 1, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				],
 			},
@@ -9291,6 +9794,7 @@
 			// 25mm Twin Autocannon Mount
 			"39": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9311,12 +9815,36 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 9,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
 			// 25mm Triple Autocannon Mount
 			"40": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9337,12 +9865,30 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 9,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
 			// 25mm Single Autocannon Mount
 			"49": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9363,6 +9909,41 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni, extra +2 ev
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 5 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -9444,6 +10025,7 @@
 			// 25mm Triple Autocannon Mount (Concentrated Deployment)
 			"131": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -9464,6 +10046,17 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "tyku": 2 },
 					},
 				],
 			},
@@ -9549,6 +10142,15 @@
 							flags: [ "airRadar" ],
 							single: { "tyku": 2, "houk": 2 },
 						},
+					},
+				},
+				byShip: {
+					// Hatsuzuki Kai Ni
+					ids: [968],
+					multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					synergy: {
+						flags: [ "airRadar" ],
+						multiple: { "houg": 1, "houm": 1 },
 					},
 				},
 			},
@@ -10924,6 +11526,42 @@
 					},
 				],
 			},
+			// Fleet Communication Antenna
+			"531": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// For any ship can equip it
+					{
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 5,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
+			},
 			// Smoke Generator (Smoke Screen)
 			"500": {
 				count: 0,
@@ -11234,6 +11872,11 @@
 						countCap: 2,
 						multiple: { "soku": 5 },
 					},
+					{
+						// Inagi Kai Ni (Slow Group B)
+						ids: [979],
+						single: { "soku": 5},
+					},
 				],
 			},
 			// Improved Kanhon Type Turbine, speed boost synergy with boilers
@@ -11424,12 +12067,14 @@
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
+						//   Slow DE: Inagi K2
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953,
 								26, 27, 77, 87, 80, 81, 439, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
-								445, 451, 491
+								445, 451, 491,
+								922
 							],
-						excludes: [541, 573, 888, 878, 879, 894, 899],
+						excludes: [541, 573, 888, 878, 879, 894, 899, 922, 730],
 						speedCap: 10,
 						synergy: [
 							{
