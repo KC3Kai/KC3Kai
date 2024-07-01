@@ -136,7 +136,7 @@ AntiAir: anti-air related calculations
 	var isAARadar = predAllOf(isRadar, function(mst) {
 		return mst.api_tyku >= 2;
 	});
-	// kind 47 needs AA stat >= 4
+	// kind 47, 48 needs AA stat >= 4
 	function isAARadarWithAtLeast(aa) {
 		return predAllOf(isRadar, function(mst) {
 			return mst.api_tyku >= aa;
@@ -622,6 +622,8 @@ AntiAir: anti-air related calculations
 	// Shiratsuyu-class K2+ with max AA stat >= 70
 	var isShiratsuyuClassK2 = masterIdIn([145, 497, 498, 961, 975]);
 	var isInagiK2 = masterIdEq( 979 );
+	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
+	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -748,13 +750,13 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		48, 8, 1, 1.75, 65, 2000, // wip
+		48, 8, 1, 1.75, 65, 2000,
 		[hatsuzukiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
+		predAllOf(isAkizukiClassKai, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKaiAAFDKai, 2 ),
-				hasSome( isAARadar ))
+				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
 
