@@ -214,7 +214,9 @@
 			}
 			var isCertainSuccess = !!parseInt(params.api_certain_flag);
 			var isSuccess = !!response.api_remodel_flag;
-			// It's 2nd ship anyway, secretary is always Akashi
+			// Known issues: 1.naming inaccurate, 2nd ship should be 'helper', secretary is always Akashi
+			//               2.api_voice_ship_id may not be actual remodel form of helper ship
+			//                 eg: Yuubari Kai Ni Toku+ (623/624) re-uses Kai Ni (622) voice
 			data.secretary = response.api_voice_ship_id || -1;
 			var afterRemodelIds = response.api_remodel_id;
 			var afterRemodelSlot = response.api_after_slot;

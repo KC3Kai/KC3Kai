@@ -136,7 +136,7 @@ AntiAir: anti-air related calculations
 	var isAARadar = predAllOf(isRadar, function(mst) {
 		return mst.api_tyku >= 2;
 	});
-	// kind 47 needs AA stat >= 4
+	// kind 47, 48 needs AA stat >= 4
 	function isAARadarWithAtLeast(aa) {
 		return predAllOf(isRadar, function(mst) {
 			return mst.api_tyku >= aa;
@@ -194,6 +194,10 @@ AntiAir: anti-air related calculations
 	var isBuiltinHighAngleMount = predAllOf(isHighAngleMount, function(mst) {
 		return mst.api_tyku >= 8;
 	});
+	var isHighAngleMountNotBuiltinAAFD = predAllOf(isHighAngleMount, predNot(isBuiltinHighAngleMount));
+
+	// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
+	var is10cmTwinHighAngleMountKaiAAFDKai = masterIdEq(533);
 
 	// [276] 46cm Kai not counted
 	// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
@@ -542,6 +546,7 @@ AntiAir: anti-air related calculations
 	// Icons used to declare AACI type
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
+		hatsuzukiK2Icon = 968,
 		battleShipIcon = 131, // Yamato, weigh anchor!
 		battleShipKaiIcon = 148, // Musashi Kai represents
 		yamatoK2Icon = 911,
@@ -616,6 +621,9 @@ AntiAir: anti-air related calculations
 	var isHarunaK2B = masterIdEq( harunaK2BIcon );
 	// Shiratsuyu-class K2+ with max AA stat >= 70
 	var isShiratsuyuClassK2 = masterIdIn([145, 497, 498, 961, 975]);
+	var isInagiK2 = masterIdEq( 979 );
+	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
+	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -739,6 +747,16 @@ AntiAir: anti-air related calculations
 		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			hasAtLeast( isHighAngleMount, 2 )
+		)
+	);
+	declareAACI(
+		48, 8, 1, 1.75, 65, 2000,
+		[hatsuzukiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
+		predAllOf(isAkizukiClassKai, slotNumAtLeast(3)),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleMountKaiAAFDKai, 2 ),
+				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
 
@@ -901,10 +919,11 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadar ))
 		)
 	);
+	// Kasumi K2B, Inagi K2
 	declareAACI(
 		17, 2, 1, 1.25, 55, 2730, // rate 57?
 		[kasumiK2BIcon, haMountIcon, aaGunIcon],
-		predAllOf(isKasumiK2B),
+		predAnyOf(isKasumiK2B, isInagiK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -912,11 +931,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Satsuki K2
+	// Satsuki K2, Inagi K2
 	declareAACI(
 		18, 2, 1, 1.2, 60, 2740, // rate 59?
 		[satsukiK2Icon, cdmgIcon],
-		predAllOf(isSatsukiK2),
+		predAnyOf(isSatsukiK2, isInagiK2),
 		withEquipmentMsts(
 			hasSome( isAAGunCDMG )
 		)
@@ -930,8 +949,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				/* any HA with builtin AAFD will not work */
-				predNot( hasSome( isBuiltinHighAngleMount )),
-				hasSome( isHighAngleMount ),
+				hasSome( isHighAngleMountNotBuiltinAAFD ),
 				hasSome( isAAGunCDMG ))
 		)
 	);
@@ -1060,10 +1078,11 @@ AntiAir: anti-air related calculations
 				hasAtLeast( isHighAngleMount, 3 ))
 		)
 	);
+	// Tenryuu K2, Inagi K2
 	declareAACI(
 		31, 2, 1, 1.25, 50, 2710,
 		[tenryuuK2Icon, haMountIcon, haMountIcon],
-		predAllOf(isTenryuuK2),
+		predAnyOf(isTenryuuK2, isInagiK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 2 ))

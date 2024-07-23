@@ -232,7 +232,7 @@
 					}
 					if(remodelInfo.boiler) {
 						mappedObj.materials.push({
-							icon: 902,
+							icon: 899,
 							info: remodelInfo,
 							used: isUsed
 						});
@@ -304,7 +304,7 @@
 									m.icon === 75 ? m.info.gunmat :
 									m.icon === 77 ? m.info.airmat :
 									m.icon === 94 ? m.info.armmat :
-									m.icon === 902 ? m.info.boiler :
+									m.icon === 899 ? m.info.boiler :
 									1).fill(m.icon)
 				))).map(iconArr => {
 					const icon = iconArr[0];
@@ -360,7 +360,7 @@
 					case 78:
 						appendOwnedItem(iconImg, PlayerManager.consumables.actionReport);
 						break;
-					case 902: // a slotitem mapped to 902 as a special useitem
+					case 899: // a slotitem mapped to 899 (former 902) as a special useitem
 						appendOwnedItem(iconImg, KC3GearManager.count(g => g.masterId === 87));
 						break;
 				}
@@ -484,7 +484,7 @@
 			}
 			if(remodelInfo.boiler) {
 				$("<img />")
-					.attr("src", KC3Meta.useitemIcon(902))
+					.attr("src", KC3Meta.useitemIcon(899))
 					.width(15).height(15).css("margin-right", 2)
 					.css("vertical-align", "top")
 					.appendTo(line);

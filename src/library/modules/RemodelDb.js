@@ -201,6 +201,8 @@
                 case 955: // Kiyoshimo Kai Ni
                 case 960: // Kiyoshimo K2D
                     return 10;
+                case 730: // Inagi Kai
+                    return 13;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0

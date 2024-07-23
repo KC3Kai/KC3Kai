@@ -379,8 +379,10 @@ Previously known as "Reactor"
 					// 901 virtual item, for 800 rank points as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
+					//     moved to id 899 since 2024-06-27
 					// 903/904 for max gear slots extending card assets as quest rewards
 					// 905/906 for max gear slots extending card assets as event selectrewards
+					//     id 906 moved to id 902
 					default: break;
 				}
 			}
@@ -2891,16 +2893,19 @@ Previously known as "Reactor"
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
 				break;
 				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`
-				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End
+				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End in 2023
+					// exchange 11 teruteruBouzu with furniture and 1 Communication Equipment & Personnel (once) in 2024
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 10;
 				break;
-				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once)
+				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once) in 2023
+					// exchange 20 teruteruBouzu with 1 Fleet Communication Antenna +1 (once) in 2024
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 11;
 				break;
 				case 113: // exchange 12 teruteruBouzu with 1 blueRibbon (twice)
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 12;
 				break;
-				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times)
+				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times) in 2023
+					// exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (8 times) in 2024
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 1;
 				break;
 				default:
@@ -2943,7 +2948,7 @@ Previously known as "Reactor"
 					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2, and `api_slotitem` will appear
 					if(getitem.api_slotitem){
 						// since `api_get_member/slot_item` will not be called, have to update GearManager here
-						KC3GearManager.set([ getitem.api_slotitem ]);
+						KC3GearManager.set(Array.isArray(getitem.api_slotitem) ? getitem.api_slotitem : [ getitem.api_slotitem ]);
 						console.log("Obtained slotitem:", getitem.api_slotitem);
 					}
 					// `api_mst_id` will be the furniture ID if `api_usemst` is 1
@@ -3003,13 +3008,18 @@ Previously known as "Reactor"
 				recipeId = parseInt(params.api_id);
 			// cache current recipe detail data
 			recipes.currentDetail = response.api_data;
-			//recipes.currentDetail.api_req_useitem_id = 75;
-			//recipes.currentDetail.api_req_useitem_num = 1;
-			//recipes.currentDetail.api_req_useitem_id2 = 78;
-			//recipes.currentDetail.api_req_useitem_num2 = 1;
 			// merge detail to cached recipe
 			const recipe = cache[recipeId];
 			cache[recipeId] = $.extend({}, recipe, recipes.currentDetail);
+			// remove omitted properties in the same recipe of different stars
+			if(recipes.currentDetail.api_req_useitem_id === undefined){
+				delete cache[recipeId].api_req_useitem_id;
+				delete cache[recipeId].api_req_useitem_num;
+			}
+			if(recipes.currentDetail.api_req_useitem_id2 === undefined){
+				delete cache[recipeId].api_req_useitem_id2;
+				delete cache[recipeId].api_req_useitem_num2;
+			}
 			// cache ID info of current item to be improved
 			recipes.rosterId = parseInt(params.api_slot_id);
 			recipes.masterId = recipe.api_slot_id;
@@ -3180,6 +3190,8 @@ Previously known as "Reactor"
 					[1005,1,[1,3], true, true], // By13: 2nd requirement: [W1-3] A-rank+ the boss node
 					[1005,2,[1,5], true, true], // By13: 3rd requirement: [W1-5] A-rank+ the boss node
 					[1005,3,[3,2], true, true], // By13: 4th requirement: [W3-2] A-rank+ the boss node
+					[1012,1,[1,2], true, true], // By14: 2nd requirement: [W1-2] A-rank+ the boss node twice
+					[1012,2,[1,5], true, true], // By14: 3rd requirement: [W1-5] A-rank+ the boss node twice
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
@@ -3242,6 +3254,7 @@ Previously known as "Reactor"
 					[975,1,[2,3], true, true], // By12: 2nd requirement: [W2-3] S-rank the boss node
 					[975,2,[3,2], true, true], // By12: 3rd requirement: [W3-2] S-rank the boss node
 					[975,3,[5,3], true, true], // By12: 4th requirement: [W5-3] S-rank the boss node
+					[1012,0,[1,1], true, true], // By14: 1st requirement: [W1-1] S-rank the boss node 3 times
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

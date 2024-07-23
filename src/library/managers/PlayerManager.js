@@ -564,12 +564,13 @@ Does not include Ships and Gears which are managed by other Managers
 				"97": "teruteruBouzu",
 				"98": "blueRibbon",
 				"99": "whiteRibbon",
+				"899": "boiler",
 				"901": "rankPoints",
-				"902": "boiler",
+				"902": "gearSlots2", // boiler id moved to 899
 				"903": "gearSlots3",
 				"904": "gearSlots4",
 				"905": "gearSlots5",
-				"906": "gearSlots2",
+				"906": "gearSlots2", // moved to 902
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :
