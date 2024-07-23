@@ -1243,6 +1243,7 @@ Contains summary information about a fleet and its ships
 			"35": 0.35,
 			"52": 0.35,
 			"63": 0.35,
+			"75": 0.35,
 		})[mapKey] || 0.4;
 	};
 	

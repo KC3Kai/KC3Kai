@@ -342,7 +342,7 @@
 		"rewardConsumables": [0, 3, 0, 0]
 	},
 	"196": {
-		"unlock": [197, 892],
+		"unlock": [892],
 		"rewardConsumables": [0, 5, 0, 0]
 	},
 	"197": {
@@ -930,6 +930,7 @@
 		"rewardConsumables": [0, 5, 8, 4]
 	},
 	"348": {
+		"unlock": [372],
 		"tracking": [
 			[0, 4]
 		],
@@ -1010,6 +1011,9 @@
 	"366": {
 		"rewardConsumables": [0, 8, 4, 0]
 	},
+	"367": {
+		"hash": -1082455334
+	},
 	"368": {
 		"unlock": [992, 993, 1131],
 		"tracking": [
@@ -1029,6 +1033,13 @@
 			[0, 4]
 		],
 		"rewardConsumables": [0, 2, 7, 2]
+	},
+	"372": {
+		"unlock": [1138],
+		"tracking": [
+			[0, 4]
+		],
+		"rewardConsumables": [0, 0, 10, 0]
 	},
 	"401": {},
 	"402": {
@@ -1380,7 +1391,7 @@
 		"rewardConsumables": [0, 0, 0, 7]
 	},
 	"619": {
-		"unlock": [637, 638, 654, 689],
+		"unlock": [637, 638, 654, 689, 1137],
 		"tracking": [
 			[0, 1]
 		],
@@ -2304,14 +2315,14 @@
 	},
 	"953": {
 		"unlock": [954],
-		"hash": -8961584
+		"hash": 85643174
 	},
 	"954": {
 		"unlock": [955],
-		"hash": -519654639
+		"hash": 998299532
 	},
 	"955": {
-		"hash": -203501820
+		"hash": -1360508466
 	},
 	"956": {
 		"hash": 1797333829
@@ -2506,6 +2517,26 @@
 	"1011": {
 		"hash": -1978573149
 	},
+	"1012": {
+		"tracking": [
+			[0, 3],
+			[0, 2],
+			[0, 2]
+		],
+		"rewardConsumables": [0, 6, 16, 3]
+	},
+	"1013": {
+		"rewardConsumables": [0, 8, 0, 8]
+	},
+	"1014": {
+		"unlock": [1015, 1139],
+		"rewardConsumables": [0, 5, 6, 0]
+	},
+	"1015": {
+		"unlock": [1016],
+		"rewardConsumables": [0, 0, 8, 2]
+	},
+	"1016": {},
 	"1101": {
 		"unlock": [1102, 1103],
 		"rewardConsumables": [8, 0, 8, 4]
@@ -2626,6 +2657,15 @@
 		"unlock": [1009],
 		"hash": 756900
 	},
+	"1137": {},
+	"1138": {
+		"unlock": [1139],
+		"tracking": [
+			[0, 4]
+		],
+		"rewardConsumables": [0, 3, 0, 2]
+	},
+	"1139": {},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],
