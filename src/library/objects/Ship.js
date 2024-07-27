@@ -3629,6 +3629,10 @@ KC3改 Ship Object
 							{ p1: [697], p2: [659] },      // South Dakota + Washington
 							{ p1: [446], p2: [447] },      // Italia + Roma
 							{ p1: [1496], p2: [918] },     // Colorado + Maryland
+							{ p1: [576], p2: [577] },      // Nelson + Rodney (added since 2024-07-27)
+							{ p1: [969], p2: [724] },      // Richelieu Deux + Jean Bart Kai (2024-07-27)
+							{ p1: [392], p2: [724] },      // Richelieu Kai + Jean Bart Kai (2024-07-27)
+							{ p1: [364], p2: [733] },      // Warspite + Valiant? (2024-07-27)
 						];
 						const validPartners = allowedCombinations.find(pair => {
 							const p1Id = fleetObj.ship(1).masterId,
@@ -3804,6 +3808,8 @@ KC3改 Ship Object
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.61],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
+			105: ["Cutin", 105, "CutinRichelieuSpecial", 1.0],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.0],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
@@ -4118,6 +4124,8 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
+			105: ["Cutin", 105, "CutinRichelieuSpecial", 1.0],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.0],
 			200: ["Cutin", 200, "CutinNightZuiunNight", 1.28],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],

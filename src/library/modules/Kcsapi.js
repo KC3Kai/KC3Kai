@@ -376,6 +376,7 @@ Previously known as "Reactor"
 					case 97: PlayerManager.consumables.teruteruBouzu = thisItem.api_count; break;
 					case 98: PlayerManager.consumables.blueRibbon = thisItem.api_count; break;
 					case 99: PlayerManager.consumables.whiteRibbon = thisItem.api_count; break;
+					case 100:PlayerManager.consumables.overseaTechMaterial = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
@@ -1853,6 +1854,7 @@ Previously known as "Reactor"
 			
 			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
+				if(!x) return; // ignore null element if any
 				if(x.api_type == 1 && x.api_item.api_id >= 5 && x.api_item.api_id <= 8) {
 					consume[x.api_item.api_id - 5] += x.api_count;
 				}
@@ -1867,6 +1869,7 @@ Previously known as "Reactor"
 			
 			var deferEventApiCount = 0;
 			bonuses.forEach(bonus => {
+				if(!bonus) return;
 				const bonusType = bonus.api_type;
 				// Known types: 1=Consumable, 2=Unlock a fleet, 3=Furniture box, 4=LSC unlock,
 				//   5=LBAS unlock, 6=Exped resupply unlock, 11=Ship, 12=Slotitem, 13=Useitem,
