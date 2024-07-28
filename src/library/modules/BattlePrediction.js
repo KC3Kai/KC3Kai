@@ -811,6 +811,7 @@
     const { parseDamage, parseDefender, parseDefenderFriend, parseInfo, isRealAttack,
       parseAttacker, parseAttackerFriend, parseAttackerSpecial,
       isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin,
+      isRichelieuCutin, isQelizabethCutin,
       isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3,
       isYamatoCutin3P, isYamatoCutin2P,
       isNightZuiunCutin } = KC3BattlePrediction.battle.phases.hougeki;
@@ -829,6 +830,10 @@
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2][index], isAllySideFriend})) :
         isKongouCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1][index], isAllySideFriend})) :
+        isRichelieuCutin(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 0, 1][index], isAllySideFriend})) :
+        isQelizabethCutin(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 0, 1][index], isAllySideFriend})) :
         isNightZuiunCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: orgAttacker, isAllySideFriend})) :
         isSubmarineCutin1(attackJson) ?
@@ -871,6 +876,8 @@
   Hougeki.isColoradoCutin   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 103;
   // Kongou cutin (104) only available in night api_sp_list for now, no daytime conflict yet
   Hougeki.isKongouCutin     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 104;
+  Hougeki.isRichelieuCutin  = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 105;
+  Hougeki.isQelizabethCutin = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 106;
   Hougeki.isSubmarineCutin1 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 300;
   Hougeki.isSubmarineCutin2 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 301;
   Hougeki.isSubmarineCutin3 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 302;
@@ -882,6 +889,7 @@
   // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
   // For Colorado, 3 attacks assigned to first 3 ships;
   // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
+  // For Richelieu/Queen-Elizabeth Class, unknown yet;
   // For Submarine Fleet, 2~4 torpedo attacks assigned to 2 of 2nd~4th SS members, 1st flagship not attack;
   //   Known issue: no proper way to predict 3 hits torpedo attacks have merged 2 hits from which submarine for now;
   // For Yamato/Musashi, 3 attacks assigned to first 2or3 ships, flagship twice if only 1 partner ship;

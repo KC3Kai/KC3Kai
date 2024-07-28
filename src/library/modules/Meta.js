@@ -171,7 +171,7 @@ Provides access to data on built-in JSON files
 			392, // Richelieu Kai -> Deux
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546],
+		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
 		nelsonTouchShips: [571, 576, 572, 577],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
@@ -184,6 +184,8 @@ Provides access to data on built-in JSON files
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392, 969, 724],
 		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 577, 364, 733, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918, 724, 392, 969],
+		richelieuClassCutinShips: [392, 969, 724],
+		queenElizabethClassCutinShips: [364, 733],
 		// getCountryName by ctype in `main.js#SlotItemEffectParamModel.SHIP_COUNTRY`
 		countryCtypeMap: {
 			"UnitedStates": [
@@ -1004,7 +1006,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Richelieu/QueenElizabeth Cutin index 100 to 20
 				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
 				// move Submarine Fleet Cutin index 300 to 40
 				// move Yamato-class Cutin index 400 to 50
@@ -1013,7 +1015,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Kongou/Richelieu/QueenElizabeth Cutin index 100 to 20
 				// move Zuiun Night Cutin index 200 to 30
 				// move Submarine Fleet Cutin index 300 to 40
 				// move Yamato-class Cutin index 400 to 50

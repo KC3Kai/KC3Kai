@@ -1221,11 +1221,13 @@
 			// A night Zuiun CI flag will be added to all SUBSEQUENT attack submissions (excluding the first night Zuiun CI).
 			let nightZuiunIdx = -1;
 
-			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
+			// Index list of partner ships for NagaMutsu/Colorado/Richeliue/QueenElizabeth/Yamato cutins
 			const shipIndexListSpecial = {
 				101: [1],
 				102: [1],
 				103: [1, 2],
+				105: [1],
+				106: [1],
 				400: [1, 2],
 				401: [1],
 			};

@@ -2467,9 +2467,8 @@ KC3改 Ship Object
 		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
 			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
-			// [518] 14cm Twin Kai2 forgotten: https://twitter.com/yukicacoon/status/1729696346179813382
 			const singleMountCnt = this.countEquipment([4, 11]);
-			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407]);
+			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407, 518]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
 			result += lightCruiserBonus;
 		}
@@ -3688,6 +3687,28 @@ KC3改 Ship Object
 			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
 	};
 
+	KC3Ship.prototype.canDoRicheliueClassCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		if(KC3Meta.richelieuClassCutinShips.includes(this.masterId) && !this.isStriped()) {
+		}
+		return false;
+	};
+
+	KC3Ship.prototype.estimateRichelieuClassCutinModifier = function(forShipPos = 0) {
+		return 1;
+	};
+
+	KC3Ship.prototype.canDoQueenElizabethClassCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		if(KC3Meta.queenElizabethClassCutinShips.includes(this.masterId) && !this.isStriped()) {
+		}
+		return false;
+	};
+
+	KC3Ship.prototype.estimateQueenElizabethClassCutinModifier = function(forShipPos = 0) {
+		return 1;
+	};
+
 	/**
 	 * Night Zuiun night cut-in attack modifiers are variant depending on equipment.
 	 * Suspected to be multi-rolls since random modifier and higher rate for bonus gears.
@@ -3883,6 +3904,14 @@ KC3改 Ship Object
 			// Colorado cutin since 2019-05-25
 			if(this.canDoColoradoCutin()) {
 				results.push(KC3Ship.specialAttackTypeDay(103, null, this.estimateColoradoCutinModifier()));
+			}
+			// Richelieu-class Cutin since 2024-07-27
+			if(this.canDoRicheliueClassCutin()) {
+				results.push(KC3Ship.specialAttackTypeDay(105, null, this.estimateRichelieuClassCutinModifier()));
+			}
+			// Queen Elizabeth-class Cutin since 2024-07-27
+			if(this.canDoQueenElizabethClassCutin()) {
+				results.push(KC3Ship.specialAttackTypeDay(106, null, this.estimateQueenElizabethClassCutinModifier()));
 			}
 			// Sub Fleet cutin since 2021-05-08
 			if(this.canDoSubFleetCutin()) {
@@ -4154,6 +4183,8 @@ KC3改 Ship Object
 			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
 			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
 			104: { posIndex: [0, 1], partIndex: [1], nightOnly: true, modFunc: "estimateKongouCutinModifier" },
+			105: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateRichelieuClassCutinModifier", },
+			106: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateQueenElizabethClassCutinModifier", },
 			// Power mods irrelevant to ship position, not necessary yet
 			//200: { posIndex: [], partIndex: [], nightOnly: true, },
 			300: { posIndex: [1, 2], posIndex2: [1, 1, 2, 2], partIndex: [0, 1, 2], },
@@ -4280,6 +4311,14 @@ KC3改 Ship Object
 				// special Kongou-class K2C Cutin since 2020-04-23
 				if(this.canDoKongouCutin()) {
 					results.push(KC3Ship.specialAttackTypeNight(104, null, this.estimateKongouCutinModifier()));
+				}
+				// special Richelieu-class Cutin since 2024-07-27
+				if(this.canDoRicheliueClassCutin()) {
+					results.push(KC3Ship.specialAttackTypeNight(105, null, this.estimateRichelieuClassCutinModifier()));
+				}
+				// special Queen Elizabeth-class Cutin since 2024-07-27
+				if(this.canDoQueenElizabethClassCutin()) {
+					results.push(KC3Ship.specialAttackTypeNight(106, null, this.estimateQueenElizabethClassCutinModifier()));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {
@@ -4961,7 +5000,7 @@ KC3改 Ship Object
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];
 				// these gun added to firepower bonus, but not sure if got accuracy either
-				const twinMountIds2 = [303, 310, 359, 360, 361, 407];
+				const twinMountIds2 = [303, 310, 359, 360, 361, 407, 518];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;

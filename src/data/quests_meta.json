@@ -1041,6 +1041,13 @@
 		],
 		"rewardConsumables": [0, 0, 10, 0]
 	},
+	"373": {
+		"unlock": [1140],
+		"tracking": [
+			[0, 4]
+		],
+		"rewardConsumables": [0, 0, 8, 0]
+	},
 	"401": {},
 	"402": {
 		"unlock": [403, 424],
@@ -2666,6 +2673,7 @@
 		"rewardConsumables": [0, 3, 0, 2]
 	},
 	"1139": {},
+	"1140": {},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],

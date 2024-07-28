@@ -445,6 +445,7 @@ Saves and loads significant data for future use
 		 *   * [460/352/699] Hayasui/Souya AGS can only equip [524] in secondary guns,
 		 *   * [699] Souya AGS can only equip [48] in small guns,
 		 *   * [179/180] Z1/Z3 Zwei can only equip [124] in large radars.
+		 *   * [927/733] Valiant can only equip [367] in seaplane bombers.
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
@@ -511,6 +512,8 @@ Saves and loads significant data for future use
 			excludeTypedGearsOnShips(1, [48], [699]);
 			// Remove Z1/Z3 Zwei from Large Radar type list except FuMO25 Radar
 			excludeTypedGearsOnShips(13, [124], [179, 180]);
+			// Remove Valiant base & Kai from Seaplane Bomber type list except Swordfish (Seaplane Model)
+			excludeTypedGearsOnShips(11, [367], [927, 733]);
 			return {
 				stypes: capableStypes,
 				includes: capableShips,

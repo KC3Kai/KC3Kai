@@ -122,7 +122,11 @@
 				frenchYellowSecGunMount: 0,
 				frenchYellowSecGunMountIds: [247],
 				frenchNightRecon: 0,
-				frenchNightReconIds: [471],
+				frenchNightReconIds: [471, 538],
+				frenchNightReconBase: 0,
+				frenchNightReconBaseIds: [471],
+				frenchNightReconKai: 0,
+				frenchNightReconKaiIds: [538],
 				germanLargeRadar: 0,
 				germanLargeRadarIds: [124],
 			},
@@ -2652,15 +2656,9 @@
 					// Kamoi Class
 					"72": "62",
 					// Queen Elizabeth Class
-					"67": [
-						{
-							multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
-						},
-						// Warspite only
-						{
-							single: { "houg": 4, "houk": 1, "saku": 1 },
-						},
-					],
+					"67": {
+						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+					},
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
@@ -2668,6 +2666,18 @@
 					// Town Class
 					"108": "88",
 				},
+				byShip: [
+					{
+						// Warspite
+						origins: [439],
+						single: { "houg": 4, "houk": 1, "saku": 1 },
+					},
+					{
+						// Valiant
+						origins: [927],
+						single: { "houg": 3, "houk": 2, "saku": 1 },
+					},
+				],
 			},
 			// Fairey Seafox Kai
 			"371": {
@@ -3147,6 +3157,65 @@
 					"79": {
 						multiple: { "houg": 2, "houm": 1 },
 					},
+				},
+			},
+			// Loire 130M Kai (Skilled)
+			"538": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 3, "houk": 2, "houm": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Richelieu Class
+					"79": {
+						multiple: { "houg": 2, "houm": 1 },
+					},
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+				},
+				byShip: {
+					// Richelieu Deux
+					ids: [969],
+					multiple: { "houg": 1, "houk": 1, "houm": 1 },
 				},
 			},
 			// Walrus
@@ -5155,12 +5224,8 @@
 							synergy: [
 								{
 									flags: [ "frenchNightRecon" ],
-									byCount: {
-										gear: "frenchNightRecon",
-										"1": { "houm": 1 },
-										"2": { "houm": 2 },
-										"3": { "houm": 3 },
-									},
+									countFlag: 0,
+									multiple: { "houm": 2 },
 								},
 								{
 									flags: [ "frenchYellowSecGunMount" ],
@@ -5179,17 +5244,26 @@
 							synergy: [
 								{
 									flags: [ "frenchNightRecon" ],
-									byCount: {
-										gear: "frenchNightRecon",
-										"1": { "houm": 1 },
-										"2": { "houm": 2 },
-										"3": { "houm": 3 },
-									},
+									countFlag: 0,
+									multiple: { "houm": 1 },
+								},
+								{
+									flags: [ "frenchNightReconBase" ],
 									byStars: {
 										gearId: 471,
 										isMultiple: true,
 										"7": { "houm": 1 },
 										"9": { "houk": 1 },
+									},
+								},
+								{
+									flags: [ "frenchNightReconKai" ],
+									byStars: {
+										gearId: 538,
+										isMultiple: true,
+										"7": { "houm": 1 },
+										"8": { "houk": 1 },
+										"9": { "houm": 1 },
 									},
 								},
 								{
@@ -5229,6 +5303,246 @@
 						},
 					],
 				},
+			},
+			// 13.8cm Twin Gun Mount
+			"534": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Mogador Class
+					"129": {
+						multiple: { "houm": 1 },
+					},
+				},
+			},
+			// 13.8cm Twin Gun Mount Kai
+			"535": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Mogador Class
+					"129": {
+						multiple: { "houm": 1 },
+					},
+				},
+				byShip: {
+					// Mogador Kai
+					ids: [967],
+					multiple: { "houg": 1 },
+				},
+			},
+			// 15.2cm Triple Main Gun Mount
+			"536": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 1,
+							synergy: {
+								flags: [ "frenchNightReconKai" ],
+								byStars: {
+									gearId: 538,
+									isMultiple: true,
+									"1": { "houk": 1 },
+									"9": { "houm": 1 },
+								},
+							},
+						},
+						{
+							minStars: 3,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// La Galissonniere Class
+					"128": {
+						multiple: { "houm": 1 },
+					},
+				},
+				byShip: {
+					// Gloire Kai
+					ids: [970],
+					minStars: 1,
+					synergy: {
+						flags: [ "frenchNightRecon" ],
+						countFlag: 0,
+						multiple: { "houk": 1, "houm": 1 },
+					},
+				},
+			},
+			// 15.2cm Triple Main Gun Mount Kai
+			"537": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 1,
+							synergy: {
+								flags: [ "frenchNightReconKai" ],
+								byStars: {
+									gearId: 538,
+									isMultiple: true,
+									"1": { "houk": 1 },
+									"9": { "houm": 1 },
+								},
+							},
+						},
+						{
+							minStars: 3,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// La Galissonniere Class
+					"128": {
+						multiple: { "houm": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Gloire Kai
+						ids: [970],
+						multiple: { "houg": 1, "houk": 2, "houm": 1 },
+					},
+					{
+						// Gloire Kai
+						ids: [970],
+						minStars: 1,
+						synergy: {
+							flags: [ "frenchNightRecon" ],
+							countFlag: 0,
+							multiple: { "houk": 1, "houm": 1 },
+						},
+					},
+				],
 			},
 			// 14cm Twin Gun Mount
 			"119": {
