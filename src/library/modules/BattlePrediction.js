@@ -889,7 +889,7 @@
   // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
   // For Colorado, 3 attacks assigned to first 3 ships;
   // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
-  // For Richelieu/Queen-Elizabeth Class, unknown yet;
+  // For Richelieu/Queen-Elizabeth Class, 3 attacks assigned to 1st twice, 2nd once?;
   // For Submarine Fleet, 2~4 torpedo attacks assigned to 2 of 2nd~4th SS members, 1st flagship not attack;
   //   Known issue: no proper way to predict 3 hits torpedo attacks have merged 2 hits from which submarine for now;
   // For Yamato/Musashi, 3 attacks assigned to first 2or3 ships, flagship twice if only 1 partner ship;

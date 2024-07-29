@@ -3152,6 +3152,7 @@ KC3改 Ship Object
 		const abyssalNameTypeMap = {
 			// Uncategorized event-only land installation:
 			//"北端上陸姫": 5, // Northernmost Landing Princess
+			"港湾棲姫 休日mode": 5, // Harbor Princess Holiday Mode
 			"港湾夏姫": 5, // Summer Harbor Princess
 			"離島棲姫": 3, // Isolated Island Princess
 			"砲台小鬼": 2, // Artillery Imp
@@ -3631,7 +3632,7 @@ KC3改 Ship Object
 							{ p1: [576], p2: [577] },      // Nelson + Rodney (added since 2024-07-27)
 							{ p1: [969], p2: [724] },      // Richelieu Deux + Jean Bart Kai (2024-07-27)
 							{ p1: [392], p2: [724] },      // Richelieu Kai + Jean Bart Kai (2024-07-27)
-							{ p1: [364], p2: [733] },      // Warspite + Valiant? (2024-07-27)
+							{ p1: [364], p2: [733] },      // Warspite + Valiant (2024-07-27)
 						];
 						const validPartners = allowedCombinations.find(pair => {
 							const p1Id = fleetObj.ship(1).masterId,
@@ -3687,26 +3688,71 @@ KC3改 Ship Object
 			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
 	};
 
-	KC3Ship.prototype.canDoRicheliueClassCutin = function() {
+	KC3Ship.prototype.canDoRichelieuClassCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		if(KC3Meta.richelieuClassCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				const isDoubleLine = [2, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					partnerShip = fleetObj.ship(1);
+				const validPartner = KC3Meta.richelieuClassCutinShips.includes(partnerShip.masterId)
+						&& !partnerShip.isAbsent()
+						&& !partnerShip.isTaiha();
+				const hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isDoubleLine && validPartner && hasSixSurfaceShips;
+			}
 		}
 		return false;
 	};
 
 	KC3Ship.prototype.estimateRichelieuClassCutinModifier = function(forShipPos = 0) {
-		return 1;
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.richelieuClassCutinShips.includes(flagshipMstId)) return 1;
+		const baseModifier = 1.24;
+		const targetShip = locatedFleet.ship(forShipPos);
+		const richelieuFlagshipModifier = forShipPos === 0 && RemodelDb.originOf(targetShip.masterId) === 492 ? 1.05 : 1;
+		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
+		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		return baseModifier * richelieuFlagshipModifier * apShellModifier * surfaceRadarModifier;
 	};
 
 	KC3Ship.prototype.canDoQueenElizabethClassCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		if(KC3Meta.queenElizabethClassCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				const isDoubleLine = [2, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					partnerShip = fleetObj.ship(1);
+				const validPartner = KC3Meta.queenElizabethClassCutinShips.includes(partnerShip.masterId)
+						&& !partnerShip.isAbsent()
+						&& !partnerShip.isTaiha();
+				const hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isDoubleLine && validPartner && hasSixSurfaceShips;
+			}
 		}
 		return false;
 	};
 
 	KC3Ship.prototype.estimateQueenElizabethClassCutinModifier = function(forShipPos = 0) {
-		return 1;
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.queenElizabethClassCutinShips.includes(flagshipMstId)) return 1;
+		const baseModifier = [1.2, 1.2][forShipPos % 2];
+		const targetShip = locatedFleet.ship(forShipPos);
+		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
+		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		return baseModifier * apShellModifier * surfaceRadarModifier;
 	};
 
 	/**
@@ -3829,8 +3875,8 @@ KC3改 Ship Object
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.61],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
-			105: ["Cutin", 105, "CutinRichelieuSpecial", 1.0],
-			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.0],
+			105: ["Cutin", 105, "CutinRichelieuSpecial", 2.02],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 2.0],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
@@ -3906,7 +3952,7 @@ KC3改 Ship Object
 				results.push(KC3Ship.specialAttackTypeDay(103, null, this.estimateColoradoCutinModifier()));
 			}
 			// Richelieu-class Cutin since 2024-07-27
-			if(this.canDoRicheliueClassCutin()) {
+			if(this.canDoRichelieuClassCutin()) {
 				results.push(KC3Ship.specialAttackTypeDay(105, null, this.estimateRichelieuClassCutinModifier()));
 			}
 			// Queen Elizabeth-class Cutin since 2024-07-27
@@ -4153,8 +4199,8 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
-			105: ["Cutin", 105, "CutinRichelieuSpecial", 1.0],
-			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.0],
+			105: ["Cutin", 105, "CutinRichelieuSpecial", 2.02],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 2.0],
 			200: ["Cutin", 200, "CutinNightZuiunNight", 1.28],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
@@ -4313,7 +4359,7 @@ KC3改 Ship Object
 					results.push(KC3Ship.specialAttackTypeNight(104, null, this.estimateKongouCutinModifier()));
 				}
 				// special Richelieu-class Cutin since 2024-07-27
-				if(this.canDoRicheliueClassCutin()) {
+				if(this.canDoRichelieuClassCutin()) {
 					results.push(KC3Ship.specialAttackTypeNight(105, null, this.estimateRichelieuClassCutinModifier()));
 				}
 				// special Queen Elizabeth-class Cutin since 2024-07-27
