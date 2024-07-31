@@ -106,7 +106,7 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊'
+			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
 		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
@@ -168,9 +168,10 @@ Provides access to data on built-in JSON files
 			502, // Mikuma K2 -> K2T
 			323, // Harusame Kai -> K2
 			357, // Hatsuzuki Kai -> K2
+			392, // Richelieu Kai -> Deux
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546],
+		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
 		nelsonTouchShips: [571, 576, 572, 577],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
@@ -181,8 +182,10 @@ Provides access to data on built-in JSON files
 		yamatoCutinShips: [911, 916],
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
-		yamatoCutinPartner1: [546, 360, 178, 392],
-		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918],
+		yamatoCutinPartner1: [546, 360, 178, 392, 969, 724],
+		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 577, 364, 733, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918, 724, 392, 969],
+		richelieuClassCutinShips: [392, 969, 724],
+		queenElizabethClassCutinShips: [364, 733],
 		// getCountryName by ctype in `main.js#SlotItemEffectParamModel.SHIP_COUNTRY`
 		countryCtypeMap: {
 			"UnitedStates": [
@@ -195,7 +198,7 @@ Provides access to data on built-in JSON files
 			"Australia": [96],
 			"Sweden": [89],
 			"Germany": [47, 48, 55, 57, 63],
-			"France": [70, 79],
+			"France": [70, 79, 128, 129],
 			"Russia": [73, 81],
 			"Japan": [
 				1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -234,7 +237,7 @@ Provides access to data on built-in JSON files
 			// [1630] 深海空超要塞's image asset not uploaded onto server so far, perhaps no fix forever?
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631:1630,*/1634: 1573, 1635: 1561, 1636: 1562,
 			1637: 364,  1638: 48,   1640: 513,  1641: 507,  1642: 508,  1643: 85,   1644: 308,  1645: 376,
-			1646: 439,  1647: 363,  1648: 1648,
+			1646: 439,  1647: 363,  1648: 1648, 1649: 537,
 		},
 		
 		/* Initialization
@@ -1003,7 +1006,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Richelieu/QueenElizabeth Cutin index 100 to 20
 				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
 				// move Submarine Fleet Cutin index 300 to 40
 				// move Yamato-class Cutin index 400 to 50
@@ -1012,7 +1015,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Kongou/Richelieu/QueenElizabeth Cutin index 100 to 20
 				// move Zuiun Night Cutin index 200 to 30
 				// move Submarine Fleet Cutin index 300 to 40
 				// move Yamato-class Cutin index 400 to 50

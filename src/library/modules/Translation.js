@@ -363,7 +363,7 @@
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou/Yamato Cutin) key
+			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou/Yamato/Richelieu/Elizabeth Cutin) key
 			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
 			// add special cut-in voice keys for Nagato class combination

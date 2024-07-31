@@ -564,6 +564,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"97": "teruteruBouzu",
 				"98": "blueRibbon",
 				"99": "whiteRibbon",
+				"100": "overseaTechMaterial",
 				"899": "boiler",
 				"901": "rankPoints",
 				"902": "gearSlots2", // boiler id moved to 899

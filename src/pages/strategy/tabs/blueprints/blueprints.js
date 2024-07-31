@@ -230,6 +230,14 @@
 						});
 						mappedObj.materialsUsed += isUsed;
 					}
+					if(remodelInfo.techmat) {
+						mappedObj.materials.push({
+							icon: 100,
+							info: remodelInfo,
+							used: isUsed
+						});
+						mappedObj.materialsUsed += isUsed;
+					}
 					if(remodelInfo.boiler) {
 						mappedObj.materials.push({
 							icon: 899,
@@ -304,6 +312,7 @@
 									m.icon === 75 ? m.info.gunmat :
 									m.icon === 77 ? m.info.airmat :
 									m.icon === 94 ? m.info.armmat :
+									m.icon === 100 ? m.info.techmat :
 									m.icon === 899 ? m.info.boiler :
 									1).fill(m.icon)
 				))).map(iconArr => {
@@ -356,6 +365,9 @@
 						break;
 					case 94:
 						appendOwnedItem(iconImg, PlayerManager.consumables.newArmamentMaterial);
+						break;
+					case 100:
+						appendOwnedItem(iconImg, PlayerManager.consumables.overseaTechMaterial);
 						break;
 					case 78:
 						appendOwnedItem(iconImg, PlayerManager.consumables.actionReport);
@@ -480,6 +492,16 @@
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 10)
 					.text(remodelInfo.armmat)
+					.appendTo(line);
+			}
+			if(remodelInfo.techmat) {
+				$("<img />")
+					.attr("src", KC3Meta.useitemIcon(100))
+					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 10)
+					.text(remodelInfo.techmat)
 					.appendTo(line);
 			}
 			if(remodelInfo.boiler) {
