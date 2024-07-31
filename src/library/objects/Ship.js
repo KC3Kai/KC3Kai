@@ -2467,9 +2467,9 @@ KC3改 Ship Object
 		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
 			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
+			// get bonus bug? small guns 13.8cm and its kai: https://x.com/kancolle_aki/status/1818138892744454392
 			const singleMountCnt = this.countEquipment([4, 11]);
-			// Small gun 13.8cm: https://x.com/kancolle_aki/status/1818138892744454392
-			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407, 518, 534]);
+			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407, 518]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
 			result += lightCruiserBonus;
 		}
@@ -3689,6 +3689,11 @@ KC3改 Ship Object
 			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
 	};
 
+	/**
+	 * Most conditions are the same with Nagato-class cutin, except:
+	 * 2nd ship fixed to Richelieu-class Kai+.
+	 * @see https://x.com/CC_jabberwock/status/1817973885155033447
+	 */
 	KC3Ship.prototype.canDoRichelieuClassCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		if(KC3Meta.richelieuClassCutinShips.includes(this.masterId) && !this.isStriped()) {
