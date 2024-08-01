@@ -291,7 +291,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyJul',
 				key: 'timeToResetYearlyJulQuests',
 				resetMonth: JULY,
-				questIds: [354, 368, 1105],
+				questIds: [354, 368, 373, 1105],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJul.type);
 				},
@@ -606,8 +606,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13, Cy14
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -879,6 +879,13 @@ Uses KC3Quest objects to play around with
 							fleet.hasShipClass(54, 0) &&   // Akizuki-class
 							fleet.countShipType(2) >= 3 && // 3 DD in total
 							fleet.countShipType(10) >= 2;
+					},
+				"373": // Cy14 PvP with French ship as flagship, 2 more French ships
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShipClass(KC3Meta.ctypesByCountryName("France"), 0) &&   // French flagship
+							fleet.countShipClass(KC3Meta.ctypesByCountryName("France")) >= 3; // 3 French ships in total
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

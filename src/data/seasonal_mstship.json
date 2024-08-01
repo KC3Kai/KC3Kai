@@ -6963,5 +6963,45 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5870": {
+		"api_id": 5870,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5871": {
+		"api_id": 5871,
+		"api_name": "夏清霜改二",
+		"api_yomi": "きよしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5872": {
+		"api_id": 5872,
+		"api_name": "夏清霜改二丁",
+		"api_yomi": "きよしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5873": {
+		"api_id": 5873,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5874": {
+		"api_id": 5874,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

@@ -192,14 +192,17 @@
                 case 396: // Gambier Bay Kai
                     return 60;
                 case 877: // Conte di Cavour
+                case 392: // Richelieu Kai
                     return 30;
                 case 878: // Conte di Cavour Kai
                 case 916: // Yamato Kai Ni Juu
                     return 50;
                 case 325: // Kiyoshimo Kai
+                case 357: // Hatsuzuki Kai
                     return 30;
                 case 955: // Kiyoshimo Kai Ni
                 case 960: // Kiyoshimo K2D
+                case 962: // Mogador
                     return 10;
                 case 730: // Inagi Kai
                     return 13;
@@ -331,6 +334,8 @@
                     return 20;
                 case 916: // Yamato Kai Ni Juu
                     return 50;
+                case 392: // Richelieu Kai
+                    return 120;
                 default:
                     return 0;
             }
@@ -374,6 +379,7 @@
                  , airmat: Int
                  , armmat: Int
                  , boiler: Int
+                 , techmat: Int
                  , devmat: Int
                  , screw: Int
                  , torch: Int
@@ -411,6 +417,7 @@
                       airmat: 0,
                       armmat: 0,
                       boiler: 0,
+                      techmat: 0,
                       devmat: 0,
                       screw: 0,
                       torch: 0
@@ -452,6 +459,7 @@
                 remodel.airmat = x.api_aviation_mat_count;
                 remodel.armmat = x.api_arms_mat_count;
                 remodel.boiler = x.api_boiler_count;
+                remodel.techmat = x.api_tech_count;
                 // recalc devmat according blueprint
                 remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from, remodel.blueprint);
                 // add loop converted remodel if original ship is also remodel target

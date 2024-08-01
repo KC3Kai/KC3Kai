@@ -122,7 +122,11 @@
 				frenchYellowSecGunMount: 0,
 				frenchYellowSecGunMountIds: [247],
 				frenchNightRecon: 0,
-				frenchNightReconIds: [471],
+				frenchNightReconIds: [471, 538],
+				frenchNightReconBase: 0,
+				frenchNightReconBaseIds: [471],
+				frenchNightReconKai: 0,
+				frenchNightReconKaiIds: [538],
 				germanLargeRadar: 0,
 				germanLargeRadarIds: [124],
 			},
@@ -2652,15 +2656,9 @@
 					// Kamoi Class
 					"72": "62",
 					// Queen Elizabeth Class
-					"67": [
-						{
-							multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
-						},
-						// Warspite only
-						{
-							single: { "houg": 4, "houk": 1, "saku": 1 },
-						},
-					],
+					"67": {
+						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+					},
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
@@ -2668,6 +2666,18 @@
 					// Town Class
 					"108": "88",
 				},
+				byShip: [
+					{
+						// Warspite
+						origins: [439],
+						single: { "houg": 4, "houk": 1, "saku": 1 },
+					},
+					{
+						// Valiant
+						origins: [927],
+						single: { "houg": 3, "houk": 2, "saku": 1 },
+					},
+				],
 			},
 			// Fairey Seafox Kai
 			"371": {
@@ -3147,6 +3157,65 @@
 					"79": {
 						multiple: { "houg": 2, "houm": 1 },
 					},
+				},
+			},
+			// Loire 130M Kai (Skilled)
+			"538": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 3, "houk": 2, "houm": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Richelieu Class
+					"79": {
+						multiple: { "houg": 2, "houm": 1 },
+					},
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 2, "houm": 1 },
+					},
+				},
+				byShip: {
+					// Richelieu Deux
+					ids: [969],
+					multiple: { "houg": 1, "houk": 1, "houm": 1 },
 				},
 			},
 			// Walrus
@@ -5155,12 +5224,8 @@
 							synergy: [
 								{
 									flags: [ "frenchNightRecon" ],
-									byCount: {
-										gear: "frenchNightRecon",
-										"1": { "houm": 1 },
-										"2": { "houm": 2 },
-										"3": { "houm": 3 },
-									},
+									countFlag: 0,
+									multiple: { "houm": 2 },
 								},
 								{
 									flags: [ "frenchYellowSecGunMount" ],
@@ -5179,17 +5244,26 @@
 							synergy: [
 								{
 									flags: [ "frenchNightRecon" ],
-									byCount: {
-										gear: "frenchNightRecon",
-										"1": { "houm": 1 },
-										"2": { "houm": 2 },
-										"3": { "houm": 3 },
-									},
+									countFlag: 0,
+									multiple: { "houm": 1 },
+								},
+								{
+									flags: [ "frenchNightReconBase" ],
 									byStars: {
 										gearId: 471,
 										isMultiple: true,
 										"7": { "houm": 1 },
 										"9": { "houk": 1 },
+									},
+								},
+								{
+									flags: [ "frenchNightReconKai" ],
+									byStars: {
+										gearId: 538,
+										isMultiple: true,
+										"7": { "houm": 1 },
+										"8": { "houk": 1 },
+										"9": { "houm": 1 },
 									},
 								},
 								{
@@ -5229,6 +5303,246 @@
 						},
 					],
 				},
+			},
+			// 13.8cm Twin Gun Mount
+			"534": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Mogador Class
+					"129": {
+						multiple: { "houm": 1 },
+					},
+				},
+			},
+			// 13.8cm Twin Gun Mount Kai
+			"535": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Mogador Class
+					"129": {
+						multiple: { "houm": 1 },
+					},
+				},
+				byShip: {
+					// Mogador Kai
+					ids: [967],
+					multiple: { "houg": 1 },
+				},
+			},
+			// 15.2cm Triple Main Gun Mount
+			"536": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 1,
+							synergy: {
+								flags: [ "frenchNightReconKai" ],
+								byStars: {
+									gearId: 538,
+									isMultiple: true,
+									"1": { "houk": 1 },
+									"9": { "houm": 1 },
+								},
+							},
+						},
+						{
+							minStars: 3,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// La Galissonniere Class
+					"128": {
+						multiple: { "houm": 1 },
+					},
+				},
+				byShip: {
+					// Gloire Kai
+					ids: [970],
+					minStars: 1,
+					synergy: {
+						flags: [ "frenchNightRecon" ],
+						countFlag: 0,
+						multiple: { "houk": 1, "houm": 1 },
+					},
+				},
+			},
+			// 15.2cm Triple Main Gun Mount Kai
+			"537": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+						},
+						{
+							minStars: 1,
+							synergy: {
+								flags: [ "frenchNightReconKai" ],
+								byStars: {
+									gearId: 538,
+									isMultiple: true,
+									"1": { "houk": 1 },
+									"9": { "houm": 1 },
+								},
+							},
+						},
+						{
+							minStars: 3,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byClass: {
+					// La Galissonniere Class
+					"128": {
+						multiple: { "houm": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Gloire Kai
+						ids: [970],
+						multiple: { "houg": 1, "houk": 2, "houm": 1 },
+					},
+					{
+						// Gloire Kai
+						ids: [970],
+						minStars: 1,
+						synergy: {
+							flags: [ "frenchNightRecon" ],
+							countFlag: 0,
+							multiple: { "houk": 1, "houm": 1 },
+						},
+					},
+				],
 			},
 			// 14cm Twin Gun Mount
 			"119": {
@@ -11935,13 +12249,13 @@
 						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?
 						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+
 						//   All fast DD: not here, see next item
-						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?
+						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
 						origins: [
 								83, 332, 549, 515, 444, 432, 433, 603, 931,
 								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877,
-								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896,
+								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923,
 								74, 76, 116, 102, 103, 184, 925
 							],
@@ -12064,12 +12378,12 @@
 					},
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi
-						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
+						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						//   Slow DE: Inagi K2
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953,
-								26, 27, 77, 87, 80, 81, 439, 571, 572, 601, 918, 924, 511, 877,
+								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491,
 								922
