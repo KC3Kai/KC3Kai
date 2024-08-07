@@ -2543,13 +2543,14 @@
 					},
 					// Kamoi Class
 					"72": "62",
-					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
+					// Queen Elizabeth Class (Valiant can equip)
 					"67": {
 						multiple: { "houg": 2, "houk": 2, "saku": 2 },
 					},
+					// Ark Royal Class, J Class and Nelson Class can not equip tho
 					"78": "67",
 					"82": "67",
-					"88": "67", */
+					"88": "67",
 				},
 			},
 			// Swordfish Mk.III Kai (Seaplane Model)

@@ -981,7 +981,7 @@
 		"rewardConsumables": [0, 0, 6, 4]
 	},
 	"358": {
-		"unlock": [983],
+		"unlock": [373, 983],
 		"rewardConsumables": [0, 0, 10, 2]
 	},
 	"359": {
@@ -2089,6 +2089,7 @@
 		"rewardConsumables": [0, 0, 4, 0]
 	},
 	"895": {
+		"unlock": [654],
 		"rewardConsumables": [0, 0, 0, 4]
 	},
 	"896": {
@@ -2190,7 +2191,7 @@
 	},
 	"918": {},
 	"919": {
-		"unlock": [920, 923],
+		"unlock": [654, 920, 923],
 		"rewardConsumables": [0, 4, 0, 2]
 	},
 	"920": {
