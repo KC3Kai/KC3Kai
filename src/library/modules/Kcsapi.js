@@ -377,6 +377,7 @@ Previously known as "Reactor"
 					case 98: PlayerManager.consumables.blueRibbon = thisItem.api_count; break;
 					case 99: PlayerManager.consumables.whiteRibbon = thisItem.api_count; break;
 					case 100:PlayerManager.consumables.overseaTechMaterial = thisItem.api_count; break;
+					case 101:PlayerManager.consumables.nightSkilledCrew = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
