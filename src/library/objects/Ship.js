@@ -897,7 +897,7 @@ KC3改 Ship Object
 		const originId = RemodelDb.originOf(shipId);
 		const ctype = this.master().api_ctype;
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, originId, stype, ctype) =>
+		const checkByShip = (byShip) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.origins || []).includes(originId) ||
 			(byShip.stypes || []).includes(stype) ||
@@ -943,12 +943,12 @@ KC3改 Ship Object
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
-							if (checkByShip(gear[type][i], shipId, originId, stype, ctype)) {
+							if (checkByShip(gear[type][i])) {
 								gear.path = gear.path || [];
 								gear.path.push(gear[type][i]);
 							}
 						}
-					} else if (checkByShip(gear[type], shipId, originId, stype, ctype)) {
+					} else if (checkByShip(gear[type])) {
 						gear.path = gear[type];
 					}
 				}
@@ -967,8 +967,8 @@ KC3改 Ship Object
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.remodelCap && RemodelDb.remodelGroup(shipId).indexOf(shipId) > check.remodelCap) { continue; }
 						if (check.origins && !check.origins.includes(originId)) { continue; }
-						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						if (check.classes && !check.classes.includes(ctype)) { continue; }
+						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
 						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
 						if (check.single) { gear.count = 1; flag = true; }
