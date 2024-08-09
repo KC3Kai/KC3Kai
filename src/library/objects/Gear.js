@@ -1155,6 +1155,12 @@ KC3改 Equipment Object
 			this.master().api_houm > 2;
 	};
 
+	KC3Gear.prototype.isHighAccuracyCutinRadar = function(){
+		return this.exists() &&
+			[12, 13, 93].includes(this.master().api_type[2]) &&
+			this.master().api_houm > 7;
+	};
+
 	KC3Gear.prototype.isAafdBuiltinHighAngleMount = function(){
 		return this.exists() &&
 			[1, 4].includes(this.master().api_type[2]) &&
