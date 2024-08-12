@@ -364,6 +364,7 @@
 				sortedVoiceNums.push(6);
 
 			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou/Yamato/Richelieu/Elizabeth Cutin) key
+			// when Kongou cutin, only 900 for flagship, no special for combined ship
 			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
 			// add special cut-in voice keys for Nagato class combination

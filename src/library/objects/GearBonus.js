@@ -495,6 +495,47 @@
 					},
 				],
 			},
+			// Tenzan Model 12A Kai 2 (Murata Squadron w/ Radar)
+			"545": {
+				count: 0,
+				byShip: [
+					{
+						// Shoukaku
+						origins: [110],
+						single: { "houg": 4 },
+					},
+					{
+						// Zuikaku
+						origins: [111],
+						single: { "houg": 3 },
+					},
+					{
+						// Akagi
+						origins: [83],
+						single: { "houg": 2 },
+					},
+					{
+						// Kaga, Taihou
+						origins: [84, 153],
+						single: { "houg": 1 },
+					},
+					{
+						// Shoukaku K2+
+						ids: [461, 466],
+						multiple: { "houg": 1, "houm": 2, "houk": 1, "saku": 2 },
+					},
+					{
+						// Zuikaku K2+, Kaga K2Go
+						ids: [462, 467, 646],
+						multiple: { "houg": 1, "houm": 1, "saku": 1 },
+					},
+					{
+						// Akagi K2E, Kaga K2E, Taihou Kai
+						ids: [599, 610, 156],
+						multiple: { "houm": 1, "saku": 1 },
+					},
+				],
+			},
 			// Tenzan Model 12A Kai (with Type 6 Airborne Radar)
 			"373": {
 				count: 0,
@@ -1327,6 +1368,168 @@
 						multiple: { "houg": 1 },
 					},
 				},
+			},
+			// SBD (Yellow Wings)
+			"541": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Lexington
+						origins: [966],
+						multiple: { "houg": 3, "houm": 2, "tyku": 1, "houk": 2, "saku": 1 },
+					},
+					{
+						// Saratoga
+						origins: [433],
+						multiple: { "houg": 2, "houm": 1, "tyku": 1, "houk": 1, "saku": 1 },
+					},
+					{
+						// Hornet, Ranger
+						origins: [603, 931],
+						multiple: { "houg": 1, "houm": 1, "houk": 1 },
+					},
+				],
+			},
+			// TBD (Yellow Wings)
+			"542": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Lexington
+						origins: [966],
+						multiple: { "houg": 3, "houm": 2, "tyku": 1, "houk": 2, "saku": 1 },
+					},
+					{
+						// Saratoga
+						origins: [433],
+						multiple: { "houg": 2, "houm": 1, "tyku": 1, "houk": 1, "saku": 1 },
+					},
+					{
+						// Hornet, Ranger
+						origins: [603, 931],
+						multiple: { "houg": 1, "houm": 1, "houk": 1 },
+					},
+				],
+			},
+			// SBD VS-2 (Reconnaissance Squadron)
+			"543": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Lexington
+						origins: [966],
+						multiple: { "houg": 4, "houm": 2, "tyku": 1, "houk": 2, "saku": 2 },
+					},
+					{
+						// Saratoga
+						origins: [433],
+						multiple: { "houg": 2, "houm": 1, "tyku": 1, "houk": 1, "saku": 1 },
+					},
+					{
+						// Hornet, Ranger
+						origins: [603, 931],
+						multiple: { "houg": 1, "houm": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Gambier Bay, Langley
+						origins: [544, 925],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// SBD VB-2 (Bombing Squadron)
+			"544": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Lexington
+						origins: [966],
+						multiple: { "houg": 4, "houm": 2, "tyku": 1, "houk": 2, "saku": 2 },
+					},
+					{
+						// Saratoga
+						origins: [433],
+						multiple: { "houg": 2, "houm": 1, "tyku": 1, "houk": 1, "saku": 1 },
+					},
+					{
+						// Hornet, Ranger
+						origins: [603, 931],
+						multiple: { "houg": 1, "houm": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Gambier Bay, Langley
+						origins: [544, 925],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
 			},
 			// SBD-5
 			"419": {
@@ -2543,13 +2746,14 @@
 					},
 					// Kamoi Class
 					"72": "62",
-					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
+					// Queen Elizabeth Class (Valiant can equip)
 					"67": {
 						multiple: { "houg": 2, "houk": 2, "saku": 2 },
 					},
+					// Ark Royal Class, J Class and Nelson Class can not equip tho
 					"78": "67",
 					"82": "67",
-					"88": "67", */
+					"88": "67",
 				},
 			},
 			// Swordfish Mk.III Kai (Seaplane Model)
@@ -2773,35 +2977,82 @@
 							minStars: 5,
 							single: { "houk": 1 },
 						},
-					],
-				},
-				byClass: {
-					// Northampton Class
-					"95": [
 						{
+							// All USN CL/CA
+							stypes: [3, 5],
 							single: { "houg": 1, "saku": 1 },
 						},
 						{
+							stypes: [3, 5],
 							minStars: 3,
 							single: { "saku": 1 },
 						},
 						{
+							stypes: [3, 5],
 							minStars: 8,
 							single: { "houk": 1 },
 						},
 						{
+							stypes: [3, 5],
 							minStars: 10,
 							single: { "houg": 1 },
 						},
 					],
-					// Atlanta Class
-					"99": "95",
-					// St. Louis Class
-					"106": "95",
+				},
+			},
+			// SOC Seagull Late Model (Skilled)
+			"539": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 3,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 7,
+							single: { "houm": 1 },
+						},
+						{
+							// All USN CL/CA
+							stypes: [3, 5],
+							single: { "houg": 1, "saku": 1 },
+						},
+						{
+							stypes: [3, 5],
+							minStars: 6,
+							single: { "tyku": 1 },
+						},
+						{
+							stypes: [3, 5],
+							minStars: 8,
+							single: { "houk": 1 },
+						},
+						{
+							stypes: [3, 5],
+							minStars: 9,
+							single: { "houg": 1 },
+						},
+						{
+							stypes: [3, 5],
+							minStars: 10,
+							single: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
 					// Brooklyn Class
-					"110": "95",
-					// New Orleans Class
-					"121": "95",
+					"110": {
+						single: { "houm": 1 },
+					},
 				},
 			},
 			// SO3C Seamew Kai
@@ -3044,6 +3295,37 @@
 					distinctGears: [238, 239],
 					single: { "raig": 1, "houk": 1 },
 				},
+			},
+			// Type 0 Reconnaissance Seaplane Model 11A Kai 2
+			"540": {
+				count: 0,
+				byShip: [
+					{
+						// Yamato K2+, Musashi K2, Noshiro K2, Yahagi K2+
+						ids: [911, 916, 546, 662, 663, 668],
+						multiple: { "houk": 1, "saku": 1 },
+					},
+					{
+						// Mogami K/K2T, Mikuma K, Suzuya K2, Kumano K2, Tone K2, Chikuma K2
+						ids: [73, 506, 121, 503, 504, 188, 189],
+						multiple: { "houm": 1, "houk": 1, "saku": 1 },
+					},
+					{
+						// Yura K2, Abukuma K2, Kinu K2, Mogami K2, Mikuma K2+
+						ids: [488, 200, 487, 501, 502, 507],
+						multiple: { "houg": 1, "houm": 1, "houk": 1 },
+					},
+					{
+						// Nisshin, Chitose, Chiyoda, Akitsushima
+						origins: [581, 102, 103, 445],
+						multiple: { "houg": 1, "houm": 1,  "tyku": 2, "houk": 2, "saku": 1 },
+					},
+					{
+						// Mizuho, Kamoi
+						origins: [451, 162],
+						multiple: { "houg": 2, "houm": 1,  "tyku": 2, "houk": 2, "saku": 2 },
+					},
+				],
 			},
 			// Type 0 Small Reconnaissance Seaplane
 			"522": {

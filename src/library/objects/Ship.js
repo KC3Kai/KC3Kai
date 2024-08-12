@@ -897,7 +897,7 @@ KC3改 Ship Object
 		const originId = RemodelDb.originOf(shipId);
 		const ctype = this.master().api_ctype;
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, originId, stype, ctype) =>
+		const checkByShip = (byShip) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.origins || []).includes(originId) ||
 			(byShip.stypes || []).includes(stype) ||
@@ -943,12 +943,12 @@ KC3改 Ship Object
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
-							if (checkByShip(gear[type][i], shipId, originId, stype, ctype)) {
+							if (checkByShip(gear[type][i])) {
 								gear.path = gear.path || [];
 								gear.path.push(gear[type][i]);
 							}
 						}
-					} else if (checkByShip(gear[type], shipId, originId, stype, ctype)) {
+					} else if (checkByShip(gear[type])) {
 						gear.path = gear[type];
 					}
 				}
@@ -967,8 +967,8 @@ KC3改 Ship Object
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.remodelCap && RemodelDb.remodelGroup(shipId).indexOf(shipId) > check.remodelCap) { continue; }
 						if (check.origins && !check.origins.includes(originId)) { continue; }
-						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						if (check.classes && !check.classes.includes(ctype)) { continue; }
+						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
 						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
 						if (check.single) { gear.count = 1; flag = true; }
@@ -3258,15 +3258,17 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon (forward) formation selected.
 	 * 2nd ship is a battleship, Chuuha ok, Taiha no good.
+	 * No trigger found in battle of player CTF vs abyssal single fleet.
 	 *
 	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
-	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
+	 *   + Math.ceil(total ammo cost of this battle (yasen may included) / 2)
 	 *
 	 * @return true if this ship (Nagato/Mutsu Kai Ni) can do special cut-in attack.
 	 * @see https://en.kancollewiki.net/Nagato
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 * @see http://kancolle.wikia.com/wiki/Mutsu
 	 * @see https://wikiwiki.jp/kancolle/%E9%99%B8%E5%A5%A5%E6%94%B9%E4%BA%8C
+	 * @see https://x.com/Divinity_123/status/1820114416924266920
 	 */
 	KC3Ship.prototype.canDoNagatoClassCutin = function(flagShipIds = KC3Meta.nagatoClassCutinShips) {
 		if(this.isDummy() || this.isAbsent()) { return false; }
@@ -3481,8 +3483,8 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd ship is valid partner and not even Chuuha
 					validCombinedShips = ({
-						// Kongou K2C: Hiei K2C, Haruna K2+, Warspite
-						"591": [592, 151, 593, 954, 439, 364],
+						// Kongou K2C: Hiei K2C, Haruna K2+, Warspite, Valiant
+						"591": [592, 151, 593, 954, 439, 364, 927, 733],
 						// Hiei K2C: Kongou K2C, Kirishima K2, Haruna K2B/C
 						"592": [591, 152, 593, 954],
 						// Haruna K2B: Kongou K2C, Hiei K2C
@@ -3692,6 +3694,7 @@ KC3改 Ship Object
 	/**
 	 * Most conditions are the same with Nagato-class cutin, except:
 	 * 2nd ship fixed to Richelieu-class Kai+.
+	 * Math.floor on additional consumptions.
 	 * @see https://x.com/CC_jabberwock/status/1817973885155033447
 	 */
 	KC3Ship.prototype.canDoRichelieuClassCutin = function() {
@@ -3715,17 +3718,21 @@ KC3改 Ship Object
 		return false;
 	};
 
+	/**
+	 * @see https://x.com/yukicacoon/status/1816937544799707320
+	 * @see https://x.com/hedgehog_hasira/status/1817241483952742542
+	 */
 	KC3Ship.prototype.estimateRichelieuClassCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.richelieuClassCutinShips.includes(flagshipMstId)) return 1;
-		const baseModifier = 1.24;
 		const targetShip = locatedFleet.ship(forShipPos);
-		const richelieuFlagshipModifier = forShipPos === 0 && RemodelDb.originOf(targetShip.masterId) === 492 ? 1.05 : 1;
+		const isRichelieuFlagship = forShipPos === 0 && RemodelDb.originOf(targetShip.masterId) === 492;
+		const baseModifier = isRichelieuFlagship ? 1.3 : 1.24;
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
-		return baseModifier * richelieuFlagshipModifier * apShellModifier * surfaceRadarModifier;
+		return baseModifier * apShellModifier * surfaceRadarModifier;
 	};
 
 	KC3Ship.prototype.canDoQueenElizabethClassCutin = function() {
@@ -4628,7 +4635,7 @@ KC3改 Ship Object
 	 * Calculate Nelson Touch process rate, currently only known in day
 	 * @param {boolean} isNight - Nelson Touch has lower modifier at night?
 	 * @return {number} special attack rate
-	 * @see https://twitter.com/Xe_UCH/status/1181509685863518209
+	 * @see https://x.com/Divinity_123/status/1820114418904002935
 	 */
 	KC3Ship.prototype.nelsonTouchRate = function(isNight) {
 		if (this.isDummy() || isNight) { return false; }
@@ -4638,17 +4645,61 @@ KC3改 Ship Object
 		if (shipPos !== 0 || shipCnt < 6 || !fleetNum) { return false; }
 		const fleetObj = PlayerManager.fleets[fleetNum - 1];
 		const combinedShips = [2, 4].map(pos => fleetObj.ship(pos));
-		const totalRootedLevel = Math.sqrt(this.level) + combinedShips.map(ship => Math.sqrt(ship.level)).sumValues();
-		// Cap luck on 50 to avoid misleading people luckmod too much XD
-		// Luck from combined ships may get in, but modifier unknown
-		const cappedLuck = this.lk[0] < 50 ? this.lk[0] : 50 + Math.sqrt(this.lk[0] - 50);
-		return (1.1 * totalRootedLevel + 2.6 * Math.sqrt(cappedLuck) + 16) / 100;
-		// old version: https://twitter.com/Xe_UCH/status/1180283907284979713
+		// Only Nelson luck affects, luck from combined ships not get in
+		return (1.1 * Math.sqrt(this.level) + 1.4 * Math.sqrt(this.lk[0])
+			+ combinedShips.map(ship => Math.sqrt(ship.level)).sumValues() + 25) / 100;
+
+		// older version: https://twitter.com/Xe_UCH/status/1180283907284979713
 		//return (0.08 * this.level + 0.04 * combinedShips.map(ship => ship.level).sumValues() + 0.24 * this.lk[0] + 36) / 100;
+
+		// old version: https://twitter.com/Xe_UCH/status/1181509685863518209
+		//const totalRootedLevel = Math.sqrt(this.level) + combinedShips.map(ship => Math.sqrt(ship.level)).sumValues();
+		//const cappedLuck = this.lk[0] < 50 ? this.lk[0] : 50 + Math.sqrt(this.lk[0] - 50);
+		//return (1.1 * totalRootedLevel + 2.6 * Math.sqrt(cappedLuck) + 16) / 100;
+
 		// new version: https://twitter.com/Xe_UCH/status/1398930917184270337
 		// return (2 * Math.sqrt(this.level) + Math.sqrt(this.lk[0])
 		//	+ combinedShips.map(ship => Math.sqrt(ship.level)).sumValues()
 		//	+ combinedShips.map(ship => 0.5 * Math.sqrt(ship.lk[0])).sumValues() + 12) / 100;
+	};
+
+	KC3Ship.prototype.nagatoClassCutinRate = function(isNight) {
+		if (this.isDummy() || isNight) { return false; }
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		if (shipPos !== 0 || shipCnt < 6 || !fleetNum) { return false; }
+		const fleetObj = PlayerManager.fleets[fleetNum - 1];
+		const flagship = fleetObj.ship(0);
+		const partnerShip = fleetObj.ship(1);
+		// https://x.com/Divinity_123/status/1820114420569162214
+		return (25 + Math.floor(
+			Math.sqrt(flagship.level) + 1.5 * Math.sqrt(flagship.lk[0])
+			+ Math.sqrt(partnerShip.level) + 1.5 * Math.sqrt(partnerShip.lk[0])
+		)) / 100;
+	};
+
+	KC3Ship.prototype.yamatoClassCutinRate = function(isNight, partners = 2) {
+		if (this.isDummy() || isNight) { return false; }
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		if (shipPos !== 0 || shipCnt < 6 || !fleetNum) { return false; }
+		const fleetObj = PlayerManager.fleets[fleetNum - 1];
+		const flagship = fleetObj.ship(0);
+		if (partners === 3) {
+			return false;
+		} else {
+			// 2-ship cutin only: https://x.com/Divinity_123/status/1820114422343376976
+			const partnerShip = fleetObj.ship(1);
+			const fsRadarBonus = 10 * flagship.countEquipmentType(2, [12, 13]);
+			const partnerHighAccRadarBonus = 10 * partnerShip.equipment(true)
+				.map(gear => gear.isHighAccuracyCutinRadar() & 1).sumValues();
+			const partnerShipOrigin = RemodelDb.originOf(partnerShip.masterId);
+			const partnerShipBonus = partnerShipOrigin === 131 ? 4 // Yamato
+				: partnerShipOrigin === 143 ? 7 // Musashi
+				: 0;
+			return (33 + Math.floor(
+				Math.sqrt(flagship.level) + 1.25 * Math.sqrt(flagship.lk[0])
+				+ Math.sqrt(partnerShip.level) + 1.25 * Math.sqrt(partnerShip.lk[0])
+			) + fsRadarBonus + partnerHighAccRadarBonus + partnerShipBonus) / 100;
+		}
 	};
 
 	/**
@@ -4665,9 +4716,12 @@ KC3改 Ship Object
 		// type 1 laser attack has gone forever, ship not on fleet cannot be evaluated
 		if (atType < 2 || this.isDummy() || !this.onFleet()) { return false; }
 		const formatPercent = num => Math.floor(num * 1000) / 10;
-		// Nelson Touch
-		if (atType === 100) {
-			return formatPercent(this.nelsonTouchRate(false));
+		// touch type daytime special attacks
+		switch(atType) {
+			case 100: return formatPercent(this.nelsonTouchRate(false));
+			case 101:
+			case 102: return formatPercent(this.nagatoClassCutinRate(false));
+			case 401: return formatPercent(this.yamatoClassCutinRate(false, 2));
 		}
 		const typeFactor = {
 			2: 150,
@@ -4680,7 +4734,7 @@ KC3改 Ship Object
 				"CutinDBDBTB": 140,
 				"CutinDBTB"  : 155,
 			   })[cutinSubType],
-			// 100~103 might use different formula, see #nelsonTouchRate
+			// 100~106 might use different formula, see #nelsonTouchRate
 			200: 120,
 			201: 130,
 			// 300~302, 400~401 unknown

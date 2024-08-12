@@ -164,6 +164,7 @@
                 case 624: // Yuubari Kai Ni D
                 case 652: // Kuma Kai Ni
                 case 657: // Kuma Kai Ni D
+                case 734: // Phoenix Kai
                     return 30;
                 case 215: // Kuma
                 case 579: // Gotland Kai
