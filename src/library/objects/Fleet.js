@@ -303,6 +303,7 @@ Contains summary information about a fleet and its ships
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
+			if (!ss || ship.isDummy()) return;
 			if (includeRibbon) {
 				// special stats from ribbons since 2023-07-07
 				const sp = ship.statsSp();
@@ -403,6 +404,7 @@ Contains summary information about a fleet and its ships
 		// amount of bonus ships 
 		var bonusShipCount = 0;
 		this.ship((shipRid, shipIdx, shipObj) => {
+			if (shipObj.isDummy()) return;
 			// for now this can only be applied to Kinu Kai Ni (master id 487)
 			if (shipObj.masterId === 487) bonusShipCount += 1;
 			// AB daihatsu on ex-slot counted either
@@ -1362,7 +1364,7 @@ Contains summary information about a fleet and its ships
 		var fsCtLevel = 0, maxCtLevel = 0, katoriIndex = 0;
 		this.ship(function(rid, idx, ship){
 			// Exclude CT Asahi base remodel, since given different mechanism
-			if(ship.master().api_stype == 21 && ship.masterId !== ctAsahiMstId){
+			if(!ship.isDummy() && ship.master().api_stype == 21 && ship.masterId !== ctAsahiMstId){
 				if(ship.level > maxCtLevel) maxCtLevel = ship.level;
 				if(idx === 0){
 					katoriIndex = 1;

@@ -3757,13 +3757,17 @@ KC3改 Ship Object
 		return false;
 	};
 
+	/**
+	 * @see https://x.com/yukicacoon/status/1824680041655177250
+	 */
 	KC3Ship.prototype.estimateQueenElizabethClassCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.queenElizabethClassCutinShips.includes(flagshipMstId)) return 1;
-		const baseModifier = [1.2, 1.2][forShipPos % 2];
 		const targetShip = locatedFleet.ship(forShipPos);
+		const isValiantFlagship = forShipPos === 0 && RemodelDb.originOf(targetShip.masterId) === 927;
+		const baseModifier = isValiantFlagship ? 1.2 : 1.24;
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 		return baseModifier * apShellModifier * surfaceRadarModifier;
@@ -3890,7 +3894,7 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			105: ["Cutin", 105, "CutinRichelieuSpecial", 2.02],
-			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 2.0],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.93],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
@@ -4214,7 +4218,7 @@ KC3改 Ship Object
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
 			105: ["Cutin", 105, "CutinRichelieuSpecial", 2.02],
-			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 2.0],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.93],
 			200: ["Cutin", 200, "CutinNightZuiunNight", 1.28],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
