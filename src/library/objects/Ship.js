@@ -1683,6 +1683,7 @@ KC3改 Ship Object
 				// [478] Skilled Deck Personnel + Aviation Maintenance Hands
 				// DV power from antisub patrol aircraft counted against surface as expected:
 				//   https://twitter.com/twillwave1024/status/1620737825963646976
+				// DV from recon counted: https://x.com/hojo_rennka/status/1823050739469697322
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true));
 			}
 			shellingPower += combinedFleetFactor;

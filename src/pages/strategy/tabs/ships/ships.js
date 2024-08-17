@@ -928,7 +928,7 @@
 			self.defineShipFilter(
 				"spgear",
 				savedFilterValues.spgear || 0,
-				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub", "exids"],
+				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipFCF)
@@ -936,8 +936,7 @@
 						|| (curVal === 3 && ship.canEquipSPB)
 						|| (curVal === 4 && ship.canEquipLFB)
 						|| (curVal === 5 && ship.canEquipBulge)
-						|| (curVal === 6 && ship.canEquipMinisub)
-						|| (curVal === 7 && ship.canExslotEquipSpec);
+						|| (curVal === 6 && ship.canEquipMinisub);
 				});
 
 			self.defineShipFilter(
