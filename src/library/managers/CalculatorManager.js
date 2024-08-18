@@ -684,14 +684,18 @@
 
     /**
      * Get the escort fleet survival score from predicted day battle results,
-     * estimate the activte fleet of night battle.
+     * estimate the activte opponent fleet of night battle.
      * @return 1=main fleet, 2=escort fleet, undefined if judgement conditions not met
      * @see predicted version of `api_active_deck[1]` in /api_req_combined_battle/ec_midnight_battle
      * @see https://wikiwiki.jp/kancolle/%E9%80%A3%E5%90%88%E8%89%A6%E9%9A%8A#wd314cc2
      * @see https://en.kancollewiki.net/w/index.php?title=Enemy_Combined_Fleet&diff=110224&oldid=110223
      */
     const estimateNightActiveCombinedEnemy = (node = KC3SortieManager.currentNode()) => {
-        if(node && node.predictedFleetsDay && node.maxHPs && Array.isArray(node.maxHPs.enemyEscort)) {
+        if(!node || !node.yasenFlag || !node.enemyCombined) return;
+        if(node.predictedFleetsDay && node.maxHPs && Array.isArray(node.maxHPs.enemyEscort)) {
+            // only escort fleet left if all the ships sunk in main
+            if(Array.isArray(node.predictedFleetsDay.enemyMain)
+                && node.predictedFleetsDay.enemyMain.every(e => !!e.sunk)) return 2;
             const score = node.maxHPs.enemyEscort.reduce((acc, mhp, idx) => {
                 const enemy = node.predictedFleetsDay.enemyEscort[idx];
                 if(enemy && mhp > 0) {
