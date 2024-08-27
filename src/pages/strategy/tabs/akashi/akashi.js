@@ -94,6 +94,7 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
+			if(!KC3Master.available) { return; }
 			self.hideNotImprovable = false;
 			$(".loading").show();
 			this.reload();

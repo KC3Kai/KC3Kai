@@ -85,6 +85,7 @@
 		execute :function(){
 			$(".tab_mstship .runtime_id").text(chrome.runtime.id);
 			var self = this;
+			if(!KC3Master.available) { return; }
 
 			$(".stat_icon img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));

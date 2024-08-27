@@ -14,9 +14,21 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 (function(){
 	"use strict";
 	
+	var chromeVersion = (function() {
+		if (!navigator) return 0;
+		if (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands)) {
+			var brand = navigator.userAgentData.brands.find(function(o) {
+				return ["Chromium", "Google Chrome"].indexOf(o.brand) >= 0;
+			});
+			if (brand && brand.version) return parseInt(brand.version, 10);
+		}
+		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
+		return raw ? parseInt(raw[2], 10) : 0;
+	})();
+	
 	// Initialize global variables
 	var intervalChecker;
-
+	
 	// Looks for API link
 	function checkAgain(){
 		console.log("Checking API link...");
@@ -72,9 +84,12 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				// if dmm frame or api link play mode
 				|| response.storage[0] != "true" || response.storage[1] == "true"
 			){
-				console.log("Setting zoom to scale", response.value[0] + "%");
-				var scale = (response.value[0] || 100) / 100;
-				document.body.style.zoom = scale;
+				// Later chrome has fixed zoom issue of nested subframes, no longer needed
+				if(chromeVersion < 129) {
+					console.log("Setting osapi zoom to scale", response.value[0] + "%");
+					var scale = (response.value[0] || 100) / 100;
+					document.body.style.zoom = scale;
+				}
 			}
 			console.log("Applying customized styles...");
 			// Hide spacing top div element
