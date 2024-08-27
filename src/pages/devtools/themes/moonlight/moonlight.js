@@ -2389,13 +2389,19 @@
 					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
+					let blockableTaiha = true;
+					if(thisNode.stime && KC3SortieManager.getSortieFleet().length)
+						blockableTaiha = KC3SortieManager.checkTaihaShips().effectiveTaihaFlag;
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
-					$(".module.status .status_repair .status_icon").removeClass("enclose");
-					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
-						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
-					);
+					$(".module.status .status_repair .status_icon")
+						.toggleClass("enclose", !blockableTaiha);
+					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" + (
+						!blockableTaiha ? "damecon.png"
+						: FleetSummary.badState[2] ? "estat_bossheavy.png"
+						: "sunk.png"
+					));
 					$(".module.status .status_repair .status_text")
 						.attr("titlealt", "").addClass("bad");
 					const fcfInfo = KC3SortieManager.getCurrentFCF();

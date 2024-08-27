@@ -80,6 +80,7 @@
 		"URL": true,
 		"Worker": true,
 		"XMLHttpRequest": true,
+		"Intl": true,
 		"console": true,
 		"window": true,
 		"document": true,
