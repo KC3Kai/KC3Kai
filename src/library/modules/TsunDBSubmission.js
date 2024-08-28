@@ -89,6 +89,10 @@
 		)
 	) || Math.random().toString(16).substr(2));
 
+	const randomIntBytes = (b = 4) => ((window.crypto &&
+		window.crypto.getRandomValues(new Uint8Array(b)).reduce((a, v, n) => (a + v * Math.pow(256, n)))
+	) || new Uint8Array(b).reduce((a, v, n) => (a + Math.floor(Math.random() * 256) * Math.pow(256, n)), 1));
+
 	const matchGimmickApiName = (apiName = "") => !!apiName.match(/^api_m\d+/);
 	const isMapGimmickTriggered = (apiData = {}) => !!Object.keys(apiData).find(matchGimmickApiName);
 
@@ -678,7 +682,7 @@
 				};
 				// Original unique key is to identifiy fleet,
 				// building random key instead to force db recording every fleet variations
-				this.friendlyFleet.uniquekey = crc32c(JSON.stringify([randomUUIDv4(), Date.now()]));
+				this.friendlyFleet.uniquekey = randomIntBytes(6);
 				//this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
 				this.friendlyFleet.fleet.torchCount = this.torchCount;
 				this.sendData(this.friendlyFleet, 'friendlyfleet');

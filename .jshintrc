@@ -81,6 +81,7 @@
 		"Worker": true,
 		"XMLHttpRequest": true,
 		"Intl": true,
+		"crypto": true,
 		"console": true,
 		"window": true,
 		"document": true,
