@@ -677,7 +677,7 @@
 					voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
 				};
 				// Original unique key is to identifiy fleet,
-				// building random key instead to force db recording everything
+				// building random key instead to force db recording every fleet variations
 				this.friendlyFleet.uniquekey = crc32c(JSON.stringify([randomUUIDv4(), Date.now()]));
 				//this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
 				this.friendlyFleet.fleet.torchCount = this.torchCount;
