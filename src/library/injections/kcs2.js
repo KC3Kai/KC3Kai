@@ -26,8 +26,8 @@
 				const gameCanvas = $("canvas"), editArea = $("#r_editarea");
 				// Set width for canvas so that zoom will affect both its size and pointer zone
 				gameCanvas.css("width", "100%");
-				// Scale edit box to right position too, no longer needed for chrome 129~?
-				if (!Intl || !Intl.DurationFormat) editArea.css("zoom", scale);
+				// Scale edit box to right position too, no longer needed for chrome 128~
+				if (!Promise.try) editArea.css("zoom", scale);
 				$("body").css("overflow", "hidden");
 				// Prevent Tab key scrolling, and F7 mode
 				$(document).on("keydown", function(e){

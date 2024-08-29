@@ -80,7 +80,7 @@
 		"URL": true,
 		"Worker": true,
 		"XMLHttpRequest": true,
-		"Intl": true,
+		"Promise": true,
 		"crypto": true,
 		"console": true,
 		"window": true,

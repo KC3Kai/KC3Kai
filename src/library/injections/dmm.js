@@ -10,7 +10,7 @@
 			$("#game_frame").css("left", "0px");
 			$("#game_frame").css("top", "0px");
 			$("#game_frame").css("z-index", "999");
-			if (!navigator.chromeVersion || navigator.chromeVersion < 129) $("#game_frame").css("zoom", scale);
+			if (!Promise.try) $("#game_frame").css("zoom", scale);
 			$(".dmm-ntgnavi").css("display", "none");
 			$("#dmm-ntgnavi-renew").css("display", "none");
 			break;
