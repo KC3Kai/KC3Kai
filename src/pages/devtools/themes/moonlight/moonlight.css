@@ -4127,14 +4127,14 @@ ABYSS FLEET
 .module.fleet .lship .ex_item.empty {
 	background:rgba(68, 68, 68, 0.7);
 }
-.module.fleet .lship .ex_item.item_being_used {
-	background:#fe3;
-}
 .module.fleet .lship .ex_item.goddess {
 	background:#226;
 	box-shadow:0px 0px 8px #9999bb,
 		0px 0px 8px #9999bb,
 		0px 0px 8px #9999bb !important;
+}
+.module.fleet .lship .ex_item.item_being_used {
+	background:#fe3;
 }
 .module.fleet .lship .ex_item .gear_icon {
 	overflow:hidden;
