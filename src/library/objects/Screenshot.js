@@ -127,7 +127,15 @@ KCScreenshot.prototype.startCapture = function(){
 		self.handleLastError(chrome.runtime.lastError, "Inpage captureVisibleTab", "take screenshot");
 		self.domImg.src = base64img;
 		self.base64img = base64img;
-		self.domImg.onload = self.crop(self.gamebox.offset(), false);
+		var ofs = self.gamebox.offset();
+		// Chrome 128 has changed css zoom, length calc affected,
+		// `Promise.try` supposed to be shipped together with standardized zoom
+		if(Promise.try) {
+			var gameScale = (ConfigManager.api_gameScale || 100) / 100;
+			ofs.top = ofs.top / gameScale;
+			ofs.left = ofs.left / gameScale;
+		}
+		self.domImg.onload = self.crop(ofs, false);
 	});
 };
 

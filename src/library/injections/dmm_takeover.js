@@ -652,11 +652,15 @@
 		Content Scripts like this don't have access to needed chrome.* API
 		--------------------------------------*/
 		getGamescreenOffset: function(){
+			var self = this;
 			return function(request, sender, response){
 				if(request.action != "getGamescreenOffset") return true;
+				var gameAreaOffset = $("#area-game").offset() || {};
+				// Fix offset calc for Chrome 128~ on scaled zoom
+				var zoomScaleFix = !Promise.try ? 1 : self.gameZoomScale;
 				response({
-					top: $("#area-game").offset().top,
-					left: $("#area-game").offset().left,
+					top: (gameAreaOffset.top || 0) / zoomScaleFix,
+					left: (gameAreaOffset.left || 0) / zoomScaleFix,
 					devicePixelRatio: window.devicePixelRatio
 				});
 			};

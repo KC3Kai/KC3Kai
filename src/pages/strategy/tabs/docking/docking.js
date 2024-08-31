@@ -165,11 +165,11 @@
 
 			// List up equipment 4 slots (ex-slot not included)
 			[1, 2, 3, 4, 5].forEach(num => {
-				this.showEquipIcon(shipRow, num, ship.slots[num - 1], ship.equip[num - 1]);
+				this.showEquipIcon(shipRow, num, ship.slots[num - 1], ship.equip[num - 1], ship.id);
 			});
 		}
 
-		showEquipIcon(shipRow, equipNum, slotSize, gearId) {
+		showEquipIcon(shipRow, equipNum, slotSize, gearId, shipId) {
 			const equipDiv = $(".ship_equip_" + equipNum, shipRow);
 			if(gearId > -1){
 				const gear = KC3GearManager.get(gearId);
@@ -177,9 +177,10 @@
 					equipDiv.hide();
 					return;
 				}
+				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", equipDiv)
 					.attr("src", KC3Meta.itemIcon(gear.master().api_type[3]))
-					.attr("title", gear.htmlTooltip(slotSize))
+					.attr("title", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id)
 					.click(this.gearClickFunc)
 					.error(function() {

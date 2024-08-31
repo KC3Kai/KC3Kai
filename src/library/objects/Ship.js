@@ -1683,6 +1683,7 @@ KC3改 Ship Object
 				// [478] Skilled Deck Personnel + Aviation Maintenance Hands
 				// DV power from antisub patrol aircraft counted against surface as expected:
 				//   https://twitter.com/twillwave1024/status/1620737825963646976
+				// DV from recon counted: https://x.com/hojo_rennka/status/1823050739469697322
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true));
 			}
 			shellingPower += combinedFleetFactor;
@@ -1712,14 +1713,14 @@ KC3改 Ship Object
 	 * Get pre-cap night battle power of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b717e35a
 	 */
-	KC3Ship.prototype.nightBattlePower = function(nightContactPlaneId = 0){
+	KC3Ship.prototype.nightBattlePower = function(nightContactPlaneId = 0, isTargetLand = false){
 		if(this.isDummy()) { return 0; }
 		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
 		// ~~but currently only Type 98 Night Recon implemented (acc: 1), so always +5~~
 		// new night recon (acc: 2) implemented since 2022-06-30
 		const nightContact = KC3Gear.isNightContactAircraft(nightContactPlaneId, true);
-		return nightContact.powerBonus + this.fp[0] + this.tp[0]
-			+ this.statsSp("fp") + this.statsSp("tp")
+		return nightContact.powerBonus + this.fp[0] + (isTargetLand ? 0 : this.tp[0])
+			+ this.statsSp("fp") + (isTargetLand ? 0 : this.statsSp("tp"))
 			+ this.equipmentTotalImprovementBonus("yasen");
 	};
 
@@ -1859,7 +1860,7 @@ KC3改 Ship Object
 		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
 		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699];
 		const basicPower = this.shellingFirePower(0, true);
-		const basicPowerNight = this.nightBattlePower() - this.tp[0] - this.statsSp("tp");
+		const basicPowerNight = this.nightBattlePower(0, true);
 		const resultList = [];
 		// Fill damage lists for each enemy type
 		possibleTypes.forEach(installationType => {
@@ -3756,13 +3757,17 @@ KC3改 Ship Object
 		return false;
 	};
 
+	/**
+	 * @see https://x.com/yukicacoon/status/1824680041655177250
+	 */
 	KC3Ship.prototype.estimateQueenElizabethClassCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.queenElizabethClassCutinShips.includes(flagshipMstId)) return 1;
-		const baseModifier = [1.2, 1.2][forShipPos % 2];
 		const targetShip = locatedFleet.ship(forShipPos);
+		const isValiantFlagship = forShipPos === 0 && RemodelDb.originOf(targetShip.masterId) === 927;
+		const baseModifier = isValiantFlagship ? 1.2 : 1.24;
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 		return baseModifier * apShellModifier * surfaceRadarModifier;
@@ -3889,7 +3894,7 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			105: ["Cutin", 105, "CutinRichelieuSpecial", 2.02],
-			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 2.0],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.93],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
@@ -4213,7 +4218,7 @@ KC3改 Ship Object
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
 			105: ["Cutin", 105, "CutinRichelieuSpecial", 2.02],
-			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 2.0],
+			106: ["Cutin", 106, "CutinQueenElizabethSpecial", 1.93],
 			200: ["Cutin", 200, "CutinNightZuiunNight", 1.28],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
@@ -4503,15 +4508,17 @@ KC3改 Ship Object
 			const isSpecialAbyssal = [
 				1679, 1680, 1681, 1682, 1683, // Lycoris Princess
 				1711, 1712, 1713, // Jellyfish Princess
-				].includes[targetShipMasterId];
+			].includes[targetShipMasterId];
 			const isSpecialCarrier = [
 				432, 353, // Graf & Graf Kai
-				433 // Saratoga (base form)
-				].includes(this.masterId);
+				433, // Saratoga (base form)
+				//966, 735, // Lexington, forget to add? so dropped into following airattack case:
+			].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
 			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
+			// Other known ships go here: Ark with Swordfish, Kaga K2Go, Lexington
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
