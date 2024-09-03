@@ -45,11 +45,13 @@
 			url: "https://api.github.com/repos/KC3Kai/KC3Kai/pulls?state=all&base=webstore",
 			dataType: "JSON",
 			timeout: 15000,
-			complete: function(xhr, status){
+			complete: function(xhr, statusText){
 				$(".loading").hide();
 			},
-			error: function(xhr, status, err){
-				$("#versionList").text(err || status);
+			error: function(xhr, statusText, httpError){
+				$("#versionList").text((xhr.responseJSON || {}).message // message from github api
+					// parsed http text -> network/http status -> unknown error
+					|| httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "error");
 			},
 			success: function(response){
 				var releaseBox;
