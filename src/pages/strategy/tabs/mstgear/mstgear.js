@@ -28,6 +28,7 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
+			if(!KC3Master.available) { return; }
 			
 			// List all equipment
 			const iconFailsafeHandler = function(e) {

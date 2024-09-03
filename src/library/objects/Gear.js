@@ -1224,8 +1224,8 @@ KC3改 Equipment Object
 	/**
 	 * Build tooltip HTML of this Gear. Used by Panel/Strategy Room.
 	 */
-	KC3Gear.prototype.htmlTooltip = function(slotSize, onShipOrLandbase) {
-		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize, onShipOrLandbase);
+	KC3Gear.prototype.htmlTooltip = function(slotSize, onShipOrLandbase, altName = true) {
+		return KC3Gear.buildGearTooltip(this, altName, slotSize, onShipOrLandbase);
 	};
 	/** Also export a static method */
 	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize, shipOrLb) {

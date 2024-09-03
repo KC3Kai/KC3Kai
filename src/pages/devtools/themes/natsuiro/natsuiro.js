@@ -2112,7 +2112,7 @@
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
 						), // [0]: need fuel/ammo resupply for expedition?
 						CurrentFleet.needsSupply(true), // [1]: is fuel/ammo empty?
-						CurrentFleet.ship(0).isTaiha(), // [2]: is some ship Taiha?
+						CurrentFleet.ship(0).isTaiha(), // [2]: is flagship Taiha?
 						false, // [3]: is combined fleet HP bad conditions?
 						CurrentFleet.needsPlaneSupply(), // [4]: is any aircraft slot not full?
 					],
@@ -2256,13 +2256,20 @@
 					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
-					$(".module.status .status_repair .status_text").text( KC3Meta.term(
+					$(".module.status .status_repair .status_text").text(KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
-					) );
-					$(".module.status .status_repair .status_icon").removeClass("enclose");
-					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
-						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
-					);
+					));
+					// Show damecon icon if Taiha Blocker is not supposed to be activated during sortie
+					let blockableTaiha = true;
+					if(thisNode.stime && KC3SortieManager.getSortieFleet().length)
+						blockableTaiha = KC3SortieManager.checkTaihaShips().effectiveTaihaFlag;
+					$(".module.status .status_repair .status_icon")
+						.toggleClass("enclose", !blockableTaiha);
+					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" + (
+						!blockableTaiha ? "damecon.png"
+						: FleetSummary.badState[2] ? "estat_bossheavy.png"
+						: "sunk.png"
+					));
 					$(".module.status .status_repair .status_text")
 						.attr("titlealt", "").addClass("bad");
 					const fcfInfo = KC3SortieManager.getCurrentFCF();
@@ -2338,6 +2345,7 @@
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
 						.lazyInitTooltip()
 						.addClass("bad");
+					$(".module.status .status_repair .status_icon").removeClass("enclose");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "estat_bossmodrt.png")
 					);
@@ -2347,6 +2355,7 @@
 						.text( KC3Meta.term("PanelNoTaiha") )
 						.attr("titlealt", "")
 						.addClass("good");
+					$(".module.status .status_repair .status_icon").removeClass("enclose");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
 				}
 

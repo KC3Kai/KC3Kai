@@ -50,7 +50,7 @@
 
     detectMaxBattleBgmId() {
       const mapBgmIds = [];
-      Object.values(this.mapbgm).forEach(o => {
+      Object.values(this.mapbgm || {}).forEach(o => {
         mapBgmIds.push(o.api_moving_bgm);
         mapBgmIds.push(...o.api_map_bgm);
         mapBgmIds.push(...o.api_boss_bgm);

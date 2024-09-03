@@ -80,6 +80,8 @@
 		"URL": true,
 		"Worker": true,
 		"XMLHttpRequest": true,
+		"Promise": true,
+		"crypto": true,
 		"console": true,
 		"window": true,
 		"document": true,

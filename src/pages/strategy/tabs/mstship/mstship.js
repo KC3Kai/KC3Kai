@@ -85,6 +85,7 @@
 		execute :function(){
 			$(".tab_mstship .runtime_id").text(chrome.runtime.id);
 			var self = this;
+			if(!KC3Master.available) { return; }
 
 			$(".stat_icon img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
@@ -1496,12 +1497,12 @@
 								}
 							} else if(stat[1] === "airpow"){
 								// Compute fighter air power based on known slots
-								$(".ship_stat_min", statBox).text(
-									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
-								);
+								const airpow = KC3Calc.enemyFighterPower([abyssMaster.api_id]);
+								$(".ship_stat_min", statBox).text(airpow[0] || 0)
+									.attr("title", airpow.slice(1, 3).sumValues());
 								$(".ship_stat_max span", statBox).text(
 									KC3Calc.enemyFighterPower([abyssMaster.api_id], null, null, true)[0] || 0
-								);
+								).attr("title", airpow.slice(1, 4).sumValues());
 							} else if(stat[1] === "adjaa"){
 								// Compute adjusted anti-air power based on known slots
 								const adjShip = AntiAir.abyssalShipAdjustedAntiAir(abyssMaster.api_id);

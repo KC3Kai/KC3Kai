@@ -89,6 +89,10 @@
 		)
 	) || Math.random().toString(16).substr(2));
 
+	const randomIntBytes = (b = 4) => ((window.crypto &&
+		window.crypto.getRandomValues(new Uint8Array(b)).reduce((a, v, n) => (a + v * Math.pow(256, n)))
+	) || new Uint8Array(b).reduce((a, v, n) => (a + Math.floor(Math.random() * 256) * Math.pow(256, n)), 1));
+
 	const matchGimmickApiName = (apiName = "") => !!apiName.match(/^api_m\d+/);
 	const isMapGimmickTriggered = (apiData = {}) => !!Object.keys(apiData).find(matchGimmickApiName);
 
@@ -629,11 +633,13 @@
 			const apiData = http.response.api_data;
 			const friendlyInfo = apiData.api_friendly_info;
 
+			this.torchCount = PlayerManager.consumables.torch;
+			// Because remote nodes settings no longer updated and DB server-side broken,
+			// remove its dependency and friendlyfleetcount submissions
+			/*
 			this.updateFriendlyFleetNodes();
 			if(localStorage.tsundb_ffnodes === undefined) { return; }
-
 			const ffn = JSON.parse(localStorage.tsundb_ffnodes);
-			this.torchCount = PlayerManager.consumables.torch;
 
 			this.friendlyFleetCount = {
 				map: this.data.map,
@@ -650,6 +656,7 @@
 			if (KC3SortieManager.isCombinedSortie()) {
 				this.friendlyFleetCount.playerfleet.push(...(this.data.fleet2 || []).filter(ship => !ship.flee).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b));
 			}
+			*/
 
 			if(friendlyInfo) { 
 				this.friendlyFleet = {};
@@ -673,9 +680,14 @@
 					requestType: PlayerManager.friendlySettings.api_request_type,
 					voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
 				};
-				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
+				// Original unique key is to identifiy fleet,
+				// building random key instead to force db recording every fleet variations
+				this.friendlyFleet.uniquekey = randomIntBytes(6);
+				//this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
+				this.friendlyFleet.fleet.torchCount = this.torchCount;
 				this.sendData(this.friendlyFleet, 'friendlyfleet');
-				
+
+			/*
 				this.friendlyFleetCount.friendlyfleet = friendlyInfo.api_ship_id;
 				this.sendData(this.friendlyFleetCount, 'friendlyfleetcount');
 
@@ -689,6 +701,7 @@
 				}
 			} else if (ffn.edges[this.data.map] && ffn.edges[this.data.map].includes(this.friendlyFleetCount.node)) {
 				this.sendData(this.friendlyFleetCount, 'friendlyfleetcount');
+			*/
 			}
 		},
 		
@@ -1192,6 +1205,10 @@
 			};
 			if (KC3SortieManager.isCombinedSortie()) {
 				fleet.fleet2 = PlayerManager.fleets[1].ship().map(ship => formatShip(ship));
+			}
+			if (PlayerManager.friendlySettings.api_request_flag && KC3Meta.isEventWorld(this.currentMap[0])) {
+				fleet.requesttype = PlayerManager.friendlySettings.api_request_type;
+				fleet.torchcount = PlayerManager.consumables.torch;
 			}
 			const isBoss = thisNode.isBoss();
 			const supportFleetNum = KC3SortieManager.getSupportingFleet(isBoss);
