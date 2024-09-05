@@ -3742,7 +3742,7 @@ KC3改 Ship Object
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
-				const isDoubleLine = [2, 12].includes(
+				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
@@ -3751,7 +3751,7 @@ KC3改 Ship Object
 						&& !partnerShip.isAbsent()
 						&& !partnerShip.isTaiha();
 				const hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
-				return isDoubleLine && validPartner && hasSixSurfaceShips;
+				return isEchelon && validPartner && hasSixSurfaceShips;
 			}
 		}
 		return false;
