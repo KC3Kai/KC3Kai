@@ -593,7 +593,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 						isForcedToRetreat = true;
 					}
 					// ignore taiha state of non-heart-locked ships if setting demands
-					if (ConfigManager.alert_taiha_unlock && !ship.lock) { return; }
+					if (ConfigManager.alert_taiha_unlock && !ship.lock
+						// and without any locked equipment
+						&& ship.equipment(true).every(g => !g.lock)) { return; }
 					// ignore taiha state of combined escort fleet flagship if setting demands
 					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) { return; }
 					hasTaihaShip = true;

@@ -3402,6 +3402,7 @@ KC3改 Ship Object
 	 * @see https://twitter.com/syoukuretin/status/1132763536222969856
 	 * @see https://twitter.com/CC_jabberwock/status/1538198001520283649 - buffed since 2022-06-17
 	 * @see https://twitter.com/CC_jabberwock/status/1538235861178802176 - base remodel no Big7 modifier
+	 * @see https://x.com/yukicacoon/status/1835179078141591603 - Rodney no Big7 modifier
 	 */
 	KC3Ship.prototype.estimateColoradoCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
