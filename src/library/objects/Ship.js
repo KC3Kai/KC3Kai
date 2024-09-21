@@ -5648,7 +5648,8 @@ KC3改 Ship Object
 		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
 			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
 		$(".stat_lk .current", tooltipBox).text(shipObj.lk[0]);
-		$(".stat_lk .luck", tooltipBox).text(signedNumber(modLeftStats.lk));
+		$(".stat_lk .luck", tooltipBox).text(signedNumber(modLeftStats.lk))
+			.toggle(!!modLeftStats.lk);
 		$(".stat_lk .equip", tooltipBox).text("({0})".format(nakedStats.lk))
 			.toggle(!!equipDiffStats.lk);
 		if(!(ConfigManager.info_stats_diff & 1)){

@@ -48,14 +48,14 @@ KCScreenshot.prototype.remoteStart = function(tabId, offset){
 
 KCScreenshot.prototype.prepare = function(offset = {}){
 	var scale = this.getCurrentScale(offset.devicePixelRatio);
-	
+
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
 	this.canvas.width = (offset.width || 1200) * scale;
 	this.canvas.height = (offset.height || 720) * scale;
 	this.context = this.canvas.getContext("2d");
 	this.context.imageSmoothingEnabled = this.imageSmoothing;
-	
+
 	// Initialize Image Tag
 	this.domImg = new Image();
 };
@@ -70,7 +70,7 @@ function chromeCapture(captureFormat, imageQuality, response){
 
 KCScreenshot.prototype.generateScreenshotFilename = function(withPlayerName) {
 	withPlayerName = typeof withPlayerName == 'undefined' ? true : withPlayerName;
-	
+
 	var d = new Date();
 	var curr_month = (d.getMonth()+1) + "";
 	if (curr_month.length == 1) { curr_month = "0" + curr_month; }
@@ -82,7 +82,7 @@ KCScreenshot.prototype.generateScreenshotFilename = function(withPlayerName) {
 	if (curr_min.length == 1) { curr_min = "0" + curr_min; }
 	var curr_second = d.getSeconds() + "";
 	if (curr_second.length == 1) { curr_second = "0" + curr_second; }
-	
+
 	if (withPlayerName) {
 		this.screenshotFilename = "["+this.playerName+"] "+d.getFullYear()+"-"+curr_month+"-"+curr_date+" "+curr_hour+"-"+curr_min+"-"+curr_second + " " + getRandomInt(10,99);
 	} else {
@@ -127,15 +127,7 @@ KCScreenshot.prototype.startCapture = function(){
 		self.handleLastError(chrome.runtime.lastError, "Inpage captureVisibleTab", "take screenshot");
 		self.domImg.src = base64img;
 		self.base64img = base64img;
-		var ofs = self.gamebox.offset();
-		// Chrome 128 has changed css zoom, length calc affected,
-		// `Promise.try` supposed to be shipped together with standardized zoom
-		if(Promise.try) {
-			var gameScale = (ConfigManager.api_gameScale || 100) / 100;
-			ofs.top = ofs.top / gameScale;
-			ofs.left = ofs.left / gameScale;
-		}
-		self.domImg.onload = self.crop(ofs, false);
+		self.domImg.onload = self.crop(self.gamebox.offset(), false);
 	});
 };
 
@@ -151,20 +143,27 @@ KCScreenshot.prototype.handleLastError = function(lastError, apiDesc, funcName){
 
 KCScreenshot.prototype.crop = function(offset, isRemote){
 	var self = this;
+	var gameWindowDpr = offset.devicePixelRatio || window.devicePixelRatio || 1;
 	var scale = this.getCurrentScale(offset.devicePixelRatio);
-	
+
 	// Get zoom factor of viewing page
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
-		// Viewing page zoom factor has been taken into account by window.devicePixelRatio (since chromium 25),
-		var realScale = self.autoDpi ? scale : zoomFactor * scale;
-		// Get gamebox dimensions and position
+		// Viewing page zoom factor has been taken into account by window.devicePixelRatio (since chromium 25)
+		var mixedScale = self.autoDpi ? scale : zoomFactor * scale;
+		var pageZoomScale = self.autoDpi ? gameWindowDpr : zoomFactor;
+		// Chromium 128 has changed css zoom, scaled length calcs applied already,
+		// `Promise.try` supposed to be shipped together with standardized zoom.
+		// but seems 128~129 different DPR calcs make offset left off?
+		var isGameScaleApplied = !!Promise.try;
+		// Get gamebox dimensions and position from offset, but in fact,
+		// values of width & height not offered, otherwise standardized zoom should be applied
 		var params = {
-			realWidth: (offset.width || 1200) * realScale,
-			realHeight: (offset.height || 720) * realScale,
-			offTop: offset.top * realScale,
-			offLeft: offset.left * realScale,
+			realWidth: (offset.width || 1200) * mixedScale,
+			realHeight: (offset.height || 720) * mixedScale,
+			offTop: offset.top * (isGameScaleApplied ? pageZoomScale : mixedScale),
+			offLeft: offset.left * (isGameScaleApplied ? pageZoomScale : mixedScale),
 		};
-		
+
 		// Actual Cropping
 		self.context.drawImage(
 			self.domImg,
@@ -177,7 +176,7 @@ KCScreenshot.prototype.crop = function(offset, isRemote){
 			(offset.width || 1200) * scale,
 			(offset.height || 720) * scale
 		);
-		
+
 		self.output();
 	});
 };
