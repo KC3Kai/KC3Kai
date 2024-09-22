@@ -28,22 +28,62 @@ KCScreenshot.prototype.getCurrentScale = function(gameWindowDpr){
 		* (ConfigManager.ss_dppx || gameWindowDpr || window.devicePixelRatio || 1);
 };
 
+/** Try to get original game canvas data first, fallback to old capture if failed */
+KCScreenshot.prototype.tryOriginalCanvas = function(fallbackMethod){
+	var self = this;
+	if (!this.tabId) {
+		if (fallbackMethod) fallbackMethod();
+		return;
+	}
+	(new TMsg(this.tabId, "gamescreen", "getGameCanvasData", {}, function(response){
+		if (response && response.base64img) {
+			response.isOriginalCanvas = true;
+			self.prepare(response);
+			self.base64img = response.base64img;
+			self.domImg.onload = () => {
+				self.context.drawImage(self.domImg, 0, 0, self.canvas.width, self.canvas.height);
+				self.output();
+			};
+			self.domImg.src = self.base64img;
+		} else {
+			if (fallbackMethod) fallbackMethod();
+		}
+	})).execute();
+};
+
 /** Running in page/content script scope */
-KCScreenshot.prototype.start = function(playerName, element){
+KCScreenshot.prototype.start = function(tabId, playerName, element){
+	var self = this;
+	this.tabId = tabId;
 	this.playerName = playerName;
 	this.gamebox = element;
 	this.generateScreenshotFilename();
-	this.prepare();
-	this.capture();
+	if (ConfigManager.ss_origin) {
+		this.tryOriginalCanvas(function() {
+			self.prepare();
+			self.capture();
+		});
+	} else {
+		this.prepare();
+		this.capture();
+	}
 };
 
 /** Running in background script scope */
 KCScreenshot.prototype.remoteStart = function(tabId, offset){
+	var self = this;
 	this.tabId = tabId;
 	this.offset = offset;
 	this.generateScreenshotFilename(false);
-	this.prepare(offset);
-	this.remoteCapture();
+	if (ConfigManager.ss_origin) {
+		this.tryOriginalCanvas(function() {
+			self.prepare(offset);
+			self.remoteCapture();
+		});
+	} else {
+		this.prepare(offset);
+		this.remoteCapture();
+	}
 };
 
 KCScreenshot.prototype.prepare = function(offset = {}){
@@ -51,8 +91,8 @@ KCScreenshot.prototype.prepare = function(offset = {}){
 
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = (offset.width || 1200) * scale;
-	this.canvas.height = (offset.height || 720) * scale;
+	this.canvas.width = (offset.width || 1200) * (offset.isOriginalCanvas ? 1 : scale);
+	this.canvas.height = (offset.height || 720) * (offset.isOriginalCanvas ? 1 : scale);
 	this.context = this.canvas.getContext("2d");
 	this.context.imageSmoothingEnabled = this.imageSmoothing;
 

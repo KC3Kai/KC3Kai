@@ -505,6 +505,12 @@
 						[ 2.0, "Retina (2x)" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_origin",
+				"name" : "SettingsSSOriginalSize",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
