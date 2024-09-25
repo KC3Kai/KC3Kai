@@ -46,21 +46,6 @@
 			script.setAttribute("type", "text/javascript");
 			script.setAttribute("src", chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
 			body.appendChild(script);
-			// Message exchanges between content scripts and page scripts
-			/*
-			chrome.runtime.onMessage.addListener(function(request, sender, response) {
-				if (request.action != "getGameCanvasData") return true;
-				const getGameCanvasDataRespHandler = (event) => {
-					if (event.origin !== window.location.origin) return;
-					if (!event.data || event.data.action !== "getGameCanvasDataResp") return;
-					response(event.data.canvas);
-					window.removeEventListener("message", getGameCanvasDataRespHandler);
-				};
-				window.addEventListener("message", getGameCanvasDataRespHandler);
-				window.postMessage({ action: "getGameCanvasDataReq" }, window.location.origin);
-				return true;
-			});
-			*/
 		}
 		// Register original canvas screenshot message handler
 		chrome.runtime.onMessage.addListener(function(request, sender, response) {

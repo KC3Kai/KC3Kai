@@ -6966,10 +6966,10 @@
 	},
 	"5870": {
 		"api_id": 5870,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "夏第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5871": {
@@ -6990,18 +6990,74 @@
 	},
 	"5873": {
 		"api_id": 5873,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "水着平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5874": {
 		"api_id": 5874,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5875": {
+		"api_id": 5875,
+		"api_name": "水着Nevada",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5876": {
+		"api_id": 5876,
+		"api_name": "水着Nevada改",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5877": {
+		"api_id": 5877,
+		"api_name": "水着Nevada改 Mod.2",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5878": {
+		"api_id": 5878,
+		"api_name": "水着清霜改二",
+		"api_yomi": "きよしも",
 		"api_stype": 2,
 		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5879": {
+		"api_id": 5879,
+		"api_name": "水着清霜改二丁",
+		"api_yomi": "きよしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5880": {
+		"api_id": 5880,
+		"api_name": "欧州遠征平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5881": {
+		"api_id": 5881,
+		"api_name": "欧州遠征平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
 	}
 }

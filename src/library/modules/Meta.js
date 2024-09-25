@@ -169,6 +169,7 @@ Provides access to data on built-in JSON files
 			323, // Harusame Kai -> K2
 			357, // Hatsuzuki Kai -> K2
 			392, // Richelieu Kai -> Deux
+			152, // Kirishima K2 -> K2C
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
@@ -177,13 +178,13 @@ Provides access to data on built-in JSON files
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
 		coloradoCutinShips: [601, 1496, 913, 918],
-		kongouCutinShips: [591, 592, 593, 954],
+		kongouCutinShips: [591, 592, 593, 954, 694],
 		subFleetCutinShips: [184, 634, 635, 639, 640, 944, 949],
 		yamatoCutinShips: [911, 916],
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392, 969, 724],
-		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 577, 364, 733, 591, 592, 593, 954, 697, 659, 446, 447, 1496, 918, 724, 392, 969],
+		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 577, 364, 733, 591, 592, 593, 694, 954, 697, 659, 446, 447, 1496, 918, 724, 392, 969],
 		richelieuClassCutinShips: [392, 969, 724],
 		queenElizabethClassCutinShips: [364, 733],
 		// getCountryName by ctype in `main.js#SlotItemEffectParamModel.SHIP_COUNTRY`

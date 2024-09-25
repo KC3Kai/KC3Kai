@@ -60,6 +60,8 @@
                     return 330;
                 case 151: // Haruna K2
                     return 390;
+                case 152: // Kirishima K2
+                    return 400;
                 case 593: // Haruna K2B
                     return 55;
                 case 954: // Haruna K2C
@@ -345,13 +347,14 @@
         // see: main.js#ShipUpgradeModel.prototype.newhokohesosizai
         calcGunMat: function(ship_id_from) {
             switch(ship_id_from) {
-                case 136: // to Yamato K2
-                case 148: // to Musashi K2
+                case 136: // to Yamato K2 911
+                case 148: // to Musashi K2 546
                     return 3;
-                case 149: // to Kongou K2C
-                case 150: // to Hiei K2C
+                case 149: // to Kongou K2C 591
+                case 150: // to Hiei K2C 592
+                case 152: // to Kirishima K2C 694
                     return 2;
-                case 206: // to Isonami K2
+                case 206: // to Isonami K2 666
                     return 1;
                 default: return 0;
             }

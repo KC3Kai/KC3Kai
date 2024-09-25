@@ -3452,9 +3452,10 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
-	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ (extended) / Warspite
-	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2 / Haruna K2B/C (extended)
-	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01)
+	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ (extended) / Kirishima K2C (extended) / Warspite / Valiant
+	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2+ (extended) / Haruna K2B/C (extended)
+	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01) / Kirishima K2C (extended)
+	 *   * Kirishima K2C flagship: Kongou K2C / Hiei K2C / Haruna K2B/C / South Dakota K (added since 2024-09-24)
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
@@ -3488,14 +3489,16 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd ship is valid partner and not even Chuuha
 					validCombinedShips = ({
-						// Kongou K2C: Hiei K2C, Haruna K2+, Warspite, Valiant
-						"591": [592, 151, 593, 954, 439, 364, 927, 733],
-						// Hiei K2C: Kongou K2C, Kirishima K2, Haruna K2B/C
-						"592": [591, 152, 593, 954],
-						// Haruna K2B: Kongou K2C, Hiei K2C
-						"593": [591, 592],
-						// Haruna K2C: Kongou K2C, Hiei K2C
-						"954": [591, 592],
+						// Kongou K2C: Hiei K2C, Haruna K2+, Kirishima K2C, Warspite, Valiant
+						"591": [592, 151, 593, 954, 694, 439, 364, 927, 733],
+						// Hiei K2C: Kongou K2C, Kirishima K2+, Haruna K2B/C
+						"592": [591, 152, 694, 593, 954],
+						// Haruna K2B: Kongou K2C, Hiei K2C, Kirishima K2C
+						"593": [591, 592, 694],
+						// Haruna K2C: Kongou K2C, Hiei K2C, Kirishima K2C
+						"954": [591, 592, 694],
+						// Kirishima K2C: Kongou K2C, Hiei K2C, Haruna K2B/C, South Dakota Kai
+						"694": [591, 592, 593, 954, 697],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
 						&& !fleetObj.ship(1).isStriped(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
@@ -3634,6 +3637,8 @@ KC3改 Ship Object
 							{ p1: [591], p2: [592] },      // Kongou + Hiei
 							{ p1: [591], p2: [593] },      // Kongou + Haruna K2B (Haruna added since 2023-05-01)
 							{ p1: [591], p2: [954] },      // Kongou + Haruna K2C
+							{ p1: [591], p2: [694] },      // Kongou + Kirishima (added since 2024-09-24)
+							{ p1: [592], p2: [694] },      // Hiei + Kirishima (added since 2024-09-24)
 							{ p1: [697], p2: [659] },      // South Dakota + Washington
 							{ p1: [446], p2: [447] },      // Italia + Roma
 							{ p1: [1496], p2: [918] },     // Colorado + Maryland

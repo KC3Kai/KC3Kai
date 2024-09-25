@@ -3832,19 +3832,19 @@
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class Kai Ni+
-						ids: [149, 150, 151, 152, 591, 592, 593, 954],
+						// Kongou K2/C
+						ids: [149, 591],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Hiei K2/C, Kirishima K2/C
+						ids: [150, 592, 152, 694],
 						multiple: { "houg": 1 },
 					},
 					{
-						// for Kongou K2/C and Haruna K2+
-						ids: [149, 151, 591, 593, 954],
-						multiple: { "houg": 1 },
-					},
-					{
-						// extra +1 aa, +2 ev for Haruna K2+
+						// Haruna K2+
 						ids: [151, 593, 954],
-						multiple: { "tyku": 1, "houk": 2 },
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
 					},
 				],
 			},
@@ -3855,7 +3855,7 @@
 				byShip: [
 					{
 						// all Kongou Class Kai Ni+
-						ids: [149, 150, 151, 152, 591, 592, 593, 954],
+						ids: [149, 150, 151, 152, 591, 592, 593, 954, 694],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -3935,18 +3935,18 @@
 						multiple: { "houk": 1 },
 					},
 					{
-						// by stars for Kongou K2, Hiei K2/C, Kirishima K2
-						ids: [149, 150, 152, 592],
+						// by stars for Kongou K2, Hiei K2/C, Kirishima K2/C
+						ids: [149, 150, 152, 592, 694],
 						minStars: 7,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [149, 150, 152, 592],
+						ids: [149, 150, 152, 592, 694],
 						minStars: 9,
 						multiple: { "houg": 1 },
 					},
 					{
-						ids: [149, 150, 152, 592],
+						ids: [149, 150, 152, 592, 694],
 						minStars: 10,
 						multiple: { "houk": 1 },
 					},
@@ -3958,8 +3958,8 @@
 				starsDist: [],
 				byShip: [
 					{
-						// +1 fp for Hiei K2+, Kirishima K2
-						ids: [150, 592, 152],
+						// +1 fp for Hiei K2+, Kirishima K2+
+						ids: [150, 592, 152, 694],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -3978,8 +3978,8 @@
 						multiple: { "houg": 5, "tyku": 4 },
 					},
 					{
-						// total +2 aa for Haruna K2
-						ids: [151],
+						// total +2 aa for Haruna K2, +1 aa for Kirishima K2C
+						ids: [151, 694],
 						multiple: { "tyku": 1 },
 					},
 					{
@@ -4100,18 +4100,18 @@
 						multiple: { "tyku": 1 },
 					},
 					{
-						// by stars for Kongou K2, Hiei K2/C, Kirishima K2
-						ids: [149, 150, 152, 592],
+						// by stars for Kongou K2, Hiei K2/C, Kirishima K2/C
+						ids: [149, 150, 152, 592, 694],
 						minStars: 5,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [149, 150, 152, 592],
+						ids: [149, 150, 152, 592, 694],
 						minStars: 8,
 						multiple: { "houg": 1 },
 					},
 					{
-						ids: [149, 150, 152, 592],
+						ids: [149, 150, 152, 592, 694],
 						minStars: 10,
 						multiple: { "tyku": 1 },
 					},
@@ -4133,13 +4133,13 @@
 						multiple: { "houg": 3 },
 					},
 					{
-						// +4 fp Haruna K2B/C
-						ids: [593, 954],
+						// +4 fp Haruna K2B/C, Kirishima K2C
+						ids: [593, 954, 694],
 						multiple: { "houg": 4 },
 					},
 					{
-						// +1 aa Kongou K2+, Hiei K2C
-						ids: [149, 591, 592],
+						// +1 aa Kongou K2+, Hiei K2C, Kirishima K2C
+						ids: [149, 591, 592, 694],
 						multiple: { "tyku": 1 },
 					},
 					{
@@ -4158,8 +4158,8 @@
 						multiple: { "tyku": 4 },
 					},
 					{
-						// for Kongou K2C, Hiei K2C and Haruna K2/K2B
-						ids: [151, 591, 592, 593],
+						// for Kongou K2C, Hiei K2C, Haruna K2/K2B, Kirishima K2C
+						ids: [151, 591, 592, 593, 694],
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 2, "houk": 1, "houm": 2 },
@@ -4182,8 +4182,8 @@
 						}
 					},
 					{
-						// Hiei K2C, Haruna K2B
-						ids: [592, 593],
+						// Hiei K2C, Haruna K2B, Kirishima K2C
+						ids: [592, 593, 694],
 						synergy: {
 							flags: [ "highAccuracyRadar" ],
 							single: { "houg": 2, "houk": 2, "houm": 2 },
@@ -4199,7 +4199,7 @@
 					},
 					{
 						// Kongou Class K2B+
-						ids: [591, 592, 593, 954],
+						ids: [591, 592, 593, 954, 694],
 						synergy: {
 							flags: [ "kamikazeTwinTorpedo" ],
 							single: { "raig": 4 },
@@ -4294,6 +4294,42 @@
 						minStars: 10,
 						multiple: { "tyku": 1 },
 					},
+					{
+						// by stars for Kirishima K2C
+						ids: [694],
+						minStars: 0,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [694],
+						minStars: 1,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [694],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [694],
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [694],
+						minStars: 6,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [694],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [694],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
 				],
 			},
 			// 35.6cm Twin Gun Mount Kai
@@ -4324,9 +4360,9 @@
 						ids: [591],
 						multiple: { "houg": 1, "raig": 1 },
 					},
-					// extra +1 fp, +1 aa for Hiei Kai Ni C
+					// extra +1 fp, +1 aa for Hiei Kai Ni C, Kirishima K2C
 					{
-						ids: [592],
+						ids: [592, 694],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 					// extra +2 aa for Haruna Kai Ni B
@@ -4379,6 +4415,11 @@
 						ids: [593],
 						multiple: { "houg": -1, "raig": -1, "tyku": 2 },
 					},
+					{
+						// Kirishima Kai Ni C
+						ids: [694],
+						multiple: { "houg": 1, "raig": -1 },
+					},
 				],
 			},
 			// 35.6cm Twin Gun Mount Kai 3C
@@ -4397,8 +4438,8 @@
 						multiple: { "houg": 3 },
 					},
 					{
-						// Hiei K2C
-						ids: [592],
+						// Hiei K2C, Kirishima K2C
+						ids: [592, 694],
 						multiple: { "houg": 4 },
 					},
 					{
@@ -4407,8 +4448,8 @@
 						multiple: { "tyku": 1 },
 					},
 					{
-						// Kongou K2C, Hiei K2C, Haruna K2C
-						ids: [591, 592, 954],
+						// Kongou K2C, Hiei K2C, Haruna K2C, Kirishima K2C
+						ids: [591, 592, 954, 694],
 						multiple: { "tyku": 2 },
 					},
 					{
@@ -4417,19 +4458,35 @@
 						multiple: { "tyku": 3 },
 					},
 					{
-						// Hiei K2C
-						ids: [592],
+						// Hiei K2C, Kirishima K2C
+						ids: [592, 694],
 						multiple: { "houg": 1, "houm": 2 },
 						synergy: [
 							{
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 6, "houk": 3, "houm": 3 },
+								single: { "houg": 3, "houk": 3, "houm": 3 },
 							},
 							{
 								flags: [ "highAccuracyRadar" ],
 								single: { "houm": 1 },
 							},
 						],
+					},
+					{
+						// Hiei K2C
+						ids: [592],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3 },
+						},
+					},
+					{
+						// Kirishima K2C
+						ids: [694],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 4 },
+						},
 					},
 					{
 						// Hiei K2C
@@ -4448,6 +4505,12 @@
 						ids: [592],
 						minCount: 4,
 						single: { "houm": 2 },
+					},
+					{
+						// Kirishima K2C
+						ids: [694],
+						minCount: 3,
+						single: { "houg": 3 },
 					},
 					{
 						// Hiei K2C
@@ -4583,8 +4646,8 @@
 						},
 					},
 					{
-						// Kongou K2C, Hiei K2C, Haruna K2/K2B
-						ids: [591, 592, 593, 954],
+						// Kongou K2C, Hiei K2C, Haruna K2/K2B, Kirishima K2C
+						ids: [591, 592, 593, 954, 694],
 						synergy: [
 							{
 								flags: [ "kamikazeTwinTorpedo" ],
@@ -4622,6 +4685,14 @@
 						synergy: {
 							flags: [ "highAccuracyRadar" ],
 							single: { "houg": 1 },
+						},
+					},
+					{
+						// Kirishima K2C
+						ids: [694],
+						synergy: {
+							flags: [ "highAccuracyRadar" ],
+							single: { "houg": 3 },
 						},
 					},
 				],
@@ -4904,8 +4975,8 @@
 				},
 				byShip: [
 					{
-						// Kongou K2C, Hiei K2C
-						ids: [591, 592],
+						// Kongou K2C, Hiei K2C, Kirishima K2C
+						ids: [591, 592, 694],
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
 					{
@@ -10056,6 +10127,11 @@
 						single: { "houg": 3, "tyku": 4 },
 					},
 					{
+						// Kirishima K2C
+						ids: [694],
+						single: { "houg": 4, "tyku": 2 },
+					},
+					{
 						// Nagato K2, Mutsu K2, Ise K2, Hyuuga K2
 						ids: [541, 573, 553, 554],
 						single: { "houg": 2, "tyku": 2 },
@@ -10887,8 +10963,8 @@
 						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 					},
 					{
-						// Kirishima K2
-						ids: [152],
+						// Kirishima K2/C
+						ids: [152, 694],
 						multiple: { "houg": 2, "tyku": 1 },
 					},
 					{
@@ -11044,6 +11120,11 @@
 						// Kirishima K2
 						ids: [152],
 						single: { "houg": 2, "tyku": 2 },
+					},
+					{
+						// Kirishima K2C
+						ids: [694],
+						single: { "houg": 3, "tyku": 2, "houk": 1 },
 					},
 					{
 						// Yamato-class K2+
@@ -11659,6 +11740,20 @@
 						},
 					],
 				},
+				byShip: [
+					{
+						// Kirishima K2C
+						ids: [694],
+						minStars: 7,
+						single: { "souk": 1 },
+					},
+					{
+						// Kirishima K2C
+						ids: [694],
+						minStars: 10,
+						single: { "raig": 1 },
+					},
+				],
 			},
 			// Soukoutei (Armored Boat Class)
 			"408": {
@@ -12295,6 +12390,15 @@
 						synergy: {
 							flags: [ "kamikazeTwinTorpedo" ],
 							single: { "raig": 5 },
+						},
+					},
+					{
+						// Kirishima Kai Ni C
+						ids: [694],
+						single: { "houg": 4, "raig": 1 },
+						synergy: {
+							flags: [ "kamikazeTwinTorpedo" ],
+							single: { "raig": 7 },
 						},
 					},
 					{

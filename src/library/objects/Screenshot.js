@@ -137,7 +137,7 @@ function getRandomInt(min, max) {
 KCScreenshot.prototype.capture = function(){
 	var self = this;
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss && typeof interactions != "undefined") {
+	if (!ConfigManager.alert_taiha_ss && typeof interactions != "undefined") {
 		interactions.suspendTaiha(function(){
 			self.startCapture();
 		});
@@ -172,7 +172,7 @@ KCScreenshot.prototype.startCapture = function(){
 };
 
 KCScreenshot.prototype.handleLastError = function(lastError, apiDesc, funcName){
-	if(lastError) {
+	if (lastError) {
 		var errMsg = lastError.message || "unknown reason";
 		console.warn((apiDesc || "Chrome API") + " invoking error", errMsg);
 		// Invoke cleanup callback first even exception thrown
