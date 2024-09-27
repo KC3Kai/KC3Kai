@@ -1917,6 +1917,7 @@ KC3改 Ship Object
 	 * @see estimateInstallationEnemyType
 	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83
+	 * @see https://bbs.nga.cn/read.php?tid=33769345
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
@@ -4746,11 +4747,11 @@ KC3改 Ship Object
 			case 401: return formatPercent(this.yamatoClassCutinRate(false, 2));
 		}
 		const typeFactor = {
-			2: 150,
-			3: 120,
-			4: 130,
-			5: 130,
-			6: 140,
+			2: 130, // DoubleAttack (main+main)
+			3: 120, // MainSecond (main+sec)
+			4: 130, // MainRadar (main+sec+radar)
+			5: 140, // MainApshell (main+sec+apshell)
+			6: 150, // MainMain (main+main+apshell)
 			7: ({
 				"CutinFDBTB" : 125,
 				"CutinDBDBTB": 140,
@@ -4780,13 +4781,13 @@ KC3改 Ship Object
 		// not sure: DA success rate almost 99%
 		if (spType === 1) { return 99; }
 		const typeFactor = {
-			2: 115,
+			2: 115, // TorpTorpMain
 			3: ({ // submarine late torp cutin
 				"CutinLateTorpRadar": 105,
 				"CutinLateTorpTorp": 110,
-			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
-			4: 130,
-			5: 140,
+			   })[cutinSubType] || 122, // default TorpTorpTorp
+			4: 130, // MainMainSecond
+			5: 140, // MainMainMain
 			6: ({ // CVNCI factors https://twitter.com/Divinity__123/status/1481091340876369921
 				"CutinNFNFNTB": 105,  // 3 planes for mod 1.25
 				"CutinNFNTB" : 120,   // 2 planes for mod 1.2
