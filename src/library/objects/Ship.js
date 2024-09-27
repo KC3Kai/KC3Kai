@@ -1930,6 +1930,7 @@ KC3改 Ship Object
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu, (T4 Tank variants *2)
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
 		//  * 8: [525,526] virtual type of T4 Tank special merging rules, see *2
+		// [496~499] army units unknown, preliminary: https://x.com/yukicacoon/status/1839245331348992263
 		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436, [525, 526]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
@@ -3511,10 +3512,12 @@ KC3改 Ship Object
 
 	/**
 	 * Kongou special night cut-in attack modifiers are depending on equipment and engagement.
+	 * Note: night battle cut-in modifier is applied precap.
 	 * Basic precap modifier was 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 	 * Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
 	 * Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
 	 * Buffed again by 35.6cm K2C/K4 since 2024-05-31: https://x.com/Camellia_bb/status/1805918324301365632
+	 * Buffed again to 2.6~2.7? since 2024-09-24: https://x.com/hedgehog_hasira/status/1838951859605983678
 	 */
 	KC3Ship.prototype.estimateKongouCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3524,13 +3527,16 @@ KC3改 Ship Object
 
 		// All capable ships applied, including K2, K2B and Warspite, despite only K2C mentioned by announcement
 		const targetShip = locatedFleet.ship(forShipPos);
-		const k3cTwin356gunCount = targetShip.countEquipment(530),
+		const baseModifier = forShipPos === 0 ? 2.6 : 2.7;
+		const k2Twin356gunCount = targetShip.countEquipment(329),
+			k3cTwin356gunCount = targetShip.countEquipment(530),
 			k4Twin356gunCount = targetShip.countEquipment(503);
 		const twin356gunsMod = k4Twin356gunCount + k3cTwin356gunCount >= 2 ? 1.15
 			: k4Twin356gunCount + k3cTwin356gunCount >= 1 ? 1.11
+			: k2Twin356gunCount >= 1 ? 1.05
 			: 1.0;
 		const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
-		return 2.4 * engagementMod * twin356gunsMod;
+		return baseModifier * engagementMod * twin356gunsMod;
 	};
 
 	/**

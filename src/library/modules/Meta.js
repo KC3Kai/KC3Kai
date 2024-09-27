@@ -85,7 +85,7 @@ Provides access to data on built-in JSON files
 			353: {917: 917, 918: 918},
 		},
 		specialReairVoiceShips: [
-			// These ships got special (unused?) voice line (6, aka. Repair) implemented,
+			// These ships got special voice line (6, aka. Repair) implemented (some used by akashi remodel),
 			// tested by trying and succeeding to http fetch mp3 from kc server
 			56, 160, 224,  // Naka
 			65, 194, 268,  // Haguro
@@ -97,6 +97,7 @@ Provides access to data on built-in JSON files
 			136,           // Yamato Kai
 			418,           // Satsuki Kai Ni
 			496,           // Zara due
+			694,           // Kirishima K2C
 		],
 		specialAbyssalIdVoicePrefixes: {
 			// Why do devs make wrong voice filename matching even for last event?
@@ -172,7 +173,7 @@ Provides access to data on built-in JSON files
 			152, // Kirishima K2 -> K2C
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
+		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
 		nelsonTouchShips: [571, 576, 572, 577],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
