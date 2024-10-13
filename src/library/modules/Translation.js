@@ -71,13 +71,9 @@
 			});
 		},
 
-		/* APPLY HTML
-		Specialized Language HTML adjustments
-		-----------------------------------------*/
-		applyHTML :function(returnFontFamily){
-			// Apply specialized global fonts
-			var fontFamily = false;
-			switch(ConfigManager.language){
+		getDefaultFontFamily :function(lang){
+			var fontFamily = "";
+			switch(lang){
 				// Default font family for CJK languages
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
@@ -86,11 +82,21 @@
 				case "kr": fontFamily = '"Helvetica Neue", Helvetica, Arial, "AppleGothic", "Malgun Gothic", "GulimChe", "Dotum", "UnDotum", sans-serif'; break;
 				default: break;
 			}
+			return fontFamily;
+		},
+
+		getSubtitleFontFamily :function(config = ConfigManager){
+			return config.subtitle_font || this.getDefaultFontFamily(config.subtitle_lang || config.language);
+		},
+
+		/* APPLY HTML
+		Specialized Language HTML adjustments
+		-----------------------------------------*/
+		applyHTML :function(){
+			// Apply specialized global fonts
+			var fontFamily = this.getDefaultFontFamily(ConfigManager.language);
 			if(fontFamily){
-				if(returnFontFamily) return fontFamily;
 				$("body").css("font-family", fontFamily);
-			} else {
-				if(returnFontFamily) return;
 			}
 			// Can be also defined in terms
 			var fontFamilyInTerm = KC3Meta.term("BodyFontFamily");

@@ -290,7 +290,8 @@ Provides access to data on built-in JSON files
 		},
 		
 		loadQuotes :function(){
-			this._quotes = KC3Translation.getQuotes(this.repo);
+			const subtitleLang = ConfigManager.subtitle_lang || ConfigManager.language;
+			this._quotes = KC3Translation.getQuotes(this.repo, false, subtitleLang);
 			this._quotesSize = JSON.parse($.ajax(this.repo + "quotes_size.json", { async: false }).responseText);
 			return this;
 		},

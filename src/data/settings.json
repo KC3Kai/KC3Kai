@@ -944,6 +944,18 @@
 				"options" : {}
 			},
 			{
+				"id" : "subtitle_lang",
+				"name" : "SettingsSubtitleLang",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ ""  , "SettingsShipNamesGlobal" ],
+						[ "en", "English" ],
+						[ "jp", "日本語" ]
+					]
+				}
+			},
+			{
 				"id" : "subtitle_font",
 				"name" : "SettingsSubtitleFont",
 				"type" : "long_text",

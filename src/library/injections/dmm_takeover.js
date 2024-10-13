@@ -141,7 +141,7 @@
 				position: 'relative',
 				zoom: this.gameZoomScale
 			});
-			var altFontFamily = KC3Translation.applyHTML(true);
+			var altFontFamily = KC3Translation.getDefaultFontFamily(config.language);
 			if(altFontFamily) $("#area-game").css("font-family", altFontFamily);
 			$("#game_frame").css({
 				width: 1200,
@@ -244,7 +244,7 @@
 
 			if(config.api_subtitles){
 				// Subtitle font customizations
-				$(".overlay_subtitles").css("font-family", config.subtitle_font);
+				$(".overlay_subtitles").css("font-family", KC3Translation.getSubtitleFontFamily(config));
 				$(".overlay_subtitles").css("font-size", config.subtitle_size);
 				if(config.subtitle_bold){
 					$(".overlay_subtitles").css("font-weight", "bold");

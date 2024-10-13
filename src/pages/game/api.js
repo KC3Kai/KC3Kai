@@ -124,7 +124,7 @@ $(document).on("ready", function(){
 	}
 	
 	if(ConfigManager.api_subtitles){
-		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-family", KC3Translation.getSubtitleFontFamily());
 		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
 		if(ConfigManager.subtitle_bold){
 			$(".overlay_subtitles").css("font-weight", "bold");
