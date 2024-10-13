@@ -3518,7 +3518,9 @@ KC3改 Ship Object
 	 * Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
 	 * Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
 	 * Buffed again by 35.6cm K2C/K4 since 2024-05-31: https://x.com/Camellia_bb/status/1805918324301365632
-	 * Buffed again to 2.6~2.7? since 2024-09-24: https://x.com/hedgehog_hasira/status/1838951859605983678
+	 * Buffed again to 2.6~2.7 since 2024-09-24: https://x.com/hedgehog_hasira/status/1838951859605983678
+	 *  * K2 & K3 Dazzle added since 2024-09-24: https://x.com/yukicacoon/status/1839959049791778912
+	 *  * thread of verifications: https://x.com/CC_jabberwock/status/1842239909274534271
 	 */
 	KC3Ship.prototype.estimateKongouCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3529,15 +3531,12 @@ KC3改 Ship Object
 		// All capable ships applied, including K2, K2B and Warspite, despite only K2C mentioned by announcement
 		const targetShip = locatedFleet.ship(forShipPos);
 		const baseModifier = forShipPos === 0 ? 2.6 : 2.7;
-		const k2Twin356gunCount = targetShip.countEquipment(329),
-			k3cTwin356gunCount = targetShip.countEquipment(530),
-			k4Twin356gunCount = targetShip.countEquipment(503);
-		const twin356gunsMod = k4Twin356gunCount + k3cTwin356gunCount >= 2 ? 1.15
-			: k4Twin356gunCount + k3cTwin356gunCount >= 1 ? 1.11
-			: k2Twin356gunCount >= 1 ? 1.05
-			: 1.0;
+		const twin356Group1Count = targetShip.countEquipment([329 /* K2 */, 502 /* K3 Dazzle */]),
+			twin356Group2Count = targetShip.countEquipment([503 /* K4 */, 530 /* K3C */]);
+		const twin356gunsMod1 = [1, 1.05, 1.08][twin356Group1Count] || 1.08;
+		const twin356gunsMod2 = [1, 1.11, 1.15][twin356Group2Count] || 1.15;
 		const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
-		return baseModifier * engagementMod * twin356gunsMod;
+		return baseModifier * engagementMod * twin356gunsMod1 * twin356gunsMod2;
 	};
 
 	/**

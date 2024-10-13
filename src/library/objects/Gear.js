@@ -571,6 +571,31 @@ KC3改 Equipment Object
 			}
 			return Math.qckInt("floor", modifier * Math.sqrt(stars), 1);
 		}
+		if (type.toLowerCase() === "contact") {
+			// no accurate mods found, some values based on tests:
+			// https://github.com/noro6/kc-web/blob/main/src/classes/item/item.ts#L1014
+			switch (type2) {
+				case 10: // Seaplane recon
+				case 41: // Large Flying Boat
+					// Night recon
+					modifier = this.master().api_type[3] === 50 ? 0.1 : 0.14;
+					break;
+				case 9: // Recon plane
+				case 94: // Recon (II)
+				case 49: // LB Recon
+				case 59: // Jet Recon
+					modifier = 0.25; break;
+			}
+			switch (this.masterId) {
+				case 59: // Type 0 Observation
+				case 539: // SOC Seagull LM (Skilled)
+				case 543: // SBD VS-2 (Recon)
+					modifier = 0.2; break;
+				case 151: // Prototype Keiun (Recon)
+					modifier = 0.4; break;
+			}
+			return Math.qckInt("floor", modifier * stars, 1);
+		}
 		switch (type2) {
 			case 12: // Small radar
 				modifier = 1.25; break;
