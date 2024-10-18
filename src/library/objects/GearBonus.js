@@ -9438,8 +9438,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Kiyoshimo K2
-						ids: [955],
+						// Kiyoshimo K2, Hayashimo K2
+						ids: [955, 956],
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "raig": -1 },
@@ -12422,8 +12422,8 @@
 						},
 					},
 					{
-						// Kiyoshimo K2/K2D
-						ids: [955, 960],
+						// Kiyoshimo K2/K2D, Hayashimo K2
+						ids: [955, 960, 956],
 						synergy: [
 							{
 								flags: [ "airRadar" ],

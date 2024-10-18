@@ -89,6 +89,7 @@
                 case 643: // Ume
                     return 15;
                 case 231: // Akebono
+                case 324: // Hayashimo
                 case 344: // Asashimo
                 case 350: // Umikaze
                     return 30;

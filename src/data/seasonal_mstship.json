@@ -7059,5 +7059,37 @@
 		"api_stype": 20,
 		"api_soku": 5,
 		"api_slot_num": 3
+	},
+	"5882": {
+		"api_id": 5882,
+		"api_name": "浴衣Gotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5883": {
+		"api_id": 5883,
+		"api_name": "浴衣Gotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5884": {
+		"api_id": 5884,
+		"api_name": "浴衣2024鵜来改",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5885": {
+		"api_id": 5885,
+		"api_name": "浴衣第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
 	}
 }

@@ -171,6 +171,7 @@ Provides access to data on built-in JSON files
 			357, // Hatsuzuki Kai -> K2
 			392, // Richelieu Kai -> Deux
 			152, // Kirishima K2 -> K2C
+			324, // Hayashimo Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
