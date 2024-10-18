@@ -208,7 +208,8 @@
 				if((gearData["api_"+sdata[1]]||0) !== 0 && (
 					!planeOnlyStats.includes(sdata[0]) || (
 						planeOnlyStats.includes(sdata[0]) &&
-						KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
+						(KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
+							|| gearData.api_cost !== undefined)
 					)
 				) && (
 					sdata[0] !== "dc" || KC3GearManager.aswDepthChargeIds.includes(gearData.api_id)

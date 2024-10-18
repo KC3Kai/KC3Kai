@@ -317,7 +317,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlySep',
 				key: 'timeToResetYearlySepQuests',
 				resetMonth: SEPTEMBER,
-				questIds: [439, 440, 657, 928, 1107],
+				questIds: [375, 439, 440, 657, 928, 1018, 1107],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
 				},
@@ -606,8 +606,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13, Cy14
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13, Cy14, Cy15
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373, 375], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -887,6 +887,15 @@ Uses KC3Quest objects to play around with
 							fleet.hasShipClass(KC3Meta.ctypesByCountryName("France"), 0) &&   // French flagship
 							fleet.countShipClass(KC3Meta.ctypesByCountryName("France")) >= 3; // 3 French ships in total
 					},
+				"375": // Cy15 PvP with Hiei, Kirishima, 1 CL, 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShip(86) &&   // Hiei any remodel
+							fleet.hasShip(85) &&   // Kirishima any remodel
+							fleet.countShipType(3) >= 1 &&
+							fleet.countShipType(2) >= 2;
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -1100,6 +1109,13 @@ Uses KC3Quest objects to play around with
 						return fleet.hasShipClass(117, 0)
 							&& fleet.countShipType(1) <= 4
 							&& fleet.countShipType(1, true, false) === 0;
+					},
+				"1018": // By15 Sortie Hiei, Kirishima, 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip(85)  // Kirishima
+							&& fleet.hasShip(86)  // Hiei
+							&& fleet.countShipType(2) >= 2;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

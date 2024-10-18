@@ -157,7 +157,7 @@
             planeListHtml
         );
         // add night contact rate if night recon found
-        const nightContactSuccess = viewFleet.nightContactSuccessChance(airBattleId);
+        const nightContactSuccess = (isCombined ? escortFleet : viewFleet).nightContactSuccessChance(airBattleId);
         if(nightContactSuccess >= 0) text += "\n" + KC3Meta.term("PanelNightContactTip")
             .format(Math.qckInt("floor", nightContactSuccess * 100, 1));
         return $("<p></p>")

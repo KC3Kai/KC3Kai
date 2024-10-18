@@ -124,7 +124,7 @@ $(document).on("ready", function(){
 	}
 	
 	if(ConfigManager.api_subtitles){
-		$(".overlay_subtitles").css("font-family", ConfigManager.subtitle_font);
+		$(".overlay_subtitles").css("font-family", KC3Translation.getSubtitleFontFamily());
 		$(".overlay_subtitles").css("font-size", ConfigManager.subtitle_size);
 		if(ConfigManager.subtitle_bold){
 			$(".overlay_subtitles").css("font-weight", "bold");
@@ -325,7 +325,11 @@ $(document).on("keydown", function(event){
 			
 		// F9: Screenshot
 		case(120):
-			interactions.screenshot({playerName: "Auto"}, {}, function(){});
+			chrome.tabs.getCurrent(function(tab) {
+				interactions.screenshot({
+					tabId: tab.id, playerName: tab.title
+				}, {}, function(){});
+			});
 			return false;
 		
 		// F10: Clear overlays
@@ -534,7 +538,7 @@ var interactions = {
 		(new KCScreenshot()).setCallback(function(){
 			response({success:true});
 			isTakingScreenshot = false;
-		}).start(request.playerName, $(".box-wrap"));
+		}).start(request.tabId, request.playerName, $(".box-wrap"));
 		return true;
 	},
 	

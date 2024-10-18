@@ -47,6 +47,24 @@
 			script.setAttribute("src", chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
 			body.appendChild(script);
 		}
+		// Register original canvas screenshot message handler
+		chrome.runtime.onMessage.addListener(function(request, sender, response) {
+			if (request.action != "getGameCanvasData") return true;
+			const gameCanvas = document.querySelector("canvas");
+			if (!gameCanvas) {
+				response({});
+			} else {
+				window.requestAnimationFrame(() => {
+					response({
+						base64img: gameCanvas.toDataURL(),
+						width: gameCanvas.width,
+						height: gameCanvas.height,
+						devicePixelRatio: window.devicePixelRatio
+					});
+				});
+			}
+			return true;
+		});
 	})).execute();
 
 })();

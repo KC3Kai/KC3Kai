@@ -9,17 +9,19 @@
 		enQuotes: [],
 		jpQuotes: [],
 		showFriendLines: false,
+		subtitleLang: "",
 		
 		init :function() {
 			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
 		},
 		reload: function() {
 			ConfigManager.load();
+			this.subtitleLang = ConfigManager.subtitle_lang || ConfigManager.language;
 			this.enQuotes = [];
-			if(ConfigManager.language !== "en")
+			if(this.subtitleLang !== "en")
 				this.enQuotes = KC3Translation.getQuotes(this.repo_loc, false, "en", false, false);
 			this.jpQuotes = [];
-			if(ConfigManager.language !== "jp")
+			if(this.subtitleLang !== "jp")
 				this.jpQuotes = KC3Translation.getQuotes(this.repo_loc, false, "jp", false, false);
 		},
 		buildShipName: function(masterId, shipData) {
@@ -27,10 +29,9 @@
 		},
 		showVoiceDetail: function(masterId) {
 			var self = this;
-			var language = ConfigManager.language;
 			$("#error").empty().hide();
 			KC3Meta.loadQuotes();
-			var quotes = KC3Translation.getQuotes(this.repo_loc, true);
+			var quotes = KC3Translation.getQuotes(this.repo_loc, true, self.subtitleLang);
 			masterId = Number(masterId) || 318;
 			var shipLines = quotes[masterId];
 			var shipData = KC3Master.ship(masterId);
@@ -85,7 +86,7 @@
 					src = shipLines[voiceNum];
 					if (src && typeof src.tag === "number") {
 						state = (src.tag === masterId) ? "direct" : "inherit";
-					} else if (src && language === "en" && src.tag === "en") {
+					} else if (src && self.subtitleLang === "en" && src.tag === "en") {
 						state = "direct";
 					}
 				} else {
@@ -188,7 +189,6 @@
 				var shipLines = quotes[masterId];
 				var availableVoiceNums = KC3Translation.getShipVoiceNums(masterId);
 
-				var language = ConfigManager.language;
 				var directCount = 0;
 				var inheritedCount = 0;
 				if (shipLines) {
@@ -200,7 +200,7 @@
 							} else {
 								inheritedCount = inheritedCount + 1;
 							}
-						} else if (src && language === "en" && src.tag === "en") {
+						} else if (src && self.subtitleLang === "en" && src.tag === "en") {
 							directCount = directCount + 1;
 						}
 					});
