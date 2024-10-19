@@ -224,6 +224,8 @@ known IDs see QuestManager
 						KC3QuestManager.get(368).increment(); // Cy11: Yearly Exercises 11
 					if(KC3QuestManager.isPrerequisiteFulfilled(375))
 						KC3QuestManager.get(375).increment(); // Cy15: Yearly Exercises 15
+					if(KC3QuestManager.isPrerequisiteFulfilled(377))
+						KC3QuestManager.get(377).increment(); // Cy16: Yearly Exercises 16
 				}
 				break;
 			case 4: // Dxx type, expedition success

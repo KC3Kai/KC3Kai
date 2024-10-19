@@ -330,7 +330,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyOct',
 				key: 'timeToResetYearlyOctQuests',
 				resetMonth: OCTOBER,
-				questIds: [345, 346, 355, 654],
+				questIds: [345, 346, 355, 377, 654],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyOct.type);
 				},
@@ -606,8 +606,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13, Cy14, Cy15
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373, 375], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13, Cy14, Cy15, Cy16
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373, 375, 377], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -895,6 +895,19 @@ Uses KC3Quest objects to play around with
 							fleet.hasShip(85) &&   // Kirishima any remodel
 							fleet.countShipType(3) >= 1 &&
 							fleet.countShipType(2) >= 2;
+					},
+				"377": // Cy16 PvP with Hayashimo/Akishimo/Kiyoshimo as flagship, 2 of Hayashimo/Akishimo/Kiyoshimo/Asashimo
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+								fleet.hasShip(409, 0)    // Hayashimo any remodel
+								|| fleet.hasShip(625, 0) // Akishimo any remodel
+								|| fleet.hasShip(410, 0) // Kiyoshimo any remodel
+							) && (fleet.countShip(409)   // Hayashimo any remodel
+								+ fleet.countShip(625)   // Akishimo any remodel
+								+ fleet.countShip(410)   // Kiyoshimo any remodel
+								+ fleet.countShip(425)   // Asashimo any remodel
+							) >= 3; // including flagship
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
