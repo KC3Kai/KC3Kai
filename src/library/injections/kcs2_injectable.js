@@ -23,6 +23,31 @@
 			return false;
 		}
 
+		// Register original canvas screenshot message listener?
+		//pixi.settings.RENDER_OPTIONS.preserveDrawingBuffer = true;
+		/*
+		window.addEventListener("message", (event) => {
+			if (event.origin !== window.location.origin) return;
+			if (!event.data || event.data.action !== "getGameCanvasDataReq") return;
+			pixi.settings.RENDER_OPTIONS.preserveDrawingBuffer = true;
+			setTimeout(function() {
+				pixi.settings.RENDER_OPTIONS.preserveDrawingBuffer = false;
+			}, 1000);
+			const canvasData = {};
+			const gameCanvas = document.querySelector("canvas");
+			if (gameCanvas) {
+				canvasData.base64img = gameCanvas.toDataURL();
+				canvasData.width = gameCanvas.width;
+				canvasData.height = gameCanvas.height;
+				canvasData.devicePixelRatio = window.devicePixelRatio;
+			}
+			event.source.postMessage({
+				action: "getGameCanvasDataResp",
+				canvas: canvasData
+			}, event.origin);
+		});
+		*/
+
 		// Hook and improve pixi.js if necessary?
 		/*
 		const originalRender = pixi.WebGLRenderer.prototype.render;

@@ -151,6 +151,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					if( isDMMFrame(tabDetails.url) || isAPIFrame(tabDetails.url)){
 						// If API or DMM Frame, use traditional screenshot call
 						(new TMsg(request.tabId, "gamescreen", "screenshot", {
+							tabId: request.tabId,
 							playerName: request.playerName
 						}, response)).execute();
 						return true;

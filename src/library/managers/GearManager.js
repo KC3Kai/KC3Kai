@@ -17,7 +17,7 @@ Saves and loads list to and from localStorage
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46,50,51],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		// Type 21, 22 extended since 2023-02-14
-		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56],
+		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56,57],
 		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58],
 		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474],
@@ -30,7 +30,7 @@ Saves and loads list to and from localStorage
 		aswDepthChargeIds: [226,227,378,439,488],
 		aswDepthChargeProjectorIds: [44,45,287,288,377,472],
 		aswArmorPenetrationIds: [226,227,377,378,439,472,488],
-		interceptorsType3Ids: [38,44,56],
+		interceptorsType3Ids: [38,44,56,57],
 		interceptorsType2Ids: [48],
 		nightAircraftType3Ids: [45,46],
 

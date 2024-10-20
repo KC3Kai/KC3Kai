@@ -125,13 +125,11 @@ Does not include Ships and Gears which are managed by other Managers
 				expandedInfo = data.api_air_base_expanded_info,
 				mapInfo = data.api_map_info;
 			if(typeof airBase !== "undefined") {
-				// Map and keep World IDs only
+				// Map and keep World IDs only without duplication
 				var openedWorldIds = (mapInfo || []).map(m => m.api_id)
-					.map(id => String(id).slice(0, -1));
-				// Remove duplicate IDs
-				openedWorldIds = [...new Set(openedWorldIds)];
+					.map(id => String(id).slice(0, -1)).unique();
 				// Filter unset land bases after event if event world API data still exist
-				var openedBases = airBase.filter(ab => openedWorldIds.indexOf(String(ab.api_area_id)) > -1);
+				var openedBases = airBase.filter(ab => openedWorldIds.includes(String(ab.api_area_id)));
 				this.setBases(openedBases, expandedInfo);
 				return true;
 			} else if(this.bases[0].map > 0) {

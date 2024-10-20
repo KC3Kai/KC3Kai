@@ -141,7 +141,7 @@
 				position: 'relative',
 				zoom: this.gameZoomScale
 			});
-			var altFontFamily = KC3Translation.applyHTML(true);
+			var altFontFamily = KC3Translation.getDefaultFontFamily(config.language);
 			if(altFontFamily) $("#area-game").css("font-family", altFontFamily);
 			$("#game_frame").css({
 				width: 1200,
@@ -244,7 +244,7 @@
 
 			if(config.api_subtitles){
 				// Subtitle font customizations
-				$(".overlay_subtitles").css("font-family", config.subtitle_font);
+				$(".overlay_subtitles").css("font-family", KC3Translation.getSubtitleFontFamily(config));
 				$(".overlay_subtitles").css("font-size", config.subtitle_size);
 				if(config.subtitle_bold){
 					$(".overlay_subtitles").css("font-weight", "bold");
@@ -656,11 +656,9 @@
 			return function(request, sender, response){
 				if(request.action != "getGamescreenOffset") return true;
 				var gameAreaOffset = $("#area-game").offset() || {};
-				// Fix offset calc for Chrome 128~ on scaled zoom
-				var zoomScaleFix = !Promise.try ? 1 : self.gameZoomScale;
 				response({
-					top: (gameAreaOffset.top || 0) / zoomScaleFix,
-					left: (gameAreaOffset.left || 0) / zoomScaleFix,
+					top: gameAreaOffset.top || 0,
+					left: gameAreaOffset.left || 0,
 					devicePixelRatio: window.devicePixelRatio
 				});
 			};
