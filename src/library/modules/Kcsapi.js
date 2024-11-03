@@ -2891,6 +2891,7 @@ Previously known as "Reactor"
 				break;
 				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni in 2022 (once)
 					// 6 pumpkins with 2 Irako and a Type 1 Shell Kai in 2023 (once)
+					// 6 pumpkins with 1 Mamiya and 1 +4 Tenzan 12A Kai (Type6 Airborne Radar) in 2024 (once)
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
