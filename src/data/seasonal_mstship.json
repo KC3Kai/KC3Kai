@@ -7091,5 +7091,133 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5886": {
+		"api_id": 5886,
+		"api_name": "浴衣Mogador",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5887": {
+		"api_id": 5887,
+		"api_name": "浴衣Mogador改",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5888": {
+		"api_id": 5888,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5889": {
+		"api_id": 5889,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5890": {
+		"api_id": 5890,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5891": {
+		"api_id": 5891,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5892": {
+		"api_id": 5892,
+		"api_name": "ハロウィン稲木改二",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5893": {
+		"api_id": 5893,
+		"api_name": "ハロウィン熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5894": {
+		"api_id": 5894,
+		"api_name": "ハロウィン熊野丸改",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5895": {
+		"api_id": 5895,
+		"api_name": "ハロウィン迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5896": {
+		"api_id": 5896,
+		"api_name": "ハロウィン朧",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5897": {
+		"api_id": 5897,
+		"api_name": "ハロウィン巻波",
+		"api_yomi": "まきなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5898": {
+		"api_id": 5898,
+		"api_name": "ハロウィン瑞鳳改二",
+		"api_yomi": "ずいほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5899": {
+		"api_id": 5899,
+		"api_name": "ハロウィン瑞鳳改二乙",
+		"api_yomi": "ずいほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5900": {
+		"api_id": 5900,
+		"api_name": "ハロウィンTuscaloosa",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5901": {
+		"api_id": 5901,
+		"api_name": "ハロウィン能美",
+		"api_yomi": "のうみ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
 	}
 }

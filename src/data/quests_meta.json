@@ -1987,14 +1987,15 @@
 	"865": {},
 	"866": {
 		"unlock": [369, 867, 1110],
-		"hash": 531662544
+		"hash": 457289079
 	},
 	"867": {
-		"unlock": [868],
-		"hash": 822948048
+		"unlock": [868, 960],
+		"hash": 1085473946
 	},
 	"868": {
-		"hash": -239743033
+		"unlock": [1144],
+		"hash": -1741507329
 	},
 	"869": {
 		"unlock": [427, 982]
@@ -2369,7 +2370,7 @@
 		"hash": 1276516163
 	},
 	"960": {
-		"hash": 2014067640
+		"hash": 296217475
 	},
 	"961": {
 		"unlock": [980],
@@ -2628,7 +2629,7 @@
 	"1108": {},
 	"1109": {},
 	"1110": {
-		"hash": 1145136383
+		"hash": -262196865
 	},
 	"1111": {
 		"unlock": [1142]
@@ -2721,6 +2722,12 @@
 	},
 	"1139": {},
 	"1140": {},
+	"1141": {},
+	"1142": {},
+	"1143": {},
+	"1144": {
+		"hash": 146578908
+	},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],

@@ -3676,49 +3676,49 @@
 				starsDist: [],
 				byShip: [
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						multiple: { "houg": 1, "tais": 3 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 1,
 						multiple: { "houg": 2 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 2,
 						multiple: { "houm": 1 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 3,
 						multiple: { "tais": 1 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 4,
 						multiple: { "houg": 1 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 6,
 						multiple: { "houm": 1 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 8,
 						multiple: { "tais": 1 },
 					},
 					{
-						// Yamashiomaru
-						origins: [900],
+						// Yamashiomaru, Kumanomaru
+						origins: [900, 943],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -3754,6 +3754,92 @@
 					{
 						// Akitsumaru Kai
 						ids: [166],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 3 Command Liaison Aircraft Kai 2
+			"549": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Houshou Class
+					"27": [
+						{
+							multiple: { "houg": 1, "tais": 1, "houm": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "tais": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Taiyou Class
+					"76": "27",
+				},
+				byShip: [
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						multiple: { "houg": 2, "tais": 4, "houk": 1, "houm": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 5,
+						multiple: { "tais": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
+						minStars: 9,
+						multiple: { "tais": 1 },
+					},
+					{
+						// Yamashiomaru, Kumanomaru, Akitsumaru
+						origins: [900, 943, 161],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
