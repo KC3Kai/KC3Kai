@@ -2314,6 +2314,8 @@ KC3改 Ship Object
 				// https://twitter.com/yukicacoon/status/1423133193096503296
 				// TP bonus even counted from seaplane recon (added to SPB?):
 				// https://twitter.com/twillwave1024/status/1772989848359493639
+				// Some findings on TP bonus priority on multiple planes equipped:
+				// https://docs.google.com/spreadsheets/d/1pXwnNTIYkMYXwJqYA1-J2TQNyr_MF9eSdOr8r_guZY4/html
 				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
 				const visibleBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [gear.masterId]);
 				if(visibleBonus > 0 && !isJetAssaultPhase) {

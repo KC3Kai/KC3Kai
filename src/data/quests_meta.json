@@ -372,7 +372,7 @@
 		"rewardConsumables": [0, 1, 0, 0]
 	},
 	"205": {
-		"unlock": [206],
+		"unlock": [206, 959],
 		"rewardConsumables": [0, 0, 1, 0]
 	},
 	"206": {

@@ -655,8 +655,8 @@ KC3改 Equipment Object
 			case 57: // Jet fighter bomber
 				if(this.isFighterBomber()) modifier = 0.25;
 				break;
-			case 41: // Large Flying Boat, uncertain?
-				return 0.25 * Math.sqrt(stars);
+			case 41: // Large Flying Boat
+				modifier = 0.15; break;
 			case 47: // LB attacker
 			case 53: // LB heavy bomber
 				return 0.5 * Math.sqrt(stars);
