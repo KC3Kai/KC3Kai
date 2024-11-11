@@ -2959,9 +2959,11 @@ KC3改 Ship Object
 		const isHyuugaKaiNi = this.masterId === 554;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		const isKagaK2Go = this.masterId === 646;
+		// CVL Suzuya/Kumano Kou Kai Ni may not able to OASW, even equips Sonar?
+		const isNotSuzuyaKumanoCarrier = ![508, 509].includes(this.masterId);
 
 		// lower condition for DE and CVL, even lower if equips Sonar
-		const aswThreshold = isLightCarrier && hasSonar ? 50
+		const aswThreshold = isLightCarrier && isNotSuzuyaKumanoCarrier && hasSonar ? 50
 			: isEscort ? 60
 			// May apply to CVL, but only CVE can reach 65 for now (Zuihou K2 modded asw +9 +13x4 = 61)
 			: isEscortLightCarrier ? 65
@@ -3001,7 +3003,7 @@ KC3改 Ship Object
 		// For other CVL possible but hard to reach 50 asw and do OASW with Sonar and high ASW aircraft.
 		// For CV Kaga K2Go, can perform OASW with any asw aircraft like Taiyou-class Kai+:
 		//   https://twitter.com/noobcyan/status/1299886834919510017
-		// For Houshou K2S, ASW aircraft in 0-size slot only can't enable OASW and shelling ASW:
+		// For Houshou K2S, single ASW aircraft in 0-size slot can't enable OASW and shelling ASW:
 		//   https://twitter.com/myteaGuard/status/1600867450429485056
 		//   but can do OASW even in 0-size slot with another ASW aircraft together:
 		//   https://twitter.com/bobcat18/status/1600909312033193984
