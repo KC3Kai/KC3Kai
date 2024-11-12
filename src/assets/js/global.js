@@ -833,24 +833,43 @@ Object.defineProperty(Array.prototype, "joinIfNeeded", {
 
 /**
  * Polyfill for `Array.prototype.flat`, supported since Chromium m69
- * FlattenIntoArray too complex to fit in this module. Reduce implementation see also BP module .flatten method.
+ * FlattenIntoArray too complex to fit in this module, using implementation also used by BP.flatten method.
+ * No `Array.prototype.flatMap` implemention for now.
  * @see https://github.com/es-shims/es-abstract/blob/main/2021/FlattenIntoArray.js
  * @see https://github.com/es-shims/Array.prototype.flat
  */
-/*
 if (!Array.prototype.flat) {
 	Object.defineProperty(Array.prototype, "flat", {
 		enumerable: false,
 		value: function flat(depth) {
-			var thisArray = this, resultArray = [];
-			var sourceLen = thisArray.length || 0;
-			var depthNum = depth || 1;
-			FlattenIntoArray(A, O, sourceLen, 0, depthNum);
-			return resultArray;
+			var thisArray = this;
+			var depthNum = depth === undefined ? 1 : depth;
+			if(depthNum > 0) {
+				return thisArray.reduce(function(acc, elm) {
+					return acc.concat(Array.isArray(elm) ? elm.flat(depthNum - 1) : elm);
+				}, []);
+			}
+			return thisArray;
 		}
 	});
 }
-*/
+
+Object.defineProperty(Array.prototype, "unique", {
+	enumerable: false,
+	/**
+	 * A convenient method to remove duplicate elements from this Array.
+	 * Equivalent to a code like `[...new Set(this.concat(array))]`.
+	 * Unlike `uniqueBy` proposal with key/callback parameter, here parameters concatenated instead.
+	 * @param arguments - optional elements concatenated into to this array before removing duplications.
+	 * @see https://github.com/tc39/proposal-array-unique
+	 */
+	value: function unique() {
+		var thisArray = this;
+		return Array.from(new Set(
+			arguments.length < 1 ? thisArray : thisArray.concat(Array.from(arguments).flat())
+		));
+	}
+});
 
 /*******************************\
 |*** Date                       |

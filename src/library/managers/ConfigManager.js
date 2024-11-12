@@ -94,6 +94,7 @@ Retrieves when needed to apply on components
 				ss_directory : 'KanColle',
 				ss_dppx      : 0,
 				ss_smooth    : true,
+				ss_origin    : false,
 
 				alert_diff         : 59,
 				alert_morale_notif : true,
@@ -142,6 +143,7 @@ Retrieves when needed to apply on components
 				api_bg_position   : "top center",
 				api_gameScale     : 100,
 				api_subtitles     : true,
+				subtitle_lang     : "",
 				subtitle_font     : '"Trebuchet MS","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Tahoma,sans-serif',
 				subtitle_size     : 32,
 				subtitle_bold     : false,

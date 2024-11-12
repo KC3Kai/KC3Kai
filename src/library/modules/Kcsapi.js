@@ -2891,6 +2891,7 @@ Previously known as "Reactor"
 				break;
 				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni in 2022 (once)
 					// 6 pumpkins with 2 Irako and a Type 1 Shell Kai in 2023 (once)
+					// 6 pumpkins with 1 Mamiya and 1 +4 Tenzan 12A Kai (Type6 Airborne Radar) in 2024 (once)
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
@@ -3196,6 +3197,10 @@ Previously known as "Reactor"
 					[1005,3,[3,2], true, true], // By13: 4th requirement: [W3-2] A-rank+ the boss node
 					[1012,1,[1,2], true, true], // By14: 2nd requirement: [W1-2] A-rank+ the boss node twice
 					[1012,2,[1,5], true, true], // By14: 3rd requirement: [W1-5] A-rank+ the boss node twice
+					[1018,0,[5,1], true, true], // By15: 1st requirement: [W5-1] A-rank+ the boss node
+					[1018,1,[5,3], true, true], // By15: 2nd requirement: [W5-3] A-rank+ the boss node
+					[1018,2,[5,4], true, true], // By15: 3rd requirement: [W5-4] A-rank+ the boss node
+					[1018,3,[5,5], true, true], // By15: 4th requirement: [W5-5] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)

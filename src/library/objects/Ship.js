@@ -1917,6 +1917,7 @@ KC3改 Ship Object
 	 * @see estimateInstallationEnemyType
 	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83
+	 * @see https://bbs.nga.cn/read.php?tid=33769345
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
@@ -1930,6 +1931,7 @@ KC3改 Ship Object
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu, (T4 Tank variants *2)
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
 		//  * 8: [525,526] virtual type of T4 Tank special merging rules, see *2
+		// [496~499] army units unknown, preliminary: https://x.com/yukicacoon/status/1839245331348992263
 		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436, [525, 526]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
@@ -2312,6 +2314,8 @@ KC3改 Ship Object
 				// https://twitter.com/yukicacoon/status/1423133193096503296
 				// TP bonus even counted from seaplane recon (added to SPB?):
 				// https://twitter.com/twillwave1024/status/1772989848359493639
+				// Some findings on TP bonus priority on multiple planes equipped:
+				// https://docs.google.com/spreadsheets/d/1pXwnNTIYkMYXwJqYA1-J2TQNyr_MF9eSdOr8r_guZY4/html
 				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
 				const visibleBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [gear.masterId]);
 				if(visibleBonus > 0 && !isJetAssaultPhase) {
@@ -2391,16 +2395,19 @@ KC3改 Ship Object
 		}
 		// Modifier of vanguard formation depends on the position in the fleet
 		if(formationId === 6) {
-			const [shipPos, shipCnt] = this.fleetPosition();
-			// Vanguard formation needs 4 ships at least, fake ID make no sense
-			if(shipCnt >= 4) {
-				// Guardian ships counted from 3rd or 4th ship
-				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
-				if(warfareType === "Shelling" || isNightBattle) {
-					formationModifier = isGuardian ? 1.0 : 0.5;
-				} else if(warfareType === "Antisub") {
-					formationModifier = isGuardian ? 0.6 : 1.0;
-				}
+			let [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			// Vanguard formation needs 4 ships at least (to choose formation for single fleet),
+			// but <4 ships fleet still possible to apply vanguard (when combined in night start node),
+			// and some damage samples suggest guardian ships counted from 3rd ship minimally,
+			// for combined escort fleet (<=3 ships in main), and friend fleet (<=3 ships)
+			// https://discord.com/channels/118339803660943369/178613137430282240/1286997214580703335
+			if(isCombined && fleetNum === 2) shipCnt = PlayerManager.fleet[0].countShips();
+			// Guardian ships counted from 3rd or 4th ship
+			const isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
+			if(warfareType === "Shelling" || isNightBattle) {
+				formationModifier = isGuardian ? 1.0 : 0.5;
+			} else if(warfareType === "Antisub") {
+				formationModifier = isGuardian ? 0.6 : 1.0;
 			}
 			// All ships get 0.5 for Expedition Support Shelling (but 1.0 when vs Combined Fleet)
 			if(warfareType === "SupportShelling") {
@@ -2952,9 +2959,11 @@ KC3改 Ship Object
 		const isHyuugaKaiNi = this.masterId === 554;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
 		const isKagaK2Go = this.masterId === 646;
+		// CVL Suzuya/Kumano Kou Kai Ni may not able to OASW, even equips Sonar?
+		const isNotSuzuyaKumanoCarrier = ![508, 509].includes(this.masterId);
 
 		// lower condition for DE and CVL, even lower if equips Sonar
-		const aswThreshold = isLightCarrier && hasSonar ? 50
+		const aswThreshold = isLightCarrier && isNotSuzuyaKumanoCarrier && hasSonar ? 50
 			: isEscort ? 60
 			// May apply to CVL, but only CVE can reach 65 for now (Zuihou K2 modded asw +9 +13x4 = 61)
 			: isEscortLightCarrier ? 65
@@ -2994,7 +3003,7 @@ KC3改 Ship Object
 		// For other CVL possible but hard to reach 50 asw and do OASW with Sonar and high ASW aircraft.
 		// For CV Kaga K2Go, can perform OASW with any asw aircraft like Taiyou-class Kai+:
 		//   https://twitter.com/noobcyan/status/1299886834919510017
-		// For Houshou K2S, ASW aircraft in 0-size slot only can't enable OASW and shelling ASW:
+		// For Houshou K2S, single ASW aircraft in 0-size slot can't enable OASW and shelling ASW:
 		//   https://twitter.com/myteaGuard/status/1600867450429485056
 		//   but can do OASW even in 0-size slot with another ASW aircraft together:
 		//   https://twitter.com/bobcat18/status/1600909312033193984
@@ -3402,6 +3411,7 @@ KC3改 Ship Object
 	 * @see https://twitter.com/syoukuretin/status/1132763536222969856
 	 * @see https://twitter.com/CC_jabberwock/status/1538198001520283649 - buffed since 2022-06-17
 	 * @see https://twitter.com/CC_jabberwock/status/1538235861178802176 - base remodel no Big7 modifier
+	 * @see https://x.com/yukicacoon/status/1835179078141591603 - Rodney no Big7 modifier
 	 */
 	KC3Ship.prototype.estimateColoradoCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3448,9 +3458,10 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
-	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ (extended) / Warspite
-	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2 / Haruna K2B/C (extended)
-	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01)
+	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ (extended) / Kirishima K2C (extended) / Warspite / Valiant
+	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2+ (extended) / Haruna K2B/C (extended)
+	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01) / Kirishima K2C (extended)
+	 *   * Kirishima K2C flagship: Kongou K2C / Hiei K2C / Haruna K2B/C / South Dakota K (added since 2024-09-24)
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
@@ -3484,14 +3495,16 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd ship is valid partner and not even Chuuha
 					validCombinedShips = ({
-						// Kongou K2C: Hiei K2C, Haruna K2+, Warspite, Valiant
-						"591": [592, 151, 593, 954, 439, 364, 927, 733],
-						// Hiei K2C: Kongou K2C, Kirishima K2, Haruna K2B/C
-						"592": [591, 152, 593, 954],
-						// Haruna K2B: Kongou K2C, Hiei K2C
-						"593": [591, 592],
-						// Haruna K2C: Kongou K2C, Hiei K2C
-						"954": [591, 592],
+						// Kongou K2C: Hiei K2C, Haruna K2+, Kirishima K2C, Warspite, Valiant
+						"591": [592, 151, 593, 954, 694, 439, 364, 927, 733],
+						// Hiei K2C: Kongou K2C, Kirishima K2+, Haruna K2B/C
+						"592": [591, 152, 694, 593, 954],
+						// Haruna K2B: Kongou K2C, Hiei K2C, Kirishima K2C
+						"593": [591, 592, 694],
+						// Haruna K2C: Kongou K2C, Hiei K2C, Kirishima K2C
+						"954": [591, 592, 694],
+						// Kirishima K2C: Kongou K2C, Hiei K2C, Haruna K2B/C, South Dakota Kai
+						"694": [591, 592, 593, 954, 697],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
 						&& !fleetObj.ship(1).isStriped(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
@@ -3504,10 +3517,14 @@ KC3改 Ship Object
 
 	/**
 	 * Kongou special night cut-in attack modifiers are depending on equipment and engagement.
+	 * Note: night battle cut-in modifier is applied precap.
 	 * Basic precap modifier was 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 	 * Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
 	 * Buffed again to 2.4 since 2023-05-01: https://twitter.com/hedgehog_hasira/status/1653066005852360704
 	 * Buffed again by 35.6cm K2C/K4 since 2024-05-31: https://x.com/Camellia_bb/status/1805918324301365632
+	 * Buffed again to 2.6~2.7 since 2024-09-24: https://x.com/hedgehog_hasira/status/1838951859605983678
+	 *  * K2 & K3 Dazzle added since 2024-09-24: https://x.com/yukicacoon/status/1839959049791778912
+	 *  * thread of verifications: https://x.com/CC_jabberwock/status/1842239909274534271
 	 */
 	KC3Ship.prototype.estimateKongouCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3517,13 +3534,13 @@ KC3改 Ship Object
 
 		// All capable ships applied, including K2, K2B and Warspite, despite only K2C mentioned by announcement
 		const targetShip = locatedFleet.ship(forShipPos);
-		const k3cTwin356gunCount = targetShip.countEquipment(530),
-			k4Twin356gunCount = targetShip.countEquipment(503);
-		const twin356gunsMod = k4Twin356gunCount + k3cTwin356gunCount >= 2 ? 1.15
-			: k4Twin356gunCount + k3cTwin356gunCount >= 1 ? 1.11
-			: 1.0;
+		const baseModifier = forShipPos === 0 ? 2.6 : 2.7;
+		const twin356Group1Count = targetShip.countEquipment([329 /* K2 */, 502 /* K3 Dazzle */]),
+			twin356Group2Count = targetShip.countEquipment([503 /* K4 */, 530 /* K3C */]);
+		const twin356gunsMod1 = [1, 1.05, 1.08][twin356Group1Count] || 1.08;
+		const twin356gunsMod2 = [1, 1.11, 1.15][twin356Group2Count] || 1.15;
 		const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
-		return 2.4 * engagementMod * twin356gunsMod;
+		return baseModifier * engagementMod * twin356gunsMod1 * twin356gunsMod2;
 	};
 
 	/**
@@ -3630,6 +3647,8 @@ KC3改 Ship Object
 							{ p1: [591], p2: [592] },      // Kongou + Hiei
 							{ p1: [591], p2: [593] },      // Kongou + Haruna K2B (Haruna added since 2023-05-01)
 							{ p1: [591], p2: [954] },      // Kongou + Haruna K2C
+							{ p1: [591], p2: [694] },      // Kongou + Kirishima (added since 2024-09-24)
+							{ p1: [592], p2: [694] },      // Hiei + Kirishima (added since 2024-09-24)
 							{ p1: [697], p2: [659] },      // South Dakota + Washington
 							{ p1: [446], p2: [447] },      // Italia + Roma
 							{ p1: [1496], p2: [918] },     // Colorado + Maryland
@@ -3742,7 +3761,7 @@ KC3改 Ship Object
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
-				const isDoubleLine = [2, 12].includes(
+				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
@@ -3751,7 +3770,7 @@ KC3改 Ship Object
 						&& !partnerShip.isAbsent()
 						&& !partnerShip.isTaiha();
 				const hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
-				return isDoubleLine && validPartner && hasSixSurfaceShips;
+				return isEchelon && validPartner && hasSixSurfaceShips;
 			}
 		}
 		return false;
@@ -4731,11 +4750,11 @@ KC3改 Ship Object
 			case 401: return formatPercent(this.yamatoClassCutinRate(false, 2));
 		}
 		const typeFactor = {
-			2: 150,
-			3: 120,
-			4: 130,
-			5: 130,
-			6: 140,
+			2: 130, // DoubleAttack (main+main)
+			3: 120, // MainSecond (main+sec)
+			4: 130, // MainRadar (main+sec+radar)
+			5: 140, // MainApshell (main+sec+apshell)
+			6: 150, // MainMain (main+main+apshell)
 			7: ({
 				"CutinFDBTB" : 125,
 				"CutinDBDBTB": 140,
@@ -4765,13 +4784,13 @@ KC3改 Ship Object
 		// not sure: DA success rate almost 99%
 		if (spType === 1) { return 99; }
 		const typeFactor = {
-			2: 115,
+			2: 115, // TorpTorpMain
 			3: ({ // submarine late torp cutin
 				"CutinLateTorpRadar": 105,
 				"CutinLateTorpTorp": 110,
-			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
-			4: 130,
-			5: 140,
+			   })[cutinSubType] || 122, // default TorpTorpTorp
+			4: 130, // MainMainSecond
+			5: 140, // MainMainMain
 			6: ({ // CVNCI factors https://twitter.com/Divinity__123/status/1481091340876369921
 				"CutinNFNFNTB": 105,  // 3 planes for mod 1.25
 				"CutinNFNTB" : 120,   // 2 planes for mod 1.2
@@ -5019,7 +5038,7 @@ KC3改 Ship Object
 						break;
 					case 6:{// Vanguard, depends on fleet position
 						const [shipPos, shipCnt] = this.fleetPosition(),
-							isGuardian = shipCnt >= 4 && shipPos >= Math.floor(shipCnt / 2);
+							isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
 						modifier = isGuardian ?
 							(isAntisubWarfare ? 1.1 : 1.2) :
 							(isAntisubWarfare ? 1.0 : 0.8);
@@ -5647,7 +5666,8 @@ KC3改 Ship Object
 		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
 			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
 		$(".stat_lk .current", tooltipBox).text(shipObj.lk[0]);
-		$(".stat_lk .luck", tooltipBox).text(signedNumber(modLeftStats.lk));
+		$(".stat_lk .luck", tooltipBox).text(signedNumber(modLeftStats.lk))
+			.toggle(!!modLeftStats.lk);
 		$(".stat_lk .equip", tooltipBox).text("({0})".format(nakedStats.lk))
 			.toggle(!!equipDiffStats.lk);
 		if(!(ConfigManager.info_stats_diff & 1)){
