@@ -119,6 +119,8 @@
 			"t55": "overall",
 			// land base jet fighter
 			"t56": "aa",
+			// land base canard interceptor
+			"t57": "aa",
 			// all types
 			"tall": "type",
 		},

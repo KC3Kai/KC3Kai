@@ -156,6 +156,7 @@
 				if(self.audio){ self.audio.pause(); }
 				var vnum = Number($(this).data("vnum"));
 				var voiceFile = KC3Meta.getFilenameByVoiceLine(self.currentShipId, vnum);
+				$(".tab_mstship .shipInfo .subtitles").css("font-family", KC3Translation.getSubtitleFontFamily());
 				$(".tab_mstship .shipInfo .subtitles").show();
 				if(!voiceFile || voiceFile==100000){
 					$(".tab_mstship .shipInfo .subtitles").html("This voice is currently disabled to be replayable in KC3Kai");

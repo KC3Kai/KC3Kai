@@ -505,6 +505,12 @@
 						[ 2.0, "Retina (2x)" ]
 					]
 				}
+			},
+			{
+				"id" : "ss_origin",
+				"name" : "SettingsSSOriginalSize",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -936,6 +942,18 @@
 				"name" : "SettingsSubtitles",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "subtitle_lang",
+				"name" : "SettingsSubtitleLang",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ ""  , "SettingsShipNamesGlobal" ],
+						[ "en", "English" ],
+						[ "jp", "日本語" ]
+					]
+				}
 			},
 			{
 				"id" : "subtitle_font",
