@@ -1040,7 +1040,7 @@ KC3改 Equipment Object
 				//&& this.master().api_tyku > 0
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
 				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
-				// other [25] Autogyro and [26] AS Partol participate in stage1 and get proficiency, but no AA power found
+				// other [25] Autogyro and [26] AS Partol participate in stage1 and get proficiency AA bonus, but no AA power found (proficiency only increased on asw?)
 			) || [489, 491].includes(this.masterId));
 	};
 
@@ -1051,6 +1051,8 @@ KC3改 Equipment Object
 				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
 				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+				// Type 3 Command Liaison Kai 2 has bombing stat but noshow in opening airstrike, since 2024-11-08
+				//   however critical bonus found in shelling, and participate in LBAS airstrike like Hayabusa.
 			) || [489, 491].includes(this.masterId));
 	};
 
