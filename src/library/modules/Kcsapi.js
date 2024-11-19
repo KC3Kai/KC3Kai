@@ -2768,6 +2768,7 @@ Previously known as "Reactor"
 				break;
 				case 34: // exchange 22 saury (curry) with 1 Zuiun (634 Air Group / Skilled) (up to twice)
 					// exchange 46 saury (curry k2) with 1 T1 Fighter Hayabusa Model II (64 Squad) in 2023 (once)
+					// exchange 48 saury (curry k3) with 1 Ginga (Egusa) in 2024 (once)
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 46;
 				break;
 				case 41: // exchange all boxes with fcoins
