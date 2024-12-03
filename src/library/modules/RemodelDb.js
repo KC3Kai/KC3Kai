@@ -112,6 +112,7 @@
                 case 502: // Mikuma K2
                     return 35;
                 case 316: // Amatsukaze Kai
+                case 373: // Fujinami Kai
                     return 65;
                 case 145: // Shigure K2
                     return 77;

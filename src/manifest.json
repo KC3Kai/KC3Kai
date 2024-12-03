@@ -28,7 +28,7 @@
 		"webRequestBlocking",
 		"file:///*",
 		"*://*.dmm.com/*",
-		"*://*.kan-colle.com/*",
+		"*://*.kancolle-server.com/*",
 		"*://203.104.209.7/*"
 	],
 	"background": {
@@ -103,7 +103,7 @@
 		},
 		{
 			"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
-			"include_globs": ["*://*.kan-colle.com/*", "*://203.104.209.*/*", "*://125.6.184.*/*", "*://125.6.189.*/*"],
+			"include_globs": ["*://*.kancolle-server.com/*", "*://203.104.209.*/*", "*://125.6.184.*/*", "*://125.6.189.*/*"],
 			"js": [
 				"assets/js/jquery.min.js",
 				"library/objects/Messengers.js",
