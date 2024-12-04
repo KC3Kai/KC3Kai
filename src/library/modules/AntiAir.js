@@ -573,6 +573,7 @@ AntiAir: anti-air related calculations
 		atlantaIcon = 597,
 		harunaK2BIcon = 593,
 		harusameK2Icon = 975,
+		fujinamiK2Icon = 981,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -624,6 +625,7 @@ AntiAir: anti-air related calculations
 	var isInagiK2 = masterIdEq( 979 );
 	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
 	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
+	var isFujinamiKai2 = masterIdEq( fujinamiK2Icon );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -1270,6 +1272,18 @@ AntiAir: anti-air related calculations
 				predAllOf(
 					hasAtLeast( is127mmTwinGunMountCK3H, 2 ))
 			)
+		)
+	);
+
+	// Fujinami K2
+	declareAACI(
+		49, 5, 1, 1.5, 60, 2245,
+		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
+		predAllOf(isFujinamiKai2, slotNumAtLeast(3)),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( isHighAngleMountNotBuiltinAAFD, 2 ),
+				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
 

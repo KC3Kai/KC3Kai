@@ -77,8 +77,9 @@ function ActivateGame(){
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
 	}
-	// Send OPTION_LOAD message to activate game without osapi.dmm.com parent,
-	// settings might be changed only via this?
+	// Send OPTION_LOAD message to activate game without osapi.dmm.com parent, settings might be changed only via this?
+	// No longer necessary since 2024-12-03, because settings have been moved to kcsapi on 2024-11-08
+	/*
 	var postData = "vol_bgm=30;vol_se=40;vol_voice=60;v_be_left=1;v_duty=1";
 	var gadgetOrigin = (localStorage.absoluteswf.match("^http:\/\/[0-9.]+\/") || [])[0].slice(0, -1);
 	$(".box-game iframe").on("load", function(loaded) {
@@ -87,6 +88,7 @@ function ActivateGame(){
 			loaded.target.contentWindow.postMessage(postData, gadgetOrigin);
 		}, 100);
 	});
+	*/
 	return true;
 }
 

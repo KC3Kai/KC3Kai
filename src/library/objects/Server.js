@@ -8,7 +8,7 @@ Represent KanColle game server instance.
 	
 	const kcBaseDomain = ".kancolle-server.com";
 	
-	window.KC3Server = function(num, isSecured){
+	window.KC3Server = function(num){
 		this.num = 0;
 		this.ip = "";
 		this.name = "";
@@ -16,7 +16,8 @@ Represent KanColle game server instance.
 		this.protocol = "";
 		this.urlPrefix = "";
 		this.isDomain = false;
-		if(num) this.setNum(num, isSecured);
+		this.isSecured = false;
+		if(num) this.setNum(num);
 	};
 	
 	KC3Server.prototype.setUrl = function(url){
@@ -27,6 +28,7 @@ Represent KanColle game server instance.
 		// gadget and w01 (yokosuka) server have started to use domain since 2024-12-03
 		// eg: w00g.       w01y.     kancolle-server.com
 		this.protocol = anchor.protocol;
+		this.isSecured = this.protocol == "https:";
 		const domainMatch = (this.ip || "").match(/w(\d+)\w+\.kancolle-server\.com/);
 		this.isDomain = !!(domainMatch && domainMatch[1]);
 		const serverInfo = this.isDomain ? KC3Meta.serverByNum(domainMatch[1]) : KC3Meta.server(this.ip);
@@ -37,20 +39,21 @@ Represent KanColle game server instance.
 			this.ip = serverInfo.ip;
 			this.urlPrefix = `${this.protocol}//${this.host}`;
 		} else {
-			this.host = serverInfo.domain || `w${String(this.num).pad(2,"0")}y` + kcBaseDomain;
+			this.host = serverInfo.domain || `w${String(this.num).pad(2,"0")}y${kcBaseDomain}`;
 			this.urlPrefix = `${this.protocol}//${this.ip}`;
 		}
 		return this;
 	};
 	
-	KC3Server.prototype.setNum = function(num, isSecured = false){
+	KC3Server.prototype.setNum = function(num, isDomain = false, isSecured = false){
 		const serverInfo = KC3Meta.serverByNum(num);
 		this.num = serverInfo.num;
 		this.ip = serverInfo.ip;
 		this.name = serverInfo.name;
-		this.host = serverInfo.domain || `w${String(this.num).pad(2,"0")}y` + kcBaseDomain;
-		this.isDomain = !!serverInfo.domain;
-		this.protocol = isSecured ? "https:" : "http:";
+		this.host = serverInfo.domain || `w${String(this.num).pad(2,"0")}y${kcBaseDomain}`;
+		this.isDomain = !!serverInfo.domain || isDomain;
+		this.isSecured = !!serverInfo.https || isSecured;
+		this.protocol = this.isSecured ? "https:" : "http:";
 		this.urlPrefix = `${this.protocol}//${this.isDomain ? this.host : this.ip}`;
 		return this;
 	};
