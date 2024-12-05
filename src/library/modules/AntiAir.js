@@ -1279,7 +1279,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		49, 5, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isFujinamiKai2, slotNumAtLeast(3)),
+		predAllOf(isFujinamiKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMountNotBuiltinAAFD, 2 ),
