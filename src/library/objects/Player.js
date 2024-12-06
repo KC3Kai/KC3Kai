@@ -36,6 +36,10 @@ Instantiate-able class to represent one player
 		}
 	};
 	
+	KC3Player.prototype.getServer = function(){
+		return new KC3Server(this.server, this.isDomain, this.isSecured);
+	};
+	
 	KC3Player.prototype.update = function(data){
 		this.id = data.mid;
 		this.name = data.name;
