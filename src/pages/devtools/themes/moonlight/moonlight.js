@@ -439,7 +439,7 @@
 		KC3QuestSync.init();
 
 		myKcServerHost = myKcServerHost || (() => {
-			const server = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+			const server = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain, PlayerManager.hq.isSecured);
 			return server.urlPrefix;
 		})();
 

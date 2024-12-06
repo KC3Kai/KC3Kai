@@ -13,7 +13,7 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain, PlayerManager.hq.isSecured);
 		},
 		
 		/* RELOAD
