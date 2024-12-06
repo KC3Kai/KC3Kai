@@ -224,14 +224,14 @@ Listens to network history and triggers callback if game events happen
 					});
 					har.getContent(function(x){
 						try {
-							var data = JSON.parse(/^[\s\S]*svdata=(.+)$/.exec(x)[1]);
+							var data = JSON.parse(/^[\s\S]*?svdata=(.+)/.exec(x)[1]);
 							message.api_status = data.api_result;
 							message.api_result = data.api_result_msg;
 						} catch (e) {
 							// Only prevent the data parsing error
 							message.api_status = e.name;
 							message.api_result = e.message;
-							console.warn("Prevented unhandled", e);
+							console.warn("Prevented unhandled", e, requestUrl);
 						} finally {
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}
