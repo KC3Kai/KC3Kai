@@ -671,8 +671,10 @@
 
 			const footerTxt = KC3Meta.term("EquipmentListSummaryFooter").format(
 				typeStats.total, typeStats.unheld, typeStats.unlocked,
-				typeStats.useitem === undefined ? "" :
-					KC3Meta.term("EquipmentListUseitemLabel").format(typeStats.useitem)
+				typeStats.useitem === undefined ? "" : KC3Meta.term("EquipmentListUseitemLabel").format(
+					typeStats.useitem,
+					"{0} /{1}".format(KC3GearManager.countNonUseitem(), PlayerManager.hq.gearSlots)
+				)
 			);
 			$(".tab_gears .item_list").append(
 				$('<div class="summary footer">').html(footerTxt)
