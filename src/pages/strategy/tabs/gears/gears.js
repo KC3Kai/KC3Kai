@@ -49,10 +49,10 @@
 			"t19": "ev",
 			// landing craft
 			"t20": "overall",
-			// KA obs
+			// autogyro
 			"t21": "as",
-			// type 3 CLA
-			"t22": "as",
+			// ASW patrol
+			"t22": "overall",
 			// bulge
 			"t23": "ar",
 			// searchlight
@@ -174,7 +174,7 @@
 					|| a.id - b.id;
 			};
 			self._comparator.ingame = function(a,b) {
-				// in-game it sorted by sp(api_type[2]) asc, masterId asc, rosterId asc
+				// in-game it sorted by sp(api_type[2]) asc, masterId asc, itemId asc
 				return a.category - b.category
 					|| a.id - b.id;
 			};
@@ -227,7 +227,6 @@
 				// Check if slotitem_id is filled
 				if(typeof ThisType["s"+MasterItem.api_id] == "undefined"){
 					ThisType["s"+MasterItem.api_id] = {
-						rid: ThisItem.id,
 						id: ThisItem.masterId,
 						type_id: MasterItem.api_type[3],
 						category: KC3Master.equip_type_sp(ThisItem.masterId, MasterItem.api_type[2]),
@@ -581,18 +580,36 @@
 				return div;
 			}
 
-			const SlotItems = [];
-			if (type_id === "all") {
-				$.each(this.getAllAvailableTypes(), function(i,typeId) {
-					const tyInd = "t"+typeId;
-					for (const slotItem in self._items[tyInd]) {
-						SlotItems.push( self._items[tyInd][slotItem] );
-					}
-				});
-			} else {
-				for (const slotItem in this._items["t"+type_id]) {
-					SlotItems.push( this._items["t"+type_id][slotItem] );
+			const SlotItems = [], typeStats = {
+				total: 0,
+				unheld: 0,
+				unlocked: 0,
+				nostar: 0,
+			};
+			const pushSlotItemsByType = (typedItemsArr) => {
+				for (const sId in typedItemsArr) {
+					const slotitem = typedItemsArr[sId];
+					SlotItems.push(slotitem);
+					typeStats.total += slotitem.held.length + slotitem.extras.length;
+					typeStats.unheld += slotitem.extras.length;
+					slotitem.held.forEach(itemSimple => {
+						typeStats.unlocked += !itemSimple.locked & 1;
+						typeStats.nostar += !itemSimple.level & 1;
+					});
+					slotitem.extras.forEach(itemSimple => {
+						typeStats.unlocked += !itemSimple.locked & 1;
+						typeStats.nostar += !itemSimple.level & 1;
+					});
 				}
+			};
+			if (type_id === "all") {
+				$.each(this.getAllAvailableTypes(), function(_,typeId) {
+					const tyInd = "t"+typeId;
+					pushSlotItemsByType(self._items[tyInd]);
+				});
+				typeStats.useitem = typeStats.total - KC3GearManager.countNonUseitem();
+			} else {
+				pushSlotItemsByType(this._items["t"+type_id]);
 			}
 
 			SlotItems.sort( comparator );
@@ -651,6 +668,17 @@
 					)
 				)).appendTo( ItemElem.children('.holders') );
 			});
+
+			const footerTxt = KC3Meta.term("EquipmentListSummaryFooter").format(
+				typeStats.total, typeStats.unheld, typeStats.unlocked,
+				typeStats.useitem === undefined ? "" : KC3Meta.term("EquipmentListUseitemLabel").format(
+					typeStats.useitem,
+					"{0} /{1}".format(KC3GearManager.countNonUseitem(), PlayerManager.hq.gearSlots)
+				)
+			);
+			$(".tab_gears .item_list").append(
+				$('<div class="summary footer">').html(footerTxt)
+			);
 
 		},
 

@@ -690,10 +690,11 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	/* To bypass gadget server access restriction outside of jp area.
 	Listen to webRequest.onBeforeRequest and redirect all requests sent to gadget server,
 	to a public cache server, which now hosted on Github Pages.
+	No longer needed since 2024-12-03 gadget server hosted behind cloudfront CDN.
 	------------------------------------------*/
 	if(chrome.webRequest) {
 		// Note: gadget server IP address also configured in permissions of mainifest.json
-		const gadgetServerHost = "203.104.209.7/";
+		const gadgetServerHost = "w00g.kancolle-server.com/";
 		const gadgetRequestListener = function(details) {
 			if(ConfigManager.dmm_redirgadget) {
 				const cacheServerBaseUrl = ConfigManager.dmm_gadgetcache || "https://kcwiki.github.io/cache/";

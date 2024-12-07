@@ -169,13 +169,20 @@
 			
 			const rewardFilterTypes = ["Torches", "Buckets", "DevMats", "Screws"].map(str => `contains${str}`);
 			$(".questFilter").on("click", function(e) {
+				const filterPeriod = e.target.dataset.filterperiod || "";
 				const filterId = parseInt(e.target.dataset.filterid, 10);
 				$(".flowchart .questFlowItem, .extralist .questExtraItem").each(function() {
-					$(this).addClass("questFilterHidden").removeClass(rewardFilterTypes.join(" "));
-					const rewardItems = $(".questDesc:first", this).data("rewardConsumables");
-					if (rewardItems && rewardItems[filterId] > 0) {
-						$(this).removeClass("questFilterHidden").addClass(rewardFilterTypes[filterId]);
-						$(this).parents(".questFlowItem, .questExtraItem").removeClass("questFilterHidden");
+					if (filterPeriod) { // by opened quest cycle type
+						$(this).addClass("questFilterHidden");
+						$(".questIcon.label_" + filterPeriod, this)
+							.parents(".questFlowItem, .questExtraItem").removeClass("questFilterHidden");
+					} else { // by consumable item in rewards
+						$(this).addClass("questFilterHidden").removeClass(rewardFilterTypes.join(" "));
+						const rewardItems = $(".questDesc:first", this).data("rewardConsumables");
+						if (rewardItems && rewardItems[filterId] > 0) {
+							$(this).removeClass("questFilterHidden").addClass(rewardFilterTypes[filterId]);
+							$(this).parents(".questFlowItem, .questExtraItem").removeClass("questFilterHidden");
+						}
 					}
 				});
 			});

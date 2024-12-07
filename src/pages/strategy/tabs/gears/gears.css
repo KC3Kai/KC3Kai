@@ -287,6 +287,16 @@
 	width:		16px;
 }
 
+.tab_gears .item_list .footer {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 16px;
+	margin: 10px 0px;
+	padding: 0 10px;
+	position: relative;
+	overflow: hidden;
+}
+
 .tab_gears .itemSorters {
 	
 }

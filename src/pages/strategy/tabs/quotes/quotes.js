@@ -12,7 +12,7 @@
 		subtitleLang: "",
 		
 		init :function() {
-			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+			this.gameServer = PlayerManager.hq.getServer();
 		},
 		reload: function() {
 			ConfigManager.load();

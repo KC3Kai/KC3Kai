@@ -1040,7 +1040,7 @@ KC3改 Equipment Object
 				//&& this.master().api_tyku > 0
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
 				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
-				// other [25] Autogyro and [26] AS Partol participate in stage1 and get proficiency, but no AA power found
+				// other [25] Autogyro and [26] AS Partol participate in stage1 and get proficiency AA bonus, but no AA power found (proficiency only increased on asw?)
 			) || [489, 491].includes(this.masterId));
 	};
 
@@ -1051,6 +1051,8 @@ KC3改 Equipment Object
 				&& (this.master().api_raig > 0 || this.master().api_baku > 0)
 				// Type 1 Fighter Hayabusa Model II Kai (20th Squadron) since 2023-02-14
 				// Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron) since 2023-02-27
+				// Type 3 Command Liaison Kai 2 has bombing stat but noshow in opening airstrike, since 2024-11-08
+				//   however critical bonus found in shelling, and participate in LBAS airstrike like Hayabusa.
 			) || [489, 491].includes(this.masterId));
 	};
 
@@ -1098,19 +1100,17 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isFighterBomber = function(){
-		// 'Fighter Bomber' in dive bomber category is likely based on name, not AA stat and DV stat?
-		//   depends on tests of Suisei M12 (634 Air Group w/Type 3 Cluster Bombs) or other new AA 3 dive bomer.
+		// 'Fighter Bomber' in dive bomber category is likely based on name, neither AA stat nor DV stat.
+		// Suisei M12 (634 Air Group w/Type 3 Cluster Bombs) (AA 3 DV 12) is not fighter-bomber: https://x.com/noro_006/status/1862461148853149834
 		// Re.2001 CB Kai (AA 4 DV 6) is not fighter-bomber: https://twitter.com/myteaGuard/status/1330856406363193345
 		// FM-2 (AA 6 DV 2) is not fighter-bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
-		// Type 0 Fighter Model 64 (Two-seat w/ KMX) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
 		// Type 0 Fighter Model 64 (Skilled Fighter-bomber): https://twitter.com/noro_006/status/1600419310006317056
+		// [447] Type 0 Fighter Model 64 (Two-seat w/ KMX) (without '爆戦' in name) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.includes(this.master().api_type[2]) &&
-			// Using ID list for now since data insufficient
 			[60, 154, 219, 447, 487].includes(this.masterId);
-			//this.master().api_tyku > 2 && this.master().api_baku < 6;
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){

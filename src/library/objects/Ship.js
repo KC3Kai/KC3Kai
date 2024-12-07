@@ -2627,13 +2627,17 @@ KC3改 Ship Object
 				// https://twitter.com/Camellia_bb/status/1514976505910415365 
 				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
-				if( !(warfareType === "Antisub" && (isOaswPhase || [11, 18, 22].includes(this.master().api_stype))) ) {
+				if(!(
+					warfareType === "Antisub" && (isOaswPhase || [11, 18, 22].includes(this.master().api_stype))
+				)) {
 					this.equipment().forEach((g, i) => {
-						if(g.isAirstrikeAircraft()) {
+						if(g.isAirstrikeAircraft() || [549].includes(g.masterId)) {
 							// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 							// Type 1 Fighter Hayabusa Model II Kai bonus not fully tested, all -4 for now:
 							// https://twitter.com/yukicacoon/status/1625831965055410176
-							const expBonus = [489, 491].includes(g.masterId)
+							// Type 3 Command Liaison Kai 2 not participate in opening airstrike, but give this:
+							// https://x.com/yukicacoon/status/1857620935836315724
+							const expBonus = [489, 491, 549].includes(g.masterId)
 								? [0, 0, 0, 0, 0, 1, 3, 6]
 								: [0, 1, 2, 3, 4, 5, 7, 10];
 							const aceLevel = g.ace || 0;

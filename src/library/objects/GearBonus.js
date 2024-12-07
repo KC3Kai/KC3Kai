@@ -7801,6 +7801,18 @@
 						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
 					},
 				},
+				byShip: [
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						multiple: { "houg": 1, "houm": 1, "houk": 1 },
+					},
+					{
+						// Fujinami Kai Ni
+						ids: [981],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// 10cm Twin High-angle Gun Mount + Anti-Aircraft Fire Director
 			"122": {
@@ -7836,6 +7848,11 @@
 				},
 				byShip: [
 					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						multiple: { "houg": 1, "houm": 1, "houk": 1 },
+					},
+					{
 						// Yukikaze Kai Ni
 						ids: [656],
 						minStars: 4,
@@ -7850,6 +7867,31 @@
 								single: { "tyku": 4, "houk": 3 },
 							},
 						],
+					},
+					{
+						// Fujinami Kai Ni
+						ids: [981],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				]
 			},
@@ -7914,6 +7956,31 @@
 					{
 						ids: [968],
 						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Fujinami Kai Ni
+						ids: [981],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 10,
 						multiple: { "houg": 1 },
 					},
 				]
@@ -10506,6 +10573,11 @@
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
 					},
 					{
+						// Fujinami K2
+						ids: [981],
+						single: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+					{
 						minStars: 7,
 						single: { "houm": 1 },
 					},
@@ -10872,6 +10944,15 @@
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
+						// Fujinami K2
+						ids: [981],
+						single: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 1, "houk": 2 },
+						},
+					},
+					{
 						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Hatsushimo K2, Amatsukaze K2, Harusame K2
 						ids: [145, 497, 656, 419, 951, 975],
 						synergy: {
@@ -10902,15 +10983,26 @@
 						},
 					},
 				},
-				byShip: {
-					// Hatsuzuki Kai Ni
-					ids: [968],
-					multiple: { "houg": 1, "tyku": 1, "houk": 1 },
-					synergy: {
-						flags: [ "airRadar" ],
-						multiple: { "houg": 1, "houm": 1 },
+				byShip: [
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							multiple: { "houg": 1, "houm": 1 },
+						},
 					},
-				},
+					{
+						// Fujinami Kai Ni
+						ids: [981],
+						multiple: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+				],
 			},
 			// Type 1 Armor-Piercing Shell Kai
 			"365": {
@@ -12508,8 +12600,8 @@
 						},
 					},
 					{
-						// Kiyoshimo K2/K2D, Hayashimo K2
-						ids: [955, 960, 956],
+						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2
+						ids: [955, 960, 956, 981],
 						synergy: [
 							{
 								flags: [ "airRadar" ],

@@ -244,6 +244,9 @@
 }
 .tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt {
 	width:20px;
+	font-size:13px;
+	float:left;
+	white-space:nowrap;
 }
 .tab_akashi .eq_res .extra_consumed {
 	float:right;

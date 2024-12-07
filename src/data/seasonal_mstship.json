@@ -7110,35 +7110,35 @@
 	},
 	"5888": {
 		"api_id": 5888,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "浴衣平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5889": {
 		"api_id": 5889,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "浴衣平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5890": {
 		"api_id": 5890,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Massachusetts",
+		"api_yomi": "マサチューセッツ",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5891": {
 		"api_id": 5891,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Massachusetts改",
+		"api_yomi": "マサチューセッツ",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5892": {
 		"api_id": 5892,
@@ -7219,5 +7219,133 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5902": {
+		"api_id": 5902,
+		"api_name": "ガチ漁師天霧",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5903": {
+		"api_id": 5903,
+		"api_name": "ガチ漁師天霧改二",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5904": {
+		"api_id": 5904,
+		"api_name": "ガチ漁師天霧改二丁",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5905": {
+		"api_id": 5905,
+		"api_name": "秋刀魚朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5906": {
+		"api_id": 5906,
+		"api_name": "秋刀魚朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5907": {
+		"api_id": 5907,
+		"api_name": "秋刀魚玉波",
+		"api_yomi": "たまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5908": {
+		"api_id": 5908,
+		"api_name": "秋刀魚Mogador",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5909": {
+		"api_id": 5909,
+		"api_name": "秋刀魚伊41",
+		"api_yomi": "い41",
+		"api_stype": 14,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5910": {
+		"api_id": 5910,
+		"api_name": "秋刀魚伊36",
+		"api_yomi": "い36",
+		"api_stype": 14,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5911": {
+		"api_id": 5911,
+		"api_name": "秋刀魚Gloire",
+		"api_yomi": "グロワール",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5912": {
+		"api_id": 5912,
+		"api_name": "秋刀魚Gloire改",
+		"api_yomi": "グロワール",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5913": {
+		"api_id": 5913,
+		"api_name": "秋刀魚Northampton",
+		"api_yomi": "ノーザンプトン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5914": {
+		"api_id": 5914,
+		"api_name": "秋刀魚Pola",
+		"api_yomi": "ポーラ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5915": {
+		"api_id": 5915,
+		"api_name": "秋刀魚第四号海防艦改",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5916": {
+		"api_id": 5916,
+		"api_name": "秋刀魚第二十二号海防艦改",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5917": {
+		"api_id": 5917,
+		"api_name": "ミルフィーユRichelieu Deux",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }
