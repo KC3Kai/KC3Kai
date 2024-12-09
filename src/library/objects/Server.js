@@ -7,7 +7,7 @@ Represent KanColle game server instance.
 	"use strict";
 	
 	const kcBaseDomain = ".kancolle-server.com";
-	const kcsNameInitials = "yksmotrrsbtpbhpskish";
+	const kcsNameInitials = "yksmotlrsbtpbhpskish";
 	
 	window.KC3Server = function(num, isDomain, isSecured){
 		this.num = 0;
@@ -42,7 +42,7 @@ Represent KanColle game server instance.
 			this.ip = serverInfo.ip;
 			this.urlPrefix = `${this.protocol}//${this.host}`;
 		} else {
-			const worldName = String(this.num).pad(2,"0") + kcsNameInitials.charAt(this.num - 1);
+			const worldName = String(this.num).pad(2, "0") + kcsNameInitials.charAt(this.num - 1);
 			this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
 			this.urlPrefix = `${this.protocol}//${this.ip}`;
 		}
@@ -54,10 +54,10 @@ Represent KanColle game server instance.
 		this.num = serverInfo.num;
 		this.ip = serverInfo.ip;
 		this.name = serverInfo.name;
-		const worldName = String(this.num).pad(2,"0") + kcsNameInitials.charAt(this.num - 1);
+		const worldName = String(this.num).pad(2, "0") + kcsNameInitials.charAt(this.num - 1);
 		this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
-		this.isDomain = isDomain === undefined ? !!serverInfo.domain : isDomain;
-		this.isSecured = isSecured === undefined ? !!serverInfo.https : isSecured;
+		this.isDomain = isDomain === undefined ? !!serverInfo.domain : !!isDomain;
+		this.isSecured = isSecured === undefined ? !!serverInfo.https : !!isSecured;
 		this.protocol = this.isSecured ? "https:" : "http:";
 		this.urlPrefix = `${this.protocol}//${this.isDomain ? this.host : this.ip}`;
 		return this;
