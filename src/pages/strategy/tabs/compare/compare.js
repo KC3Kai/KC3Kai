@@ -52,7 +52,10 @@
 				if (KC3Master.isNotRegularShip(ShipData.api_id)) return false;
 				box = $(".tab_compare .factory .compare_suggest_item").clone();
 				$(".compare_suggest_icon img", box).attr("src", KC3Meta.shipIcon(ShipData.api_id));
-				$(".compare_suggest_name", box).html(KC3Meta.shipNameById(ShipData.api_id));
+				$(".compare_suggest_name", box).text(KC3Meta.shipNameById(ShipData.api_id))
+					.attr("data-jpname", ShipData.api_name)
+					.attr("data-jpname-yomi", ShipData.api_yomi)
+					.attr("data-jpname-romaji", wanakana.toRomaji(ShipData.api_yomi));
 				box.data("id", ShipData.api_id);
 				box.appendTo(".tab_compare .compare_suggest");
 			});
@@ -106,11 +109,15 @@
 			} else {
 				$(".tab_compare .compare_suggest_item").each(function(){
 					if (self.ships.indexOf($(this).data("id")) < 0) {
-						if ($(".compare_suggest_name", this).text().toLowerCase().includes(searchVal.toLowerCase())) {
-							$(this).show();
-						} else {
-							$(this).hide();
-						}
+						const elm = $(".compare_suggest_name", this);
+						const shipName = elm.text(),
+							shipNameJp = elm.data("jpname") || "",
+							shipNameYomi = elm.data("jpname-yomi") || "",
+							shipNameRomaji = elm.data("jpname-romaji") || "";
+						const isMatchedName = [shipName, shipNameRomaji, shipNameJp, shipNameYomi].some((v, i) => (
+							i > 1 ? v.includes(searchVal) : v.toLowerCase().includes(searchVal.toLowerCase())
+						));
+						$(this).toggle(isMatchedName);
 					} else {
 						$(this).hide();
 					}

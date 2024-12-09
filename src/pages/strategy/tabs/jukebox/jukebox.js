@@ -19,7 +19,7 @@
      * Prepares initial static data needed.
      */
     init() {
-      this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+      this.gameServer = PlayerManager.hq.getServer();
     },
 
     /**

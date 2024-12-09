@@ -42,8 +42,10 @@
 						s1 = 'ht'; s2 = 'aa'; break;
 					case 44: // LB Fighter (ev = Interception)
 						s1 = 'aa'; s2 = 'ev'; break;
-					case 21: case 22: case 47: // Autogyro, ASW-PBY, LB ASW bomber
+					case 21: case 47: // Autogyro, LB ASW bomber
 						s1 = 'as'; s2 = 'dv'; break;
+					case 22: // ASW-PBY
+						s1 = 'dv'; s2 = 'as'; break;
 				}
 				return b.stats[s1] - a.stats[s1]
 					|| b.stats[s2] - a.stats[s2]

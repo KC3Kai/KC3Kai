@@ -17,6 +17,7 @@ Instantiate-able class to represent one player
 			this.exp = [0,0,0,0];
 			this.server = 0;
 			this.isDomain = false;
+			this.isSecured = false;
 			this.rankPtLastCount = 0;
 			this.rankPtCutoff = 0;
 			this.rankPtLastCheck = 0;
@@ -35,6 +36,10 @@ Instantiate-able class to represent one player
 		}
 	};
 	
+	KC3Player.prototype.getServer = function(){
+		return new KC3Server(this.server, this.isDomain, this.isSecured);
+	};
+	
 	KC3Player.prototype.update = function(data){
 		this.id = data.mid;
 		this.name = data.name;
@@ -44,6 +49,7 @@ Instantiate-able class to represent one player
 		var MyServer = (new KC3Server()).setUrl(KC3Network.lastUrl);
 		this.server = MyServer.num;
 		this.isDomain = MyServer.isDomain;
+		this.isSecured = MyServer.isSecured;
 		
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank(data.rank);
@@ -210,6 +216,7 @@ Instantiate-able class to represent one player
 			this.exp = playerInfo.exp;
 			this.server = playerInfo.server;
 			this.isDomain = playerInfo.isDomain;
+			this.isSecured = playerInfo.isSecured;
 			this.rankPtLastCount = (playerInfo.rankPtLastCount || 0);
 			this.rankPtLastTimestamp = (playerInfo.rankPtLastTimestamp || 0);
 			this.rankPtCutoff = (playerInfo.rankPtCutoff || 0);

@@ -2768,6 +2768,7 @@ Previously known as "Reactor"
 				break;
 				case 34: // exchange 22 saury (curry) with 1 Zuiun (634 Air Group / Skilled) (up to twice)
 					// exchange 46 saury (curry k2) with 1 T1 Fighter Hayabusa Model II (64 Squad) in 2023 (once)
+					// exchange 48 saury (curry k3) with 1 Ginga (Egusa) in 2024 (once)
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 46;
 				break;
 				case 41: // exchange all boxes with fcoins
@@ -3272,8 +3273,8 @@ Previously known as "Reactor"
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
 						(!x[3] || (!x[2] && KC3Meta.isEventWorld(KC3SortieManager.getSortieMap()[0]) ?
-							// Bw1 seems not take boss nodes of pre-final boss for a multi-boss event map into account,
-							// but it counts both 2 boss nodes for map 7-2, because 7-2 is defeat type, not HP gauge, perhaps?
+						/* Bw1 seems not take boss nodes of pre-final boss for a multi-boss event map into account,
+							but it counts all boss nodes for World 7, perhaps thank to kills type, not HP gauge? */
 							KC3SortieManager.currentNode().isValidBoss() :
 							KC3SortieManager.currentNode().isBoss()))                       && /* Is on boss node */
 						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
