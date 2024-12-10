@@ -27,7 +27,7 @@
 			this.pointY = 0;
 			this.scale = 0.5;
 			this.isLoading = false;
-			this.gameServer = new KC3Server(PlayerManager.hq.server, PlayerManager.hq.isDomain);
+			this.gameServer = PlayerManager.hq.getServer();
 		},
 
 		/* RELOAD: optional
