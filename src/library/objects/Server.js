@@ -6,6 +6,12 @@ Represent KanColle game server instance.
 (function(){
 	"use strict";
 	
+	// kc server ip addresses are replaced by domain hostnames: (but still via http)
+	// server gadget and w01 (yokosuka) have started to use domain since 2024-12-03
+	//    eg: w00g.      w01y.          kancolle-server.com
+	// w02~w05 have started since 2024-12-06
+	// w06~w10 have started since 2024-12-09
+	// w11~w15 have started since 2024-12-11
 	const kcBaseDomain = ".kancolle-server.com";
 	const kcsNameInitials = "yksmotlrsbtpbhpskish";
 	
@@ -26,10 +32,6 @@ Represent KanColle game server instance.
 		anchor.href = url;
 		// here `ip` may stand for either IP address or domain hostname, old ip will be unused if isDomain true
 		this.ip = anchor.host;
-		// kc still using http and ip addresses (partially)
-		// gadget and w01 (yokosuka) server have started to use domain since 2024-12-03
-		// eg: w00g.       w01y.     kancolle-server.com
-		// w02~w05 have started since 2024-12-06
 		this.protocol = anchor.protocol;
 		this.isSecured = this.protocol == "https:";
 		const domainMatch = (this.ip || "").match(/w(\d+)\w+\.kancolle-server\.com/);
@@ -56,6 +58,8 @@ Represent KanColle game server instance.
 		this.name = serverInfo.name;
 		const worldName = String(this.num).pad(2, "0") + kcsNameInitials.charAt(this.num - 1);
 		this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
+		// first use info (domain/protocol) from actually dectected and saved in api link,
+		// but hostname not saved, so will depend on internal meta or auto-gen one
 		this.isDomain = isDomain === undefined ? !!serverInfo.domain : !!isDomain;
 		this.isSecured = isSecured === undefined ? !!serverInfo.https : !!isSecured;
 		this.protocol = this.isSecured ? "https:" : "http:";
