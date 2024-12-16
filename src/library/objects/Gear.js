@@ -576,8 +576,7 @@ KC3改 Equipment Object
 			// https://github.com/noro6/kc-web/blob/main/src/classes/item/item.ts#L1014
 			switch (type2) {
 				case 10: // Seaplane recon
-				case 41: // Large Flying Boat
-					// Night recon
+					// Night recon less
 					modifier = this.master().api_type[3] === 50 ? 0.1 : 0.14;
 					break;
 				case 9: // Recon plane
@@ -585,6 +584,8 @@ KC3改 Equipment Object
 				case 49: // LB Recon
 				case 59: // Jet Recon
 					modifier = 0.25; break;
+				case 41: // Large Flying Boat
+					modifier = 0.3; break;
 			}
 			switch (this.masterId) {
 				case 59: // Type 0 Observation

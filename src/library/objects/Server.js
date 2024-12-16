@@ -12,6 +12,7 @@ Represent KanColle game server instance.
 	// w02~w05 have started since 2024-12-06
 	// w06~w10 have started since 2024-12-09
 	// w11~w15 have started since 2024-12-11
+	// w16~w20 have started since 2024-12-13
 	const kcBaseDomain = ".kancolle-server.com";
 	const kcsNameInitials = "yksmotlrsbtpbhpskish";
 	
