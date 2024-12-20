@@ -1089,7 +1089,7 @@
 		"rewardConsumables": [0, 0, 3, 0]
 	},
 	"405": {
-		"unlock": [406]
+		"unlock": [406, 1145]
 	},
 	"406": {
 		"unlock": [408]
