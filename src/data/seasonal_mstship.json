@@ -7347,5 +7347,101 @@
 		"api_stype": 8,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5918": {
+		"api_id": 5918,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5919": {
+		"api_id": 5919,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5920": {
+		"api_id": 5920,
+		"api_name": "Xmas稲木改二",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5921": {
+		"api_id": 5921,
+		"api_name": "Xmas平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5922": {
+		"api_id": 5922,
+		"api_name": "Xmas平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5923": {
+		"api_id": 5923,
+		"api_name": "Xmas早霜",
+		"api_yomi": "はやしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5924": {
+		"api_id": 5924,
+		"api_name": "Xmas早霜改二",
+		"api_yomi": "はやしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5925": {
+		"api_id": 5925,
+		"api_name": "Xmas熊野丸",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5926": {
+		"api_id": 5926,
+		"api_name": "Xmas伊36",
+		"api_yomi": "い36",
+		"api_stype": 14,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5927": {
+		"api_id": 5927,
+		"api_name": "Xmas伊36改",
+		"api_yomi": "い36",
+		"api_stype": 14,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5928": {
+		"api_id": 5928,
+		"api_name": "クリスマスJohnston",
+		"api_yomi": "ジョンストン",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5929": {
+		"api_id": 5929,
+		"api_name": "クリスマスValiant",
+		"api_yomi": "ヴァリアント",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
 	}
 }

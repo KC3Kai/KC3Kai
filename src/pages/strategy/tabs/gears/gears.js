@@ -121,6 +121,8 @@
 			"t56": "aa",
 			// land base canard interceptor
 			"t57": "aa",
+			// night dive bomber
+			"t58": "dv",
 			// all types
 			"tall": "type",
 		},
