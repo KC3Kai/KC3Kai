@@ -3347,13 +3347,14 @@
 			if(!thisNode.startsFromNight || thisNode.isNightToDay){
 				// If anti-air CI fire is triggered
 				$(".module.activity .battle_aaci img").attr("src",
-					"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisNode.antiAirFire)&1]+".png");
+					"/assets/img/ui/dark_aaci"+["-x",""][(!!thisNode.antiAirFire)&1]+".png");
 				$(".module.activity .battle_aaci").attr("title",
 					thisNode.buildAntiAirCutinMessage() || KC3Meta.term("BattleAntiAirCutIn") )
 					.lazyInitTooltip();
 
 				// If night battle will be asked after this battle
-				$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+				$(".module.activity .battle_night img").attr("src",
+					"/assets/img/ui/dark_yasen"+["-x","-c"][thisNode.yasenFlag&1]+".png");
 
 				// Add option to simulate night battle
 				if (thisNode.yasenFlag) {
@@ -3380,7 +3381,8 @@
 				
 				// Indicate night to day battle, and if battle is kept to dawn (day time)
 				if(thisNode.isNightToDay){
-					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
+					$(".module.activity .battle_night img").attr("src",
+						"/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
 					$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleDayNeeded"));
 				}
 				// Indicate potential friendly fleet support for night to day battle or daytime aerial battle
@@ -3553,6 +3555,7 @@
 			var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 
+			$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen.png");
 			if(thisNode.friendlySupportFlag){
 				$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_friendly.png");
 				$(".module.activity .battle_night").attr("title", thisNode.buildFriendlyBattleMessage());
@@ -4043,14 +4046,14 @@
 
 			// If anti-air CI fire is triggered
 			$(".module.activity .battle_aaci img").attr("src",
-				"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisPvP.antiAirFire)&1]+".png");
+				"/assets/img/ui/dark_aaci"+["-x",""][(!!thisPvP.antiAirFire)&1]+".png");
 			$(".module.activity .battle_aaci").attr("title",
 				thisPvP.buildAntiAirCutinMessage() || KC3Meta.term("BattleAntiAirCutIn") )
 				.lazyInitTooltip();
 
-			// If night battle will be asked after this battle
-			$(".module.activity .battle_night img").attr("src",
-				"../../../../assets/img/ui/dark_yasen"+["-x",""][thisPvP.yasenFlag&1]+".png");
+			// If night battle will be asked after this battle, or actual night battle
+			$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen"
+				+ ["-x","-c",""][(thisPvP.yasenFlag&1) + (!!thisPvP.battleNight&1)] + ".png");
 
 			// Show predicted battle rank
 			if(thisPvP.predictedRank){
