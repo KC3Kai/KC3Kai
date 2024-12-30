@@ -1250,7 +1250,7 @@
 					},
 				],
 			},
-			// Prototype Myoujou (Additional Trial Model)
+			// Prototype Myoujou (Supplementary Prototype)
 			"550": {
 				count: 0,
 				starsDist: [],
