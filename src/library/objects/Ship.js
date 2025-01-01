@@ -1045,8 +1045,11 @@ KC3改 Ship Object
 			return obj;
 		});
 		const stats = this.statsBonusOnShip();
+		let isShow = gearFlag || synergyFlag;
+		// No show if summed bonus value of all stats equals to zero finally
+		if (Object.values(stats).every(v => v === 0)) isShow = false;
 		return {
-			isShow: gearFlag || synergyFlag,
+			isShow: isShow,
 			bonusGears: result,
 			stats: stats,
 		};
