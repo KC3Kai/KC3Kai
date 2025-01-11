@@ -98,6 +98,7 @@ Provides access to data on built-in JSON files
 			418,           // Satsuki Kai Ni
 			496,           // Zara due
 			694,           // Kirishima K2C
+			955, 960,      // Kiyoshimo K2(D)
 		],
 		specialAbyssalIdVoicePrefixes: {
 			// Why do devs make wrong voice filename matching even for last event?
