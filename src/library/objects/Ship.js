@@ -4351,10 +4351,10 @@ KC3改 Ship Object
 				// 1 photodb + 1 ndb works. 2 photodb not work, 2 ndb unknown
 				// https://x.com/CC_jabberwock/status/1877357816869978124
 				if((nightFighterCnt >= 1 && photoDBomberCnt >= 1) // highest priority
+					|| (nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
 					|| (nightFighterCnt >= 1 && nightDBomberCnt >= 1)
 					|| (nightTBomberCnt >= 1 && nightDBomberCnt >= 1)
 					|| (photoDBomberCnt >= 1 && nightDBomberCnt >= 1)
-					|| (nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
 				) results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
 				// 3 planes mod 1.18, get rid of the mod 1.25 pattern
 				if(nightFighterCnt >= 1 && nightPlaneCnt >= 3
