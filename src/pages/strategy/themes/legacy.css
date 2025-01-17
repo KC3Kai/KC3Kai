@@ -1049,6 +1049,9 @@ body {
 .tab_gears .slotitem .holders dl ~ dl{
 	border-top: 2px solid hsl(210, 50%, 85%);
 }
+.tab_gears .slotitem .holders dl dd .holder img.exslot{
+	box-shadow: 2px 0px 2px #fc2;
+}
 
 /* Crafting */
 .tab_crafts .build_pages {
