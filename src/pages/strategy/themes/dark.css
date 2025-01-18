@@ -1426,6 +1426,9 @@ button, input, select, textarea {
 .tab_gears .slotitem .holders dl ~ dl{
 	border-top: 1px solid #333333;
 }
+.tab_gears .slotitem .holders dl dd .holder img.exslot{
+	box-shadow: 3px 0px 2px #ff3;
+}
 
 /* Crafting */
 .tab_crafts .filters {

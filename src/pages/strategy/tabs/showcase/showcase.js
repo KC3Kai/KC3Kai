@@ -66,7 +66,7 @@
 				nameTypeIdx: 0,
 				nameTypeId: 22,
 				order: "aa",
-				types: [ 38, 44 ]
+				types: [ 38, 44, 56, 57 ]
 			},
 			"t11": {
 				name: "Radars",

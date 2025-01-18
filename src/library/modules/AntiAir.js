@@ -1282,7 +1282,7 @@ AntiAir: anti-air related calculations
 		predAllOf(isFujinamiKai2),
 		withEquipmentMsts(
 			predAllOf(
-				hasAtLeast( isHighAngleMountNotBuiltinAAFD, 2 ),
+				hasAtLeast( isBuiltinHighAngleMount, 2 ),
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);

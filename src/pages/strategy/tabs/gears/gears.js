@@ -121,6 +121,8 @@
 			"t56": "aa",
 			// land base canard interceptor
 			"t57": "aa",
+			// night dive bomber
+			"t58": "dv",
 			// all types
 			"tall": "type",
 		},
@@ -286,6 +288,7 @@
 						item.arranged[ThisItem.stars].holder[holder.rosterId] = {
 							held: [],
 							holder: holder,
+							inexslot: holder.ex_item === ThisItem.itemId,
 							count: 0
 						};
 					item.arranged[ThisItem.stars].holder[holder.rosterId].held.push(itemSimple);
@@ -570,6 +573,7 @@
 								<span>x${item.count}</span>`
 						});
 						$("img", holderDiv).addClass("shipiconimg hover")
+							.toggleClass("exslot", !!item.inexslot)
 							.attr("title", `[${masterId}] ${item.holder.name()} #${item.holder.rosterId}\n${getItemList(item.held).join("\n")}`)
 							.attr("alt", masterId)
 							.on("click", shipClickFunc);

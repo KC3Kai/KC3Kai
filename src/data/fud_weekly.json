@@ -1,6 +1,6 @@
 {
-	"carrierBasedAircraftType3Ids": [6, 7, 8, 9, 10, 21, 22, 33, 39, 40, 43, 45, 46, 50, 51],
-	"landBasedAircraftType3Ids": [6, 7, 8, 9, 10, 21, 22, 33, 37, 38, 39, 40, 43, 44, 45, 46, 47, 48, 49, 50, 51, 56, 57],
+	"carrierBasedAircraftType3Ids": [6, 7, 8, 9, 10, 21, 22, 33, 39, 40, 43, 45, 46, 50, 51, 58],
+	"landBasedAircraftType3Ids": [6, 7, 8, 9, 10, 21, 22, 33, 37, 38, 39, 40, 43, 44, 45, 46, 47, 48, 49, 50, 51, 56, 57, 58],
 	"antiAirFighterType2Ids": [6, 7, 8, 11, 45, 56, 57, 58],
 	"antiAirLandBaseFighterType2Ids": [9, 10, 41, 47, 48, 49, 59, 94],
 	"antiLandDiveBomberIds": [64, 148, 233, 277, 305, 306, 319, 320, 391, 392, 420, 421, 474],
@@ -12,7 +12,7 @@
 	"aswDepthChargeIds": [226, 227, 378, 439, 488],
 	"aswArmorPenetrationIds": [226, 227, 377, 378, 439, 472, 488],
 	"jetAircraftType2Ids": [56, 57, 58, 59],
-	"nightAircraftType3Ids": [45, 46],
+	"nightAircraftType3Ids": [45, 46, 58],
 	"interceptorsType3Ids": [38, 44, 56, 57],
 	"interceptorsType2Ids": [48],
 	"landBaseReconnType2Ids": [9, 10, 41, 49, 59, 94],
