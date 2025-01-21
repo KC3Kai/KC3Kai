@@ -1250,6 +1250,197 @@
 					},
 				],
 			},
+			// Prototype Myoujou (Supplementary Prototype)
+			"550": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou, Zuihou
+						origins: [89, 116],
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 7,
+						origins: [89, 116],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 8,
+						origins: [89, 116],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						origins: [89, 116],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						origins: [89, 116],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// Myoujou Kai
+			"551": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou, Zuihou
+						origins: [89, 116],
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 7,
+						origins: [89, 116],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 8,
+						origins: [89, 116],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						origins: [89, 116],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						origins: [89, 116],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 2, "houk": 2, "houm": 1 },
+					},
+					{
+						minStars: 7,
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 8,
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 9,
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 99 Training Bomber Model 22 Kai (Experimental w/ Night Equipment)
+			"552": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Houshou, Zuihou
+						origins: [89, 116],
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 7,
+						origins: [89, 116],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 8,
+						origins: [89, 116],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						origins: [89, 116],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						origins: [89, 116],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, Houshou K2Sen
+						ids: [883, 899],
+						multiple: { "houg": 2, "houk": 3, "houm": 3 },
+					},
+					{
+						minStars: 3,
+						ids: [883, 899],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 6,
+						ids: [883, 899],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 7,
+						ids: [883, 899],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 8,
+						ids: [883, 899],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 9,
+						ids: [883, 899],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						ids: [883, 899],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Akagi/Kaga K2E, Zuihou K2+, Ryuuhou K2
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houg": 1, "houk": 1, "houm": 2 },
+					},
+					{
+						minStars: 7,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 8,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 9,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houg": 1 },
+					},
+				],
+			},
 			// Type 0 Fighter Model 62 (Fighter-bomber)
 			"60": {
 				count: 0,
@@ -9491,7 +9682,8 @@
 					},
 					// For all ships can equip it
 					{
-						// To avoid error for library
+						minCount: 1,
+						// Empty bonus stats to avoid error for library display
 						single: {},
 						synergy: {
 							flags: [ "airRadar" ],
@@ -12094,6 +12286,23 @@
 						ids: [879],
 						single: { "souk": 1, "houk": 1 },
 				},
+			},
+			// Night Operations Aviation Personnel
+			"258": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						minStars: 2,
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 2,
+						// Ryuuhou K2E, Akagi K2E, Kaga K2E, Houshou K2Sen, Taihou Kai
+						ids: [883, 599, 610, 899, 156],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+				],
 			},
 			// Skilled Deck Personnel + Aviation Maintenance Hands
 			"478": {

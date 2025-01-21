@@ -643,6 +643,16 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 		},
 		
+		// Update lock of a fleet Preset
+		"api_req_hensei/preset_lock":function(params, response, headers){
+			console.log("Locked/unlock fleet Preset", params.api_preset_no);
+		},
+		
+		// Update position of a fleet Preset
+		"api_req_hensei/preset_order_change":function(params, response, headers){
+			console.log("Moved Preset position from", params.api_preset_from, "to", params.api_preset_to);
+		},
+		
 		/* Equipment Presets
 		-------------------------------------------------------*/
 		// List Presets

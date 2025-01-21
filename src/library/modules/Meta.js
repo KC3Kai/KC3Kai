@@ -89,15 +89,34 @@ Provides access to data on built-in JSON files
 			// tested by trying and succeeding to http fetch mp3 from kc server
 			56, 160, 224,  // Naka
 			65, 194, 268,  // Haguro
+			69,            // Choukai
+			89,            // Houshou (Poke dupe)
 			114, 200, 290, // Abukuma
+			116,           // Zuihou (Poke dupe)
 			123, 142, 295, // Kinukasa
 			126, 398,      // I-168
 			127, 399,      // I-58
-			135, 304,      // Naganami
-			136,           // Yamato Kai
+			135, 304, 543, // Naganami
+			136,           // Yamato Kai (Poke dupe)
+			145, 961,      // Shigure Kai Ni(San) (Event/Equip2 reuse)
+			321,           // Ooyodo Kai (Friend50 cut)
+			412,           // Yamashiro Kai Ni (Poke dupe)
 			418,           // Satsuki Kai Ni
-			496,           // Zara due
+			449,           // Pola (Equip1 cut)
+			496,           // Zara due (Event reuse)
+			515,           // Ark Royal (Poke dupe)
+			522, 884,      // Yawatamaru (K2 Equip3 dupe), Unyou
+			549,           // Intrepid (Poke dupe)
+			568,           // Kuroshio Kai Ni (Poke dupe)
+			573,           // Mutsu Kai Ni (Poke dupe)
+			578,           // Asashimo Kai Ni
+			580,           // Maestrale Kai (Base Poke1 dupe)
+			591,           // Kongou K2C (Attack dupe)
+			662,           // Noshiro Kai Ni (Poke dupe)
 			694,           // Kirishima K2C
+			951,           // Amatsukaze Kai Ni
+			955, 960,      // Kiyoshimo K2(D)
+			975,           // Harusame Kai Ni
 		],
 		specialAbyssalIdVoicePrefixes: {
 			// Why do devs make wrong voice filename matching even for last event?

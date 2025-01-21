@@ -1045,8 +1045,11 @@ KC3改 Ship Object
 			return obj;
 		});
 		const stats = this.statsBonusOnShip();
+		let isShow = gearFlag || synergyFlag;
+		// No show if summed bonus value of all stats equals to zero finally
+		if (Object.values(stats).every(v => v === 0)) isShow = false;
 		return {
-			isShow: gearFlag || synergyFlag,
+			isShow: isShow,
 			bonusGears: result,
 			stats: stats,
 		};
@@ -4324,24 +4327,35 @@ KC3改 Ship Object
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// https://en.kancollewiki.net/Combat/Night_Battle
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
+				// see also #nightAircraftType3Ids, enabling carriers night attack, excluding Night Seaplane types
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 				const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
+				const nightDBomberCnt = this.countNonZeroSlotEquipmentType(3, 58);
 				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
 				const iwaiDBomberCnt = this.countNonZeroSlotEquipment(154);
 				// Swordfish variants
 				const swordfishTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
 				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30,
-				// it more likely acts as yet unimplemented Night Dive Bomber type
+				// ~~it more likely acts as yet unimplemented Night Dive Bomber type~~
+				// Night Dive Bomber type implemented since 2024-12-26
+				// https://x.com/CC_jabberwock/status/1876998846590455997
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
-				const nightPlaneCnt = nightFighterCnt + nightTBomberCnt + photoDBomberCnt + iwaiDBomberCnt + swordfishTBomberCnt;
+				const nightPlaneCnt = nightFighterCnt + nightTBomberCnt + nightDBomberCnt + photoDBomberCnt + iwaiDBomberCnt + swordfishTBomberCnt;
 				// first place thank to its highest priority and power mod 1.25
 				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", 1.25));
 				// 2 planes mod 1.2, proc rate might be higher and photo one might roll once more
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2));
-				if((nightFighterCnt >= 1 || nightTBomberCnt >= 1) && photoDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
+				// nf + photodb shadows ntb + photodb, also shadows other +ndb?
+				// 1 photodb + 1 ndb works. 2 photodb not work, 2 ndb unknown
+				// https://x.com/CC_jabberwock/status/1877357816869978124
+				if((nightFighterCnt >= 1 && photoDBomberCnt >= 1) // highest priority
+					|| (nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
+					|| (nightFighterCnt >= 1 && nightDBomberCnt >= 1)
+					|| (nightTBomberCnt >= 1 && nightDBomberCnt >= 1)
+					|| (photoDBomberCnt >= 1 && nightDBomberCnt >= 1)
+				) results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
 				// 3 planes mod 1.18, get rid of the mod 1.25 pattern
 				if(nightFighterCnt >= 1 && nightPlaneCnt >= 3
 					&& !(nightFighterCnt === 2 && nightTBomberCnt === 1 && nightPlaneCnt === 3))
