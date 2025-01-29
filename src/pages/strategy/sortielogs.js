@@ -1041,7 +1041,7 @@
 								}
 								$(".rfleet_count", planeBox).text(plane.count);
 								$(".rfleet_morale img", planeBox)
-									.attr("src", "/assets/img/client/morale/" + ["","3","2","1"][plane.morale] + ".png");
+									.attr("src", "/assets/img/client/morale/" + ["4","3","2","1"][plane.morale] + ".png");
 							} else {
 								$(".rfleet_stars", planeBox).hide();
 								$(".rfleet_ace", planeBox).hide();

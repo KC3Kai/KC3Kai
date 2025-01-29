@@ -378,6 +378,7 @@ Previously known as "Reactor"
 					case 99: PlayerManager.consumables.whiteRibbon = thisItem.api_count; break;
 					case 100:PlayerManager.consumables.overseaTechMaterial = thisItem.api_count; break;
 					case 101:PlayerManager.consumables.nightSkilledCrew = thisItem.api_count; break;
+					case 102:PlayerManager.consumables.airUnitRation = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
@@ -1816,6 +1817,37 @@ Previously known as "Reactor"
 			});
 			PlayerManager.setResources(utcHour * 3600, null, [-consumedFuel,0,0,-consumedBauxite]);
 			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Lbas");
+		},
+		
+		/* Consume ration item to recover morale of squadrons
+		-------------------------------------------------------*/
+		"api_req_air_corps/cond_recovery":function(params, response, headers){
+			// To update base by api_plane_info too?
+			PlayerManager.consumables.airUnitRation -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
+		},
+		
+		/* Update morale recovery timer after ration used?
+		-------------------------------------------------------*/
+		"api_port/airCorpsCondRecoveryWithTimer":function(params, response, headers){
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					const distance = response.api_data.api_distance;
+					if(typeof distance === "object"){
+						base.rangeBase = distance.api_base;
+						base.rangeBonus = distance.api_bonus;
+						base.range = base.rangeBase + base.rangeBonus;
+					} else {
+						base.range = distance;
+					}
+					$.each(response.api_data.api_plane_info, function(_, p){
+						base.planes[p.api_squadron_id-1] = p;
+					});
+				}
+			});
+			PlayerManager.saveBases();
 			KC3Network.trigger("Lbas");
 		},
 		

@@ -2667,8 +2667,8 @@
 								}
 								
 								if (planeInfo.api_state == 1) {
-									// Plane on standby, no detail morale value in API, only condition [1, 3]
-									const eqMorale = ["","3","2","1"][planeInfo.api_cond] || "3";
+									// Plane on standby, no detail morale value in API, only condition [0, 3]
+									const eqMorale = ["4","3","2","1"][planeInfo.api_cond] || "3";
 									const eqCondSrc = "/assets/img/client/morale/"+eqMorale+".png";
 									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
 									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);

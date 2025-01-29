@@ -626,6 +626,8 @@ AntiAir: anti-air related calculations
 	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
 	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
 	var isFujinamiKai2 = masterIdEq( fujinamiK2Icon );
+	var isFubukiKai2 = masterIdEq( 426 );
+	var isShirayukiKai2 = masterIdEq( 986 );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -1206,7 +1208,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		42, 10, 1, 1.65, 65, 1750,
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
@@ -1217,7 +1219,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		43, 8, 1, 1.6, 58, 1910, // rate 60?
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
@@ -1227,7 +1229,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		44, 6, 1, 1.6, 55, 2120,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
@@ -1238,7 +1240,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		45, 5, 1, 1.55, 50, 2240,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
@@ -1276,10 +1278,11 @@ AntiAir: anti-air related calculations
 	);
 
 	// Fujinami K2
+	// Fubuki/Shirayuki K2 added since 2025-1-28
 	declareAACI(
 		49, 5, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isFujinamiKai2),
+		predAnyOf(isFujinamiKai2, isFubukiKai2, isShirayukiKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isBuiltinHighAngleMount, 2 ),
