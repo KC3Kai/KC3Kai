@@ -87,6 +87,8 @@
 				twin203MediumGunMountNo2Ids: [90],
 				antiAirGreenSecGunMount: 0,
 				antiAirGreenSecGunMountIds: [10, 66, 71, 130, 220, 275, 464],
+				twin10cmKaiHighAngleGunMount: 0,
+				twin10cmKaiHighAngleGunMountIds: [533, 553],
 				twin51cmLargeGunMount: 0,
 				twin51cmLargeGunMountIds: [281],
 				twin51cmLargeGunMountNonexist: 1,
@@ -129,6 +131,8 @@
 				frenchNightReconKaiIds: [538],
 				germanLargeRadar: 0,
 				germanLargeRadarIds: [124],
+				arcticGearDeckPersonnel: 0,
+				arcticGearDeckPersonnelIds: [402],
 			},
 			// Ryuusei
 			"18": {
@@ -456,6 +460,63 @@
 						// Akagi Kai Ni E, Kaga Kai Ni E
 						ids: [599, 610],
 						multiple: { "houg": 3, "houk": 1 },
+					},
+				],
+			},
+			// Type 97 Torpedo Bomber Kai (Northeastern Air Group)
+			"554": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Houshou Class
+					"27": {
+						multiple: { "tais": 1, "houk": 1, "houm": 1 },
+					},
+					// Taiyou Class
+					"76": "27",
+				},
+				byShip: [
+					{
+						// Any CVL
+						stypes: [7],
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+					{
+						// Zuihou Kai/K2/K2B, Houshou Kai/K2, Ryuuhou Kai/K2/K2E
+						ids: [117, 555, 560, 285, 894, 318, 888, 883],
+						multiple: { "houg": 1, "houm": 1 },
+					},
+					{
+						// Houshou K2
+						ids: [894],
+						multiple: { "houg": 1 },
+					},
+					// For all ships can equip it
+					{
+						synergy: {
+							flags: [ "arcticGearDeckPersonnel" ],
+							multiple: { "houg": 3, "tais": 3, "houk": 1, "houm": 2 },
+						},
+					},
+					{
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
 					},
 				],
 			},
@@ -7363,7 +7424,7 @@
 					"5": "1",
 					// Hatsuharu Class K2: Hatsuharu K2, Hatsushimo K2
 					"10": "1",
-					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2, Isonami K2
+					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2, Isonami K2, Shirayuki K2
 					"12": "1",
 				},
 				byShip: [
@@ -8084,6 +8145,27 @@
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
+					{
+						// Fubuki Kai Ni, Shirayuki Kai Ni
+						ids: [426, 986],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
 				]
 			},
 			// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
@@ -8171,6 +8253,126 @@
 					},
 					{
 						ids: [981],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Fubuki Kai Ni, Shirayuki Kai Ni
+						ids: [426, 986],
+						multiple: { "houg": 1, "tyku": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				]
+			},
+			// 10cm Twin High-angle Gun Mount Kai
+			"553": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Akizuki Class
+					"54": [
+						{
+							multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Hatsuzuki Kai Ni
+						ids: [968],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						// Fujinami Kai Ni
+						ids: [981],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 2,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 6,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [981],
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Fubuki Kai Ni, Shirayuki Kai Ni
+						ids: [426, 986],
+						multiple: { "houg": 1, "tyku": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [426, 986],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [426, 986],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -10186,7 +10388,7 @@
 				count: 0,
 				byShip: [
 					{
-						// Known typo bug found in client which ids are changed to all mogami k2+
+						// Fixed since 2025-01-28: typo bug found in client which ids are changed to all mogami k2+
 						// Noshiro K2, Yahagi K2+
 						ids: [662, 663, 668],
 						multiple: { "tyku": 2, "houk": 1 },
@@ -10861,6 +11063,35 @@
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
+					{
+						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
+						ids: [986],
+						multiple: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "twin10cmKaiHighAngleGunMount" ],
+							distinct: { "tyku": 1, "houm": 1 },
+						},
+					},
+					{
+						ids: [986],
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						ids: [986],
+						minStars: 8,
+						multiple: { "tyku": 1 },
+					},
+					{
+						ids: [986],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [986],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
 				],
 			},
 			// 25mm Triple Autocannon Mount
@@ -10904,6 +11135,15 @@
 						ids: [979],
 						minStars: 10,
 						multiple: { "houg": 1 },
+					},
+					{
+						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
+						ids: [986],
+						multiple: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "twin10cmKaiHighAngleGunMount" ],
+							distinct: { "tyku": 1, "houm": 1 },
+						},
 					},
 				],
 			},
@@ -10966,6 +11206,15 @@
 						ids: [979],
 						minStars: 10,
 						multiple: { "houg": 1 },
+					},
+					{
+						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
+						ids: [986],
+						multiple: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "twin10cmKaiHighAngleGunMount" ],
+							distinct: { "tyku": 1, "houm": 1 },
+						},
 					},
 				],
 			},
@@ -11085,6 +11334,7 @@
 			// 25mm Anti-aircraft Autocannon Mount & Machine Guns
 			"505": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
 						// All DD
@@ -11159,6 +11409,20 @@
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 1, "houk": 1 },
 						},
+					},
+					{
+						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
+						ids: [986],
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: {
+							flags: [ "twin10cmKaiHighAngleGunMount" ],
+							distinct: { "tyku": 1, "houm": 1 },
+						},
+					},
+					{
+						ids: [986],
+						minStars: 8,
+						multiple: { "houm": 1 },
 					},
 				],
 			},

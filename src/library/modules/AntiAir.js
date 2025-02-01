@@ -1290,6 +1290,12 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// Fubuki K2, Shirayuki K2
+	// 50: 10cm Twin HA Kai + 10cmAAFD? + AAFD? + AirRadar? (45>50>49)
+	// 51: 10cm Twin HA Kai + AAMG? + AirRadar? (49>51>52)
+	// 52: 10cm Twin HA Kai x2 + T94 AAFD (49>52>19)
+
+
 	// return a list of possible AACI APIs based on ship and her equipment
 	// - returns a list of **strings**, not numbers
 	//   (since object keys has to be strings, and AACITable[key] accepts keys

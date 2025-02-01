@@ -1040,6 +1040,7 @@ KC3改 Ship Object
 				else if (flag.includes("NightRecon")) { return 50; }
 				else if (flag.includes("Sonar")) { return 18; }
 				else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
+				else if (flag.includes("DeckPersonnel")) { return 29; }
 				return 0; // Unknown synergy type
 			});
 			return obj;

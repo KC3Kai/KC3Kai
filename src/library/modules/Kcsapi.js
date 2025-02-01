@@ -1820,18 +1820,37 @@ Previously known as "Reactor"
 			KC3Network.trigger("Lbas");
 		},
 		
-		/* Consume ration item to recover morale of squadrons
+		/* Consume ration item to maximize morale of deployed squadrons
 		-------------------------------------------------------*/
 		"api_req_air_corps/cond_recovery":function(params, response, headers){
-			// To update base by api_plane_info too?
+			if(typeof response.api_data.api_plane_info === "object"){
+				$.each(PlayerManager.bases, function(i, base){
+					if(base.map == params.api_area_id && base.rid == params.api_base_id){
+						const distance = response.api_data.api_distance;
+						if(typeof distance === "object"){
+							base.rangeBase = distance.api_base;
+							base.rangeBonus = distance.api_bonus;
+							base.range = base.rangeBase + base.rangeBonus;
+						} else {
+							base.range = distance;
+						}
+						$.each(response.api_data.api_plane_info, function(_, p){
+							base.planes[p.api_squadron_id-1] = p;
+						});
+					}
+				});
+				PlayerManager.saveBases();
+				KC3Network.trigger("Lbas");
+			}
 			PlayerManager.consumables.airUnitRation -= 1;
 			PlayerManager.setConsumables();
 			KC3Network.trigger("Consumables");
 		},
 		
-		/* Update morale recovery timer after ration used?
+		/* Update client's cond indicators based on morale recovered by server's timer
 		-------------------------------------------------------*/
 		"api_port/airCorpsCondRecoveryWithTimer":function(params, response, headers){
+			if(typeof response.api_data.api_plane_info !== "object") return;
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.map == params.api_area_id && base.rid == params.api_base_id){
 					const distance = response.api_data.api_distance;
@@ -2908,12 +2927,13 @@ Previously known as "Reactor"
 					// 18 beans + 28 devmats with a Type 1 Land-based Attack Aircraft Model 22A in 2022
 					// 10 beans + 8 devmats with a Type 97 Torpedo Bomber (Skilled) in 2023
 					// 16 beans + 35 devmats with a Special Type 2 Amphibious Landing Craft in 2024
+					// 18 beans with a New Model Aircraft Blueprint in 2025
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
 					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					// 20 beans + 40 devmats with a Ginga in 2021 (once)
-					// 20 beans with a Blueprint in 2022, 2023 and 2024
+					// 20 beans with a Blueprint in 2022, 2023, 2024 and 2025
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
 				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
@@ -2921,6 +2941,7 @@ Previously known as "Reactor"
 					// 27 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2022
 					// 30 beans + 60 devmats with a Type 4 Heavy Bomber Hiryuu (Skilled) in 2023 (once)
 					// 32 beans + 70 devmats with a Ginga (Skilled) in 2024 (once)
+					// 33 beans + 80 devmats with a Toukai (901 Air Group) in 2025 (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
