@@ -198,6 +198,10 @@ AntiAir: anti-air related calculations
 
 	// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
 	var is10cmTwinHighAngleMountKaiAAFDKai = masterIdEq(533);
+	// 10cm Twin High-angle Gun Mount Kai
+	var is10cmTwinHighAngleMountKai = masterIdEq(553);
+	var is10cmTwinHighAngleMountKaiOrAAFDKai = predAnyOf(is10cmTwinHighAngleMountKai, is10cmTwinHighAngleMountKaiAAFDKai);
+	var isType94AAFD = masterIdEq(121);
 
 	// [276] 46cm Kai not counted
 	// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
@@ -574,6 +578,7 @@ AntiAir: anti-air related calculations
 		harunaK2BIcon = 593,
 		harusameK2Icon = 975,
 		fujinamiK2Icon = 981,
+		shirayukiK2Icon = 986,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -627,7 +632,7 @@ AntiAir: anti-air related calculations
 	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
 	var isFujinamiKai2 = masterIdEq( fujinamiK2Icon );
 	var isFubukiKai2 = masterIdEq( 426 );
-	var isShirayukiKai2 = masterIdEq( 986 );
+	var isShirayukiKai2 = masterIdEq( shirayukiK2Icon );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -1290,10 +1295,39 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Fubuki K2, Shirayuki K2
-	// 50: 10cm Twin HA Kai + 10cmAAFD? + AAFD? + AirRadar? (45>50>49)
-	// 51: 10cm Twin HA Kai + AAMG? + AirRadar? (49>51>52)
-	// 52: 10cm Twin HA Kai x2 + T94 AAFD (49>52>19)
+	// Fubuki K2, Shirayuki K2, Akizuki-class Kai+
+	declareAACI(
+		50, 7, 1, 1.5, 60, 2244,
+		[shirayukiK2Icon, biHaMountIcon, biHaMountIcon, aaFdIcon, radarIcon],
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isAkizukiClassKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleMountKaiOrAAFDKai, 2 ),
+				hasSome( isType94AAFD ),
+				hasSome( isAARadarWithAtLeast(4) ))
+		)
+	);
+	declareAACI(
+		51, 5, 1, 1.35, 50, 2246,
+		[shirayukiK2Icon, biHaMountIcon, aaGunIcon, radarIcon],
+		predAnyOf(isFubukiKai2, isShirayukiKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleMountKaiOrAAFDKai ),
+				hasSome( isAAGunWithAtLeast(5) ),
+				hasSome( isAARadarWithAtLeast(4) ))
+		)
+	);
+	declareAACI(
+		52, 4, 1, 1.4, 50, 2247,
+		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
+		predAnyOf(isFubukiKai2, isShirayukiKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleMountKai, 2 ),
+				hasSome( isType94AAFD ))
+		)
+	);
 
 
 	// return a list of possible AACI APIs based on ship and her equipment
