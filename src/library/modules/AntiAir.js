@@ -136,7 +136,7 @@ AntiAir: anti-air related calculations
 	var isAARadar = predAllOf(isRadar, function(mst) {
 		return mst.api_tyku >= 2;
 	});
-	// kind 47, 48 needs AA stat >= 4
+	// kind 47~51 need AA stat >= 4
 	function isAARadarWithAtLeast(aa) {
 		return predAllOf(isRadar, function(mst) {
 			return mst.api_tyku >= aa;
@@ -163,7 +163,8 @@ AntiAir: anti-air related calculations
 	// To match AA gun with minimal tyku of specified value:
 	// kind 12 needs AA stat >= 3 (defined by KC Vita, only 7.7mm MG incapable for now)
 	// kind 33 needs AA stat >= 4
-	// kind 42/44 needs AA stat >= 6
+	// kind 51 needs AA stat >= 5
+	// kind 42&44 need AA stat >= 6
 	function isAAGunWithAtLeast(aa) {
 		return predAllOf(isMachineGun, function(mst) {
 			return mst.api_tyku >= aa;
@@ -376,7 +377,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.5 : 2*0.25) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -1319,7 +1320,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		52, 4, 1, 1.4, 50, 2247,
+		52, 4, 1, 1.35, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
 		predAnyOf(isFubukiKai2, isShirayukiKai2),
 		withEquipmentMsts(

@@ -1544,10 +1544,14 @@
 					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
 					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
 				));
-			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+			$(".count_morale").text(
+					(PlayerManager.consumables.mamiya || 0)
+					+ (PlayerManager.consumables.irako || 0)
+					+ (PlayerManager.consumables.airUnitRation || 0)
+				).parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5}".format(
 					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
+					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
 			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
