@@ -1308,6 +1308,7 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
+	// Fubuki K2, Shirayuki K2
 	declareAACI(
 		51, 5, 1, 1.35, 50, 2246,
 		[shirayukiK2Icon, biHaMountIcon, aaGunIcon, radarIcon],

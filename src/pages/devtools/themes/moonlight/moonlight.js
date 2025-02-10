@@ -458,6 +458,17 @@
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
 						//console.debug(KC3Meta._quests);
 						console.info("New quests detected, live updated");/*RemoveLogging:skip*/
+						$.ajax({
+							async: true,
+							dataType: "JSON",
+							url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/develop/src/data/quests_meta.json?v="+(Date.now()),
+							success: function(newQuestMeta){
+								if(JSON.stringify(newQuestMeta) !== JSON.stringify(KC3Meta._questsMeta)){
+									KC3Meta._questsMeta = newQuestMeta;
+									console.info("Quests meta live updated");/*RemoveLogging:skip*/
+								}
+							}
+						});
 					}else{
 						console.info("Quests is up to date");
 					}
