@@ -1040,6 +1040,7 @@ KC3改 Ship Object
 				else if (flag.includes("NightRecon")) { return 50; }
 				else if (flag.includes("Sonar")) { return 18; }
 				else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
+				else if (flag.includes("DeckPersonnel")) { return 29; }
 				return 0; // Unknown synergy type
 			});
 			return obj;
@@ -2636,12 +2637,14 @@ KC3改 Ship Object
 					this.equipment().forEach((g, i) => {
 						if(g.isAirstrikeAircraft() || [549].includes(g.masterId)) {
 							// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
-							// Type 1 Fighter Hayabusa Model II Kai bonus not fully tested, all -4 for now:
+							// Type 1 Fighter Hayabusa Model II Kai bonus not fully tested, ~~all -4 for now~~:
 							// https://twitter.com/yukicacoon/status/1625831965055410176
 							// Type 3 Command Liaison Kai 2 not participate in opening airstrike, but give this:
 							// https://x.com/yukicacoon/status/1857620935836315724
+							// More bonus tests for 491 Hayabusa:
+							// https://docs.google.com/document/d/1ZG6v_9d21VsxHS-BDXsnZ9PibNOCLxAZ5cMq8xqFlYk/edit
 							const expBonus = [489, 491, 549].includes(g.masterId)
-								? [0, 0, 0, 0, 0, 1, 3, 6]
+								? [0, 0, 1, 2, 3, 4, 5, 6]
 								: [0, 1, 2, 3, 4, 5, 7, 10];
 							const aceLevel = g.ace || 0;
 							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];

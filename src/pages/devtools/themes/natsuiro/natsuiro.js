@@ -458,6 +458,18 @@
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
 						//console.debug(KC3Meta._quests);
 						console.info("New quests detected, live updated");/*RemoveLogging:skip*/
+						// Only update meta when en translations actually get updated
+						$.ajax({
+							async: true,
+							dataType: "JSON",
+							url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/develop/src/data/quests_meta.json?v="+(Date.now()),
+							success: function(newQuestMeta){
+								if(JSON.stringify(newQuestMeta) !== JSON.stringify(KC3Meta._questsMeta)){
+									KC3Meta._questsMeta = newQuestMeta;
+									console.info("Quests meta live updated");/*RemoveLogging:skip*/
+								}
+							}
+						});
 					}else{
 						console.info("Quests is up to date");
 					}
@@ -1544,10 +1556,14 @@
 					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
 					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
 				));
-			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+			$(".count_morale").text(
+					(PlayerManager.consumables.mamiya || 0)
+					+ (PlayerManager.consumables.irako || 0)
+					+ (PlayerManager.consumables.airUnitRation || 0)
+				).parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5}".format(
 					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
+					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
 			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
@@ -2543,8 +2559,8 @@
 								}
 								
 								if (planeInfo.api_state == 1) {
-									// Plane on standby, no detail morale value in API, only condition [1, 3]
-									const eqMorale = ["","3","2","1"][planeInfo.api_cond] || "3";
+									// Plane on standby, no detail morale value in API, only condition [0, 3]
+									const eqMorale = ["4","3","2","1"][planeInfo.api_cond] || "3";
 									const eqCondSrc = "/assets/img/client/morale/"+eqMorale+".png";
 									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
 									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);

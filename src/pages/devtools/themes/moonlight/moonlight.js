@@ -458,6 +458,17 @@
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
 						//console.debug(KC3Meta._quests);
 						console.info("New quests detected, live updated");/*RemoveLogging:skip*/
+						$.ajax({
+							async: true,
+							dataType: "JSON",
+							url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/develop/src/data/quests_meta.json?v="+(Date.now()),
+							success: function(newQuestMeta){
+								if(JSON.stringify(newQuestMeta) !== JSON.stringify(KC3Meta._questsMeta)){
+									KC3Meta._questsMeta = newQuestMeta;
+									console.info("Quests meta live updated");/*RemoveLogging:skip*/
+								}
+							}
+						});
 					}else{
 						console.info("Quests is up to date");
 					}
@@ -1609,7 +1620,7 @@
 				if(slotitem) amount = slotitem.amount;
 				$(`.consumable_display .count_${attrName}`).text(amount).parent().attr("title", KC3Meta.useItemName(useitemId));
 			};
-			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 62, 64, 65, 66, 67, 68, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94, 95, 96, 97].forEach(updateCountByUseitemId);
+			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 62, 64, 65, 66, 67, 68, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94, 95, 96, 97, 102].forEach(updateCountByUseitemId);
 			$(".count_sumScrews").text(
 				(PlayerManager.getConsumableById(4) || 0) +    // screws
 				(PlayerManager.getConsumableById(60) || 0) +   // 1 present box => 1 screw
@@ -2667,8 +2678,8 @@
 								}
 								
 								if (planeInfo.api_state == 1) {
-									// Plane on standby, no detail morale value in API, only condition [1, 3]
-									const eqMorale = ["","3","2","1"][planeInfo.api_cond] || "3";
+									// Plane on standby, no detail morale value in API, only condition [0, 3]
+									const eqMorale = ["4","3","2","1"][planeInfo.api_cond] || "3";
 									const eqCondSrc = "/assets/img/client/morale/"+eqMorale+".png";
 									$(".base_plane_count", planeBox).text(planeInfo.api_count+" / "+planeInfo.api_max_count);
 									$(".base_plane_cond img", planeBox).attr("src", eqCondSrc);
