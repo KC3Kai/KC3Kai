@@ -116,6 +116,7 @@
                     return 65;
                 case 145: // Shigure K2
                     return 77;
+                case 202: // Shirayuki
                 case 208: // Shikinami
                 case 225: // Kagerou
                 case 226: // Shiranui
@@ -239,6 +240,8 @@
                 case 652: // Kuma Kai Ni
                 case 657: // Kuma Kai Ni D
                     return 15;
+                case 202: // Shirayuki
+                    return 5;
                 case 312: // Hamakaze
                 case 317: // Urakaze
                 case 320: // Isokaze
@@ -357,6 +360,7 @@
                 case 152: // to Kirishima K2C 694
                     return 2;
                 case 206: // to Isonami K2 666
+                case 202: // to Shirayuki K2 986
                     return 1;
                 default: return 0;
             }

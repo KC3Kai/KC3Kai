@@ -7443,5 +7443,109 @@
 		"api_stype": 9,
 		"api_soku": 5,
 		"api_slot_num": 4
+	},
+	"5930": {
+		"api_id": 5930,
+		"api_name": "正月武蔵",
+		"api_yomi": "むさし",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5931": {
+		"api_id": 5931,
+		"api_name": "正月Intrepid",
+		"api_yomi": "イントレピッド",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5932": {
+		"api_id": 5932,
+		"api_name": "正月Intrepid改",
+		"api_yomi": "イントレピッド",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5933": {
+		"api_id": 5933,
+		"api_name": "正月Nevada",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5934": {
+		"api_id": 5934,
+		"api_name": "正月Nevada改",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5935": {
+		"api_id": 5935,
+		"api_name": "正月Nevada改 Mod.2",
+		"api_yomi": "ネヴァダ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5936": {
+		"api_id": 5936,
+		"api_name": "正月古鷹",
+		"api_yomi": "ふるたか",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5937": {
+		"api_id": 5937,
+		"api_name": "正月Hornet",
+		"api_yomi": "ホーネット",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5938": {
+		"api_id": 5938,
+		"api_name": "正月平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5939": {
+		"api_id": 5939,
+		"api_name": "正月平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5940": {
+		"api_id": 5940,
+		"api_name": "正月山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5941": {
+		"api_id": 5941,
+		"api_name": "正月Heywood L.E.",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5942": {
+		"api_id": 5942,
+		"api_name": "正月Heywood L.E.改",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

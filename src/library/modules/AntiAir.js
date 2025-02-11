@@ -136,7 +136,7 @@ AntiAir: anti-air related calculations
 	var isAARadar = predAllOf(isRadar, function(mst) {
 		return mst.api_tyku >= 2;
 	});
-	// kind 47, 48 needs AA stat >= 4
+	// kind 47~51 need AA stat >= 4
 	function isAARadarWithAtLeast(aa) {
 		return predAllOf(isRadar, function(mst) {
 			return mst.api_tyku >= aa;
@@ -163,7 +163,8 @@ AntiAir: anti-air related calculations
 	// To match AA gun with minimal tyku of specified value:
 	// kind 12 needs AA stat >= 3 (defined by KC Vita, only 7.7mm MG incapable for now)
 	// kind 33 needs AA stat >= 4
-	// kind 42/44 needs AA stat >= 6
+	// kind 51 needs AA stat >= 5
+	// kind 42&44 need AA stat >= 6
 	function isAAGunWithAtLeast(aa) {
 		return predAllOf(isMachineGun, function(mst) {
 			return mst.api_tyku >= aa;
@@ -198,6 +199,10 @@ AntiAir: anti-air related calculations
 
 	// 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai
 	var is10cmTwinHighAngleMountKaiAAFDKai = masterIdEq(533);
+	// 10cm Twin High-angle Gun Mount Kai
+	var is10cmTwinHighAngleMountKai = masterIdEq(553);
+	var is10cmTwinHighAngleMountKaiOrAAFDKai = predAnyOf(is10cmTwinHighAngleMountKai, is10cmTwinHighAngleMountKaiAAFDKai);
+	var isType94AAFD = masterIdEq(121);
 
 	// [276] 46cm Kai not counted
 	// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
@@ -372,7 +377,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.5 : 2*0.25) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -574,6 +579,7 @@ AntiAir: anti-air related calculations
 		harunaK2BIcon = 593,
 		harusameK2Icon = 975,
 		fujinamiK2Icon = 981,
+		shirayukiK2Icon = 986,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -626,6 +632,8 @@ AntiAir: anti-air related calculations
 	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
 	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
 	var isFujinamiKai2 = masterIdEq( fujinamiK2Icon );
+	var isFubukiKai2 = masterIdEq( 426 );
+	var isShirayukiKai2 = masterIdEq( shirayukiK2Icon );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -1206,7 +1214,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		42, 10, 1, 1.65, 65, 1750,
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
@@ -1217,7 +1225,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		43, 8, 1, 1.6, 58, 1910, // rate 60?
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
@@ -1227,7 +1235,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		44, 6, 1, 1.6, 55, 2120,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
@@ -1238,7 +1246,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		45, 5, 1, 1.55, 50, 2240,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
-		predAllOf(isYamatoClassKai2),
+		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
@@ -1276,16 +1284,53 @@ AntiAir: anti-air related calculations
 	);
 
 	// Fujinami K2
+	// Fubuki/Shirayuki K2 added since 2025-1-28
 	declareAACI(
 		49, 5, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isFujinamiKai2),
+		predAnyOf(isFujinamiKai2, isFubukiKai2, isShirayukiKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isBuiltinHighAngleMount, 2 ),
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
+
+	// Fubuki K2, Shirayuki K2, Akizuki-class Kai+
+	declareAACI(
+		50, 7, 1, 1.5, 60, 2244,
+		[shirayukiK2Icon, biHaMountIcon, biHaMountIcon, aaFdIcon, radarIcon],
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isAkizukiClassKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleMountKaiOrAAFDKai, 2 ),
+				hasSome( isType94AAFD ),
+				hasSome( isAARadarWithAtLeast(4) ))
+		)
+	);
+	// Fubuki K2, Shirayuki K2
+	declareAACI(
+		51, 5, 1, 1.35, 50, 2246,
+		[shirayukiK2Icon, biHaMountIcon, aaGunIcon, radarIcon],
+		predAnyOf(isFubukiKai2, isShirayukiKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleMountKaiOrAAFDKai ),
+				hasSome( isAAGunWithAtLeast(5) ),
+				hasSome( isAARadarWithAtLeast(4) ))
+		)
+	);
+	declareAACI(
+		52, 4, 1, 1.35, 50, 2247,
+		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
+		predAnyOf(isFubukiKai2, isShirayukiKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleMountKai, 2 ),
+				hasSome( isType94AAFD ))
+		)
+	);
+
 
 	// return a list of possible AACI APIs based on ship and her equipment
 	// - returns a list of **strings**, not numbers
