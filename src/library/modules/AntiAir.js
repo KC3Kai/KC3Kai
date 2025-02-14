@@ -377,7 +377,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 2*0.25) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -1321,7 +1321,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		52, 4, 1, 1.35, 50, 2247,
+		52, 4, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
 		predAnyOf(isFubukiKai2, isShirayukiKai2),
 		withEquipmentMsts(
