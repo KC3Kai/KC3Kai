@@ -9,7 +9,7 @@ from io import BytesIO
 
 URL_CHROMIUM = 'https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win_x64%2F1230501%2Fchrome-win.zip?generation=1701250567654085&alt=media'
 
-if os.path.exists('chrome-win'):
+if not os.path.exists('chrome-win'):
 	input('Requires ~450MB disk space. Press ENTER to continue, or close the window to quit.')
 	print('Downloading Chromium...')
 	with ZipFile(BytesIO(urlopen(URL_CHROMIUM).read())) as zr:
