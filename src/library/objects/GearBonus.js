@@ -12345,11 +12345,46 @@
 			// Arctic Camouflage
 			"268": {
 				count: 0,
-				byShip: {
-					// Tama K / K2, Kiso K / K2
-					ids: [146, 216, 217, 547],
-					single: { "souk": 2, "houk": 7 },
-				},
+				starsDist: [],
+				byShip: [
+					{
+						// All remodels of Tama, Kiso, Gangut
+						origins: [100, 101, 511],
+						single: { "souk": 2, "houk": 7 },
+					},
+					{
+						// Abukuma Kai+
+						ids: [290, 200],
+						single: { "souk": 2, "houk": 7 },
+					},
+					{
+						// Nachi, Tama, Kiso, Apukuma (typo bug?), Hibiki, Tashkent, Gotland, Gangut
+						minStars: 7,
+						origins: [63, 100, 101/*, 114*/, 35, 516, 574, 511],
+						multiple: { "tais": 1, "houk": 2, "houm": 1 },
+						synergy: {
+							flags: [ "arcticGearDeckPersonnel" ],
+							multiple: { "tais": 2, "houk": 4, "houm": 1 },
+						},
+					},
+					{
+						// For all ships can equip
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
 			},
 			// New Kanhon Design Anti-torpedo Bulge (Large)
 			"204": {

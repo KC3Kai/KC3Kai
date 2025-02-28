@@ -1823,7 +1823,7 @@ Previously known as "Reactor"
 		/* Consume ration item to maximize morale of deployed squadrons
 		-------------------------------------------------------*/
 		"api_req_air_corps/cond_recovery":function(params, response, headers){
-			if(typeof response.api_data.api_plane_info === "object"){
+			if(response.api_data && typeof response.api_data.api_plane_info === "object"){
 				$.each(PlayerManager.bases, function(i, base){
 					if(base.map == params.api_area_id && base.rid == params.api_base_id){
 						const distance = response.api_data.api_distance;
@@ -1850,7 +1850,8 @@ Previously known as "Reactor"
 		/* Update client's cond indicators based on morale recovered by server's timer
 		-------------------------------------------------------*/
 		"api_port/airCorpsCondRecoveryWithTimer":function(params, response, headers){
-			if(typeof response.api_data.api_plane_info !== "object") return;
+			// `api_data` may not exist sometimes for unknown reason
+			if(!response.api_data || typeof response.api_data.api_plane_info !== "object") return;
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.map == params.api_area_id && base.rid == params.api_base_id){
 					const distance = response.api_data.api_distance;

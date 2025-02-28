@@ -377,7 +377,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 2*0.25) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -1295,12 +1295,11 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
-
-	// Fubuki K2, Shirayuki K2, Akizuki-class Kai+
+	// Fubuki K2, Shirayuki K2, Fujinami K2, Akizuki-class Kai+
 	declareAACI(
 		50, 7, 1, 1.5, 60, 2244,
 		[shirayukiK2Icon, biHaMountIcon, biHaMountIcon, aaFdIcon, radarIcon],
-		predAnyOf(isFubukiKai2, isShirayukiKai2, isAkizukiClassKai),
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2, isAkizukiClassKai),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKaiOrAAFDKai, 2 ),
@@ -1308,11 +1307,11 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
-	// Fubuki K2, Shirayuki K2
+	// Fubuki K2, Shirayuki K2, Fujinami K2
 	declareAACI(
 		51, 5, 1, 1.35, 50, 2246,
 		[shirayukiK2Icon, biHaMountIcon, aaGunIcon, radarIcon],
-		predAnyOf(isFubukiKai2, isShirayukiKai2),
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleMountKaiOrAAFDKai ),
@@ -1321,9 +1320,9 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		52, 4, 1, 1.35, 50, 2247,
+		52, 4, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
-		predAnyOf(isFubukiKai2, isShirayukiKai2),
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKai, 2 ),
