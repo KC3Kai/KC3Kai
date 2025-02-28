@@ -446,6 +446,7 @@ Saves and loads significant data for future use
 		 *   * [699] Souya AGS can only equip [48] in small guns,
 		 *   * [179/180] Z1/Z3 Zwei can only equip [124] in large radars.
 		 *   * [927/733] Valiant can only equip [367] in seaplane bombers.
+		 *   * [Id list below] Many northern ships can only equip [268] in medium armor.
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
@@ -514,6 +515,9 @@ Saves and loads significant data for future use
 			excludeTypedGearsOnShips(13, [124], [179, 180]);
 			// Remove Valiant base & Kai from Seaplane Bomber type list except Swordfish (Seaplane Model)
 			excludeTypedGearsOnShips(11, [367], [927, 733]);
+			// Remove listed ships from Medium Armor except Arctic Camouflage (>+7 furthur equippable in exslot)
+			//   Gotland base, Tama base, Kiso base, Abukuma ex all, Tashkent all, Gangut all
+			excludeTypedGearsOnShips(27, [268], [200, 574, 100, 101, 114, 290, 516, 395, 511, 512, 513]);
 			return {
 				stypes: capableStypes,
 				includes: capableShips,
