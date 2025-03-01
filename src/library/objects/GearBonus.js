@@ -12358,9 +12358,9 @@
 						single: { "souk": 2, "houk": 7 },
 					},
 					{
-						// Nachi, Tama, Kiso, Apukuma (typo bug?), Hibiki, Tashkent, Gotland, Gangut
+						// Nachi, Tama, Kiso, Abukuma, Hibiki, Tashkent, Gotland, Gangut
 						minStars: 7,
-						origins: [63, 100, 101/*, 114*/, 35, 516, 574, 511],
+						origins: [63, 100, 101, 114, 35, 516, 574, 511],
 						multiple: { "tais": 1, "houk": 2, "houm": 1 },
 						synergy: {
 							flags: [ "arcticGearDeckPersonnel" ],
