@@ -89,3 +89,15 @@ jobs:
         asset_path: build/release.zip
         asset_name: kc3kai-${{ env.KC3_VERSION }}.zip
         asset_content_type: application/zip
+    - name: Package auto-updater asset
+      timeout-minutes: 10
+      run: grunt compress:updater
+    - name: Upload auto-updater asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/updater-win64.zip
+        asset_name: kc3kai-chromium-standalone-updater-win64.zip
+        asset_content_type: application/zip
