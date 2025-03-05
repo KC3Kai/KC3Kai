@@ -7,7 +7,8 @@ from urllib.request import urlopen,HTTPError
 from zipfile import ZipFile
 from io import BytesIO
 
-URL_CHROMIUM = 'https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win_x64%2F1230501%2Fchrome-win.zip?generation=1701250567654085&alt=media'
+#Chromium 123.0.6312.0
+URL_CHROMIUM = 'https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Win_x64%2F1262500%2Fchrome-win.zip?generation=1708396724485531&alt=media'
 
 if not os.path.exists('chrome-win'):
 	input('Requires ~450MB disk space. Press ENTER to continue, or close the window to quit.')
