@@ -516,8 +516,8 @@ Saves and loads significant data for future use
 			// Remove Valiant base & Kai from Seaplane Bomber type list except Swordfish (Seaplane Model)
 			excludeTypedGearsOnShips(11, [367], [927, 733]);
 			// Remove listed ships from Medium Armor except Arctic Camouflage (>+7 furthur equippable in exslot)
-			//   Gotland base, Tama base, Kiso base, Abukuma ex all, Tashkent all, Gangut all
-			excludeTypedGearsOnShips(27, [268], [200, 574, 100, 101, 114, 290, 516, 395, 511, 512, 513]);
+			//   Gotland base, Tama base, Kiso base, Abukuma ex all, Tashkent all, Gangut all, Ootomari all, Kirov all
+			excludeTypedGearsOnShips(27, [268], [200, 574, 100, 101, 114, 290, 516, 395, 511, 512, 513, 995, 1000, 1001, 1006]);
 			return {
 				stypes: capableStypes,
 				includes: capableShips,
