@@ -426,6 +426,16 @@ module.exports = function(grunt) {
 				cwd: 'build/release/',
 				src: [ '**/*' ],
 				dest: './'
+			},
+			updater: {
+				options: {
+					archive: 'build/updater-win64.zip',
+					pretty: true
+				},
+				expand: true,
+				cwd: 'misc/',
+				src: [ 'update-kc3kai.py', 'start-chrome-win.bat' ],
+				dest: './'
 			}
 		},
 		webstore_upload: {

@@ -212,6 +212,10 @@
                     return 10;
                 case 730: // Inagi Kai
                     return 13;
+                case 995: // Ootomari
+                    return 12;
+                case 1001: // Kirov
+                    return 26;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -232,6 +236,7 @@
         calcTorch: function(ship_id_from) {
             switch(ship_id_from) {
                 case 213: // Tenryuu
+                case 995: // Ootomari
                     return 8;
                 case 214: // Tatsuta
                     return 5;
@@ -253,7 +258,10 @@
                 case 323: // Harusame
                 case 900: // Yamashiomaru
                     return 15;
+                case 994: // Kaya
+                    return 17;
                 case 943: // Kumanomaru
+                case 1001: // Kirov
                     return 18;
                 case 945: // No.101 Transport Ship
                     return 11;
