@@ -6274,7 +6274,7 @@
 		"api_yomi": "あさひ",
 		"api_stype": 21,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5784": {
 		"api_id": 5784,
@@ -6402,7 +6402,7 @@
 		"api_yomi": "あさひ",
 		"api_stype": 21,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5800": {
 		"api_id": 5800,
@@ -7258,7 +7258,7 @@
 		"api_yomi": "あさひ",
 		"api_stype": 21,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5907": {
 		"api_id": 5907,
@@ -7350,11 +7350,11 @@
 	},
 	"5918": {
 		"api_id": 5918,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "秋の味覚春雨改二",
+		"api_yomi": "はるさめ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5919": {
 		"api_id": 5919,
@@ -7547,5 +7547,181 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5943": {
+		"api_id": 5943,
+		"api_name": "冬の私服Salmon",
+		"api_yomi": "サーモン",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5944": {
+		"api_id": 5944,
+		"api_name": "節分風雲改二",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5945": {
+		"api_id": 5945,
+		"api_name": "節分朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5946": {
+		"api_id": 5946,
+		"api_name": "節分朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5947": {
+		"api_id": 5947,
+		"api_name": "節分曙",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5948": {
+		"api_id": 5948,
+		"api_name": "節分曙改二",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5949": {
+		"api_id": 5949,
+		"api_name": "節分夕張",
+		"api_yomi": "ゆうばり",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5950": {
+		"api_id": 5950,
+		"api_name": "節分Gloire",
+		"api_yomi": "グロワール",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5951": {
+		"api_id": 5951,
+		"api_name": "節分Gloire改",
+		"api_yomi": "グロワール",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5952": {
+		"api_id": 5952,
+		"api_name": "Valentine大淀",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5953": {
+		"api_id": 5953,
+		"api_name": "Valentine大淀改",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5954": {
+		"api_id": 5954,
+		"api_name": "Valentine神威",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5955": {
+		"api_id": 5955,
+		"api_name": "Valentine神威改",
+		"api_yomi": "かもい",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5956": {
+		"api_id": 5956,
+		"api_name": "Valentine神威改母",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5957": {
+		"api_id": 5957,
+		"api_name": "バレンタインMogador",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5958": {
+		"api_id": 5958,
+		"api_name": "Valentine大井",
+		"api_yomi": "おおい",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5959": {
+		"api_id": 5959,
+		"api_name": "Valentine大井改二",
+		"api_yomi": "おおい",
+		"api_stype": 4,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5960": {
+		"api_id": 5960,
+		"api_name": "バレンタインHouston",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5961": {
+		"api_id": 5961,
+		"api_name": "バレンタインHouston改",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5962": {
+		"api_id": 5962,
+		"api_name": "バレンタインTuscaloosa",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5963": {
+		"api_id": 5963,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5964": {
+		"api_id": 5964,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

@@ -137,7 +137,7 @@
 				const remodelInfo = allRemodelInfo[key];
 				if(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
 					|| remodelInfo.gunmat || remodelInfo.airmat || remodelInfo.armmat
-					|| remodelInfo.boiler) {
+					|| remodelInfo.boiler || remodelInfo.techmat) {
 					const shipMaster = KC3Master.ship(remodelInfo.ship_id_from);
 					const shipData = {
 						id: remodelInfo.ship_id_from,

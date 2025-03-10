@@ -101,6 +101,8 @@
 				twin127SmallGunMountModelDK3Ids: [366],
 				ru130mmB13SmallGunMount: 0,
 				ru130mmB13SmallGunMountIds: [282],
+				ru10cm56GreenSecGunMount: 0,
+				ru10cm56GreenSecGunMountIds: [556],
 				skilledLookouts: 0,
 				skilledLookoutsIds: [129, 412],
 				searchlightSmall: 0,
@@ -6902,6 +6904,40 @@
 					],
 				},
 			},
+			// 18cm/57 Triple Main Gun Mount
+			"555": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Kirov
+						origins: [1001],
+						multiple: { "houg": 2, "tais": 1, "houm": 1 },
+						synergy: [
+							{
+								flags: [ "ru10cm56GreenSecGunMount" ],
+								multiple: { "houg": 1, "tyku": 3, "houk": 2, "houm": 1 },
+							},
+							{
+								flags: [ "arcticGearDeckPersonnel" ],
+								multiple: { "houg": 1, "tais": 1, "houk": 2 },
+							},
+						],
+					},
+					{
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 7,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
+			},
 			// 5inch Single High-angle Gun Mount Battery
 			"358": {
 				count: 0,
@@ -7139,6 +7175,15 @@
 					},
 					// Yuubari Class
 					"34" : "21"
+				},
+			},
+			// 10cm/56 Single High-angle Gun Mount (Concentrated Deployment)
+			"556": {
+				count: 0,
+				byShip: {
+					// Kirov, Gangut
+					origins: [1001, 511],
+					multiple: { "houg": 1, "tyku": 3, "houk": 1, "houm": 1 },
 				},
 			},
 			// SK Radar
@@ -7544,25 +7589,23 @@
 			// 533mm Triple Torpedo Mount
 			"283": {
 				count: 0,
-				byClass: {
-					// Tashkent Class
-					"81": {
-						multiple: { "houg": 1, "raig": 3, "souk": 1 },
+				byNation: {
+					"Russia": {
+						multiple: { "houg": 1, "raig": 6, "souk": 1 },
 					},
 				},
 				byShip: {
 					// Hibiki K2 (Bep)
 					ids: [147],
-					multiple: { "houg": 1, "raig": 3, "souk": 1 },
+					multiple: { "houg": 1, "raig": 6, "souk": 1 },
 				},
 			},
 			// 533mm Triple Torpedo Mount (Model 53-39)
 			"400": {
 				count: 0,
-				byClass: {
-					// Tashkent Class
-					"81": {
-						multiple: { "houg": 1, "raig": 5, "souk": 1, "houk": 2 },
+				byNation: {
+					"Russia": {
+						multiple: { "houg": 1, "raig": 8, "souk": 1, "houk": 2 },
 						synergy: {
 							flags: [ "ru130mmB13SmallGunMount" ],
 							single: { "houg": 2 },
@@ -7572,7 +7615,7 @@
 				byShip:{
 					// Hibiki K2 (Bep)
 					ids: [147],
-					multiple: { "houg": 1, "raig": 5, "souk": 1, "houk": 2 },
+					multiple: { "houg": 1, "raig": 8, "souk": 1, "houk": 2 },
 					synergy: {
 						flags: [ "ru130mmB13SmallGunMount" ],
 						single: { "houg": 2 },
@@ -9337,13 +9380,16 @@
 			// 130mm B-13 Twin Gun Mount
 			"282": {
 				count: 0,
-				byClass: {
-					// Tashkent Class
-					"81": {
+				byNation: {
+					"Russia": {
 						multiple: { "houg": 2, "souk": 1 },
 					},
+				},
+				byClass: {
 					// Yuubari Class
-					"34": "81",
+					"34": {
+						multiple: { "houg": 2, "souk": 1 },
+					},
 				},
 				byShip: {
 					// Hibiki K2 (Bep)
@@ -12345,11 +12391,46 @@
 			// Arctic Camouflage
 			"268": {
 				count: 0,
-				byShip: {
-					// Tama K / K2, Kiso K / K2
-					ids: [146, 216, 217, 547],
-					single: { "souk": 2, "houk": 7 },
-				},
+				starsDist: [],
+				byShip: [
+					{
+						// All remodels of Tama, Kiso, Gangut
+						origins: [100, 101, 511],
+						single: { "souk": 2, "houk": 7 },
+					},
+					{
+						// Abukuma Kai+
+						ids: [290, 200],
+						single: { "souk": 2, "houk": 7 },
+					},
+					{
+						// Nachi, Tama, Kiso, Abukuma, Hibiki, Tashkent, Gotland, Gangut, Kirov
+						minStars: 7,
+						origins: [63, 100, 101, 114, 35, 516, 574, 511, 1001],
+						multiple: { "tais": 1, "houk": 2, "houm": 1 },
+						synergy: {
+							flags: [ "arcticGearDeckPersonnel" ],
+							multiple: { "tais": 2, "houk": 4, "houm": 1 },
+						},
+					},
+					{
+						// For all ships can equip
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houk": 1 },
+					},
+				],
 			},
 			// New Kanhon Design Anti-torpedo Bulge (Large)
 			"204": {
@@ -13286,13 +13367,13 @@
 						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?
 						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+
 						//   All fast DD: not here, see next item
-						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?
+						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?, Kirov?
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
 						origins: [
 								83, 332, 549, 515, 444, 432, 433, 603, 931,
 								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877,
-								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965,
+								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965, 1001,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923,
 								74, 76, 116, 102, 103, 184, 925
 							],
@@ -13414,14 +13495,14 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						//   Slow DE: Inagi K2
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953,
 								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
-								75, 89, 92, 521, 522, 534, 544,
+								75, 89, 92, 521, 522, 534, 544, 995,
 								445, 451, 491,
 								922
 							],
@@ -13490,9 +13571,9 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, I-36?, I-41?, Scamp, Salmon?, Drum?
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, I-36?, I-41?, Scamp, Salmon?, Drum?, Wahoo?
 						origins: [182, 460, 161,
-							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 971, 972, 299, 891, 892
+							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 971, 972, 299, 891, 892, 984
 						],
 						speedCap: 5,
 						synergy: [
