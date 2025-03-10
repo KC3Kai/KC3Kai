@@ -16056,7 +16056,7 @@ var SHIPDATA_ = {
 	},
 	2270: {
 		name: 'Ra-Class Destroyer B (Initial Model) 1',
-		nameJP: '駆逐ラ級(初期型)',
+		nameJP: '駆逐ラ級β(初期型)',
 		image: 'S2270.jpg',
 		type: 'DD',
 		canOpTorp: true,
@@ -16077,7 +16077,7 @@ var SHIPDATA_ = {
 	},
 	2271: {
 		name: 'Ra-Class Destroyer B 2',
-		nameJP: '駆逐ラ級',
+		nameJP: '駆逐ラ級β',
 		image: 'S2270.jpg',
 		type: 'DD',
 		canOpTorp: true,
@@ -16098,7 +16098,7 @@ var SHIPDATA_ = {
 	},
 	2272: {
 		name: 'Ra-Class Destroyer B 3',
-		nameJP: '駆逐ラ級',
+		nameJP: '駆逐ラ級β',
 		image: 'S2270.jpg',
 		type: 'DD',
 		canOpTorp: true,
