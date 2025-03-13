@@ -1452,17 +1452,21 @@ KC3改 Ship Object
 	   clear: is the value already clear or not? it's a NaN like.
 	**
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.obtainTP = function() {
+	KC3Ship.prototype.obtainTP = function(forEnforcedLanding = false) {
 		var tp = KC3Meta.tpObtained();
 		if (this.isDummy()) { return tp; }
 		if (!(this.isAbsent() || this.isTaiha())) {
-			var tp1,tp2,tp3;
-			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
-			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
-			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
+			tp.add(KC3Meta.tpObtained({stype:this.master().api_stype}));
+			tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})}));
+			tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]}));
+			if (forEnforcedLanding) {
+				tp.add(KC3Meta.tpObtained({tanks:this.equipment().map(slot => slot.masterId)}));
+				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId]}));
+			}
 			// Special case of Kinu Kai 2: Daihatsu embedded :)
 			if (this.masterId == 487) {
 				tp.add(KC3Meta.tpObtained({slots:[68]}));
+				if (forEnforcedLanding) tp.add(KC3Meta.tpObtained({tanks:[68]}));
 			}
 		}
 		return tp;

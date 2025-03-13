@@ -1157,13 +1157,32 @@ Provides access to data on built-in JSON files
 				}
 				return getSlot;
 			}).call(this);
+			var getFlanding = (function(){
+				var tpBase = $.extend({}, tpData);
+				function getSlot(slot) {
+					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
+						slots  = tpmult.forEnforcedLanding || {},
+						data   = slots[slot],
+						tprs   = $.extend({}, tpBase);
+					switch(typeof data) {
+						case 'number':
+							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
+						break;
+					}
+					return tprs;
+				}
+				return getSlot;
+			}).call(this);
 
-			kwargs = $.extend({stype:0,slots:[]},kwargs);
+			kwargs = $.extend({stype:0,slots:[],tanks:[]},kwargs);
 			kwargs.stype = parseInt(kwargs.stype,10);
 			if(arguments.length == 1) {
 				tpData.add( getSType(kwargs.stype) );
 				kwargs.slots.forEach(function(slotID){
 					tpData.add( getSlot(slotID) );
+				});
+				kwargs.tanks.forEach(slotID => {
+					tpData.add( getFlanding(slotID) );
 				});
 			}
 			return tpData;

@@ -965,6 +965,20 @@ Contains summary information about a fleet and its ships
 			.value);
 	};
 
+	KC3Fleet.prototype.calcEnforcedLandingTp = function(...fleetArr) {
+		if(fleetArr.length > 1) {
+			return Math.floor(fleetArr.map(fleet => fleet.ship()
+				.map(ship => ship.obtainTP(true))
+				.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
+			).reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained()).value);
+		}
+		const fleet = fleetArr[0] || this;
+		return Math.floor(fleet.ship()
+			.map(ship => ship.obtainTP(true))
+			.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
+			.value);
+	};
+
 	KC3Fleet.prototype.calcRepairCost = function() {
 		const totalCost = {
 			fuel: 0,
