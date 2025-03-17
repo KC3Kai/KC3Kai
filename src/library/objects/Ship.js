@@ -1464,10 +1464,10 @@ KC3改 Ship Object
 				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId]}));
 			}
 			// Special case of Kinu Kai 2: Daihatsu embedded :)
-			// but should only 1 daihatsu counted for 2 Kinu K2 in both fleets of CF
+			// but only 1 Daihatsu counted for 2 Kinu K2 in both fleets of CF (not implemented)
+			// and no modifier applied to this Daihatsu for enforced landing operation
 			if (this.masterId == 487) {
-				tp.add(KC3Meta.tpObtained({slots:[68], tanklanding:forcedLanding}));
-				if (forcedLanding) tp.add(KC3Meta.tpObtained({tanks:[68]}));
+				tp.add(KC3Meta.tpObtained({slots:[68], tanklanding:false}));
 			}
 		}
 		return tp;
