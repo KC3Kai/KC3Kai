@@ -1125,14 +1125,15 @@ Provides access to data on built-in JSON files
 
 			var getSType = (function(){
 				var tpBase = $.extend({}, tpData);
-				function getSType(stype) {
+				function getSType(stype, flanding) {
 					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
 						stypes = tpmult.stype || {},
 						data   = stypes[stype],
+						mod    = flanding ? 0.65 : 1,
 						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
-							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
+							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data * mod : tprs.value;
 						break;
 						default:
 							tprs.clear = false;
@@ -1140,6 +1141,24 @@ Provides access to data on built-in JSON files
 					return tprs;
 				}
 				return getSType;
+			}).call(this);
+			var getSlotType = (function(){
+				var tpBase = $.extend({}, tpData);
+				function getSlot(slot, flanding) {
+					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
+						stypes = tpmult.geartype || {},
+						type2  = (KC3Master.slotitem(slot).api_type || [])[2],
+						data   = stypes[type2],
+						mod    = flanding ? 0.65 : 1,
+						tprs   = $.extend({}, tpBase);
+					switch(typeof data) {
+						case 'number':
+							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data * mod : tprs.value;
+						break;
+					}
+					return tprs;
+				}
+				return getSlot;
 			}).call(this);
 			var getSlot = (function(){
 				var tpBase = $.extend({}, tpData);
@@ -1157,32 +1176,16 @@ Provides access to data on built-in JSON files
 				}
 				return getSlot;
 			}).call(this);
-			var getFlanding = (function(){
-				var tpBase = $.extend({}, tpData);
-				function getSlot(slot) {
-					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
-						slots  = tpmult.forEnforcedLanding || {},
-						data   = slots[slot],
-						tprs   = $.extend({}, tpBase);
-					switch(typeof data) {
-						case 'number':
-							tprs.value = (tprs.clear = isFinite(data) && !isNaN(data)) ? data : tprs.value;
-						break;
-					}
-					return tprs;
-				}
-				return getSlot;
-			}).call(this);
 
-			kwargs = $.extend({stype:0,slots:[],tanks:[]},kwargs);
+			kwargs = $.extend({stype:0,slots:[],tanks:[],tanklanding:false},kwargs);
 			kwargs.stype = parseInt(kwargs.stype,10);
 			if(arguments.length == 1) {
-				tpData.add( getSType(kwargs.stype) );
+				tpData.add( getSType(kwargs.stype, kwargs.tanklanding) );
 				kwargs.slots.forEach(function(slotID){
-					tpData.add( getSlot(slotID) );
+					tpData.add( getSlotType(slotID, kwargs.tanklanding) );
 				});
 				kwargs.tanks.forEach(slotID => {
-					tpData.add( getFlanding(slotID) );
+					tpData.add( getSlot(slotID) );
 				});
 			}
 			return tpData;
