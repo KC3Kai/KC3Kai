@@ -1118,18 +1118,23 @@ Provides access to data on built-in JSON files
 			var tpData = {
 				value:0,
 				clear:true,
+				embedded:false,
+				tanklanding:false,
 				add:function(){return addTP.apply(null,[this].concat([].slice.call(arguments)));},
+				floor:function(){this.value = Math.floor(this.value); return this;},
+				isNaN:function(){return !this.clear || isNaN(this.value);},
 				valueOf:function(){return this.clear ? this.value : NaN;},
-				toString:function(){return [(this.clear ? this.value : '??'),"TP"].join(" ");}
+				valueOfRankA:function(){return this.clear ? Math.floor(this.value * 0.7) : NaN;},
+				toString:function(){return [(this.clear ? this.value : '??'),this.tanklanding ? "Tank TP" : "TP"].join(" ");}
 			};
 
 			var getSType = (function(){
 				var tpBase = $.extend({}, tpData);
-				function getSType(stype, flanding) {
+				function getSType(stype) {
 					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
 						stypes = tpmult.stype || {},
 						data   = stypes[stype],
-						mod    = flanding ? 0.65 : 1,
+						mod    = tpData.tanklanding ? 0.65 : 1,
 						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
@@ -1144,12 +1149,12 @@ Provides access to data on built-in JSON files
 			}).call(this);
 			var getSlotType = (function(){
 				var tpBase = $.extend({}, tpData);
-				function getSlot(slot, flanding) {
+				function getSlot(slot) {
 					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
 						stypes = tpmult.geartype || {},
 						type2  = (KC3Master.slotitem(slot).api_type || [])[2],
 						data   = stypes[type2],
-						mod    = flanding ? 0.65 : 1,
+						mod    = tpData.tanklanding ? 0.65 : 1,
 						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
@@ -1177,12 +1182,16 @@ Provides access to data on built-in JSON files
 				return getSlot;
 			}).call(this);
 
-			kwargs = $.extend({stype:0,slots:[],tanks:[],tanklanding:false},kwargs);
+			kwargs = $.extend({stype:0,slots:[],tanks:[],embedded:false,tanklanding:false},kwargs);
 			kwargs.stype = parseInt(kwargs.stype,10);
 			if(arguments.length == 1) {
-				tpData.add( getSType(kwargs.stype, kwargs.tanklanding) );
+				if(kwargs.embedded) {
+					tpData.add(getSlotType(68));
+				}
+				if(kwargs.tanklanding) tpData.tanklanding = true;
+				tpData.add(getSType(kwargs.stype));
 				kwargs.slots.forEach(function(slotID){
-					tpData.add( getSlotType(slotID, kwargs.tanklanding) );
+					tpData.add(getSlotType(slotID));
 				});
 				kwargs.tanks.forEach(slotID => {
 					tpData.add( getSlot(slotID) );

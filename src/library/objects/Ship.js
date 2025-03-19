@@ -1445,30 +1445,34 @@ KC3改 Ship Object
 		return dameconId === 42 ? 1 : dameconId === 43 ? 2 : 0;
 	};
 
-	/* CALCULATE TRANSPORT POINT
-	Retrieve TP object related to the current ship
-	** TP Object Detail --
-	   value: known value that were calculated for
-	   clear: is the value already clear or not? it's a NaN like.
-	**
-	--------------------------------------------------------------*/
-	KC3Ship.prototype.obtainTP = function(forcedLanding = false) {
-		var tp = KC3Meta.tpObtained();
+	/**
+	 * CALCULATE TRANSPORT POINT - Retrieve TP object related to the current ship.
+	 * @param tp - result TP Object to be accumulated for fleets
+	 * @param forcedLanding - yet another new type landing operation, since Spring 2025 E2
+	 * @return TP Object Detail -
+	 *  value: known value that were calculated for
+	 *  clear: is the value already clear or not? it's a NaN like.
+	 * @see KC3Meta.tpObtained
+	 * @see KC3Fleet.prototype.calcTpObtain
+	 */
+	KC3Ship.prototype.obtainTP = function(tp = KC3Meta.tpObtained(), forcedLanding = false) {
 		if (this.isDummy()) { return tp; }
 		if (!(this.isAbsent() || this.isTaiha())) {
+			const equipArr = this.equipment().map(slot => slot.masterId);
 			tp.add(KC3Meta.tpObtained({stype:this.master().api_stype, tanklanding:forcedLanding}));
-			tp.add(KC3Meta.tpObtained({slots:this.equipment().map(slot => slot.masterId), tanklanding:forcedLanding}));
+			tp.add(KC3Meta.tpObtained({slots:equipArr, tanklanding:forcedLanding}));
 			tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId], tanklanding:forcedLanding}));
 			if (forcedLanding) {
-				tp.add(KC3Meta.tpObtained({tanks:this.equipment().map(slot => slot.masterId)}));
+				tp.tanklanding = forcedLanding;
+				tp.add(KC3Meta.tpObtained({tanks:equipArr}));
 				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId]}));
 			}
-			// Special case of Kinu Kai 2: Daihatsu embedded :)
-			// but only 1 Daihatsu counted for 2 Kinu K2 in both fleets of CF (not implemented)
-			// and no modifier applied to this Daihatsu for enforced landing operation
-			if (this.masterId == 487) {
-				tp.add(KC3Meta.tpObtained({slots:[68], tanklanding:false}));
-			}
+			// Special case of Kinu Kai Ni: extra Daihatsu embedded,
+			// but only 1 Daihatsu counted for x2 Kinu K2 in both fleets of Combined Fleet,
+			// so TP added in fleet method, instead of here.
+			// No modifier applied to this Daihatsu for enforced landing operation.
+			// Unknown: this Daihatsu still counted if Kinu K2 taiha, sunk or escaped?
+			if (this.masterId == 487) { tp.embedded = true; }
 		}
 		return tp;
 	};

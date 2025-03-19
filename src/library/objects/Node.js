@@ -313,16 +313,15 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
-		// No way to indicate the new type landing node for E60-2-T for now
+		// No api data to indicate the new type landing node of E60-2-T for now
+		let forcedLanding = false;
 		if (KC3SortieManager.map_world == 60 && KC3SortieManager.map_num == 2) {
-			this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcEnforcedLandingTp(
-				...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
-			);
-		} else {
-			this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
-				...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
-			);
+			forcedLanding = true;
 		}
+		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
+			forcedLanding,
+			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
+		).valueOf();
 		console.log("TP amount when arrive TP point", this.amount);
 		// Update map gauge preview at once if the TP point is the endline (winter 2024 E1p1)
 		if (nodeData.api_next == 0 && nodeData.api_eventmap) {

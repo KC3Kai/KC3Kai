@@ -2147,7 +2147,8 @@
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0,
-					tpValueSum: MainFleet.calcTpObtain(MainFleet, EscortFleet)
+					tpValueSumTank: MainFleet.calcTpObtain(true, MainFleet, EscortFleet),
+					tpValueSum: MainFleet.calcTpObtain(false, MainFleet, EscortFleet)
 				};
 
 			// SINGLE
@@ -2228,7 +2229,8 @@
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
-					tpValueSum: CurrentFleet.calcTpObtain()
+					tpValueSumTank: CurrentFleet.calcTpObtain(true),
+					tpValueSum: CurrentFleet.calcTpObtain(false)
 				};
 
 			}
@@ -2259,10 +2261,14 @@
 					return tips;
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-transport").attr("title",
-				KC3Meta.term("PanelTransportPoints").format(
-					isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-					isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
-				)
+				[KC3Meta.term("PanelTransportPoints").format(
+					FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOfRankA(),
+					FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()
+				),
+				KC3Meta.term("PanelTransportPointsTank").format(
+					FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOfRankA(),
+					FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOf()
+				)].join("\n")
 			).lazyInitTooltip();
 			$(".summary-saury .summary_text").text( PlayerManager.consumables.mackerel );
 			$(".summary-sardines .summary_text").text( PlayerManager.consumables.sardine );
@@ -2277,8 +2283,8 @@
 				$(".summary-eqlos .summary_text").attr("titlealt", "");
 			}
 			$(".summary-transport .summary_text").text(KC3Meta.term("PanelTransportPointsAbbr"));
-			$(".summary-transport .summary_textS").text("S: " + (isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum));
-			$(".summary-transport .summary_textA").text("A: " + (isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum)));
+			$(".summary-transport .summary_textS").text("S: " + (FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()));
+			$(".summary-transport .summary_textA").text("A: " + (FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOfRankA()));
 
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );

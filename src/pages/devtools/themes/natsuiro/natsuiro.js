@@ -2053,7 +2053,8 @@
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0,
-					tpValueSum: MainFleet.calcTpObtain(MainFleet, EscortFleet)
+					tpValueSumTank: MainFleet.calcTpObtain(true, MainFleet, EscortFleet),
+					tpValueSum: MainFleet.calcTpObtain(false, MainFleet, EscortFleet)
 				};
 
 			// SINGLE
@@ -2134,7 +2135,8 @@
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
-					tpValueSum: CurrentFleet.calcTpObtain()
+					tpValueSumTank: CurrentFleet.calcTpObtain(true),
+					tpValueSum: CurrentFleet.calcTpObtain(false)
 				};
 
 			}
@@ -2401,10 +2403,14 @@
 							break;
 					}
 					$(".module.status .status_butai .status_text").attr("title",
-						KC3Meta.term("PanelTransportPoints").format(
-							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
-						)
+						[KC3Meta.term("PanelTransportPoints").format(
+							FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOfRankA(),
+							FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()
+						),
+						KC3Meta.term("PanelTransportPointsTank").format(
+							FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOfRankA(),
+							FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOf()
+						)].join("\n")
 					).lazyInitTooltip();
 					$(".module.status .status_butai").show();
 					$(".module.status .status_support").hide();
@@ -2412,10 +2418,16 @@
 					// STATUS: SUPPORT
 					$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
 					$(".module.status .status_support .status_text").attr("titlealt",
-						KC3Meta.term("PanelTransportPoints").format(
-							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
-						) + "\n" + KC3Calc.buildFleetExpedSupportText(MainFleet)
+						[KC3Meta.term("PanelTransportPoints").format(
+							FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOfRankA(),
+							FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()
+						),
+						KC3Meta.term("PanelTransportPointsTank").format(
+							FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOfRankA(),
+							FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOf()
+						),
+						KC3Calc.buildFleetExpedSupportText(MainFleet)
+						].join("\n")
 					).lazyInitTooltip();
 					$(".module.status .status_butai").hide();
 					$(".module.status .status_support").show();
