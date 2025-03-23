@@ -314,11 +314,11 @@ Used by SortieManager
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
 		const thisMap = KC3SortieManager.getCurrentMapData();
-		// No api data to indicate the new type landing node of E60-2-T and E60-5-J, flags have to be manually set in fud_quarterly.json
+		// No api data to indicate the new type landing node of spring 2025 E2-T and E5-J, flags have to be manually set in fud_quarterly.json
 		// see also `main.js#CellTaskLanding.prototype._getSlotCountForE602`
 		let forcedLanding = false;
 		const eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1);
-		if (eventMapGauge.type == "tp" && eventMapGauge.enforced) { forcedLanding = true; }
+		if (eventMapGauge.landing) { forcedLanding = !!eventMapGauge.enforced; }
 		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
 			forcedLanding,
 			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
