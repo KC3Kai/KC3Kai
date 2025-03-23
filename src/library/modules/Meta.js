@@ -116,6 +116,7 @@ Provides access to data on built-in JSON files
 			694,           // Kirishima K2C
 			951,           // Amatsukaze Kai Ni
 			955, 960,      // Kiyoshimo K2(D)
+			967,           // Mogador Kai
 			975,           // Harusame Kai Ni
 		],
 		specialAbyssalIdVoicePrefixes: {
@@ -126,7 +127,7 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊', '太平洋飛行場姫', '集積地棲姫V バカンスmode', '集積地棲姫V バカンスmode-壊'
+			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊', '太平洋飛行場姫', '集積地棲姫V バカンスmode', '集積地棲姫V バカンスmode-壊', '集積地棲姫改', '集積地棲姫改-壊', '飛行場棲姫'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
 		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
@@ -193,6 +194,7 @@ Provides access to data on built-in JSON files
 			324, // Hayashimo Kai -> K2
 			373, // Fujinami Kai -> K2
 			202, // Shirayuki Kai -> K2
+			203, // Hatsuyuki Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
@@ -229,7 +231,7 @@ Provides access to data on built-in JSON files
 				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
 				41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
 				71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
-				111, 115, 117, 119, 120, 123, 126, 127, 130
+				111, 115, 117, 119, 120, 123, 126, 127, 130, 132
 			],
 		},
 		// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
@@ -731,6 +733,8 @@ Provides access to data on built-in JSON files
 				"650": 54, // Souya AGB: 南極観測船
 				"900": 55, // Yamashiomaru: 特設護衛空母
 				"717": 55, // Yamashiomaru K: 特設護衛空母
+				"1003":55, // Shimanemaru: 特設護衛空母
+				"1008":55, // Sgimanemaru K: 特設護衛空母
 				"945": 56, // No.101: 戦車揚陸艦
 				"727": 56, // No.101 K: 戦車揚陸艦
 				"953": 57, // Asahi: 練習特務艦

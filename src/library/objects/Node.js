@@ -313,19 +313,20 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsTransport = function( nodeData ){
 		this.type = "transport";
-		// No api data to indicate the new type landing node of E60-2-T for now
+		const thisMap = KC3SortieManager.getCurrentMapData();
+		// No api data to indicate the new type landing node of E60-2-T and E60-5-J, flags have to be manually set in fud_quarterly.json
+		// see also `main.js#CellTaskLanding.prototype._getSlotCountForE602`
 		let forcedLanding = false;
-		if (KC3SortieManager.map_world == 60 && KC3SortieManager.map_num == 2) {
-			forcedLanding = true;
-		}
+		const eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1);
+		if (eventMapGauge.type == "tp" && eventMapGauge.enforced) { forcedLanding = true; }
 		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
 			forcedLanding,
 			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
 		).valueOf();
-		console.log("TP amount when arrive TP point", this.amount);
+		console.log("TP amount when arrive TP point", this.amount, forcedLanding);
 		// Update map gauge preview at once if the TP point is the endline (winter 2024 E1p1)
 		if (nodeData.api_next == 0 && nodeData.api_eventmap) {
-			const mapHp = KC3SortieManager.getCurrentMapData().curhp,
+			const mapHp = thisMap.curhp,
 				afterHp = Number(nodeData.api_eventmap.api_now_maphp) || 0,
 				hpDiff = mapHp - afterHp;
 			this.gaugeDamage = Math.min(hpDiff, this.amount);

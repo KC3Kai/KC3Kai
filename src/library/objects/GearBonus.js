@@ -1361,26 +1361,6 @@
 						multiple: { "houk": 1, "houm": 1 },
 					},
 					{
-						minStars: 7,
-						origins: [89, 116],
-						multiple: { "houg": 1 },
-					},
-					{
-						minStars: 8,
-						origins: [89, 116],
-						multiple: { "houk": 1 },
-					},
-					{
-						minStars: 9,
-						origins: [89, 116],
-						multiple: { "houm": 1 },
-					},
-					{
-						minStars: 10,
-						origins: [89, 116],
-						multiple: { "houg": 1 },
-					},
-					{
 						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
 						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
 						multiple: { "houg": 2, "houk": 2, "houm": 1 },
@@ -1416,26 +1396,6 @@
 						// Houshou, Zuihou
 						origins: [89, 116],
 						multiple: { "houk": 1, "houm": 1 },
-					},
-					{
-						minStars: 7,
-						origins: [89, 116],
-						multiple: { "houg": 1 },
-					},
-					{
-						minStars: 8,
-						origins: [89, 116],
-						multiple: { "houk": 1 },
-					},
-					{
-						minStars: 9,
-						origins: [89, 116],
-						multiple: { "houm": 1 },
-					},
-					{
-						minStars: 10,
-						origins: [89, 116],
-						multiple: { "houg": 1 },
 					},
 					{
 						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
@@ -1564,6 +1524,125 @@
 						// Ryuuhou K2E, K2
 						ids: [883, 888],
 						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+				],
+			},
+			// Type 0 Fighter Model 62 (Night Fighter-bomber)
+			"557": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou, Chitose, Chiyoda, Zuihou
+						origins: [75, 92, 102, 103, 116],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou, Ryuuhou Kai, Shouhou Kai
+						ids: [185, 318, 282],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, K2
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+					// from getSlotMyoujoPlanePersonalEffect
+					{
+						// Houshou, Zuihou
+						origins: [89, 116],
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, Houshou K2Sen
+						ids: [883, 899],
+						multiple: { "houg": 2, "houk": 3, "houm": 3 },
+					},
+					{
+						minStars: 1,
+						ids: [883, 899],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 2,
+						ids: [883, 899],
+						multiple: { "houm": 1 },
+					},
+					{
+						// Akagi/Kaga K2E, Zuihou K2+, Ryuuhou K2
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houg": 1, "houk": 1, "houm": 2 },
+					},
+					{
+						minStars: 2,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houm": 1 },
+					},
+				],
+			},
+			// Type 0 Fighter Model 62 (Skilled / Night Fighter-bomber)
+			"558": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou, Chitose, Chiyoda, Zuihou
+						origins: [75, 92, 102, 103, 116],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou, Ryuuhou Kai, Shouhou Kai
+						ids: [185, 318, 282],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, K2
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+					// from getSlotMyoujoPlanePersonalEffect
+					{
+						// Houshou, Zuihou
+						origins: [89, 116],
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						// Zuihou all remodels, Houshou Kai+, Ryuuhou Kai+
+						ids: [116, 117, 555, 560, 285, 894, 899, 318, 888, 883],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, Houshou K2Sen
+						ids: [883, 899],
+						multiple: { "houg": 2, "houk": 3, "houm": 3 },
+					},
+					{
+						minStars: 1,
+						ids: [883, 899],
+						multiple: { "houg": 2 },
+					},
+					{
+						minStars: 2,
+						ids: [883, 899],
+						multiple: { "houm": 1 },
+					},
+					{
+						// Akagi/Kaga K2E, Zuihou K2+, Ryuuhou K2
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houg": 1, "houk": 1, "houm": 2 },
+					},
+					{
+						minStars: 1,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 2,
+						ids: [599, 610, 555, 560, 888],
+						multiple: { "houm": 1 },
 					},
 				],
 			},
@@ -7469,7 +7548,7 @@
 					"5": "1",
 					// Hatsuharu Class K2: Hatsuharu K2, Hatsushimo K2
 					"10": "1",
-					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2, Isonami K2, Shirayuki K2
+					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2, Isonami K2, Shirayuki K2, Hatsuyuki K2
 					"12": "1",
 				},
 				byShip: [
@@ -8189,23 +8268,23 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Fubuki Kai Ni, Shirayuki Kai Ni
-						ids: [426, 986],
+						// Fubuki Kai Ni, Shirayuki Kai Ni, Hatsuyuki Kai Ni
+						ids: [426, 986, 987],
 						minStars: 7,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 9,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -8300,27 +8379,27 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Fubuki Kai Ni, Shirayuki Kai Ni
-						ids: [426, 986],
+						// Fubuki Kai Ni, Shirayuki Kai Ni, Hatsuyuki Kai Ni
+						ids: [426, 986, 987],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 4,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 6,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 8,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -8395,27 +8474,27 @@
 						multiple: { "houk": 1 },
 					},
 					{
-						// Fubuki Kai Ni, Shirayuki Kai Ni
-						ids: [426, 986],
+						// Fubuki Kai Ni, Shirayuki Kai Ni, Hatsuyuki Kai Ni
+						ids: [426, 986, 987],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 4,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 6,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 8,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [426, 986],
+						ids: [426, 986, 987],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -11110,8 +11189,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
-						ids: [986],
+						// Shirayuki K2, Hatsuyuki K2, from getSlot25mmMachinegunLightShipEffect
+						ids: [986, 987],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "twin10cmKaiHighAngleGunMount" ],
@@ -11183,8 +11262,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
-						ids: [986],
+						// Shirayuki K2, Hatsuyuki K2, from getSlot25mmMachinegunLightShipEffect
+						ids: [986, 987],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "twin10cmKaiHighAngleGunMount" ],
@@ -11254,8 +11333,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
-						ids: [986],
+						// Shirayuki K2, Hatsuyuki K2, from getSlot25mmMachinegunLightShipEffect
+						ids: [986, 987],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "twin10cmKaiHighAngleGunMount" ],
@@ -11457,8 +11536,8 @@
 						},
 					},
 					{
-						// Shirayuki Kai Ni, from getSlot25mmMachinegunLightShipEffect
-						ids: [986],
+						// Shirayuki K2, Hatsuyuki K2, from getSlot25mmMachinegunLightShipEffect
+						ids: [986, 987],
 						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 						synergy: {
 							flags: [ "twin10cmKaiHighAngleGunMount" ],
@@ -13368,13 +13447,13 @@
 						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+
 						//   All fast DD: not here, see next item
 						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?, Kirov?
-						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?
+						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?, Minneapolis?
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
 						origins: [
 								83, 332, 549, 515, 444, 432, 433, 603, 931,
 								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877,
 								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965, 1001,
-								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923,
+								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005,
 								74, 76, 116, 102, 103, 184, 925
 							],
 						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
@@ -13495,12 +13574,12 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari, Shimanemaru?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						//   Slow DE: Inagi K2
-						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953,
+						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953, 1003,
 								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544, 995,
 								445, 451, 491,
