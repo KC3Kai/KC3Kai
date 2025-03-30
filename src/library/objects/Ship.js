@@ -1455,15 +1455,15 @@ KC3改 Ship Object
 	 * @see KC3Meta.tpObtained
 	 * @see KC3Fleet.prototype.calcTpObtain
 	 */
-	KC3Ship.prototype.obtainTP = function(tp = KC3Meta.tpObtained(), forcedLanding = false) {
+	KC3Ship.prototype.obtainTP = function(tp = KC3Meta.tpObtained(), tankType = false) {
 		if (this.isDummy()) { return tp; }
 		if (!(this.isAbsent() || this.isTaiha())) {
 			const equipArr = this.equipment().map(slot => slot.masterId);
-			tp.add(KC3Meta.tpObtained({stype:this.master().api_stype, tanklanding:forcedLanding}));
-			tp.add(KC3Meta.tpObtained({slots:equipArr, tanklanding:forcedLanding}));
-			tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId], tanklanding:forcedLanding}));
-			if (forcedLanding) {
-				tp.tanklanding = forcedLanding;
+			tp.add(KC3Meta.tpObtained({stype:this.master().api_stype, tanktype:tankType}));
+			tp.add(KC3Meta.tpObtained({slots:equipArr, tanktype:tankType}));
+			tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId], tanktype:tankType}));
+			if (tankType) {
+				tp.tanktype = tankType;
 				tp.add(KC3Meta.tpObtained({tanks:equipArr}));
 				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId]}));
 			}

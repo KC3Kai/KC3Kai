@@ -1123,22 +1123,23 @@ Provides access to data on built-in JSON files
 				value:0,
 				clear:true,
 				embedded:false,
-				tanklanding:false,
+				tanktype:false,
 				add:function(){return addTP.apply(null,[this].concat([].slice.call(arguments)));},
 				floor:function(){this.value = Math.floor(this.value); return this;},
 				isNaN:function(){return !this.clear || isNaN(this.value);},
 				valueOf:function(){return this.clear ? this.value : NaN;},
 				valueOfRankA:function(){return this.clear ? Math.floor(this.value * 0.7) : NaN;},
-				toString:function(){return [(this.clear ? this.value : '??'),this.tanklanding ? "Tank TP" : "TP"].join(" ");}
+				toString:function(){return [(this.clear ? this.value : '??'),this.tanktype ? `Tank TP ${this.tanktype}` : "TP"].join(" ");}
 			};
 
 			var getSType = (function(){
 				var tpBase = $.extend({}, tpData);
 				function getSType(stype) {
 					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
+						tankf  = (tpmult.tankforce || {})[tpData.tanktype] || {},
 						stypes = tpmult.stype || {},
 						data   = stypes[stype],
-						mod    = tpData.tanklanding ? 0.65 : 1,
+						mod    = tpData.tanktype ? (tankf.modifier || 1) : 1,
 						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
@@ -1155,10 +1156,11 @@ Provides access to data on built-in JSON files
 				var tpBase = $.extend({}, tpData);
 				function getSlot(slot) {
 					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
+						tankf  = (tpmult.tankforce || {})[tpData.tanktype] || {},
 						stypes = tpmult.geartype || {},
 						type2  = (KC3Master.slotitem(slot).api_type || [])[2],
 						data   = stypes[type2],
-						mod    = tpData.tanklanding ? 0.65 : 1,
+						mod    = tpData.tanktype ? (tankf.modifier || 1) : 1,
 						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
 						case 'number':
@@ -1173,7 +1175,8 @@ Provides access to data on built-in JSON files
 				var tpBase = $.extend({}, tpData);
 				function getSlot(slot) {
 					var tpmult = KC3Meta._eventColle.tpMultipliers || {},
-						slots  = tpmult.slots || {},
+						tankf  = (tpmult.tankforce || {})[tpData.tanktype] || {},
+						slots  = tankf.slots || {},
 						data   = slots[slot],
 						tprs   = $.extend({}, tpBase);
 					switch(typeof data) {
@@ -1186,19 +1189,19 @@ Provides access to data on built-in JSON files
 				return getSlot;
 			}).call(this);
 
-			kwargs = $.extend({stype:0,slots:[],tanks:[],embedded:false,tanklanding:false},kwargs);
+			kwargs = $.extend({stype:0,slots:[],tanks:[],embedded:false,tanktype:false},kwargs);
 			kwargs.stype = parseInt(kwargs.stype,10);
 			if(arguments.length == 1) {
 				if(kwargs.embedded) {
 					tpData.add(getSlotType(68));
 				}
-				if(kwargs.tanklanding) tpData.tanklanding = true;
+				if(kwargs.tanktype) tpData.tanktype = kwargs.tanktype;
 				tpData.add(getSType(kwargs.stype));
 				kwargs.slots.forEach(function(slotID){
 					tpData.add(getSlotType(slotID));
 				});
 				kwargs.tanks.forEach(slotID => {
-					tpData.add( getSlot(slotID) );
+					tpData.add(getSlot(slotID));
 				});
 			}
 			return tpData;

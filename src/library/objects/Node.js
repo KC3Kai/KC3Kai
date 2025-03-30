@@ -316,14 +316,12 @@ Used by SortieManager
 		const thisMap = KC3SortieManager.getCurrentMapData();
 		// No api data to indicate the new type landing node of spring 2025 E2-T and E5-J, flags have to be manually set in fud_quarterly.json
 		// see also `main.js#CellTaskLanding.prototype._getSlotCountForE602`
-		let forcedLanding = false;
 		const eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1);
-		if (eventMapGauge.landing) { forcedLanding = !!eventMapGauge.enforced; }
 		this.amount = PlayerManager.fleets[KC3SortieManager.fleetSent-1].calcTpObtain(
-			forcedLanding,
+			eventMapGauge.tank,
 			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
 		).valueOf();
-		console.log("TP amount when arrive TP point", this.amount, forcedLanding);
+		console.log("TP amount when arrive TP point", this.amount, eventMapGauge.tank);
 		// Update map gauge preview at once if the TP point is the endline (winter 2024 E1p1)
 		if (nodeData.api_next == 0 && nodeData.api_eventmap) {
 			const mapHp = thisMap.curhp,

@@ -2147,7 +2147,7 @@
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0,
-					tpValueSumTank: MainFleet.calcTpObtain(true, MainFleet, EscortFleet),
+					tpValueTank: [MainFleet.calcTpObtain("type1", MainFleet, EscortFleet), MainFleet.calcTpObtain("type2", MainFleet, EscortFleet)],
 					tpValueSum: MainFleet.calcTpObtain(false, MainFleet, EscortFleet)
 				};
 
@@ -2229,7 +2229,7 @@
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
-					tpValueSumTank: CurrentFleet.calcTpObtain(true),
+					tpValueTank: [CurrentFleet.calcTpObtain("type1"), CurrentFleet.calcTpObtain("type2")],
 					tpValueSum: CurrentFleet.calcTpObtain(false)
 				};
 
@@ -2266,8 +2266,10 @@
 					FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()
 				),
 				KC3Meta.term("PanelTransportPointsTank").format(
-					FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOfRankA(),
-					FleetSummary.tpValueSumTank.isNaN() ? "?" : FleetSummary.tpValueSumTank.valueOf()
+					FleetSummary.tpValueTank[0].isNaN() ? "?" : FleetSummary.tpValueTank[0].valueOfRankA(),
+					FleetSummary.tpValueTank[0].isNaN() ? "?" : FleetSummary.tpValueTank[0].valueOf(),
+					FleetSummary.tpValueTank[1].isNaN() ? "?" : FleetSummary.tpValueTank[1].valueOfRankA(),
+					FleetSummary.tpValueTank[1].isNaN() ? "?" : FleetSummary.tpValueTank[1].valueOf()
 				)].join("\n")
 			).lazyInitTooltip();
 			$(".summary-saury .summary_text").text( PlayerManager.consumables.mackerel );

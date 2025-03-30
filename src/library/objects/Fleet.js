@@ -951,11 +951,11 @@ Contains summary information about a fleet and its ships
 		return totalCost;
 	};
 
-	KC3Fleet.prototype.calcTpObtain = function(forcedLanding, ...fleetArr) {
+	KC3Fleet.prototype.calcTpObtain = function(tankType, ...fleetArr) {
 		const result = KC3Meta.tpObtained();
 		const fleets = fleetArr.length < 1 ? [this] : fleetArr;
 		fleets.forEach(fleet => {
-			fleet.ship().forEach(ship => ship.obtainTP(result, forcedLanding));
+			fleet.ship().forEach(ship => ship.obtainTP(result, tankType));
 			result.floor();
 		});
 		if(result.embedded) result.add(KC3Meta.tpObtained({embedded:true}));
