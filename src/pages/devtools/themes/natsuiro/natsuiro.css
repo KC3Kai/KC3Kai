@@ -4530,7 +4530,7 @@ ABYSS FLEET
 }
 .wide_column .base_plane_name {
 	display:inline-block !important;
-	width:165px;
+	width:164px;
 	margin-right:2px;
 }
 .wide_column.long_name .base_plane_name {
@@ -4538,7 +4538,7 @@ ABYSS FLEET
 }
 
 .base_plane_count {
-	max-width:38px;
+	max-width:35px;
 	line-height:24px;
 	font-size:11px;
 	text-shadow:2px 2px 4px #333,
@@ -4562,7 +4562,7 @@ ABYSS FLEET
 	vertical-align:top;
 }
 .wide_column .base_plane_cond {
-	margin-right:3px;
+	margin-right:5px;
 }
 .long_name .name_toggle_group {
 	display:none;

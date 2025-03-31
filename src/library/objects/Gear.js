@@ -1108,10 +1108,11 @@ KC3改 Equipment Object
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
 		// Type 0 Fighter Model 64 (Skilled Fighter-bomber): https://twitter.com/noro_006/status/1600419310006317056
 		// [447] Type 0 Fighter Model 64 (Two-seat w/ KMX) (without '爆戦' in name) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
+		// [557,558] Night Fighter-bomber pending to test?
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.includes(this.master().api_type[2]) &&
-			[60, 154, 219, 447, 487].includes(this.masterId);
+			[60, 154, 219, 447, 487, 557, 558].includes(this.masterId);
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){

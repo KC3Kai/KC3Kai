@@ -132,13 +132,18 @@
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
                 case 206: // Isonami
+                case 203: // Hatsuyuki
                     return 28;
                 case 204: // Miyuki
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
                 case 900: // Yamashiomaru
                     return 10;
+                case 1003: // Shimanemaru
+                    return 18;
                 case 943: // Kumanomaru
+                case 994: // Kaya
+                case 992: // Sugi
                     return 22;
                 case 945: // No.101 Transport Ship
                     return 9;
@@ -245,8 +250,6 @@
                 case 652: // Kuma Kai Ni
                 case 657: // Kuma Kai Ni D
                     return 15;
-                case 202: // Shirayuki
-                    return 5;
                 case 312: // Hamakaze
                 case 317: // Urakaze
                 case 320: // Isokaze
@@ -258,7 +261,10 @@
                 case 323: // Harusame
                 case 900: // Yamashiomaru
                     return 15;
+                case 1003: // Shimanemaru
+                    return 22;
                 case 994: // Kaya
+                case 992: // Sugi
                     return 17;
                 case 943: // Kumanomaru
                 case 1001: // Kirov
@@ -293,6 +299,10 @@
                 case 955: // Kiyoshimo K2
                 case 960: // Kiyoshimo K2D
                     return 10;
+                case 203: // Hatsuyuki
+                    return 7;
+                case 202: // Shirayuki
+                    return 5;
                 case 692: // Fletcher Kai
                 case 628: // Fletcher Kai Mod.2
                 case 316: // Amatsukaze Kai
@@ -366,6 +376,7 @@
                 case 149: // to Kongou K2C 591
                 case 150: // to Hiei K2C 592
                 case 152: // to Kirishima K2C 694
+                case 203: // to Hatsuyuki K2 987
                     return 2;
                 case 206: // to Isonami K2 666
                 case 202: // to Shirayuki K2 986

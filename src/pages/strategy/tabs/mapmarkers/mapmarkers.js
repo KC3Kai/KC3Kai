@@ -287,7 +287,7 @@
 						if(!spot.line) continue;
 						const isAddingRoute = !!spot.route || spot.no >= this.mapInfoMeta.initSpotCnt;
 						isAddingRouteStart |= isAddingRoute;
-						const textureName = spot.line.img || (isAddingRoute && spot.route.img) || "route_" + edge;
+						const textureName = spot.line.img || (spot.route && spot.route.img) || "route_" + edge;
 						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${textureName}`);
 						const sprite = new this.pixi.Sprite(frame);
 						sprite.position.set(spot.x + spot.line.x, spot.y + spot.line.y);
