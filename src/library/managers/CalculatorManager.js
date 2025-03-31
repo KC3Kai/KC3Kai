@@ -732,6 +732,10 @@
      *             {shipId: null || {gearId: null || aaStat || 'lbas'}}
      *         ]
      * @see Fleet, Ship, Gear classes to compute fighter power of player fleet.
+     * Useful for estimating total plane slots of 1 new enemy, but to estimate slots distribution:
+     *  * For fighter slots, have to gather at least 1 record with stage1 enemy 0 loss
+     *  * For bomber slots, gather edge data via AA shotdown: https://x.com/Croshadow_/status/1167439355935215616
+     *  * For final distribution, gather edge data for AP/AS/AS+ to confirm enemy's fighter power
      */
     const enemyFighterPower = (enemyFleetShips, enemyShipSlots, enemySlotSizes, forLbas) => {
         var totalPower = false;

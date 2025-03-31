@@ -1445,25 +1445,34 @@ KC3改 Ship Object
 		return dameconId === 42 ? 1 : dameconId === 43 ? 2 : 0;
 	};
 
-	/* CALCULATE TRANSPORT POINT
-	Retrieve TP object related to the current ship
-	** TP Object Detail --
-	   value: known value that were calculated for
-	   clear: is the value already clear or not? it's a NaN like.
-	**
-	--------------------------------------------------------------*/
-	KC3Ship.prototype.obtainTP = function() {
-		var tp = KC3Meta.tpObtained();
+	/**
+	 * CALCULATE TRANSPORT POINT - Retrieve TP object related to the current ship.
+	 * @param tp - result TP Object to be accumulated for fleets
+	 * @param forcedLanding - yet another new type landing operation, since Spring 2025 E2
+	 * @return TP Object Detail -
+	 *  value: known value that were calculated for
+	 *  clear: is the value already clear or not? it's a NaN like.
+	 * @see KC3Meta.tpObtained
+	 * @see KC3Fleet.prototype.calcTpObtain
+	 */
+	KC3Ship.prototype.obtainTP = function(tp = KC3Meta.tpObtained(), tankType = false) {
 		if (this.isDummy()) { return tp; }
 		if (!(this.isAbsent() || this.isTaiha())) {
-			var tp1,tp2,tp3;
-			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
-			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
-			tp3 = String(tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId]})));
-			// Special case of Kinu Kai 2: Daihatsu embedded :)
-			if (this.masterId == 487) {
-				tp.add(KC3Meta.tpObtained({slots:[68]}));
+			const equipArr = this.equipment().map(slot => slot.masterId);
+			tp.add(KC3Meta.tpObtained({stype:this.master().api_stype, tanktype:tankType}));
+			tp.add(KC3Meta.tpObtained({slots:equipArr, tanktype:tankType}));
+			tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId], tanktype:tankType}));
+			if (tankType) {
+				tp.tanktype = tankType;
+				tp.add(KC3Meta.tpObtained({tanks:equipArr}));
+				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId]}));
 			}
+			// Special case of Kinu Kai Ni: extra Daihatsu embedded,
+			// but only 1 Daihatsu counted for x2 Kinu K2 in both fleets of Combined Fleet,
+			// so TP added in fleet method, instead of here.
+			// No modifier applied to this Daihatsu for enforced landing operation.
+			// Unknown: this Daihatsu still counted if Kinu K2 taiha, sunk or escaped?
+			if (this.masterId == 487) { tp.embedded = true; }
 		}
 		return tp;
 	};
@@ -4350,50 +4359,22 @@ KC3改 Ship Object
 				// 2 planes mod 1.2, proc rate might be higher and photo one might roll once more
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2));
-				// nf + photodb shadows ntb + photodb, also shadows other +ndb?
-				// 1 photodb + 1 ndb works. 2 photodb not work, 2 ndb unknown
+				// nf + photodb shadows ntb + photodb, also shadows other +ndb
+				// https://x.com/yukicacoon/status/1901176827692876016
+				// 1 photodb + 1 ndb works. x2 photodb not work, x2 ndb works
 				// https://x.com/CC_jabberwock/status/1877357816869978124
+				// 2 ndb: https://x.com/yukicacoon/status/1901115501159628909
 				if((nightFighterCnt >= 1 && photoDBomberCnt >= 1) // highest priority
 					|| (nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
 					|| (nightFighterCnt >= 1 && nightDBomberCnt >= 1)
 					|| (nightTBomberCnt >= 1 && nightDBomberCnt >= 1)
 					|| (photoDBomberCnt >= 1 && nightDBomberCnt >= 1)
+					|| (nightDBomberCnt >= 2)
 				) results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
 				// 3 planes mod 1.18, get rid of the mod 1.25 pattern
 				if(nightFighterCnt >= 1 && nightPlaneCnt >= 3
 					&& !(nightFighterCnt === 2 && nightTBomberCnt === 1 && nightPlaneCnt === 3))
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNPx3", 1.18));
-				// old codes for all known patterns of 3 planes
-				/*
-				if(nightFighterCnt >= 3)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", ncvciModifier));
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", ncvciModifier));
-				if(nightFighterCnt >= 2 && iwaiDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", ncvciModifier));
-				if(nightFighterCnt >= 2 && swordfishTBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", ncvciModifier));
-				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 2)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFFBIFBI", ncvciModifier));
-				if(nightFighterCnt >= 1 && swordfishTBomberCnt >= 2)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", ncvciModifier));
-				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", ncvciModifier));
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", ncvciModifier));
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", ncvciModifier));
-				if(nightFighterCnt >= 2 && photoDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNDB", ncvciModifier));
-				if(nightFighterCnt >= 1 && photoDBomberCnt >= 2)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBNDB", ncvciModifier));
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNDB", ncvciModifier));
-				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBFBI", ncvciModifier));
-				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBSF", ncvciModifier));
-				*/
 			} else {
 				// special Nelson Touch since 2018-09-15
 				if(this.canDoNelsonTouch()) {

@@ -951,18 +951,15 @@ Contains summary information about a fleet and its ships
 		return totalCost;
 	};
 
-	KC3Fleet.prototype.calcTpObtain = function(...fleetArr) {
-		if(fleetArr.length > 1) {
-			return Math.floor(fleetArr.map(fleet => fleet.ship()
-				.map(ship => ship.obtainTP())
-				.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
-			).reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained()).value);
-		}
-		const fleet = fleetArr[0] || this;
-		return Math.floor(fleet.ship()
-			.map(ship => ship.obtainTP())
-			.reduce((pre, cur) => pre.add(cur), KC3Meta.tpObtained())
-			.value);
+	KC3Fleet.prototype.calcTpObtain = function(tankType, ...fleetArr) {
+		const result = KC3Meta.tpObtained();
+		const fleets = fleetArr.length < 1 ? [this] : fleetArr;
+		fleets.forEach(fleet => {
+			fleet.ship().forEach(ship => ship.obtainTP(result, tankType));
+			result.floor();
+		});
+		if(result.embedded) result.add(KC3Meta.tpObtained({embedded:true}));
+		return result;
 	};
 
 	KC3Fleet.prototype.calcRepairCost = function() {

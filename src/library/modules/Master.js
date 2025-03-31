@@ -442,8 +442,8 @@ Saves and loads significant data for future use
 		 *   * [945/727] No.101 Transport Ship can only equip [229, 379, 382] in small guns,
 		 *     [727] No.101 Kai can only equip [66, 220] in secondary guns.
 		 *     the same hard-code method, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
-		 *   * [460/352/699] Hayasui/Souya AGS can only equip [524] in secondary guns,
-		 *   * [699] Souya AGS can only equip [48] in small guns,
+		 *   * [460/352/699/995/1000] Hayasui/Souya AGS/Ootomari can only equip [524] in secondary guns,
+		 *   * [699/995/1000] Souya AGS/Ootomari can only equip [48] in small guns,
 		 *   * [179/180] Z1/Z3 Zwei can only equip [124] in large radars.
 		 *   * [927/733] Valiant can only equip [367] in seaplane bombers.
 		 *   * [Id list below] Many northern ships can only equip [268] in medium armor.
@@ -507,10 +507,10 @@ Saves and loads significant data for future use
 			excludeTypedGearsOnShips(1, [229, 379, 382], [945, 727]);
 			// Remove No.101 Transport Ship Kai from Secondary Guns type list except 2 specific items
 			excludeTypedGearsOnShips(4, [66, 220], [727]);
-			// Remove Hayasui all & Souya AGS from Secondary Guns type list except 12cm Single HA + 25mm AAMG
-			excludeTypedGearsOnShips(4, [524], [460, 352, 699]);
-			// Remove Souya AGS from Smal Guns type list except 12cm Single HA
-			excludeTypedGearsOnShips(1, [48], [699]);
+			// Remove Hayasui all, Souya AGS, Ootomari all from Secondary Guns type list except 12cm Single HA + 25mm AAMG
+			excludeTypedGearsOnShips(4, [524], [460, 352, 699, 995, 1000]);
+			// Remove Souya AGS, Ootomari all from Smal Guns type list except 12cm Single HA
+			excludeTypedGearsOnShips(1, [48], [699, 995, 1000]);
 			// Remove Z1/Z3 Zwei from Large Radar type list except FuMO25 Radar
 			excludeTypedGearsOnShips(13, [124], [179, 180]);
 			// Remove Valiant base & Kai from Seaplane Bomber type list except Swordfish (Seaplane Model)
