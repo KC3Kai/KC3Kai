@@ -1463,9 +1463,9 @@ KC3改 Ship Object
 			tp.add(KC3Meta.tpObtained({slots:equipArr, tanktype:tankType}));
 			tp.add(KC3Meta.tpObtained({slots:[this.exItem().masterId], tanktype:tankType}));
 			if (tankType) {
+				tp.add(KC3Meta.tpObtained({tanks:equipArr, tanktype:tankType}));
+				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId], tanktype:tankType}));
 				tp.tanktype = tankType;
-				tp.add(KC3Meta.tpObtained({tanks:equipArr}));
-				tp.add(KC3Meta.tpObtained({tanks:[this.exItem().masterId]}));
 			}
 			// Special case of Kinu Kai Ni: extra Daihatsu embedded,
 			// but only 1 Daihatsu counted for x2 Kinu K2 in both fleets of Combined Fleet,
