@@ -2414,7 +2414,7 @@ KC3改 Ship Object
 			// and some damage samples suggest guardian ships counted from 3rd ship minimally,
 			// for combined escort fleet (<=3 ships in main), and friend fleet (<=3 ships)
 			// https://discord.com/channels/118339803660943369/178613137430282240/1286997214580703335
-			if(isCombined && fleetNum === 2) shipCnt = PlayerManager.fleet[0].countShips();
+			if(isCombined && fleetNum === 2) shipCnt = PlayerManager.fleets[0].countShips();
 			// Guardian ships counted from 3rd or 4th ship
 			const isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
 			if(warfareType === "Shelling" || isNightBattle) {
