@@ -410,6 +410,26 @@
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
+					} else if(e.ctrlKey) {
+						fetch('https://kcrdb.hitomaru.dev/replays', {
+							method: 'POST',
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ data: encodeData }),
+						}).then(async(res) => {
+							if (res.ok) {
+								let data = await res.json();
+								let url = 'https://kc3kai.github.io/kancolle-replay/?r=' + data.id;
+								self.copyToClipboard(url, () => {
+									alert(KC3Meta.term("BattleReplayToClipboard"));
+								});
+							}
+						});
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
 					}
 					
 					steg.encode(JSON.stringify(encodeData), withDataCover64, {
