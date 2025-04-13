@@ -731,10 +731,10 @@ Provides access to data on built-in JSON files
 				"699": 52, // Souya AGS: 特務艦
 				"645": 53, // Souya AGL: 灯台補給船
 				"650": 54, // Souya AGB: 南極観測船
-				"900": 55, // Yamashiomaru: 特設護衛空母
+				"900": 55, // Yamashiomaru: 特設護衛空母(icon designation is '陸護空')
 				"717": 55, // Yamashiomaru K: 特設護衛空母
-				"1003":55, // Shimanemaru: 特設護衛空母
-				"1008":55, // Sgimanemaru K: 特設護衛空母
+				"1003":60, // Shimanemaru: 特設護衛空母(been changed to '特護空' since 2025-03-24)
+				"1008":60, // Shimanemaru K: 特設護衛空母
 				"945": 56, // No.101: 戦車揚陸艦
 				"727": 56, // No.101 K: 戦車揚陸艦
 				"953": 57, // Asahi: 練習特務艦
