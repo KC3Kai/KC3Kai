@@ -554,20 +554,20 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship is Yamashiomaru with any Dive/Torpedo Bomber equipped
+	 * @return true if this ship is Yamashiomaru/Shimanemaru with any Dive/Torpedo Bomber equipped
 	 * @see main.js#PhaseHougeki.prototype._getNormalAttackType - the same place for Hayasui and ASW below
 	 */
 	 KC3Ship.prototype.isYamashiomaruWithBomber = function(){
 		if(this.isDummy()) return false;
-		return [900, 717].includes(this.masterId) && this.hasEquipmentType(2, [7, 8]);
+		return [900, 717, 1003, 1008].includes(this.masterId) && this.hasEquipmentType(2, [7, 8]);
 	};
 
 	/**
-	 * @return true if this ship is Yamashiomaru with ASW possible aircraft equipped
+	 * @return true if this ship is Yamashiomaru/Shimanemaru with ASW possible aircraft equipped
 	 */
 	 KC3Ship.prototype.isYamashiomaruWithAircraft = function(){
 		if(this.isDummy()) return false;
-		return [900, 717].includes(this.masterId) && this.hasEquipmentType(2, [7, 8, 25, 26]);
+		return [900, 717, 1003, 1008].includes(this.masterId) && this.hasEquipmentType(2, [7, 8, 25, 26]);
 	};
 
 	/* REPAIR TIME
@@ -3079,7 +3079,7 @@ KC3改 Ship Object
 		const isHayasuiKaiWithTorpedoBomber = this.isHayasuiKaiWithTorpedoBomber();
 		const isKagaK2Go = this.masterId === 646;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
-		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru
+		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru, Shimanemaru
 		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAircraft();
 		if(isAirAntiSubStype) {
 			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertain conditions (using CVL's currently),
@@ -4126,8 +4126,8 @@ KC3改 Ship Object
 			else
 				pushRocketAttackIfNecessary(["SingleAttack", 0]);
 		}
-		// is this ship Yamashiomaru
-		else if([900, 717].includes(this.masterId)) {
+		// is this ship Yamashiomaru/Shimanemaru
+		else if([900, 717, 1003, 1008].includes(this.masterId)) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
 				const aswEquip = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
@@ -4187,8 +4187,9 @@ KC3改 Ship Object
 		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
 		//             Langley and Kai fp > 0, but seems don't attack either
 		if(isThisCarrier && initYasen > 0 && ![707, 925, 930].includes(this.masterId)) return true;
+		const isShimanemaru = (this.masterId == 1008) && this.isYamashiomaruWithBomber();
 		// carriers without yasen power can do air attack under some conditions:
-		if(isThisCarrier) {
+		if(isThisCarrier || isShimanemaru) {
 			// only CVB can air attack on chuuha (taiha already excluded)
 			const isNotCvb = this.master().api_stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
@@ -4210,11 +4211,13 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canCarrierNightAirAttack = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(this.isCarrier()) {
+		const isShimanemaru = (this.masterId == 1008) && this.isYamashiomaruWithBomber();
+		if(this.isCarrier() || isShimanemaru) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
-			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId);
+			//   Shimanemaru Kai with bombers? api_n_mother_list unknown
+			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isShimanemaru;
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
@@ -4329,7 +4332,7 @@ KC3改 Ship Object
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
 		// simulate server-side night air attack flag: `api_n_mother_list`
-		const isCarrierNightAirAttack = isThisCarrier && this.canCarrierNightAirAttack();
+		const isCarrierNightAirAttack = this.canCarrierNightAirAttack();
 		if(trySpTypeFirst && !targetShipType.isSubmarine) {
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
@@ -5025,7 +5028,7 @@ KC3改 Ship Object
 		switch(type) {
 			case "accuracy":
 				// Default is no bonus for regular fleet
-				// Still unknown for combined fleet formation
+				// Still unknown for combined fleet formations, values from simulator
 				// Line Ahead, Diamond:
 				modifier = 1;
 				switch(playerFormationId) {
@@ -5046,6 +5049,21 @@ KC3改 Ship Object
 							(isAntisubWarfare ? 1.0 : 0.8);
 						break;
 					}
+					case 11: // 1st cruising formation: anti-sub
+					case 21:
+						modifier = 0.9;
+						break;
+					case 12: // 2nd cruising formation: forward
+					case 22:
+						break;
+					case 13: // 3rd cruising formation: diamond
+					case 23:
+						modifier = 0.8;
+						break;
+					case 14: // 4th cruising formation: battle
+					case 24:
+						modifier = 1.1;
+						break;
 				}
 				break;
 			case "evasion":
@@ -5066,6 +5084,21 @@ KC3改 Ship Object
 					case 6: // Vanguard, depends on fleet position and ship type
 						// but it seems be postcap bonus of hit rate instead of a multiplier, see #shellingEvasion
 						modifier = 1.0;
+						break;
+					case 11: // 1st cruising formation: anti-sub
+					case 21:
+						modifier = 1.1;
+						break;
+					case 12: // 2nd cruising formation: forward
+					case 22:
+						modifier = 1.2;
+						break;
+					case 13: // 3rd cruising formation: diamond
+					case 23:
+						modifier = 1.1;
+						break;
+					case 14: // 4th cruising formation: battle
+					case 24:
 						break;
 				}
 				break;
