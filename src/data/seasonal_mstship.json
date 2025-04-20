@@ -7710,18 +7710,26 @@
 	},
 	"5963": {
 		"api_id": 5963,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "桃節句Richelieu Deux",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5964": {
 		"api_id": 5964,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "桃節句第二十二号海防艦改",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5965": {
+		"api_id": 5965,
+		"api_name": "バレンタインLangley",
+		"api_yomi": "ラングレー",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

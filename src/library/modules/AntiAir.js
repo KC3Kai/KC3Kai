@@ -1307,11 +1307,10 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
-	// Fubuki K2, Shirayuki K2, Fujinami K2
 	declareAACI(
 		51, 5, 1, 1.35, 50, 2246,
 		[shirayukiK2Icon, biHaMountIcon, aaGunIcon, radarIcon],
-		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2),
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2, isAkizukiClassKai),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleMountKaiOrAAFDKai ),
@@ -1322,7 +1321,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		52, 4, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
-		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2),
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isFujinamiKai2, isAkizukiClassKai),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKai, 2 ),

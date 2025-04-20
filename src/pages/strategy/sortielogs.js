@@ -1573,6 +1573,41 @@
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
+					} else if(e.ctrlKey || e.metaKey) {
+						$.ajax({
+							url: "https://kcrdb.hitomaru.dev/replays",
+							async: true,
+							method: "POST",
+							headers: {
+								"Accept": "application/json",
+								"Content-Type": "application/json",
+								"Data-Origin": "KC3"
+							},
+							data: JSON.stringify({ data: sortieData }),
+							complete: (xhr) => {
+								self.exportingReplay = false;
+								$("body").css("opacity", "1");
+							},
+							success: (data) => {
+								console.debug("KCRDB returned data", data);
+								const url = "https://kc3kai.github.io/kancolle-replay/?r=" + data.id;
+								self.copyToClipboard(url, () => {
+									alert(KC3Meta.term("BattleReplayToClipboard"));
+								});
+							},
+							error: (xhr, statusText, httpError) => {
+								let msg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
+								const json = xhr.responseJSON;
+								if(json) {
+									msg = [[json.statusCode, json.error].join(" ")];
+									if(Array.isArray(json.message)) msg = msg.concat(json.message); else msg.push(json.message);
+									msg = msg.join("\n");
+								}
+								console.debug(["HTTP", statusText, xhr.status].join(" "), json);
+								alert(msg);
+							},
+						});
+						return true;
 					}
 					
 					console.debug("Downloading reply", sortieId, ", data:", sortieData);
