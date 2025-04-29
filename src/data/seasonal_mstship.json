@@ -7731,5 +7731,13 @@
 		"api_stype": 7,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5966": {
+		"api_id": 5966,
+		"api_name": "ホワイトドレスFletcher Mk.II",
+		"api_yomi": "フレッチャー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
