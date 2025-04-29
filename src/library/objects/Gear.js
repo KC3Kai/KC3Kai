@@ -593,6 +593,7 @@ KC3改 Equipment Object
 				case 543: // SBD VS-2 (Recon)
 					modifier = 0.2; break;
 				case 151: // Prototype Keiun (Recon)
+				case 178: // PBY-5A Catalina
 					modifier = 0.4; break;
 			}
 			return Math.qckInt("floor", modifier * stars, 1);
