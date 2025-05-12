@@ -4793,8 +4793,8 @@
 							if (dataActual <= dataReq + 1) {
 								jq.css("color", "lightpink");
 							}
-							// when actual stats value greater than req x2.17 for combat type2
-							if (expedCombatType > 1 && dataActual > dataReq * 2.17) {
+							// when actual stats value greater than req x 2.x for combat type2
+							if (expedCombatType > 1 && dataActual > dataReq * 2.2) {
 								jq.css("color", "goldenrod");
 							}
 						}

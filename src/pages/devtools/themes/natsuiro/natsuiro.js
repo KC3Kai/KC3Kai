@@ -4701,9 +4701,10 @@
 							if (dataActual <= dataReq + 1) {
 								jq.css("color", "lightpink");
 							}
-							// when actual stats value greater than req x2.17 for combat type2
+							// when actual stats value greater than req x2.17~2.2 for combat type2
 							// https://twitter.com/CC_jabberwock/status/1381532727170637827
-							if (expedCombatType > 1 && dataActual > dataReq * 2.17) {
+							// https://x.com/jo_swaf/status/1921922638311563672
+							if (expedCombatType > 1 && dataActual > dataReq * 2.2) {
 								jq.css("color", "goldenrod");
 							}
 						}

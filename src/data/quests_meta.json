@@ -2615,6 +2615,10 @@
 	"1028": {
 		"hash": -1536531250
 	},
+	"1029": {},
+	"1030": {
+		"hash": -1446429626
+	},
 	"1101": {
 		"unlock": [1102, 1103],
 		"rewardConsumables": [8, 0, 8, 4]
@@ -2762,6 +2766,9 @@
 		"hash": 1452115505
 	},
 	"1148": {},
+	"1149": {
+		"hash": 1986431867
+	},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],

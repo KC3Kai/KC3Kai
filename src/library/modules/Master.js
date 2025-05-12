@@ -440,7 +440,7 @@ Saves and loads significant data for future use
 		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem`
 		 *   * [166] AkitsuMaru Kai can equip aviation personnel [402] Arctic Gear & Deck Personnel only,
 		 *   * [945/727] No.101 Transport Ship can only equip [229, 379, 382] in small guns,
-		 *     [727] No.101 Kai can only equip [66, 220] in secondary guns.
+		 *     [727] No.101 Kai can only equip [66, 220, 524] in secondary guns.
 		 *     the same hard-code method, but logic bugged in 5.5.9.7, fixed in 5.5.9.9
 		 *   * [460/352/699/995/1000] Hayasui/Souya AGS/Ootomari can only equip [524] in secondary guns,
 		 *   * [699/995/1000] Souya AGS/Ootomari can only equip [48] in small guns,
@@ -505,8 +505,8 @@ Saves and loads significant data for future use
 			excludeTypedGearsOnShips(35, [402], [166]);
 			// Remove No.101 Transport Ship all remodels from Small Guns type list except 3 specific items
 			excludeTypedGearsOnShips(1, [229, 379, 382], [945, 727]);
-			// Remove No.101 Transport Ship Kai from Secondary Guns type list except 2 specific items
-			excludeTypedGearsOnShips(4, [66, 220], [727]);
+			// Remove No.101 Transport Ship Kai from Secondary Guns type list except 3 specific items
+			excludeTypedGearsOnShips(4, [66, 220, 524], [727]);
 			// Remove Hayasui all, Souya AGS, Ootomari all from Secondary Guns type list except 12cm Single HA + 25mm AAMG
 			excludeTypedGearsOnShips(4, [524], [460, 352, 699, 995, 1000]);
 			// Remove Souya AGS, Ootomari all from Smal Guns type list except 12cm Single HA
