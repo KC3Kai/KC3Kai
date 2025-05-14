@@ -2952,7 +2952,7 @@ KC3改 Ship Object
 				893, // Janus Kai
 				906, // Javelin Kai
 				681, 920, // Samuel B.Roberts Kai and Mk.II
-				562, 689, 596, 692, 628, 629, 726, // all remodels of Fletcher-class (except Heywood base)
+				562, 689, 596, 692, 628, 629, 726, 737, // all remodels of Fletcher-class (except Heywood/Leary base)
 				624, // Yuubari Kai Ni D
 			].includes(this.masterId);
 	};

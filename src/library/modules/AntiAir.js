@@ -1287,11 +1287,11 @@ AntiAir: anti-air related calculations
 
 	// Fujinami K2
 	// Fubuki/Shirayuki K2 added since 2025-1-28
-	// Hatsuyuki K2 added since 2025-5-12
+	// Hatsuyuki/Hamanami K2 added since 2025-5-12
 	declareAACI(
 		49, 5, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAnyOf(isFujinamiKai2, isFubukiKai2, isShirayukiKai2, isHatsuyukiKai2),
+		predAnyOf(isFujinamiKai2, isHamanamiKai2, isFubukiKai2, isShirayukiKai2, isHatsuyukiKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isBuiltinHighAngleMount, 2 ),
@@ -1325,7 +1325,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		52, 4, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
-		predAnyOf(isFubukiKai2, isShirayukiKai2, isHatsuyukiKai2, isFujinamiKai2, isHamanamiKai2, isAkizukiClassKai),
+		predAnyOf(isFubukiKai2, isShirayukiKai2, isHatsuyukiKai2, isFujinamiKai2, isHamanamiKai2, isAkizukiClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKai, 2 ),
