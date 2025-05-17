@@ -8243,27 +8243,27 @@
 						],
 					},
 					{
-						// Fujinami Kai Ni
-						ids: [981],
+						// Fujinami Kai Ni, Hamanami Kai Ni
+						ids: [981, 983],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						ids: [981],
+						ids: [981, 983],
 						minStars: 7,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [981],
+						ids: [981, 983],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [981],
+						ids: [981, 983],
 						minStars: 9,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [981],
+						ids: [981, 983],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -11092,8 +11092,8 @@
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
 					},
 					{
-						// Fujinami K2
-						ids: [981],
+						// Fujinami K2, Hamanami K2
+						ids: [981, 983],
 						single: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
@@ -11511,8 +11511,8 @@
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// Fujinami K2
-						ids: [981],
+						// Fujinami K2, Hamanami K2
+						ids: [981, 983],
 						single: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -11575,8 +11575,8 @@
 						},
 					},
 					{
-						// Fujinami Kai Ni
-						ids: [981],
+						// Fujinami Kai Ni, Hamanami Kai Ni
+						ids: [981, 983],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -13233,8 +13233,8 @@
 						},
 					},
 					{
-						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2
-						ids: [955, 960, 956, 981],
+						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2, Hamanami K2
+						ids: [955, 960, 956, 981, 983],
 						synergy: [
 							{
 								flags: [ "airRadar" ],

@@ -658,7 +658,8 @@ button, input, select, textarea {
 .ship_list .ship_item.even .ship_field.ship_lk.max {
 	background:#09a709;
 }
-.ship_list .ship_item .sup {
+.ship_list .ship_item sup,
+.ship_list .ship_item sub {
 	color:#999999;
 }
 .ship_list .ship_item .ship_equip span {
@@ -1029,8 +1030,12 @@ button, input, select, textarea {
 .tab_ships .ship_item.even .ship_field.ship_lk.max {
 	background:#09a709;
 }
-.tab_ships .ship_item .ship_lk .sub {
+.tab_ships .ship_item .sup,
+.tab_ships .ship_item .sub {
 	color:#999999;
+}
+.tab_ships .ship_item .nonmax {
+	color:#fe6;
 }
 .tab_ships .ship_item .ship_equip span {
 	color:#999999;

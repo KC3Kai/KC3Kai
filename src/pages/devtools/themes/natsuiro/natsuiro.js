@@ -1533,7 +1533,7 @@
 				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
 			};
 			// Total items of 1 page should be 3 x 3 for current page layout and styles
-			[52, 57, 64, 65, 70, 71, 75, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
+			[52, 57, 58, 64, 65, 70, 71, 73, 74, 75, 77, 78, 91, 92, 94, 95, 98, 99, 100, 101, 102].forEach(updateCountByUseitemId);
 			// Update amounts of combined counting
 			$(".count_eventMedals").text(PlayerManager.consumables.firstClassMedals || 0)
 				.parent().attr("title", "x{0} {1}\nx{2} {3}\nx{4} {5}".format(
@@ -1564,6 +1564,11 @@
 					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
 					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
 					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
+				));
+			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71),
+					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100)
 				));
 			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
@@ -4696,9 +4701,10 @@
 							if (dataActual <= dataReq + 1) {
 								jq.css("color", "lightpink");
 							}
-							// when actual stats value greater than req x2.17 for combat type2
+							// when actual stats value greater than req x2.17~2.2 for combat type2
 							// https://twitter.com/CC_jabberwock/status/1381532727170637827
-							if (expedCombatType > 1 && dataActual > dataReq * 2.17) {
+							// https://x.com/jo_swaf/status/1921922638311563672
+							if (expedCombatType > 1 && dataActual > dataReq * 2.2) {
 								jq.css("color", "goldenrod");
 							}
 						}

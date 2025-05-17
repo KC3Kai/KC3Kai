@@ -610,7 +610,8 @@ body {
 .ship_list .ship_item.even .ship_field.ship_lk.max {
 	background:#52d052;
 }
-.ship_list .ship_item .sup {
+.ship_list .ship_item sup,
+.ship_list .ship_item sub {
 	color:#aaa;
 }
 .ship_list .ship_item .ship_equip span {
@@ -806,8 +807,12 @@ body {
 .tab_ships .ship_item.even .ship_field.ship_lk.max {
 	background:#52d052;
 }
-.tab_ships .ship_item .ship_lk .sub {
+.tab_ships .ship_item .sup,
+.tab_ships .ship_item .sub {
 	color:#aaa;
+}
+.tab_ships .ship_item .nonmax {
+	color:#d65;
 }
 .tab_ships .ship_item .ship_equip span {
 	color:#777;

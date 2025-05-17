@@ -248,7 +248,8 @@ KC3改 Ship Object
 	// 2017-07-31: 155->165
 	// 2018-08-17: 165->175
 	// 2023-05-26: 175->180
-	KC3Ship.getMaxLevel = function(){ return 180; };
+	// 2025-05-12: 180->185
+	KC3Ship.getMaxLevel = function(){ return 185; };
 	// hard-coded at `Core.swf/vo.UserShipData.VHP` / `main.js#ShipModel.prototype.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
 	// hard-coded at `Core.swf/vo.UserShipData.VAS` / `main.js#ShipModel.prototype.VAS`
@@ -2951,7 +2952,7 @@ KC3改 Ship Object
 				893, // Janus Kai
 				906, // Javelin Kai
 				681, 920, // Samuel B.Roberts Kai and Mk.II
-				562, 689, 596, 692, 628, 629, 726, // all remodels of Fletcher-class (except Heywood base)
+				562, 689, 596, 692, 628, 629, 726, 737, // all remodels of Fletcher-class (except Heywood/Leary base)
 				624, // Yuubari Kai Ni D
 			].includes(this.masterId);
 	};

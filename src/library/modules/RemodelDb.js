@@ -106,6 +106,7 @@
                 case 228: // Yukikaze Kai
                     return 50;
                 case 651: // Tan Yang
+                case 680: // Hamanami Kai
                 case 681: // Samuel B.Roberts Kai
                 case 121: // Mikuma Kai
                     return 60;
@@ -155,6 +156,7 @@
                 case 562: // Johnston
                 case 596: // Fletcher
                 case 941: // Heywood
+                case 942: // Richard P.Leary
                     return 80;
                 case 692: // Fletcher Kai
                     return 120;
@@ -296,6 +298,7 @@
                 case 903: // Amagiri K2
                 case 908: // Amagiri K2D
                 case 941: // Heywood
+                case 942: // Richard P.Leary
                 case 955: // Kiyoshimo K2
                 case 960: // Kiyoshimo K2D
                     return 10;

@@ -1356,8 +1356,8 @@
 							$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
 							self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
 							$(".ship_hp", this).attr("data-equip-mode", self.equipMode);
-							$(".ship_fuel", this).text( thisShip.fuel[1] );
-							$(".ship_ammo", this).text( thisShip.ammo[1] );
+							self.consumableStat("fuel", this, thisShip.fuel);
+							self.consumableStat("ammo", this, thisShip.ammo);
 							$(".ship_cost", this).text( thisShip.cost );
 							$(".ship_sp", this).text( [thisShip.isp, thisShip.sp][self.equipMode] );
 							$(".ship_rn", this).text( [thisShip.irange, thisShip.range][self.equipMode] );
@@ -1479,6 +1479,24 @@
 					$(".stat_left", statElm).show()
 						.text("+" + (valuesTuple[0] - valuesTuple[1]));
 				}
+			}
+		},
+
+		/* Show cell contents of a cur/max stat
+		--------------------------------------------*/
+		consumableStat :function(statAbbr, rowElm, valuesTuple, showSub = false){
+			const statElm = $(".ship_" + statAbbr, rowElm);
+			$(".stat_value", statElm).text(valuesTuple[1]);
+			$(".sub", statElm).text("/" + valuesTuple[0]);
+			if(valuesTuple[0] != valuesTuple[1]){
+				statElm.addClass("nonmax");
+				if(!showSub){
+					$(".sub", statElm).hide();
+					statElm.attr("title", "{1} /{0}".format(valuesTuple));
+				}
+			} else {
+				$(".sub", statElm).hide();
+				statElm.removeAttr("title");
 			}
 		},
 
