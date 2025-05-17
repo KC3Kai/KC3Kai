@@ -1045,8 +1045,9 @@ AntiAir: anti-air related calculations
 	);
 
 	// Ooyodo Kai
+	// fixed 6->7 since 2025-05-12?
 	declareAACI(
-		27, 5, 1, 1.55, 55, 2230,
+		27, 6, 1, 1.55, 55, 2230,
 		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
 		predAllOf(isOoyodoKai),
 		withEquipmentMsts(
