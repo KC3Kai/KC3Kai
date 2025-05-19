@@ -612,6 +612,20 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}
 		},
 	};
+
+	
+	if (!!navigator && navigator.dameconVersion > 700) {
+		
+		/* WINDOW OPEN
+		Electron's window.open is broken within devtools context,
+		so we'll execute it via the KC3 service instead
+		------------------------------------------*/
+		window.KC3Service.windowOpen = function(request, sender, response) {
+			chrome.tabs.create({
+				url: request.url
+			});
+		}
+	}
 	
 	/* Runtime Message Listener
 	https://developer.chrome.com/extensions/messaging#simple
