@@ -30,6 +30,13 @@ if (!!navigator) {
 		return raw ? parseInt(raw[2], 10) : 0;
 	};
 	navigator.chromeVersion = navigator.parseChromeVersion();
+	navigator.parseDameconVersion = function() {
+		// Have to use appVersion as userAgentData isn't properly supported in Electron
+		var raw = navigator.appVersion.match(/Damecon\/(?<version>\d+(?:\.\d+)+)\b/);
+		// M.m.r -> MMmmrr // e.g. 1.8.4 -> 10804
+		return raw ? raw.groups.version.split('.').reverse().reduce((prev,cur,idx) => Math.pow(10,idx*2) * cur + prev, 0) : 0;
+	}
+	navigator.dameconVersion = navigator.parseDameconVersion();
 }
 
 /*
