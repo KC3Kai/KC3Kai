@@ -624,7 +624,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			chrome.tabs.create({
 				url: request.url
 			});
-		}
+		};
 	}
 	
 	/* Runtime Message Listener
