@@ -1045,7 +1045,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// Ooyodo Kai
-	// fixed 6->7 since 2025-05-12?
+	// fixed 6->7 since 2025-5-12?
 	declareAACI(
 		27, 6, 1, 1.55, 55, 2230,
 		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
@@ -1247,8 +1247,9 @@ AntiAir: anti-air related calculations
 				hasSome( isAAGunWithAtLeast(6) ))
 		)
 	);
+	// fixed 6->7 since 2025-5-12?
 	declareAACI(
-		45, 5, 1, 1.55, 50, 2240,
+		45, 6, 1, 1.55, 50, 2240,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
 		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1327,8 +1328,9 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
+	// fixed 5->6?
 	declareAACI(
-		52, 4, 1, 1.4, 50, 2247,
+		52, 5, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
 		predAnyOf(isFujinamiKai2AndTokugataKai2, isAkizukiClass),
 		withEquipmentMsts(

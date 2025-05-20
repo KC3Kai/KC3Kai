@@ -440,7 +440,20 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						tabId = tab.id;
 					});
 				}
-					
+			});
+		},
+		
+		/* OPEN ANY WINDOW
+		Electron's window.open is broken within devtools context,
+		so execute it via the background service instead
+		------------------------------------------*/
+		"windowOpen" :function(request, sender, response) {
+			const targetIdMap = {};
+			// todo if targeted window opened already, update it instead of create
+			chrome.tabs.create({
+				url: request.url
+			}, function(tab){
+				if(request.target) targetIdMap[request.target] = tab.id;
 			});
 		},
 		
@@ -613,20 +626,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		},
 	};
 
-	
-	if (!!navigator && navigator.dameconVersion > 700) {
-		
-		/* WINDOW OPEN
-		Electron's window.open is broken within devtools context,
-		so we'll execute it via the KC3 service instead
-		------------------------------------------*/
-		window.KC3Service.windowOpen = function(request, sender, response) {
-			chrome.tabs.create({
-				url: request.url
-			});
-		};
-	}
-	
 	/* Runtime Message Listener
 	https://developer.chrome.com/extensions/messaging#simple
 	This script will wait for messages from other parts of the extension

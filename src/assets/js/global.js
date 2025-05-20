@@ -34,7 +34,9 @@ if (!!navigator) {
 		// Have to use appVersion as userAgentData isn't properly supported in Electron
 		var raw = navigator.appVersion.match(/Damecon\/(\d+(\.\d+)+)/);
 		// M.m.r -> MMmmrr // e.g. 1.8.4 -> 10804
-		return raw ? raw[1].split('.').reverse().reduce((prev,cur,idx) => Math.pow(10,idx*2) * cur + prev, 0) : 0;
+		return raw ? raw[1].split('.').reverse().reduce(function(prev, cur, idx) {
+			return Math.pow(10, idx * 2) * cur + prev;
+		}, 0) : 0;
 	};
 	navigator.dameconVersion = navigator.parseDameconVersion();
 }
