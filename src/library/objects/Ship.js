@@ -4188,9 +4188,12 @@ KC3改 Ship Object
 		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
 		//             Langley and Kai fp > 0, but seems don't attack either
 		if(isThisCarrier && initYasen > 0 && ![707, 925, 930].includes(this.masterId)) return true;
-		const isShimanemaru = (this.masterId == 1008) && this.isYamashiomaruWithBomber();
+		// Shimanemaru Kai gets special behaviors: moves like a night carrier when any night plane equipped,
+		// but falls back to shelling fires when she is chuuha.
+		const isHealthyShimanemaruKaiWithNightPlane = (this.masterId == 1008)
+			&& this.canCarrierNightAirAttack() && !this.isStriped();
 		// carriers without yasen power can do air attack under some conditions:
-		if(isThisCarrier || isShimanemaru) {
+		if(isThisCarrier || isHealthyShimanemaruKaiWithNightPlane) {
 			// only CVB can air attack on chuuha (taiha already excluded)
 			const isNotCvb = this.master().api_stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
@@ -4212,13 +4215,14 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canCarrierNightAirAttack = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		const isShimanemaru = (this.masterId == 1008) && this.isYamashiomaruWithBomber();
-		if(this.isCarrier() || isShimanemaru) {
+		const isShimanemaruKai = this.masterId == 1008;
+		if(this.isCarrier() || isShimanemaruKai) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
-			//   Shimanemaru Kai with bombers? api_n_mother_list unknown
-			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isShimanemaru;
+			//   Shimanemaru Kai with any night fighter, api_n_mother_list will be 1
+			//     base remodel untested, night bombers untested, empty slot untested
+			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isShimanemaruKai;
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
