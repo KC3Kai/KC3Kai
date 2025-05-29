@@ -4190,10 +4190,9 @@ KC3改 Ship Object
 		if(isThisCarrier && initYasen > 0 && ![707, 925, 930].includes(this.masterId)) return true;
 		// Shimanemaru Kai gets special behaviors: moves like a night carrier when any night plane equipped,
 		// but falls back to shelling fires when she is chuuha.
-		const isHealthyShimanemaruKaiWithNightPlane = (this.masterId == 1008)
-			&& this.canCarrierNightAirAttack() && !this.isStriped();
+		const isShimanemaruKaiWithNightPlane = (this.masterId == 1008) && this.canCarrierNightAirAttack();
 		// carriers without yasen power can do air attack under some conditions:
-		if(isThisCarrier || isHealthyShimanemaruKaiWithNightPlane) {
+		if(isThisCarrier || isShimanemaruKaiWithNightPlane) {
 			// only CVB can air attack on chuuha (taiha already excluded)
 			const isNotCvb = this.master().api_stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
@@ -4215,14 +4214,14 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canCarrierNightAirAttack = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		const isShimanemaruKai = this.masterId == 1008;
-		if(this.isCarrier() || isShimanemaruKai) {
+		const isHealthyShimanemaruKai = this.masterId == 1008 && !this.isStriped();
+		if(this.isCarrier() || isHealthyShimanemaruKai) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
 			//   Shimanemaru Kai with any night fighter, api_n_mother_list will be 1
 			//     base remodel untested, night bombers untested, empty slot untested
-			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isShimanemaruKai;
+			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isHealthyShimanemaruKai;
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
