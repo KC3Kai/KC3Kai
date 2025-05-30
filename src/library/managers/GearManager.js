@@ -20,7 +20,7 @@ Saves and loads list to and from localStorage
 		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56,57,58],
 		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58],
 		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
-		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474],
+		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474,541,544,550,551,552],
 		// Modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
 		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,208,224,237,319,320,322,323,343,374,388,404,405,406,433,444,453,454,466,474,475,476,479,481,484,487,490,491,504,545,557,558],
