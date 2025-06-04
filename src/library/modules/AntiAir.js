@@ -129,6 +129,7 @@ AntiAir: anti-air related calculations
 	function isRadar(mst) {
 		return (categoryEq(12)(mst) || categoryEq(13)(mst));
 	}
+	var isLargeRadar = categoryEq(13);
 
 	// AA Radar
 	// Surface Radar are excluded by checking whether
@@ -274,8 +275,10 @@ AntiAir: anti-air related calculations
 			return 6;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 4;
+		// no proof/test data about large radar diff, ref:
+		// https://github.com/noro6/kc-web/blob/main/src/classes/item/item.ts#L879
 		if (isAARadar(mst))
-			return 3;
+			return isLargeRadar(mst) ? 3.6 : 3;
 		// no default value for unverified equipment
 		return 0;
 	}
@@ -376,8 +379,10 @@ AntiAir: anti-air related calculations
 		// total value added to adjusted aa of both ship and fleet?
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
+		// current used values: (old f x0.5 / s x0.75)
+		// https://github.com/noro6/kc-web/blob/main/src/classes/aerialCombat/shootDownInfo.ts#L146
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.6 : 2*0.4) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);

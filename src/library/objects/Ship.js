@@ -2942,9 +2942,16 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship able to do OASW unconditionally.
+	 * @return true if this ship able to do OASW unconditionally regardless of equipment.
 	 */
 	KC3Ship.prototype.isOaswShip = function() {
+		// Possible game server backend uses condition: initAsw >= 50,
+		//  for sonar types only, CAV/BBV/AV/CV(L)/LHA types still need asw aircraft.
+		// However, `api_tais` attribute is NOT exprtoed in master data to client, except some CVL: (KC3Master.find_ships(s => ((s.api_tais||[])[0] > 0)).map(o => o.api_name)), so impossible to use:
+		/*
+		const initAsw = (this.master().api_tais || [])[0];
+		return initAsw >= 50 && !this.isAswAirAttack();
+		*/
 		return [
 				141, // Isuzu Kai Ni
 				478, // Tatsuta Kai Ni
@@ -2988,10 +2995,10 @@ KC3改 Ship Object
 			// May apply to CVL, but only CVE can reach 65 for now (Zuihou K2 modded asw +9 +13x4 = 61)
 			: isEscortLightCarrier ? 65
 			// Kaga Kai Ni Go asw starts from 82 on Lv84, let her pass just like Hyuuga K2
-			: isKagaK2Go ? 80
+			: isKagaK2Go ? 50
 			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
 			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter, without bonus and mod)
-			: isHyuugaKaiNi ? 90
+			: isHyuugaKaiNi ? 50
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
