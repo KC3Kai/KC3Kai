@@ -10,6 +10,19 @@
 (function () {
 	"use strict";
 
+	var intervalChecker;
+	function checkAgain(){
+		console.log("Checking game canvas...");
+		const gameCanvas = document.querySelector("canvas");
+		if (gameCanvas) {
+			// Set width for canvas so that zoom will affect both its size and pointer zone
+			gameCanvas.style.width = "100%";
+			clearInterval(intervalChecker);
+		}
+	}
+	// Start timer to check if canvas element ready every half-second
+	intervalChecker = setInterval(checkAgain, 500);
+
 	(new RMsg("service", "getConfig", {
 		id: ["api_gameScale", "dmm_customize", "fix_game_code"],
 		attr: ["dmmplay", "extract_api"]
@@ -23,9 +36,7 @@
 				//console.debug("Setting zoom to scale", response.value[0] + "%");
 				const scale = (response.value[0] || 100) / 100;
 				// There should be one jQuery $ injected into this context
-				const gameCanvas = $("canvas"), editArea = $("#r_editarea");
-				// Set width for canvas so that zoom will affect both its size and pointer zone
-				gameCanvas.css("width", "100%");
+				const editArea = $("#r_editarea");
 				// Scale edit box to right position too, no longer needed for chrome 128~
 				if (!Promise.try) editArea.css("zoom", scale);
 				$("body").css("overflow", "hidden");

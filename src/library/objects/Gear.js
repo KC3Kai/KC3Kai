@@ -1086,11 +1086,11 @@ KC3改 Equipment Object
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
 		// Carrier-based or Land-base bombers for now;
 		// Torpedo bombers current implemented:
-		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D/3W+3S, Ryuusei Kai(CD1/Sk), PT97Kai (Skilled)
+		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D/3W+3S, Ryuusei Kai(CD1/Sk), PT97Kai (Skilled), Tenzan 12A K/2 (Sk/6)/(Tamura), Barracuda Mk.3, Ju 87 D-4 (Fliegerass)
 		// LB attackers current implemented:
 		//   Toukai variants
 		// Dive bombers still NOT capable for OASW, unknown for LBAS:
-		//   Ju87C Kai Ni (w/ KMX) variants
+		//   Ju 87C Kai Ni (w/ KMX) variants
 		// AS-PBY, Autogyro/Helicopter capable for OASW:
 		//   https://twitter.com/FlatIsNice/status/966332515681296384
 		// Seaplane Recon capable for LBAS ASW attack:

@@ -2942,9 +2942,16 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship able to do OASW unconditionally.
+	 * @return true if this ship able to do OASW unconditionally regardless of equipment.
 	 */
 	KC3Ship.prototype.isOaswShip = function() {
+		// Possible game server backend uses condition: initAsw >= 50,
+		//  for sonar types only, CAV/BBV/AV/CV(L)/LHA types still need asw aircraft.
+		// However, `api_tais` attribute is NOT exprtoed in master data to client, except some CVL: (KC3Master.find_ships(s => ((s.api_tais||[])[0] > 0)).map(o => o.api_name)), so impossible to use:
+		/*
+		const initAsw = (this.master().api_tais || [])[0];
+		return initAsw >= 50 && !this.isAswAirAttack();
+		*/
 		return [
 				141, // Isuzu Kai Ni
 				478, // Tatsuta Kai Ni
@@ -2988,10 +2995,10 @@ KC3改 Ship Object
 			// May apply to CVL, but only CVE can reach 65 for now (Zuihou K2 modded asw +9 +13x4 = 61)
 			: isEscortLightCarrier ? 65
 			// Kaga Kai Ni Go asw starts from 82 on Lv84, let her pass just like Hyuuga K2
-			: isKagaK2Go ? 80
+			: isKagaK2Go ? 50
 			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
 			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter, without bonus and mod)
-			: isHyuugaKaiNi ? 90
+			: isHyuugaKaiNi ? 50
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
@@ -4188,9 +4195,11 @@ KC3改 Ship Object
 		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
 		//             Langley and Kai fp > 0, but seems don't attack either
 		if(isThisCarrier && initYasen > 0 && ![707, 925, 930].includes(this.masterId)) return true;
-		const isShimanemaru = (this.masterId == 1008) && this.isYamashiomaruWithBomber();
+		// Shimanemaru Kai gets special behaviors: moves like a night carrier when any night plane equipped,
+		// but falls back to shelling fires when she is chuuha.
+		const isShimanemaruKaiWithNightPlane = (this.masterId == 1008) && this.canCarrierNightAirAttack();
 		// carriers without yasen power can do air attack under some conditions:
-		if(isThisCarrier || isShimanemaru) {
+		if(isThisCarrier || isShimanemaruKaiWithNightPlane) {
 			// only CVB can air attack on chuuha (taiha already excluded)
 			const isNotCvb = this.master().api_stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
@@ -4212,13 +4221,14 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canCarrierNightAirAttack = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		const isShimanemaru = (this.masterId == 1008) && this.isYamashiomaruWithBomber();
-		if(this.isCarrier() || isShimanemaru) {
+		const isHealthyShimanemaruKai = this.masterId == 1008 && !this.isStriped();
+		if(this.isCarrier() || isHealthyShimanemaruKai) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
-			//   Shimanemaru Kai with bombers? api_n_mother_list unknown
-			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isShimanemaru;
+			//   Shimanemaru Kai with any night fighter, api_n_mother_list will be 1
+			//     base remodel untested, night bombers untested, empty slot untested
+			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isHealthyShimanemaruKai;
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);

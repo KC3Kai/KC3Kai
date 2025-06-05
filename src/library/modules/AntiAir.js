@@ -129,6 +129,7 @@ AntiAir: anti-air related calculations
 	function isRadar(mst) {
 		return (categoryEq(12)(mst) || categoryEq(13)(mst));
 	}
+	var isLargeRadar = categoryEq(13);
 
 	// AA Radar
 	// Surface Radar are excluded by checking whether
@@ -274,8 +275,10 @@ AntiAir: anti-air related calculations
 			return 6;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 4;
+		// no proof/test data about large radar diff, ref:
+		// https://github.com/noro6/kc-web/blob/main/src/classes/item/item.ts#L879
 		if (isAARadar(mst))
-			return 3;
+			return isLargeRadar(mst) ? 3.6 : 3;
 		// no default value for unverified equipment
 		return 0;
 	}
@@ -376,8 +379,10 @@ AntiAir: anti-air related calculations
 		// total value added to adjusted aa of both ship and fleet?
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
+		// current used values: (old f x0.5 / s x0.75)
+		// https://github.com/noro6/kc-web/blob/main/src/classes/aerialCombat/shootDownInfo.ts#L146
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 2*0.375) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.6 : 2*0.4) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipment(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -1033,8 +1038,10 @@ AntiAir: anti-air related calculations
 	);
 
 	// Musashi Kai+, Yamato Kai+
+	// mod 1.4->1.45 since 2025-5-12
+	// https://x.com/Matsu_class_DD/status/1927080114510086525
 	declareAACI(
-		26, 6, 1, 1.4, 60, 2130, // rate 55?
+		26, 6, 1, 1.45, 60, 2130, // rate 55?
 		[musashiK2Icon, haMountKaiAmg, radarIcon],
 		predAllOf(isYamatoClassKai),
 		withEquipmentMsts(
@@ -1045,7 +1052,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// Ooyodo Kai
-	// fixed 6->7 since 2025-05-12?
+	// fixed 6->7 since 2025-5-12?
 	declareAACI(
 		27, 6, 1, 1.55, 55, 2230,
 		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
@@ -1215,8 +1222,9 @@ AntiAir: anti-air related calculations
 	);
 
 	// Yamato K2+, Musashi K2 (kind 26 either)
+	// mod 1.65->1.7
 	declareAACI(
-		42, 10, 1, 1.65, 65, 1750,
+		42, 10, 1, 1.7, 65, 1750,
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
 		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1226,8 +1234,9 @@ AntiAir: anti-air related calculations
 				hasSome( isAAGunWithAtLeast(6) ))
 		)
 	);
+	// mod 1.6 -> 1.65
 	declareAACI(
-		43, 8, 1, 1.6, 58, 1910, // rate 60?
+		43, 8, 1, 1.65, 58, 1910, // rate 60?
 		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon],
 		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1236,8 +1245,9 @@ AntiAir: anti-air related calculations
 				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ))
 		)
 	);
+	// mod 1.6->1.65
 	declareAACI(
-		44, 6, 1, 1.6, 55, 2120,
+		44, 6, 1, 1.65, 55, 2120,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
 		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1247,8 +1257,9 @@ AntiAir: anti-air related calculations
 				hasSome( isAAGunWithAtLeast(6) ))
 		)
 	);
+	// fixed 6->7, mod 1.55->1.6
 	declareAACI(
-		45, 5, 1, 1.55, 50, 2240,
+		45, 6, 1, 1.6, 50, 2240,
 		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
 		predAnyOf(isYamatoClassKai2),
 		withEquipmentMsts(
@@ -1294,7 +1305,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		49, 6, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAnyOf(isFujinamiKai2AndTokugataKai2, isAkizukiClass),
+		predAnyOf(isFujinamiKai2AndTokugataKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isBuiltinHighAngleMount, 2 ),
@@ -1302,7 +1313,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	// Fubuki K2, Shirayuki K2, Fujinami K2, Akizuki-class Kai+
-	// Hatsuyuki/Hamanami K2, Akizuki-class base? added since 2025-5-12
+	// Hatsuyuki/Hamanami K2, Akizuki-class added since 2025-5-12
 	declareAACI(
 		50, 7, 1, 1.5, 60, 2244,
 		[shirayukiK2Icon, biHaMountIcon, biHaMountIcon, aaFdIcon, radarIcon],
@@ -1314,7 +1325,7 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
-	// Akizuki-class not capable?
+	// Akizuki-class not capable
 	// mod 1.35->1.4?
 	declareAACI(
 		51, 5, 1, 1.4, 50, 2246,
@@ -1327,8 +1338,10 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadarWithAtLeast(4) ))
 		)
 	);
+	// Akizuki-class all forms added
+	// fixed 5->6?
 	declareAACI(
-		52, 4, 1, 1.4, 50, 2247,
+		52, 5, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
 		predAnyOf(isFujinamiKai2AndTokugataKai2, isAkizukiClass),
 		withEquipmentMsts(

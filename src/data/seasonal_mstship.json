@@ -2878,7 +2878,7 @@
 	},
 	"5359": {
 		"api_id": 5359,
-		"api_name": "秋の味覚白露",
+		"api_name": "お芋白露",
 		"api_yomi": "しらつゆ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -7739,5 +7739,165 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5967": {
+		"api_id": 5967,
+		"api_name": "カクテルドレス潮",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5968": {
+		"api_id": 5968,
+		"api_name": "カクテルドレス潮改二",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5969": {
+		"api_id": 5969,
+		"api_name": "カクテルドレス漣",
+		"api_yomi": "さざなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5970": {
+		"api_id": 5970,
+		"api_name": "カクテルドレス朧",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5971": {
+		"api_id": 5971,
+		"api_name": "フォーマルドレス曙",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5972": {
+		"api_id": 5972,
+		"api_name": "フォーマルドレス曙改二",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5973": {
+		"api_id": 5973,
+		"api_name": "フォーマルドレスGotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5974": {
+		"api_id": 5974,
+		"api_name": "フォーマルドレスGotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5975": {
+		"api_id": 5975,
+		"api_name": "フォーマルドレスMogador",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5976": {
+		"api_id": 5976,
+		"api_name": "フォーマルドレス平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5977": {
+		"api_id": 5977,
+		"api_name": "フォーマルドレス平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5978": {
+		"api_id": 5978,
+		"api_name": "フォーマルドレス大泊",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5979": {
+		"api_id": 5979,
+		"api_name": "フォーマルドレス衣笠改二",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5980": {
+		"api_id": 5980,
+		"api_name": "フォーマルドレスC.Cappellini",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5981": {
+		"api_id": 5981,
+		"api_name": "フォーマルドレスUIT-24",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5982": {
+		"api_id": 5982,
+		"api_name": "フォーマルドレス伊503",
+		"api_yomi": "コマンダンテ・カッペリーニ",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5983": {
+		"api_id": 5983,
+		"api_name": "お芋藤波",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5984": {
+		"api_id": 5984,
+		"api_name": "お芋藤波改二",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5985": {
+		"api_id": 5985,
+		"api_name": "初夏の私服Minneapolis",
+		"api_yomi": "ミネアポリス",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5986": {
+		"api_id": 5986,
+		"api_name": "初夏の私服Minneapolis改",
+		"api_yomi": "ミネアポリス",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }

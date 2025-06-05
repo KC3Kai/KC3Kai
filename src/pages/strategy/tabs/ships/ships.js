@@ -658,7 +658,7 @@
 				canEquipSPF: ThisShip.canEquip(45),
 				canEquipSPB: ThisShip.canEquip(11),
 				canEquipLFB: ThisShip.canEquip(41),
-				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
+				canEquipBulge: ThisShip.canEquip(27, 268) || ThisShip.canEquip(28),
 				canEquipMinisub: ThisShip.canEquip(22),
 				canExslotEquipSecGun: ThisShip.exslotCanEquip(this.exslotGearsByType.secGun),
 				canExslotEquipRadar: ThisShip.exslotCanEquip(this.exslotGearsByType.radar),
