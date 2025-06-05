@@ -2032,6 +2032,58 @@
 					multiple: { "houg": 1, "houk": 1 },
 				},
 			},
+			// Ju87C Kai
+			"64": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Germany": [
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "tyku": 1, "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Akagi, Shinyou
+						origins: [83, 534],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						origins: [83, 534],
+						minStars: 10,
+						multiple: { "houg": 1, "houm": 1 },
+					},
+				],
+			},
+			// Ju87 D-4 (Fliegerass)
+			"559": {
+				count: 0,
+				byNation: {
+					"Germany": {
+						multiple: { "houg": 8, "tyku": 1, "houk": 2, "houm": 6 },
+					},
+				},
+				byShip: {
+					// Akagi, Shinyou
+					origins: [83, 534],
+					multiple: { "houg": 3, "houk": 1, "houm": 2 },
+				},
+			},
 			// Type 96 Fighter
 			"19": {
 				count: 0,
@@ -2460,6 +2512,58 @@
 						multiple: { "houg": 1, "houm": 1 },
 					},
 				],
+			},
+			// Bf109T Kai
+			"158": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Germany": [
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "tyku": 1, "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Akagi, Shinyou
+						origins: [83, 534],
+						minStars: 9,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						origins: [83, 534],
+						minStars: 10,
+						multiple: { "tyku": 1, "houk": 1, "houm": 1 },
+					},
+				],
+			},
+			// Bf109 T-3 (G)
+			"560": {
+				count: 0,
+				byNation: {
+					"Germany": {
+						multiple: { "houg": 3, "tyku": 4, "houk": 5, "houm": 3 },
+					},
+				},
+				byShip: {
+					// Akagi, Shinyou
+					origins: [83, 534],
+					multiple: { "houg": 1, "tyku": 2, "houk": 3, "houm": 1 },
+				},
 			},
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
 			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
