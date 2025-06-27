@@ -329,8 +329,8 @@ Saves and loads significant data for future use
 		equip_type :function(stype, shipId){
 			if(!this.available) return false;
 			// use ship specified equip types first if found
-			const equipTypeArr = shipId && this.equip_ship(shipId).api_equip_type;
-			if(equipTypeArr) return equipTypeArr;
+			const equipTypeMap = shipId && this.equip_ship(shipId).api_equip_type;
+			if(equipTypeMap) return Object.keys(equipTypeMap).map(id => Number(id));
 			const equipTypeObj = this.stype(stype).api_equip_type || {};
 			// remap equip types object of ship type to array
 			return Object.keys(equipTypeObj).filter(type => !!equipTypeObj[type]).map(id => Number(id));
@@ -344,7 +344,8 @@ Saves and loads significant data for future use
 			const equipShips = this._raw.equip_ship || {};
 			// look up ship specified equip types
 			return !this.available ? false :
-				equipShips[Object.keys(equipShips).find(i => equipShips[i].api_ship_id == shipId)] || false;
+			//	equipShips[Object.keys(equipShips).find(i => equipShips[i].api_ship_id == shipId)] || false;
+				equipShips[shipId] || false;
 		},
 
 		equip_exslot_type :function(equipTypes, stype, shipId){
@@ -352,8 +353,11 @@ Saves and loads significant data for future use
 			// remap general exslot types object to array
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
 			const regularSlotTypes = equipTypes || this.equip_type(stype, shipId) || [];
-			return !regularSlotTypes.length ? generalExslotTypes :
-				generalExslotTypes.filter(type => regularSlotTypes.includes(type));
+			const limitExslotTypes = (this._raw.equip_limit_exslot || {})[shipId] || [];
+			let result = generalExslotTypes;
+			if(regularSlotTypes.length) result = result.filter(type => regularSlotTypes.includes(type));
+			if(limitExslotTypes.length) result = result.filter(type => !limitExslotTypes.includes(type));
+			return result;
 		},
 
 		/**
@@ -462,18 +466,21 @@ Saves and loads significant data for future use
 					capableStypes.push(stype.api_id);
 			});
 			const capableShips = [], incapableShips = [];
-			$.each(this._raw.equip_ship, (_, equipShip) => {
-				const shipId = equipShip.api_ship_id,
+			$.each(this._raw.equip_ship, (id, equipShip) => {
+				const shipId = Number(id),
 					shipMst = this.ship(shipId), stype = shipMst.api_stype;
-				const equipTypes = equipShip.api_equip_type;
-				if(!capableStypes.includes(stype) && equipTypes.includes(type2Id))
-					capableShips.push(shipId);
-				if(capableStypes.includes(stype) && !equipTypes.includes(type2Id))
+				const equipTypes = equipShip.api_equip_type ? Object.keys(equipShip.api_equip_type).map(id => Number(id)) : [];
+				const limitedGearIds = (equipShip.api_equip_type || {})[type2Id] || [];
+				if((!capableStypes.includes(stype) && equipTypes.includes(type2Id))
+					|| (limitedGearIds.length > 0 && limitedGearIds.includes(gearId)))
+					if(limitedGearIds.length === 0 || limitedGearIds.includes(gearId)) capableShips.push(shipId);
+				if((capableStypes.includes(stype) && !equipTypes.includes(type2Id))
+					|| (limitedGearIds.length > 0 && !limitedGearIds.includes(gearId)))
 					incapableShips.push(shipId);
 			});
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
 			let isCapableToExslot = generalExslotTypes.includes(type2Id);
-			let exslotCapableShips = [], exslotCapableStypes = [], exslotMinStars = 0;
+			let exslotCapableShips = [], exslotIncapableShips = [], exslotCapableStypes = [], exslotMinStars = 0;
 			// note: #equip_exslot_ships method extends ctype to all ships in that class, which may include some ships not really capable with both regular and exslot. have to use #equip_on_ship method to re-verify
 			const exslotCapableInfo = gearId > 0 ? this.equip_exslot_ships(gearId) : false;
 			if(exslotCapableInfo) {
@@ -487,6 +494,14 @@ Saves and loads significant data for future use
 					exslotMinStars = exslotCapableInfo.minStars;
 				}
 			}
+			const limitExslot = this._raw.equip_limit_exslot || {};
+			Object.keys(limitExslot).forEach(shipId => {
+				if(Array.isArray(limitExslot[shipId]) && limitExslot[shipId].includes(type2Id))
+					exslotIncapableShips.push(Number(shipId));
+			});
+			// ~~from `#isMstEquipShipExceptionSlotItem`~~, hardcodes deprecated since 2025-06-27
+			// definitions are included by `equip_ship` structure above
+			/*
 			const excludeTypedGearsOnShips = (type2, exceptGearIds, shipIds) => {
 				if(type2Id === type2 && !exceptGearIds.includes(gearId)) {
 					shipIds.forEach(shipId => {
@@ -498,7 +513,6 @@ Saves and loads significant data for future use
 					});
 				}
 			};
-			// from `#isMstEquipShipExceptionSlotItem`
 			// Remove Richelieu-class Kai from Seaplane Bomber type list except Late 298B
 			excludeTypedGearsOnShips(11, [194], [392, 724]);
 			// Remove AkitsuMaru Kai from Aviation Personnel type list except Arctic Gear & Deck Personnel
@@ -518,12 +532,14 @@ Saves and loads significant data for future use
 			// Remove listed ships from Medium Armor except Arctic Camouflage (>+7 furthur equippable in exslot)
 			//   Gotland base, Tama base, Kiso base, Abukuma ex all, Tashkent all, Gangut all, Ootomari all, Kirov all
 			excludeTypedGearsOnShips(27, [268], [200, 574, 100, 101, 114, 290, 516, 395, 511, 512, 513, 995, 1000, 1001, 1006]);
+			*/
 			return {
 				stypes: capableStypes,
 				includes: capableShips,
 				excludes: incapableShips,
 				exslot: isCapableToExslot,
 				exslotIncludes: exslotCapableShips,
+				exslotExcludes: exslotIncapableShips,
 				exslotStypes: exslotCapableStypes,
 				exslotMinStars: exslotMinStars,
 			};

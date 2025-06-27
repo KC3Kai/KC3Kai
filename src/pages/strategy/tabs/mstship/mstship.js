@@ -888,7 +888,7 @@
 				} else {
 					$(".equipSlots").hide();
 				}
-				const exslotTypes = KC3Master.equip_exslot_type(equipTypes);
+				const exslotTypes = KC3Master.equip_exslot_type(equipTypes, shipData.api_stype, shipData.api_id);
 				if (exslotTypes.length > 0) {
 					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
 					// specified items on exslot of specified ships (or stype/ctype)

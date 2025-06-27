@@ -2947,7 +2947,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.isOaswShip = function() {
 		// Possible game server backend uses condition: initAsw >= 50,
 		//  for sonar types only, CAV/BBV/AV/CV(L)/LHA types still need asw aircraft.
-		// However, `api_tais` attribute is NOT exprtoed in master data to client, except some CVL: (KC3Master.find_ships(s => ((s.api_tais||[])[0] > 0)).map(o => o.api_name)), so impossible to use:
+		// However, `api_tais` attribute is NOT exprtoed in master data to client, except some CVL:
+		// (KC3Master.find_ships(s => ((s.api_tais||[])[0] > 0)).map(o => o.api_name)), so impossible to use:
 		/*
 		const initAsw = (this.master().api_tais || [])[0];
 		return initAsw >= 50 && !this.isAswAirAttack();
