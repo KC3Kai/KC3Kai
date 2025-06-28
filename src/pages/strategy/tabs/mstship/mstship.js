@@ -881,9 +881,43 @@
 					$(".typeName", equipTypeBox).text(KC3Meta.gearTypeName(2, typeId))
 						.attr("title", KC3Meta.gearTypeName(2, typeId));
 				};
+				const addEquipItem = (listClass, gearId, isExslot) => {
+					const gearMst = KC3Master.slotitem(gearId);
+					const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
+						.appendTo(listClass);
+					$(".typeIcon img", equipTypeBox)
+						.attr("src", KC3Meta.itemIcon(gearMst.api_type[3]))
+						.attr("title", "[{0}]".format(gearId))
+						.attr("alt", gearId).click(gearClickFunc);
+					$(".typeIcon", equipTypeBox).addClass("hover");
+					$(".typeName", equipTypeBox).text(KC3Meta.gearName(gearMst.api_name))
+						.attr("title", KC3Meta.gearName(gearMst.api_name));
+					// some items with specified stars can be equipped on exslot since 2023-11-02
+					const exslotShip = isExslot && KC3Master.equip_exslot_ships(gearId);
+					if(exslotShip && exslotShip.minStars > 0) {
+						$(".typeName", equipTypeBox).html(
+							'<span class="star">\u2605{0}</span>{1}'.format(
+								(exslotShip.minStars >= 10 ? "m" : exslotShip.minStars),
+								KC3Meta.gearName(gearMst.api_name)
+							)
+						);
+					}
+				};
+				// order items by types asc first for better readability
+				const orderByType = (a, b) => (
+					KC3Master.slotitem(a).api_type[2] - KC3Master.slotitem(b).api_type[2]
+					|| KC3Master.slotitem(a).api_type[3] - KC3Master.slotitem(b).api_type[3]
+					|| a - b
+				);
 				const equipTypes = KC3Master.equip_type(shipData.api_stype, shipData.api_id);
 				if (equipTypes.length > 0) {
 					equipTypes.forEach(addEquipType.bind(this, ".equipSlots .equipList"));
+					const equipLimitGears = KC3Master.equip_limit_gears(shipData.api_id);
+					if (equipLimitGears.length > 0) {
+						equipLimitGears.sort(orderByType).forEach(id => {
+							addEquipItem(".equipSlots .equipList", id, false);
+						});
+					}
 					$(".equipSlots").show().createChildrenTooltips();
 				} else {
 					$(".equipSlots").hide();
@@ -894,33 +928,8 @@
 					// specified items on exslot of specified ships (or stype/ctype)
 					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id).filter(id => KC3Master.equip_on_ship(shipData.api_id, id) & 2);
 					if (exslotItems.length > 0) {
-						// order items by types asc first for better readability
-						const orderByType = (a, b) => (
-							KC3Master.slotitem(a).api_type[2] - KC3Master.slotitem(b).api_type[2]
-							|| KC3Master.slotitem(a).api_type[3] - KC3Master.slotitem(b).api_type[3]
-							|| a - b
-						);
-						exslotItems.sort(orderByType).forEach(item => {
-							const gearMst = KC3Master.slotitem(item);
-							const exslotShip = KC3Master.equip_exslot_ships(item);
-							const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
-								.appendTo(".equipExSlot .equipList");
-							$(".typeIcon img", equipTypeBox)
-								.attr("src", KC3Meta.itemIcon(gearMst.api_type[3]))
-								.attr("title", "[{0}]".format(item))
-								.attr("alt", item).click(gearClickFunc);
-							$(".typeIcon", equipTypeBox).addClass("hover");
-							$(".typeName", equipTypeBox).text(KC3Meta.gearName(gearMst.api_name))
-								.attr("title", KC3Meta.gearName(gearMst.api_name));
-							// some items with specified stars can be equipped on exslot since 2023-11-02
-							if(exslotShip.minStars > 0) {
-								$(".typeName", equipTypeBox).html(
-									'<span class="star">\u2605{0}</span>{1}'.format(
-										(exslotShip.minStars >= 10 ? "m" : exslotShip.minStars),
-										KC3Meta.gearName(gearMst.api_name)
-									)
-								);
-							}
+						exslotItems.sort(orderByType).forEach(id => {
+							addEquipItem(".equipExSlot .equipList", id, true);
 						});
 					}
 					$(".equipExSlot").show().createChildrenTooltips();

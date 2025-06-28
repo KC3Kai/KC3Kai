@@ -330,10 +330,24 @@ Saves and loads significant data for future use
 			if(!this.available) return false;
 			// use ship specified equip types first if found
 			const equipTypeMap = shipId && this.equip_ship(shipId).api_equip_type;
-			if(equipTypeMap) return Object.keys(equipTypeMap).map(id => Number(id));
+			if(equipTypeMap) return Object.keys(equipTypeMap)
+				.filter(type => !equipTypeMap[type]).map(id => Number(id));
 			const equipTypeObj = this.stype(stype).api_equip_type || {};
 			// remap equip types object of ship type to array
 			return Object.keys(equipTypeObj).filter(type => !!equipTypeObj[type]).map(id => Number(id));
+		},
+
+		equip_limit_gears :function(shipId){
+			if(!this.available) return false;
+			const result = [];
+			const equipTypeMap = this.equip_ship(shipId).api_equip_type;
+			// replacement of hard-coded `excludeTypedGearsOnShips` below
+			if(equipTypeMap) Object.keys(equipTypeMap)
+				.filter(type => Array.isArray(equipTypeMap[type]))
+				.forEach(type => {
+					result.push(...equipTypeMap[type]);
+				});
+			return result;
 		},
 
 		equip_type_sp :function(slotitemId, defaultType){
@@ -344,8 +358,9 @@ Saves and loads significant data for future use
 			const equipShips = this._raw.equip_ship || {};
 			// look up ship specified equip types
 			return !this.available ? false :
-			//	equipShips[Object.keys(equipShips).find(i => equipShips[i].api_ship_id == shipId)] || false;
 				equipShips[shipId] || false;
+			// previous structure:
+			//	equipShips[Object.keys(equipShips).find(i => equipShips[i].api_ship_id == shipId)] || false;
 		},
 
 		equip_exslot_type :function(equipTypes, stype, shipId){
@@ -472,10 +487,10 @@ Saves and loads significant data for future use
 				const equipTypes = equipShip.api_equip_type ? Object.keys(equipShip.api_equip_type).map(id => Number(id)) : [];
 				const limitedGearIds = (equipShip.api_equip_type || {})[type2Id] || [];
 				if((!capableStypes.includes(stype) && equipTypes.includes(type2Id))
-					|| (limitedGearIds.length > 0 && limitedGearIds.includes(gearId)))
-					if(limitedGearIds.length === 0 || limitedGearIds.includes(gearId)) capableShips.push(shipId);
+					|| (limitedGearIds.length && limitedGearIds.includes(gearId)))
+					if(!limitedGearIds.length || limitedGearIds.includes(gearId)) capableShips.push(shipId);
 				if((capableStypes.includes(stype) && !equipTypes.includes(type2Id))
-					|| (limitedGearIds.length > 0 && !limitedGearIds.includes(gearId)))
+					|| (limitedGearIds.length && !limitedGearIds.includes(gearId)))
 					incapableShips.push(shipId);
 			});
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
@@ -499,7 +514,7 @@ Saves and loads significant data for future use
 				if(Array.isArray(limitExslot[shipId]) && limitExslot[shipId].includes(type2Id))
 					exslotIncapableShips.push(Number(shipId));
 			});
-			// ~~from `#isMstEquipShipExceptionSlotItem`~~, hardcodes deprecated since 2025-06-27
+			// ~~from `#isMstEquipShipExceptionSlotItem`~~, hard-code deprecated since 2025-06-27
 			// definitions are included by `equip_ship` structure above
 			/*
 			const excludeTypedGearsOnShips = (type2, exceptGearIds, shipIds) => {
