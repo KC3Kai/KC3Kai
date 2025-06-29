@@ -4154,7 +4154,7 @@
 		"api_yomi": "だいよんごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5519": {
 		"api_id": 5519,
@@ -4626,7 +4626,7 @@
 		"api_yomi": "だいよんごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5578": {
 		"api_id": 5578,
@@ -4714,7 +4714,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5589": {
 		"api_id": 5589,
@@ -4722,7 +4722,7 @@
 		"api_yomi": "だいよんごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5590": {
 		"api_id": 5590,
@@ -4810,7 +4810,7 @@
 		"api_yomi": "だいよんごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5601": {
 		"api_id": 5601,
@@ -4834,7 +4834,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5604": {
 		"api_id": 5604,
@@ -5010,7 +5010,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5626": {
 		"api_id": 5626,
@@ -5066,7 +5066,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5633": {
 		"api_id": 5633,
@@ -5178,7 +5178,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5647": {
 		"api_id": 5647,
@@ -5386,7 +5386,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5673": {
 		"api_id": 5673,
@@ -5514,7 +5514,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5689": {
 		"api_id": 5689,
@@ -5722,7 +5722,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5715": {
 		"api_id": 5715,
@@ -5818,7 +5818,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5727": {
 		"api_id": 5727,
@@ -5954,7 +5954,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5744": {
 		"api_id": 5744,
@@ -6066,7 +6066,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5758": {
 		"api_id": 5758,
@@ -6272,7 +6272,7 @@
 		"api_id": 5783,
 		"api_name": "クリスマス朝日改",
 		"api_yomi": "あさひ",
-		"api_stype": 21,
+		"api_stype": 19,
 		"api_soku": 5,
 		"api_slot_num": 3
 	},
@@ -6282,7 +6282,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5785": {
 		"api_id": 5785,
@@ -6400,7 +6400,7 @@
 		"api_id": 5799,
 		"api_name": "正月朝日改",
 		"api_yomi": "あさひ",
-		"api_stype": 21,
+		"api_stype": 19,
 		"api_soku": 5,
 		"api_slot_num": 3
 	},
@@ -6410,7 +6410,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5801": {
 		"api_id": 5801,
@@ -6602,7 +6602,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5825": {
 		"api_id": 5825,
@@ -6618,7 +6618,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5827": {
 		"api_id": 5827,
@@ -6722,7 +6722,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5840": {
 		"api_id": 5840,
@@ -6786,7 +6786,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5848": {
 		"api_id": 5848,
@@ -6906,7 +6906,7 @@
 		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5863": {
 		"api_id": 5863,
@@ -6970,7 +6970,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5871": {
 		"api_id": 5871,
@@ -7090,7 +7090,7 @@
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5886": {
 		"api_id": 5886,
@@ -7256,7 +7256,7 @@
 		"api_id": 5906,
 		"api_name": "秋刀魚朝日改",
 		"api_yomi": "あさひ",
-		"api_stype": 21,
+		"api_stype": 19,
 		"api_soku": 5,
 		"api_slot_num": 3
 	},
@@ -7576,7 +7576,7 @@
 		"api_id": 5946,
 		"api_name": "節分朝日改",
 		"api_yomi": "あさひ",
-		"api_stype": 21,
+		"api_stype": 19,
 		"api_soku": 5,
 		"api_slot_num": 3
 	},
@@ -7718,11 +7718,11 @@
 	},
 	"5964": {
 		"api_id": 5964,
-		"api_name": "桃節句第二十二号海防艦改",
+		"api_name": "桃節句第二十二号海防艦",
 		"api_yomi": "だいにじゅうにごう",
 		"api_stype": 1,
 		"api_soku": 5,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5965": {
 		"api_id": 5965,
@@ -7899,5 +7899,125 @@
 		"api_stype": 5,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5987": {
+		"api_id": 5987,
+		"api_name": "梅雨藤波改二",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5988": {
+		"api_id": 5988,
+		"api_name": "梅雨浜波改二",
+		"api_yomi": "はまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5989": {
+		"api_id": 5989,
+		"api_name": "梅雨第二十二号海防艦",
+		"api_yomi": "だいにじゅうにごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5990": {
+		"api_id": 5990,
+		"api_name": "梅雨しまね丸",
+		"api_yomi": "しまねまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5991": {
+		"api_id": 5991,
+		"api_name": "梅雨しまね丸改",
+		"api_yomi": "しまねまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5992": {
+		"api_id": 5992,
+		"api_name": "梅雨Minneapolis",
+		"api_yomi": "ミネアポリス",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5993": {
+		"api_id": 5993,
+		"api_name": "梅雨Minneapolis改",
+		"api_yomi": "ミネアポリス",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5994": {
+		"api_id": 5994,
+		"api_name": "梅雨朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5995": {
+		"api_id": 5995,
+		"api_name": "梅雨朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5996": {
+		"api_id": 5996,
+		"api_name": "梅雨Richard P.Leary",
+		"api_yomi": "リチャード・P・リアリー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5997": {
+		"api_id": 5997,
+		"api_name": "梅雨Richard P.Leary改",
+		"api_yomi": "リチャード・P・リアリー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5998": {
+		"api_id": 5998,
+		"api_name": "梅雨冬月",
+		"api_yomi": "ふゆつき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5999": {
+		"api_id": 5999,
+		"api_name": "秋冬制服早霜改二",
+		"api_yomi": "はやしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6000": {
+		"api_id": 6000,
+		"api_name": "秋冬制服藤波改二",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6001": {
+		"api_id": 6001,
+		"api_name": "秋冬制服浜波改二",
+		"api_yomi": "はまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

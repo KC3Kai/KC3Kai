@@ -123,6 +123,8 @@
 			"t57": "aa",
 			// night dive bomber
 			"t58": "dv",
+			// flying wing jet bomber
+			"t59": "dv",
 			// all types
 			"tall": "type",
 		},
