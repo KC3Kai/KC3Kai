@@ -53,7 +53,8 @@ Saves and loads list to and from localStorage
 		// Jet aircraft mechanism still in progress
 		jetAircraftType2Ids: [56,57,58,59,91],
 		jetBomberSteelCostRatioPerSlot: 0.2,
-		// steel_consumption = floor(api_cost * current_slot * 0.2)
+		// steel_consumption = round(api_cost * current_slot * 0.2)
+		// ho229 not 0.2, actual 60 =round(14*18*x), x=0.237~0.24?
 
 		getLandBaseSlotSize :function(type2Id) {
 			if(KC3GearManager.landBaseReconnType2Ids.includes(type2Id))
