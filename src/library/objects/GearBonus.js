@@ -2015,16 +2015,71 @@
 			// F4U-4
 			"474": {
 				count: 0,
+				starsDist: [],
 				byNation: {
-					"UnitedStates": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
-					},
-					"UnitedKingdom": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
-					},
-					"France": {
-						multiple: { "houg": 1, "tyku": 1 },
-					},
+					"UnitedStates": [
+						{
+							multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					"UnitedKingdom": [
+						{
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					"France": [
+						{
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: {
 					// Gambier Bay Mk.II, Langley Kai
@@ -2370,9 +2425,8 @@
 			"252": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Ark Royal Class
-					"78": [
+				byNation: {
+					"UnitedKingdom": [
 						{
 							minStars: 4,
 							multiple: { "houk": 1 },
@@ -2383,23 +2437,21 @@
 						},
 						{
 							minStars: 7,
-							multiple: { "houg": 1 },
+							multiple: { "houg": 1, "tyku": 1 },
 						},
 						{
 							minStars: 8,
-							multiple: { "houk": 1 },
+							multiple: { "houk": 2 },
 						},
 						{
 							minStars: 9,
-							multiple: { "houm": 1 },
+							multiple: { "houg": 1, "houm": 1 },
 						},
 						{
 							minStars: 10,
-							multiple: { "houk": 1 },
+							multiple: { "houg": 1, "houm": 1 },
 						},
 					],
-					// Illustrious Class
-					"112": "78",
 				},
 			},
 			// Corsair Mk.II
@@ -7786,6 +7838,7 @@
 			// 533mm Triple Torpedo Mount (Model 53-39)
 			"400": {
 				count: 0,
+				starsDist: [],
 				byNation: {
 					"Russia": {
 						multiple: { "houg": 1, "raig": 8, "souk": 1, "houk": 2 },
@@ -7795,15 +7848,46 @@
 						},
 					},
 				},
-				byShip:{
-					// Hibiki K2 (Bep)
-					ids: [147],
-					multiple: { "houg": 1, "raig": 8, "souk": 1, "houk": 2 },
-					synergy: {
-						flags: [ "ru130mmB13SmallGunMount" ],
-						single: { "houg": 2 },
+				byShip: [
+					{
+						// Hibiki K2 (Bep)
+						ids: [147],
+						multiple: { "houg": 1, "raig": 8, "souk": 1, "houk": 2 },
+						synergy: {
+							flags: [ "ru130mmB13SmallGunMount" ],
+							single: { "houg": 2 },
+						},
 					},
-				},
+					// For any ship can equip it
+					{
+						minStars: 2,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 4,
+						multiple: { "raig": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "souk": 1 },
+					},
+					{
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "raig": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "raig": 1 },
+					},
+				],
 			},
 			// Late Model 53cm Bow Torpedo Mount (8 tubes)
 			"383": {
@@ -8175,6 +8259,51 @@
 						single: { "houk": 2, "houm": 2 },
 					},
 				},
+			},
+			// Type C Kouhyouteki
+			"309": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Yuubari K2T, Nisshin A, Kitakami K2, Ooi K2, Kuma K2D, Mogami/Mikuma K2T, Yahagi K2B
+						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						minStars: 9,
+						multiple: { "raig": 1 },
+					},
+					{
+						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					// client codes' bug shows following bonus for all other ships?
+					{
+						// Nisshin Kai
+						ids: [690],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [690],
+						minStars: 9,
+						multiple: { "raig": 1 },
+					},
+					{
+						ids: [690],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Type D Kai Kouhyouteki
 			"364": {

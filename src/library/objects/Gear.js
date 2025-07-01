@@ -814,8 +814,8 @@ KC3改 Equipment Object
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
 			const isTorpedoBomber = [8, 58].includes(type2);
-			const isOtherBomber = [7, 11, 57].includes(type2);
-			const isJet = [57, 58].includes(type2);
+			const isOtherBomber = [7, 11, 57, 91].includes(type2);
+			const isJet = [57, 58, 91].includes(type2);
 			const isAsPartol = [26].includes(type2);
 			// ~~Visible bonus no effect~~ Added since 2021-08-04, counted in ship class later since it's total stats bonus.
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
@@ -834,8 +834,10 @@ KC3改 Equipment Object
 				// modifier for unimplemented jet torpedo bomber unknown
 				return [0.8 * power, 1.5 * power, true];
 			} else {
-				const typeModifier = isJet ? isJetAssault ? 1 : 1 / Math.sqrt(2) : 1;
-				return [typeModifier * power, typeModifier * power, false];
+				// https://x.com/CC_jabberwock/status/1939699963778457773
+				if(isJet && !isJetAssault)
+					return [0.7 * power + 0.5, 0.7 * power + 0.5, false];
+				return [power, power, false];
 			}
 		}
 		return [0, 0, false];
@@ -844,16 +846,16 @@ KC3改 Equipment Object
 	/**
 	 * Get pre-cap support airstrike power from this land-based aircraft.
 	 */
-	KC3Gear.prototype.landbaseAirstrikePower = function(capacity = 0, targetShipId = 0){
+	KC3Gear.prototype.landbaseAirstrikePower = function(capacity = 0, targetShipId = 0, isJetAssault = false){
 		if(this.isDummy()) { return 0; }
 		let result = 0;
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
 			const isTorpedoBomber = [8, 58].includes(type2);
-			const isOtherBomber = [7, 11, 57].includes(type2);
+			const isOtherBomber = [7, 11, 57, 91].includes(type2);
 			const isLandBaseAttacker = [47].includes(type2);
 			const isLandBaseHeavyBomber = [53].includes(type2);
-			const isJet = [57, 58].includes(type2);
+			const isJet = [57, 58, 91].includes(type2);
 			const isAsAircraft = [25, 26].includes(type2);
 			const targetMst = targetShipId > 0 && KC3Master.ship(targetShipId);
 			const isTargetLand = !!targetMst && targetMst.api_soku === 0;
@@ -869,7 +871,7 @@ KC3改 Equipment Object
 					stat = this.master().api_baku;
 				}
 			}
-			if(isJet) typeModifier = 1 / Math.sqrt(2);
+			if(isJet && !isJetAssault) typeModifier = 0.7;
 			// Antisub Patrol and Rotorcraft might use different values?
 			// against DD for Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
 			// https://twitter.com/Divinity_123/status/1651948848351158273
@@ -885,6 +887,7 @@ KC3改 Equipment Object
 			//if(isLandBaseHeavyBomber) sizeModifier = 1.0;
 			result += Math.sqrt(capacity * sizeModifier) * stat;
 			result *= typeModifier;
+			if(isJet && !isJetAssault) result += 0.5;
 		}
 		return result;
 	};

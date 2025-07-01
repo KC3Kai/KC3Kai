@@ -2621,11 +2621,19 @@
 		"hash": -1446429626
 	},
 	"1031": {
-		"unlock": [1150],
+		"unlock": [1034, 1150],
 		"hash": -1520241698
 	},
 	"1032": {
 		"hash": 1204159151
+	},
+	"1033": {},
+	"1034": {
+		"unlock": [1035],
+		"hash": -1194538934
+	},
+	"1035": {
+		"hash": 1587463221
 	},
 	"1101": {
 		"unlock": [1102, 1103],
@@ -2781,6 +2789,7 @@
 		"unlock": [1032],
 		"hash": -2072607887
 	},
+	"1151": {},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],

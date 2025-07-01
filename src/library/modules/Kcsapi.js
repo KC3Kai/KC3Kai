@@ -2965,17 +2965,21 @@ Previously known as "Reactor"
 				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`
 				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End in 2023
 					// exchange 11 teruteruBouzu with furniture and 1 Communication Equipment & Personnel (once) in 2024
+					// exchange 22 teruteruBouzu with 1 Ho229 (once) in 2025
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 10;
 				break;
 				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once) in 2023
 					// exchange 20 teruteruBouzu with 1 Fleet Communication Antenna +1 (once) in 2024
+					// exchange 18 teruteruBouzu with furniture and 1 GFCS Mk.37 (once) in 2025
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 11;
 				break;
 				case 113: // exchange 12 teruteruBouzu with 1 blueRibbon (twice)
+					// exchange 12 teruteruBouzu with 1 blueRibbon (once) in 2025
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 12;
 				break;
 				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times) in 2023
 					// exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (8 times) in 2024
+					// exchange 1 teruteruBouzu with Materials [0, 1, 0, 1] (10 times) in 2025
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 1;
 				break;
 				default:

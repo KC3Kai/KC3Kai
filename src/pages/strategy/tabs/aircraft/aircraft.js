@@ -21,7 +21,7 @@
 				switch(type){
 					case 6: case 45: case 43: // (Night/Seaplane) fighter
 						s1 = 'aa'; s2 = 'fp'; break;
-					case 7: case 58: case 39: case 40: // (Night) Dive/Jet bomber
+					case 7: case 58: case 39: case 40: case 59: // (Night/Flying-wing) Dive/Jet bomber
 						s1 = 'dv'; s2 = 'aa'; break;
 					case 8: case 46: // (Night) Torpedo bomber
 						s1 = 'tp'; s2 = 'as'; break;
