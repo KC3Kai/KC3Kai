@@ -28,6 +28,7 @@ Saves and loads significant data for future use
 		_raw: {},
 		_abyssalShips: {},
 		_seasonalShips: {},
+		_equipShipTypes: false,
 		_equipExslotShips: false,
 
 		init: function( raw ){
@@ -371,7 +372,8 @@ Saves and loads significant data for future use
 				$.each(this._raw.equip_ship, (id, equipShip) => {
 					const shipId = Number(id),
 						shipMst = this.ship(shipId), stype = shipMst.api_stype;
-					const equipTypes = equipShip.api_equip_type ? Object.keys(equipShip.api_equip_type).map(id => Number(id)) : [];
+					const equipTypes = !equipShip.api_equip_type ? [] :
+						Object.keys(equipShip.api_equip_type).map(id => Number(id));
 					const limitedGears = {};
 					equipTypes.forEach(typeId => {
 						if(Array.isArray(equipShip.api_equip_type[typeId]))
@@ -476,6 +478,8 @@ Saves and loads significant data for future use
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *   * [968] Hatsuzuki Kai Ni can NOT equip small main gun/torpedo/large radar [1, 5, 13] in slot 4,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *
+		 *   * Hard-coded exceptions are removed and defined in API since 2025-06-27, following notes deprecated:
 		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,
 		 *     hard-coded the exception connditions, for following items either.
 		 *     * see `main.js#SlotUtil.isMstEquipShipExceptionSlotItem`
