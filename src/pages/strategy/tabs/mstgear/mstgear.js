@@ -317,6 +317,10 @@
 					"\u2605{0}".format(equipOn.exslotMinStars >= 10 ? "m" : equipOn.exslotMinStars)
 				));
 				addEquipShips(exslotCapableShips, ".tab_mstgear .gearInfo .equippable .exslot");
+				const exslotIncapableShips = (equipOn.exslotExcludes || []).filter(
+					id => !(equipOn.excludes.includes(id) || exslotCapableShips.includes(id))
+				);
+				addEquipShips(exslotIncapableShips, ".tab_mstgear .gearInfo .equippable .exslot", true);
 				if(hasExslotCapableStypes) addEquipStypes(equipOn.exslotStypes, ".tab_mstgear .gearInfo .equippable .exslot");
 			}
 			
