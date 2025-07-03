@@ -557,7 +557,7 @@ Used by SortieManager
 				let consumedSteel = 0;
 				$.each(this.airBaseJetInjection.api_air_base_data, function(_, jet){
 					const jetMst = KC3Master.slotitem(jet.api_mst_id);
-					const jetBomber2Ratio = KC3Master.equip_type_sp(jet.api_mst_id) === 91 ? 0.4 : 0;
+					const jetBomber2Ratio = KC3Master.equip_type_sp(jet.api_mst_id) === 91 ? 0.04 : 0;
 					consumedSteel += Math.round(
 						jet.api_count * jetMst.api_cost * (
 							KC3GearManager.jetBomberSteelCostRatioPerSlot + jetBomber2Ratio

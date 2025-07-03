@@ -668,7 +668,7 @@ KC3改 Ship Object
 			if(item.exists() && this.slots[i] > 0 &&
 				KC3GearManager.jetAircraftType2Ids.includes(item.master().api_type[2])) {
 				// Ho229 [jet fighter-bomber (II)] might be different cost
-				const jetBomber2RatioAdditive = KC3Master.equip_type_sp(item.masterId) === 91 ? 0.4 : 0;
+				const jetBomber2RatioAdditive = KC3Master.equip_type_sp(item.masterId) === 91 ? 0.04 : 0;
 				consumedSteel = Math.round(
 					this.slots[i] * item.master().api_cost
 					* (KC3GearManager.jetBomberSteelCostRatioPerSlot + jetBomber2RatioAdditive)
