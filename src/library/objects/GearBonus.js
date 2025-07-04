@@ -8266,40 +8266,39 @@
 				starsDist: [],
 				byShip: [
 					{
-						// Yuubari K2T, Nisshin A, Kitakami K2, Ooi K2, Kuma K2D, Mogami/Mikuma K2T, Yahagi K2B
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						// Yuubari K2T, Nisshin Kai/A, Kitakami K2, Ooi K2, Kuma K2D, Mogami/Mikuma K2T, Yahagi K2B
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 7,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 8,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 9,
 						multiple: { "raig": 1 },
 					},
 					{
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 10,
 						multiple: { "houm": 1 },
 					},
-					// client codes' bug shows following bonus for all other ships?
+					// All other ships can equip this except ships above
 					{
-						// Nisshin Kai
-						ids: [690],
+						excludes: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [690],
+						excludes: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 9,
 						multiple: { "raig": 1 },
 					},
 					{
-						ids: [690],
+						excludes: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 10,
 						multiple: { "houm": 1 },
 					},
