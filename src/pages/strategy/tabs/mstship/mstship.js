@@ -196,9 +196,13 @@
 				// Get audio file size first for seasonal Poke(1/2/3)
 				if(isPortVoices){
 					$.ajax({
-						type: "HEAD",
+						// the actual request send by Audio tag simulated for better cache hit
+						type: "GET",
 						url: voiceSrc,
 						async: true,
+						headers: {
+							"Range": "bytes=0-"
+						},
 						success: (data, status, xhr) => {
 							voiceSize = parseInt(xhr.getResponseHeader("Content-Length"), 10) || 0;
 							playAndShowSubtitle();

@@ -57,6 +57,10 @@
 				// Jump to specified section if necessary
 				if(document.location.hash)
 					document.location.replace(document.location.href);
+				// Toggle dark theme simulation on clicking logo
+				$(".logo").addClass("hover").on("click", function(e) {
+					$("body").toggleClass("dark");
+				});
 			}
 		});
 		
