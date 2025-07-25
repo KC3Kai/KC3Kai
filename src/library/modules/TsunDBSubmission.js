@@ -1702,28 +1702,50 @@
 			const request = http.params;
 			const response = http.response.api_data;
 
-			if(request.api_type !== "2") return; // Equipment only
+			if(![1, 2].includes(+request.api_type)) return; // Ships or equipment only
 			if(response == null || response.api_list === null) return; // Pages with content only
 
-			const equips = response.api_list.map((equip) => {
-				return {
-					id: equip.api_table_id[0],
-					name: equip.api_name,
-					description: equip.api_info,
-					firepower: equip.api_houg,
-					torpedo: equip.api_raig,
-					aa: equip.api_tyku,
-					armor: equip.api_souk,
-					los: equip.api_saku,
-					range: equip.api_leng,
-					bombing: equip.api_baku,
-					evasion: equip.api_houk,
-					accuracy: equip.api_houm,
-					speed: equip.api_soku,
-					asw: equip.api_tais,
-					type: equip.api_type
-				};
-			});
+			const equips = response.api_list.map((e) => +request.api_type === 1
+				? {
+					index: 10000 + e.api_index_no,
+					id: 10000 + e.api_table_id[0],
+					name: e.api_name,
+					reading: e.api_yomi,
+					type: e.api_stype,
+					class: e.api_ctype,
+					class_number: e.api_cnum,
+					hp: e.api_taik,
+					armor: e.api_souk,
+					evasion: e.api_kaih,
+					firepower: e.api_houg,
+					torpedo: e.api_raig,
+					aa: e.api_tyku,
+					asw: e.api_tais,
+					range: e.api_leng,
+					description: e.api_sinfo,
+					bombing: e.api_cnum,
+					los: -1,
+					accuracy: -1,
+					speed: -1,
+				} : {
+					index: e.api_index_no,
+					id: e.api_table_id[0],
+					name: e.api_name,
+					description: e.api_info,
+					firepower: e.api_houg,
+					torpedo: e.api_raig,
+					aa: e.api_tyku,
+					armor: e.api_souk,
+					los: e.api_saku,
+					range: e.api_leng,
+					bombing: e.api_baku,
+					evasion: e.api_houk,
+					accuracy: e.api_houm,
+					speed: e.api_soku,
+					asw: e.api_tais,
+					type: e.api_type,
+				}
+			);
 			this.sendData({equips}, "equips");
 		},
 
