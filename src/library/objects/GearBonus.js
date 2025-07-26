@@ -7160,6 +7160,19 @@
 						],
 					},
 					{
+						// Kirov
+						origins: [1001],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kirov
+						origins: [1001],
+						minStars: 10,
+						multiple: { "houg": 2 },
+					},
+					// For all ships can equip it
+					{
 						minStars: 3,
 						multiple: { "houg": 1 },
 					},

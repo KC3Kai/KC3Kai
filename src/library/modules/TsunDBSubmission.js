@@ -409,7 +409,7 @@
 				// Port checks
 				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener, this.submitExped],
 
-				// Equipment list
+				// Ship/Equipment list library
 				'api_get_member/picture_book': this.processPictureBook,
 
 				// Expedition
@@ -1701,11 +1701,12 @@
 		processPictureBook: function(http) {
 			const request = http.params;
 			const response = http.response.api_data;
+			const type = Number(request.api_type);
 
-			if(![1, 2].includes(+request.api_type)) return; // Ships or equipment only
+			if(![1, 2].includes(type)) return; // Ships or equipment only
 			if(response == null || response.api_list === null) return; // Pages with content only
 
-			const equips = response.api_list.map((e) => +request.api_type === 1
+			const equips = response.api_list.map((e) => type === 1
 				? {
 					index: 10000 + e.api_index_no,
 					id: 10000 + e.api_table_id[0],
