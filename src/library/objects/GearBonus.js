@@ -13024,6 +13024,7 @@
 			// Skilled Lookouts
 			"129": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// All IJN DD fp +1, tp +2, asw +2, ev +2, los +1
 					// Ayanami Class
@@ -13088,6 +13089,16 @@
 					"29": "7",
 					// Tone Class
 					"31": "7",
+				},
+				byShip: {
+					// All ship classes above
+					classes: [
+						66, 28, 12, 1, 5, 10, 23, 18, 30, 38, 22, 54, 101,
+						21, 4, 20, 16, 34, 56, 41, 52,
+						7, 13, 29, 8, 9, 31
+					],
+					minStars: 10,
+					single: { "houm": 1 },
 				},
 			},
 			// Torpedo Squadron Skilled Lookouts

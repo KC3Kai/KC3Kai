@@ -3094,6 +3094,10 @@ Previously known as "Reactor"
 				delete cache[recipeId].api_req_useitem_id2;
 				delete cache[recipeId].api_req_useitem_num2;
 			}
+			if(recipes.currentDetail.api_req_slot_id2 === undefined){
+				delete cache[recipeId].api_req_slot_id2;
+				delete cache[recipeId].api_req_slot_num2;
+			}
 			// cache ID info of current item to be improved
 			recipes.rosterId = parseInt(params.api_slot_id);
 			recipes.masterId = recipe.api_slot_id;
@@ -3138,8 +3142,11 @@ Previously known as "Reactor"
 			// Update equipment or consumables on local data
 			console.log("Improvement consumed slot or use item",
 				result.api_use_slot_id || "no gear",
-				result.api_use_useitem_id || "no item1",
-				result.api_use_useitem_id2 || "no item2"
+				// these properties not found yet
+				//result.api_use_useitem_id || "no item1",
+				//result.api_use_useitem_id2 || "no item2",
+				//result.api_use_slot_id2 || "no gear2",
+				", recipe", recipe
 			);
 			(result.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			if(result.api_after_slot) KC3GearManager.set([ result.api_after_slot ]);
