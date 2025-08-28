@@ -3140,13 +3140,13 @@ Previously known as "Reactor"
 				data: materials
 			});
 			// Update equipment or consumables on local data
-			console.log("Improvement consumed slot or use item",
+			console.log("Improvement consumed slotitem",
 				result.api_use_slot_id || "no gear",
 				// these properties not found yet
 				//result.api_use_useitem_id || "no item1",
 				//result.api_use_useitem_id2 || "no item2",
 				//result.api_use_slot_id2 || "no gear2",
-				", recipe", recipe
+				"by recipe", recipe
 			);
 			(result.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			if(result.api_after_slot) KC3GearManager.set([ result.api_after_slot ]);
