@@ -380,6 +380,8 @@ Previously known as "Reactor"
 					case 101:PlayerManager.consumables.nightSkilledCrew = thisItem.api_count; break;
 					case 102:PlayerManager.consumables.airUnitRation = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
+					//     moved to 898 since 2025-08-27, then
+					//     for max gear slots extending card assets as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
 					//     moved to id 899 since 2024-06-27

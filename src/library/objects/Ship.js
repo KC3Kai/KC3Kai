@@ -5209,6 +5209,8 @@ KC3改 Ship Object
 				// for 203mm/53 twin gun mount on CL, -3*n?
 				//   on Agano-class -4*n?
 				// for 152mm/55 triple rapid fire on CL, -2*n?
+				// https://x.com/CC_jabberwock/status/1963300969187610936
+				// for 18cm/57 triple gun mount on CL, -3*n?
 				break;
 			case 5:
 			case 6: // for Heavy Cruisers

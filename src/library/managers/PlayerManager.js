@@ -497,9 +497,9 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		getConsumableById :function(useitemId, attrNameOnly = false){
-			// ID mapping see also `api_get_member/useitem` at Kcsapi.js#282
+			// ID mapping see also `api_get_member/useitem` at Kcsapi.js#304
 			const attrNameMap = {
-				"1": "buckets",
+				"1": "buckets", // virtual materials, either torches/fuel/fcoins, etc
 				"2": "torch",
 				"3": "devmats",
 				"4": "screws",
@@ -511,11 +511,11 @@ Does not include Ships and Gears which are managed by other Managers
 				"33": "steel",
 				"34": "bauxite",
 				"44": "fcoin",
-				"49": "dockKey",
-				"50": "repairTeam",
-				"51": "repairGoddess",
+				"49": "dockKey", // virtual payitem
+				"50": "repairTeam", // virtual slotitem
+				"51": "repairGoddess", // virtual slotitem
 				"52": "furnitureFairy",
-				"53": "portExpansion",
+				"53": "portExpansion", // virtual payitem
 				"54": "mamiya",
 				"55": "ring",
 				"56": "chocolate",
@@ -528,25 +528,25 @@ Does not include Ships and Gears which are managed by other Managers
 				"63": "hqPersonnel",
 				"64": "reinforceExpansion",
 				"65": "protoCatapult",
-				"66": "ration",
-				"67": "resupplier",
+				"66": "ration", // virtual slotitem
+				"67": "resupplier", // virtual slotitem
 				"68": "mackerel",
-				"69": "mackerelCan",
+				"69": "mackerelCan", // virtual slotitem
 				"70": "skilledCrew",
 				"71": "nEngine",
 				"72": "decoMaterial",
 				"73": "constCorps",
 				"74": "newAircraftBlueprint",
 				"75": "newArtilleryMaterial",
-				"76": "rationSpecial",
+				"76": "rationSpecial", // virtual slotitem
 				"77": "newAviationMaterial",
 				"78": "actionReport",
-				"79": "straitMedal",
+				"79": "straitMedal", // not usable
 				"80": "xmasGiftBox",
-				"81": "shogoMedalHard",
-				"82": "shogoMedalNormal",
-				"83": "shogoMedalEasy",
-				"84": "shogoMedalCasual",
+				"81": "shogoMedalHard", // not usable
+				"82": "shogoMedalNormal", // not usable
+				"83": "shogoMedalEasy", // not usable
+				"84": "shogoMedalCasual", // not usable
 				"85": "rice",
 				"86": "umeboshi",
 				"87": "nori",
@@ -565,13 +565,20 @@ Does not include Ships and Gears which are managed by other Managers
 				"100": "overseaTechMaterial",
 				"101": "nightSkilledCrew",
 				"102": "airUnitRation",
-				"899": "boiler",
-				"901": "rankPoints",
-				"902": "gearSlots2", // boiler id moved to 899
+				"895": "rankPoints440", // virtual reward
+				"896": "rankPoints50",
+				"897": "rankPoints11",
+				"898": "rankPoints800",
+				"899": "boiler", // virtual slotitem
+				"901": "gearSlots1", // 800pts moved to 898
+				"902": "gearSlots2", // boiler moved to 899
 				"903": "gearSlots3",
 				"904": "gearSlots4",
 				"905": "gearSlots5",
-				"906": "gearSlots2", // moved to 902
+				"906": "gearSlots6", // slots2 moved to 902
+				"908": "gearSlots8",
+				"911": "gearSlots11",
+				"912": "gearSlots12",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :
