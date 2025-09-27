@@ -8022,74 +8022,138 @@
 	},
 	"6002": {
 		"api_id": 6002,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着Richard P.Leary",
+		"api_yomi": "リチャード・P・リアリー",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"6003": {
 		"api_id": 6003,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着Richard P.Leary改",
+		"api_yomi": "リチャード・P・リアリー",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6004": {
 		"api_id": 6004,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Atlanta",
+		"api_yomi": "アトランタ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6005": {
 		"api_id": 6005,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "水着朝日",
+		"api_yomi": "あさひ",
+		"api_stype": 21,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"6006": {
 		"api_id": 6006,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "水着朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"6007": {
 		"api_id": 6007,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Langley",
+		"api_yomi": "ラングレー",
+		"api_stype": 7,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6008": {
 		"api_id": 6008,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Langley改",
+		"api_yomi": "ラングレー",
+		"api_stype": 7,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6009": {
 		"api_id": 6009,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着能代",
+		"api_yomi": "のしろ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6010": {
+		"api_id": 6010,
+		"api_name": "水着能代改二",
+		"api_yomi": "のしろ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6011": {
+		"api_id": 6011,
+		"api_name": "水着瑞鶴",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6012": {
+		"api_id": 6012,
+		"api_name": "水着瑞鶴改二",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6013": {
+		"api_id": 6013,
+		"api_name": "水着長波",
+		"api_yomi": "ながなみ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"6010": {
-		"api_id": 6010,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+	"6014": {
+		"api_id": 6014,
+		"api_name": "水着長波改二",
+		"api_yomi": "ながなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
+	},
+	"6015": {
+		"api_id": 6015,
+		"api_name": "水着Richelieu Deux",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6016": {
+		"api_id": 6016,
+		"api_name": "浴衣藤波改二",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6017": {
+		"api_id": 6017,
+		"api_name": "水着瑞鶴改",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6018": {
+		"api_id": 6018,
+		"api_name": "水着瑞鶴改二甲",
+		"api_yomi": "ずいかく",
+		"api_stype": 18,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }

@@ -2959,9 +2959,11 @@ Previously known as "Reactor"
 				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni in 2022 (once)
 					// 6 pumpkins with 2 Irako and a Type 1 Shell Kai in 2023 (once)
 					// 6 pumpkins with 1 Mamiya and 1 +4 Tenzan 12A Kai (Type6 Airborne Radar) in 2024 (once)
+					// 13 pumpkins with seletable: (2 Suisei M12 T31 Photo Bombs \u2605+2 / 2 Prototype Flight Deck Catapult / 1 Elite Torpedo Squadron Command Facility) in 2025 (once)
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
+					// exchange 3 pumpkins with Materials [6, 0, 0, 4] in 2025
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
 				break;
 				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`

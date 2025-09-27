@@ -579,6 +579,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"908": "gearSlots8",
 				"911": "gearSlots11",
 				"912": "gearSlots12",
+				"948": "gearSlots48",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :

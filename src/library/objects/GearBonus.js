@@ -2402,12 +2402,33 @@
 			// FR-1 Fireball
 			"422": {
 				count: 0,
+				starsDist: [],
 				byNation: {
-					"UnitedStates": {
+					"UnitedStates": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Game codes still using ctype matching, here uses country name in advance
+					"UnitedKingdom": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
-					// Game codes still using ctype matching, here uses country name in advance
-					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
@@ -2415,11 +2436,34 @@
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 				},
-				byShip: {
-					// Gambier Bay Mk.II
-					ids: [707],
-					multiple: { "houg": 2, "tyku": 2, "houk": 2 },
-				},
+				byShip: [
+					{
+						// Gambier Bay Mk.II
+						ids: [707],
+						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+					},
+					// For all CVL
+					{
+						stypes: [7],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [7],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						stypes: [7],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [7],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Seafire Mk.III Kai
 			"252": {
@@ -11252,9 +11296,84 @@
 					},
 				],
 			},
+			// Type 22 Surface Radar
+			"28": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// Murasame, Minegumo
+					{
+						origins: [44, 583],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 22 Surface Radar Kai 4
+			"88": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// Murasame, Minegumo
+					{
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 22 Surface Radar Kai 4 (Calibrated Late Model)
+			"240": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// Murasame, Minegumo
+					{
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
 			// Radar Equipment Mast (Type 13 Kai + Type 22 Radar Kai 4)
 			"506": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
 						// Shigure K3
@@ -11270,6 +11389,22 @@
 						// Asashimo K2, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D
 						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960],
 						single: { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
+					},
+					{
+						// Murasame, Minegumo
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -11382,6 +11517,22 @@
 								},
 							},
 						],
+					},
+					{
+						// Murasame, Minegumo
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
