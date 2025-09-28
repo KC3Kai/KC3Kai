@@ -2963,7 +2963,7 @@ Previously known as "Reactor"
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
-					// exchange 3 pumpkins with Materials [6, 0, 0, 4] in 2025
+					// exchange 3 pumpkins with Materials [0, 0, 6, 4] in 2025
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
 				break;
 				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`
