@@ -17,14 +17,15 @@
 	}
 	function applyCookiesAndRedirect(htmlLink){
 		chrome.cookies.set({
-			url: "http://www.dmm.com",
+			url: "https://play.games.dmm.com",
 			name: "ckcy",
 			value: "1",
 			domain: ".dmm.com",
 			expirationDate: getInfExpirationDate(),
-			path: "/netgame/",
+			path: "/",
 		}, function(cookie){
-			window.location.href = htmlLink || "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
+			// pre-https was: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
+			window.location.href = htmlLink || "https://play.games.dmm.com/game/kancolle";
 		});
 	}
 	

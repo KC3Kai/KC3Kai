@@ -4831,6 +4831,7 @@ KC3改 Ship Object
 			// same factor for all setups with bonus gears and multi-roll for more chance?
 			// https://twitter.com/yukicacoon/status/1628701453677363202
 			// https://twitter.com/yukicacoon/status/1630145015644311554
+			// 104 Kirishima gear bonus: https://x.com/Xe_UCH/status/1977928481355989315
 			200: 135,
 			// 300~302, 400~401 unknown
 		}[spType];

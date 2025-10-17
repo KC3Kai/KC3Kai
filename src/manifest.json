@@ -64,7 +64,8 @@
 			"all_frames": true
 		},
 		{
-			"matches": ["*://www.dmm.com/netgame/*/app_id=854854*"],
+			"matches": ["*://*.dmm.com/*"],
+			"include_globs": ["*://www.dmm.com/netgame/*/app_id=854854*", "*://play.games.dmm.com/game/kancolle*"],
 			"css": [
 				"library/injections/dmm.css"
 			],

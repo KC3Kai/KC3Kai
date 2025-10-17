@@ -7,7 +7,7 @@
 
 	window.DMMCustomizations = {
 		apply: function(response){
-			console.log('Applying DMM customizations...');
+			console.debug('Applying DMM customizations...');
 
 			config = $.extend(true, ConfigManager, response.config);
 			master = $.extend(true, KC3Master, response.master);
@@ -76,8 +76,8 @@
 		attachHTML: function(){
 			const self = this;
 
-			// Overlay screens
-			var overlays = $("<div>").addClass("overlays notranslate").appendTo("#area-game");
+			// Overlay screens, #area-game no longer exist
+			var overlays = $("<div>").addClass("overlays notranslate").appendTo("#area-game, #root > div > main");
 
 			var overlay_quests = $("<div>").addClass("overlay_box overlay_quests");
 			overlays.append(overlay_quests);
@@ -103,7 +103,7 @@
 						//}
 					})
 				)
-				.appendTo("#area-game");
+				.appendTo("#area-game, #root > div > main");
 
 			// Clonable Factory
 			var factory = $("<div>").attr("id", "factory").appendTo("body");
@@ -132,17 +132,18 @@
 			$("body").addClass("kc3");
 			$("body").css({ margin:0, padding:0, 'min-width':0, 'min-height':0 });
 			$("#main-ntg").css({ position: 'static' });
-			$("#area-game").css({
+			$("#area-game, #root > div > main").css({
 				'margin-left': 'auto',
 				'margin-right': 'auto',
 				padding: 0,
 				width: 1200,
 				height: 720,
 				position: 'relative',
+				display: 'block',
 				zoom: this.gameZoomScale
 			});
 			var altFontFamily = KC3Translation.getDefaultFontFamily(config.language);
-			if(altFontFamily) $("#area-game").css("font-family", altFontFamily);
+			if(altFontFamily) $("#area-game, #root > div > main").css("font-family", altFontFamily);
 			$("#game_frame").css({
 				width: 1200,
 				height: 720
@@ -153,11 +154,14 @@
 			$("#foot").hide();
 			$("#foot").next().hide();
 			$("#w, #main-ntg, #page").css({
-				margin:0,
-				padding:0,
+				margin: 0,
+				padding: 0,
 				width: '100%',
 				height: 0
 			});
+			// New styles for post-https play.games.dmm.com lazy loading
+			$("#root > .gamesResetStyle").css({ "background-color": 'unset' });
+			$("#root > div > header, #root > div > footer, #root > div > aside").hide();
 			$(document).on("ready", this.resizeGameFrameFinal);
 			$(window).on("load", this.resizeGameFrameFinal);
 
@@ -195,7 +199,7 @@
 		backgrounds: function(){
 			var self = this;
 			// Top Margin from game frame to window
-			$("#area-game").css("margin-top", config.api_margin+"px");
+			$("#area-game, #root > div > main").css("margin-top", config.api_margin+"px");
 
 			// Keep background image size fitting to window, see issue #1824
 			var autoFitWindowHeight = function(){
@@ -204,7 +208,7 @@
 				// For wide window, the height may not fit viewport height,
 				// especially when it's smaller than game player, and scrollbar appears
 				var visibleHeight = $(window).height() - self.gameZoomScale
-					* (($("#area-game").offset() || {}).top || 0);
+					* (($("#root > div > main").offset() || {}).top || 0);
 				$("body").css("min-height", visibleHeight);
 				// Prevent scrollbar shown if computed height not accurate but larger than game player
 				$("body").css("overflow-y", !$("#alert").is(":visible")
@@ -256,8 +260,8 @@
 						$(".overlay_subtitles span").css("pointer-events", "none");
 						break;
 					case "below":
-						$("#area-game").css({ overflow:'', height:'' });
-						$(".overlay_subtitles").appendTo("#area-game");
+						$("#area-game, #root > div > main").css({ overflow:'', height:'' });
+						$(".overlay_subtitles").appendTo("#area-game, #root > div > main");
 						$(".overlay_subtitles").css({
 							position: "relative",
 							margin: "5px auto 0px",
@@ -265,7 +269,7 @@
 							top: "auto",
 							bottom: "auto",
 							right: "auto",
-							width: $("#area-game").width()
+							width: $("#root > div > main").width()
 						});
 						break;
 					case "stick":
@@ -276,8 +280,8 @@
 							top: "auto",
 							bottom: "3px",
 							right: "auto",
-							margin: "0px 0px 0px "+(-($("#area-game").width()/2))+"px",
-							width: $("#area-game").width()
+							margin: "0px 0px 0px "+(-($("#root > div > main").width()/2))+"px",
+							width: $("#root > div > main").width()
 						});
 						break;
 					default: break;
@@ -627,8 +631,8 @@
 				response({
 					width: $(window).width(),
 					height: $(window).height(),
-					game_zoom: $("#area-game").css("zoom"),
-					margin_top: parseInt($("#area-game").css("margin-top"))
+					game_zoom: $("#root > div > main").css("zoom"),
+					margin_top: parseInt($("#root > div > main").css("margin-top"))
 				});
 			};
 		},
@@ -655,7 +659,7 @@
 			var self = this;
 			return function(request, sender, response){
 				if(request.action != "getGamescreenOffset") return true;
-				var gameAreaOffset = $("#area-game").offset() || {};
+				var gameAreaOffset = $("#root > div > main").offset() || {};
 				response({
 					top: gameAreaOffset.top || 0,
 					left: gameAreaOffset.left || 0,
