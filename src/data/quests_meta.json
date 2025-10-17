@@ -2648,6 +2648,17 @@
 		"unlock": [381, 1155],
 		"hash": 83351655
 	},
+	"1038": {
+		"unlock": [1039, 1040],
+		"hash": 1935352460
+	},
+	"1039": {
+		"unlock": [1157],
+		"hash": 1424529197
+	},
+	"1040": {
+		"hash": 214825363
+	},
 	"1101": {
 		"unlock": [1102, 1103],
 		"rewardConsumables": [8, 0, 8, 4]
@@ -2813,7 +2824,11 @@
 	"1154": {},
 	"1155": {},
 	"1156": {
+		"unlock": [1039, 1040],
 		"hash": 389705016
+	},
+	"1157": {
+		"hash": -2114935648
 	},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
