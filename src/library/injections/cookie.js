@@ -35,7 +35,7 @@ Redirects to KanColle game page after writing
 		document.cookie = buildCookie("ckcy", "1", "osapi.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "log-netgame.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "hermes-play.games.dmm.com", "/");
-		// ckcy_remedied_check=ec_mrnhbtk required? ktkrt_argt?
+		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/");
 		console.log("Hacked cookies written!");
 	}
 	
