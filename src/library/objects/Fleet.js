@@ -15,6 +15,7 @@ Contains summary information about a fleet and its ships
 		// might be 7-length for 3rd fleet since 2017-11-17
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
+		this.deckParams = {};
 		this.repairTimeMod = 1;
 
 		// Define properties not included in stringifications
@@ -98,6 +99,7 @@ Contains summary information about a fleet and its ships
 			this.name = data.api_name;
 			this.ships = data.api_ship;
 			this.mission = data.api_mission;
+			if(!this.deckParams) this.deckParams = {};
 			
 			shipState.set('post');
 			
@@ -125,6 +127,7 @@ Contains summary information about a fleet and its ships
 		this.mission = data.mission;
 		this.fastFleet = data.fastFleet;
 		this.minSpeed = data.minSpeed;
+		this.deckParams = data.deckParams;
 		this.repairTimeMod = data.repairTimeMod;
 		return this;
 	};
@@ -349,8 +352,12 @@ Contains summary information about a fleet and its ships
 				stats[stat] += ss[stat] || 0;
 			});
 		});
+		// since 2025-10-17 (https update) the game has more stats in radar chart,
+		// and accurate fighter power and TP values are offered, see #deckParams
+		// see main.js#Rader._model.prototype.update
+		// stats of new radar chart just simple sum and value capped based on single/combined fleet,
+		// following algorithm no longer used
 		if (!!forRadarchart) {
-			// see main.js#Rader._model.prototype._getParam
 			const ingameGetParam = function (statsTotal, shipAmount) {
 				if (shipAmount <= 0) return 0;
 				var avg1 = Math.round(statsTotal / shipAmount);

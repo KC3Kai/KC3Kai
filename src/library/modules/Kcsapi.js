@@ -2487,6 +2487,22 @@ Previously known as "Reactor"
 		/*----------------------[ OTHERS ]-----------------------*/
 		/*-------------------------------------------------------*/
 		
+		/* Update fleet additional stats must be computed by server-side
+		-------------------------------------------------------*/
+		"api_get_member/chart_additional_info":function(params, response, headers){
+			const deckParams = response.api_data.api_deck_param;
+			if(Array.isArray(deckParams)) {
+				deckParams.forEach((o, n) => {
+					const fleetParams = PlayerManager.fleets[n].deckParams;
+					fleetParams.seiku = Number(o.api_seiku_value);
+					fleetParams.tp = Number(o.api_tp_value);
+					if(o.api_atp_value) fleetParams.atp = Object.assign({}, o.api_atp_value);
+				});
+				PlayerManager.saveFleets();
+				KC3Network.trigger("Fleet");
+			}
+		},
+		
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){

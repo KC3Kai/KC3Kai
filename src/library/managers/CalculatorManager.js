@@ -35,12 +35,17 @@
     const getFleetsFighterPowerText = (
             viewFleet = PlayerManager.fleets[0],
             escortFleet = PlayerManager.fleets[1],
-            isCombined = false) => {
+            isCombined = false,
+            useFormula = ConfigManager.air_formula) => {
         var mainFleet = viewFleet;
         if(isCombined) { // force to 1st fleet if combined
             mainFleet = viewFleet = PlayerManager.fleets[0];
         }
-        switch(ConfigManager.air_formula) {
+        switch(useFormula) {
+            case 1:
+                return isCombined && ConfigManager.air_combined ?
+                    mainFleet.fighterPower() + escortFleet.fighterPower() :
+                    viewFleet.fighterPower();
             case 2:
                 return "\u2248" + (
                     isCombined && ConfigManager.air_combined ?
@@ -55,9 +60,12 @@
                         (isCombined && ConfigManager.air_combined ?
                         mainBounds[1] + escortBounds[1] : mainBounds[1]);
             default:
-                return isCombined && ConfigManager.air_combined ?
-                    mainFleet.fighterPower() + escortFleet.fighterPower() :
-                    viewFleet.fighterPower();
+                if(isCombined) {
+                    const combinedSeiku = mainFleet.deckParams.seiku + escortFleet.deckParams.seiku;
+                    return isNaN(combinedSeiku) ? "?" : combinedSeiku;
+                } else {
+                    return isNaN(viewFleet.deckParams.seiku) ? "?" : viewFleet.deckParams.seiku;
+                }
         }
     };
 
@@ -67,10 +75,13 @@
             isCombined = false,
             gottenPowerText = "") => {
         const afpText = gottenPowerText || KC3Calc.getFleetsFighterPowerText(viewFleet, escortFleet, isCombined);
+        const safpText = KC3Calc.getFleetsFighterPowerText(viewFleet, escortFleet, isCombined, -1);
         const formulaType = KC3Meta.term(["", "SettingsAFPNoBonus", "SettingsAFPVeteran", "SettingsAFPRange"][ConfigManager.air_formula]) || "";
         const isCombinedPrefix = (isCombined && ConfigManager.air_combined) ? KC3Meta.term("CombinedFleet") : "";
-        const text = KC3Meta.term("PanelFighterPoowerTip")
-            .format(afpText, isCombinedPrefix + formulaType);
+        const text = [
+            KC3Meta.term("PanelServerAFPowTip").format(safpText),
+            KC3Meta.term("PanelFighterPowerTip").format(afpText, isCombinedPrefix + formulaType)
+        ].join("\n");
         return $("<p></p>")
             .css("font-size", "11px")
             .html(text)
@@ -236,7 +247,7 @@
         const containerStyles = {
             "font-size":"11px",
             "display":"grid",
-            "grid-template-columns":"auto auto auto auto auto",
+            "grid-template-columns":"auto auto auto auto",
             "column-gap":"10px", "grid-column-gap":"10px",
             "white-space":"nowrap",
         };
@@ -249,23 +260,23 @@
         const statsVisible = viewFleet.totalStats(true, false, false);
         const statsImprove = viewFleet.totalStats(true, improvementType, false);
         const statsExped   = viewFleet.totalStats(true, "exped", true);
-        const statsRadar   = viewFleet.totalStats(true, false, false, true);
         if(isCombined) {
             accumulateStatsTo(statsVisible, escortFleet.totalStats(true, false, false));
             accumulateStatsTo(statsImprove, escortFleet.totalStats(true, improvementType, false));
             accumulateStatsTo(statsExped,   escortFleet.totalStats(true, "exped", true));
-            accumulateStatsTo(statsRadar,   escortFleet.totalStats(true, false, false, true));
         }
-        const rowTemplate = "<div>{0}</div><div>{1}</div><div>{2}</div><div>{3}</div><div>{4}</div>";
+        const rowTemplate = "<div>{0}</div><div>{1}</div><div>{2}</div><div>{3}</div>";
         let text = rowTemplate.format(
             KC3Meta.term("ExpedTotalHeader"), KC3Meta.term("ExpedTotalNone"),
-            KC3Meta.term("ExpedTotalImp"), KC3Meta.term("ExpedTotalExped"), KC3Meta.term("ExpedTotalRadar")
+            KC3Meta.term("ExpedTotalImp"), KC3Meta.term("ExpedTotalExped")
         );
-        text += rowTemplate.format(KC3Meta.term("ExpedTotalFp")  , statsVisible.fp, rnd(statsImprove.fp), rnd(statsExped.fp), statsRadar.fp);
-        text += rowTemplate.format(KC3Meta.term("ExpedTotalTorp"), statsVisible.tp, rnd(statsImprove.tp), rnd(statsExped.tp), statsRadar.tp);
-        text += rowTemplate.format(KC3Meta.term("ExpedTotalAa")  , statsVisible.aa, rnd(statsImprove.aa), rnd(statsExped.aa), statsRadar.aa);
-        text += rowTemplate.format(KC3Meta.term("ExpedTotalAsw") , statsVisible.as, rnd(statsImprove.as), rnd(statsExped.as), statsRadar.as);
-        text += rowTemplate.format(KC3Meta.term("ExpedTotalLos") , statsVisible.ls, rnd(statsImprove.ls), rnd(statsExped.ls), statsRadar.ls);
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalFp")  , statsVisible.fp, rnd(statsImprove.fp), rnd(statsExped.fp));
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalTorp"), statsVisible.tp, rnd(statsImprove.tp), rnd(statsExped.tp));
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalAa")  , statsVisible.aa, rnd(statsImprove.aa), rnd(statsExped.aa));
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalLos") , statsVisible.ls, rnd(statsImprove.ls), rnd(statsExped.ls));
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalAsw") , statsVisible.as, rnd(statsImprove.as), rnd(statsExped.as));
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalEva") , statsVisible.ev, rnd(statsImprove.ev), rnd(statsExped.ev));
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalHp")  , statsVisible.hp, rnd(statsImprove.hp), rnd(statsExped.hp));
         return $("<div></div>")
             .css(containerStyles)
             .html(text)

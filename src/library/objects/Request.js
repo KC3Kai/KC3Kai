@@ -197,6 +197,7 @@ Executes processing and relies on KC3Network for the triggers
 			return false;
 		} else {
 			// Check availability of the headers.Date
+			if(!this.headers.Date && this.headers.date) this.headers.Date = this.headers.date;
 			if(!this.headers.Date) {
 				// Ignore header check if local proxy found
 				if(this.remoteIp === "127.0.0.1" || this.remoteIp === "::1") {
