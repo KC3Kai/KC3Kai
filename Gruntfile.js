@@ -277,7 +277,7 @@ module.exports = function(grunt) {
 								"all_frames": true
 							},
 							{
-								"matches": ["*://www.dmm.com/netgame/*/app_id=854854*"],
+								"matches": ["*://play.games.dmm.com/game/kancolle*"],
 								"css": [
 									"library/injections/dmm.css"
 								],
@@ -313,6 +313,7 @@ module.exports = function(grunt) {
 							},
 							{
 								"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
+								"include_globs": ["*://*.kancolle-server.com/*"],
 								"js": [
 									"assets/js/global.js",
 									"library/objects.js",
