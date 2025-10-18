@@ -2226,6 +2226,37 @@
 					},
 				],
 			},
+			// Reppuu Model 11
+			"53": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Japan": [
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+						{
+							// All IJN CV(B)
+							stypes: [11, 18],
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
 			// Reppuu Kai (Prototype Carrier-based Model)
 			"335": {
 				count: 0,
@@ -2402,12 +2433,33 @@
 			// FR-1 Fireball
 			"422": {
 				count: 0,
+				starsDist: [],
 				byNation: {
-					"UnitedStates": {
+					"UnitedStates": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Game codes still using ctype matching, here uses country name in advance
+					"UnitedKingdom": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
-					// Game codes still using ctype matching, here uses country name in advance
-					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
@@ -2415,11 +2467,34 @@
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 				},
-				byShip: {
-					// Gambier Bay Mk.II
-					ids: [707],
-					multiple: { "houg": 2, "tyku": 2, "houk": 2 },
-				},
+				byShip: [
+					{
+						// Gambier Bay Mk.II
+						ids: [707],
+						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+					},
+					// For all CVL
+					{
+						stypes: [7],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [7],
+						minStars: 8,
+						multiple: { "houg": 1 },
+					},
+					{
+						stypes: [7],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [7],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// Seafire Mk.III Kai
 			"252": {
@@ -2704,17 +2779,30 @@
 			// Fulmar (Reconnaissance Fighter / Skilled)
 			"423": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ark Royal Class
-					"78": {
-						multiple: { "houg": 4, "tyku": 4, "houk": 4, "saku": 4 },
-					},
+					"78": [
+						{
+							multiple: { "houg": 4, "tyku": 4, "houk": 4, "saku": 4 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
 					// Illustrious Class
 					"112": "78",
 					// Queen Elizabeth Class
-					"67": {
-						multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
-					},
+					"67": [
+						{
+							multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
 					// J Class
 					"82": "67",
 					// Nelson Class
@@ -2726,6 +2814,10 @@
 					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1, "saku": 1 },
 					},
+				},
+				byShip: {
+					minStars: 10,
+					multiple: { "houk": 1, "houm": 1 },
 				},
 			},
 			// Barracuda Mk.II
@@ -7160,6 +7252,19 @@
 						],
 					},
 					{
+						// Kirov
+						origins: [1001],
+						minStars: 9,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kirov
+						origins: [1001],
+						minStars: 10,
+						multiple: { "houg": 2 },
+					},
+					// For all ships can equip it
+					{
 						minStars: 3,
 						multiple: { "houg": 1 },
 					},
@@ -8266,40 +8371,39 @@
 				starsDist: [],
 				byShip: [
 					{
-						// Yuubari K2T, Nisshin A, Kitakami K2, Ooi K2, Kuma K2D, Mogami/Mikuma K2T, Yahagi K2B
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						// Yuubari K2T, Nisshin Kai/A, Kitakami K2, Ooi K2, Kuma K2D, Mogami/Mikuma K2T, Yahagi K2B
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 7,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 8,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 9,
 						multiple: { "raig": 1 },
 					},
 					{
-						ids: [623, 586, 119, 118, 657, 506, 668, 507],
+						ids: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 10,
 						multiple: { "houm": 1 },
 					},
-					// client codes' bug shows following bonus for all other ships?
+					// All other ships can equip this except ships above
 					{
-						// Nisshin Kai
-						ids: [690],
+						excludes: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [690],
+						excludes: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 9,
 						multiple: { "raig": 1 },
 					},
 					{
-						ids: [690],
+						excludes: [623, 586, 119, 118, 657, 506, 668, 507, 690],
 						minStars: 10,
 						multiple: { "houm": 1 },
 					},
@@ -11240,9 +11344,84 @@
 					},
 				],
 			},
+			// Type 22 Surface Radar
+			"28": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// Murasame, Minegumo
+					{
+						origins: [44, 583],
+						minStars: 7,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houm": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 22 Surface Radar Kai 4
+			"88": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// Murasame, Minegumo
+					{
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Type 22 Surface Radar Kai 4 (Calibrated Late Model)
+			"240": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// Murasame, Minegumo
+					{
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
 			// Radar Equipment Mast (Type 13 Kai + Type 22 Radar Kai 4)
 			"506": {
 				count: 0,
+				starsDist: [],
 				byShip: [
 					{
 						// Shigure K3
@@ -11258,6 +11437,22 @@
 						// Asashimo K2, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D
 						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960],
 						single: { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
+					},
+					{
+						// Murasame, Minegumo
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -11370,6 +11565,22 @@
 								},
 							},
 						],
+					},
+					{
+						// Murasame, Minegumo
+						origins: [44, 583],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 9,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [44, 583],
+						minStars: 10,
+						multiple: { "houg": 1 },
 					},
 				],
 			},
@@ -13012,6 +13223,7 @@
 			// Skilled Lookouts
 			"129": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// All IJN DD fp +1, tp +2, asw +2, ev +2, los +1
 					// Ayanami Class
@@ -13076,6 +13288,16 @@
 					"29": "7",
 					// Tone Class
 					"31": "7",
+				},
+				byShip: {
+					// All ship classes above
+					classes: [
+						66, 28, 12, 1, 5, 10, 23, 18, 30, 38, 22, 54, 101,
+						21, 4, 20, 16, 34, 56, 41, 52,
+						7, 13, 29, 8, 9, 31
+					],
+					minStars: 10,
+					single: { "houm": 1 },
 				},
 			},
 			// Torpedo Squadron Skilled Lookouts

@@ -671,7 +671,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			if( changeInfo.cookie.name == "ckcy" ){
 				// console.log("CKCY=", changeInfo.cookie.value, changeInfo);
 				chrome.cookies.set({
-					url: "http://www.dmm.com",
+					url: "https://play.games.dmm.com",
 					name: "ckcy",
 					value: "1",
 					domain: ".dmm.com",
@@ -686,7 +686,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			if( changeInfo.cookie.name == "cklg" ){
 				// console.log("CKLG=", changeInfo.cookie.value, changeInfo);
 				chrome.cookies.set({
-					url: "http://www.dmm.com",
+					url: "https://play.games.dmm.com",
 					name: "cklg",
 					value: "welcome",
 					domain: ".dmm.com",

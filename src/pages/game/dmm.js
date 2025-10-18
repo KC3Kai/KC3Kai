@@ -58,7 +58,7 @@ function ActivateGame(){
 	$(".box-game")
 		.prepend("<iframe class=game-swf frameborder=0></iframe>")
 		.find(".game-swf")
-		.attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
+		.attr("src", "https://play.games.dmm.com/game/kancolle")
 		.end()
 		.show();
 	$(".box-wrap").css({

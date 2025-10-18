@@ -3,6 +3,23 @@
 body {
 	background:#eee;
 }
+body.dark {
+	filter:invert(100%) hue-rotate(180deg);
+	background:#222;
+}
+body.dark img, body.dark svg {
+	filter:invert(100%) hue-rotate(180deg);
+}
+@media (prefers-color-scheme:dark) {
+body {
+	filter:invert(100%) hue-rotate(180deg);
+	background:#222;
+}
+img, svg {
+	filter:invert(100%) hue-rotate(180deg);
+}
+}
+
 #wrapper {
 	width:800px;
 	margin:0px auto;

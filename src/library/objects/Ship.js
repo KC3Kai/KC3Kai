@@ -668,7 +668,7 @@ KC3改 Ship Object
 			if(item.exists() && this.slots[i] > 0 &&
 				KC3GearManager.jetAircraftType2Ids.includes(item.master().api_type[2])) {
 				// Ho229 [jet fighter-bomber (II)] might be different cost
-				const jetBomber2RatioAdditive = KC3Master.equip_type_sp(item.masterId) === 91 ? 0.4 : 0;
+				const jetBomber2RatioAdditive = KC3Master.equip_type_sp(item.masterId) === 91 ? 0.04 : 0;
 				consumedSteel = Math.round(
 					this.slots[i] * item.master().api_cost
 					* (KC3GearManager.jetBomberSteelCostRatioPerSlot + jetBomber2RatioAdditive)
@@ -4831,6 +4831,7 @@ KC3改 Ship Object
 			// same factor for all setups with bonus gears and multi-roll for more chance?
 			// https://twitter.com/yukicacoon/status/1628701453677363202
 			// https://twitter.com/yukicacoon/status/1630145015644311554
+			// 104 Kirishima gear bonus: https://x.com/Xe_UCH/status/1977928481355989315
 			200: 135,
 			// 300~302, 400~401 unknown
 		}[spType];
@@ -5209,6 +5210,8 @@ KC3改 Ship Object
 				// for 203mm/53 twin gun mount on CL, -3*n?
 				//   on Agano-class -4*n?
 				// for 152mm/55 triple rapid fire on CL, -2*n?
+				// https://x.com/CC_jabberwock/status/1963300969187610936
+				// for 18cm/57 triple gun mount on CL, -3*n?
 				break;
 			case 5:
 			case 6: // for Heavy Cruisers

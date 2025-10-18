@@ -836,7 +836,7 @@ KC3改 Equipment Object
 			} else {
 				// https://x.com/CC_jabberwock/status/1939699963778457773
 				if(isJet && !isJetAssault)
-					return [0.7 * power + 0.5, 0.7 * power + 0.5, false];
+					return [Math.round(0.7 * power), Math.round(0.7 * power), false];
 				return [power, power, false];
 			}
 		}
@@ -887,7 +887,7 @@ KC3改 Equipment Object
 			//if(isLandBaseHeavyBomber) sizeModifier = 1.0;
 			result += Math.sqrt(capacity * sizeModifier) * stat;
 			result *= typeModifier;
-			if(isJet && !isJetAssault) result += 0.5;
+			if(isJet && !isJetAssault) result = Math.round(result);
 		}
 		return result;
 	};

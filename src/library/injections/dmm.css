@@ -14,7 +14,10 @@
 	text-align:left;
 	overflow:hidden;
 }
-.kc3 #factory {
+.kc3 #factory,
+.kc3 #root header,
+.kc3 #root footer,
+.kc3 #root aside {
 	display:none;
 }
 

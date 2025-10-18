@@ -4145,46 +4145,44 @@
 			
 			if(recipeDetail.api_req_slot_id || recipeDetail.api_req_useitem_id) {
 				const consumeList = $(".remodel_consume_items", remodelDetailBox);
-				$(".remodel_consume_item.useitem", consumeList).remove();
+				$(".remodel_consume_item:not(.first)", consumeList).remove();
 				$(".owned_use_items:not(.first)", remodelDetailBox).remove();
-				// If consumes another equipment
-				if(recipeDetail.api_req_slot_id && recipeDetail.api_req_slot_num) {
-					const masterId = recipeDetail.api_req_slot_id;
-					const consumeGear = KC3Master.slotitem(masterId);
-					const consumeGearBox = $(".remodel_consume_item", consumeList);
+				const addConsumeSlotItem = (consumeSlotId, consumeSlotNum, isFirst = true) => {
+					const consumeGear = KC3Master.slotitem(consumeSlotId);
+					const consumeGearBox = isFirst ? $(".remodel_consume_item.first", consumeList)
+						: $(".remodel_consume_item.first", consumeList).clone();
+					if(!isFirst) consumeGearBox.removeClass("first").appendTo(consumeList);
 					$(".remodel_slot_icon img", consumeGearBox)
 						.attr("src", KC3Meta.itemIcon(consumeGear.api_type[3]))
-						.attr("alt", masterId).data("masterId", masterId)
+						.attr("alt", consumeSlotId).data("masterId", consumeSlotId)
 						.on("dblclick", this.gearDoubleClickFunction);
 					$(".remodel_slot_name", consumeGearBox)
 						.text(KC3Meta.gearName(consumeGear.api_name))
 						.attr("title", KC3Meta.gearName(consumeGear.api_name));
 					$(".remodel_consume_amount", consumeGearBox)
-						.text("x{0}".format(recipeDetail.api_req_slot_num));
+						.text("x{0}".format(consumeSlotNum));
 					consumeGearBox.show();
-					const gearToRemodel = KC3GearManager.get(data.rosterId);
-					const isToConsumeSameGear = masterId === gearToRemodel.masterId
-						&& !gearToRemodel.lock && !gearToRemodel.stars;
-					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true)
-						- (isToConsumeSameGear & 1);
-					$(".owned_star0_item .value", remodelDetailBox)
-						.text("x{0}".format(totalAmount))
-						.toggleClass("red", totalAmount < recipeDetail.api_req_slot_num);
-					$(".owned_star0_item", remodelDetailBox).show();
-					const freeAmount = KC3GearManager.countFree(masterId, true, true)
-						- (isToConsumeSameGear & 1);
-					$(".owned_free_item .value", remodelDetailBox)
-						.text("x{0}".format(freeAmount))
-						.toggleClass("red", freeAmount < recipeDetail.api_req_slot_num);
-					$(".owned_free_item", remodelDetailBox).show();
-				} else {
-					$(".remodel_consume_item", consumeList).hide();
-					$(".owned_star0_item", remodelDetailBox).hide();
-					$(".owned_free_item", remodelDetailBox).hide();
-				}
+					if(isFirst) {
+						const gearToRemodel = KC3GearManager.get(data.rosterId);
+						const isToConsumeSameGear = consumeSlotId === gearToRemodel.masterId
+							&& !gearToRemodel.lock && !gearToRemodel.stars;
+						const totalAmount = KC3GearManager.countByMasterId(consumeSlotId, false, true)
+							- (isToConsumeSameGear & 1);
+						$(".owned_star0_item .value", remodelDetailBox)
+							.text("x{0}".format(totalAmount))
+							.toggleClass("red", totalAmount < consumeSlotNum);
+						$(".owned_star0_item", remodelDetailBox).show();
+						const freeAmount = KC3GearManager.countFree(consumeSlotId, true, true)
+							- (isToConsumeSameGear & 1);
+						$(".owned_free_item .value", remodelDetailBox)
+							.text("x{0}".format(freeAmount))
+							.toggleClass("red", freeAmount < consumeSlotNum);
+						$(".owned_free_item", remodelDetailBox).show();
+					}
+				};
 				const addConsumeUseItem = (useitemId, useitemNum) => {
-					const consumeUseItemBox = $(".remodel_consume_item:not(.useitem)", consumeList).clone();
-					consumeUseItemBox.addClass("useitem").show().appendTo(consumeList);
+					const consumeUseItemBox = $(".remodel_consume_item.first", consumeList).clone();
+					consumeUseItemBox.removeClass("first").addClass("useitem").show().appendTo(consumeList);
 					$(".remodel_slot_icon img", consumeUseItemBox)
 						.attr("src", KC3Meta.useitemIcon(useitemId, 1));
 					$(".remodel_slot_name", consumeUseItemBox)
@@ -4202,11 +4200,23 @@
 						.toggleClass("red", useitemAmount < useitemNum);
 					ownedUseitemBox.show();
 				};
+				// If consumes another equipment
+				if(recipeDetail.api_req_slot_id && recipeDetail.api_req_slot_num) {
+					addConsumeSlotItem(recipeDetail.api_req_slot_id, recipeDetail.api_req_slot_num, true);
+				} else {
+					$(".remodel_consume_item.first", consumeList).hide();
+					$(".owned_star0_item", remodelDetailBox).hide();
+					$(".owned_free_item", remodelDetailBox).hide();
+				}
+				// If consumes more equipment slotitems
+				if(recipeDetail.api_req_slot_id2 && recipeDetail.api_req_slot_num2) {
+					addConsumeSlotItem(recipeDetail.api_req_slot_id2, recipeDetail.api_req_slot_num2, false);
+				}
 				// If consumes some useitems
 				if(recipeDetail.api_req_useitem_id && recipeDetail.api_req_useitem_num) {
 					addConsumeUseItem(recipeDetail.api_req_useitem_id, recipeDetail.api_req_useitem_num);
 				}
-				// For now, only appears for upgrading from C gun to D gun
+				// It consumes some more useitems
 				if(recipeDetail.api_req_useitem_id2 && recipeDetail.api_req_useitem_num2) {
 					addConsumeUseItem(recipeDetail.api_req_useitem_id2, recipeDetail.api_req_useitem_num2);
 				}

@@ -81,7 +81,8 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				}
 			}
 			console.log("Applying customized styles...");
-			// Hide spacing top div element
+			$("body").css("overflow", "hidden");
+			// Hide spacing top div element (disappeared since https update)
 			$("#spacing_top").hide();
 			intervalTimer = setInterval(hideSpacingTop, 1000);
 			// Prevent Tab key scrolling
