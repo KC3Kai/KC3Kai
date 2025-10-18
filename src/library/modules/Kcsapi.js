@@ -380,6 +380,8 @@ Previously known as "Reactor"
 					case 101:PlayerManager.consumables.nightSkilledCrew = thisItem.api_count; break;
 					case 102:PlayerManager.consumables.airUnitRation = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
+					//     moved to 898 since 2025-08-27, then
+					//     for max gear slots extending card assets as quest rewards
 					// 902 not found here, the slotitem "boiler" used for remodelling Yamato Kai
 					//     also virtual for 10 irako card assets as quest rewards
 					//     moved to id 899 since 2024-06-27
@@ -2485,6 +2487,20 @@ Previously known as "Reactor"
 		/*----------------------[ OTHERS ]-----------------------*/
 		/*-------------------------------------------------------*/
 		
+		/* Update fleet additional stats must be computed by server-side before sortie,
+			used by in-game fleet radar chart 2025 model IIA
+		-------------------------------------------------------*/
+		"api_get_member/chart_additional_info":function(params, response, headers){
+			const deckParams = response.api_data.api_deck_param;
+			if(Array.isArray(deckParams)) {
+				deckParams.forEach((o, n) => {
+					PlayerManager.fleets[n].updateDeckParams(o);
+				});
+				PlayerManager.saveFleets();
+				KC3Network.trigger("Fleet");
+			}
+		},
+		
 		/* View World Maps
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
@@ -2957,9 +2973,11 @@ Previously known as "Reactor"
 				case 101: // exchange 6 pumpkins with 2 Irako and a Type 3 Shell Kai Ni in 2022 (once)
 					// 6 pumpkins with 2 Irako and a Type 1 Shell Kai in 2023 (once)
 					// 6 pumpkins with 1 Mamiya and 1 +4 Tenzan 12A Kai (Type6 Airborne Radar) in 2024 (once)
+					// 13 pumpkins with seletable: (2 Suisei M12 T31 Photo Bombs \u2605+2 / 2 Prototype Flight Deck Catapult / 1 Elite Torpedo Squadron Command Facility) in 2025 (once)
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 6;
 				break;
 				case 102: // exchange 2 pumpkins with materials [0, 0, 0, 4]
+					// exchange 3 pumpkins with Materials [0, 0, 6, 4] in 2025
 					//if(itemId === 96) PlayerManager.consumables.pumpkin -= 2;
 				break;
 				// Hints can be found in client `ConfirmView`, `TopView` and `getUseTypeIndex`
@@ -3094,6 +3112,10 @@ Previously known as "Reactor"
 				delete cache[recipeId].api_req_useitem_id2;
 				delete cache[recipeId].api_req_useitem_num2;
 			}
+			if(recipes.currentDetail.api_req_slot_id2 === undefined){
+				delete cache[recipeId].api_req_slot_id2;
+				delete cache[recipeId].api_req_slot_num2;
+			}
 			// cache ID info of current item to be improved
 			recipes.rosterId = parseInt(params.api_slot_id);
 			recipes.masterId = recipe.api_slot_id;
@@ -3136,10 +3158,13 @@ Previously known as "Reactor"
 				data: materials
 			});
 			// Update equipment or consumables on local data
-			console.log("Improvement consumed slot or use item",
+			console.log("Improvement consumed slotitem",
 				result.api_use_slot_id || "no gear",
-				result.api_use_useitem_id || "no item1",
-				result.api_use_useitem_id2 || "no item2"
+				// these properties not found yet
+				//result.api_use_useitem_id || "no item1",
+				//result.api_use_useitem_id2 || "no item2",
+				//result.api_use_slot_id2 || "no gear2",
+				"by recipe", recipe
 			);
 			(result.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			if(result.api_after_slot) KC3GearManager.set([ result.api_after_slot ]);

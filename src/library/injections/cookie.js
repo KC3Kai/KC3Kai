@@ -24,13 +24,18 @@ Redirects to KanColle game page after writing
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame_s/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/play/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/game/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame_s/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/play/");
+		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/game/");
 		document.cookie = buildCookie("ckcy", "1", "www.dmm.com", "/");
+		document.cookie = buildCookie("ckcy", "1", "play.games.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "osapi.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "log-netgame.dmm.com", "/");
+		document.cookie = buildCookie("ckcy", "1", "hermes-play.games.dmm.com", "/");
+		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/");
 		console.log("Hacked cookies written!");
 	}
 	

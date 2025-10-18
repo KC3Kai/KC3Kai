@@ -82,9 +82,12 @@ Executes processing and relies on KC3Network for the triggers
 		// Reformat headers array to name-value object
 		var headersReformatted = {};
 		$.each(this.headers, function(index, element){
-			headersReformatted[ element.name ] = element.value;
+			headersReformatted[String(element.name).toLowerCase()] = element.value;
 		});
 		this.headers = headersReformatted;
+		// RFC spec says header name should be case insensitive, but we use `headers.Date` everywhere,
+		// because before https update, header names are capitalized
+		if(this.headers.date) this.headers.Date = this.headers.date;
 		
 		// Reformat and decode parameters
 		var paramsReformatted = {};
