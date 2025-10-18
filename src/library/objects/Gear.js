@@ -652,10 +652,12 @@ KC3改 Equipment Object
 			case 49: // LB recon, uncertain: all? or AA > 2 like fighter bomber?
 				// for now: https://twitter.com/noro_006/status/1628605249492766721
 				// btw, no proficiency type bonus: https://twitter.com/noro_006/status/1628593477134209024
-				modifier = 0.2; break;
+				modifier = [486].includes(this.masterId) ? 0.3 : 0.2;
+				break;
 			case 7: // Fighter bomber
 			case 57: // Jet fighter bomber
-				if(this.isFighterBomber()) modifier = 0.25;
+				// Some specific planes use 0.3? https://x.com/noro_006/status/1979155131707920627
+				if(this.isFighterBomber()) modifier = [487].includes(this.masterId) ? 0.3 : 0.25;
 				break;
 			case 41: // Large Flying Boat
 				modifier = 0.15; break;
