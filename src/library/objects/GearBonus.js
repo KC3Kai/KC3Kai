@@ -2226,6 +2226,37 @@
 					},
 				],
 			},
+			// Reppuu Model 11
+			"53": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Japan": [
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+						{
+							// All IJN CV(B)
+							stypes: [11, 18],
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
 			// Reppuu Kai (Prototype Carrier-based Model)
 			"335": {
 				count: 0,
@@ -2748,17 +2779,30 @@
 			// Fulmar (Reconnaissance Fighter / Skilled)
 			"423": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ark Royal Class
-					"78": {
-						multiple: { "houg": 4, "tyku": 4, "houk": 4, "saku": 4 },
-					},
+					"78": [
+						{
+							multiple: { "houg": 4, "tyku": 4, "houk": 4, "saku": 4 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
 					// Illustrious Class
 					"112": "78",
 					// Queen Elizabeth Class
-					"67": {
-						multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
-					},
+					"67": [
+						{
+							multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
 					// J Class
 					"82": "67",
 					// Nelson Class
@@ -2770,6 +2814,10 @@
 					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1, "saku": 1 },
 					},
+				},
+				byShip: {
+					minStars: 10,
+					multiple: { "houk": 1, "houm": 1 },
 				},
 			},
 			// Barracuda Mk.II

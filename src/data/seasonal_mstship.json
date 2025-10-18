@@ -2622,7 +2622,7 @@
 	},
 	"5327": {
 		"api_id": 5327,
-		"api_name": "夏制服夕雲改二",
+		"api_name": "秋冬制服夕雲改二",
 		"api_yomi": "ゆうぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -2630,7 +2630,7 @@
 	},
 	"5328": {
 		"api_id": 5328,
-		"api_name": "夏制服長波改二",
+		"api_name": "秋冬制服長波改二",
 		"api_yomi": "ながなみ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -4302,7 +4302,7 @@
 	},
 	"5537": {
 		"api_id": 5537,
-		"api_name": "夏制服風雲改二",
+		"api_name": "秋冬制服風雲改二",
 		"api_yomi": "かざぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -4310,7 +4310,7 @@
 	},
 	"5538": {
 		"api_id": 5538,
-		"api_name": "夏制服巻雲改二",
+		"api_name": "秋冬制服巻雲改二",
 		"api_yomi": "まきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -4318,7 +4318,7 @@
 	},
 	"5539": {
 		"api_id": 5539,
-		"api_name": "夏制服沖波改二",
+		"api_name": "秋冬制服沖波改二",
 		"api_yomi": "おきなみ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -4326,7 +4326,7 @@
 	},
 	"5540": {
 		"api_id": 5540,
-		"api_name": "夏制服朝霜改二",
+		"api_name": "秋冬制服朝霜改二",
 		"api_yomi": "あさしも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -4630,7 +4630,7 @@
 	},
 	"5578": {
 		"api_id": 5578,
-		"api_name": "夏制服高波改二",
+		"api_name": "秋冬制服高波改二",
 		"api_yomi": "たかなみ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -6382,7 +6382,7 @@
 	},
 	"5797": {
 		"api_id": 5797,
-		"api_name": "夏制服時雨改三",
+		"api_name": "秋冬制服時雨改三",
 		"api_yomi": "しぐれ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -8155,5 +8155,213 @@
 		"api_stype": 18,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"6019": {
+		"api_id": 6019,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6019": {
+		"api_id": 6019,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6020": {
+		"api_id": 6020,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6021": {
+		"api_id": 6021,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6022": {
+		"api_id": 6022,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6023": {
+		"api_id": 6023,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6024": {
+		"api_id": 6024,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6025": {
+		"api_id": 6025,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6026": {
+		"api_id": 6026,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6027": {
+		"api_id": 6027,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6028": {
+		"api_id": 6028,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6029": {
+		"api_id": 6029,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6030": {
+		"api_id": 6030,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6031": {
+		"api_id": 6031,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6032": {
+		"api_id": 6032,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6033": {
+		"api_id": 6033,
+		"api_name": "夏制服夕雲改二",
+		"api_yomi": "ゆうぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6034": {
+		"api_id": 6034,
+		"api_name": "夏制服風雲改二",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6035": {
+		"api_id": 6035,
+		"api_name": "夏制服巻雲改二",
+		"api_yomi": "まきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6036": {
+		"api_id": 6036,
+		"api_name": "夏制服沖波改二",
+		"api_yomi": "おきなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6037": {
+		"api_id": 6037,
+		"api_name": "夏制服高波改二",
+		"api_yomi": "たかなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6038": {
+		"api_id": 6038,
+		"api_name": "夏制服時雨改三",
+		"api_yomi": "しぐれ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6039": {
+		"api_id": 6039,
+		"api_name": "夏制服藤波改二",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6040": {
+		"api_id": 6040,
+		"api_name": "夏制服早霜改二",
+		"api_yomi": "はやしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6041": {
+		"api_id": 6041,
+		"api_name": "夏制服長波改二",
+		"api_yomi": "ながなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6042": {
+		"api_id": 6042,
+		"api_name": "夏制服朝霜改二",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6043": {
+		"api_id": 6043,
+		"api_name": "夏制服浜波改二",
+		"api_yomi": "はまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

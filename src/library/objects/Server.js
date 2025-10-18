@@ -6,13 +6,16 @@ Represent KanColle game server instance.
 (function(){
 	"use strict";
 	
-	// kc server ip addresses are replaced by domain hostnames: (but still via http)
+	// kc server ip addresses are replaced by domain hostnames:
 	// server gadget and w01 (yokosuka) have started to use domain since 2024-12-03
 	//    eg: w00g.      w01y.          kancolle-server.com
 	// w02~w05 have started since 2024-12-06
 	// w06~w10 have started since 2024-12-09
 	// w11~w15 have started since 2024-12-11
 	// w16~w20 have started since 2024-12-13
+	// https migration done since 2025-10-17
+	//   with DMM frontend upgrade: 'www. dmm.com/netgame/' -> 'play.games.dmm.com/'
+	//   this introduced script ES module requirement, depending on minimal chrome m61 (winxp out)
 	const kcBaseDomain = ".kancolle-server.com";
 	const kcsNameInitials = "yksmotlrsbtpbhpskish";
 	

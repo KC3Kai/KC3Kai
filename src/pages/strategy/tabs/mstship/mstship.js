@@ -1174,7 +1174,8 @@
 								for (const minStar in starBonus) {
 									starBonus[minStar] = Object.assign({}, totalStats);
 									for (const bonusDef of classBonus) {
-										if (bonusDef.minStars <= minStar) {
+										if (bonusDef.minStars <= minStar
+											&& checkBonusExtraRequirements(bonusDef, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype)) {
 											bonusStats = bonusDef.single || bonusDef.multiple;
 											starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
 										}
@@ -1209,7 +1210,8 @@
 									// redo star bonuses from class if any, due to overwritten by new total stats of previous line
 									if (classBonus.length) {
 										for (const bonusDef of classBonus) {
-											if (bonusDef.minStars <= minStar) {
+											if (bonusDef.minStars <= minStar
+												&& checkBonusExtraRequirements(bonusDef, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype)) {
 												bonusStats = bonusDef.single || bonusDef.multiple;
 												starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
 											}
