@@ -2487,16 +2487,14 @@ Previously known as "Reactor"
 		/*----------------------[ OTHERS ]-----------------------*/
 		/*-------------------------------------------------------*/
 		
-		/* Update fleet additional stats must be computed by server-side
+		/* Update fleet additional stats must be computed by server-side before sortie,
+			used by in-game fleet radar chart 2025 model IIA
 		-------------------------------------------------------*/
 		"api_get_member/chart_additional_info":function(params, response, headers){
 			const deckParams = response.api_data.api_deck_param;
 			if(Array.isArray(deckParams)) {
 				deckParams.forEach((o, n) => {
-					const fleetParams = PlayerManager.fleets[n].deckParams;
-					fleetParams.seiku = Number(o.api_seiku_value);
-					fleetParams.tp = Number(o.api_tp_value);
-					if(o.api_atp_value) fleetParams.atp = Object.assign({}, o.api_atp_value);
+					PlayerManager.fleets[n].updateDeckParams(o);
 				});
 				PlayerManager.saveFleets();
 				KC3Network.trigger("Fleet");
