@@ -657,8 +657,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	chrome.cookies.onChanged.addListener(function(changeInfo){
 		if(changeInfo.cookie.domain == ".dmm.com" && changeInfo.cause == "expired_overwrite"){
 			
-			// Check if forcing cookies is enabled, for efficiency, only do this for the two variables
-			if( changeInfo.cookie.name == "ckcy" || changeInfo.cookie.name == "cklg" ){
+			// Check if forcing cookies is enabled, for efficiency, only do this for the specified variables
+			if( changeInfo.cookie.name == "ckcy" || changeInfo.cookie.name == "cklg" || changeInfo.cookie.name == "ckcy_remedied_check" ){
 				// Reload config, do always. If not, cookie settings will only take affect after browser restart
 				ConfigManager.load();
 				// Cancel all further actions if disabled
@@ -695,7 +695,21 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				}, function(cookie){
 					// console.log("cklg cookie re-hacked", cookie);
 				});
-				
+			}
+			
+			// ckcy_remedied_check force?
+			if( changeInfo.cookie.name == "ckcy_remedied_check" ){
+				// console.log("ckcy_remedied_check=", changeInfo.cookie.value, changeInfo);
+				chrome.cookies.set({
+					url: "https://play.games.dmm.com",
+					name: "ckcy_remedied_check",
+					value: "ec_mrnhbtk",
+					domain: ".dmm.com",
+					expirationDate: Math.ceil(nextYear.getTime()/1000),
+					path: changeInfo.cookie.path,
+				}, function(cookie){
+					// console.log("ckcy_remedied_check cookie re-hacked", cookie);
+				});
 			}
 		}
 	});
