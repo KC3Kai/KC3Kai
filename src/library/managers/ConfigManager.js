@@ -233,6 +233,9 @@ Retrieves when needed to apply on components
 				forwardConsoleOutput   : false,
 				hoursToKeepLogs        : 12,
 				hoursToKeepErrors      : 168,
+
+				cache_proxy_enabled: false,
+				cache_proxy_url: "http://127.0.0.1:8081",
 			};
 		},
 
