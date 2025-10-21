@@ -19,7 +19,7 @@ Represent KanColle game server instance.
 	const kcBaseDomain = ".kancolle-server.com";
 	const kcsNameInitials = "yksmotlrsbtpbhpskish";
 	
-	window.KC3Server = function(num, isDomain, isSecured){
+	window.KC3Server = function(num, isDomain, isSecured, originUrl){
 		this.num = 0;
 		this.ip = "";
 		this.name = "";
@@ -28,37 +28,39 @@ Represent KanColle game server instance.
 		this.urlPrefix = "";
 		this.isDomain = false;
 		this.isSecured = false;
-		if(num) this.setNum(num, isDomain, isSecured);
+		if(num) this.setNum(num, isDomain, isSecured, originUrl);
 	};
 	
 	KC3Server.prototype.setUrl = function(url){
-		const anchor = document.createElement("a");
-		anchor.href = url;
+		const anchor = new URL(url);
 		// here `ip` may stand for either IP address or domain hostname, old ip will be unused if isDomain true
-		this.ip = anchor.host;
+		this.ip = anchor.hostname;
+		this.host = anchor.host;
 		this.protocol = anchor.protocol;
 		this.isSecured = this.protocol == "https:";
+		this.urlPrefix = anchor.origin;
 		const domainMatch = (this.ip || "").match(/w(\d+)\w+\.kancolle-server\.com/);
 		this.isDomain = !!(domainMatch && domainMatch[1]);
 		const serverInfo = this.isDomain ? KC3Meta.serverByNum(domainMatch[1]) : KC3Meta.server(this.ip);
 		this.num = serverInfo.num;
 		this.name = serverInfo.name;
 		if(this.isDomain) {
-			this.host = this.ip;
 			this.ip = serverInfo.ip;
-			this.urlPrefix = `${this.protocol}//${this.host}`;
 		} else {
-			const worldName = String(this.num).pad(2, "0") + kcsNameInitials.charAt(this.num - 1);
-			this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
-			this.urlPrefix = `${this.protocol}//${this.ip}`;
+			if(this.num === 0) {
+				// to indicate 'Unknown server', might be redirected for a cache server
+				this.num = -1;
+			} else {
+				const worldName = String(this.num).pad(2, "0") + kcsNameInitials.charAt(this.num - 1);
+				this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
+			}
 		}
-		if (ConfigManager.cache_proxy_enabled) {
-			this.urlPrefix = ConfigManager.cache_proxy_url;
-		}
+		if(ConfigManager.cache_proxy_enabled)
+			this.urlPrefix = ConfigManager.cache_proxy_url || "http://127.0.0.1:8081";
 		return this;
 	};
 	
-	KC3Server.prototype.setNum = function(num, isDomain, isSecured){
+	KC3Server.prototype.setNum = function(num, isDomain, isSecured, originUrl){
 		const serverInfo = KC3Meta.serverByNum(num);
 		this.num = serverInfo.num;
 		this.ip = serverInfo.ip;
@@ -70,10 +72,13 @@ Represent KanColle game server instance.
 		this.isDomain = isDomain === undefined ? !!serverInfo.domain : !!isDomain;
 		this.isSecured = isSecured === undefined ? !!serverInfo.https : !!isSecured;
 		this.protocol = this.isSecured ? "https:" : "http:";
-		this.urlPrefix = `${this.protocol}//${this.isDomain ? this.host : this.ip}`;
-		if (ConfigManager.cache_proxy_enabled) {
-			this.urlPrefix = ConfigManager.cache_proxy_url;
+		this.urlPrefix = originUrl ? originUrl : `${this.protocol}//${this.isDomain ? this.host : this.ip}`;
+		if(this.num < 0) {
+			this.num = 0;
+			this.host = this.ip;
 		}
+		if(ConfigManager.cache_proxy_enabled)
+			this.urlPrefix = ConfigManager.cache_proxy_url || "http://127.0.0.1:8081";
 		return this;
 	};
 	

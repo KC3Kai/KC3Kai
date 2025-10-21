@@ -1090,6 +1090,26 @@
 		]
 	},
 	{
+		"section": "SettingsCacheProxy",
+		"contents": [
+			{
+				"id" : "cache_proxy_enabled",
+				"name" : "SettingsCacheProxyEnabled",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "cache_proxy_url",
+				"name" : "SettingsCacheProxyUrl",
+				"type" : "long_text",
+				"options" : {
+					"tooltip" : "SettingsCacheProxyUrlTip",
+					"placeholder" : "http://localhost:8081"
+				}
+			}
+		]
+	},
+	{
 		"section" : "SettingsDataSynchronization",
 		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" : [
@@ -1195,23 +1215,6 @@
 				"name" : "SettingsEnableOpenDBSubmission",
 				"type" : "check",
 				"options" : {}
-			}
-		]
-	},
-	{
-		"section": "SettingsCacheProxy",
-		"contents": [
-			{
-				"id" : "cache_proxy_enabled",
-				"name" : "SettingsCacheProxyEnabled",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "cache_proxy_url",
-				"name" : "SettingsCacheProxyUrl",
-				"type" : "long_text",
-				"options" : { "placeholder" : "http://127.0.0.1:8081" }
 			}
 		]
 	},
