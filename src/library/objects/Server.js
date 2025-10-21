@@ -52,6 +52,9 @@ Represent KanColle game server instance.
 			this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
 			this.urlPrefix = `${this.protocol}//${this.ip}`;
 		}
+		if (ConfigManager.cache_proxy_enabled) {
+			this.urlPrefix = ConfigManager.cache_proxy_url;
+		}
 		return this;
 	};
 	
@@ -68,6 +71,9 @@ Represent KanColle game server instance.
 		this.isSecured = isSecured === undefined ? !!serverInfo.https : !!isSecured;
 		this.protocol = this.isSecured ? "https:" : "http:";
 		this.urlPrefix = `${this.protocol}//${this.isDomain ? this.host : this.ip}`;
+		if (ConfigManager.cache_proxy_enabled) {
+			this.urlPrefix = ConfigManager.cache_proxy_url;
+		}
 		return this;
 	};
 	

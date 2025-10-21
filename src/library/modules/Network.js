@@ -182,7 +182,7 @@ Listens to network history and triggers callback if game events happen
 		Argument HAR see: https://developer.chrome.com/extensions/devtools_network#type-Request
 		------------------------------------------*/
 		received : function(har){
-			const requestUrl = har.request.url;
+			const requestUrl = KC3Network.parseRequestUrl(har);
 			// If request is an API Call
 			if(requestUrl.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = requestUrl;
@@ -361,7 +361,7 @@ Listens to network history and triggers callback if game events happen
 		showSubtitle :function(har){
 			// url sample: http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
 			//             http://203.104.209.39/kcs2/resources/voice/titlecall_1/050.mp3
-			const requestUrl = har.request.url;
+			const requestUrl = KC3Network.parseRequestUrl(har);
 			const isV2Voice = requestUrl.includes("/kcs2/resources/voice/");
 			// there are also some voices in `/resources/se/` (eg: 332 for furniture), ignored for now
 			if(!(isV2Voice || requestUrl.includes("/kcs/sound/"))) {
@@ -440,6 +440,20 @@ Listens to network history and triggers callback if game events happen
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			}
+		},
+
+		parseRequestUrl: function (har) {
+			const url = new URL(har.request.url);
+			const header = har.request.headers.find(v => v.name === 'x-host');
+			if (header) {
+				url.protocol = 'https:';
+				url.host = header.value;
+				url.port = '';
+			} else if (url.pathname.startsWith('/http')) {
+				const newUrl = url.href.substring(url.href.indexOf(url.pathname)).replace(/.https{0,1}./, 'https://');
+				return newUrl;
+			}
+			return url.href;
 		},
 
 		/* NEXT BLOCK TRIGGER
