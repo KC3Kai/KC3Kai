@@ -443,14 +443,17 @@ Listens to network history and triggers callback if game events happen
 		},
 
 		parseRequestUrl: function (har) {
-			const url = new URL(har.request.url)
-			const header = har.request.headers.find(v => v.name === 'x-host')
+			const url = new URL(har.request.url);
+			const header = har.request.headers.find(v => v.name === 'x-host');
 			if (header) {
-				url.protocol = 'https:'
-				url.host = header.value
-				url.port = ''
+				url.protocol = 'https:';
+				url.host = header.value;
+				url.port = '';
+			} else if (url.pathname.startsWith('/http')) {
+				const newUrl = url.href.substring(url.href.indexOf(url.pathname)).replace(/.https{0,1}./, 'https://');
+				return newUrl;
 			}
-			return url.href
+			return url.href;
 		},
 
 		/* NEXT BLOCK TRIGGER
