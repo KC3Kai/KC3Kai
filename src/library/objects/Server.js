@@ -55,8 +55,6 @@ Represent KanColle game server instance.
 				this.host = serverInfo.domain || `w${worldName}${kcBaseDomain}`;
 			}
 		}
-		if(ConfigManager.cache_proxy_enabled)
-			this.urlPrefix = ConfigManager.cache_proxy_url || "http://127.0.0.1:8081";
 		return this;
 	};
 	
@@ -77,6 +75,7 @@ Represent KanColle game server instance.
 			this.num = 0;
 			this.host = this.ip;
 		}
+		// override saved urlPrefix if demanded KCCP service configured
 		if(ConfigManager.cache_proxy_enabled)
 			this.urlPrefix = ConfigManager.cache_proxy_url || "http://127.0.0.1:8081";
 		return this;

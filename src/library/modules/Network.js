@@ -181,24 +181,26 @@ Listens to network history and triggers callback if game events happen
 		------------------------------------------*/
 		parseRequestUrl: function (har) {
 			const url = new URL(har.request.url);
-			let newUrl = url.href;
-			let urlPath = newUrl.substring(newUrl.indexOf(url.pathname));
+			let requestUrl = url.href;
+			let urlPath = requestUrl.substring(requestUrl.indexOf(url.pathname));
 			// To retrieve kc server from header added by KCP
 			const xHostHeader = har.request.headers.find(v => v.name.toLowerCase() === 'x-host');
 			if (xHostHeader) {
 				url.protocol = "https:";
-				url.host = xHostHeader.value;
-				url.port = "";
-				newUrl = url.href;
+				url.username = "";
+				url.password = "";
+				url.hostname = xHostHeader.value;
+				url.port = "443";
+				requestUrl = url.href;
 			// If kc server host embedded in url path mode
-			} else if (urlPath.startsWith("/http")) {
-				newUrl = urlPath.replace(/^\/(https?)\//, "$1://");
-				urlPath = newUrl.substring(newUrl.indexOf("://") + 3);
+			} else if (urlPath.startsWith("/https/") || urlPath.startsWith("/http/")) {
+				requestUrl = urlPath.replace(/^\/(https?)\//, "$1://");
+				urlPath = requestUrl.substring(requestUrl.indexOf("://") + 3);
 				urlPath = urlPath.substring(urlPath.indexOf("/"));
 			}
 			return {
-				requestUrl: newUrl,
-				urlPath: urlPath
+				requestUrl,
+				urlPath
 			};
 		},
 
@@ -394,6 +396,7 @@ Listens to network history and triggers callback if game events happen
 			if(!(isV2Voice || urlPath.includes("/kcs/sound/"))) {
 				return;
 			}
+			const fullUrl = har.request.url;
 			const soundPaths = urlPath.split("/");
 			const voiceType = soundPaths[isV2Voice ? 4 : 3];
 			switch(voiceType) {
@@ -401,7 +404,7 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED titlecall sound");
 				(new RMsg("service", "subtitle", {
 					voicetype: "titlecall",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: soundPaths[4],
 					voiceNum: soundPaths[5].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
@@ -412,7 +415,7 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED kcs2 titlecall sound");
 				(new RMsg("service", "subtitle", {
 					voicetype: "titlecall",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: voiceType.split("_")[1],
 					voiceNum: soundPaths[5].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
@@ -425,7 +428,7 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED Event special sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "event",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: "",
 					voiceNum: soundPaths[4].split(".")[0],
 					voiceSize: har.response.content.size || 0,
@@ -436,7 +439,7 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED Abyssal sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "abyssal",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: "",
 					voiceNum: soundPaths[4].split(".")[0],
 					voiceSize: har.response.content.size || 0,
@@ -447,7 +450,7 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED NPC sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "npc",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: "",
 					voiceNum: soundPaths[4].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
@@ -460,7 +463,7 @@ Listens to network history and triggers callback if game events happen
 				const audioFileSize = har.response.content.size || 0;
 				(new RMsg("service", "subtitle", {
 					voicetype: "shipgirl",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					shipID: shipGirl,
 					voiceNum: voiceLine,
 					voiceSize: audioFileSize,
