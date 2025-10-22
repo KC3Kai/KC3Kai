@@ -175,6 +175,35 @@ Listens to network history and triggers callback if game events happen
 			window.addEventListener("storage", configChangedListener);
 		},
 
+		/* PARSE AND GET REAL REQUEST URL
+		Real request URL possibly redirected by other extensions,
+		namely KCProxifier for KCCP
+		------------------------------------------*/
+		parseRequestUrl: function (har) {
+			const url = new URL(har.request.url);
+			let requestUrl = url.href;
+			let urlPath = requestUrl.substring(requestUrl.indexOf(url.pathname));
+			// To retrieve kc server from header added by KCP
+			const xHostHeader = har.request.headers.find(v => v.name.toLowerCase() === 'x-host');
+			if (xHostHeader) {
+				url.protocol = "https:";
+				url.username = "";
+				url.password = "";
+				url.hostname = xHostHeader.value;
+				url.port = "443";
+				requestUrl = url.href;
+			// If kc server host embedded in url path mode
+			} else if (urlPath.startsWith("/https/") || urlPath.startsWith("/http/")) {
+				requestUrl = urlPath.replace(/^\/(https?)\//, "$1://");
+				urlPath = requestUrl.substring(requestUrl.indexOf("://") + 3);
+				urlPath = urlPath.substring(urlPath.indexOf("/"));
+			}
+			return {
+				requestUrl,
+				urlPath
+			};
+		},
+
 		/* RECEIVED
 		Fired when we receive network entry
 		Inside, use "KC3Network" instead of "this"
@@ -182,7 +211,7 @@ Listens to network history and triggers callback if game events happen
 		Argument HAR see: https://developer.chrome.com/extensions/devtools_network#type-Request
 		------------------------------------------*/
 		received : function(har){
-			const requestUrl = har.request.url;
+			const {requestUrl, urlPath} = KC3Network.parseRequestUrl(har);
 			// If request is an API Call
 			if(requestUrl.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = requestUrl;
@@ -243,24 +272,24 @@ Listens to network history and triggers callback if game events happen
 				}
 				
 				// When a sortie begins, assume fallback until we know SE isn't muted
-				if(requestUrl.endsWith("/api_req_map/start")){
+				if(urlPath.endsWith("/api_req_map/start")){
 					KC3Network.isNextBlockerNetworkFallback = true;
 				}
 			}
 			
 			// If request is a furniture asset
-			if(requestUrl.includes("/img/interior/interior_parts")){
+			if(urlPath.includes("/img/interior/interior_parts")){
 				// Clear overlays upon entering furniture menu,
 				// not work everytime since Phase 2 caches assets
 				KC3Network.clearOverlays();
 			}
 			// Node 'sonar ping' sound should always be heard before a battle if SE is on;
 			// Will allow us to determine whether SE is muted for the next blocker
-			if(requestUrl.includes("/resources/se/252.")) {
+			if(urlPath.includes("/resources/se/252.")) {
 				KC3Network.isNextBlockerNetworkFallback = false;
 			}
 			// If it's switching to NextNode or Yasen screen (might be others?)
-			if(requestUrl.includes("/resources/se/217.") && ConfigManager.next_blocker === 1){
+			if(urlPath.includes("/resources/se/217.") && ConfigManager.next_blocker === 1){
 				KC3Network.triggerNextBlock(undefined, true);
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,
@@ -273,14 +302,14 @@ Listens to network history and triggers callback if game events happen
 				// Only after: daytime? day / night to day? night start?
 				// seems no side effect if game tab already focused, so use any time for now
 				//&& KC3Network.battleEvent.time === "day"
-				&& focusPaths.some(path => requestUrl.includes(path))){
+				&& focusPaths.some(path => urlPath.includes(path))){
 				(new RMsg("service", "focusGameTab", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 				// console.debug("Battle end SE detected, focus on game tab requested");
 			}
 			// Try to detect gadget server HTTP 403 error
-			if(requestUrl.includes("/203.104.209.7/gadget_html5/js/") && har.response.status == 403){
+			if(requestUrl.includes("/w00g.kancolle-server.com/gadget_html5/js/") && har.response.status == 403){
 				console.warn("Gadget server block detected", har.serverIPAddress, har.request, har.response);
 				// Ensure panel display activiated from waiting homeport
 				KC3Network.trigger("GameStart");
@@ -291,7 +320,7 @@ Listens to network history and triggers callback if game events happen
 			}
 			
 			// Overlay subtitles
-			KC3Network.showSubtitle(har);
+			KC3Network.showSubtitle(har, requestUrl, urlPath);
 		},
 
 		/**
@@ -358,25 +387,26 @@ Listens to network history and triggers callback if game events happen
 		 * Send a message to content script (via background script service)
 		 * to show subtitles at overlay for supported sound audio files.
 		 */
-		showSubtitle :function(har){
+		showSubtitle :function(har, requestUrl, urlPath){
 			// url sample: http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
 			//             http://203.104.209.39/kcs2/resources/voice/titlecall_1/050.mp3
-			const requestUrl = har.request.url;
-			const isV2Voice = requestUrl.includes("/kcs2/resources/voice/");
+			// sound path:  ~0  1~       0        1     2        3         4       5
+			const isV2Voice = urlPath.includes("/kcs2/resources/voice/");
 			// there are also some voices in `/resources/se/` (eg: 332 for furniture), ignored for now
-			if(!(isV2Voice || requestUrl.includes("/kcs/sound/"))) {
+			if(!(isV2Voice || urlPath.includes("/kcs/sound/"))) {
 				return;
 			}
-			const soundPaths = requestUrl.split("/");
-			const voiceType = soundPaths[isV2Voice ? 6 : 5];
+			const fullUrl = har.request.url;
+			const soundPaths = urlPath.split("/");
+			const voiceType = soundPaths[isV2Voice ? 4 : 3];
 			switch(voiceType) {
 			case "titlecall":
 				// console.debug("DETECTED titlecall sound");
 				(new RMsg("service", "subtitle", {
 					voicetype: "titlecall",
-					fullurl: requestUrl,
-					filename: soundPaths[6],
-					voiceNum: soundPaths[7].split(".")[0],
+					fullurl: fullUrl,
+					filename: soundPaths[4],
+					voiceNum: soundPaths[5].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 				break;
@@ -385,9 +415,9 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED kcs2 titlecall sound");
 				(new RMsg("service", "subtitle", {
 					voicetype: "titlecall",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: voiceType.split("_")[1],
-					voiceNum: soundPaths[7].split(".")[0],
+					voiceNum: soundPaths[5].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 				break;
@@ -398,9 +428,9 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED Event special sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "event",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: "",
-					voiceNum: soundPaths[6].split(".")[0],
+					voiceNum: soundPaths[4].split(".")[0],
 					voiceSize: har.response.content.size || 0,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
@@ -409,9 +439,9 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED Abyssal sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "abyssal",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: "",
-					voiceNum: soundPaths[6].split(".")[0],
+					voiceNum: soundPaths[4].split(".")[0],
 					voiceSize: har.response.content.size || 0,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
@@ -420,20 +450,20 @@ Listens to network history and triggers callback if game events happen
 				// console.debug("DETECTED NPC sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "npc",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					filename: "",
-					voiceNum: soundPaths[6].split(".")[0],
+					voiceNum: soundPaths[4].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 				break;
 			default:
 				// console.debug("DETECTED shipgirl sound");
-				const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
-				const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
+				const shipGirl = KC3Master.graph_file(soundPaths[3].substring(2));
+				const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[4].split(".")[0]);
 				const audioFileSize = har.response.content.size || 0;
 				(new RMsg("service", "subtitle", {
 					voicetype: "shipgirl",
-					fullurl: requestUrl,
+					fullurl: fullUrl,
 					shipID: shipGirl,
 					voiceNum: voiceLine,
 					voiceSize: audioFileSize,

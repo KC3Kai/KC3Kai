@@ -20,6 +20,7 @@ Redirects to KanColle game page after writing
 		var buildCookie = function(key, value, domain, path){
 			return key + "=" + value + ";expires=" + expireTime + ";domain=" + domain + ";path=" + path;
 		};
+		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame_s/");
@@ -35,7 +36,6 @@ Redirects to KanColle game page after writing
 		document.cookie = buildCookie("ckcy", "1", "osapi.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "log-netgame.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "hermes-play.games.dmm.com", "/");
-		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/");
 		console.log("Hacked cookies written!");
 	}
 	
