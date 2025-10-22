@@ -51,6 +51,8 @@ Retrieves when needed to apply on components
 				PushAlerts_enabled   : 0,
 				PushAlerts_expedonly : false,
 				PushAlerts_key       : '',
+				cache_proxy_enabled  : false,
+				cache_proxy_url      : '',
 
 				info_quest_activity  : true,
 				info_face            : true,

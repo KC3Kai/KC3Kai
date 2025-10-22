@@ -6,6 +6,7 @@ body {
 body.dark {
 	filter:invert(100%) hue-rotate(180deg);
 	background:#222;
+	font-weight:bolder;
 }
 body.dark img, body.dark svg {
 	filter:invert(100%) hue-rotate(180deg);
@@ -14,6 +15,7 @@ body.dark img, body.dark svg {
 body {
 	filter:invert(100%) hue-rotate(180deg);
 	background:#222;
+	font-weight:bolder;
 }
 img, svg {
 	filter:invert(100%) hue-rotate(180deg);
@@ -177,7 +179,7 @@ img, svg {
 	right:10px;
 	border-radius:7px;
 	font-size:11px;
-	color:#000;
+	color:#222;
 	background:#ffc;
 	border:1px solid #ccc;
 	overflow:hidden;
@@ -239,10 +241,9 @@ img, svg {
 	padding:0px 15px;
 	margin:5px 10px 0px 0px;
 	border-radius:7px;
-	font-weight:normal;
 	background:#ffc;
 	border:1px solid #ccc;
-	color:#000;
+	color:#222;
 }
 .settingBox .options .radioBox.active {
 	background:#7ad;

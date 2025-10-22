@@ -59,7 +59,8 @@
 			$(".hq_desc .hq_content").text(PlayerManager.hq.desc);
 			
 			const myServer = PlayerManager.hq.getServer();
-			$(".hq_server .hq_content").text(myServer.name).attr("title", myServer.urlPrefix);
+			$(".hq_server .hq_content").text(myServer.name)
+				.attr("title", [myServer.host, myServer.urlPrefix].join("\n"));
 			
 			$(".hq_rank .hq_content").text(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").text(PlayerManager.hq.level);
