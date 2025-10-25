@@ -970,6 +970,10 @@ KC3改 Equipment Object
 			// Do 217 E-5 + Hs293 Initial Model targeting DD
 			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
+			// Do 217 E-5 + Hs293D TV Guided Model targeting DD
+			// https://x.com/kancolle_aki/status/1981702886875955319
+			if(this.masterId === 562 && !isLand && [2].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.25;
 			// Type 4 Heavy Bomber Hiryuu + I-go Model 1A Guided Missile targeting many types since 2021-11-30
 			// Type 4 Heavy Bomber Hiryuu (Skilled) + I-go Model 1A Guided Missile since 2022-10-31
 			// DD, CL, CLT, CA, CVL, BB, AO: https://twitter.com/oxke_admiral/status/1465639932970430469
