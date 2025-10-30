@@ -482,6 +482,8 @@
 					5281, 5282, 5283, 5284, 5285, 5286, 5287, 5288, 5289, 5290,
 					5291, 5292, 5293, 5294, 5295, 5296, 5297, 5298, 5299, 5300,
 					5301, 5302, 5303, 5304, 5305, 5306, 5357, 5667, 5668, 5669,
+					/* missing in getSpecificAlbumImageLoadList? */
+					6044, 6045, 6046, 6047,
 				].includes(ship_id);
 				// No card but has damaged image
 				const isSpButHasTaiha = [5256, 5269, 5357].includes(ship_id);
@@ -542,9 +544,11 @@
 						isDamaged = type.endsWith("_dmg"),
 						qualifiedType = isDebuffedBoss ? type.slice(0, -2) :
 							isDamaged ? type.slice(0, -4) : type;
+					// New suffix _g used by Mu-class CL, see `ShipLoader.prototype.isLoadEnemyDamagedGraph`
+					const isSpDamagedSuffix = !!KC3Master.graph(ship_id).api_sp_flag;
+					let fileSuffix = isDebuffedBoss ? (isSpDamagedSuffix ? "_g" : this.damagedBossFileSuffix) : "";
 					const img = $("<img />"),
-						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged,
-							isDebuffedBoss ? this.damagedBossFileSuffix : "");
+						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged, fileSuffix);
 					const url = `${this.gameServer.urlPrefix}/kcs2/resources${imgUri}`
 						+ (this.currentCardVersion ? `?version=${this.currentCardVersion}` : "");
 					img.attr("src", url).attr("alt", imgUri).attr("title", type)

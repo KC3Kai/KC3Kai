@@ -8363,5 +8363,37 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"6044": {
+		"api_id": 6044,
+		"api_name": "夏制服朝雲",
+		"api_yomi": "あさぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6045": {
+		"api_id": 6045,
+		"api_name": "夏制服山雲",
+		"api_yomi": "やまぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6046": {
+		"api_id": 6046,
+		"api_name": "夏制服夏雲",
+		"api_yomi": "なつぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6047": {
+		"api_id": 6047,
+		"api_name": "夏制服夏雲改",
+		"api_yomi": "なつぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
