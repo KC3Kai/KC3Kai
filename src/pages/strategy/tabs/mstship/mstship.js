@@ -824,6 +824,12 @@
 				});
 				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
+				$(".tab_mstship .shipInfo .consumption").attr("title", [
+					"api_backs: {0}".format(shipData.api_backs),
+					"api_buildtime: {0}".format(shipData.api_buildtime),
+					"api_sort_id: {0}".format(shipData.api_sort_id),
+					"api_voicef: {0}".format(shipData.api_voicef),
+				].join("\n")).lazyInitTooltip();
 
 				// level-dependent stats
 				var lowestLevel = RemodelDb.lowestLevel( self.currentShipId );
