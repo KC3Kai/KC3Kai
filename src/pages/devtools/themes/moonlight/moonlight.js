@@ -2148,7 +2148,8 @@
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0,
 					tpValueTank: [MainFleet.calcTpObtain("type1", MainFleet, EscortFleet), MainFleet.calcTpObtain("type2", MainFleet, EscortFleet)],
-					tpValueSum: MainFleet.calcTpObtain(false, MainFleet, EscortFleet)
+					tpValueSum: MainFleet.calcTpObtain(false, MainFleet, EscortFleet),
+					tpValueDisp: KC3Calc.getFleetsIngameTpText(MainFleet, EscortFleet, !!PlayerManager.combinedFleet)
 				};
 
 			// SINGLE
@@ -2230,7 +2231,8 @@
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
 					tpValueTank: [CurrentFleet.calcTpObtain("type1"), CurrentFleet.calcTpObtain("type2")],
-					tpValueSum: CurrentFleet.calcTpObtain(false)
+					tpValueSum: CurrentFleet.calcTpObtain(false),
+					tpValueDisp: KC3Calc.getFleetsIngameTpText(CurrentFleet)
 				};
 
 			}
@@ -2263,7 +2265,8 @@
 			$(".summary-transport").attr("title",
 				[KC3Meta.term("PanelTransportPoints").format(
 					FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOfRankA(),
-					FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()
+					FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf(),
+					FleetSummary.tpValueDisp
 				),
 				KC3Meta.term("PanelTransportPointsTank").format(
 					FleetSummary.tpValueTank[0].isNaN() ? "?" : FleetSummary.tpValueTank[0].valueOfRankA(),

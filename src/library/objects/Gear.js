@@ -862,18 +862,23 @@ KC3改 Equipment Object
 			const targetMst = targetShipId > 0 && KC3Master.ship(targetShipId);
 			const isTargetLand = !!targetMst && targetMst.api_soku === 0;
 
-			result += 25;
+			// Constant by plane type: https://x.com/yukicacoon/status/1985320796081058223
+			let typeAdditive = 25;
 			let stat = isTorpedoBomber || isLandBaseAttacker || isLandBaseHeavyBomber ?
 				this.master().api_raig : this.master().api_baku;
 			let typeModifier = 1;
 			if(isLandBaseAttacker || isLandBaseHeavyBomber) {
 				typeModifier = 0.8;
+				typeAdditive = 20;
 				// use DV stat if LandBase Attack Aircraft against land installation
 				if(isTargetLand) {
 					stat = this.master().api_baku;
 				}
 			}
-			if(isJet && !isJetAssault) typeModifier = 0.7;
+			if(isJet && !isJetAssault) {
+				typeModifier = 0.7;
+				typeAdditive = 18;
+			}
 			// Antisub Patrol and Rotorcraft might use different values?
 			// against DD for Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)
 			// https://twitter.com/Divinity_123/status/1651948848351158273
@@ -889,7 +894,7 @@ KC3改 Equipment Object
 			//if(isLandBaseHeavyBomber) sizeModifier = 1.0;
 			result += Math.sqrt(capacity * sizeModifier) * stat;
 			result *= typeModifier;
-			if(isJet && !isJetAssault) result = Math.round(result);
+			result += typeAdditive;
 		}
 		return result;
 	};

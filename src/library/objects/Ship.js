@@ -2418,7 +2418,7 @@ KC3改 Ship Object
 			// https://discord.com/channels/118339803660943369/178613137430282240/1286997214580703335
 			if(isCombined && fleetNum === 2) shipCnt = PlayerManager.fleets[0].countShips();
 			// Guardian ships counted from 3rd or 4th ship
-			const isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
+			const isGuardian = shipPos >= Math.max(2, Math.floor(shipCnt / 2));
 			if(warfareType === "Shelling" || isNightBattle) {
 				formationModifier = isGuardian ? 1.0 : 0.5;
 			} else if(warfareType === "Antisub") {
@@ -5057,7 +5057,7 @@ KC3改 Ship Object
 						break;
 					case 6:{// Vanguard, depends on fleet position
 						const [shipPos, shipCnt] = this.fleetPosition(),
-							isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
+							isGuardian = shipPos >= Math.max(2, Math.floor(shipCnt / 2));
 						modifier = isGuardian ?
 							(isAntisubWarfare ? 1.1 : 1.2) :
 							(isAntisubWarfare ? 1.0 : 0.8);

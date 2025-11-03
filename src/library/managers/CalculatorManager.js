@@ -69,6 +69,30 @@
         }
     };
 
+    /**
+     * Get Transport Points from 1 or more fleet(s), especially served for Combined Fleet.
+     *
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
+     * @param {boolean} isCombined - if current view is really Combined Fleet view, default false.
+     * @return {string} TP value text.
+     */
+    const getFleetsIngameTpText = (
+            viewFleet = PlayerManager.fleets[0],
+            escortFleet = PlayerManager.fleets[1],
+            isCombined = false,
+            mapId = KC3SortieManager.getLatestEventMapData().id) => {
+        const getAtpOrTp = (fleet) => (
+            mapId && fleet.deckParams.atp ? fleet.deckParams.atp[mapId] : fleet.deckParams.tp
+        );
+        var tpValue = getAtpOrTp(viewFleet);
+        if(isCombined) {
+            viewFleet = PlayerManager.fleets[0];
+            tpValue = getAtpOrTp(viewFleet) + getAtpOrTp(escortFleet);
+        }
+        return isNaN(tpValue) ? "?" : tpValue;
+    };
+
     const buildFleetsFighterPowerText = (
             viewFleet = PlayerManager.fleets[0],
             escortFleet = PlayerManager.fleets[1],
@@ -953,6 +977,7 @@
     // Export public API
     window.KC3Calc = Object.assign(publicApi, {
         getFleetsFighterPowerText,
+        getFleetsIngameTpText,
         buildFleetsFighterPowerText,
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,
