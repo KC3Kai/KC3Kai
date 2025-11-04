@@ -3204,9 +3204,11 @@ KC3改 Ship Object
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
 		if(!precap) {
 			// Uncategorized postcap-only event surface installations:
-			// Anchorage Water Demon Vacation Mode, Dock Princess
+			// Anchorage Water Demon Vacation Mode, Dock Princess, Europa
 			//if(shipJapName.startsWith("泊地水鬼 バカンスmode")) return 6?;
 			//if(shipJapName.startsWith("船渠棲姫")) return 7?;
+			//if(shipJapName.startsWith("戦艦仏棲姫")) return 8?;
+			//if(shipJapName.startsWith("欧州水姫")) return 9?;
 		}
 		// Other soft-skin installations
 		return isLand ? 1 : 0;
