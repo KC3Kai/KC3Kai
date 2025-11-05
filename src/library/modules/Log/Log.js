@@ -3,6 +3,7 @@
 
   const CONSOLE_LOG_HOOKS = ['error', 'warn', 'info', 'log', 'assert'];
   const ERROR_LOG_LEVELS = ['error', 'warn'];
+  const CRLF = /\r?\n/;
 
   const Log = {
     context: 'Unknown context',
@@ -55,11 +56,13 @@
   // ---------------------------[ LOG MESSAGE ]----------------------------- //
 
   Log.logMessage = (logLevel, message, data) => {
-    if (ConfigManager.forwardConsoleOutput) {
-      KC3Log.console[logLevel].apply(KC3Log.console, [message].concat(data));
-    }
     try {
       const stack = KC3Log.getStackTrace(logLevel, message, data);
+      const unknownCaller = !KC3Log.isCallerKnown(stack);
+      if (ConfigManager.forwardConsoleOutput || unknownCaller) {
+        KC3Log.console[logLevel].apply(KC3Log.console, [message].concat(data));
+        if (unknownCaller) return;
+      }
       const result = KC3Log.composeEntry({ type: logLevel, message, data, stack });
       return KC3Log.saveToDb(result)
         .catch((error) => {
@@ -116,8 +119,19 @@
     Error.captureStackTrace(obj, KC3Log.logMessage);
 
     // remove KC3Log's function calls
-    const lines = obj.stack.split(/\r?\n/);
+    const lines = obj.stack.split(CRLF);
     return lines.filter(line => !line.includes('library/modules/Log/Log.js')).join('\n');
+  };
+
+  Log.isCallerKnown = (stack) => {
+    try {
+      const lines = stack.split(CRLF);
+      return lines.some((at, i) => (
+        i > 0 && at.includes(chrome.runtime.getURL(''))
+      ));
+    } catch (e) {
+      return false;
+    }
   };
 
   // ----------------------------------------------------------------------- //

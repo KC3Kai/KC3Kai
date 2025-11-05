@@ -1464,7 +1464,7 @@ Used by SortieManager
 		}
 	};
 	
-	function sumSupportDamageArray(damageArray) {
+	function sumSupportDamageArray(damageArray = []) {
 		return damageArray.reduce(function (total, attack) {
 			// old data format used leading -1 to make 1-based arrays
 			// kcsapi adds 0.1 to damage value to indicate flagship protection

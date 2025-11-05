@@ -542,9 +542,11 @@
 						isDamaged = type.endsWith("_dmg"),
 						qualifiedType = isDebuffedBoss ? type.slice(0, -2) :
 							isDamaged ? type.slice(0, -4) : type;
+					// New suffix _g used by Mu-class CL, see `ShipLoader.prototype.isLoadEnemyDamagedGraph`
+					const isSpDamagedSuffix = !!KC3Master.graph(ship_id).api_sp_flag;
+					let fileSuffix = isDebuffedBoss ? (isSpDamagedSuffix ? "_g" : this.damagedBossFileSuffix) : "";
 					const img = $("<img />"),
-						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged,
-							isDebuffedBoss ? this.damagedBossFileSuffix : "");
+						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged, fileSuffix);
 					const url = `${this.gameServer.urlPrefix}/kcs2/resources${imgUri}`
 						+ (this.currentCardVersion ? `?version=${this.currentCardVersion}` : "");
 					img.attr("src", url).attr("alt", imgUri).attr("title", type)
@@ -820,6 +822,12 @@
 				});
 				$(".tab_mstship .shipInfo .consume_fuel .rsc_value").text( shipData.api_fuel_max );
 				$(".tab_mstship .shipInfo .consume_ammo .rsc_value").text( shipData.api_bull_max );
+				$(".tab_mstship .shipInfo .consumption").attr("title", [
+					"api_backs: {0}".format(shipData.api_backs),
+					"api_buildtime: {0}".format(shipData.api_buildtime),
+					"api_sort_id: {0}".format(shipData.api_sort_id),
+					"api_voicef: {0}".format(shipData.api_voicef),
+				].join("\n")).lazyInitTooltip();
 
 				// level-dependent stats
 				var lowestLevel = RemodelDb.lowestLevel( self.currentShipId );

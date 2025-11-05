@@ -133,6 +133,10 @@
 				frenchNightReconKaiIds: [538],
 				germanLargeRadar: 0,
 				germanLargeRadarIds: [124],
+				ukTwin38cmMk1LargeGunMount: 0,
+				ukTwin38cmMk1LargeGunMountIds: [190, 192],
+				norway15cmYellowSecGunMount: 0,
+				norway15cmYellowSecGunMountIds: [565],
 				arcticGearDeckPersonnel: 0,
 				arcticGearDeckPersonnelIds: [402],
 			},
@@ -1683,7 +1687,6 @@
 					"UnitedStates": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
-					// Game codes still using ctype matching, here uses country name in advance
 					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
@@ -1914,14 +1917,7 @@
 							multiple: { "houg": 1 },
 						},
 					],
-				},
-				byClass: {
-					// Essex Class
-					"84": {
-						multiple: { "houg": 1 },
-					},
-					// Queen Elizabeth Class
-					"67": [
+					"UnitedKingdom": [
 						{
 							multiple: { "houg": 1 },
 						},
@@ -1930,14 +1926,15 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					"82": "67",
-					"88": "67",
-					"108": "67",
-					"112": "67",
-					// Ark Royal Class, should share with class 67 too, and fp -1
-					"78": {
-						minStars: 3,
+				},
+				byClass: {
+					// Essex Class
+					"84": {
 						multiple: { "houg": 1 },
+					},
+					// Ark Royal Class
+					"78": {
+						multiple: { "houg": -1 },
 					},
 				},
 				byShip: {
@@ -1980,14 +1977,7 @@
 							multiple: { "houm": 1 },
 						},
 					],
-				},
-				byClass: {
-					// Essex Class
-					"84": {
-						multiple: { "houg": 1 },
-					},
-					// Queen Elizabeth Class
-					"67": [
+					"UnitedKingdom": [
 						{
 							multiple: { "houg": 2 },
 						},
@@ -1996,14 +1986,15 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					"82": "67",
-					"88": "67",
-					"108": "67",
-					"112": "67",
-					// Ark Royal Class, should share with class 67 too, and fp -1
-					"78": {
-						minStars: 5,
+				},
+				byClass: {
+					// Essex Class
+					"84": {
 						multiple: { "houg": 1 },
+					},
+					// Ark Royal Class
+					"78": {
+						multiple: { "houg": -1 },
 					},
 				},
 				byShip: {
@@ -2456,7 +2447,6 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					// Game codes still using ctype matching, here uses country name in advance
 					"UnitedKingdom": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
@@ -2537,12 +2527,11 @@
 					"112": {
 						multiple: { "houg": 2, "tyku": 3, "houk": 5 },
 					},
-					// Ark Royal Class
-					"78": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
-					},
 				},
 				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
 					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 					},
@@ -2556,12 +2545,11 @@
 					"112": {
 						multiple: { "houg": 2, "tyku": 3, "houk": 5 },
 					},
-					// Ark Royal Class
-					"78": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
-					},
 				},
 				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
 					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 					},
@@ -2692,6 +2680,34 @@
 					multiple: { "houg": 1, "tyku": 2, "houk": 3, "houm": 1 },
 				},
 			},
+			// Sea Gladiator
+			"567": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedKingdom": [
+						{
+							multiple: { "tyku": 1, "houk": 2 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+			},
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
 			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
 			"t2_9": {
@@ -2782,19 +2798,16 @@
 				starsDist: [],
 				byClass: {
 					// Ark Royal Class
-					"78": [
-						{
-							multiple: { "houg": 4, "tyku": 4, "houk": 4, "saku": 4 },
-						},
-						{
-							minStars: 10,
-							multiple: { "houg": 1, "houm": 1 },
-						},
-					],
+					"78": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
+					},
 					// Illustrious Class
 					"112": "78",
-					// Queen Elizabeth Class
-					"67": [
+					// Glorious Class
+					"135": "78",
+				},
+				byNation: {
+					"UnitedKingdom": [
 						{
 							multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
 						},
@@ -2803,14 +2816,6 @@
 							multiple: { "houg": 1, "houm": 1 },
 						},
 					],
-					// J Class
-					"82": "67",
-					// Nelson Class
-					"88": "67",
-					// Town Class
-					"108": "67",
-				},
-				byNation: {
 					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1, "saku": 1 },
 					},
@@ -2824,9 +2829,8 @@
 			"424": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Ark Royal Class
-					"78": [
+				byNation: {
+					"UnitedKingdom": [
 						{
 							multiple: { "houg": 2, "raig": 3 },
 						},
@@ -2843,16 +2847,6 @@
 							multiple: { "houm": 1 },
 						},
 					],
-					// Illustrious Class
-					"112": "78",
-					// Queen Elizabeth Class (not capable)
-					"67": "78",
-					// J Class (not capable)
-					"82": "78",
-					// Nelson Class (not capable)
-					"88": "78",
-					// Town Class (not capable)
-					"108": "78",
 				},
 				"byShip": [
 					// For any ship can equip it
@@ -2866,9 +2860,8 @@
 			"425": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Ark Royal Class
-					"78": [
+				byNation: {
+					"UnitedKingdom": [
 						{
 							multiple: { "houg": 2, "tais": 2, "raig": 1, "saku": 1 },
 						},
@@ -2901,16 +2894,6 @@
 							multiple: { "tais": 1 },
 						},
 					],
-					// Illustrious Class
-					"112": "78",
-					// Queen Elizabeth Class (not capable)
-					"67": "78",
-					// J Class (not capable)
-					"82": "78",
-					// Nelson Class (not capable)
-					"88": "78",
-					// Town Class (not capable)
-					"108": "78",
 				},
 				"byShip": [
 					// For any ship can equip it
@@ -3312,6 +3295,11 @@
 			// Swordfish (Seaplane Model)
 			"367": {
 				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "houk": 2, "saku": 2 },
+					},
+				},
 				byClass: {
 					// Commandant Teste Class
 					"70": {
@@ -3327,19 +3315,16 @@
 					},
 					// Kamoi Class
 					"72": "62",
-					// Queen Elizabeth Class (Valiant can equip)
-					"67": {
-						multiple: { "houg": 2, "houk": 2, "saku": 2 },
-					},
-					// Ark Royal Class, J Class and Nelson Class can not equip tho
-					"78": "67",
-					"82": "67",
-					"88": "67",
 				},
 			},
 			// Swordfish Mk.III Kai (Seaplane Model)
 			"368": {
 				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "tais": 2, "houk": 2, "saku": 2 },
+					},
+				},
 				byClass: {
 					// Commandant Teste Class
 					"70": {
@@ -3367,6 +3352,11 @@
 			// Swordfish Mk.III Kai (Seaplane Model/Skilled)
 			"369": {
 				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "tais": 2, "houk": 2, "saku": 2 },
+					},
+				},
 				byClass: {
 					// Commandant Teste Class
 					"70": {
@@ -3423,6 +3413,11 @@
 			// Swordfish Mk.II Kai (Recon Seaplane Model)
 			"370": {
 				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+					},
+				},
 				byClass: {
 					// Gotland Class
 					"89": [
@@ -3440,16 +3435,6 @@
 					},
 					// Kamoi Class
 					"72": "62",
-					// Queen Elizabeth Class
-					"67": {
-						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
-					},
-					// Nelson Class
-					"88": {
-						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
-					},
-					// Town Class
-					"108": "88",
 				},
 				byShip: [
 					{
@@ -3467,6 +3452,11 @@
 			// Fairey Seafox Kai
 			"371": {
 				count: 0,
+				byNation: {
+					"UnitedKingdom": {
+						multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
+					},
+				},
 				byClass: {
 					// Gotland Class
 					"89": [
@@ -3487,21 +3477,10 @@
 					"79": {
 						multiple: { "houg": 2, "houk": 1, "saku": 3 },
 					},
-					// Queen Elizabeth Class
-					"67": {
-						multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
-					},
-					// Town Class
-					"108": "67",
 					// Nelson Class
-					"88": [
-						{
-							multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
-						},
-						{
-							single: { "houg": 3, "houk": 2, "saku": 2 },
-						},
-					],
+					"88": {
+						single: { "houg": 3, "houk": 2, "saku": 2 },
+					},
 				},
 			},
 			// OS2U
@@ -5624,14 +5603,15 @@
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
 				count: 0,
-				byClass: {
-					// Nelson Class
-					"88": {
+				byNation: {
+					"UnitedKingdom": {
 						multiple: { "houg": 2, "souk": 1 },
 					},
+				},
+				byClass: {
 					// Queen Elizabeth Class
 					"67": {
-						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+						multiple: { "houk": -2 },
 					},
 					// Kongou Class Kai Ni only (K2C incapable)
 					"6": {
@@ -5656,14 +5636,15 @@
 			// 16inch Mk.I Triple Gun Mount + AFCT Kai
 			"299": {
 				count: 0,
-				byClass: {
-					// Nelson Class
-					"88": {
+				byNation: {
+					"UnitedKingdom": {
 						multiple: { "houg": 2, "souk": 1 },
 					},
+				},
+				byClass: {
 					// Queen Elizabeth Class
 					"67": {
-						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+						multiple: { "houk": -2 },
 					},
 					// Kongou Class Kai Ni only (K2C incapable)
 					"6": {
@@ -5688,14 +5669,15 @@
 			// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284
 			"300": {
 				count: 0,
-				byClass: {
-					// Nelson Class
-					"88": {
+				byNation: {
+					"UnitedKingdom": {
 						multiple: { "houg": 2, "souk": 1 },
 					},
+				},
+				byClass: {
 					// Queen Elizabeth Class
 					"67": {
-						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+						multiple: { "houk": -2 },
 					},
 					// Kongou Class Kai Ni only (K2C incapable)
 					"6": {
@@ -7286,23 +7268,12 @@
 					"95": {
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 					},
-					// Following British: (Game codes have not used country name to match)
-					// Queen Elizabeth Class
-					"67": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
-					},
-					// Ark Royal Class
-					"78": "67",
-					// Nelson Class
-					"88": "67",
-					// Town Class
-					"108": "67",
-					// Illustrious Class
-					"112": "67",
 				},
 				byNation: {
-					// Number refers to byClass[67] above
-					"UnitedStates": 67,
+					"UnitedKingdom": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					"UnitedStates": "UnitedKingdom",
 				},
 			},
 			// 10cm Twin High-angle Gun Mount Battery Concentrated Deployment
@@ -7533,21 +7504,11 @@
 					"UnitedStates": {
 						single: { "tyku": 1, "houk": 3, "saku": 1 },
 					},
-				},
-				byClass: {
-					// Following British: (Game codes have not used country name to match)
-					// Queen Elizabeth Class
-					"67": {
+					"UnitedKingdom": {
 						single: { "tyku": 1, "houk": 2 },
 					},
-					// Ark Royal Class
-					"78": "67",
-					// Nelson Class
-					"88": "67",
-					// Town Class
-					"108": "67",
-					// Illustrious Class
-					"112": "67",
+				},
+				byClass: {
 					// Perth Class
 					"96": {
 						single: { "tyku": 1, "houk": 1 },
@@ -7561,21 +7522,11 @@
 					"UnitedStates": {
 						single: { "houg": 2, "tyku": 2, "houk": 3, "saku": 2 },
 					},
-				},
-				byClass: {
-					// Following British: (Game codes have not used country name to match)
-					// Queen Elizabeth Class
-					"67": {
+					"UnitedKingdom": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
 					},
-					// Ark Royal Class
-					"78": "67",
-					// Nelson Class
-					"88": "67",
-					// Town Class
-					"108": "67",
-					// Illustrious Class
-					"112": "67",
+				},
+				byClass: {
 					// Perth Class
 					"96": {
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
@@ -7760,15 +7711,11 @@
 					"UnitedStates": {
 						multiple: { "houg": 2, "raig": 4 },
 					},
-				},
-				byClass: {
-					// Game codes have not used country name to match yet, so does here
-					// Jervis Class
-					"82": {
+					"UnitedKingdom": {
 						multiple: { "houg": 1, "raig": 2 },
 					},
-					// Town Class
-					"108": "82",
+				},
+				byClass: {
 					// Perth Class
 					"96": {
 						multiple: { "houg": 1, "raig": 1 },
@@ -10845,6 +10792,125 @@
 					},
 				],
 			},
+			// 21cm Single Main Gun Mount
+			"564": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Norge Class
+					"133": [
+						{
+							multiple: { "houg": 2, "houm": 1 },
+							synergy: {
+								flags: [ "norway15cmYellowSecGunMount" ],
+								single: { "houk": 1, "houm": 1 },
+							},
+						},
+						{
+							minCount: 2,
+							single: { "houg": 2 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+					// Yuubari Class
+					"34": "133",
+				},
+			},
+			// 15cm Single Secondary Gun Mount
+			"565": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Norge Class
+					"133": [
+						{
+							multiple: { "houg": 1, "houm": 2 },
+						},
+						{
+							minCount: 2,
+							single: { "houg": 2, "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+					// Yuubari Class
+					"34": "133",
+					// Fusou Class
+					"26": "133",
+				},
+			},
+			// 10.2cm Triple Secondary Gun Mount
+			"566": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedKingdom": [
+						{
+							multiple: { "houg": 1, "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Courageous Class
+					"134": {
+						multiple: { "houg": 1, "houk": 2, "houm": 1 },
+						synergy: {
+							flags: [ "ukTwin38cmMk1LargeGunMount" ],
+							byCount: {
+								gear: "ukTwin38cmMk1LargeGunMount",
+								"2": { "houg": 3, "tyku": 1, "houk": 1, "houm": 1 },
+								"3": { "houg": 3, "tyku": 1, "houk": 1, "houm": 1 },
+								"4": { "houg": 3, "tyku": 1, "houk": 1, "houm": 1 },
+							},
+						},
+					},
+				},
+			},
 			// 8cm High-angle Gun
 			"66": {
 				count: 0,
@@ -12372,21 +12438,10 @@
 			// 20-tube 7inch UP Rocket Launchers
 			"301": {
 				count: 0,
-				byClass: {
-					// Queen Elizabeth Class
-					"67": {
+				byNation: {
+					"UnitedKingdom": {
 						multiple: { "souk": 1, "tyku": 2, "houk": 1 },
 					},
-					// Ark Royal Class
-					"78": "67",
-					// Jervis Class
-					"82": "67",
-					// Nelson Class
-					"88": "67",
-					// Town Class
-					"108": "67",
-					// Illustrious Class
-					"112": "67",
 				},
 			},
 			// Type 93 Passive Sonar
@@ -12784,16 +12839,9 @@
 					"UnitedStates": {
 						single: { "houk": 1, "tais": 2 },
 					},
-				},
-				byClass: {
-					// Jervis Class
-					"82": {
+					"UnitedKingdom": {
 						single: { "houk": 1, "tais": 1 },
 					},
-					// Perth Class
-					"96": "82",
-					// Town Class
-					"108": "82",
 				},
 				byShip: [
 					{
@@ -12815,14 +12863,11 @@
 					"UnitedStates": {
 						single: { "houk": 1, "tais": 3 },
 					},
-				},
-				byClass: {
-					// Jervis Class
-					"82": {
+					"UnitedKingdom": {
 						single: { "houk": 1, "tais": 2 },
 					},
-					// Town Class
-					"108": "82",
+				},
+				byClass: {
 					// Perth Class
 					"96": {
 						single: { "houk": 1, "tais": 1 },
@@ -13898,15 +13943,15 @@
 					},
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D, Noshiro K2
-						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?
-						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+
+						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?, Glorious (CV)?
+						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+, Glorious (BC)?
 						//   All fast DD: not here, see next item
 						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?, Kirov?
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?, Minneapolis?
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
 						origins: [
 								83, 332, 549, 515, 444, 432, 433, 603, 931,
-								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877,
+								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877, 1022,
 								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965, 1001,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005,
 								74, 76, 116, 102, 103, 184, 925
@@ -14033,12 +14078,12 @@
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						//   Slow DE: Inagi K2
+						//   Slow DE: Inagi K2, Norge, Eidsvold
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953, 1003,
 								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544, 995,
 								445, 451, 491,
-								922
+								922, 998, 999
 							],
 						excludes: [541, 573, 888, 878, 879, 894, 899, 922, 730],
 						speedCap: 10,

@@ -2418,7 +2418,7 @@ KC3改 Ship Object
 			// https://discord.com/channels/118339803660943369/178613137430282240/1286997214580703335
 			if(isCombined && fleetNum === 2) shipCnt = PlayerManager.fleets[0].countShips();
 			// Guardian ships counted from 3rd or 4th ship
-			const isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
+			const isGuardian = shipPos >= Math.max(2, Math.floor(shipCnt / 2));
 			if(warfareType === "Shelling" || isNightBattle) {
 				formationModifier = isGuardian ? 1.0 : 0.5;
 			} else if(warfareType === "Antisub") {
@@ -3204,9 +3204,11 @@ KC3改 Ship Object
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
 		if(!precap) {
 			// Uncategorized postcap-only event surface installations:
-			// Anchorage Water Demon Vacation Mode, Dock Princess
+			// Anchorage Water Demon Vacation Mode, Dock Princess, Europa
 			//if(shipJapName.startsWith("泊地水鬼 バカンスmode")) return 6?;
 			//if(shipJapName.startsWith("船渠棲姫")) return 7?;
+			//if(shipJapName.startsWith("戦艦仏棲姫")) return 8?;
+			//if(shipJapName.startsWith("欧州水姫")) return 9?;
 		}
 		// Other soft-skin installations
 		return isLand ? 1 : 0;
@@ -5057,7 +5059,7 @@ KC3改 Ship Object
 						break;
 					case 6:{// Vanguard, depends on fleet position
 						const [shipPos, shipCnt] = this.fleetPosition(),
-							isGuardian = shipPos >= Math.min(2, Math.floor(shipCnt / 2));
+							isGuardian = shipPos >= Math.max(2, Math.floor(shipCnt / 2));
 						modifier = isGuardian ?
 							(isAntisubWarfare ? 1.1 : 1.2) :
 							(isAntisubWarfare ? 1.0 : 0.8);

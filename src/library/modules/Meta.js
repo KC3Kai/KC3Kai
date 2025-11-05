@@ -127,7 +127,7 @@ Provides access to data on built-in JSON files
 		},
 		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
-			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊', '太平洋飛行場姫', '集積地棲姫V バカンスmode', '集積地棲姫V バカンスmode-壊', '集積地棲姫改', '集積地棲姫改-壊', '飛行場棲姫'
+			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊', '太平洋飛行場姫', '集積地棲姫V バカンスmode', '集積地棲姫V バカンスmode-壊', '集積地棲姫改', '集積地棲姫改-壊', '飛行場棲姫', '深海上陸小鬼'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
 		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
@@ -219,13 +219,14 @@ Provides access to data on built-in JSON files
 				65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110,
 				114, 116, 118, 121, 122, 125
 			],
-			"UnitedKingdom": [67, 78, 82, 88, 108, 112],
+			"UnitedKingdom": [67, 78, 82, 88, 108, 112, 134, 135],
 			"Italy": [58, 61, 64, 68, 80, 92, 113, 124],
 			"Netherlands": [98],
 			"Australia": [96],
 			"Sweden": [89],
 			"Germany": [47, 48, 55, 57, 63],
 			"France": [70, 79, 128, 129],
+			"Norway": [133],
 			"Russia": [73, 81, 131],
 			"Japan": [
 				1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -265,7 +266,38 @@ Provides access to data on built-in JSON files
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631:1630,*/1634: 1573, 1635: 1561, 1636: 1562,
 			1637: 364,  1638: 48,   1640: 513,  1641: 507,  1642: 508,  1643: 85,   1644: 308,  1645: 376,
 			1646: 439,  1647: 363,  1648: 1648, 1649: 537,  1650: 1650, 1651: 1651, 1652: 1652, 1653: 362,
-			1654: 555
+			1654: 555,  1655: 564,  1656: 565,  1657: 566
+		},
+		stypeAltNameMap: {
+			"553": 47, // Ise K2: 改装航空戦艦
+			"554": 47, // Hyuuga K2: 改装航空戦艦
+			"574": 48, // Gotland: 軽(航空)巡洋艦
+			"630": 48, // Gotland andra: 軽(航空)巡洋艦
+			"597": 49, // Atlanta: 防空巡洋艦
+			"696": 49, // Atlanta K: 防空巡洋艦
+			"622": 50, // Yuubari K2: 兵装実験軽巡
+			"623": 50, // Yuubari K2T: 兵装実験軽巡
+			"624": 50, // Yuubari K2D: 兵装実験軽巡
+			"506": 51, // Mogami K2T: 改装航空巡洋艦
+			"699": 52, // Souya AGS: 特務艦
+			"645": 53, // Souya AGL: 灯台補給船
+			"650": 54, // Souya AGB: 南極観測船
+			"900": 55, // Yamashiomaru: 特設護衛空母(icon designation is '陸護空')
+			"717": 55, // Yamashiomaru K: 特設護衛空母
+			"1003":60, // Shimanemaru: 特設護衛空母(been changed to '特護空' since 2025-03-24)
+			"1008":60, // Shimanemaru K: 特設護衛空母
+			"945": 56, // No.101: 戦車揚陸艦
+			"727": 56, // No.101 K: 戦車揚陸艦
+			"953": 57, // Asahi: 練習特務艦
+			"507": 58, // Mikuma K2T: 戦闘水上機母艦
+			"995": 59, // Ootomari: 砕氷艦
+			"1000":59, // Ootomari K: 砕氷艦
+			"998": 61, // Norge: 海防戦艦
+			"999": 61, // Eidsvold: 海防戦艦
+			"738": 61, // Norge K: 海防戦艦
+			"739": 61, // Eidsvold K: 海防戦艦
+			"1022":62, // Glorious FBB: 巡洋戦艦
+			"740": 62, // Glorious K FBB: 巡洋戦艦
 		},
 		
 		/* Initialization
@@ -718,32 +750,7 @@ Provides access to data on built-in JSON files
 		shipTypeNameSp :function(mstId, stype, isAlt){
 			// defined by game client (and card/banner images), see `main.js#ShipMstModel.prototype.shipTypeName`
 			// in order to map to 2 or more names, index + doubled 23 for now
-			const stypeAltNameMap = {
-				"553": 47, // Ise K2: 改装航空戦艦
-				"554": 47, // Hyuuga K2: 改装航空戦艦
-				"574": 48, // Gotland: 軽(航空)巡洋艦
-				"630": 48, // Gotland andra: 軽(航空)巡洋艦
-				"597": 49, // Atlanta: 防空巡洋艦
-				"696": 49, // Atlanta K: 防空巡洋艦
-				"622": 50, // Yuubari K2: 兵装実験軽巡
-				"623": 50, // Yuubari K2T: 兵装実験軽巡
-				"624": 50, // Yuubari K2D: 兵装実験軽巡
-				"506": 51, // Mogami K2T: 改装航空巡洋艦
-				"699": 52, // Souya AGS: 特務艦
-				"645": 53, // Souya AGL: 灯台補給船
-				"650": 54, // Souya AGB: 南極観測船
-				"900": 55, // Yamashiomaru: 特設護衛空母(icon designation is '陸護空')
-				"717": 55, // Yamashiomaru K: 特設護衛空母
-				"1003":60, // Shimanemaru: 特設護衛空母(been changed to '特護空' since 2025-03-24)
-				"1008":60, // Shimanemaru K: 特設護衛空母
-				"945": 56, // No.101: 戦車揚陸艦
-				"727": 56, // No.101 K: 戦車揚陸艦
-				"953": 57, // Asahi: 練習特務艦
-				"507": 58, // Mikuma K2T: 戦闘水上機母艦
-				"995": 59, // Ootomari: 砕氷艦
-				"1000":59, // Ootomari K: 砕氷艦
-			};
-			const altIdx = stypeAltNameMap[mstId];
+			const altIdx = this.stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);
 			return this.stype(stype, isAlt);
 		},
@@ -1484,7 +1491,7 @@ Provides access to data on built-in JSON files
 						seasons : ["Winter", "Spring", "Summer", "Fall"],
 						fromId : 21,
 						fromYear : 2013,
-						skippedSeasons : [[42, 2], [48, 3], [50, 4], [56, 6], [58, 7], [59, 8], [60, 10]],
+						skippedSeasons : [[42, 2], [48, 3], [50, 4], [56, 6], [58, 7], [59, 8], [60, 10], [61, 11]],
 					},
 					period = eventMapDefs.seasons.length,
 					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (
