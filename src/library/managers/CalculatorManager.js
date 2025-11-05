@@ -88,7 +88,8 @@
         var tpValue = getAtpOrTp(viewFleet);
         if(isCombined) {
             viewFleet = PlayerManager.fleets[0];
-            tpValue = getAtpOrTp(viewFleet) + getAtpOrTp(escortFleet);
+            // TP value is already summed by server (same value for both fleet 1 and 2)
+            tpValue = getAtpOrTp(viewFleet); /* + getAtpOrTp(escortFleet); */
         }
         return isNaN(tpValue) ? "?" : tpValue;
     };

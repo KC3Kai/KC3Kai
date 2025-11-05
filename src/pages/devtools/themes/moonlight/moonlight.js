@@ -3079,7 +3079,13 @@
 						.attr("src", KC3Meta.itemIcon(25));
 					var lowTPGain = isNaN(thisNode.amount) ? "?" : Math.floor(0.7 * thisNode.amount);
 					var highTPGain = isNaN(thisNode.amount) ? "?" : thisNode.amount;
-					$(".module.activity .node_type_resource .node_res_text").text( "{0} ~ {1} TP".format(lowTPGain, highTPGain) );
+					$(".module.activity .node_type_resource .node_res_text")
+						.text("{0} ~ {1} TP".format(lowTPGain, highTPGain));
+					if(thisNode.amountPre) $(".module.activity .node_type_resource .node_res_text")
+						.attr("title", KC3Meta("PanelTransportPoints")
+							.format(lowTPGain, highTPGain, thisNode.amountPre)
+						).lazyInitTooltip();
+					else $(".module.activity .node_type_resource .node_res_text").removeAttr("title");
 					$(".module.activity .node_type_resource").show().children().show();
 
 					if(thisNode.gaugeDamage > 0 && KC3SortieManager.getCurrentMapData().kind === 'gauge-tp') {
