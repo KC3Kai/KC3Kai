@@ -14078,7 +14078,7 @@
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						//   Slow DE: Inagi K2, Norge?, Eidsvold?
+						//   Slow DE: Inagi K2, Norge, Eidsvold
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953, 1003,
 								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
 								75, 89, 92, 521, 522, 534, 544, 995,
