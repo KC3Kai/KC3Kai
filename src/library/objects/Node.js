@@ -323,7 +323,7 @@ Used by SortieManager
 			...KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id])
 		).valueOf();
 		console.log("TP amount when arrive TP point", this.amount, eventMapGauge.tank);
-		const ingameTp = KC3Calc.getFleetsIngameTpText(sentFleet, undefined, KC3SortieManager.isCombinedSortie());
+		const ingameTp = KC3Calc.getFleetsIngameTpText(sentFleet, KC3SortieManager.getCurrentMapData().id);
 		this.amountPre = ingameTp;
 		if (!isNaN(ingameTp) && this.amount != ingameTp) {
 			// Use ingame TP value instead even a pre-sortie value, if tank flag not set in our meta data yet

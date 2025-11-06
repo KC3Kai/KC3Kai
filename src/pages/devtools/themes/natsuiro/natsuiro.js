@@ -2060,7 +2060,7 @@
 					supportPower: 0,
 					tpValueTank: [MainFleet.calcTpObtain("type1", MainFleet, EscortFleet), MainFleet.calcTpObtain("type2", MainFleet, EscortFleet)],
 					tpValueSum: MainFleet.calcTpObtain(false, MainFleet, EscortFleet),
-					tpValueDisp: KC3Calc.getFleetsIngameTpText(MainFleet, EscortFleet, !!PlayerManager.combinedFleet)
+					tpValueDisp: KC3Calc.getFleetsIngameTpText(MainFleet)
 				};
 
 			// SINGLE
