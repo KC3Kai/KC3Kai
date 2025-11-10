@@ -145,8 +145,10 @@
                 case 943: // Kumanomaru
                 case 994: // Kaya
                 case 992: // Sugi
+                case 993: // Kashi
                     return 22;
                 case 945: // No.101 Transport Ship
+                case 996: // Nosaki
                     return 9;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
@@ -267,6 +269,7 @@
                     return 22;
                 case 994: // Kaya
                 case 992: // Sugi
+                case 993: // Kashi
                     return 17;
                 case 943: // Kumanomaru
                 case 1001: // Kirov
@@ -303,6 +306,7 @@
                 case 960: // Kiyoshimo K2D
                     return 10;
                 case 203: // Hatsuyuki
+                case 996: // Nosaki
                     return 7;
                 case 202: // Shirayuki
                     return 5;
