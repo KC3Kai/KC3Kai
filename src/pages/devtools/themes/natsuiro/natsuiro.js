@@ -2973,7 +2973,7 @@
 					$(".module.activity .node_type_resource .node_res_text")
 						.text("{0} ~ {1} TP".format(lowTPGain, highTPGain));
 					if(thisNode.amountPre) $(".module.activity .node_type_resource .node_res_text")
-						.attr("title", KC3Meta("PanelTransportPoints")
+						.attr("title", KC3Meta.term("PanelTransportPoints")
 							.format(lowTPGain, highTPGain, thisNode.amountPre)
 						).lazyInitTooltip();
 					else $(".module.activity .node_type_resource .node_res_text").removeAttr("title");
