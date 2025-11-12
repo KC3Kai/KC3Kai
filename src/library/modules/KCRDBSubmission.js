@@ -1,6 +1,6 @@
 (() => {
 
-  const baseUrl = "https://kcrdb.hitomaru.dev"
+  const baseUrl = "https://kcrdb.hitomaru.dev";
   const manifest = chrome.runtime.getManifest() || {};
   const kc3version = manifest.version + ("update_url" in manifest ? "" : "_dev");
 
@@ -9,7 +9,7 @@
     "api_req_quest/clearitemget": [processClearItemGet],
   };
 
-  let forcePostQuestList = false
+  let forcePostQuestList = false;
 
   function processData(req) {
     const handlers = apis[req.call];
@@ -38,7 +38,7 @@
       })
       .fail((xhr, status, error) => {
         console.warn("KCRDBSubmission", path, error);
-      })
+      });
   }
 
   /**
@@ -51,14 +51,14 @@
 
     const list = req.response.api_data.api_list;
     postData("quests", { list });
-    forcePostQuestList = false
+    forcePostQuestList = false;
   }
 
   /**
    * On quest finish
    */
   function processClearItemGet(req) {
-    forcePostQuestList = true
+    forcePostQuestList = true;
   }
 
   window.KCRDBSubmission = {
@@ -66,4 +66,4 @@
     postData,
   };
 
-})()
+})();
