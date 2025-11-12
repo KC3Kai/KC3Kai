@@ -62,7 +62,11 @@ Listens to network history and triggers callback if game events happen
 			identifier: undefined,
 			resultRecieved: false,
 		},
-		submissionModuleNames: ["PoiDBSubmission", "TsunDBSubmission"],
+		submissionModuleNames: [
+			"PoiDBSubmission",
+			"TsunDBSubmission",
+			"KCRDBSubmission",
+		],
 		submissionConfigs: {},
 
 		/* ADD LISTENER
