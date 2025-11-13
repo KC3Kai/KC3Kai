@@ -9,7 +9,7 @@
     "api_req_quest/clearitemget": [processClearItemGet],
   };
 
-  const questIds = new Set();
+  let prevQuestIdList = [], prevAllQuestsHash = false;
 
   function processData(req) {
     const handlers = apis[req.call];
@@ -48,18 +48,27 @@
       });
   }
 
+  function hasQuestListChange(list, isSubList = false) {
+    const currentIdList = !Array.isArray(list) ? [] : list.map(q => Number(q.api_no));
+    const diffList = currentIdList.diff(prevQuestIdList);
+    let hasDiff = diffList.length > 0;
+    if (!isSubList) {
+      const fullListHash = Array.isArray(list) && JSON.stringify(list).hashCode();
+      hasDiff = fullListHash !== prevAllQuestsHash;
+      prevQuestIdList = currentIdList;
+      prevAllQuestsHash = fullListHash;
+    } else if (hasDiff) prevQuestIdList.push(...diffList);
+    return hasDiff;
+  }
+
   /**
    * On quest screen
    */
   function processQuestList(req) {
-    const curQuests = req.response.api_data.api_list;
-    const newQuests = curQuests.filter((q) => !questIds.has(q.api_no));
-    if (!newQuests.length) return;
-
-    postData("quests", { list: newQuests });
-    newQuests.forEach((q) => {
-      questIds.add(q.api_no);
-    });
+    const tabId = parseInt(req.params.api_tab_id);
+    const list = req.response.api_data.api_list;
+    if (!hasQuestListChange(list, tabId > 0)) return;
+    postData("quests", { list });
   }
 
   /**

@@ -90,7 +90,7 @@
     if (lbWorldId >= 0 || !lbas.length) {
       buildLbasFromPlayerManager(deckBuilder, lbas, lbWorldId, deployedOnly);
     } else {
-      const availWorlds = lbas.map(lb => lb.map).sort();
+      const availWorlds = lbas.map(lb => lb.map).sort((a, b) => a > b);
       const latestWorld = availWorlds.pop();
       const guessedWorld = KC3Meta.isEventWorld(latestWorld) ? latestWorld : availWorlds[0];
       buildLbasFromPlayerManager(deckBuilder, lbas, guessedWorld, deployedOnly);
