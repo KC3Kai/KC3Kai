@@ -20,24 +20,31 @@
     handlers.forEach(handler => handler(req));
   }
 
-  function postData(path, body) {
+  function postData(path, body,
+    completeCallback = (xhr) => {},
+    successCallback = (data) => {},
+    errorCallback = (xhr, statusText, httpError) => {}) {
     const url = new URL(path, baseUrl);
     return $.ajax({
       async: true,
       method: "POST",
       url: url.href,
       headers: {
+        "accept": "application/json",
         "content-type": "application/json",
         "x-origin": "KC3",
         "x-version": kc3version,
       },
       data: JSON.stringify(body),
-    })
-      .done(() => {
-        console.log("KCRDBSubmission", path, "ok");
+      complete: completeCallback,
+      success: successCallback,
+      error: errorCallback,
+    }).done(() => {
+        console.log("KCRDBSubmission", path, "done");
       })
-      .fail((xhr, status, error) => {
-        console.warn("KCRDBSubmission", path, error);
+      .fail((xhr, statusText, httpError) => {
+        const errMsg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
+        console.log("KCRDBSubmission", path, errMsg);
       });
   }
 
