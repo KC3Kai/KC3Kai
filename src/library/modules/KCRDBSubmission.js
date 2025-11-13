@@ -9,7 +9,7 @@
     "api_req_quest/clearitemget": [processClearItemGet],
   };
 
-  let forcePostQuestList = false;
+  let prevQuestIdList = [];
 
   function processData(req) {
     const handlers = apis[req.call];
@@ -21,7 +21,7 @@
   }
 
   function postData(path, body) {
-    const url = new URL(path, baseUrl)
+    const url = new URL(path, baseUrl);
     return $.ajax({
       async: true,
       method: "POST",
@@ -41,24 +41,30 @@
       });
   }
 
+  function hasQuestListChange(list) {
+    const currentIdList = !Array.isArray(list) ? [] : list.map(q => Number(q.api_no));
+    const diffList = currentIdList.diff(prevQuestIdList);
+    const hasDiff = currentIdList.length !== prevQuestIdList.length || diffList.length > 0;
+    if (hasDiff) prevQuestIdList = currentIdList;
+    return hasDiff;
+  }
+
   /**
    * On quest screen
    */
   function processQuestList(req) {
-    if (!forcePostQuestList && req.params.api_tab_id !== "0") {
-      return;
-    }
-
+    // only handles 'All quests' tab for now
+    if (parseInt(req.params.api_tab_id) !== 0) return;
     const list = req.response.api_data.api_list;
+    if (!hasQuestListChange(list)) return;
     postData("quests", { list });
-    forcePostQuestList = false;
   }
 
   /**
    * On quest finish
    */
   function processClearItemGet(req) {
-    forcePostQuestList = true;
+    // reversed for unlocks check?
   }
 
   window.KCRDBSubmission = {

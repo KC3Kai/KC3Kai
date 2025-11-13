@@ -880,6 +880,23 @@ Object.defineProperty(Array.prototype, "unique", {
 	}
 });
 
+Object.defineProperty(Array.prototype, "diff", {
+	enumerable: false,
+	/**
+	 * A convenient method to get different elements from this Array comparing with given Array.
+	 * @param array - another Array to be compared with.
+	 * @return an array with elements not found in given Array.
+	 */
+	value: function diff(otherArray) {
+		var thisArray = this;
+		if(!Array.isArray(otherArray)) return thisArray;
+		if(otherArray === thisArray) return [];
+		var thisSet = new Set(thisArray), otherSet = new Set(otherArray);
+		return [...thisSet].filter(e => !otherSet.has(e));
+	}
+});
+
+
 /*******************************\
 |*** Date                       |
 \*******************************/
