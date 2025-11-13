@@ -13943,14 +13943,14 @@
 					},
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D, Noshiro K2
-						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?, Glorious (CV)?
+						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?, Glorious (CV)?, Wasp?
 						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+, Glorious (BC)?
 						//   All fast DD: not here, see next item
 						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?, Kirov?
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?, Minneapolis?
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
 						origins: [
-								83, 332, 549, 515, 444, 432, 433, 603, 931,
+								83, 332, 549, 515, 444, 432, 433, 603, 931, 1025,
 								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877, 1022,
 								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965, 1001,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005,
@@ -14074,13 +14074,13 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari, Shimanemaru?
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari, Shimanemaru?, Nosaki?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						//   Slow DE: Inagi K2, Norge, Eidsvold
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953, 1003,
-								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
+								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877, 988,
 								75, 89, 92, 521, 522, 534, 544, 995,
 								445, 451, 491,
 								922, 998, 999
@@ -14150,9 +14150,9 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, I-36?, I-41?, Scamp, Salmon?, Drum?, Wahoo?
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, I-36?, I-41?, Scamp, Salmon?, Drum?, Wahoo?, Dace?
 						origins: [182, 460, 161,
-							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 971, 972, 299, 891, 892, 984
+							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 971, 972, 299, 891, 892, 984, 985
 						],
 						speedCap: 5,
 						synergy: [

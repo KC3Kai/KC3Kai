@@ -70,25 +70,21 @@
     };
 
     /**
-     * Get Transport Points from 1 or more fleet(s), especially served for Combined Fleet.
+     * Get Transport Points from specified fleet, or 'Tank TP' value by specified map ID.
+     * For Combined Fleet, TP value is already summed by API, both fleets get the same value.
      *
      * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
-     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
-     * @param {boolean} isCombined - if current view is really Combined Fleet view, default false.
-     * @return {string} TP value text.
+     * @return {string} TP value text, '?' for unknown.
      */
     const getFleetsIngameTpText = (
             viewFleet = PlayerManager.fleets[0],
-            escortFleet = PlayerManager.fleets[1],
-            isCombined = false,
             mapId = KC3SortieManager.getLatestEventMapData().id) => {
-        const getAtpOrTp = (fleet) => (
-            mapId && fleet.deckParams.atp ? fleet.deckParams.atp[mapId] : fleet.deckParams.tp
-        );
-        var tpValue = getAtpOrTp(viewFleet);
-        if(isCombined) {
-            viewFleet = PlayerManager.fleets[0];
-            tpValue = getAtpOrTp(viewFleet) + getAtpOrTp(escortFleet);
+        let tpValue = viewFleet.deckParams.tp;
+        // atp object dont disappear once unlock, even tp gauge cleared or other maps selected,
+        // have to fall-back to regular tp if no value for specified map id
+        if(mapId && viewFleet.deckParams.atp) {
+            tpValue = viewFleet.deckParams.atp[mapId];
+            if(tpValue === undefined) tpValue = viewFleet.deckParams.tp;
         }
         return isNaN(tpValue) ? "?" : tpValue;
     };

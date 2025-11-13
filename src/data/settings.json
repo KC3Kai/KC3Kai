@@ -1165,6 +1165,18 @@
 		]
 	},
 	{
+		"section": "SettingsKCRDBSubmission",
+		"help" : "https://kcrdb.hitomaru.dev/docs",
+		"contents" :[
+			{
+				"id" : "KCRDBSubmission_enabled",
+				"name" : "SettingsEnableKCRDBSubmission",
+				"type" : "check",
+				"options" : {}
+			}
+		]
+	},
+	{
 		"section": "SettingsPushAlerts",
 		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings%3A-PushNotifications",
 		"contents" :[

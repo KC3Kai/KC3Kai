@@ -411,6 +411,8 @@
 						$("body").css("opacity", "1");
 						return true;
 					} else if(e.ctrlKey || e.metaKey) {
+						const manifest = chrome.runtime.getManifest() || {};
+						const kc3version = manifest.version + ("update_url" in manifest ? "" : "_dev");
 						$.ajax({
 							url: "https://kcrdb.hitomaru.dev/replays",
 							async: true,
@@ -418,7 +420,8 @@
 							headers: {
 								"Accept": "application/json",
 								"Content-Type": "application/json",
-								"Data-Origin": "KC3"
+								"X-Origin": "KC3",
+								"X-Version": kc3version,
 							},
 							data: JSON.stringify({ data: encodeData }),
 							complete: (xhr) => {

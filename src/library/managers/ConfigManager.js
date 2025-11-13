@@ -48,6 +48,8 @@ Retrieves when needed to apply on components
 				KC3DBSubmission_enabled : false,
 				TsunDBSubmission_enabled : false,
 				TsunDBSubmissionExtra_enabled : false,
+				KCRDBSubmission_enabled : false,
+
 				PushAlerts_enabled   : 0,
 				PushAlerts_expedonly : false,
 				PushAlerts_key       : '',
