@@ -11,13 +11,13 @@
 
   let prevQuestIdList = [], prevAllQuestsHash = false;
 
-  function processData(req) {
-    const handlers = apis[req.call];
+  function processData(har) {
+    const handlers = apis[har.call];
     if (!handlers) {
       return;
     }
 
-    handlers.forEach(handler => handler(req));
+    handlers.forEach(handler => handler(har));
   }
 
   function postData(path, body,
@@ -41,11 +41,10 @@
       error: errorCallback,
     }).done(() => {
       console.log("KCRDBSubmission", path, "done");
-    })
-      .fail((xhr, statusText, httpError) => {
-        const errMsg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
-        console.log("KCRDBSubmission", path, errMsg);
-      });
+    }).fail((xhr, statusText, httpError) => {
+      const errMsg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
+      console.log("KCRDBSubmission", path, errMsg);
+    });
   }
 
   function hasQuestListChange(list, isSubList = false) {
@@ -53,32 +52,45 @@
       : list.map(q => ((q != -1 && q) || {}).api_no || -1).filter(v => v !== -1);
     const diffList = currentIdList.diff(prevQuestIdList);
     let hasDiff = diffList.length > 0;
+
     if (!isSubList) {
       const fullListHash = Array.isArray(list) && JSON.stringify(list).hashCode();
       hasDiff = fullListHash !== prevAllQuestsHash;
       prevQuestIdList = currentIdList;
       prevAllQuestsHash = fullListHash;
     } else if (hasDiff) prevQuestIdList.push(...diffList);
+
     return hasDiff;
   }
 
   /**
    * On quest screen
    */
-  function processQuestList(req) {
-    const tabId = parseInt(req.params.api_tab_id);
-    const list = req.response.api_data.api_list;
+  function processQuestList(har) {
+    const tabId = parseInt(har.params.api_tab_id);
+    const list = har.response.api_data.api_list;
     if (!hasQuestListChange(list, tabId > 0)) return;
+
     postData("quests", { list });
   }
 
   /**
    * On quest finish
    */
-  function processClearItemGet(req) {
-    const api_quest_id = Number(req.params.api_quest_id);
-    const data = req.response.api_data;
-    postData("quest-items", { api_quest_id, data });
+  function processClearItemGet(har) {
+    const api_quest_id = Number(har.params.api_quest_id);
+    const data = har.response.api_data;
+    const items = { api_quest_id, data };
+
+    const selectNoKey = "api_select_no";
+    const selectNoParams = Object.keys(har.params).filter(key => key.startsWith(selectNoKey));
+    if (selectNoParams.length > 0) {
+      const pos = selectNoKey.length;
+      selectNoParams.sort((a, b) => Number(a.substring(pos)) - Number(b.substring(pos)));
+      items.api_select_no = selectNoParams.map(k => Number(har.params[k]));
+    }
+
+    postData("quest-items", items);
   }
 
   window.KCRDBSubmission = {
