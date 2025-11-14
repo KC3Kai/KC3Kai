@@ -49,7 +49,8 @@
   }
 
   function hasQuestListChange(list, isSubList = false) {
-    const currentIdList = !Array.isArray(list) ? [] : list.map(q => Number(q.api_no));
+    const currentIdList = !Array.isArray(list) ? []
+      : list.map(q => ((q != -1 && q) || {}).api_no || -1).filter(v => v !== -1);
     const diffList = currentIdList.diff(prevQuestIdList);
     let hasDiff = diffList.length > 0;
     if (!isSubList) {
