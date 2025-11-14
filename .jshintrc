@@ -28,6 +28,7 @@
 		"KC3Network": true,
 		"OpenDBSubmission": true,
 		"TsunDBSubmission": true,
+		"KCRDBSubmission": true,
 		"KC3Panel": true,
 		"PictureBook": true,
 		"PoiDBSubmission": true,

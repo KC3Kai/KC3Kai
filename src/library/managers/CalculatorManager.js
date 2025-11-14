@@ -69,6 +69,26 @@
         }
     };
 
+    /**
+     * Get Transport Points from specified fleet, or 'Tank TP' value by specified map ID.
+     * For Combined Fleet, TP value is already summed by API, both fleets get the same value.
+     *
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @return {string} TP value text, '?' for unknown.
+     */
+    const getFleetsIngameTpText = (
+            viewFleet = PlayerManager.fleets[0],
+            mapId = KC3SortieManager.getLatestEventMapData().id) => {
+        let tpValue = viewFleet.deckParams.tp;
+        // atp object dont disappear once unlock, even tp gauge cleared or other maps selected,
+        // have to fall-back to regular tp if no value for specified map id
+        if(mapId && viewFleet.deckParams.atp) {
+            tpValue = viewFleet.deckParams.atp[mapId];
+            if(tpValue === undefined) tpValue = viewFleet.deckParams.tp;
+        }
+        return isNaN(tpValue) ? "?" : tpValue;
+    };
+
     const buildFleetsFighterPowerText = (
             viewFleet = PlayerManager.fleets[0],
             escortFleet = PlayerManager.fleets[1],
@@ -953,6 +973,7 @@
     // Export public API
     window.KC3Calc = Object.assign(publicApi, {
         getFleetsFighterPowerText,
+        getFleetsIngameTpText,
         buildFleetsFighterPowerText,
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,

@@ -171,6 +171,13 @@
 			} else {
 				$(".tab_mstgear .gearInfo .scrap").hide();
 			}
+			$(".tab_mstgear .gearInfo .rarity").attr("title", [
+				"api_sortno: {0}".format(gearData.api_sortno),
+				"api_atap: {0}".format(gearData.api_atap),
+				"api_bakk: {0}".format(gearData.api_bakk),
+				"api_raim: {0}".format(gearData.api_raim),
+				"api_sakb: {0}".format(gearData.api_sakb),
+			].join("\n")).lazyInitTooltip();
 			
 			$(".tab_mstgear .gearInfo .name").text(KC3Meta.gearName(gearData.api_name));
 			$(".tab_mstgear .gearInfo .name_jp").text(

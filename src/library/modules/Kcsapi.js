@@ -2842,11 +2842,13 @@ Previously known as "Reactor"
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 5;
 				break;
 				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0]
+					// exchange 7 saury with 1 Arctic Gear & Deck Personnel as an option in 2025 (up to twice)
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
 				break;
 				case 34: // exchange 22 saury (curry) with 1 Zuiun (634 Air Group / Skilled) (up to twice)
 					// exchange 46 saury (curry k2) with 1 T1 Fighter Hayabusa Model II (64 Squad) in 2023 (once)
 					// exchange 48 saury (curry k3) with 1 Ginga (Egusa) in 2024 (once)
+					// exchange 41 saury (curry k3a) with 1 T4 Heavy Bomber Hiryuu + No.1 1A Guided Missile +4 in 2025 (once)
 					//if(itemId === 68) PlayerManager.consumables.mackerel -= 46;
 				break;
 				case 41: // exchange all boxes with fcoins

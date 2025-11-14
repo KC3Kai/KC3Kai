@@ -139,6 +139,8 @@ Contains summary information about a fleet and its ships
 		this.deckParams.tp = Number(data.api_tp_value);
 		if(data.api_atp_value)
 			this.deckParams.atp = Object.assign({}, data.api_atp_value);
+		else if(this.deckParams.atp)
+			delete this.deckParams.atp;
 	};
 	
 	/*--------------------------------------------------------*/

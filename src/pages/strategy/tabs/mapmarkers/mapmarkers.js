@@ -217,14 +217,24 @@
 			this.mapImgMetaUrl = getMapRscUrl(this.world, this.map, "image.json");
 			this.mapInfoMetaUrl = getMapRscUrl(this.world, this.map, "info.json");
 			this.updateParams();
-			this.pixiTextStyle = this.pixiTextStyle || new this.pixi.TextStyle({
+			this.pixiTextStyleOdd = this.pixiTextStyleOdd || new this.pixi.TextStyle({
 				fontFamily: "Arial",
-				fontSize: 18,
+				fontSize: 13,
 				fill: "white",
 				stroke: "#ff3300",
-				strokeThickness: 4,
+				strokeThickness: 2,
 				dropShadow: true,
-				dropShadowColor: "#000000",
+				dropShadowColor: "#111111",
+				dropShadowDistance: 2,
+			});
+			this.pixiTextStyleEven = this.pixiTextStyleEven || new this.pixi.TextStyle({
+				fontFamily: "Arial",
+				fontSize: 13,
+				fill: "white",
+				stroke: "#aaaa00",
+				strokeThickness: 2,
+				dropShadow: true,
+				dropShadowColor: "#111111",
 				dropShadowDistance: 2,
 			});
 			const mapKey = `${String(this.world).pad(3, '0')}${String(this.map).pad(2, '0')}`;
@@ -310,8 +320,8 @@
 						if(this.isShowArrows) {
 							const grp = new this.pixi.Graphics();
 							grp.setTransform(
-								spot.x + (fromSpot.x - spot.x) / 2,
-								spot.y + (fromSpot.y - spot.y) / 2,
+								spot.x + (fromSpot.x - spot.x) / 5,
+								spot.y + (fromSpot.y - spot.y) / 5,
 								1, 1, angle);
 							const arrowHeight = 18, arrowColor = 0xcdcde9;
 							grp.lineStyle(2, arrowColor, 1);
@@ -326,12 +336,12 @@
 						}
 						// Show edge numbers
 						if(this.isShowEdgeIds) {
-							const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
-							edgeText.anchor.set(
-								1.5 * (Math.abs(angle) / Math.PI),
-								Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
-							);
-							edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+							const edgeText = new this.pixi.Text(edge,
+								edge % 2 ? this.pixiTextStyleEven : this.pixiTextStyleOdd);
+							edgeText.anchor.set(0.5, 0.5);
+							const ratew = bounds.width >= bounds.height ? 2.5 : 2;
+							const rateh = bounds.width >= bounds.height ? 2 : 2.5;
+							edgeText.position.set(bounds.x + bounds.width / ratew, bounds.y + bounds.height / rateh);
 							edgesContainer.addChild(edgeText);
 						}
 					}
