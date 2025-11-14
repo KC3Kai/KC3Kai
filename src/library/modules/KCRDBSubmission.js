@@ -9,7 +9,7 @@
     "api_req_quest/clearitemget": [processClearItemGet],
   };
 
-  let prevQuestIdList = [];
+  let prevQuestIdList = [], prevAllQuestsHash = false;
 
   function processData(req) {
     const handlers = apis[req.call];
@@ -20,32 +20,45 @@
     handlers.forEach(handler => handler(req));
   }
 
-  function postData(path, body) {
+  function postData(path, body,
+    completeCallback = (xhr) => {},
+    successCallback = (data) => {},
+    errorCallback = (xhr, statusText, httpError) => {}) {
     const url = new URL(path, baseUrl);
     return $.ajax({
       async: true,
       method: "POST",
       url: url.href,
       headers: {
+        "accept": "application/json",
         "content-type": "application/json",
         "x-origin": "KC3",
         "x-version": kc3version,
       },
       data: JSON.stringify(body),
-    })
-      .done(() => {
-        console.log("KCRDBSubmission", path, "ok");
+      complete: completeCallback,
+      success: successCallback,
+      error: errorCallback,
+    }).done(() => {
+        console.log("KCRDBSubmission", path, "done");
       })
-      .fail((xhr, status, error) => {
-        console.warn("KCRDBSubmission", path, error);
+      .fail((xhr, statusText, httpError) => {
+        const errMsg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
+        console.log("KCRDBSubmission", path, errMsg);
       });
   }
 
-  function hasQuestListChange(list) {
-    const currentIdList = !Array.isArray(list) ? [] : list.map(q => Number(q.api_no));
+  function hasQuestListChange(list, isSubList = false) {
+    const currentIdList = !Array.isArray(list) ? []
+      : list.map(q => ((q != -1 && q) || {}).api_no || -1).filter(v => v !== -1);
     const diffList = currentIdList.diff(prevQuestIdList);
-    const hasDiff = currentIdList.length !== prevQuestIdList.length || diffList.length > 0;
-    if (hasDiff) prevQuestIdList = currentIdList;
+    let hasDiff = diffList.length > 0;
+    if (!isSubList) {
+      const fullListHash = Array.isArray(list) && JSON.stringify(list).hashCode();
+      hasDiff = fullListHash !== prevAllQuestsHash;
+      prevQuestIdList = currentIdList;
+      prevAllQuestsHash = fullListHash;
+    } else if (hasDiff) prevQuestIdList.push(...diffList);
     return hasDiff;
   }
 
@@ -53,10 +66,9 @@
    * On quest screen
    */
   function processQuestList(req) {
-    // only handles 'All quests' tab for now
-    if (parseInt(req.params.api_tab_id) !== 0) return;
+    const tabId = parseInt(req.params.api_tab_id);
     const list = req.response.api_data.api_list;
-    if (!hasQuestListChange(list)) return;
+    if (!hasQuestListChange(list, tabId > 0)) return;
     postData("quests", { list });
   }
 

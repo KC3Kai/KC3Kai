@@ -59,8 +59,9 @@
 		toggleSetting("dmm_customize", "#background");
 		toggleSetting("api_subtitles", "#subtitles");
 		toggleSetting("map_markers", "#mapmarkers");
-		toggleSetting("api_translation", "#questtl");
-		toggleSetting("api_tracking", "#questtrack");
+		toggleSetting("map_letters", "#nodeletters");
+		//toggleSetting("api_translation", "#questtl");
+		//toggleSetting("api_tracking", "#questtrack");
 		toggleSetting("info_quest_activity", "#questtab");
 		toggleSetting("api_askExit", "#exitconfirm");
 		toggleSetting("mute_game_tab", "#mutegametab");
@@ -68,6 +69,7 @@
 		toggleSetting("focus_game_tab", "#focusgame");
 		toggleSetting("TsunDBSubmission_enabled", "#tsundbsubmission");
 		toggleSetting("PoiDBSubmission_enabled", "#poidbsubmission");
+		toggleSetting("KCRDBSubmission_enabled", "#kcrdbsubmission");
 		//toggleSetting("OpenDBSubmission_enabled", "#opendbsubmission");
 		//toggleSetting("checkLiveQuests", "#tl_autocheck_switch");
 		
