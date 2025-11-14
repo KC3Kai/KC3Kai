@@ -21,9 +21,9 @@
   }
 
   function postData(path, body,
-    completeCallback = (xhr) => {},
-    successCallback = (data) => {},
-    errorCallback = (xhr, statusText, httpError) => {}) {
+    completeCallback = (xhr) => { },
+    successCallback = (data) => { },
+    errorCallback = (xhr, statusText, httpError) => { }) {
     const url = new URL(path, baseUrl);
     return $.ajax({
       async: true,
@@ -40,8 +40,8 @@
       success: successCallback,
       error: errorCallback,
     }).done(() => {
-        console.log("KCRDBSubmission", path, "done");
-      })
+      console.log("KCRDBSubmission", path, "done");
+    })
       .fail((xhr, statusText, httpError) => {
         const errMsg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
         console.log("KCRDBSubmission", path, errMsg);
@@ -76,7 +76,9 @@
    * On quest finish
    */
   function processClearItemGet(req) {
-    // reversed for unlocks check?
+    const api_quest_id = Number(req.params.api_quest_id);
+    const data = req.response.api_data;
+    postData("quest-items", { api_quest_id, data });
   }
 
   window.KCRDBSubmission = {
