@@ -600,8 +600,10 @@
     const getLandBasesResupplyCost = () => {
         const total = {fuel: 0, ammo: 0, steel: 0, bauxite: 0};
         $.each(PlayerManager.bases, (i, base) => {
-            const cost = base.calcResupplyCost();
-            Object.keys(total).map(k => { total[k] += cost[k]; });
+            if(ConfigManager.isRelevantBaseForLBASCalculations(base.map, base.rid)){
+                const cost = base.calcResupplyCost();
+                Object.keys(total).map(k => { total[k] += cost[k]; });
+            }
         });
         return total;
     };
@@ -614,7 +616,7 @@
     const getLandBasesSortieCost = () => {
         const total = {fuel: 0, ammo: 0, steel: 0, bauxite: 0};
         $.each(PlayerManager.bases, (i, base) => {
-            if(base.action === 1) {
+            if(ConfigManager.isRelevantBaseForLBASCalculations(base.map, base.rid) && base.action === 1) {
                 var cost = base.calcSortieCost();
                 Object.keys(total).map(k => { total[k] += cost[k]; });
             }
@@ -630,7 +632,7 @@
     const getLandBasesWorstCond = () => {
         var worst = 1;
         $.each(PlayerManager.bases, (i, base) => {
-            if(base.action === 1) {
+            if(ConfigManager.isRelevantBaseForLBASCalculations(base.map, base.rid) && base.action === 1) {
                 worst = Math.max(worst, base.worstCond());
             }
         });
@@ -643,7 +645,8 @@
      * @see LandBase.isPlanesSupplied
      */
     const isLandBasesSupplied = () => {
-        return PlayerManager.bases.every(base => base.isPlanesSupplied());
+        const relevantBases = PlayerManager.bases.filter(base => ConfigManager.isRelevantBaseForLBASCalculations(base.map, base.rid));
+        return relevantBases.every(relevantBase => relevantBase.isPlanesSupplied());
     };
 
     /**
