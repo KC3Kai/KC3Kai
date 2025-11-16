@@ -4552,12 +4552,13 @@ KC3改 Ship Object
 				432, 353, // Graf & Graf Kai
 				433, // Saratoga (base form)
 				//966, 735, // Lexington, forget to add? so dropped into following airattack case:
+				//1025, 1030,
 			].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
 			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
-			// Other known ships go here: Ark with Swordfish, Kaga K2Go, Lexington
+			// Other known ships go here: Ark with Swordfish, Kaga K2Go, Lexington, Wasp
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
