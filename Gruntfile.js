@@ -313,7 +313,7 @@ module.exports = function(grunt) {
 							},
 							{
 								"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
-								"include_globs": ["*://*.kancolle-server.com/*"],
+								"include_globs": ["*://*.kancolle-server.com/*", "*://192.168.1.*/*", "*://127.0.0.1/*"],
 								"js": [
 									"assets/js/global.js",
 									"library/objects.js",
