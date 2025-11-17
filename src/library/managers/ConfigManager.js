@@ -84,6 +84,7 @@ Retrieves when needed to apply on components
 				info_items_iconset   : 0,
 				info_stats_iconset   : 0,
 				info_format_numbers  : false,
+				info_lbas_ind_excl_bases : [],
 				info_salt            : false,
 				info_troll           : false,
 
@@ -303,6 +304,13 @@ Retrieves when needed to apply on components
 			return !this.idbSaveSortie ||
 				(Array.isArray(this.idbSaveExcludeMaps) &&
 				this.idbSaveExcludeMaps.indexOf(mapId) > -1);
+		},
+
+	 	// check whether land base is relevant for LBAS info
+		isRelevantBaseForLBASCalculations : function(world, id){
+			const baseId = Number([world, id].join('')) || "ShouldNotMatch";
+			return !(Array.isArray(this.info_lbas_ind_excl_bases) && 
+						this.info_lbas_ind_excl_bases.indexOf(baseId) > -1 );
 		},
 
 		// Return the corresponding language code supported by now, see Translation.js#getLocale
@@ -531,3 +539,4 @@ Retrieves when needed to apply on components
 		});
 
 })();
+
