@@ -315,11 +315,11 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_lbas_ind_excl_bases",
-				"name" : "SettingsLBASInfoCalculationsExcludeBases",
+				"id" : "info_lbas_exclude",
+				"name" : "SettingsLbasInfoExcludeBases",
 				"type" : "json",
 				"options" : {
-					"tooltip" : "SettingsLBASInfoCalculationsExcludeBasesTip"
+					"tooltip" : "SettingsLbasInfoExcludeBasesTip"
 				}
 			},
 			{
