@@ -84,7 +84,7 @@ Provides access to data on built-in JSON files
 			432: {917: 917, 918: 918},
 			353: {917: 917, 918: 918},
 		},
-		specialReairVoiceShips: [
+		specialRepairVoiceShips: [
 			// These ships got special voice line (6, aka. Repair) implemented (some used by akashi remodel),
 			// tested by trying and succeeding to http fetch mp3 from kc server
 			56, 160, 224,  // Naka
@@ -93,17 +93,19 @@ Provides access to data on built-in JSON files
 			89,            // Houshou (Poke dupe)
 			114, 200, 290, // Abukuma
 			116,           // Zuihou (Poke dupe)
-			123, 142, 295, // Kinukasa
+			123, 142, 295, // Kinugasa
 			126, 398,      // I-168
 			127, 399,      // I-58
 			135, 304, 543, // Naganami
 			136,           // Yamato Kai (Poke dupe)
 			145, 961,      // Shigure Kai Ni(San) (Event/Equip2 reuse)
+			196,           // Hiryuu Kai Ni
 			321,           // Ooyodo Kai (Friend50 cut)
 			412,           // Yamashiro Kai Ni (Poke dupe)
 			418,           // Satsuki Kai Ni
 			449,           // Pola (Equip1 cut)
 			496,           // Zara due (Event reuse)
+			498,           // Murasame Kai Ni
 			515,           // Ark Royal (Poke dupe)
 			522, 884,      // Yawatamaru (K2 Equip3 dupe), Unyou
 			549,           // Intrepid (Poke dupe)
@@ -114,10 +116,15 @@ Provides access to data on built-in JSON files
 			591,           // Kongou K2C (Attack dupe)
 			662,           // Noshiro Kai Ni (Poke dupe)
 			694,           // Kirishima K2C
+			942, 737,      // Richard P.Leary
+			945,           // No.101 Transport Ship
 			951,           // Amatsukaze Kai Ni
 			955, 960,      // Kiyoshimo K2(D)
 			967,           // Mogador Kai
 			975,           // Harusame Kai Ni
+			983,           // Hamanami Kai Ni
+			986,           // Shirayuki Kai Ni
+			1001,          // Kirov
 		],
 		specialAbyssalIdVoicePrefixes: {
 			// Why do devs make wrong voice filename matching even for last event?
