@@ -488,7 +488,7 @@ known IDs see QuestManager
 					available : true,
 					code : questMeta.code,
 					name : questMeta.name,
-					desc : questMeta.desc,
+					desc : KC3Quest.removeHtmlLinebreak(questMeta.desc),
 					memo : questMeta.memo,
 					trackingDesc : questMeta.trackingDesc,
 					// Elements order of possible reward consumables (including selectable optional rewards):
@@ -520,7 +520,7 @@ known IDs see QuestManager
 					available : true,
 					code : questMeta.code,
 					name : questMeta.name,
-					desc : questMeta.desc,
+					desc : KC3Quest.removeHtmlLinebreak(questMeta.desc),
 					memo : questMeta.memo,
 					trackingDesc : questMeta.trackingDesc,
 					rewardConsumables: questMeta.rewardConsumables,
@@ -735,6 +735,11 @@ known IDs see QuestManager
 			"#D75048", //10
 			"#996600", //11
 		][KC3Quest.getIdHigh(this.id)] || "#555555";
+	};
+
+	/** Only for removing lowercase `<br>` in quest api_detail string */
+	KC3Quest.removeHtmlLinebreak = function(desc){
+		return (desc || "").replace(/<br>/g, '');
 	};
 
 	/** Static method for scenes that only ID available without quest API data */
