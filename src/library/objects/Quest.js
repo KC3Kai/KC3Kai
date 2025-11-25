@@ -739,7 +739,7 @@ known IDs see QuestManager
 
 	/** Only for removing lowercase `<br>` in quest api_detail string */
 	KC3Quest.removeHtmlLinebreak = function(desc){
-		return (desc || "").replace(/<br>/g, '');
+		return (desc || "").replace(/<br>/g, "");
 	};
 
 	/** Static method for scenes that only ID available without quest API data */
