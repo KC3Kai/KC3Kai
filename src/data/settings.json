@@ -315,6 +315,14 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_lbas_exclude",
+				"name" : "SettingsLbasInfoExcludeBases",
+				"type" : "json",
+				"options" : {
+					"tooltip" : "SettingsLbasInfoExcludeBasesTip"
+				}
+			},
+			{
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
@@ -1715,3 +1723,4 @@
 		]
 	}
 ]
+

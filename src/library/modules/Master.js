@@ -634,14 +634,16 @@ Saves and loads significant data for future use
 			// to exclude gears like [33] Improved Kanhon Type Turbine
 			// since 2024-03-03, [524] Sec.Gun can be equipped in ex-slot for some AO without regular slots capability
 			//   and [524] can be equipped in ex-slot for LHA No.101 even banned specially by regular slots
-			// since 2024-05-29, [33] can be equipped by DE Inagi K2 in both slot types
+			// since 2024-05-29, [33] can be equipped by DE Inagi K2/Norge-class in both slot types
+			// since 2025-10-29, [226,227,488] DC can not be equipped by DE Norge-class in both slot types
 			if(equipTypesIncluded) {
 				if(equipOn.exslot) result |= 2;
 				// since 2023-11-02, some gears can be equipped in exslot only if specified stars met
 				if(equipOn.exslotMinStars > 0) {
 					if(gearStars !== undefined && gearStars < equipOn.exslotMinStars) return result;
 				}
-				if(Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
+				if((result & 1) // exclude too if excluded by regular slot for stype case
+				&& Array.isArray(equipOn.exslotStypes) && equipOn.exslotStypes.includes(stype)) result |= 2;
 				if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) result |= 2;
 			}
 			return result;

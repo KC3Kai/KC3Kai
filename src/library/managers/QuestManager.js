@@ -460,7 +460,7 @@ Uses KC3Quest objects to play around with
 			title += $("<p></p>").css("font-size", "11px")
 				.css("margin-left", "1em")
 				.css("text-indent", "-1em")
-				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
+				.text(KC3Quest.removeHtmlLinebreak(questMeta.desc) || KC3Meta.term("UntranslatedQuestTip"))
 				.prop("outerHTML");
 			const rewardRscItems = [];
 			const buildRscItem = (name, value) => {
