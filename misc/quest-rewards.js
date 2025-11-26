@@ -1,5 +1,5 @@
 // For running in strategy room devtools console, in order to reuse master and translation data.
-// note: copy() to clipboard function only availiable in console context
+// note: console command line copy() to clipboard function not availiable in promise context
 
 // fetch collected unmodified quests first
 fetch("https://kcrdb.hitomaru.dev/quests/data?is_mod=false&sort=api_no").then((resp) => (resp.ok && resp.json())).then((o) => { quests=o; dupes=o.items.filter(q => q.api_select_rewards).map(({api_no, api_title, api_select_rewards}) => ({id:api_no, title:api_title, select:api_select_rewards})); console.debug(quests, dupes); })
@@ -13,7 +13,7 @@ diff=quests.items.filter(q => (!KC3Meta.quest(q.api_no))); meta={}; diff.forEach
 copy(JSON.stringify(meta,null,"    "))
 
 // check text diff for correcting jp json
-fetch("https://kcrdb.hitomaru.dev/quests/data?is_mod=false&is_verified=false").then((resp) => (resp.ok && resp.json())).then((o) => { quests=o; console.debug(quests); });
+fetch("https://kcrdb.hitomaru.dev/quests/data?is_mod=false&is_verified=false").then(resp => (resp.ok && resp.json())).then(o => { quests=o; console.debug(quests); });
 diff=quests.items.filter(q => { m = KC3Meta.quest(q.api_no); return m.name != q.api_title || m.desc.replace(/<br>/g,'') != q.api_detail.replace(/<br>/g,''); }).map(q => ({ id: q.api_no, name: q.api_title, desc: q.api_detail, difftitle: q.api_title != KC3Meta.quest(q.api_no).name })); console.debug(diff);
 copy(JSON.stringify(diff,null,"    "))
 
