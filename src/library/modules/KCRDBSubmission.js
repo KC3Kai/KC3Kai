@@ -2,7 +2,10 @@
 
   const baseUrl = "https://kcrdb.hitomaru.dev";
   const manifest = chrome.runtime.getManifest() || {};
-  const kc3version = manifest.version + ("update_url" in manifest ? "" : "_dev");
+  const kc3version = (manifest.version || "unk")
+    + ("update_url" in manifest ? "_webstore" : "")
+    + ((manifest.name || "").includes("Development") ? "_dev" : "");
+  /** Assuming following texts not changed in kc game API, if changed, have to update them */
   const questTitleToVerify = {
     "261": "海上輸送路の安全確保に努めよ！",
     "256": "「潜水艦隊」出撃せよ！",
