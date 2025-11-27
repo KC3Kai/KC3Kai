@@ -368,7 +368,7 @@
 				sortedVoiceNums.push(129);
 
 			// add repair key
-			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
+			if (includeRepair && KC3Meta.specialRepairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
 			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou/Yamato/Richelieu/Elizabeth Cutin) key

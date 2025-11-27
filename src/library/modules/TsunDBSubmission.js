@@ -420,7 +420,9 @@
 				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
-			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+			this.kc3version = (this.manifest.version || "unk")
+				+ ("update_url" in this.manifest ? "" : "r")
+				+ ((this.manifest.name || "").includes("Development") ? "d" : "");
 		},
 		
 		lazyInitNetworkListener: function() {

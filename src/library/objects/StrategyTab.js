@@ -84,7 +84,7 @@
 			}else{
 				$("#contentHtml").text(self.errorMessage);
 			}
-			$("#contentHtml").show();
+			$("#content").fadeIn(250, function() { $("#contentHtml").fadeIn(250); });
 			KC3StrategyTabs.loading = false;
 		});
 	};

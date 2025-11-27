@@ -257,7 +257,7 @@
 			$(".questIcon", thisBox).on("mouseleave", function(){
 				$(this).next().tooltip("close");
 			});
-			$(".questDesc", thisBox).text( this.showQuestName ? thisQuest.name : thisQuest.desc );
+			$(".questDesc", thisBox).text( this.showQuestName ? thisQuest.name : KC3Quest.removeHtmlLinebreak(thisQuest.desc) );
 			$(".questDesc", thisBox)
 				.attr("title", KC3QuestManager.buildHtmlTooltip(quest_id, thisQuest, true, false))
 				.lazyInitTooltip();
@@ -341,7 +341,7 @@
 				$(this).next().tooltip("close");
 			});
 			$(".questDesc", thisBox).text(
-				(this.showQuestName ? questMeta.name : questMeta.desc) || KC3Meta.term("UntranslatedQuest")
+				(this.showQuestName ? questMeta.name : KC3Quest.removeHtmlLinebreak(questMeta.desc)) || KC3Meta.term("UntranslatedQuest")
 			);
 			$(".questDesc", thisBox)
 				.attr("title", KC3QuestManager.buildHtmlTooltip(thisQuest.id, questMeta))

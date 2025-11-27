@@ -843,6 +843,15 @@
 				"links" : {
 					"gh" : "https://github.com/Orgling"
 				}
+			},
+			{
+				"name": "Myarnoid",
+				"avatar" : "https://avatars.githubusercontent.com/u/201815248?v=4",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/Myarnoid"
+				}
 			}
 		],
 		"AboutTesters": [
