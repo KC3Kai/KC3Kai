@@ -1015,7 +1015,7 @@
 								toggleTabSounds();
 						})).execute();
 					};
-					// since Chromium m76?, muted tab but no audio actually played yet will still make sounds later,
+					// since Chromium m76~?, muted tab but no audio actually played yet will still make sounds later,
 					// so polling tab info for audible state, mute the tab when the game actually begins to play audio.
 					// current polling timeout is 70 seconds, since will no audio played until game loaded, or if in-game music/SE is off.
 					const tabMutePollingTimeout = 70;
@@ -1034,10 +1034,9 @@
 							}
 						})).execute();
 					};
+					toggleTabSounds(true);
 					if(navigator.chromeVersion >= 76 && !tabInfo.audible) {
 						tabMuteHandler = setInterval(tabAudibleChecker, 1000);
-					} else {
-						toggleTabSounds(true);
 					}
 				}
 			} catch(e) {}
