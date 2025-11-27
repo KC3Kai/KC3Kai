@@ -16,7 +16,6 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-			this.battleCounts.lastPortTime = 0;
 		},
 
 		/* RELOAD
@@ -26,14 +25,24 @@
 			ConfigManager.load();
 			// Check for player HQ info
 			PlayerManager.hq.load();
-			// Check for player statistics
-			if(localStorage.statistics !== undefined){
-				this.statistics = JSON.parse(localStorage.statistics);
-			}else{
-				this.statistics = false;
+			try {
+				// Check for player statistics
+				if(localStorage.statistics !== undefined){
+					this.statistics = localStorage.getObject("statistics");
+				}else{
+					this.statistics = false;
+				}
+				// Check for recent battle statistics
+				if(localStorage.srBtlcnts !== undefined){
+					this.battleCounts = localStorage.getObject("srBtlcnts") || {};
+				} else {
+					this.battleCounts = { lastPortTime: 0 };
+				}
+				// Check for player news feed
+				this.newsfeed = JSON.parse(localStorage.playerNewsFeed || "{}");
+			} catch(e) {
+				console.warn("Parsing localStorage exception", e);
 			}
-			// Check for player news feed
-			this.newsfeed = JSON.parse(localStorage.playerNewsFeed || "{}");
 		},
 		
 		/* EXECUTE
@@ -118,7 +127,7 @@
 			});
 			
 			// Show health metric
-			if(PlayerManager.hq.lastPortTime > this.battleCounts.lastPortTime + 600){
+			if(PlayerManager.hq.lastPortTime > (this.battleCounts.lastPortTime || 0) + 600){
 				const lastMonthSec = Math.floor(new Date().shiftDate(-30).getTime() / 1000);
 				const last2DaySec = Math.floor(new Date().shiftHour(-48).getTime() / 1000);
 				const lastDaySec = Math.floor(new Date().shiftHour(-24).getTime() / 1000);
@@ -136,6 +145,7 @@
 					self.battleCounts.lastMonthAvgBattle = Math.round(bc / 30);
 					self.battleCounts.lastPortTime = PlayerManager.hq.lastPortTime;
 					self.refreshHealthMetric();
+					localStorage.setObject("srBtlcnts", self.battleCounts);
 				}, lastMonthSec);
 			} else {
 				this.refreshHealthMetric();

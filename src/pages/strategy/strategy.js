@@ -179,7 +179,8 @@
 		// Interface
 		$("#menu .submenu ul.menulist li").removeClass("active");
 		$(tab).addClass("active");
-		$("#contentHtml").hide().empty();
+		$("#content").hide();
+		$("#contentHtml").hide().html("");
 		window.document.title = KC3Meta.term("StrategyRoomTitlePattern")
 			.format(KC3Meta.term("StrategyRoomTitle"), $(tab).text());
 		if(KC3StrategyTabs.loading != KC3StrategyTabs.pageParams[0]) {
