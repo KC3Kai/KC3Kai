@@ -72,7 +72,7 @@
 				var listItem = $(".tab_mstgear .gearRecords .gearRecord[data-id={0}]".format(self.currentGearId));
 				var scrollTop = listItem.length === 1 ? listItem.offset().top - $(".tab_mstgear .gearRecords").offset().top : 0;
 				$(".tab_mstgear .gearRecords").scrollTop(scrollTop);
-			}, 200);
+			}, 500);
 		},
 		
 		/* UPDATE

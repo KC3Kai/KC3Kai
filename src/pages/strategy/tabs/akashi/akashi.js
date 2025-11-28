@@ -539,7 +539,7 @@
 				setTimeout(function(){
 					const target = $("#akashi-{0}-{1}".format(dayName, viewMasterId));
 					if(target.length) target.get(0).scrollIntoView();
-				}, 0);
+				}, 500);
 			}
 		},
 		

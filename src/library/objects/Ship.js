@@ -4549,16 +4549,18 @@ KC3改 Ship Object
 				1711, 1712, 1713, // Jellyfish Princess
 			].includes[targetShipMasterId];
 			const isSpecialCarrier = [
-				432, 353, // Graf & Graf Kai
-				433, // Saratoga (base form)
-				//966, 735, // Lexington, forget to add? so dropped into following airattack case:
-				//1025, 1030,
+				432, 353, // Graf Zeppelin
+				433, // Saratoga base form
+				966, 735, // Lexington (following forgotten IDs fixed since 2025-11-28)
+				1025, 1030, // Wasp
+				529, 536, 889, // Taiyou/Shinyou/Unyou Kai Ni
+				646, // Kaga K2Go
 			].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
-			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
-			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
-			// Other known ships go here: Ark with Swordfish, Kaga K2Go, Lexington, Wasp
+			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs:
+			// she was doing air attack against surface ships, but no plane appears if no aircraft equipped.
+			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
