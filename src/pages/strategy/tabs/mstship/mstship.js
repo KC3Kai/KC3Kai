@@ -34,6 +34,7 @@
 		currentGraph: "",
 		currentShipId: 0,
 		currentCardVersion: "",
+		initDeferDelay: 500,
 		audio: false,
 		gameServer: {},
 		atLvlSlider: null,
@@ -77,6 +78,7 @@
 					return mstIda - mstIdb;
 				});
 			}
+			this.initDeferDelay = 500;
 		},
 		
 		/* EXECUTE
@@ -147,6 +149,7 @@
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
 				var sid = $(this).data("id");
 				if( sid != self.currentShipId ){
+					self.initDeferDelay = 0;
 					KC3StrategyTabs.gotoTab(null, sid);
 				}
 			});
@@ -396,6 +399,8 @@
 			console.debug("Viewing shipData", shipData);
 			if(!shipData) { return; }
 			
+			var updateCgViewer = false;
+			const startTime = Date.now();
 			const gearClickFunc = function(e) {
 				KC3StrategyTabs.gotoTab("mstgear", $(this).data("id") || $(this).attr("alt"));
 			};
@@ -557,7 +562,7 @@
 				});
 			} else {
 				$(".tab_mstship .shipInfo .basic .cglist").remove();
-				setTimeout(() => {
+				updateCgViewer = () => {
 					if(this.currentShipId !== ship_id) return;
 					const cgswf = $(".tab_mstship .shipInfo .cgswf").show();
 					this.croppie = $(".tab_mstship .shipInfo .cgswf .image").croppie({
@@ -586,7 +591,7 @@
 						$(".tab_mstship .shipInfo .cgswf .image").html($("<img>").attr("src", kcs2Src));
 						*/
 					});
-				}, 250);
+				};
 			}
 			
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
@@ -1635,7 +1640,13 @@
 				$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
 				$(".tab_mstship .shipInfo .tokubest .go-back").toggle(KC3Master.isSeasonalShip(ship_id));
 			}
-			
+			// Have to delay updating croppie image viewer to wait for element sizes ready,
+			// since long time (>1s) may be taken by adding complex elements above
+			if(updateCgViewer){
+				const delay = Date.now() - startTime + this.initDeferDelay;
+				console.debug("CG viewer loading deferred ms", delay, this.initDeferDelay);
+				setTimeout(updateCgViewer, delay);
+			}
 		}
 	};
 	

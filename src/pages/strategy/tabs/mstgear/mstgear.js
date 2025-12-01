@@ -153,7 +153,7 @@
 				} else {
 					gearTypesBox.attr("title", "");
 				}
-			}, 0);
+			}, 500);
 
 			$(".tab_mstgear .gearInfo .rarity").html(
 				'[{0}] <span class="stars"></span>'.format(gearData.api_rare)
