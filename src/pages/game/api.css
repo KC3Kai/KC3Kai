@@ -223,6 +223,7 @@ body {
 	width:1200px;
 	height:720px;
 	display:none;
+	user-select:none;
 	position:relative;
 	overflow:hidden;
 }

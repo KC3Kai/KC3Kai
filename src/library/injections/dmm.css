@@ -7,11 +7,15 @@
 .kc3 .clear {
 	clear:both !important;
 }
-.kc3 #area-game {
+.kc3 #area-game,
+.kc3 #root > div > main {
 	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
 	font-size:12px;
 	color:#333;
 	text-align:left;
+}
+.kc3 #root > div > main > #game_frame {
+	user-select:none;
 	overflow:hidden;
 }
 .kc3 #factory,
