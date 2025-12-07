@@ -12,6 +12,10 @@ copy(JSON.stringify(rewards,null,"\t"))
 diff=quests.items.filter(q => (!KC3Meta.quest(q.api_no))); meta={}; diff.forEach(q => { meta[q.api_no]={ code:"???", name:q.api_title, desc:q.api_detail, memo:"※", hash:q.api_title.hashCode()}; }); console.debug(diff.length, meta);
 copy(meta)
 
+// check voice id
+voices={}; quests.items.filter(q => q.api_voice_id).forEach(q => { voices[q.api_no]=q.api_voice_id; }); console.debug(voices);
+copy(voices);
+
 // check text diff for correcting jp json
 fetch("https://kcrdb.hitomaru.dev/quests/data?is_mod=false&is_verified=false").then(resp => (resp.ok && resp.json())).then(o => { quests=o; console.debug(quests); });
 diff=quests.items.filter(q => { m = KC3Meta.quest(q.api_no); return m.name != q.api_title || m.desc.replace(/<br>/g,'') != q.api_detail.replace(/<br>/g,''); }).map(q => ({ id: q.api_no, name: q.api_title, desc: q.api_detail, difftitle: q.api_title != KC3Meta.quest(q.api_no).name })); console.debug(diff);

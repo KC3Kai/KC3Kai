@@ -78,15 +78,14 @@
 					return mstIda - mstIdb;
 				});
 			}
-			this.initDeferDelay = 500;
 		},
 		
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			$(".tab_mstship .runtime_id").text(chrome.runtime.id);
 			var self = this;
+			this.initDeferDelay = 500;
 			if(!KC3Master.available) { return; }
 
 			$(".stat_icon img").each((_, img) => {
