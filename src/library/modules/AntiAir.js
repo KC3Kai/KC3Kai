@@ -672,6 +672,7 @@ AntiAir: anti-air related calculations
 			// https://twitter.com/KanColle_STAFF/status/1357645300895080449
 			108, // Town Class
 			112, // Illustrious Class
+			134, 135, // Courageous/Glorious Class
 		]),
 		// Kongou Class Kai Ni+
 		masterIdIn( [149, 150, 151, 152, 591, 592, 593, 954] )
@@ -1111,7 +1112,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// British-relevant ships
-	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2
+	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2, Glorious
 	// (QF2 + FCR) OR (QF2 + 7UP) OR (7UP + 7UP)
 	declareAACI(
 		32, 3, 1, 1.2, 50, 2630, // rate 60?
