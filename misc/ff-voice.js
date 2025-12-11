@@ -86,7 +86,7 @@ ffv.forEach(r => {
 })
 const distinctShip = new Set()
 Object.keys(voiceByShipId).forEach(s => {
-	voiceByShipId[s] = voiceByShipId[s].sort()
+	voiceByShipId[s] = voiceByShipId[s].sort((a, b) => a - b)
 	voiceByShipId[s].forEach(id => distinctShip.add(id))
 })
 //console.debug(distinctShip)
@@ -97,7 +97,7 @@ console.info(JSON.stringify(voiceByShipId))
 
 // Update id list respectively
 const voicesLookfor = [161, 261]
-const previousFound = [321,738,739,741,970,997, 1010,330,374,546,736,983,330,736]
+const previousFound = [321,738,739,741,970,997, 330,374,546,736,983,1010]
 voicesLookfor.forEach(v => {
 	console.info(`voice-${v} ${voiceByShipId[v].length} ships:`, voiceByShipId[v].join(','))
 	console.info(`voice-${v} new ships:`, voiceByShipId[v].filter(id => !previousFound.includes(id)).join(','))
