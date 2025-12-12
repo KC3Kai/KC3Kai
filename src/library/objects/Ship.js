@@ -6134,23 +6134,20 @@ KC3改 Ship Object
 		}
 
 		var gearInfo;
-		for(var i=0; i<5; ++i) {
-			gearInfo = this.equipment(i).deckbuilder();
-			if (gearInfo)
-				itemsInfo["i".concat(i+1)] = gearInfo;
-			else
-				break;
-		}
+		this.equipment(false).forEach((gear, i) => {
+			gearInfo = gear.deckbuilder();
+			if (gearInfo) itemsInfo["i".concat(i+1)] = gearInfo;
+		});
 		gearInfo = this.exItem().deckbuilder();
 		if (gearInfo) {
 			// #1726 Deckbuilder: if max slot not reach 5, `ix` will not be used,
 			// which means i? > ship.api_slot_num will be considered as the ex-slot.
-			var usedSlot = Object.size(itemsInfo);
-			if(usedSlot < 5) {
-				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
-			} else {
-				itemsInfo.ix = gearInfo;
-			}
+			// It has been fixed since sometime, always treats `ix` as ex-sot.
+			//var usedSlot = Object.size(itemsInfo);
+			//if(usedSlot < 5) {
+			//	itemsInfo["i".concat(usedSlot+1)] = gearInfo;
+			//}
+			itemsInfo.ix = gearInfo;
 		}
 		
 		return result;
