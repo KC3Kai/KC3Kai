@@ -4549,16 +4549,18 @@ KC3改 Ship Object
 				1711, 1712, 1713, // Jellyfish Princess
 			].includes[targetShipMasterId];
 			const isSpecialCarrier = [
-				432, 353, // Graf & Graf Kai
-				433, // Saratoga (base form)
-				//966, 735, // Lexington, forget to add? so dropped into following airattack case:
-				//1025, 1030,
+				432, 353, // Graf Zeppelin
+				433, // Saratoga base form
+				966, 735, // Lexington (following forgotten IDs fixed since 2025-11-28)
+				1025, 1030, // Wasp
+				529, 536, 889, // Taiyou/Shinyou/Unyou Kai Ni
+				646, // Kaga K2Go
 			].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
-			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
-			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
-			// Other known ships go here: Ark with Swordfish, Kaga K2Go, Lexington, Wasp
+			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs:
+			// she was doing air attack against surface ships, but no plane appears if no aircraft equipped.
+			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
@@ -6132,23 +6134,20 @@ KC3改 Ship Object
 		}
 
 		var gearInfo;
-		for(var i=0; i<5; ++i) {
-			gearInfo = this.equipment(i).deckbuilder();
-			if (gearInfo)
-				itemsInfo["i".concat(i+1)] = gearInfo;
-			else
-				break;
-		}
+		this.equipment(false).forEach((gear, i) => {
+			gearInfo = gear.deckbuilder();
+			if (gearInfo) itemsInfo["i".concat(i+1)] = gearInfo;
+		});
 		gearInfo = this.exItem().deckbuilder();
 		if (gearInfo) {
 			// #1726 Deckbuilder: if max slot not reach 5, `ix` will not be used,
 			// which means i? > ship.api_slot_num will be considered as the ex-slot.
-			var usedSlot = Object.size(itemsInfo);
-			if(usedSlot < 5) {
-				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
-			} else {
-				itemsInfo.ix = gearInfo;
-			}
+			// It has been fixed since sometime, always treats `ix` as ex-sot.
+			//var usedSlot = Object.size(itemsInfo);
+			//if(usedSlot < 5) {
+			//	itemsInfo["i".concat(usedSlot+1)] = gearInfo;
+			//}
+			itemsInfo.ix = gearInfo;
 		}
 		
 		return result;

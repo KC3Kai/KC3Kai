@@ -439,6 +439,7 @@ Previously known as "Reactor"
 				api_request_type: parseInt(decodedParams.api_request_type, 10),
 			};
 			PlayerManager.friendlySettings = $.extend(PlayerManager.friendlySettings || {}, newSettings);
+			KC3Network.trigger("HQ");
 		},
 		
 		/* Selected event rewards since Summer 2022

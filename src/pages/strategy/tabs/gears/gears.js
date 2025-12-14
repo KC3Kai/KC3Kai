@@ -414,7 +414,7 @@
 				setTimeout(function(){
 					const target = $("#gears-{0}-{1}".format(typeId, itemId));
 					if(target.length) target.get(0).scrollIntoView();
-				}, 0);
+				}, 500);
 			}
 		},
 
