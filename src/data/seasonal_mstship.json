@@ -8395,5 +8395,101 @@
 		"api_stype": 13,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"6049": {
+		"api_id": 6049,
+		"api_name": "秋刀魚迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6050": {
+		"api_id": 6050,
+		"api_name": "秋刀魚平安丸",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6051": {
+		"api_id": 6051,
+		"api_name": "秋刀魚平安丸改",
+		"api_yomi": "へいあんまる",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6052": {
+		"api_id": 6052,
+		"api_name": "秋刀魚大泊",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6053": {
+		"api_id": 6053,
+		"api_name": "ガチF作業Heywood L.E.",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6054": {
+		"api_id": 6054,
+		"api_name": "ガチF作業Heywood L.E.改",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6055": {
+		"api_id": 6055,
+		"api_name": "秋刀魚伊47",
+		"api_yomi": "い47",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"6056": {
+		"api_id": 6056,
+		"api_name": "秋刀魚秋月",
+		"api_yomi": "あきづき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6057": {
+		"api_id": 6057,
+		"api_name": "浴衣大泊改",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6058": {
+		"api_id": 6058,
+		"api_name": "モンブランRichelieu Deux",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6059": {
+		"api_id": 6059,
+		"api_name": "秋刀魚迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6060": {
+		"api_id": 6060,
+		"api_name": "秋刀魚大泊改",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
 	}
 }
