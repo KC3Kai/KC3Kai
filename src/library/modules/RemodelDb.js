@@ -213,6 +213,7 @@
                 case 916: // Yamato Kai Ni Juu
                     return 50;
                 case 325: // Kiyoshimo Kai
+                case 330: // Akizuki Kai
                 case 357: // Hatsuzuki Kai
                     return 30;
                 case 955: // Kiyoshimo Kai Ni

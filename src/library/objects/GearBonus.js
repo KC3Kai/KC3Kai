@@ -8501,8 +8501,8 @@
 				},
 				byShip: [
 					{
-						// Hatsuzuki Kai Ni
-						ids: [968],
+						// Akizuki Kai Ni, Hatsuzuki Kai Ni
+						ids: [963, 968],
 						multiple: { "houg": 1, "houm": 1, "houk": 1 },
 					},
 					{
@@ -8546,8 +8546,8 @@
 				},
 				byShip: [
 					{
-						// Hatsuzuki Kai Ni
-						ids: [968],
+						// Akizuki Kai Ni, Hatsuzuki Kai Ni
+						ids: [963, 968],
 						multiple: { "houg": 1, "houm": 1, "houk": 1 },
 					},
 					{
@@ -8648,32 +8648,32 @@
 				},
 				byShip: [
 					{
-						// Hatsuzuki Kai Ni
-						ids: [968],
+						// Akizuki Kai Ni, Hatsuzuki Kai Ni
+						ids: [963, 968],
 						multiple: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
-						ids: [968],
+						ids: [963, 968],
 						minStars: 1,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [968],
+						ids: [963, 968],
 						minStars: 3,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [968],
+						ids: [963, 968],
 						minStars: 5,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [968],
+						ids: [963, 968],
 						minStars: 7,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [968],
+						ids: [963, 968],
 						minStars: 9,
 						multiple: { "houg": 1 },
 					},
@@ -8763,8 +8763,8 @@
 				},
 				byShip: [
 					{
-						// Hatsuzuki Kai Ni
-						ids: [968],
+						// Akizuki Kai Ni, Hatsuzuki Kai Ni
+						ids: [963, 968],
 						multiple: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
@@ -11189,8 +11189,8 @@
 						single: { "houg": 1, "souk": 1, "tyku": 2, "houk": 2 },
 					},
 					{
-						// Hatsuzuki Kai Ni
-						ids: [968],
+						// Akizuki Kai Ni, Hatsuzuki Kai Ni
+						ids: [963, 968],
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				],
@@ -12116,8 +12116,8 @@
 				},
 				byShip: [
 					{
-						// Hatsuzuki Kai Ni
-						ids: [968],
+						// Akizuki Kai Ni, Hatsuzuki Kai Ni
+						ids: [963, 968],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
