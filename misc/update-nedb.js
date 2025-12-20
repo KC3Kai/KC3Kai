@@ -76,21 +76,11 @@ if (!fileExists(wctfShipFile)) {
 	console.error('Original', shipNedbFile, 'not found at', wctfShipFile)
 	return
 }
-const shipnedb = readFile(wctfShipFile)
+const shipNedb = readFile(wctfShipFile)
 	.split(/\r?\n/)
 	.filter(l => !!l)
 	.map(l => toJson(l))
-console.info(shipNedbFile, 'records:', shipnedb.length - 3) // 3 collab ships
-
-const missingShips = {}
-Object.keys(wikiShips).forEach(s => {
-	const ship = wikiShips[s]
-	const dbr = shipnedb.find(r => r.id === ship._api_id && r._id !== autoGenId)
-	if (!dbr) missingShips[ship._api_id] = ship
-})
-console.info('Missing ships',
-	objectLen(missingShips).toString() + ':', toStr(Object.keys(missingShips))
-)
+console.info(shipNedbFile, 'records:', shipNedb.length - 3) // 3 collab ships
 
 const gearwiki2nedb = (g) => {
 	// can't differeniate wiki falsy value for 'unknown' and 'unequipped'
@@ -125,6 +115,10 @@ const lookupshipremodels = (s) => {
 	}
 	return remodels
 }
+const wikiv2db = (v) => (
+	// wiki null = unknown, -1 in db; wiki false = n/a, falsy 0
+	v === null ? -1 : v || 0
+)
 const shipwiki2nedb = (s) => ({
 	id: s._api_id,
 	no: s._true_id || s._id,
@@ -135,27 +129,27 @@ const shipwiki2nedb = (s) => ({
 		zh_cn: s._japanese_name
 	},
 	stat: {
-		fire: s._firepower || 0,
-		fire_max: s._firepower_max || 0,
-		torpedo: s._torpedo || 0,
-		torpedo_max: s._torpedo_max || 0,
-		aa: s._aa || 0,
-		aa_max: s._aa_max || 0,
-		asw: s._asw || 0,
-		asw_max: s._asw_max || 0,
-		hp: s._hp || 0,
-		hp_max: s._hp_max || 0,
-		armor: s._armor || 0,
-		armor_max: s._armor_max || 0,
-		evasion: s._evasion || 0,
-		evasion_max: s._evasion_max || 0,
+		fire: wikiv2db(s._firepower),
+		fire_max: wikiv2db(s._firepower_max),
+		torpedo: wikiv2db(s._torpedo),
+		torpedo_max: wikiv2db(s._torpedo_max),
+		aa: wikiv2db(s._aa),
+		aa_max: wikiv2db(s._aa_max),
+		asw: wikiv2db(s._asw),
+		asw_max: wikiv2db(s._asw_max),
+		hp: wikiv2db(s._hp),
+		hp_max: wikiv2db(s._hp_max),
+		armor: wikiv2db(s._armor),
+		armor_max: wikiv2db(s._armor_max),
+		evasion: wikiv2db(s._evasion),
+		evasion_max: wikiv2db(s._evasion_max),
 		carry: s._equipment.map(e => e.size || 0).reduce((c, a) => c + a, 0),
-		speed: s._speed || 0,
-		range: s._range || 0,
-		los: s._los || 0,
-		los_max: s._los_max || 0,
-		luck: s._luck || 0,
-		luck_max: s._luck_max || 0
+		speed: wikiv2db(s._speed),
+		range: wikiv2db(s._range),
+		los: wikiv2db(s._los),
+		los_max: wikiv2db(s._los_max),
+		luck: wikiv2db(s._luck),
+		luck_max: wikiv2db(s._luck_max)
 	},
 	consum: {
 		fuel: s._fuel,
@@ -184,13 +178,43 @@ const shipwiki2nedb = (s) => ({
 	illust_version: null
 })
 
-const missingShipsDb = []
+const missingShips = {}
+Object.keys(wikiShips).forEach(s => {
+	const ship = wikiShips[s]
+	const dbr = shipNedb.find(r => r.id === ship._api_id && r._id !== autoGenId)
+	if (!dbr) missingShips[ship._api_id] = ship
+})
+console.info('Missing ships',
+	objectLen(missingShips).toString() + ':', toStr(Object.keys(missingShips))
+)
+
+const outputShipsDb = []
 Object.keys(missingShips).forEach(id => {
 	const s = missingShips[id]
 	const db = shipwiki2nedb(s)
-	missingShipsDb.push(toStr(db))
+	outputShipsDb.push(toStr(db))
 })
-const outputStr = missingShipsDb.join(nedbLinefeed)
+
+const wikiShipsById = {}
+Object.keys(wikiShips).forEach(name => {
+	const s = wikiShips[name]
+	wikiShipsById[s._api_id] = s
+})
+const missingStats = []
+shipNedb.forEach(s => {
+	if (
+		s._id !== autoGenId &&
+		Object.keys(s.stat).some(k => s.stat[k] === -1 || s.stat[k] === null)
+	) {
+		missingStats.push(s)
+		const wiki = wikiShipsById[s.id]
+		const db = shipwiki2nedb(wiki)
+		outputShipsDb.push(toStr(db))
+	}
+})
+console.info('Missing stats ships', missingStats.length, toStr(missingStats.map(s => s.id)))
+
+const outputStr = outputShipsDb.join(nedbLinefeed)
 writeFile(shipNedbFile, outputStr)
 console.info(shipNedbFile, 'output:', outputStr.length)
 
