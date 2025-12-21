@@ -202,22 +202,27 @@ Object.keys(missingShips).forEach(id => {
 	outputShipsLines.push(toStr(db))
 })
 
-// Check old records for missing ship stats
-const missingStats = []
-shipNedb.forEach(s => {
-	if (
-		s._id !== autoGenId &&
-		Object.keys(s.stat).some(k => s.stat[k] === -1 || s.stat[k] === null)
-	) {
-		missingStats.push(s)
-		const wiki = wikiShipsById[s.id]
-		const db = shipwiki2nedb(wiki)
-		// no necessary since updated manually
-		//outputShipsLines.push(toStr(db))
+// Check old records for missing/diff ship stats
+const diff = { missingStats: [], mismatchStats: {} }
+shipNedb.forEach(db => {
+	if (db._id === autoGenId) return
+	const wiki = wikiShipsById[db.id], conv = wiki && shipwiki2nedb(wiki)
+	if (!wiki || !conv) return
+	if (Object.keys(db.stat).some(k => db.stat[k] === -1 || db.stat[k] === null))
+		diff.missingStats.push(db)
+	else if (Object.keys(db.stat).some(k => db.stat[k] !== conv.stat[k])) {
+		const diffKeys = Object.keys(db.stat).filter(k => db.stat[k] !== conv.stat[k])
+		const diffStats = {}
+		diffKeys.forEach(k => { diffStats[k] = conv.stat[k] })
+		diff.mismatchStats[db.id] = { db: db.stat, wiki: diffStats }
 	}
 })
-if (missingStats.length > 0)
-	console.warn('Missing stats ships', missingStats.length, toStr(missingStats.map(s => s.id)))
+if (diff.missingStats.length > 0)
+	console.info('Missing stats ships', diff.missingStats.length, toStr(diff.missingStats.map(s => s.id)))
+if (objectLen(diff.mismatchStats) > 0) {
+	console.info('Mismatch stats ships', objectLen(diff.mismatchStats) + ':', toStr(Object.keys(diff.mismatchStats)))
+	//writeFile('diff.json', toStr(diff.mismatchStats))
+}
 
 if (outputShipsLines.length === 0) return
 
