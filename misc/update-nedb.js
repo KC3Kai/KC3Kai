@@ -5,10 +5,10 @@
  * wiki source: https://github.com/kcwiki/kancolle-data/blob/master/wiki/ship.json
  *              https://github.com/kcwiki/kancolle-data/blob/master/wiki/equipment.json
  * @require node 8+, fs, https
- * @version 20251220
+ * @version 20251221
  */
 const wctfShipFile = '../src/data/WhoCallsTheFleet_ships.nedb'
-const shipNedbFile = 'ships.nedb', gearNedbFile = 'items.nedb', nedbLinefeed = '\r\n'
+const shipNedbFile = 'ships.nedb', gearNedbFile = 'items.nedb', nedbLinebreak = '\r\n'
 const shipUrl = 'https://raw.githubusercontent.com/kcwiki/kancolle-data/refs/heads/master/wiki/ship.json'
 const gearUrl = 'https://raw.githubusercontent.com/kcwiki/kancolle-data/refs/heads/master/wiki/equipment.json'
 const shipJsonFile = 'ship.json', gearJsonFile = 'equipment.json'
@@ -36,6 +36,7 @@ const downloadWikiData = (dship, dequip) => {
 		console.info('Downloading', file, '...')
 		https.get(url, (resp) => {
 			console.info(file, 'status code:', resp.statusCode)
+			if (resp.statusCode < 200 || resp.statusCode >= 400) return
 			resp.setEncoding('utf8')
 			const body = [];
 			resp.on('data', (chunk) => { body.push(chunk) })
@@ -46,13 +47,13 @@ const downloadWikiData = (dship, dequip) => {
 					writeFile(file, str)
 					body.length = 0
 					console.info(file, 'downloaded:', str.length,
-						'bytes, elements:', objectLen(json))
+						'chars, elements:', objectLen(json))
 				} catch(e) {
-					console.error(file, 'parse error', e)
+					console.error(file, 'parse', e)
 				}
-			}).on('error', (e) => {
-				console.error(file, 'download error', e)
-			});
+			})
+		}).on('error', (e) => {
+			console.error(file, 'download', e)
 		})
 	}
 	if (dship) doHttpsFetch(shipUrl, shipJsonFile)
@@ -72,6 +73,12 @@ if (!wikiShips || !wikiGears) {
 console.info(shipJsonFile, 'elements:', objectLen(wikiShips))
 console.info(gearJsonFile, 'elements:', objectLen(wikiGears))
 
+const wikiShipsById = {}
+Object.keys(wikiShips).forEach(name => {
+	const s = wikiShips[name]
+	wikiShipsById[s._api_id] = s
+})
+
 if (!fileExists(wctfShipFile)) {
 	console.error('Original', shipNedbFile, 'not found at', wctfShipFile)
 	return
@@ -83,7 +90,7 @@ const shipNedb = readFile(wctfShipFile)
 console.info(shipNedbFile, 'records:', shipNedb.length - 3) // 3 collab ships
 
 const gearwiki2nedb = (g) => {
-	// can't differeniate wiki falsy value for 'unknown' and 'unequipped'
+	// can't differentiate wiki falsy value for 'unknown' and 'unequipped'
 	// and WCTF uses either `null` or `""` for unequipped...
 	// so here we use "" for unequipped, null for exceptions
 	if (g.equipment === false) return ''
@@ -188,18 +195,14 @@ console.info('Missing ships',
 	objectLen(missingShips).toString() + ':', toStr(Object.keys(missingShips))
 )
 
-const outputShipsDb = []
+const outputShipsLines = []
 Object.keys(missingShips).forEach(id => {
 	const s = missingShips[id]
 	const db = shipwiki2nedb(s)
-	outputShipsDb.push(toStr(db))
+	outputShipsLines.push(toStr(db))
 })
 
-const wikiShipsById = {}
-Object.keys(wikiShips).forEach(name => {
-	const s = wikiShips[name]
-	wikiShipsById[s._api_id] = s
-})
+// Check old records for missing ship stats
 const missingStats = []
 shipNedb.forEach(s => {
 	if (
@@ -209,12 +212,34 @@ shipNedb.forEach(s => {
 		missingStats.push(s)
 		const wiki = wikiShipsById[s.id]
 		const db = shipwiki2nedb(wiki)
-		outputShipsDb.push(toStr(db))
+		// no necessary since updated manually
+		//outputShipsLines.push(toStr(db))
 	}
 })
-console.info('Missing stats ships', missingStats.length, toStr(missingStats.map(s => s.id)))
+if (missingStats.length > 0)
+	console.warn('Missing stats ships', missingStats.length, toStr(missingStats.map(s => s.id)))
 
-const outputStr = outputShipsDb.join(nedbLinefeed)
+if (outputShipsLines.length === 0) return
+
+const outputStr = outputShipsLines.join(nedbLinebreak)
 writeFile(shipNedbFile, outputStr)
-console.info(shipNedbFile, 'output:', outputStr.length)
+console.info(shipNedbFile, 'output:', outputStr.length, 'chars')
 
+// Directly updates WCTF DB in src
+const cnt = { updated: 0, added: 0 }
+outputShipsLines.forEach((str, i) => {
+	const s = toJson(str)
+	const found = shipNedb.findIndex(r => r.id === s.id && s._id === autoGenId)
+	if (found) {
+		// don't change timestamp for better git diff?
+		s.time_created = shipNedb[found].time_created
+		s.time_modified = shipNedb[found].time_modified
+		shipNedb[found] = s
+		cnt.updated += 1
+	} else {
+		shipNedb.push(s)
+		cnt.added += 1
+	}
+})
+writeFile(wctfShipFile, shipNedb.map(r => toStr(r)).join(nedbLinebreak))
+console.info(wctfShipFile, 'lines', cnt.updated, 'updated,', cnt.added, 'added')
