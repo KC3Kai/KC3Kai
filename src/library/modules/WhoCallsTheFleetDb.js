@@ -92,9 +92,10 @@
 		},
 
 		estimateStatBase: function(stat, statMax, level) {
+			if (level == 99) return false;
 			var retVal = stat / (( 99 - level) / 99.0)
 				- statMax * level / ( 99 - level);
-			return Math.ceil(retVal);
+			return level > 99 ? Math.floor(retVal) : Math.ceil(retVal);
 		},
 
 		getShipRemodel: function(shipId) {

@@ -1201,9 +1201,10 @@ KC3改 Ship Object
 		const level = this.level;
 		Object.keys(info).forEach(apiName => {
 			const lv99Stat = info[apiName][1];
-			const nakedStat = info[apiName][2] - this.equipmentTotalStats(apiName);
+			let nakedStat = info[apiName][2] - this.equipmentTotalStats(apiName);
+			if(apiName === "tais") nakedStat -= this.mod[6] || 0;
 			info[apiName][3] = nakedStat;
-			if(level && level > 99) {
+			if(level && level == 99) {
 				info[apiName][0] = false;
 			} else {
 				info[apiName][0] = WhoCallsTheFleetDb.estimateStatBase(nakedStat, lv99Stat, level);
