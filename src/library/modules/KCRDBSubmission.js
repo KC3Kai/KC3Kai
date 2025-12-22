@@ -24,10 +24,15 @@
     "637": "勲章x2消費：「鳳翔」秘書艦に練度max及び改修max「九六式艦戦」を搭載、熟練搭乗員を養成せよ！<br>(任務達成後、部隊は消滅します)",
     "1123": "旗艦「利根改二」または「由良改二」第一スロに最大改修「零式水上偵察機」。「九七式艦攻(九三一空)」<br>x2廃棄、ボーキ950、新型航空兵装資材x2、開発資材x35、熟練搭乗員x2を準備！",
   };
+  const akashiRecipesToIgnore = [101, 201, 301];
 
   const apis = {
     "api_get_member/questlist": [processQuestList],
     "api_req_quest/clearitemget": [processClearItemGet],
+
+    "api_req_kousyou/remodel_slotlist": [processRemodelSlotList],
+    "api_req_kousyou/remodel_slotlist_detail": [processRemodelSlotListDetail],
+    "api_req_kousyou/remodel_slot": [processRemodelSlot],
   };
 
   let prevQuestIdList = [], prevAllQuestsHash = false, alterQuestDetected = false;
@@ -126,6 +131,66 @@
     }
 
     postData("quest-items", items);
+  }
+
+  function prepareRemodelBasicInfo(har) {
+    const fleet1 = PlayerManager.fleets[0];
+    return {
+      flag_ship_id: fleet1.ship(0).masterId || 0,
+      helper_ship_id: fleet1.ship(1).masterId || 0,
+      day: Date.getJstDate(har.headers.Date).getDay()
+    };
+  }
+
+  /**
+   * On akashi improvement items listed
+   */
+  function processRemodelSlotList(har) {
+    const list = prepareRemodelBasicInfo(har);
+    list.data = har.response.api_data;
+    if (list.flag_ship_id && list.data) {
+      postData("remodel_slotlist", list);
+    }
+  }
+
+  /**
+   * On akashi improvement an item selected
+   */
+  function processRemodelSlotListDetail(har) {
+    const item = prepareRemodelBasicInfo(har);
+    item.api_id = Number(har.params.api_id);
+    const rosterId = Number(har.params.api_slot_id);
+    const gearObj = KC3GearManager.get(rosterId);
+    item.api_slot_id = gearObj.masterId;
+    item.api_slot_level = gearObj.stars || 0;
+    item.data = har.response.api_data;
+    // Skip submission on invalid states, default recipes
+    if (item.flag_ship_id && item.api_data && gearObj.exists()
+      && !akashiRecipesToIgnore.includes(item.api_id)) {
+      postData("remodel_slotlist_detail", item);
+    }
+  }
+
+  /**
+   * On akashi improvement previously selected procceeded
+   */
+  function processRemodelSlot(har) {
+    const item = prepareRemodelBasicInfo(har);
+    item.api_id = Number(har.params.api_id);
+    const rosterId = Number(har.params.api_slot_id);
+    const gearObj = KC3GearManager.get(rosterId);
+    item.api_slot_id = gearObj.masterId;
+    item.api_slot_level = gearObj.stars || 0;
+    item.api_certain_flag = Number(har.params.api_certain_flag);
+    item.data = Object.assign({}, har.response.api_data);
+    // Remove player's stock resources post improvement
+    delete item.data.api_after_material;
+    const isSuccess = !!item.data.api_remodel_flag;
+    // Skip submission on invalid states, default recipes, and failed improvement
+    if (item.flag_ship_id && har.response.api_data && gearObj.exists()
+      && !akashiRecipesToIgnore.includes(item.api_id) && isSuccess) {
+      postData("remodel_slot", item);
+    }
   }
 
   window.KCRDBSubmission = {
