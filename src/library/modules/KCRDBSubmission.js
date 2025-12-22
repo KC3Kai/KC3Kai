@@ -159,8 +159,7 @@
   function processRemodelSlotListDetail(har) {
     const item = prepareRemodelBasicInfo(har);
     item.api_id = Number(har.params.api_id);
-    const rosterId = Number(har.params.api_slot_id);
-    const gearObj = KC3GearManager.get(rosterId);
+    const gearObj = KC3GearManager.get(har.params.api_slot_id);
     item.api_slot_id = gearObj.masterId;
     item.api_slot_level = gearObj.stars || 0;
     item.data = har.response.api_data;
@@ -177,8 +176,7 @@
   function processRemodelSlot(har) {
     const item = prepareRemodelBasicInfo(har);
     item.api_id = Number(har.params.api_id);
-    const rosterId = Number(har.params.api_slot_id);
-    const gearObj = KC3GearManager.get(rosterId);
+    const gearObj = KC3GearManager.get(har.params.api_slot_id);
     item.api_slot_id = gearObj.masterId;
     item.api_slot_level = gearObj.stars || 0;
     item.api_certain_flag = Number(har.params.api_certain_flag);
@@ -186,6 +184,22 @@
     // Remove player's stock resources post improvement
     delete item.data.api_after_material;
     const isSuccess = !!item.data.api_remodel_flag;
+    if (isSuccess) {
+      const [idBefore, idAfter] = item.data.api_remodel_id;
+      // Fix item stars pre-improvement, since submission run after KC3GearManager's update
+      if (idBefore === idAfter) {
+        item.api_slot_level = item.data.api_after_slot.api_level - 1;
+      } else {
+        item.api_slot_level = 10;
+      }
+      // Remove item member IDs and lock state
+      delete item.data.api_after_slot.api_id;
+      delete item.data.api_after_slot.api_locked;
+      if (Array.isArray(item.data.api_use_slot_id)) {
+        item.data.api_use_slot_num = item.data.api_use_slot_id.length;
+        delete item.data.api_use_slot_id;
+      }
+    }
     // Skip submission on invalid states, default recipes, and failed improvement
     if (item.flag_ship_id && har.response.api_data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id) && isSuccess) {
