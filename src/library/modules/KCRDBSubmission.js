@@ -165,7 +165,7 @@
     item.api_slot_level = gearObj.stars || 0;
     item.data = har.response.api_data;
     // Skip submission on invalid states, default recipes
-    if (item.flag_ship_id && item.api_data && gearObj.exists()
+    if (item.flag_ship_id && item.data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id)) {
       postData("remodel_slotlist_detail", item);
     }
