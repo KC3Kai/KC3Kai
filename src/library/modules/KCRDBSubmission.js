@@ -186,12 +186,9 @@
     const isSuccess = !!item.data.api_remodel_flag;
     if (isSuccess) {
       const [idBefore, idAfter] = item.data.api_remodel_id;
-      // Fix item stars pre-improvement, since submission run after KC3GearManager's update
-      if (idBefore === idAfter) {
-        item.api_slot_level = item.data.api_after_slot.api_level - 1;
-      } else {
-        item.api_slot_level = 10;
-      }
+      // Fix item id and stars pre-improvement, since submission run after KC3GearManager's update
+      item.api_slot_id = idBefore;
+      item.api_slot_level = idBefore !== idAfter ? 10 : item.data.api_after_slot.api_level - 1;
       // Remove item member IDs and lock state
       delete item.data.api_after_slot.api_id;
       delete item.data.api_after_slot.api_locked;
