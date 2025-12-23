@@ -192,9 +192,10 @@
       // Fix item id and stars pre-improvement, since submission run after KC3GearManager's update
       item.api_slot_id = idBefore;
       item.api_slot_level = idBefore !== idAfter ? 10 : item.data.api_after_slot.api_level - 1;
-      // Remove item member IDs and lock state
+      // Remove item member IDs, lock state, and aircraft proficiency
       delete item.data.api_after_slot.api_id;
       delete item.data.api_after_slot.api_locked;
+      delete item.data.api_after_slot.api_alv;
       if (Array.isArray(item.data.api_use_slot_id)) {
         item.data.api_use_slot_num = item.data.api_use_slot_id.length;
         delete item.data.api_use_slot_id;
