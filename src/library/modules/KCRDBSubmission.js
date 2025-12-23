@@ -163,6 +163,7 @@
     item.api_slot_id = gearObj.masterId;
     item.api_slot_level = gearObj.stars || 0;
     item.data = har.response.api_data;
+
     // Skip submission on invalid states, default recipes
     if (item.flag_ship_id && item.data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id)) {
@@ -180,8 +181,10 @@
     item.api_slot_id = gearObj.masterId;
     item.api_slot_level = gearObj.stars || 0;
     item.api_certain_flag = Number(har.params.api_certain_flag);
-    item.data = Object.assign({}, har.response.api_data);
-    // Remove player's stock resources post improvement
+
+    // Deep clone api data to avoid modifying original
+    item.data = $.extend(true, {}, har.response.api_data);
+    // Remove player's stock resources post-improvement
     delete item.data.api_after_material;
     const isSuccess = !!item.data.api_remodel_flag;
     if (isSuccess) {
@@ -197,6 +200,7 @@
         delete item.data.api_use_slot_id;
       }
     }
+
     // Skip submission on invalid states, default recipes, and failed improvement
     if (item.flag_ship_id && har.response.api_data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id) && isSuccess) {
