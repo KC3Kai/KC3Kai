@@ -4,16 +4,21 @@
  *              https://github.com/TeamFleet/WhoCallsTheFleet-DB/blob/master/db/items.nedb
  * wiki source: https://github.com/kcwiki/kancolle-data/blob/master/wiki/ship.json
  *              https://github.com/kcwiki/kancolle-data/blob/master/wiki/equipment.json
+ * poidb source: https://api.poi.moe/dump/ship-stat.json
  * @require node 8+, fs, https
- * @version 20251221
+ * @version 20251225
  */
+const outputMissingNedb = false, outputDiffReport = true, updateWctfNedb = true
 const wctfShipFile = '../src/data/WhoCallsTheFleet_ships.nedb'
 const shipNedbFile = 'ships.nedb', gearNedbFile = 'items.nedb', nedbLinebreak = '\r\n'
+const shipStatDiffFile = 'wiki-shipstats-diff.json', shipStatResolveFile = 'wiki-shipstat-solution.json'
 const shipUrl = 'https://raw.githubusercontent.com/kcwiki/kancolle-data/refs/heads/master/wiki/ship.json'
 const gearUrl = 'https://raw.githubusercontent.com/kcwiki/kancolle-data/refs/heads/master/wiki/equipment.json'
-const shipJsonFile = 'ship.json', gearJsonFile = 'equipment.json'
+const masterUrl = 'https://raw.githubusercontent.com/kcwiki/kancolle-data/refs/heads/master/api/api_start2.json'
+const poiStatUrl = 'https://api.poi.moe/dump/ship-stat.json'
+const shipJsonFile = 'wiki-ship.json', gearJsonFile = 'wiki-equipment.json'
+const masterJsonFile = 'wiki-start2.json', shipStatNedbFile = 'ship-stat.nedb'
 const autoGenId = 'wikiconv'
-var wikiShips, wikiGears;
 
 // Dependencies and shortcut functions
 const https = require('https')
@@ -24,15 +29,18 @@ const fileExists = file => fs.existsSync(file)
 const toJson = str => JSON.parse(str)
 const toStr = json => JSON.stringify(json)
 const objectLen = obj => Object.keys(obj).length
+const toNedb = str => str.split(/\r?\n/)
+	.filter(l => !!l && l.startsWith('{') && l.endsWith('}')).map(l => toJson(l))
+const toLines = nedb => nedb.map(l => toStr(l)).join(nedbLinebreak)
 
 console.info('Current working dir:', process.cwd())
 //console.info('Current args:', toStr(process.argv))
 
-wikiShips = fileExists(shipJsonFile) && toJson(readFile(shipJsonFile))
-wikiGears = fileExists(gearJsonFile) && toJson(readFile(gearJsonFile))
+const wikiShips = fileExists(shipJsonFile) && toJson(readFile(shipJsonFile))
+const wikiGears = fileExists(gearJsonFile) && toJson(readFile(gearJsonFile))
 
-const downloadWikiData = (dship, dequip) => {
-	const doHttpsFetch = (url, file) => {
+const downloadWikiData = (dship, dequip, dmaster, dstat) => {
+	const doHttpsFetch = (url, file, format = 'json') => {
 		console.info('Downloading', file, '...')
 		https.get(url, (resp) => {
 			console.info(file, 'status code:', resp.statusCode)
@@ -43,7 +51,7 @@ const downloadWikiData = (dship, dequip) => {
 			resp.on('end', () => {
 				try {
 					const str = body.join('')
-					const json = toJson(str)
+					const json = format === 'nedb' ? toNedb(str) : toJson(str)
 					writeFile(file, str)
 					body.length = 0
 					console.info(file, 'downloaded:', str.length,
@@ -58,12 +66,16 @@ const downloadWikiData = (dship, dequip) => {
 	}
 	if (dship) doHttpsFetch(shipUrl, shipJsonFile)
 	if (dequip) doHttpsFetch(gearUrl, gearJsonFile)
+	if (dmaster) doHttpsFetch(masterUrl, masterJsonFile)
+	if (dstat) doHttpsFetch(poiStatUrl, shipStatNedbFile, 'nedb')
 	return false
 }
 
-if ((process.argv[2] || '').toLowerCase() === '-d') {
-	console.info('Forced to download wiki data, run again afterthen')
-	return downloadWikiData(true, true)
+const firstArg = (process.argv[2] || '').toLowerCase()
+if (firstArg.startsWith('-d')) {
+	const poistat = firstArg.startsWith('-ds')
+	console.info(`Forced to download wiki data,${poistat ? ' and poi-db data,' : ''} run again afterthen`)
+	return downloadWikiData(true, true, true, poistat)
 }
 if (!wikiShips || !wikiGears) {
 	console.info('Wiki data not ready, run again after downloaded')
@@ -72,6 +84,15 @@ if (!wikiShips || !wikiGears) {
 
 console.info(shipJsonFile, 'elements:', objectLen(wikiShips))
 console.info(gearJsonFile, 'elements:', objectLen(wikiGears))
+
+const master = fileExists(masterJsonFile) && toJson(readFile(masterJsonFile))
+const masterShipsById = {}
+if (master) {
+	master.api_mst_ship.forEach(s => {
+		masterShipsById[s.api_id] = s
+	})
+	console.info(masterJsonFile, 'ship elements:', master.api_mst_ship.length)
+}
 
 const wikiShipsById = {}
 Object.keys(wikiShips).forEach(name => {
@@ -83,10 +104,7 @@ if (!fileExists(wctfShipFile)) {
 	console.error('Original', shipNedbFile, 'not found at', wctfShipFile)
 	return
 }
-const shipNedb = readFile(wctfShipFile)
-	.split(/\r?\n/)
-	.filter(l => !!l)
-	.map(l => toJson(l))
+const shipNedb = toNedb(readFile(wctfShipFile))
 console.info(shipNedbFile, 'records:', shipNedb.length - 3) // 3 collab ships
 
 const gearwiki2nedb = (g) => {
@@ -191,60 +209,187 @@ Object.keys(wikiShips).forEach(s => {
 	const dbr = shipNedb.find(r => r.id === ship._api_id && r._id !== autoGenId)
 	if (!dbr) missingShips[ship._api_id] = ship
 })
-console.info('Missing ships',
-	objectLen(missingShips).toString() + ':', toStr(Object.keys(missingShips))
+const missingShipIds = Object.keys(missingShips).map(id => Number(id))
+console.info('Missing ships', missingShipIds.length.toString() + ':', toStr(missingShipIds)
 )
-
-const outputShipsLines = []
+const outputShipsNedb = []
 Object.keys(missingShips).forEach(id => {
 	const s = missingShips[id]
 	const db = shipwiki2nedb(s)
-	outputShipsLines.push(toStr(db))
+	outputShipsNedb.push(db)
 })
 
-// Check old records for missing/diff ship stats
+
+// Try to solve unknown lv1 values of los/asw/eva from db data, if any
+const shipStatDb = fileExists(shipStatNedbFile) && toNedb(readFile(shipStatNedbFile))
+if (shipStatDb) {
+	const shipIdsToSolve = missingShipIds
+	//const shipIdsToSolve = [988, 996, 1002]
+	console.info(shipStatNedbFile, 'records:', shipStatDb.length)
+	const outputSolutions = {}
+	shipIdsToSolve.forEach(shipId => {
+		const shipStats = shipStatDb.filter(s => s.id === shipId && s.count > 0)
+		const estimateStat = (mi, ma, lv) => mi + Math.floor((ma-mi)*lv/99.0)
+		const estimateStatMin = (cu, ma, lv) => lv == 1 ? cu :
+			lv < 99 ? Math.ceil(cu/((99-lv)/99.0) - ma*lv/(99-lv)) :
+			lv > 99 ? Math.floor(cu/((99-lv)/99.0) - ma*lv/(99-lv)) : NaN
+		const est = shipStats.map(s => ({
+			lv: s.lv,
+			los: s.los, los_max: s.los_max,
+			asw: s.asw, asw_max: s.asw_max,
+			eva: s.evasion, eva_max: s.evasion_max,
+			los_min: estimateStatMin(s.los, s.los_max, s.lv),
+			asw_min: estimateStatMin(s.asw, s.asw_max, s.lv),
+			eva_min: estimateStatMin(s.evasion, s.evasion_max, s.lv)
+		})).sort((a, b) => (a.lv - b.lv))
+		const maxs = { los: [], asw: [], eva: [] }
+		est.forEach(e => {
+			!maxs.los.includes(e.los_max) && maxs.los.push(e.los_max)
+			!maxs.asw.includes(e.asw_max) && maxs.asw.push(e.asw_max)
+			!maxs.eva.includes(e.eva_max) && maxs.eva.push(e.eva_max)
+		})
+		const ests = { los: [], asw: [], eva: [] }
+		est.forEach(e => {
+			!ests.los.includes(e.los_min) && ests.los.push(e.los_min)
+			!ests.asw.includes(e.asw_min) && ests.asw.push(e.asw_min)
+			!ests.eva.includes(e.eva_min) && ests.eva.push(e.eva_min)
+		})
+		const mins = {
+			los: ests.los.filter(v => !est.find(e => estimateStat(v, e.los_max, e.lv) !== e.los)),
+			asw: ests.asw.filter(v => !est.find(e => estimateStat(v, e.asw_max, e.lv) !== e.asw)),
+			eva: ests.eva.filter(v => !est.find(e => estimateStat(v, e.eva_max, e.lv) !== e.eva))
+		}
+		outputSolutions[shipId] = {
+			samples: est.length,
+			min: mins,
+			max: maxs,
+			possibilities: ests
+		}
+		//console.info(shipId, 'samples:', est.length, 'solution:', mins, 'possible:', ests)
+	})
+	if (objectLen(outputSolutions)) {
+		const outputStr = toStr(outputSolutions)
+		writeFile(shipStatResolveFile, outputStr)
+		console.info(shipStatResolveFile, 'output:', outputStr.length, 'chars')
+	}
+}
+const shipStatSolutions = fileExists(shipStatResolveFile) && toJson(readFile(shipStatResolveFile))
+const shipStatReport = {}
+if (shipStatSolutions) {
+	console.info(shipStatResolveFile, 'ships:', objectLen(shipStatSolutions))
+	Object.keys(shipStatSolutions).forEach(id => {
+		const s = shipStatSolutions[id]
+		shipStatReport[id] = {
+			id: Number(id),
+			stat: {
+				los: Math.max(...s.min.los),
+				los_max: Math.max(...s.max.los),
+				asw: Math.max(...s.min.asw),
+				asw_max: Math.max(...s.max.asw),
+				evasion: Math.max(...s.min.eva),
+				evasion_max: Math.max(...s.max.eva)
+			}
+		}
+	})
+}
+
+
+const shipmst2nedb = (m) => ({
+	id: m.api_id,
+	no: m.api_sortno,
+	name: {
+		ja_jp: m.api_name,
+		ja_kana: m.api_yomi
+	},
+	stat: {
+		fire: m.api_houg[0],
+		fire_max: m.api_houg[1],
+		torpedo: m.api_raig[0],
+		torpedo_max: m.api_raig[1],
+		aa: m.api_tyku[0],
+		aa_max: m.api_tyku[1],
+		asw: (m.api_tais || [])[0],
+		hp: m.api_taik[0],
+		hp_max: m.api_taik[1],
+		armor: m.api_souk[0],
+		armor_max: m.api_souk[1],
+		speed: m.api_soku,
+		range: m.api_leng,
+		luck: m.api_luck[0],
+		luck_max: m.api_luck[1]
+	},
+	slot: m.api_maxeq
+})
+// Check old records for missing/diff ship stats, comparing with both master and wiki data
+// Check new records for diffs comparing with estimated los/asw/eva values if any
 const diff = { missingStats: [], mismatchStats: {} }
 shipNedb.forEach(db => {
-	if (db._id === autoGenId) return
-	const wiki = wikiShipsById[db.id], conv = wiki && shipwiki2nedb(wiki)
-	if (!wiki || !conv) return
-	if (Object.keys(db.stat).some(k => db.stat[k] === -1 || db.stat[k] === null))
-		diff.missingStats.push(db)
-	else if (Object.keys(db.stat).some(k => db.stat[k] !== conv.stat[k])) {
-		const diffKeys = Object.keys(db.stat).filter(k => db.stat[k] !== conv.stat[k])
+	const statKeys = Object.keys(db.stat)
+	const mstShip = masterShipsById[db.id] || false
+	const addStatsDiff = (tar, name) => {
+		const diffKeys = statKeys.filter(k => db.stat[k] !== tar.stat[k])
 		const diffStats = {}
-		diffKeys.forEach(k => { diffStats[k] = conv.stat[k] })
-		diff.mismatchStats[db.id] = { db: db.stat, wiki: diffStats }
+		diffKeys.forEach(k => { diffStats[k] = tar.stat[k] })
+		diff.mismatchStats[db.id] = diff.mismatchStats[db.id] || { name: mstShip.api_name, db: db.stat }
+		diff.mismatchStats[db.id][name] = diffStats
+	}
+	if (db._id === autoGenId) {
+		const est = shipStatReport[db.id]
+		if (est) {
+			if (statKeys.some(k => est.stat[k] !== undefined && db.stat[k] !== est.stat[k])) {
+				addStatsDiff(est, 'est')
+			}
+		}
+	} else {
+		const wiki = wikiShipsById[db.id], conv = wiki && shipwiki2nedb(wiki)
+		if (conv) {
+			if (statKeys.some(k => db.stat[k] === -1 || db.stat[k] === null))
+				diff.missingStats.push(db)
+			else if (statKeys.some(k => db.stat[k] !== conv.stat[k])) {
+				addStatsDiff(conv, 'wiki')
+			}
+		}
+		const mst = mstShip && shipmst2nedb(mstShip)
+		if (mst) {
+			if (statKeys.some(k => mst.stat[k] !== undefined && db.stat[k] !== mst.stat[k])) {
+				addStatsDiff(mst, 'mst')
+			}
+		}
 	}
 })
 if (diff.missingStats.length > 0)
-	console.info('Missing stats ships', diff.missingStats.length, toStr(diff.missingStats.map(s => s.id)))
+	console.info('Missing stats ships',
+		diff.missingStats.length, toStr(diff.missingStats.map(s => s.id)))
 if (objectLen(diff.mismatchStats) > 0) {
-	console.info('Mismatch stats ships', objectLen(diff.mismatchStats) + ':', toStr(Object.keys(diff.mismatchStats)))
-	//writeFile('diff.json', toStr(diff.mismatchStats))
+	console.info('Mismatch stats ships',
+		objectLen(diff.mismatchStats) + ':', toStr(Object.keys(diff.mismatchStats)))
+	if (outputDiffReport) writeFile(shipStatDiffFile, toStr(diff.mismatchStats))
 }
 
-if (outputShipsLines.length === 0) return
+if (outputShipsNedb.length === 0) return
 
-const outputStr = outputShipsLines.join(nedbLinebreak)
-writeFile(shipNedbFile, outputStr)
-console.info(shipNedbFile, 'output:', outputStr.length, 'chars')
+if (outputMissingNedb) {
+	const outputStr = toLines(outputShipsNedb)
+	writeFile(shipNedbFile, outputStr)
+	console.info(shipNedbFile, 'output:', outputStr.length, 'chars')
+}
 
 // Directly updates WCTF DB in src
-const cnt = { updated: 0, added: 0 }
-outputShipsLines.forEach((str, i) => {
-	const s = toJson(str)
-	const found = shipNedb.findIndex(r => r.id === s.id && s._id === autoGenId)
-	if (found) {
-		// don't change timestamp for better git diff?
-		s.time_created = shipNedb[found].time_created
-		s.time_modified = shipNedb[found].time_modified
-		shipNedb[found] = s
-		cnt.updated += 1
-	} else {
-		shipNedb.push(s)
-		cnt.added += 1
-	}
-})
-writeFile(wctfShipFile, shipNedb.map(r => toStr(r)).join(nedbLinebreak))
-console.info(wctfShipFile, 'lines', cnt.updated, 'updated,', cnt.added, 'added')
+if (updateWctfNedb) {
+	const cnt = { updated: 0, added: 0 }
+	outputShipsNedb.forEach((s, i) => {
+		const found = shipNedb.findIndex(r => r.id === s.id && s._id === autoGenId)
+		if (found) {
+			// don't change timestamp for better git diff?
+			s.time_created = shipNedb[found].time_created
+			s.time_modified = shipNedb[found].time_modified
+			shipNedb[found] = s
+			cnt.updated += 1
+		} else {
+			shipNedb.push(s)
+			cnt.added += 1
+		}
+	})
+	writeFile(wctfShipFile, toLines(shipNedb))
+	console.info(wctfShipFile, 'lines', cnt.updated, 'updated,', cnt.added, 'added')
+}
