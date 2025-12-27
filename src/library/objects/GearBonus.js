@@ -6846,6 +6846,7 @@
 			// 20.3cm (No.2) Twin Gun Mount
 			"90": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Furutaka Class
 					"7": {
@@ -6867,6 +6868,17 @@
 					"29": "8",
 					// Tone Class
 					"31": "8",
+					// Thonburi Class
+					"137": [
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
@@ -6902,6 +6914,7 @@
 			// 20.3cm (No.3) Twin Gun Mount
 			"50": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Furutaka Class
 					"7": {
@@ -6940,6 +6953,17 @@
 					],
 					// Tone Class
 					"31": "9",
+					// Thonburi Class
+					"137": [
+						{
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: {
 					// Mogami Kai Ni+, Mikuma Kai Ni+
@@ -14118,12 +14142,12 @@
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						//   Slow DE: Inagi K2, Norge, Eidsvold
+						//   Slow DE: Inagi K2, Norge, Eidsvold, Thonburi?
 						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953, 1003,
 								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877, 988,
 								75, 89, 92, 521, 522, 534, 544, 995,
 								445, 451, 491,
-								922, 998, 999
+								922, 998, 999, 973
 							],
 						excludes: [541, 573, 888, 878, 879, 894, 899, 922, 730],
 						speedCap: 10,

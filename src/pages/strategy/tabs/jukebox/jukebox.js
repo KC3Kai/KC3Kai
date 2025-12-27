@@ -12,7 +12,7 @@
 
     // Current known implementation of battle BGM IDs
     // see also `main.js#TaskInit.prototype._playBGM` for event battle bgm overrides
-    maxBattleId: 272,
+    maxBattleId: 273,
     missingBattleIds: [24],
 
     /**

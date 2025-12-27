@@ -6647,7 +6647,7 @@
 	"5830": {
 		"api_id": 5830,
 		"api_name": "バレンタイン伊203",
-		"api_yomi": "い201",
+		"api_yomi": "い203",
 		"api_stype": 13,
 		"api_soku": 10,
 		"api_slot_num": 1
@@ -6655,7 +6655,7 @@
 	"5831": {
 		"api_id": 5831,
 		"api_name": "バレンタイン伊203改",
-		"api_yomi": "い201",
+		"api_yomi": "い203",
 		"api_stype": 13,
 		"api_soku": 10,
 		"api_slot_num": 2
@@ -8491,5 +8491,285 @@
 		"api_stype": 22,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"6061": {
+		"api_id": 6061,
+		"api_name": "Xmas萩風",
+		"api_yomi": "はぎかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6062": {
+		"api_id": 6062,
+		"api_name": "Xmas朝雲改",
+		"api_yomi": "あさぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6063": {
+		"api_id": 6063,
+		"api_name": "Xmas山雲改",
+		"api_yomi": "やまぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6064": {
+		"api_id": 6064,
+		"api_name": "クリスマスMassachusetts",
+		"api_yomi": "マサチューセッツ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6065": {
+		"api_id": 6065,
+		"api_name": "クリスマスMassachusetts改",
+		"api_yomi": "マサチューセッツ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6066": {
+		"api_id": 6066,
+		"api_name": "Xmas霰改二",
+		"api_yomi": "あられ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6067": {
+		"api_id": 6067,
+		"api_name": "Xmas熊野丸改",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6068": {
+		"api_id": 6068,
+		"api_name": "Xmas瑞鶴改",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6069": {
+		"api_id": 6069,
+		"api_name": "Xmas瑞鶴改二",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6070": {
+		"api_id": 6070,
+		"api_name": "Xmas瑞鶴改二甲",
+		"api_yomi": "ずいかく",
+		"api_stype": 18,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6071": {
+		"api_id": 6071,
+		"api_name": "Xmas熊野改",
+		"api_yomi": "くまの",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6072": {
+		"api_id": 6072,
+		"api_name": "Xmas熊野改二",
+		"api_yomi": "くまの",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6073": {
+		"api_id": 6073,
+		"api_name": "Xmas熊野航改二",
+		"api_yomi": "くまの",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6074": {
+		"api_id": 6074,
+		"api_name": "Xmas龍鳳改二",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6075": {
+		"api_id": 6075,
+		"api_name": "Xmas龍鳳改二戊",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6076": {
+		"api_id": 6076,
+		"api_name": "Xmas鈴谷改",
+		"api_yomi": "すずや",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6077": {
+		"api_id": 6077,
+		"api_name": "Xmas鈴谷改二",
+		"api_yomi": "すずや",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6078": {
+		"api_id": 6078,
+		"api_name": "Xmas鈴谷航改二",
+		"api_yomi": "すずや",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6079": {
+		"api_id": 6079,
+		"api_name": "Xmas神威改",
+		"api_yomi": "かもい",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6080": {
+		"api_id": 6080,
+		"api_name": "Xmas神威改母",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6081": {
+		"api_id": 6081,
+		"api_name": "クリスマスMaestrale改",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6082": {
+		"api_id": 6082,
+		"api_name": "クリスマスSalmon改",
+		"api_yomi": "サーモン",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6083": {
+		"api_id": 6083,
+		"api_name": "Xmas伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6084": {
+		"api_id": 6084,
+		"api_name": "Xmas谷風丁改",
+		"api_yomi": "たにかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6085": {
+		"api_id": 6085,
+		"api_name": "Xmas鵜来改",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6086": {
+		"api_id": 6086,
+		"api_name": "Xmas如月改二",
+		"api_yomi": "きさらぎ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6087": {
+		"api_id": 6087,
+		"api_name": "クリスマスHouston改",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6088": {
+		"api_id": 6088,
+		"api_name": "クリスマスGotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6089": {
+		"api_id": 6089,
+		"api_name": "クリスマスGotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6090": {
+		"api_id": 6090,
+		"api_name": "Xmas翔鶴改二",
+		"api_yomi": "しょうかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6091": {
+		"api_id": 6091,
+		"api_name": "Xmas翔鶴改二甲",
+		"api_yomi": "しょうかく",
+		"api_stype": 18,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6092": {
+		"api_id": 6092,
+		"api_name": "Xmas球磨改二",
+		"api_yomi": "くま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6093": {
+		"api_id": 6093,
+		"api_name": "Xmas球磨改二丁",
+		"api_yomi": "くま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6094": {
+		"api_id": 6094,
+		"api_name": "Xmas江風改二",
+		"api_yomi": "かわかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6095": {
+		"api_id": 6095,
+		"api_name": "Xmas親潮改二",
+		"api_yomi": "おやしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
