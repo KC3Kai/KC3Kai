@@ -379,7 +379,7 @@ if (updateWctfNedb) {
 	const cnt = { updated: 0, added: 0 }
 	outputShipsNedb.forEach((s, i) => {
 		const found = shipNedb.findIndex(r => r.id === s.id && s._id === autoGenId)
-		if (found) {
+		if (found > -1) {
 			// don't change timestamp for better git diff?
 			s.time_created = shipNedb[found].time_created
 			s.time_modified = shipNedb[found].time_modified
