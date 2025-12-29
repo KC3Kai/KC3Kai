@@ -20,17 +20,15 @@ Redirects to KanColle game page after writing
 		var buildCookie = function(key, value, domain, path){
 			return key + "=" + value + ";expires=" + expireTime + ";domain=" + domain + ";path=" + path;
 		};
-		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/");
-		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame/");
-		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame_s/");
-		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/play/");
 		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/game/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.co.jp", "/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/");
-		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame/");
-		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame_s/");
-		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/play/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/game/");
+		document.cookie = buildCookie("ckcy", "1", ".dmm.co.jp", "/");
+		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/");
+		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.com", "/game/");
+		document.cookie = buildCookie("ckcy_remedied_check", "ec_mrnhbtk", ".dmm.co.jp", "/");
 		document.cookie = buildCookie("ckcy", "1", "www.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "play.games.dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", "osapi.dmm.com", "/");
