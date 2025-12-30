@@ -27,7 +27,7 @@ const readFile = file => fs.readFileSync(file, 'utf8').toString()
 const writeFile = (file, str) => fs.writeFileSync(file, str, 'utf8')
 const fileExists = file => fs.existsSync(file)
 const toJson = str => JSON.parse(str)
-const toStr = json => JSON.stringify(json)
+const toStr = (json, indent) => JSON.stringify(json, null, indent)
 const objectLen = obj => Object.keys(obj).length
 const toNedb = str => str.split(/\r?\n/)
 	.filter(l => !!l && l.startsWith('{') && l.endsWith('}')).map(l => toJson(l))
@@ -363,7 +363,7 @@ if (diff.missingStats.length > 0)
 if (objectLen(diff.mismatchStats) > 0) {
 	console.info('Mismatch stats ships',
 		objectLen(diff.mismatchStats) + ':', toStr(Object.keys(diff.mismatchStats)))
-	if (outputDiffReport) writeFile(shipStatDiffFile, toStr(diff.mismatchStats))
+	if (outputDiffReport) writeFile(shipStatDiffFile, toStr(diff.mismatchStats, '    '))
 }
 
 if (outputShipsNedb.length === 0) return
