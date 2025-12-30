@@ -178,9 +178,9 @@ Date.getMonthName = function(month, forLong) {
 /* GET DATE IN Japan Standard TimeZone
 http://stackoverflow.com/a/10088053/483704
 -------------------------------*/
-Date.getJstDate = function() {
+Date.getJstDate = function(dt) {
 	// create Date object for current location
-	var d = new Date();
+	var d = dt ? new Date(dt) : new Date();
 	// convert to msec
 	// add local time zone offset
 	// get UTC time in msec

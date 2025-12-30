@@ -635,7 +635,7 @@ AntiAir: anti-air related calculations
 	var isShiratsuyuClassK2 = masterIdIn([145, 497, 498, 961, 975]);
 	var isInagiK2 = masterIdEq( 979 );
 	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
-	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
+	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 963, 968]);
 	var isFujinamiKai2 = masterIdEq( fujinamiK2Icon );
 	var isHamanamiKai2 = masterIdEq( 983 );
 	var isFubukiKai2 = masterIdEq( 426 );
