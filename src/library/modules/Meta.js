@@ -303,6 +303,8 @@ Provides access to data on built-in JSON files
 			"999": 61, // Eidsvold: 海防戦艦
 			"738": 61, // Norge K: 海防戦艦
 			"739": 61, // Eidsvold K: 海防戦艦
+			"973": 61, // Thonburi: 海防戦艦
+			"978": 61, // Thonburi K: 海防戦艦
 			"1022":62, // Glorious FBB: 巡洋戦艦
 			"740": 62, // Glorious K FBB: 巡洋戦艦
 			"988": 63, // Nankai: 雑役船

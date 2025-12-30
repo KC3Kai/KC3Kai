@@ -129,6 +129,8 @@
                 case 903: // Amagiri K2
                 case 368: // Uranami
                 case 720: // Hayashio
+                case 973: // Thonburi
+                    return 20;
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
@@ -213,6 +215,7 @@
                 case 916: // Yamato Kai Ni Juu
                     return 50;
                 case 325: // Kiyoshimo Kai
+                case 330: // Akizuki Kai
                 case 357: // Hatsuzuki Kai
                     return 30;
                 case 955: // Kiyoshimo Kai Ni
@@ -260,6 +263,7 @@
                 case 632: // Ariake
                 case 633: // Yuugure
                 case 643: // Ume
+                case 973: // Thonburi
                     return 10;
                 case 231: // Akebono
                 case 323: // Harusame

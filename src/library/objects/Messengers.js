@@ -26,6 +26,18 @@ Sample Usage:
 	
 	console.info("KC3改 Messengers loaded");
 	
+	// Error messages are safe to be ignored set by chrome later versions
+	const chromeWarningsToIgnore = [
+		"The message port closed before a response was received.",
+		"A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received"
+	];
+	const defaultCallback = function(response) {
+		const lastError = chrome.runtime.lastError;
+		const lastErrorMsg = (lastError || {}).message;
+		if(lastErrorMsg && !chromeWarningsToIgnore.includes(lastErrorMsg))
+			console.warn("Unexpected runtime.lastError: " + lastErrorMsg, lastError, response);
+	};
+	
 	/* RUNTIME MESSAGE
 	Send message to all components, which will only execute on "target"
 	------------------------------------------*/
@@ -37,7 +49,7 @@ Sample Usage:
 		}, params);
 		
 		// Save callback for later
-		this.callback = (callback || function(){});
+		this.callback = (callback || defaultCallback);
 		
 		return true; // for async callbacks
 	};
@@ -62,7 +74,7 @@ Sample Usage:
 		}, params);
 		
 		// Save callback for later
-		this.callback = (callback || function(){});
+		this.callback = (callback || defaultCallback);
 		
 		return true; // for async callbacks
 	};

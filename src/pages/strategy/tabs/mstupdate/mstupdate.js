@@ -73,8 +73,6 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			$(".tab_mstupdate .runtime_id").text(chrome.runtime.id);
-			
 			const self = this;
 			const linkClickFunc = function(e){
 				KC3StrategyTabs.gotoTab($(this).data("tab"), $(this).data("api_id"));

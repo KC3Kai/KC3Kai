@@ -472,12 +472,10 @@ Saves and loads significant data for future use
 		 *   * [553/554] Ise-class Kai Ni can equip main gun in first 2 slots only,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *     * see `main.js#SlotUtil.excludeEquipList`
-		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] in slot 4, can only equip [12, 21, 43] in slot 5,
-		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *   * [662/663/668] Noshiro/Yahagi Kai Ni+ can NOT equip torpedo [5] in slot 4,
-		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *   * [968] Hatsuzuki Kai Ni can NOT equip small main gun/torpedo/large radar [1, 5, 13] in slot 4,
-		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] in slot 4, can only equip [12, 21, 43] in slot 5;
+		 *   * [662/663/668] Noshiro/Yahagi Kai Ni+ can NOT equip torpedo [5] in slot 4;
+		 *   * [963/968] Akizuki/Hatsuzuki K2 can NOT equip small main gun/torpedo/large radar [1, 5, 13] in slot 4;
+		 *   * [978] Thonburi Kai can NOT equip medium main gun [2] in slot 3;
 		 *
 		 *   * Hard-coded exceptions are removed and defined in API since 2025-06-27, following notes deprecated:
 		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,

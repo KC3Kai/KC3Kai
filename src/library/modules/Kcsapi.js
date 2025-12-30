@@ -439,6 +439,7 @@ Previously known as "Reactor"
 				api_request_type: parseInt(decodedParams.api_request_type, 10),
 			};
 			PlayerManager.friendlySettings = $.extend(PlayerManager.friendlySettings || {}, newSettings);
+			KC3Network.trigger("HQ");
 		},
 		
 		/* Selected event rewards since Summer 2022
@@ -3091,7 +3092,7 @@ Previously known as "Reactor"
 			// detect 2nd ship, 0 if no 2nd only Akashi
 			recipes.shipId = PlayerManager.fleets[0].ship(1).masterId;
 			// get JST date on list shown
-			recipes.today = Date.getJstDate();
+			recipes.today = Date.getJstDate(headers.Date);
 			KC3Network.trigger("GearRemodelList", recipes);
 		},
 		/* Arsenal Improvement Item Detail

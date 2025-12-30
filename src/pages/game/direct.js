@@ -18,21 +18,22 @@
 	function applyCookiesAndRedirect(htmlLink){
 		chrome.cookies.set({
 			url: "https://play.games.dmm.com",
-			name: "ckcy_remedied_check",
-			value: "ec_mrnhbtk",
-			domain: ".dmm.com",
-			expirationDate: getInfExpirationDate(),
-			path: "/",
-		});
-		chrome.cookies.set({
-			url: "https://play.games.dmm.com",
 			name: "ckcy",
 			value: "1",
 			domain: ".dmm.com",
 			expirationDate: getInfExpirationDate(),
 			path: "/",
-		}, function(cookie){
-			window.location.href = htmlLink || "https://play.games.dmm.com/game/kancolle";
+		}, function() {
+			chrome.cookies.set({
+				url: "https://play.games.dmm.com",
+				name: "ckcy_remedied_check",
+				value: "ec_mrnhbtk",
+				domain: ".dmm.com",
+				expirationDate: getInfExpirationDate(),
+				path: "/",
+			}, function(){
+				window.location.href = htmlLink || "https://play.games.dmm.com/game/kancolle";
+			});
 		});
 	}
 	

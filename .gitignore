@@ -44,6 +44,8 @@ typings/
 # Custom KC3 Ignores
 $devFiles
 src.pem
+misc/wiki-*.json
+misc/*.nedb
 
 # Mac swap files and DS_Store
 *.DS_Store

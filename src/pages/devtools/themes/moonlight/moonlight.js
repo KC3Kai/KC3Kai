@@ -1504,6 +1504,11 @@
 				!PlayerManager.hq.lastPortTime ? "?" :
 					new Date(PlayerManager.hq.lastPortTime * 1000).format("mm-dd HH:MM:ss")
 			);
+			const ffs = PlayerManager.friendlySettings;
+			const friendFleetRequestTips = Object.notEmpty(ffs) ? KC3Meta.term("PanelFriendFleetSettings").format(
+				ffs.api_request_flag ? KC3Meta.term("PanelFfsRequestYes") : KC3Meta.term("PanelFfsRequestNo"),
+				ffs.api_request_type ? KC3Meta.term("PanelFfsStrong") : KC3Meta.term("PanelFfsNormal")
+			) : "";
 			const remainingTime = KC3Calc.remainingTimeUntilNextResets(undefined,
 				PlayerManager.hq.monthlyExpedResetTime * 1000);
 			const resetTimeTips = "{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}".format(
@@ -1512,22 +1517,19 @@
 				KC3Meta.term("MenuQuarterlyReset"), remainingTime.quarterly,
 				KC3Meta.term("MenuMonthlyExpedReset"), remainingTime.exped
 			);
-			//if(ConfigManager.rankPtsMode === 2){
 			$(".admiral_points").text(PlayerManager.hq.getRankPoints()
 				.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 				+ KC3Meta.term("HQRankPoints")
 			).attr("title", [KC3Meta.term("HQRankPointsTip")
 				.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
 					: new Date(PlayerManager.hq.rankPtLastTimestamp).format("mm-dd HH:MM:ss")) + "\n",
+				friendFleetRequestTips,
 				homePortTimeTips,
 				"{0}: {1}".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank),
 				resetTimeTips].join("\n")
 			);
-			//} else {
-			$(".admiral_rank").text(PlayerManager.hq.rank).attr("title",
-				[homePortTimeTips, resetTimeTips].join("\n"));
-			//}
-			$(".admiral_lvval").text( PlayerManager.hq.level );
+			$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", "");
+			$(".admiral_lvval").text(PlayerManager.hq.level);
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
 			updateHQEXPGained($(".admiral_lvnext"));
 		},

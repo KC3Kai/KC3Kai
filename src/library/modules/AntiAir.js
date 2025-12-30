@@ -635,7 +635,7 @@ AntiAir: anti-air related calculations
 	var isShiratsuyuClassK2 = masterIdIn([145, 497, 498, 961, 975]);
 	var isInagiK2 = masterIdEq( 979 );
 	// Akizuki-class Kai+, KC3Master.find_ships(s => (s.api_ctype === 54 && s.kc3_model > 1)).map(o => o.api_id)
-	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 968]);
+	var isAkizukiClassKai = masterIdIn([330, 346, 357, 537, 538, 963, 968]);
 	var isFujinamiKai2 = masterIdEq( fujinamiK2Icon );
 	var isHamanamiKai2 = masterIdEq( 983 );
 	var isFubukiKai2 = masterIdEq( 426 );
@@ -672,6 +672,7 @@ AntiAir: anti-air related calculations
 			// https://twitter.com/KanColle_STAFF/status/1357645300895080449
 			108, // Town Class
 			112, // Illustrious Class
+			134, 135, // Courageous/Glorious Class
 		]),
 		// Kongou Class Kai Ni+
 		masterIdIn( [149, 150, 151, 152, 591, 592, 593, 954] )
@@ -1111,7 +1112,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// British-relevant ships
-	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2
+	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2, Glorious
 	// (QF2 + FCR) OR (QF2 + 7UP) OR (7UP + 7UP)
 	declareAACI(
 		32, 3, 1, 1.2, 50, 2630, // rate 60?
