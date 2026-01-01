@@ -18,7 +18,7 @@ copy(voices);
 
 // check text diff for correcting jp json
 fetch("https://kcrdb.hitomaru.dev/quests/data?state=0,2").then(resp => (resp.ok && resp.json())).then(o => { quests=o; console.debug(quests); });
-diff=quests.items.filter(q => { m = KC3Meta.quest(q.api_no); return m.name != q.api_title || m.desc.replace(/<br>/g,'') != q.api_detail.replace(/<br>/g,''); }).map(q => ({ id:q.api_no, name:q.api_title, desc:q.api_detail, memo:'title diff='+(q.api_title != KC3Meta.quest(q.api_no).name), hash:q.api_title.hashCode() })); console.debug(diff);
+diff=quests.items.filter(q => { m = KC3Meta.quest(q.api_no); return m.name != q.api_title || m.desc.replace(/<br>/g,'') != q.api_detail.replace(/<br>/g,''); }).map(q => ({ id:q.api_no, name:q.api_title, desc:q.api_detail, memo:'title diff='+(q.api_title != KC3Meta.quest(q.api_no).name)+'|'+q.api_detail.replace(/<br>/g, ''), hash:q.api_title.hashCode() })); diff.forEach(q => { Object.values(KC3Master._raw.mapinfo).sort((a, b) => b.api_name.length-a.api_name.length).forEach(m => { q.memo = q.memo.replace(m.api_name, [m.api_maparea_id, m.api_no].join('-')); }); }); console.debug(diff);
 copy(diff)
 
 // check fixed rewards
