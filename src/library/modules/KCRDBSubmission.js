@@ -50,6 +50,7 @@
     completeCallback = (xhr) => { },
     successCallback = (data) => { },
     errorCallback = (xhr, statusText, httpError) => { }) {
+    if (!PlayerManager.hq.isOfficialServer()) return;
     const url = new URL(path, baseUrl);
     return $.ajax({
       async: true,
@@ -148,7 +149,7 @@
   function processRemodelSlotList(har) {
     const list = prepareRemodelBasicInfo(har);
     list.data = har.response.api_data;
-    if (list.flag_ship_id && list.data) {
+    if (list.flag_ship_id && list.helper_ship_id && list.data) {
       postData("remodel_slotlist", list);
     }
   }
@@ -165,7 +166,7 @@
     item.data = har.response.api_data;
 
     // Skip submission on invalid states, default recipes
-    if (item.flag_ship_id && item.data && gearObj.exists()
+    if (item.flag_ship_id && item.helper_ship_id && item.data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id)) {
       postData("remodel_slotlist_detail", item);
     }
@@ -203,7 +204,7 @@
     }
 
     // Skip submission on invalid states, default recipes, and failed improvement
-    if (item.flag_ship_id && har.response.api_data && gearObj.exists()
+    if (item.flag_ship_id && item.helper_ship_id && har.response.api_data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id) && isSuccess) {
       postData("remodel_slot", item);
     }
