@@ -1454,25 +1454,34 @@
 
 		/* Show cell contents of a mod stat
 		--------------------------------------------*/
-		modernizableStat :function(statAbbr, rowElm, valuesTuple,
-				equipStatIndex = 2, noEquipStatIndex = 1, isSup = false){
+		modernizableStat: function (
+			statAbbr,
+			rowElm,
+			valuesTuple,
+			equipStatIndex = 2,
+			noEquipStatIndex = 1,
+			isSup = false
+		) {
 			const statElm = $(".ship_" + statAbbr, rowElm);
+			let title = valuesTuple[0];
 			$(".stat_value", statElm).text(
 				valuesTuple[equipStatIndex > 0 ?
 					(this.equipMode ? equipStatIndex : noEquipStatIndex) :
 					noEquipStatIndex]
 			);
-			if(isSup){
-				if(valuesTuple[0] >= valuesTuple[1]){
+			if (isSup) {
+				if (valuesTuple[0] >= valuesTuple[1]) {
 					statElm.addClass("max");
 				}
-				if(valuesTuple[0] > valuesTuple[2]){
-					$(".sup", statElm).text(valuesTuple[0] - valuesTuple[2]);
+				if (valuesTuple[0] > valuesTuple[2]) {
+					const extra = valuesTuple[0] - valuesTuple[2];
+					$(".sup", statElm).text(extra);
+					title += ` (${valuesTuple[2]}+${extra})`;
 				} else {
 					$(".sup", statElm).hide();
 				}
 			} else {
-				if(valuesTuple[0] <= valuesTuple[1]){
+				if (valuesTuple[0] <= valuesTuple[1]) {
 					$(".stat_left", statElm).hide();
 					statElm.addClass("max");
 				} else {
@@ -1480,6 +1489,7 @@
 						.text("+" + (valuesTuple[0] - valuesTuple[1]));
 				}
 			}
+			statElm.attr('title', title);
 		},
 
 		/* Show cell contents of a cur/max stat
