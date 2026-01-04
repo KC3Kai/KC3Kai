@@ -1020,7 +1020,7 @@ button, input, select, textarea {
 	background:#947600;
 }
 .tab_ships .ship_item .ship_as.max {
-	background:#45a0a985;
+	background:rgba(69, 160, 169, 0.5);
 }
 .tab_ships .ship_item .ship_stat span.stat_left {
 	color:#999999;

@@ -1476,9 +1476,11 @@
 				if (valuesTuple[0] > valuesTuple[2]) {
 					const extra = valuesTuple[0] - valuesTuple[2];
 					$(".sup", statElm).text(extra);
-					title += ` (${valuesTuple[2]}+${extra})`;
+					statElm.attr("title",
+						`${valuesTuple[0]} (${valuesTuple[2]}+${extra})`);
 				} else {
 					$(".sup", statElm).hide();
+					statElm.removeAttr("title");
 				}
 			} else {
 				if (valuesTuple[0] <= valuesTuple[1]) {
@@ -1489,7 +1491,6 @@
 						.text("+" + (valuesTuple[0] - valuesTuple[1]));
 				}
 			}
-			statElm.attr('title', title);
 		},
 
 		/* Show cell contents of a cur/max stat
