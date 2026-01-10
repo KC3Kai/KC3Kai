@@ -495,7 +495,7 @@
 				"name": "Agc0de6",
 				"avatar" : "https://avatars1.githubusercontent.com/u/14156630?v=3&s=40",
 				"desc" : "Русский",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"wk" : "http://kancolle.wikia.com/wiki/Message_Wall:Agc0de6",
 					"tw" : "https://twitter.com/c0de_6",
@@ -642,7 +642,7 @@
 				"name": "Jurrunio",
 				"avatar" : "https://avatars.githubusercontent.com/u/59234041?s=88&v=4",
 				"desc" : "繁體中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" : "https://github.com/Jurrunio",
 					"tw" : "https://twitter.com/Jurrunio"
@@ -652,9 +652,18 @@
 				"name": "scp148",
 				"avatar" : "https://avatars.githubusercontent.com/u/71865093?v=4",
 				"desc" : "简体中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/scp148"
+				}
+			},
+			{
+				"name": "Orgling",
+				"avatar" : "https://avatars.githubusercontent.com/u/43367047?s=60&v=4",
+				"desc" : "English",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/Orgling"
 				}
 			}
 		],
@@ -833,15 +842,6 @@
 				"active": 1,
 				"links" : {
 					"gh" : "https://github.com/yang85"
-				}
-			},
-			{
-				"name": "Orgling",
-				"avatar" : "https://avatars.githubusercontent.com/u/43367047?s=60&v=4",
-				"desc" : "English",
-				"active": 1,
-				"links" : {
-					"gh" : "https://github.com/Orgling"
 				}
 			},
 			{
