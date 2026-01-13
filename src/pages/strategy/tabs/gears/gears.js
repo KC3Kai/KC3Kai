@@ -424,11 +424,16 @@
 
 			if (!!KC3StrategyTabs.pageParams[1]) {
 				let [typeId, itemId, sortMethod] = KC3StrategyTabs.pageParams.slice(1);
-				sortMethod = sortMethod || this.settings.types[typeId]?.sort;
+				if (this.settings.types[typeId]) {
+					sortMethod = sortMethod || this.settings.types[typeId].sort;
+				}
 				this.switchTypeAndSort(typeId, itemId, sortMethod);
 			} else {
 				const typeId = this.settings.recentType || $(".tab_gears .item_type").first().data("type");
-				const sortMethod = this.settings.types[typeId]?.sort;
+				let sortMethod = undefined;
+				if (this.settings.types[typeId]) {
+					sortMethod = this.settings.types[typeId].sort;
+				}
 				this.switchTypeAndSort(typeId, undefined, sortMethod);
 			}
 		},
