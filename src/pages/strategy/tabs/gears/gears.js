@@ -6,6 +6,12 @@
 	KC3StrategyTabs.gears.definition = {
 		tabSelf: KC3StrategyTabs.gears,
 
+		settings: {
+			groupIconsByType: false,
+			recentType: 1,
+			types: {},
+		},
+
 		_items: {},
 		_holders: {},
 		_comparator: {},
@@ -188,7 +194,6 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-			this.groupIconsByType = false;
 			const akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
 			this.initComparator();
@@ -318,6 +323,23 @@
 			}
 		},
 
+		loadSettings: function () {
+			try {
+				const value = JSON.parse(localStorage.getItem('srGearList') || '{}');
+				this.settings = $.extend(true, this.settings, value);
+			} catch (error) {
+				console.warn(error);
+			}
+		},
+
+		saveSettings: function () {
+			try {
+				localStorage.setItem('srGearList', JSON.stringify(this.settings));
+			} catch (error) {
+				console.warn(error);
+			}
+		},
+
 		/* Check a ship's equipment slot of an item is equipped
 		--------------------------------------------*/
 		checkShipSlotForItemHolder :function(slot, ThisShip){
@@ -345,6 +367,7 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
+			this.loadSettings();
 
 			const addIconsForAllMasterItemTypes = () => {
 				KC3Master.all_slotitem_icontypes().forEach(type => {
@@ -373,13 +396,16 @@
 			});
 
 			const toggleItemTypes = () => {
-				$(".tab_gears .item_types.grouped_bytype").toggle(this.groupIconsByType);
-				$(".tab_gears .item_types.netural_order").toggle(!this.groupIconsByType);
-				$(".tab_gears input[type=checkbox][name=group_bytype_box]").prop("checked", this.groupIconsByType);
+				$(".tab_gears .item_types.grouped_bytype").toggle(this.settings.groupIconsByType);
+				$(".tab_gears .item_types.netural_order").toggle(!this.settings.groupIconsByType);
+				$(".tab_gears input[type=checkbox][name=group_bytype_box]").prop("checked", this.settings.groupIconsByType);
 			};
+
 			toggleItemTypes();
+
 			$(".tab_gears input[type=checkbox][name=group_bytype_box]").on("change", (e) => {
-				this.groupIconsByType = !!$(".tab_gears input[type=checkbox][name=group_bytype_box]:checked").val();
+				this.settings.groupIconsByType = !!$(".tab_gears input[type=checkbox][name=group_bytype_box]:checked").val();
+				this.saveSettings();
 				toggleItemTypes();
 			});
 
@@ -396,20 +422,30 @@
 				
 			});
 
-			if(!!KC3StrategyTabs.pageParams[1]){
-				this.switchTypeAndSort(...KC3StrategyTabs.pageParams.slice(1));
+			if (!!KC3StrategyTabs.pageParams[1]) {
+				let [typeId, itemId, sortMethod] = KC3StrategyTabs.pageParams.slice(1);
+				sortMethod = sortMethod || this.settings.types[typeId]?.sort;
+				this.switchTypeAndSort(typeId, itemId, sortMethod);
 			} else {
-				this.switchTypeAndSort($(".tab_gears .item_type").first().data("type"));
+				const typeId = this.settings.recentType || $(".tab_gears .item_type").first().data("type");
+				const sortMethod = this.settings.types[typeId]?.sort;
+				this.switchTypeAndSort(typeId, undefined, sortMethod);
 			}
 		},
 
-		switchTypeAndSort: function(typeId, itemId, sortMethod) {
-			const compareMethod = sortMethod || this._defaultCompareMethod["t"+typeId] || "overall";
+		switchTypeAndSort: function (typeId, itemId, sortMethod) {
+			const compareMethod = sortMethod || this._defaultCompareMethod["t" + typeId] || "overall";
 			this.updateSorters(typeId);
 			this._currentTypeId = typeId;
 			this._currentItemId = itemId || 0;
 			this.showType(typeId, compareMethod);
-			if(itemId > 0) {
+
+			this.settings.recentType = typeId;
+			this.settings.types[typeId] = this.settings.types[typeId] || {};
+			this.settings.types[typeId].sort = sortMethod;
+			this.saveSettings();
+
+			if (itemId > 0) {
 				// Ensure scroll window to specified anchor
 				setTimeout(function(){
 					const target = $("#gears-{0}-{1}".format(typeId, itemId));
