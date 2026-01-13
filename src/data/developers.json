@@ -1108,6 +1108,15 @@
 			]
 		},
 		{
+			"name": "AboutPartnerKCRDBName",
+			"desc": "AboutPartnerKCRDBDesc",
+			"image": "https://kcrdb.hitomaru.dev/docs/favicon-32x32.png",
+			"links": [
+				"https://kcrdb.hitomaru.dev",
+				"https://kcrdb.hitomaru.dev/docs"
+			]
+		},
+		{
 			"name": "AboutPartnerKCImgBuilderName",
 			"desc": "AboutPartnerKCImgBuilderDesc",
 			"image": "https://kancolleimgbuilder.web.app/favicon.ico",
