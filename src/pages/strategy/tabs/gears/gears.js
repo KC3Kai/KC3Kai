@@ -430,7 +430,7 @@
 				this.switchTypeAndSort(typeId, itemId, sortMethod);
 			} else {
 				const typeId = this.settings.recentType || $(".tab_gears .item_type").first().data("type");
-				let sortMethod = undefined;
+				let sortMethod;
 				if (this.settings.types[typeId]) {
 					sortMethod = this.settings.types[typeId].sort;
 				}
