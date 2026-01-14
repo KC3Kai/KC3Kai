@@ -6,12 +6,12 @@
 	KC3StrategyTabs.gears.definition = {
 		tabSelf: KC3StrategyTabs.gears,
 
-		settings: {
+		defaultSettings: {
 			groupIconsByType: false,
 			recentType: 1,
 			types: {},
 		},
-
+		settings: {},
 		_items: {},
 		_holders: {},
 		_comparator: {},
@@ -194,6 +194,7 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+			$.extend(true, this.settings, this.defaultSettings);
 			const akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
 			this.initComparator();
@@ -324,20 +325,12 @@
 		},
 
 		loadSettings: function () {
-			try {
-				const value = JSON.parse(localStorage.getItem('srGearList') || '{}');
-				this.settings = $.extend(true, this.settings, value);
-			} catch (error) {
-				console.warn(error);
-			}
+			const saved = localStorage.getObject("srGearList");
+			$.extend(this.settings, saved);
 		},
 
 		saveSettings: function () {
-			try {
-				localStorage.setItem('srGearList', JSON.stringify(this.settings));
-			} catch (error) {
-				console.warn(error);
-			}
+			localStorage.setObject("srGearList", this.settings);
 		},
 
 		/* Check a ship's equipment slot of an item is equipped
@@ -400,13 +393,17 @@
 				$(".tab_gears .item_types.netural_order").toggle(!this.settings.groupIconsByType);
 				$(".tab_gears input[type=checkbox][name=group_bytype_box]").prop("checked", this.settings.groupIconsByType);
 			};
-
 			toggleItemTypes();
-
 			$(".tab_gears input[type=checkbox][name=group_bytype_box]").on("change", (e) => {
 				this.settings.groupIconsByType = !!$(".tab_gears input[type=checkbox][name=group_bytype_box]:checked").val();
 				this.saveSettings();
 				toggleItemTypes();
+			});
+
+			$(".tab_gears .reset_settings.btn").on("click", function(){
+				localStorage.removeItem("srGearList");
+				self.settings = $.extend(true, {}, self.defaultSettings);
+				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 
 			// setup sort methods
