@@ -571,6 +571,16 @@ KC3改 Ship Object
 		return [900, 717, 1003, 1008].includes(this.masterId) && this.hasEquipmentType(2, [7, 8, 25, 26]);
 	};
 
+	/**
+	 * @return true if this ship is Kai remodel AR/AS with ASW possible gear equipped
+	 * Capable AR/AS ships are: Akashi, Asahi, Jingei, Chougei, Heianmaru
+	 * Capable ASW gears are: Type 2 12cm Mortar Kai, Type 2 12cm Mortar Kai (Concentrated Deployment)
+	 */
+	KC3Ship.prototype.isKaiArAsWithAswGear = function(){
+		if(this.isDummy()) return false;
+		return [187, 958, 639, 640, 949].includes(this.masterId) && this.hasEquipment([346, 347]);
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
@@ -3119,6 +3129,10 @@ KC3改 Ship Object
 			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike))
 				|| ((isFusouClassKaiNi || this.is2ndClassTransporter()) && this.hasEquipmentType(2, 15));
 		}
+		// Since 2026-01-28, some Kai remodel of AR and AS possible to asw,
+		// only when equppied with Type 2 12cm Mortar Kai variants
+		// https://x.com/KanColle_STAFF/status/2016477841656078794
+		if(this.isKaiArAsWithAswGear()) return true;
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
 		//      Yamashiomaru uses depth charge if not air attack or no gear equppied.

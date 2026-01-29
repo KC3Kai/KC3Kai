@@ -2355,6 +2355,22 @@
 					multiple: { "houg": 5, "tyku": 1, "houk": 1 },
 				},
 			},
+			// Shinden Kai 2 (Carrier-based Fighter Model Kai 2)
+			"547": {
+				count: 0,
+				byShip: [
+					{
+						// Hiryuu Kai Ni
+						ids: [196],
+						multiple: { "tyku": 1, "houk": 2, "houm": 1 },
+					},
+					{
+						// Shoukaku K2/K2A, Zuikaku K2/K2A
+						ids: [461, 466, 462, 467],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
+			},
 			// Re.2001 OR Kai
 			"184": {
 				count: 0,
@@ -7324,6 +7340,65 @@
 					},
 				],
 			},
+			// 5inch Twin Gun Mount Mk.28 mod.2
+			"172": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							// FBB, BB, BBV
+							stypes: [8, 9, 10],
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							stypes: [8, 9, 10],
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							stypes: [8, 9, 10],
+							minStars: 9,
+							multiple: { "tyku": 1 },
+						},
+						{
+							stypes: [8, 9, 10],
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Iowa Class
+					"65": [
+						{
+							minStars: 5,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
 			// 5inch Single High-angle Gun Mount Battery
 			"358": {
 				count: 0,
@@ -8530,8 +8605,8 @@
 						multiple: { "houg": 1, "houm": 1, "houk": 1 },
 					},
 					{
-						// Fujinami Kai Ni
-						ids: [981],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni
+						ids: [981, 983, 982],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				],
@@ -8591,27 +8666,27 @@
 						],
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni
-						ids: [981, 983],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni
+						ids: [981, 983, 982],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						ids: [981, 983],
+						ids: [981, 983, 982],
 						minStars: 7,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [981, 983],
+						ids: [981, 983, 982],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [981, 983],
+						ids: [981, 983, 982],
 						minStars: 9,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [981, 983],
+						ids: [981, 983, 982],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -11650,8 +11725,8 @@
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
 					},
 					{
-						// Fujinami K2, Hamanami K2
-						ids: [981, 983],
+						// Fujinami K2, Hamanami K2, Hayanami K2
+						ids: [981, 983, 982],
 						single: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
@@ -12085,8 +12160,8 @@
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// Fujinami K2, Hamanami K2
-						ids: [981, 983],
+						// Fujinami K2, Hamanami K2, Hyanami K2
+						ids: [981, 983, 982],
 						single: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -12149,8 +12224,8 @@
 						},
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni
-						ids: [981, 983],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni
+						ids: [981, 983, 982],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -13797,8 +13872,8 @@
 						},
 					},
 					{
-						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2, Hamanami K2
-						ids: [955, 960, 956, 981, 983],
+						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2, Hamanami K2, Hayanami K2
+						ids: [955, 960, 956, 981, 983, 982],
 						synergy: [
 							{
 								flags: [ "airRadar" ],
