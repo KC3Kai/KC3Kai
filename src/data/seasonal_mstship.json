@@ -8771,5 +8771,509 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"6096": {
+		"api_id": 6096,
+		"api_name": "正月Ark Royal",
+		"api_yomi": "アークロイヤル",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6097": {
+		"api_id": 6097,
+		"api_name": "巫女大泊",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6098": {
+		"api_id": 6098,
+		"api_name": "巫女Mogador",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6099": {
+		"api_id": 6099,
+		"api_name": "巫女Norge",
+		"api_yomi": "ノルゲ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6100": {
+		"api_id": 6100,
+		"api_name": "巫女Eidsvold",
+		"api_yomi": "アイツヴォル",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6101": {
+		"api_id": 6101,
+		"api_name": "巫女Maestrale",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6102": {
+		"api_id": 6102,
+		"api_name": "巫女日向",
+		"api_yomi": "ひゅうが",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6103": {
+		"api_id": 6103,
+		"api_name": "巫女鵜来",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6104": {
+		"api_id": 6104,
+		"api_name": "巫女鵜来改",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6105": {
+		"api_id": 6105,
+		"api_name": "巫女大泊改",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6106": {
+		"api_id": 6106,
+		"api_name": "巫女Mogador改",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6107": {
+		"api_id": 6107,
+		"api_name": "巫女Maestrale改",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6108": {
+		"api_id": 6108,
+		"api_name": "巫女日向改",
+		"api_yomi": "ひゅうが",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6109": {
+		"api_id": 6109,
+		"api_name": "巫女日向改二",
+		"api_yomi": "ひゅうが",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 5
+	},
+	"6110": {
+		"api_id": 6110,
+		"api_name": "正月龍鳳改二戊",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6111": {
+		"api_id": 6111,
+		"api_name": "正月龍鳳改二",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6112": {
+		"api_id": 6112,
+		"api_name": "正月秋津洲改",
+		"api_yomi": "あきつしま",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6113": {
+		"api_id": 6113,
+		"api_name": "正月扶桑改二",
+		"api_yomi": "ふそう",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6114": {
+		"api_id": 6114,
+		"api_name": "正月山城改二",
+		"api_yomi": "やましろ",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6115": {
+		"api_id": 6115,
+		"api_name": "正月天城改",
+		"api_yomi": "あまぎ",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6116": {
+		"api_id": 6116,
+		"api_name": "正月鳳翔改二",
+		"api_yomi": "ほうしょう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6117": {
+		"api_id": 6117,
+		"api_name": "正月鳳翔改二戦",
+		"api_yomi": "ほうしょう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6118": {
+		"api_id": 6118,
+		"api_name": "正月山風改二",
+		"api_yomi": "やまかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6119": {
+		"api_id": 6119,
+		"api_name": "正月山風改二丁",
+		"api_yomi": "やまかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6120": {
+		"api_id": 6120,
+		"api_name": "正月大和改",
+		"api_yomi": "やまと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6121": {
+		"api_id": 6121,
+		"api_name": "正月大和改二",
+		"api_yomi": "やまと",
+		"api_stype": 8,
+		"api_soku": 5,
+		"api_slot_num": 5
+	},
+	"6122": {
+		"api_id": 6122,
+		"api_name": "正月大和改二重",
+		"api_yomi": "やまと",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 5
+	},
+	"6123": {
+		"api_id": 6123,
+		"api_name": "正月Richelieu Deux",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6124": {
+		"api_id": 6124,
+		"api_name": "正月夕雲改二",
+		"api_yomi": "ゆうぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6125": {
+		"api_id": 6125,
+		"api_name": "正月巻雲改二",
+		"api_yomi": "まきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6126": {
+		"api_id": 6126,
+		"api_name": "正月荒潮改二",
+		"api_yomi": "あらしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6127": {
+		"api_id": 6127,
+		"api_name": "正月加賀改二",
+		"api_yomi": "かが",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6128": {
+		"api_id": 6128,
+		"api_name": "正月加賀改二戊",
+		"api_yomi": "かが",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6129": {
+		"api_id": 6129,
+		"api_name": "正月加賀改二護",
+		"api_yomi": "かが",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6130": {
+		"api_id": 6130,
+		"api_name": "正月風雲改二",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6131": {
+		"api_id": 6131,
+		"api_name": "正月赤城改二",
+		"api_yomi": "あかぎ",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6132": {
+		"api_id": 6132,
+		"api_name": "正月赤城改二戊",
+		"api_yomi": "あかぎ",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6133": {
+		"api_id": 6133,
+		"api_name": "正月Gambier Bay Mk.II",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6134": {
+		"api_id": 6134,
+		"api_name": "正月神鷹改二",
+		"api_yomi": "しんよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6135": {
+		"api_id": 6135,
+		"api_name": "正月睦月改二",
+		"api_yomi": "むつき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6136": {
+		"api_id": 6136,
+		"api_name": "正月Houston改",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6137": {
+		"api_id": 6137,
+		"api_name": "正月迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6138": {
+		"api_id": 6138,
+		"api_name": "正月伊203改",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"6139": {
+		"api_id": 6139,
+		"api_name": "正月長門改二",
+		"api_yomi": "ながと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6140": {
+		"api_id": 6140,
+		"api_name": "正月翔鶴改二",
+		"api_yomi": "しょうかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6141": {
+		"api_id": 6141,
+		"api_name": "正月翔鶴改二甲",
+		"api_yomi": "しょうかく",
+		"api_stype": 18,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6142": {
+		"api_id": 6142,
+		"api_name": "巫女Conte di Cavour改",
+		"api_yomi": "カブール",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6143": {
+		"api_id": 6143,
+		"api_name": "巫女Conte di Cavour nuovo",
+		"api_yomi": "カブール",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6144": {
+		"api_id": 6144,
+		"api_name": "正月長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6145": {
+		"api_id": 6145,
+		"api_name": "正月大井改",
+		"api_yomi": "おおい",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6146": {
+		"api_id": 6146,
+		"api_name": "正月大井改二",
+		"api_yomi": "おおい",
+		"api_stype": 4,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6147": {
+		"api_id": 6147,
+		"api_name": "正月Gotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6148": {
+		"api_id": 6148,
+		"api_name": "正月瑞鶴改二",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6149": {
+		"api_id": 6149,
+		"api_name": "正月Tuscaloosa改",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6150": {
+		"api_id": 6150,
+		"api_name": "正月熊野丸改",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6151": {
+		"api_id": 6151,
+		"api_name": "正月陸奥改二",
+		"api_yomi": "むつ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6152": {
+		"api_id": 6152,
+		"api_name": "正月武蔵改",
+		"api_yomi": "むさし",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6153": {
+		"api_id": 6153,
+		"api_name": "正月武蔵改二",
+		"api_yomi": "むさし",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 5
+	},
+	"6154": {
+		"api_id": 6154,
+		"api_name": "正月古鷹改二",
+		"api_yomi": "ふるたか",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6155": {
+		"api_id": 6155,
+		"api_name": "七草粥Thonburi改",
+		"api_yomi": "トンブリ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6156": {
+		"api_id": 6156,
+		"api_name": "秋の私服天霧改二",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6157": {
+		"api_id": 6157,
+		"api_name": "秋の私服天霧改二丁",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6158": {
+		"api_id": 6158,
+		"api_name": "秋の私服蒼龍改二",
+		"api_yomi": "そうりゅう",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }

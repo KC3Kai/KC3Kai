@@ -1019,6 +1019,9 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_ar.max {
 	background:#947600;
 }
+.tab_ships .ship_item .ship_as.max {
+	background:rgba(69, 160, 169, 0.5);
+}
 .tab_ships .ship_item .ship_stat span.stat_left {
 	color:#999999;
 }

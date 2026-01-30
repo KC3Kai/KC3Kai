@@ -568,6 +568,8 @@
 						boundary: { width: cgswf.width(), height: cgswf.height() },
 						viewport: KC3Master.isAbyssalShip(ship_id) ?
 							{ width: 234, height: 200, type: "square" } :
+							viewCgMode ?
+							{ width: 234, height: 300, type: "square" } :
 							{ width: 218, height: 300, type: "square" },
 						showZoomer: false,
 					});

@@ -117,6 +117,8 @@
                     return 65;
                 case 145: // Shigure K2
                     return 77;
+                case 688: // Hayanami Kai
+                    return 78;
                 case 202: // Shirayuki
                 case 208: // Shikinami
                 case 225: // Kagerou
