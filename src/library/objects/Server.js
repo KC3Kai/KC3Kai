@@ -31,6 +31,8 @@ Represent KanColle game server instance.
 		if(num) this.setNum(num, isDomain, isSecured, originUrl);
 	};
 	
+	KC3Server.officialHostname = function(){ return kcBaseDomain; };
+	
 	KC3Server.prototype.setUrl = function(url){
 		const anchor = new URL(url);
 		// here `ip` may stand for either IP address or domain hostname, old ip will be unused if isDomain true

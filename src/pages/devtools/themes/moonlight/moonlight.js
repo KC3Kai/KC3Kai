@@ -1526,7 +1526,7 @@
 				friendFleetRequestTips,
 				homePortTimeTips,
 				"{0}: {1}".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank),
-				resetTimeTips].join("\n")
+				resetTimeTips].filter(s => !!s).join("\n")
 			);
 			$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", "");
 			$(".admiral_lvval").text(PlayerManager.hq.level);

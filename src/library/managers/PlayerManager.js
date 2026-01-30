@@ -565,6 +565,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"100": "overseaTechMaterial",
 				"101": "nightSkilledCrew",
 				"102": "airUnitRation",
+				"103": "arsenalKey", // virtual payitem
 				"895": "rankPoints440", // virtual reward
 				"896": "rankPoints50",
 				"897": "rankPoints11",
@@ -577,6 +578,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"905": "gearSlots5",
 				"906": "gearSlots6", // slots2 moved to 902
 				"908": "gearSlots8",
+				"910": "gearSlots10",
 				"911": "gearSlots11",
 				"912": "gearSlots12",
 				"918": "gearSlots18",

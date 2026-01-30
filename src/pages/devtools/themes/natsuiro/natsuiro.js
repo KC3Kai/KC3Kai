@@ -1418,11 +1418,11 @@
 					friendFleetRequestTips,
 					homePortTimeTips,
 					"{0}: {1}".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank),
-					resetTimeTips].join("\n")
+					resetTimeTips].filter(s => !!s).join("\n")
 				);
 			} else {
 				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title",
-					[friendFleetRequestTips, homePortTimeTips, resetTimeTips].join("\n"));
+					[friendFleetRequestTips, homePortTimeTips, resetTimeTips].filter(s => !!s).join("\n"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});

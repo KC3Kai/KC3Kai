@@ -203,6 +203,7 @@ Provides access to data on built-in JSON files
 			373, // Fujinami Kai -> K2
 			202, // Shirayuki Kai -> K2
 			203, // Hatsuyuki Kai -> K2
+			988, // Hayanami Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],

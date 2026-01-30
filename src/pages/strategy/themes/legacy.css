@@ -796,6 +796,9 @@ body {
 .tab_ships .ship_item .ship_ar.max {
 	background:#ffcc00;
 }
+.tab_ships .ship_item .ship_as.max {
+	background:#9080f0;
+}
 .tab_ships .ship_item .ship_stat span.stat_left {
 	color:#aaa;
 }
