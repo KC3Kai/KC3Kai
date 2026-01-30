@@ -12794,6 +12794,7 @@
 			"44": {
 				count: 0,
 				byClass: {
+					// Sharing with [44, 45, 287, 288, 569] from `getSlotDomesticAntiSubmarineToushakiPersonalEffect`
 					// Katori Class
 					"56": {
 						multiple: { "houk": 2, "tais": 3 },
@@ -12856,6 +12857,83 @@
 						// Noshiro K2, Shigure K3
 						ids: [662, 961],
 						multiple: { "tais": 4, "houk": 1 },
+					},
+				],
+			},
+			// Type 3 Depth Charge Projector Kai
+			"569": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houk": 2, "tais": 3 },
+					},
+					// Matsu Class
+					"101": [
+						{
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tais": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Hayanami Kai Ni
+						ids: [982],
+						multiple: { "tais": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						// Akigumo Kai Ni, Kazagumo Kai Ni
+						ids: [648, 564],
+						multiple: { "houk": 1, "houm": 1 },
+					},
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "houm": 1 },
+					},
+					// Improvement bonuses for all ships/types above
+					{
+						ids: [982, 648, 564],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						ids: [982, 648, 564],
+						minStars: 8,
+						multiple: { "tais": 1 },
+					},
+					{
+						ids: [982, 648, 564],
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 6,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 8,
+						multiple: { "tais": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 10,
+						multiple: { "houm": 1 },
 					},
 				],
 			},

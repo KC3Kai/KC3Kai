@@ -572,13 +572,15 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return true if this ship is Kai remodel AR/AS with ASW possible gear equipped
-	 * Capable AR/AS ships are: Akashi, Asahi, Jingei, Chougei, Heianmaru
-	 * Capable ASW gears are: Type 2 12cm Mortar Kai, Type 2 12cm Mortar Kai (Concentrated Deployment)
+	 * @return true if this ship is Kai remodel AR/AS or LHA 2nd Class Transporter with ASW possible gear equipped
+	 * Capable AR/AS ships are: Kai of Akashi, Asahi, Jingei, Chougei, Heianmaru
+	 * Capable LHA ship known: any remodel of No.101 Transport Ship
+	 * Capable ASW gears are: any Depth Charge (Projector), including Type 2 12cm Mortar Kai, Type 2 12cm Mortar Kai (Concentrated Deployment)
 	 */
-	KC3Ship.prototype.isKaiArAsWithAswGear = function(){
+	KC3Ship.prototype.isSpecificShipWithAswGear = function(){
 		if(this.isDummy()) return false;
-		return [187, 958, 639, 640, 949].includes(this.masterId) && this.hasEquipment([346, 347]);
+		return ([187, 958, 639, 640, 949].includes(this.masterId) || this.is2ndClassTransporter())
+			&& this.hasEquipmentType(2, 15);
 	};
 
 	/* REPAIR TIME
@@ -3096,11 +3098,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoASW = function(time = "Day") {
 		if(this.isDummy() || this.isAbsent()) { return false; }
+		// Since 2026-01-28, some Kai remodel of AR and AS possible to asw,
+		// only when equppied with Type 2 12cm Mortar Kai variants
+		// https://x.com/KanColle_STAFF/status/2016477841656078794
+		// supposed to share conditions (including night asw) with LHA 2nd Class Transporter
+		if(this.isSpecificShipWithAswGear()) return true;
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.isHayasuiKaiWithTorpedoBomber();
 		const isKagaK2Go = this.masterId === 646;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
-		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru, Shimanemaru
+		// CAV, CVL, BBV, AV, LHA(*), CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru, Shimanemaru
 		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAircraft();
 		if(isAirAntiSubStype) {
 			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertain conditions (using CVL's currently),
@@ -3115,7 +3122,6 @@ KC3改 Ship Object
 			//  * 2nd Class Transporter do ASW with depth charge equipped.
 			//  * Some Abyssal AV/BBV can do ASW with air attack at night.
 			if(time === "Night") {
-				if(this.is2ndClassTransporter()) return this.hasEquipmentType(2, 15);
 				return isCvlLike && !this.isTaiha() && this.as[1] > 0;
 			}
 			// For day time, false if CVL or CVL-like chuuha
@@ -3127,12 +3133,8 @@ KC3改 Ship Object
 			// and if ASW plane equipped and its slot > 0
 			// or if Fusou-class K2/2nd Class Transporter equipped Depth Charge
 			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike))
-				|| ((isFusouClassKaiNi || this.is2ndClassTransporter()) && this.hasEquipmentType(2, 15));
+				|| (isFusouClassKaiNi && this.hasEquipmentType(2, 15));
 		}
-		// Since 2026-01-28, some Kai remodel of AR and AS possible to asw,
-		// only when equppied with Type 2 12cm Mortar Kai variants
-		// https://x.com/KanColle_STAFF/status/2016477841656078794
-		if(this.isKaiArAsWithAswGear()) return true;
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
 		//      Yamashiomaru uses depth charge if not air attack or no gear equppied.
