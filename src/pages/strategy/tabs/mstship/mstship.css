@@ -466,11 +466,13 @@
 }
 /* Subtitles */
 .tab_mstship .shipInfo .subtitles {
-	width:470px;
-	margin:10px 0 20px 0;
+	width: 470px;
+	margin: 10px 0 20px 0;
 	font-weight: normal;
-	font-size:12px;
+	font-size: 12px;
 	text-align: center;
+	line-break: strict;
+	overflow-wrap: anywhere;
 }
 
 /* Regular Voices */

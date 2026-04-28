@@ -114,8 +114,9 @@
 		$.each(this.planes, function(i, p) {
 			// Only count plane which is set, not moving
 			if(p.api_slotid > 0 && p.api_state === 1){
-				const planeType2 = KC3GearManager.get(p.api_slotid).master().api_type[2];
-				const planeCost = KC3GearManager.get(p.api_slotid).master().api_cost;
+				const planeMaster = KC3GearManager.get(p.api_slotid).master();
+				const planeType2 = planeMaster.api_type[2];
+				const planeCost = planeMaster.api_cost;
 				const fuelCostPerSlot = KC3GearManager.landBaseHeavyBomberType2Ids.indexOf(planeType2) > -1 ?
 					KC3GearManager.landBaseHeavyBomberSortieFuelCostPerSlot : planeType2 === 47 ?
 					KC3GearManager.landBaseBomberSortieFuelCostPerSlot :
@@ -129,11 +130,9 @@
 				totalCost.fuel += Math.ceil(p.api_count * fuelCostPerSlot);
 				totalCost.ammo += Math.ceil(p.api_count * ammoCostPerSlot);
 				// Jets consume steel per battle
-				totalCost.steel += ((
-					KC3GearManager.jetAircraftType2Ids.indexOf(planeType2) > -1 ?
-						Math.round(p.api_count * planeCost * KC3GearManager.jetBomberSteelCostRatioPerSlot) : 0
-					) || 0
-				);
+				totalCost.steel += Math.round(KC3GearManager.jetAircraftType2Ids.includes(planeType2) ?
+					p.api_count * planeCost * KC3Meta.jetSteelCostMods(planeMaster.api_id) : 0
+				) || 0;
 			}
 		});
 		return totalCost;

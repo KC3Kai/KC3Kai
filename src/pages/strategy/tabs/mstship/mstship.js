@@ -568,6 +568,8 @@
 						boundary: { width: cgswf.width(), height: cgswf.height() },
 						viewport: KC3Master.isAbyssalShip(ship_id) ?
 							{ width: 234, height: 200, type: "square" } :
+							viewCgMode ?
+							{ width: 234, height: 300, type: "square" } :
 							{ width: 218, height: 300, type: "square" },
 						showZoomer: false,
 					});
@@ -752,6 +754,7 @@
 								"airmat": KC3Meta.useitemIcon(77),
 								"armmat": KC3Meta.useitemIcon(94),
 								"techmat": KC3Meta.useitemIcon(100),
+								"arsenalmat": KC3Meta.useitemIcon(104),
 								"boiler": KC3Meta.useitemIcon(902),
 								"bucket": "/assets/img/client/bucket.png",
 								"devmat": "/assets/img/client/devmat.png",
@@ -1114,6 +1117,8 @@
 					else if (flag.includes("skilledLookouts")) { return 32; }
 					else if (flag.includes("searchlight")) { return 24; }
 					else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+					else if (flag.includes("JetFighter")) { return 60; }
+					else if (flag.includes("CarrierFighter")) { return 6; }
 					else if (flag.includes("NightRecon")) { return 50; }
 					else if (flag.includes("Sonar")) { return 18; }
 					else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
@@ -1536,8 +1541,8 @@
 								// Compute adjusted anti-air power based on known slots
 								const adjShip = AntiAir.abyssalShipAdjustedAntiAir(abyssMaster.api_id);
 								const adjFleet = AntiAir.abyssalShipFleetAdjustedAntiAir(abyssMaster.api_id);
-								$(".ship_stat_min", statBox).text(adjShip === undefined ? "?" : adjShip);
-								$(".ship_stat_max span", statBox).text(adjFleet === undefined ? "?" : adjFleet);
+								$(".ship_stat_min", statBox).text(Object.nullishTo(adjShip, "?"));
+								$(".ship_stat_max span", statBox).text(Object.nullishTo(adjFleet, "?"));
 							} else if(stat[1] === "aaci"){
 								$(".ship_stat_min", statBox).text(abyssMaster.kc3_aaci || "-");
 								$(".ship_stat_max", statBox).hide();
@@ -1551,7 +1556,7 @@
 								$(".ship_stat_min", statBox).text(canOtorp);
 								$(".ship_stat_max", statBox).hide();
 							} else if(stat[1] === "oasw"){
-								$(".ship_stat_min", statBox).text(abyssMaster.kc3_oasw === undefined ? "?" : abyssMaster.kc3_oasw);
+								$(".ship_stat_min", statBox).text(Object.nullishTo(abyssMaster.kc3_oasw, "?"));
 								$(".ship_stat_max", statBox).hide();
 							} else if(stat[1] === "cvnb"){
 								const cvnbType = !abyssMaster.kc3_cvnb ? "-" : {

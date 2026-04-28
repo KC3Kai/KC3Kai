@@ -148,20 +148,17 @@
 				width: 1200,
 				height: 720
 			});
-			$(".dmm-ntgnavi").hide();
-			$(".area-naviapp").hide();
-			$("#ntg-recommend").hide();
-			$("#foot").hide();
-			$("#foot").next().hide();
+			$(".dmm-ntgnavi, .area-naviapp, #ntg-recommend, #foot").hide();
 			$("#w, #main-ntg, #page").css({
 				margin: 0,
 				padding: 0,
 				width: '100%',
 				height: 0
 			});
-			// New styles for post-https play.games.dmm.com lazy loading
+			// New styles for post-https play.games.dmm.com lazy loading, have to either hide them in dmm.css
 			$("#root > .gamesResetStyle").css({ "background-color": 'unset' });
 			$("#root > div > header, #root > div > footer, #root > div > aside").hide();
+			$("#root > div > footer + div, #root > div > footer + * + ul").hide();
 			$(document).on("ready", this.resizeGameFrameFinal);
 			$(window).on("load", this.resizeGameFrameFinal);
 

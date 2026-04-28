@@ -115,7 +115,7 @@ Uses KC3Quest objects to play around with
 			daily: {
 				type: 'daily',
 				key: 'timeToResetDailyQuests',
-				questIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 673, 674, 702],
+				questIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 673, 674, 702, 1166],
 				resetQuests: function () { KC3QuestManager.resetDailies(); },
 				calculateNextReset: function (serverTime) {
 					// JST is +9 GMT, so 05:00 JST === 20:00 UTC
@@ -135,7 +135,7 @@ Uses KC3Quest objects to play around with
 			weekly: {
 				type: 'weekly',
 				key: 'timeToResetWeeklyQuests',
-				questIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 676, 677, 703],
+				questIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 676, 677, 703, 1167],
 				resetQuests: function () { KC3QuestManager.resetWeeklies(); },
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
@@ -252,7 +252,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyApr',
 				key: 'timeToResetYearlyAprQuests',
 				resetMonth: APRIL,
-				questIds: [362, 371],
+				questIds: [362, 371, 1045],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyApr.type);
 				},
@@ -600,17 +600,19 @@ Uses KC3Quest objects to play around with
 			this.resetLoop(this.getRepeatableIds('daily'));
 			
 			// Progress counter reset to 0 even if completed but reward not clicked in a day:
-			// Monthly PvP C8
+			// Monthly PvP Cm1
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29, C38, C42, C44
+			// Quarterly PvP Cq1, Cq2, Cq3, Cq4
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66, C72, Cy11, Cy12, Cy13, Cy14, Cy15, Cy16
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373, 375, 377], false);
+			// Yearly PvP Cy1, Cy2, Cy3, Cy4, Cy5, Cy6, Cy7, Cy8, Cy9, Cy10, Cy11, Cy12, Cy13, Cy14, Cy15, Cy16
+			this.resetCounterLoop([345, 346, 348, 350, 353, 354, 355, 356, 357, 362, 368, 371, 372, 373, 375, 377], false);
+			// Weekly Arsenal Fw5
+			this.resetCounterLoop([1167], false);
 			
 			// Progress counter not changed at all on daily reset:
-			// Monthly PvP C16
+			// Monthly PvP Cm2
 			//this.resetCounterLoop([318], false);
 			
 			this.save();
@@ -1129,6 +1131,12 @@ Uses KC3Quest objects to play around with
 						return fleet.hasShip(85)  // Kirishima
 							&& fleet.hasShip(86)  // Hiei
 							&& fleet.countShipType(2) >= 2;
+					},
+				"1045": // By16 Sortie Fubuki K3+ as flagship, Fubuki-class as 2nd ship
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([1035, 1040], 0) // Fubuki K3/K3Go
+							&& fleet.hasShipClass(12, 1);     // Fubuki-class
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

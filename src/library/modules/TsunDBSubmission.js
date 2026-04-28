@@ -2183,6 +2183,7 @@
 		},
 		
 		sendData: function(payload, type) {
+			if (!PlayerManager.hq.isOfficialServer()) return;
 			//console.debug(JSON.stringify(payload));
 			$.ajax({
 				url: `https://tsundb.kc3.moe/api/${type}`,

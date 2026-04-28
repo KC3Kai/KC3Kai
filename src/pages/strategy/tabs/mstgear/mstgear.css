@@ -67,7 +67,7 @@
 .tab_mstgear .gearInfo .gearAssets {
 	width:370px;
 	height:90px;
-	margin:5px 0 10px 5px;
+	margin:10px 0 10px 5px;
 }
 .tab_mstgear .gearInfo .gearAsset {
 	width:180px;
@@ -196,7 +196,8 @@
 
 .tab_mstgear .gearInfo .equippable .ships > div,
 .tab_mstgear .gearInfo .equippable .exslot > div.reicon,
-.tab_mstgear .gearInfo .equippable .exslot > div.shipiconbox {
+.tab_mstgear .gearInfo .equippable .exslot > div.shipiconbox,
+.tab_mstgear .gearInfo .stockequipment .ships > div.shipiconbox {
 	float:left;
 	width:36px;
 	margin:0 0 1px 0;
@@ -210,13 +211,14 @@
 	margin-top:3px;
 }
 
-.tab_mstgear .gearInfo .equippable .ships > div.incapable > img,
-.tab_mstgear .gearInfo .equippable .exslot > div.incapable > img {
-	opacity:0.5;
+.tab_mstgear .gearInfo .equippable .ships > div.incapable,
+.tab_mstgear .gearInfo .equippable .exslot > div.incapable {
+	opacity:0.7;
 }
 
 .tab_mstgear .gearInfo .equippable .ships > div img,
-.tab_mstgear .gearInfo .equippable .exslot > div img {
+.tab_mstgear .gearInfo .equippable .exslot > div img,
+.tab_mstgear .gearInfo .stockequipment .ships > div img {
 	width:30px;
 	height:30px;
 	vertical-align:top;
@@ -239,4 +241,12 @@
 	line-height:20px;
 	margin:0 0 10px 0;
 	font-size:13px;
+}
+
+.tab_mstgear .gearInfo .stockequipment {
+	margin:0 0 10px 0;
+}
+.tab_mstgear .gearInfo .stockequipment .label,
+.tab_mstgear .gearInfo .equippable .label {
+	color:inherit;
 }

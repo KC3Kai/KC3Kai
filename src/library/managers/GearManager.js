@@ -14,21 +14,21 @@ Saves and loads list to and from localStorage
 		unsetSlotitemByType2: {},
 
 		// These IDs can be updated at `fud_weekly.json`
-		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46,50,51,58],
+		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46,50,51,58,60],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		// Type 21, 22 extended since 2023-02-14
-		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56,57,58,59],
-		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58,91],
+		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56,57,58,59,60],
+		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58,60,91],
 		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,91,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474,541,544,550,551,552],
 		// Modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
-		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,208,224,237,319,320,322,323,343,374,388,404,405,406,433,444,453,454,466,474,475,476,479,481,484,487,490,491,504,545,557,558,559,561,562],
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,208,224,237,319,320,322,323,343,374,388,404,405,406,433,444,453,454,466,474,475,476,479,481,484,487,490,491,504,545,557,558,559,561,562,570],
 		highAltitudeInterceptorIds: [350,351,352],
 		airStrikeBomberType2Ids: [7,8,11,41,47,53,57,58,91],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58,91],
 		aswDepthChargeIds: [226,227,378,439,488],
-		aswDepthChargeProjectorIds: [44,45,287,288,377,472],
+		aswDepthChargeProjectorIds: [44,45,287,288,377,472,569],
 		aswArmorPenetrationIds: [226,227,377,378,439,472,488],
 		interceptorsType3Ids: [38,44,56,57],
 		interceptorsType2Ids: [48],
@@ -50,11 +50,14 @@ Saves and loads list to and from localStorage
 		landBaseHeavyBomberType2Ids: [53],
 		landBaseHeavyBomberSortieFuelCostPerSlot: 2,
 		landBaseHeavyBomberSortieAmmoCostPerSlot: 2,
-		// Jet aircraft mechanism still in progress
 		jetAircraftType2Ids: [56,57,58,59,91],
+		// Jet aircraft mechanism still in progress
+		// steel_consumption for [57] = round(api_cost * current_slot * 0.2)
+		// [91] lb jet ho229 not 0.2, actual 60 =round(14*18*x), x=0.237~0.24?
+		// [56] jet fighter shinden neither, actual 53 =round(10*24*x), x=0.219~0.222?
+		// https://x.com/DjArpeggio/status/2022314062756073586
+		// so this fixed value deprecated, see Meta#jetSteelCostMods
 		jetBomberSteelCostRatioPerSlot: 0.2,
-		// steel_consumption = round(api_cost * current_slot * 0.2)
-		// ho229 not 0.2, actual 60 =round(14*18*x), x=0.237~0.24?
 
 		getLandBaseSlotSize :function(type2Id) {
 			if(KC3GearManager.landBaseReconnType2Ids.includes(type2Id))

@@ -571,6 +571,26 @@ KC3改 Ship Object
 		return [900, 717, 1003, 1008].includes(this.masterId) && this.hasEquipmentType(2, [7, 8, 25, 26]);
 	};
 
+	/**
+	 * @return true if this ship is Kai remodel AR/AS or LHA 2nd Class Transporter with ASW possible gear equipped
+	 * Capable AR/AS ships are: Kai of Akashi, Asahi, Jingei, Chougei, Heianmaru
+	 * Capable LHA ship known: any remodel of No.101 Transport Ship
+	 * Capable ASW gears are: any Depth Charge (Projector), including Type 2 12cm Mortar Kai, Type 2 12cm Mortar Kai (Concentrated Deployment)
+	 */
+	KC3Ship.prototype.isSpecificShipWithAswGear = function(){
+		if(this.isDummy()) return false;
+		return ([187, 958, 639, 640, 949].includes(this.masterId) || this.is2ndClassTransporter())
+			&& this.hasEquipmentType(2, 15);
+	};
+
+	/**
+	 * @return true if this ship is Hiryuu Kai 3 with any bomer/attacker and any ASW Patrol or Autogyro equipped
+	 */
+	KC3Ship.prototype.isHiryuuKai3WithAswPatrol = function(){
+		if(this.isDummy()) return false;
+		return this.masterId === 1031 && this.hasEquipmentType(2, [7, 8, 57]) && this.hasEquipmentType(2, [25, 26]);
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
@@ -667,11 +687,8 @@ KC3改 Ship Object
 			// Is Jet aircraft and left slot > 0
 			if(item.exists() && this.slots[i] > 0 &&
 				KC3GearManager.jetAircraftType2Ids.includes(item.master().api_type[2])) {
-				// Ho229 [jet fighter-bomber (II)] might be different cost
-				const jetBomber2RatioAdditive = KC3Master.equip_type_sp(item.masterId) === 91 ? 0.04 : 0;
 				consumedSteel = Math.round(
-					this.slots[i] * item.master().api_cost
-					* (KC3GearManager.jetBomberSteelCostRatioPerSlot + jetBomber2RatioAdditive)
+					this.slots[i] * item.master().api_cost * KC3Meta.jetSteelCostMods(item.masterId)
 				) || 0;
 				totalSteel += consumedSteel;
 				if(!!currentSortieId) {
@@ -1039,6 +1056,8 @@ KC3改 Ship Object
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+				else if (flag.includes("JetFighter")) { return 60; }
+				else if (flag.includes("CarrierFighter")) { return 6; }
 				else if (flag.includes("NightRecon")) { return 50; }
 				else if (flag.includes("Sonar")) { return 18; }
 				else if (flag.includes("Boiler") || flag.includes("Turbine")) { return 19; }
@@ -2491,9 +2510,9 @@ KC3改 Ship Object
 		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
 			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
-			// get bonus bug? small guns 13.8cm and its kai: https://x.com/kancolle_aki/status/1818138892744454392
+			// small guns get bonus: 13.8cm and its kai: https://x.com/kancolle_aki/status/1818138892744454392
 			const singleMountCnt = this.countEquipment([4, 11]);
-			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407, 518]);
+			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407, 518, 534, 535]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
 			result += lightCruiserBonus;
 		}
@@ -2605,11 +2624,15 @@ KC3改 Ship Object
 				// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
 				// same modifier with regualr air attack for CVNCI
 				const allowedSlotType = (cutinType => {
-					// uncertain: jets counted? not counted since #estimateDayAttackType neither
+					// uncertain: jets counted? not counted since #estimateDayAttackType neither~~
+					// Jet Fighter implemented since 2026-02-13, should be counted
 					switch(cutinType) {
 						case "CutinFDBTB": return [6, 7, 8];
 						case "CutinDBDBTB":
 						case "CutinDBTB": return [7, 8];
+						case "CutinJFJBJB":
+						case "CutinJFJB": return [56, 57];
+						case "CutinJFDBTB": return [56, 7, 8];
 						default: return [];
 					}
 				})(daySpecialAttackType[2]);
@@ -2964,6 +2987,7 @@ KC3改 Ship Object
 				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, 726, 737, // all remodels of Fletcher-class (except Heywood/Leary base)
 				624, // Yuubari Kai Ni D
+				1040, // Fubuki Kai San Go
 			].includes(this.masterId);
 	};
 
@@ -3086,12 +3110,19 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoASW = function(time = "Day") {
 		if(this.isDummy() || this.isAbsent()) { return false; }
+		// Since 2026-01-28, some Kai remodel of AR and AS possible to asw with depth charge,
+		// only when equppied with Type 2 12cm Mortar Kai variants (for now)
+		// https://x.com/KanColle_STAFF/status/2016477841656078794
+		// supposed to share conditions (including night asw) with LHA 2nd Class Transporter
+		if(this.isSpecificShipWithAswGear()) return true;
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.isHayasuiKaiWithTorpedoBomber();
 		const isKagaK2Go = this.masterId === 646;
 		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
-		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru, Shimanemaru
-		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAircraft();
+		// CAV, CVL, BBV, AV, LHA(*), CV(*): CVL-like Hayasui Kai, Kaga Kai Ni Go; Yamashiomaru, Shimanemaru, Hiryuu K3
+		const isAirAntiSubStype = this.isAirAntiSubStype()
+			|| isHayasuiKaiWithTorpedoBomber || isKagaK2Go
+			|| this.isYamashiomaruWithAircraft() || this.isHiryuuKai3WithAswPatrol();
 		if(isAirAntiSubStype) {
 			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertain conditions (using CVL's currently),
 			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
@@ -3105,19 +3136,22 @@ KC3改 Ship Object
 			//  * 2nd Class Transporter do ASW with depth charge equipped.
 			//  * Some Abyssal AV/BBV can do ASW with air attack at night.
 			if(time === "Night") {
-				if(this.is2ndClassTransporter()) return this.hasEquipmentType(2, 15);
 				return isCvlLike && !this.isTaiha() && this.as[1] > 0;
 			}
-			// For day time, false if CVL or CVL-like chuuha
+			// For day time, false if CVL or CVL-like chuuha by day shelling condition,
+			// no necessary to limit it here, since non-CVL like
 			// Yamashiomaru can air attack even taiha, but power calc seems fall back to depth charge?
 			// https://twitter.com/yukicacoon/status/1505719117260550147
 			// If 0 asw stat dive bomber equipped, even no depth charge used
 			// https://twitter.com/CC_jabberwock/status/1650452631398256640
-			if(isCvlLike && this.isStriped()) return false;
+			//if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
-			// or if Fusou-class K2/2nd Class Transporter equipped Depth Charge
+			// or if Fusou-class K2/2nd Class Transporter equipped Depth Charge.
+			// CV Hiryuu K3 implemented since 2026-02-13,
+			// can do ASW airattack when any (jet)bomber/attacker and patrol/autogyro equipped together,
+			// should not set to CVL-like in order to include patrol/autogyro; and no night asw attack
 			return this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(isCvlLike))
-				|| ((isFusouClassKaiNi || this.is2ndClassTransporter()) && this.hasEquipmentType(2, 15));
+				|| (isFusouClassKaiNi && this.hasEquipmentType(2, 15));
 		}
 		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
@@ -3273,7 +3307,9 @@ KC3改 Ship Object
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		// is this ship Nelson-class and not even Chuuha
 		// still okay even 3th and 5th ship are Taiha
-		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
+		// suspected no trigger if remaining ammo is zero:
+		// https://x.com/CC_jabberwock/status/2020912627766133161
+		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet, which min 6 surface ships needed
 			// https://twitter.com/kurosg/status/1401491454732607492
@@ -3300,7 +3336,7 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon (forward) formation selected.
 	 * 2nd ship is a battleship, Chuuha ok, Taiha no good.
-	 * No trigger found in battle of player CTF vs abyssal single fleet.
+	 * No trigger found in battle of player CTF vs abyssal single fleet. (fixed?)
 	 *
 	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
 	 *   + Math.ceil(total ammo cost of this battle (yasen may included) / 2)
@@ -3314,7 +3350,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoNagatoClassCutin = function(flagShipIds = KC3Meta.nagatoClassCutinShips) {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(flagShipIds.includes(this.masterId) && !this.isStriped()) {
+		if(flagShipIds.includes(this.masterId) && !this.isStriped() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -3417,7 +3453,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.canDoColoradoCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		// is this ship Colorado-class and not even Chuuha
-		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
+		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -3488,8 +3524,8 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
-	 * 2nd ship is healthy one of the following:
+	 * Flagship is ~~healthy~~ Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
+	 * 2nd ship is ~~healthy~~ one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2+ (extended) / Kirishima K2C (extended) / Warspite / Valiant
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2+ (extended) / Haruna K2B/C (extended)
 	 *   * Haruna K2B/C flagship: Kongou K2C / Hiei K2C (added since 2023-05-01) / Kirishima K2C (extended)
@@ -3500,7 +3536,7 @@ KC3改 Ship Object
 	 * ~~And it's impossible to be triggered after any other daytime Big-7 special cutin,
 	 * because all ship-combined spcutins only trigger 1-time per sortie?~~
 	 * It's possible to be triggered after other daytime special cutins since 2021-08-04 update,
-	 * and it's allowed to be triggered twice per sortie, unlike other ones only once.
+	 * and it's allowed to be triggered twice (3 times since 2026-04-23) per sortie, unlike other ones only once.
 	 * Triggering counters & conditions of this one are separated from other cutins.
 	 *
 	 * The additional 30% ammo consumption, see:
@@ -3508,7 +3544,9 @@ KC3改 Ship Object
 	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
 	 * Ammo consumption reduced to 20% since 2021-08-04:
 	 *   * https://twitter.com/yukicacoon/status/1422899332219502596
-	 * Power modifier increased since 2022-06-08
+	 * Ammo again reduced to 10% since 2026-04-23
+	 * Power modifier increased since 2022-06-08, and again since 2026-04-23
+	 * Possible to trigger on chuuha since 2026-04-23
 	 *
 	 * @return true if this ship (Kongou-class K2C) can do special cut-in attack.
 	 * @see https://kancolle.fandom.com/wiki/Kongou/Special_Cut-In
@@ -3516,8 +3554,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoKongouCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Kongou-class K2C(K2B) and not even Chuuha
-		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isStriped()) {
+		// is this ship Kongou-class K2C(K2B) and not ~~even Chuuha~~ Taiha
+		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isTaiha() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
 				&& (!PlayerManager.combinedFleet || fleetNum !== 1)) {
@@ -3525,7 +3563,7 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd ship is valid partner and not even Chuuha
+					// 2nd ship is valid partner and not ~~even Chuuha~~ Taiha
 					validCombinedShips = ({
 						// Kongou K2C: Hiei K2C, Haruna K2+, Kirishima K2C, Warspite, Valiant
 						"591": [592, 151, 593, 954, 694, 439, 364, 927, 733],
@@ -3538,7 +3576,7 @@ KC3改 Ship Object
 						// Kirishima K2C: Kongou K2C, Hiei K2C, Haruna K2B/C, South Dakota Kai
 						"694": [591, 592, 593, 954, 697],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
-						&& !fleetObj.ship(1).isStriped(),
+						&& !fleetObj.ship(1).isTaiha(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
 				return isFormationAllowed && validCombinedShips && hasFiveSurfaceShips;
@@ -3557,6 +3595,7 @@ KC3改 Ship Object
 	 * Buffed again to 2.6~2.7 since 2024-09-24: https://x.com/hedgehog_hasira/status/1838951859605983678
 	 *  * K2 & K3 Dazzle added since 2024-09-24: https://x.com/yukicacoon/status/1839959049791778912
 	 *  * thread of verifications: https://x.com/CC_jabberwock/status/1842239909274534271
+	 * Buffed again additional x1.06 since 2026-04-23: https://x.com/hedgehog_hasira/status/2047906206652813322
 	 */
 	KC3Ship.prototype.estimateKongouCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3566,7 +3605,7 @@ KC3改 Ship Object
 
 		// All capable ships applied, including K2, K2B and Warspite, despite only K2C mentioned by announcement
 		const targetShip = locatedFleet.ship(forShipPos);
-		const baseModifier = forShipPos === 0 ? 2.6 : 2.7;
+		const baseModifier = (forShipPos === 0 ? 2.6 : 2.7) * 1.06;
 		const twin356Group1Count = targetShip.countEquipment([329 /* K2 */, 502 /* K3 Dazzle */]),
 			twin356Group2Count = targetShip.countEquipment([503 /* K4 */, 530 /* K3C */]);
 		const twin356gunsMod1 = [1, 1.05, 1.08][twin356Group1Count] || 1.08;
@@ -3634,7 +3673,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.canDoYamatoClassCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		// is this ship healthy Musashi K2
-		if(KC3Meta.musashiCutinShips.includes(this.masterId) && !this.isStriped()) {
+		if(KC3Meta.musashiCutinShips.includes(this.masterId) && !this.isStriped() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -3751,7 +3790,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoRichelieuClassCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(KC3Meta.richelieuClassCutinShips.includes(this.masterId) && !this.isStriped()) {
+		if(KC3Meta.richelieuClassCutinShips.includes(this.masterId) && !this.isStriped() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -3789,7 +3828,7 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.canDoQueenElizabethClassCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(KC3Meta.queenElizabethClassCutinShips.includes(this.masterId) && !this.isStriped()) {
+		if(KC3Meta.queenElizabethClassCutinShips.includes(this.masterId) && !this.isStriped() && this.ammo > 0) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -4088,9 +4127,19 @@ KC3改 Ship Object
 			// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
 			// https://twitter.com/_Kotoha07/status/907598964098080768
 			// https://twitter.com/arielugame/status/908343848459317249
-			const fighterCnt = this.countNonZeroSlotEquipmentType(2, 6);
+			const fighterCnt = this.countNonZeroSlotEquipmentType(2, [6, 56]);
 			const diveBomberCnt = this.countNonZeroSlotEquipmentType(2, 7);
 			const torpedoBomberCnt = this.countNonZeroSlotEquipmentType(2, 8);
+			// Jet fighter implemented since 2023-02-13, 3 new types added
+			// https://x.com/CC_jabberwock/status/2030343554779033680
+			const jetFighterCnt = this.countNonZeroSlotEquipmentType(2, 56);
+			const jetFighterbomberCnt = this.countNonZeroSlotEquipmentType(2, 57);
+			if(jetFighterCnt >= 1 && jetFighterbomberCnt >= 2)
+				results.push(KC3Ship.specialAttackTypeDay(7, "CutinJFJBJB", 1.35));
+			if(jetFighterCnt >= 1 && jetFighterbomberCnt >= 1)
+				results.push(KC3Ship.specialAttackTypeDay(7, "CutinJFJB", 1.3));
+			if(jetFighterCnt >= 1 && diveBomberCnt >= 1 && torpedoBomberCnt >= 1)
+				results.push(KC3Ship.specialAttackTypeDay(7, "CutinJFDBTB", 1.27));
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1 && fighterCnt >= 1)
 				results.push(KC3Ship.specialAttackTypeDay(7, "CutinFDBTB", 1.25));
 			if(diveBomberCnt >= 2 && torpedoBomberCnt >= 1)
@@ -4596,7 +4645,7 @@ KC3改 Ship Object
 		const equipLoS = this.equipmentTotalStats("saku", true, false);
 		const battleConds = this.collectBattleConditions();
 		// assume to best condition AS+ by default (for non-battle)
-		const airBattleId = battleConds.airBattleId == undefined ? 1 : battleConds.airBattleId;
+		const airBattleId = Object.nullishTo(battleConds.airBattleId, 1);
 		const baseValue = airBattleId === 1 ? adjLuck + 0.7 * (adjFleetLoS + 1.6 * equipLoS) + 10 :
 			airBattleId === 2 ? adjLuck + 0.6 * (adjFleetLoS + 1.2 * equipLoS) : 0;
 		return {
@@ -4780,6 +4829,9 @@ KC3改 Ship Object
 			5: 140, // MainApshell (main+sec+apshell)
 			6: 150, // MainMain (main+main+apshell)
 			7: ({
+				"CutinJFJBJB": 135,
+				"CutinJFJB"  : 125,
+				"CutinJFDBTB": 115,
 				"CutinFDBTB" : 125,
 				"CutinDBDBTB": 140,
 				"CutinDBTB"  : 155,

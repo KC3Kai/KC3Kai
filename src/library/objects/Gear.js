@@ -457,7 +457,7 @@ KC3改 Equipment Object
 					case 21: // AA Machine Gun
 						modifier = 0.5; break;
 				}
-				// Test only return 1 decimal for expeditions
+				// Tests only return 1 decimal for expeditions
 				// https://twitter.com/myteaGuard/status/1375386223217238017
 				return Math.qckInt("floor", modifier * Math.sqrt(stars), 1);
 			default:
@@ -507,7 +507,7 @@ KC3改 Equipment Object
 				break;
 			case "asw":
 				// Sonar
-				if([14, 40].includes(type2))
+				if([14, 15, 40].includes(type2))
 					modifier = 1.3;
 				break;
 			case "support":

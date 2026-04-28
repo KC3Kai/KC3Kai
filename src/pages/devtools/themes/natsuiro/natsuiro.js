@@ -1418,11 +1418,11 @@
 					friendFleetRequestTips,
 					homePortTimeTips,
 					"{0}: {1}".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank),
-					resetTimeTips].join("\n")
+					resetTimeTips].filter(s => !!s).join("\n")
 				);
 			} else {
 				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title",
-					[friendFleetRequestTips, homePortTimeTips, resetTimeTips].join("\n"));
+					[friendFleetRequestTips, homePortTimeTips, resetTimeTips].filter(s => !!s).join("\n"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -1570,10 +1570,11 @@
 					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
 					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
-			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0) + (PlayerManager.consumables.arsenalMaterial || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5}".format(
 					PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71),
-					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100)
+					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100),
+					PlayerManager.consumables.arsenalMaterial || 0, KC3Meta.useItemName(104)
 				));
 			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
@@ -4118,6 +4119,7 @@
 						tabPath: "akashi"
 					})).execute();
 				});
+			$(".remodel_footer .owned_arsenal span", remodelListBox).text(PlayerManager.consumables.arsenalMaterial || 0);
 			$(".remodel_footer .owned_devmats span", remodelListBox).text(PlayerManager.consumables.devmats);
 			$(".remodel_footer .owned_screws span", remodelListBox).text(PlayerManager.consumables.screws);
 			$(".remodel_slotlist", remodelListBox).empty();
@@ -4151,6 +4153,7 @@
 						tabPath: "akashi"
 					})).execute();
 				});
+			$(".remodel_footer .owned_arsenal span", remodelDetailBox).text(PlayerManager.consumables.arsenalMaterial || 0);
 			$(".remodel_footer .owned_devmats span", remodelDetailBox).text(PlayerManager.consumables.devmats);
 			$(".remodel_footer .owned_screws span", remodelDetailBox).text(PlayerManager.consumables.screws);
 			const recipeDetail = data.cachedRecipes[data.recipeId];
@@ -4292,6 +4295,7 @@
 						tabPath: "akashi"
 					})).execute();
 				});
+			$(".remodel_footer .owned_arsenal span", remodelResultBox).text(PlayerManager.consumables.arsenalMaterial || 0);
 			$(".remodel_footer .owned_devmats span", remodelResultBox).text(PlayerManager.consumables.devmats);
 			$(".remodel_footer .owned_screws span", remodelResultBox).text(PlayerManager.consumables.screws);
 			const recipeDetail = data.cachedRecipes[data.recipeId];
@@ -4321,6 +4325,58 @@
 			} else {
 				$(".remodel_upgrade_title", remodelResultBox).hide();
 				$(".remodel_upgrade_to", remodelResultBox).hide();
+			}
+			$(".module.activity .activity_remodel").createChildrenTooltips();
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hideChildrenTooltips();
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_remodel .remodelList").hide();
+			$(".module.activity .activity_remodel .remodelDetail").hide();
+			$(".module.activity .activity_remodel .remodelResult").show();
+			$(".module.activity .activity_remodel").fadeIn(500);
+		},
+
+		GearRemodelReset: function(data){
+			const remodelResultBox = $(".activity_remodel .remodelResult");
+			const result = data.currentResult;
+			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
+			$(".remodel_header .result_title", remodelResultBox).html(KC3Meta.term(
+				!result.api_recover_flag ? "RemodelItemResetFailure" : "RemodelItemResetSuccess"
+			)).toggleClass("failure", !result.api_recover_flag);
+			$(".remodel_header .assistant_ship img", remodelResultBox)
+				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
+				.attr("title", KC3Meta.shipName(shipId));
+			$(".remodel_header", remodelResultBox).addClass("hover").off("click")
+				.on("click", function(e) {
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "akashi"
+					})).execute();
+				});
+			$(".remodel_footer .owned_arsenal span", remodelResultBox).text(PlayerManager.consumables.arsenalMaterial || 0);
+			$(".remodel_footer .owned_devmats span", remodelResultBox).text(PlayerManager.consumables.devmats);
+			$(".remodel_footer .owned_screws span", remodelResultBox).text(PlayerManager.consumables.screws);
+			if(result.api_recover_flag) {
+				const afterRemodelSlot = result.api_after_slot;
+				if(afterRemodelSlot) {
+					const afterItemBox = $("#factory .remodelSlotItem").clone();
+					fillRemodelSlotItemBox(this, afterItemBox, {
+						api_slot_id: afterRemodelSlot.api_slotitem_id, noReqs: true
+					}, undefined, undefined);
+					$(".remodel_upgrade_title", remodelResultBox).hide();
+					$(".remodel_upgrade_to", remodelResultBox).empty().append(afterItemBox).show();
+				} else {
+					$(".remodel_upgrade_title", remodelResultBox).hide();
+					$(".remodel_upgrade_to", remodelResultBox).hide();
+				}
+			} else {
+				const gearObj = KC3GearManager.get(data.rosterId);
+				const beforeItemBox = $("#factory .remodelSlotItem").clone();
+				fillRemodelSlotItemBox(this, beforeItemBox, {
+					api_slot_id: gearObj.masterId, noReqs: true
+				}, undefined, data.lastStars);
+				$(".remodel_upgrade_title", remodelResultBox).hide();
+				$(".remodel_upgrade_to", remodelResultBox).empty().append(beforeItemBox).show();
 			}
 			$(".module.activity .activity_remodel").createChildrenTooltips();
 			$(".module.activity .activity_tab").removeClass("active");

@@ -379,6 +379,8 @@ Previously known as "Reactor"
 					case 100:PlayerManager.consumables.overseaTechMaterial = thisItem.api_count; break;
 					case 101:PlayerManager.consumables.nightSkilledCrew = thisItem.api_count; break;
 					case 102:PlayerManager.consumables.airUnitRation = thisItem.api_count; break;
+					case 103:PlayerManager.consumables.arsenalKey = thisItem.api_count; break;
+					case 104:PlayerManager.consumables.arsenalMaterial = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
 					//     moved to 898 since 2025-08-27, then
 					//     for max gear slots extending card assets as quest rewards
@@ -2333,7 +2335,7 @@ Previously known as "Reactor"
 				utcHour      = Date.toUTChours(headers.Date);
 			var lastSuccessRosterId = null, lastSuccessMasterId = null;
 			const devmatsBefore = PlayerManager.consumables.devmats;
-			const devmatsAfter = (materials && materials[6]) || devmatsBefore;
+			const devmatsAfter = (materials && materials[6]) || 0;
 			
 			if(Array.isArray(itemsCreated)) {
 				itemsCreated.forEach(item => {
@@ -2939,6 +2941,7 @@ Previously known as "Reactor"
 				break;
 				// see also `main.js#ConfirmView.prototype.initialize` next to `SetsubunUseDialog`
 				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
+					// 2 beans with a T95 Depth Charge as a choice in 2026
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
 				case 82: // exchange 4 beans with a setsubun furniture in 2019
@@ -2948,12 +2951,14 @@ Previously known as "Reactor"
 					// 10 beans + 8 devmats with a Type 97 Torpedo Bomber (Skilled) in 2023
 					// 16 beans + 35 devmats with a Special Type 2 Amphibious Landing Craft in 2024
 					// 18 beans with a New Model Aircraft Blueprint in 2025
+					// 5 beans with 5 T3 Sonars or 3 T3 Sonars or 2 T3 DC Projectors in 2026
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
 					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					// 20 beans + 40 devmats with a Ginga in 2021 (once)
 					// 20 beans with a Blueprint in 2022, 2023, 2024 and 2025
+					// 12 beans with a New Model Aircraft Blueprint in 2026
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
 				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
@@ -2962,6 +2967,7 @@ Previously known as "Reactor"
 					// 30 beans + 60 devmats with a Type 4 Heavy Bomber Hiryuu (Skilled) in 2023 (once)
 					// 32 beans + 70 devmats with a Ginga (Skilled) in 2024 (once)
 					// 33 beans + 80 devmats with a Toukai (901 Air Group) in 2025 (once)
+					// 34 beans + 48 devmats with a Prototype Shinden (Land-based Interceptor) in 2026 (once) 
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
@@ -3176,14 +3182,46 @@ Previously known as "Reactor"
 			PlayerManager.setResources(hour * 3600, result.api_after_material.slice(0, 4));
 			PlayerManager.consumables.devmats = result.api_after_material[6];
 			PlayerManager.consumables.screws = result.api_after_material[7];
+			if(recipe.api_req_useitem_id == 104)
+				PlayerManager.consumables.arsenalMaterial -= recipe.api_req_useitem_num || 0;
+			if(recipe.api_req_useitem_id2 == 104)
+				PlayerManager.consumables.arsenalMaterial -= recipe.api_req_useitem_num2 || 0;
 			// TODO update useitems if no /useitem call followed
 			PlayerManager.setConsumables();
 			KC3QuestManager.get(619).increment();
+			KC3QuestManager.get(1166).increment();
+			KC3QuestManager.get(1167).increment();
 			
 			KC3Network.trigger("GearRemodel", recipes);
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Quests");
+		},
+		/* Equipment Arsenal Improvement Removal
+		-------------------------------------------------------*/
+		"api_req_kousyou/remodel_slot_recover":function(params, response, headers){
+			const recipes = this.remodelRecipes,
+				recipeId = parseInt(params.api_menu_id),
+				rosterId = parseInt(params.api_slot_id),
+				devmats = parseInt(params.api_dev_num),
+				result = response.api_data;
+			const gear = KC3GearManager.get(rosterId);
+			recipes.currentResult = result;
+			recipes.recipeId = recipeId;
+			recipes.rosterId = rosterId;
+			recipes.devmats = devmats;
+			recipes.lastStars = gear.stars;
+			const success = !!result && result.api_recover_flag == 1;
+			if(success && result.api_after_slot){
+				// Afterthen gear.stars will be 0, lastStars should be used if needed
+				KC3GearManager.set([ result.api_after_slot ]);
+				PlayerManager.consumables.devmats -= devmats || 1;
+			}
+			console.log("Improvement removal", (success ? "succeeded" : "failed"), recipeId, rosterId, recipes.lastStars, devmats);
+			PlayerManager.consumables.arsenalMaterial -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("GearRemodelReset", recipes);
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* List current available musics in Jukebox
@@ -3361,6 +3399,11 @@ Previously known as "Reactor"
 					[975,2,[3,2], true, true], // By12: 3rd requirement: [W3-2] S-rank the boss node
 					[975,3,[5,3], true, true], // By12: 4th requirement: [W5-3] S-rank the boss node
 					[1012,0,[1,1], true, true], // By14: 1st requirement: [W1-1] S-rank the boss node 3 times
+					[1045,0,[7,5], true, true, [24,25]], // By16: 1st requirement: [W7-5-T] S-rank 3rd boss node
+					[1045,1,[5,1], true, true], // By16: 2nd requirement: [W5-1] S-rank the boss node
+					[1045,2,[5,3], true, true], // By16: 3rd requirement: [W5-3] S-rank the boss node
+					[1045,3,[5,4], true, true], // By16: 4th requirement: [W5-4] S-rank the boss node
+					[1045,4,[5,5], true, true], // By16: 5th requirement: [W5-5] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

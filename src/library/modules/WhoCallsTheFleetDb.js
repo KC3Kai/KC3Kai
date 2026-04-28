@@ -3,7 +3,7 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
-		expectedShipCount: 834,
+		expectedShipCount: 839,
 		expectedItemCount: 523,
 		init: function(repo) {
 			var self = this;
@@ -65,6 +65,18 @@
 				function(p, c){
 					if(!!c) return p+1; else return p;
 				}, 0) : false;
+		},
+
+		findShipsWithStockEquipment: function(gearId) {
+			const shipList = [];
+			$.each(this.db, (eid, entry) => {
+				if (eid.startsWith("s")) {
+					const stockArr = entry.equip || [];
+					if (stockArr.includes(Number(gearId)))
+						shipList.push(Number(eid.substr(1)));
+				}
+			});
+			return shipList;
 		},
 
 		getLoSInfo: function(shipId) {

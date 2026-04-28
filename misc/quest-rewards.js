@@ -5,7 +5,7 @@
 fetch("https://kcrdb.hitomaru.dev/quests/data?state=0,1&sort=api_no").then((resp) => (resp.ok && resp.json())).then((o) => { quests=o; dupes=o.items.filter(q => q.api_select_rewards).map(({api_no, api_title, api_select_rewards}) => ({api_no, api_title, api_select_rewards})); console.debug(quests, dupes); })
 
 // compile known selectable rewards
-rewards={}; dupes.map(q => q.api_select_rewards.map(g => g.map(o => (((o.api_kind==11 ? KC3Meta.shipNameById(o.api_mst_id) : o.api_kind==12 ? KC3Meta.gearNameById(o.api_mst_id) : o.api_kind==13 ? KC3Meta.useItemName(o.api_mst_id) : o.api_kind==14 ? KC3Master.furniture(o.api_mst_id).api_title :"")||[o.api_kind,o.api_mst_id].join("="))+" x"+o.api_count+(o.api_slotitem_level?" \u2605+"+o.api_slotitem_level:"") )))).forEach((r,i) => { rewards[dupes[i].api_no] = r}); console.debug(rewards);
+rewards={}; dupes.map(q => q.api_select_rewards.map(g => g.map(o => (((o.api_kind==11 ? KC3Meta.shipNameById(o.api_mst_id) : o.api_kind==12 ? KC3Meta.gearNameById(o.api_mst_id) : o.api_kind==13 ? KC3Meta.useItemName(o.api_mst_id) : o.api_kind==14 ? KC3Master.furniture(o.api_mst_id).api_title :"")||[o.api_kind,o.api_mst_id].join("="))+(o.api_slotitem_level?"\\u2605+"+o.api_slotitem_level:"")+"x"+o.api_count )))).forEach((r,i) => { rewards[dupes[i].api_no] = r}); console.debug(rewards);
 copy(JSON.stringify(rewards,null,"\t"))
 
 // check id diff for new quests
@@ -18,7 +18,7 @@ copy(voices);
 
 // check text diff for correcting jp json
 fetch("https://kcrdb.hitomaru.dev/quests/data?state=0,2").then(resp => (resp.ok && resp.json())).then(o => { quests=o; console.debug(quests); });
-diff=quests.items.filter(q => { m = KC3Meta.quest(q.api_no); return m.name != q.api_title || m.desc.replace(/<br>/g,'') != q.api_detail.replace(/<br>/g,''); }).map(q => ({ id:q.api_no, name:q.api_title, desc:q.api_detail, memo:'title diff='+(q.api_title != KC3Meta.quest(q.api_no).name), hash:q.api_title.hashCode() })); console.debug(diff);
+diff=quests.items.filter(q => { m=KC3Meta.quest(q.api_no); return m.name!=q.api_title || m.desc.replace(/<br>/g,'')!=q.api_detail.replace(/<br>/g,''); }).map(q => ({ id:q.api_no, name:q.api_title, desc:q.api_detail, memo:'title diff='+(q.api_title!=KC3Meta.quest(q.api_no).name)+'|'+q.api_detail.replace(/<br>/g,''), hash:q.api_title.hashCode() })); diff.forEach(q => { Object.values(KC3Master._raw.mapinfo).sort((a,b) => b.api_name.length-a.api_name.length).forEach(m => { q.memo=q.memo.replace(m.api_name, [m.api_maparea_id,m.api_no].join('-')); }); }); console.debug(diff);
 copy(diff)
 
 // check fixed rewards

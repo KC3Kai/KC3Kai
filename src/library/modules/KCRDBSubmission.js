@@ -24,7 +24,7 @@
     "637": "勲章x2消費：「鳳翔」秘書艦に練度max及び改修max「九六式艦戦」を搭載、熟練搭乗員を養成せよ！<br>(任務達成後、部隊は消滅します)",
     "1123": "旗艦「利根改二」または「由良改二」第一スロに最大改修「零式水上偵察機」。「九七式艦攻(九三一空)」<br>x2廃棄、ボーキ950、新型航空兵装資材x2、開発資材x35、熟練搭乗員x2を準備！",
   };
-  const akashiRecipesToIgnore = [101, 201, 301];
+  const akashiRecipesToIgnore = [101, 201, 301, 306];
 
   const apis = {
     "api_get_member/questlist": [processQuestList],
@@ -33,6 +33,7 @@
     "api_req_kousyou/remodel_slotlist": [processRemodelSlotList],
     "api_req_kousyou/remodel_slotlist_detail": [processRemodelSlotListDetail],
     "api_req_kousyou/remodel_slot": [processRemodelSlot],
+    "api_req_kousyou/remodel_slot_recover": [processRemodelSlotRecover],
   };
 
   let prevQuestIdList = [], prevAllQuestsHash = false, alterQuestDetected = false;
@@ -50,6 +51,7 @@
     completeCallback = (xhr) => { },
     successCallback = (data) => { },
     errorCallback = (xhr, statusText, httpError) => { }) {
+    if (!PlayerManager.hq.isOfficialServer()) return;
     const url = new URL(path, baseUrl);
     return $.ajax({
       async: true,
@@ -148,7 +150,7 @@
   function processRemodelSlotList(har) {
     const list = prepareRemodelBasicInfo(har);
     list.data = har.response.api_data;
-    if (list.flag_ship_id && list.data) {
+    if (list.flag_ship_id && list.helper_ship_id && list.data) {
       postData("remodel_slotlist", list);
     }
   }
@@ -165,7 +167,7 @@
     item.data = har.response.api_data;
 
     // Skip submission on invalid states, default recipes
-    if (item.flag_ship_id && item.data && gearObj.exists()
+    if (item.flag_ship_id && item.helper_ship_id && item.data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id)) {
       postData("remodel_slotlist_detail", item);
     }
@@ -189,7 +191,7 @@
     const isSuccess = !!item.data.api_remodel_flag;
     if (isSuccess) {
       const [idBefore, idAfter] = item.data.api_remodel_id;
-      // Fix item id and stars pre-improvement, since submission run after KC3GearManager's update
+      // Fix item id and stars pre-improvement, since submissions run after KC3GearManager's update
       item.api_slot_id = idBefore;
       item.api_slot_level = idBefore !== idAfter ? 10 : item.data.api_after_slot.api_level - 1;
       // Remove item member IDs, lock state, and aircraft proficiency
@@ -203,9 +205,27 @@
     }
 
     // Skip submission on invalid states, default recipes, and failed improvement
-    if (item.flag_ship_id && har.response.api_data && gearObj.exists()
+    if (item.flag_ship_id && item.helper_ship_id && har.response.api_data && gearObj.exists()
       && !akashiRecipesToIgnore.includes(item.api_id) && isSuccess) {
       postData("remodel_slot", item);
+    }
+  }
+
+  /**
+   * On akashi improvement stars removal procceeded
+   */
+  function processRemodelSlotRecover(har) {
+    const item = prepareRemodelBasicInfo(har);
+    item.api_id = Number(har.params.api_menu_id);
+    const gearObj = KC3GearManager.get(har.params.api_slot_id);
+    item.api_slot_id = gearObj.masterId;
+    // Have to get previous stars from cached value since submissions run after KC3GearManager's update
+    item.api_slot_level = gearObj.stars || Kcsapi.remodelRecipes.lastStars || 0;
+    item.api_dev_num = Number(har.params.api_dev_num);
+    item.api_recover_flag = (har.response.api_data || {}).api_recover_flag || 0;
+    // Does not skip submission on akashi-only recipes, main purpose to investigate success rate
+    if (item.flag_ship_id && item.api_slot_level && har.response.api_data && gearObj.exists()) {
+      postData("remodel_slot_recover", item);
     }
   }
 

@@ -239,6 +239,11 @@ Object.assignIfDefined = function(target, key, value) {
 	}
 	return target;
 };
+/** a method like nullish coalescing operator, to avoid unexpected result on `||` for all fasly values */
+// assuming you have known the differences between fasly and nullish, and wanna `??` instead of `||`
+Object.nullishTo = function(value, valueIfNullish) {
+	return value !== undefined && value !== null ? value : valueIfNullish;
+};
 /**
  * Checks object paths of any depth is valid, like `lodash.hashPathIn`.
  */

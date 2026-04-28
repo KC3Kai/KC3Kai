@@ -166,8 +166,8 @@
 					// KC3 configurations
 					"config", "expedConfig", "expedTab",
 					"goalTemplates", "goals", "planes", "player",
-					"savedFleets", "srExpcalc", "srExpedscorer", "srShiplist", "srShowcase",
-					"srAkashiPriorities", "srJukebox",
+					"savedFleets", "srExpcalc", "srExpedscorer", "srShiplist", "srGearList",
+					"srShowcase", "srAkashiPriorities", "srJukebox",
 					// history/cached in-game data
 					"fleets", "gears", "ships", "bases", "maps", "pictureBook", "quests",
 					// other keys are cache data can be auto rebuilt on game start

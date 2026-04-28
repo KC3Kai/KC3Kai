@@ -117,6 +117,10 @@
                     return 65;
                 case 145: // Shigure K2
                     return 77;
+                case 688: // Hayanami Kai
+                    return 78;
+                case 718: // Tamanami Kai
+                    return 81;
                 case 202: // Shirayuki
                 case 208: // Shikinami
                 case 225: // Kagerou
@@ -228,6 +232,12 @@
                     return 12;
                 case 1001: // Kirov
                     return 26;
+                case 196: // Hiryuu Kai Ni
+                    return 220;
+                case 426: // Fubuki Kai Ni
+                    return 280;
+                case 1035: // Fubuki Kai San
+                    return 320;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -373,6 +383,10 @@
                     return 50;
                 case 392: // Richelieu Kai
                     return 120;
+                case 426: // Fubuki Kai Ni
+                    return 800;
+                case 1035: // Fubuki Kai San
+                    return 1946;
                 default:
                     return 0;
             }
@@ -402,6 +416,13 @@
                 default: return 0;
             }
         },
+        calcArsenalMat: function(ship_id_from) {
+            switch(ship_id_from) {
+                case 1035: // to Fubuki K3Go (T6)
+                    return 5;
+                default: return 0;
+            }
+        },
         mkDb: function(masterData, isRaw) {
             var self = this;
             // step 1: collect remodel info
@@ -420,6 +441,7 @@
                  , armmat: Int
                  , boiler: Int
                  , techmat: Int
+                 , arsenalmat: Int
                  , devmat: Int
                  , screw: Int
                  , torch: Int
@@ -458,6 +480,7 @@
                       armmat: 0,
                       boiler: 0,
                       techmat: 0,
+                      arsenalmat: 0,
                       devmat: 0,
                       screw: 0,
                       torch: 0
@@ -467,6 +490,7 @@
                 remodel.screw = self.calcScrew(remodel.ship_id_from);
                 remodel.torch = self.calcTorch(remodel.ship_id_from);
                 remodel.gunmat = self.calcGunMat(remodel.ship_id_from);
+                remodel.arsenalmat = self.calcArsenalMat(remodel.ship_id_from);
                 remodelInfo[x.api_id] = remodel;
 
             });

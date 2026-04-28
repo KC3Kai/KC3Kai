@@ -121,8 +121,10 @@
 				} else {
 					$(".tab_mstgear .gearInfo .ga_5, .tab_mstgear .gearInfo .ga_6").hide();
 				}
+				$(".tab_mstgear .gearInfo .equippable").show();
 				$(".tab_mstgear .gearInfo .gearAssets").show();
 			} else {
+				$(".tab_mstgear .gearInfo .equippable").hide();
 				// Map a abyssal gear to player gear for itemup image,
 				// see `SlotLoader.prototype.add` or `ResourceManager.prototype.getSlotitem`
 				const replacedId = KC3Meta.abyssalItemupReplace[gearId];
@@ -266,6 +268,14 @@
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstgear .gearInfo .stats");
 			
+			const shipClickFunc = function(e) {
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
+			const orderByRemodel = (a, b) => (
+				RemodelDb.originOf(a) - RemodelDb.originOf(b)
+				|| RemodelDb.remodelGroup(a).indexOf(a) - RemodelDb.remodelGroup(b).indexOf(b)
+				|| a - b
+			);
 			// Equippable ship types / ships
 			$(".tab_mstgear .gearInfo .equippable > div").empty();
 			const equipOn = KC3Master.equip_on(gearId);
@@ -276,25 +286,19 @@
 					stypeBox.attr("stype", stypeDef.id).text(stypeDef.name);
 					stypeBox.toggleClass("capable", equipOn.stypes.includes(stypeDef.id));
 				});
-				const shipClickFunc = function(e) {
-					KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
-				};
-				const orderByRemodel = (a, b) => (
-					RemodelDb.originOf(a) - RemodelDb.originOf(b)
-					|| RemodelDb.remodelGroup(a).indexOf(a) - RemodelDb.remodelGroup(b).indexOf(b)
-					|| a - b
-				);
 				const addEquipShips = (shipIdArr, appendTo, isIncapable = false) => {
 					if(!Array.isArray(shipIdArr) || !shipIdArr.length) return;
 					shipIdArr.sort(orderByRemodel).forEach(shipId => {
 						const shipBox = $("<div class='shipiconbox'><img/></div>").appendTo(appendTo);
 						shipBox.attr("masterId", shipId).toggleClass("incapable", isIncapable);
 						const shipMst = KC3Master.ship(shipId);
+						const remodelLv = RemodelDb.lowestLevel(shipId);
 						$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 							.attr("alt", shipId).addClass("hover").click(shipClickFunc)
-							.attr("title", "[{0}] {1} {2}".format(shipId,
+							.attr("title", "[{0}] {1} {2} {3}".format(shipId,
 								KC3Meta.shipName(shipMst.api_id),
-								KC3Meta.stype(shipMst.api_stype)
+								KC3Meta.stype(shipMst.api_stype),
+								remodelLv > 1 ? KC3Meta.term("LevelShort") + remodelLv : ""
 							)).lazyInitTooltip();
 					});
 				};
@@ -317,7 +321,7 @@
 				const reIcon = $('<div class="reicon"><img src="/assets/img/useitems/64.png" /></div>');
 				reIcon.toggleClass("incapable", !equipOn.exslot)
 					.toggle(equipOn.exslot || hasExslotCapableShips || hasExslotCapableStypes)
-					.attr("title", "[Lighted] Capable on ex-slot of ships or types above\n[Greyed] Capable on ex-slot of following ships or types")
+					.attr("title", KC3Meta.term("MasterGearReIconTip"))
 					.lazyInitTooltip()
 					.appendTo(".tab_mstgear .gearInfo .equippable .exslot");
 				if(equipOn.exslotMinStars > 0) reIcon.append($('<div class="star">').text(
@@ -329,6 +333,30 @@
 				);
 				addEquipShips(exslotIncapableShips, ".tab_mstgear .gearInfo .equippable .exslot", true);
 				if(hasExslotCapableStypes) addEquipStypes(equipOn.exslotStypes, ".tab_mstgear .gearInfo .equippable .exslot");
+			}
+			
+			// Index of ships with stock equipment including current gear
+			const stockShips = KC3Master.isAbyssalGear(gearId) ? [] :
+				WhoCallsTheFleetDb.findShipsWithStockEquipment(gearId);
+			if(stockShips.length) {
+				$(".tab_mstgear .gearInfo .stockequipment .ships").empty();
+				stockShips.sort(orderByRemodel).forEach(shipId => {
+					const shipBox = $("<div class='shipiconbox'><img/></div>")
+						.attr("masterId", shipId)
+						.appendTo(".tab_mstgear .stockequipment .ships");
+					const shipMst = KC3Master.ship(shipId);
+					const remodelLv = RemodelDb.lowestLevel(shipId);
+					$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false))
+						.attr("alt", shipId).addClass("hover").click(shipClickFunc)
+						.attr("title", "[{0}] {1} {2} {3}".format(shipId,
+							KC3Meta.shipName(shipMst.api_id),
+							KC3Meta.stype(shipMst.api_stype),
+							remodelLv > 1 ? KC3Meta.term("LevelShort") + remodelLv : ""
+						)).lazyInitTooltip();
+				});
+				$(".tab_mstgear .stockequipment").show();
+			} else {
+				$(".tab_mstgear .stockequipment").hide();
 			}
 			
 		}

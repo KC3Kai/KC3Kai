@@ -53,6 +53,7 @@ Listens to network history and triggers callback if game events happen
 			GearRemodelList: [],
 			GearRemodelDetail: [],
 			GearRemodel: [],
+			GearRemodelReset: [],
 		},
 		delayedUpdate: {},
 		deferredEvents: [],

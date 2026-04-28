@@ -13,6 +13,11 @@
 
 /* WORLD LIST
 ---------------------------------*/
+.tab_event .world-select {
+	margin: 5px 10px;
+	padding: 0 10px;
+	min-width: 285px;
+}
 .tab_event .world_list {
 	height:31px;
 	min-width:700px;

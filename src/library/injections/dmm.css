@@ -21,7 +21,8 @@
 .kc3 #factory,
 .kc3 #root header,
 .kc3 #root footer,
-.kc3 #root aside {
+.kc3 #root aside,
+.kc3 #root footer + * + ul {
 	display:none;
 }
 
@@ -180,7 +181,9 @@
 	position:absolute;
 	bottom:5px;
 	left:2%;
-	text-align: center;
+	text-align:center;
+	line-break:strict;
+	overflow-wrap:anywhere;
 	color:#fff;
 	text-shadow:
 			0px 0px 2px #000,

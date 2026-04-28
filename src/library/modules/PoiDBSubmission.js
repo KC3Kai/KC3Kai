@@ -385,6 +385,7 @@
 			this.remodelRecipeData = null;
 		},
 		sendData: function(target, payload) {
+			if (!PlayerManager.hq.isOfficialServer()) return;
 			var url = this.reportServer + this.reportApiBaseUrl + target;
 			payload.origin = this.reportOrigin;
 			// console.debug( "Endpoint: " + target + ", data: " + JSON.stringify( payload ) );

@@ -230,9 +230,10 @@ if (shipStatDb) {
 	shipIdsToSolve.forEach(shipId => {
 		const shipStats = shipStatDb.filter(s => s.id === shipId && s.count > 0)
 		const estimateStat = (mi, ma, lv) => mi + Math.floor((ma-mi)*lv/99.0)
+		// Excluded some low valuable from references, on level 96~102
 		const estimateStatMin = (cu, ma, lv) => lv == 1 ? cu :
-			lv < 99 ? Math.ceil(cu/((99-lv)/99.0) - ma*lv/(99-lv)) :
-			lv > 99 ? Math.floor(cu/((99-lv)/99.0) - ma*lv/(99-lv)) : NaN
+			lv < 96 ? Math.ceil(cu/((99-lv)/99.0) - ma*lv/(99-lv)) :
+			lv > 102 ? Math.floor(cu/((99-lv)/99.0) - ma*lv/(99-lv)) : NaN
 		const est = shipStats.map(s => ({
 			lv: s.lv,
 			los: s.los, los_max: s.los_max,
@@ -282,6 +283,7 @@ if (shipStatSolutions) {
 		shipStatReport[id] = {
 			id: Number(id),
 			stat: {
+				// max() asssuming devs always buff, no nerf
 				los: Math.max(...s.min.los),
 				los_max: Math.max(...s.max.los),
 				asw: Math.max(...s.min.asw),

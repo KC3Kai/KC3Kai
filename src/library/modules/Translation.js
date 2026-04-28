@@ -303,6 +303,10 @@
 			"SpCCutin(1)" : 901,
 			"SpCCutin(2)" : 902,
 			"SpCCutin(3)" : 903,
+			"SpKCutin(1)" : 990,
+			"SpKCutin(2)" : 991,
+			"SpKCutin(3)" : 992,
+			"SpKCutin(4)" : 993,
 
 			"Friend41(1)": 141, "Friend41(2)": 241,
 			"Friend42(1)": 142, "Friend42(2)": 242, "Friend42(3)": 342,
@@ -373,9 +377,14 @@
 				sortedVoiceNums.push(6);
 
 			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou/Yamato/Richelieu/Elizabeth Cutin) key
-			// when Kongou cutin, only 900 for flagship, no special for combined ship
+			// when Kongou cutin, 900 by default for flagship, random 990~993 based on combined ship
 			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
+			// Kongou cutins voices extended since 2026-04-23, see #CutinKongoAttack.prototype._getVoiceId
+			if (KC3Meta.kongouCutinShips.indexOf(masterId) > -1) {
+				sortedVoiceNums.push(990, 991, 992);
+				if (masterId === 694) sortedVoiceNums.push(993);
+			}
 			// add special cut-in voice keys for Nagato class combination
 			// when Nagato cutin, 902 for combined with Kai Ni, 901 for base remodel and Kai, 903 for Nelson
 			if (KC3Meta.nagatoCutinShips.indexOf(masterId) > -1)

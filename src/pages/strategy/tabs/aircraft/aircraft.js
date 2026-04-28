@@ -19,7 +19,7 @@
 				const type = a.type_id;
 				let s1 = "aa", s2 = "aa";
 				switch(type){
-					case 6: case 45: case 43: // (Night/Seaplane) fighter
+					case 6: case 45: case 43: case 60: // (Night/Seaplane/Jet) fighter
 						s1 = 'aa'; s2 = 'fp'; break;
 					case 7: case 58: case 39: case 40: case 59: // (Night/Flying-wing) Dive/Jet bomber
 						s1 = 'dv'; s2 = 'aa'; break;

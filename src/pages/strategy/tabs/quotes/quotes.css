@@ -78,6 +78,13 @@
 	background: #9ad;
 }
 
+.tab_quotes .part_right .voice_entity .subtitle,
+.tab_quotes .part_right .voice_entity .ref_sub {
+	line-break: strict;
+	word-wrap: normal;
+	overflow-wrap: anywhere;
+}
+
 .tab_quotes .part_right .voice_entity .jp_src,
 .tab_quotes .part_right .voice_entity .en_src {
 	display: none;

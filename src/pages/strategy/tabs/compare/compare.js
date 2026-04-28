@@ -95,8 +95,6 @@
 			$(".tab_compare .compare_select_stat").on("click", function(){
 				self.switchToStatGraph( $(this).data("stat") );
 			});
-			
-			$(".tab_compare .compare_add").show();
 		},
 		
 		/* ADD A SHIP TO COMPARE LIST
