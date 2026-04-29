@@ -1455,8 +1455,12 @@
 			$(".count_screws")
 				.text( KC3Meta.formatNumber(screws) )
 				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable))
-				.attr("title", KC3Meta.term("ConsumablesScrewExchanges").format( [hardMedals, hardMedals * 10, medals, medals * 4, presents, presents,
-					exchgscrewsTotal, exchgscrewsTotal + screws].map((n) => KC3Meta.formatNumber(n)) )).lazyInitTooltip();
+				.attr("title",
+					KC3Meta.term("ConsumablesScrewExchanges").format(
+						[hardMedals, hardMedals * 10, medals, medals * 4, presents, presents, exchgscrewsTotal, exchgscrewsTotal + screws].map((n) => KC3Meta.formatNumber(n))
+					) + "\n({0} x{1})".format(
+						KC3Meta.useItemName(104), PlayerManager.consumables.arsenalMaterial || 0
+					)).lazyInitTooltip();
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
@@ -1571,10 +1575,9 @@
 					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
 			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0) + (PlayerManager.consumables.arsenalMaterial || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5}".format(
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
 					PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71),
-					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100),
-					PlayerManager.consumables.arsenalMaterial || 0, KC3Meta.useItemName(104)
+					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100)
 				));
 			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
@@ -4356,6 +4359,7 @@
 			$(".remodel_footer .owned_arsenal span", remodelResultBox).text(PlayerManager.consumables.arsenalMaterial || 0);
 			$(".remodel_footer .owned_devmats span", remodelResultBox).text(PlayerManager.consumables.devmats);
 			$(".remodel_footer .owned_screws span", remodelResultBox).text(PlayerManager.consumables.screws);
+			$(".remodel_improved", remodelResultBox).empty();
 			if(result.api_recover_flag) {
 				const afterRemodelSlot = result.api_after_slot;
 				if(afterRemodelSlot) {

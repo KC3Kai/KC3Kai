@@ -4461,6 +4461,7 @@
 			$(".remodel_footer .owned_arsenal span", remodelResultBox).text(PlayerManager.consumables.arsenalMaterial || 0);
 			$(".remodel_footer .owned_devmats span", remodelResultBox).text(PlayerManager.consumables.devmats);
 			$(".remodel_footer .owned_screws span", remodelResultBox).text(PlayerManager.consumables.screws);
+			$(".remodel_improved", remodelResultBox).empty();
 			if(result.api_recover_flag) {
 				const afterRemodelSlot = result.api_after_slot;
 				if(afterRemodelSlot) {
