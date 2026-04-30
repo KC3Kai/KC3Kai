@@ -1285,6 +1285,7 @@
 			// Suisei Model 22 (634 Air Group)
 			"291": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ise Class Kai Ni
 					"2": {
@@ -1292,6 +1293,24 @@
 						multiple: { "houg": 6, "houk": 1 },
 					},
 				},
+				byShip: [
+					{
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
 			"292": {
@@ -5686,14 +5705,25 @@
 			// Prototype 51cm Triple Gun Mount
 			"465": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Yamato Class
-					"37": {
-						synergy: {
-							flags: [ "rangefinderAirRadar" ],
-							single: { "houg": 2, "houm": 2 },
+					"37": [
+						{
+							synergy: {
+								flags: [ "rangefinderAirRadar" ],
+								single: { "houg": 2, "houm": 2 },
+								byStars: {
+									gearId: 465,
+									"4": { "houm": 1 },
+								},
+							},
 						},
-					},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
@@ -5713,6 +5743,11 @@
 							flags: [ "rangefinderKaiAirRadar" ],
 							single: { "houk": 2, "houm": 1 },
 						},
+					},
+					{
+						ids: [916],
+						minStars: 5,
+						multiple: { "houm": 1 },
 					},
 				],
 			},
