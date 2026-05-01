@@ -506,7 +506,7 @@
 		"rewardConsumables": [0, 0, 2, 0]
 	},
 	"230": {
-		"unlock": [881],
+		"unlock": [881, 1169],
 		"tracking": [
 			[0, 6]
 		],
@@ -2562,7 +2562,7 @@
 		"unlock": [1133]
 	},
 	"1002": {
-		"hash": -1390155466
+		"hash": 1244010250
 	},
 	"1003": {},
 	"1004": {},
@@ -2709,6 +2709,10 @@
 			[0, 1]
 		],
 		"rewardConsumables": [0, 0, 88, 0]
+	},
+	"1046": {
+		"unlock": [1168],
+		"hash": 1994776386
 	},
 	"1101": {
 		"unlock": [1102, 1103],
@@ -2913,10 +2917,18 @@
 		"rewardConsumables": [0, 0, 0, 1]
 	},
 	"1167": {
+		"unlock": [1168],
 		"tracking": [
 			[0, 3]
 		],
 		"rewardConsumables": [0, 0, 6, 5]
+	},
+	"1168": {
+		"unlock": [1169],
+		"hash": -538897293
+	},
+	"1169": {
+		"hash": 473686214
 	},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
