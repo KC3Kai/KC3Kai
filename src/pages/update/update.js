@@ -1,6 +1,26 @@
 (function(){
 	"use strict";
 	_gaq.push(['_trackPageview']);
+
+	var customReleases = [
+		{
+			title: "Release 36.0.0",
+			html_url: "https://github.com/Chun-Kang/KC3Kai",
+			body: [
+				"Unofficial MV3 maintenance release for this fork.",
+				"",
+				"### Highlights",
+				"",
+				"* Migrated the extension runtime from Manifest V2 to Manifest V3",
+				"* Added a service worker + offscreen document background compatibility layer",
+				"* Replaced remote script dependencies that are blocked by MV3 CSP",
+				"* Added fork notices and multilingual notes in README"
+			].join("\n"),
+			merged_at: "2026-05-03T15:00:00Z",
+			number: 10000,
+			labels: [{ name: "type:release" }]
+		}
+	];
 	
 	ConfigManager.load();
 	KC3Meta.init("../../data/");
@@ -59,9 +79,11 @@
 				// Only show PR labelled with `type:release`
 				// Only show recent 10 releases of page1 (30/p),
 				// Order by `merged_at desc, created_at desc` as API not support
-				var orderedReleases = response
-					.filter(p => p.labels.some(l => l.name === "type:release"))
-					.slice(0, 10).sort((a, b) => (
+				var orderedReleases = customReleases.concat(
+					response.filter(p => p.labels.some(l => l.name === "type:release"))
+				).filter((rel, index, arr) => (
+					arr.findIndex((item) => item.title === rel.title) === index
+				)).slice(0, 10).sort((a, b) => (
 						// let null (not released) on top
 						(b.merged_at === null) - (a.merged_at === null) ||
 						new Date(b.merged_at).getTime() - new Date(a.merged_at).getTime() ||

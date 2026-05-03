@@ -3,7 +3,7 @@
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
-	"version": "35.6.48",
+	"version": "36.0.0",
 	"minimum_chrome_version": "109",
 	"devtools_page": "pages/devtools/init.html",
 	"options_ui": {

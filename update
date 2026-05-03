@@ -1,6 +1,6 @@
 {
-	"version" : "35.6.48",
-	"pr" : "https://github.com/KC3Kai/KC3Kai/pulls?q=label%3Atype%3Arelease%20",
+	"version" : "36.0.0",
+	"pr" : "https://github.com/Chun-Kang/KC3Kai",
 	"time" : "",
 	"maintenance_start": "Wed, 28 January 2026 11:00:00 +0900",
 	"maintenance_end": "Wed, 28 January 2026 20:00:00 +0900"
