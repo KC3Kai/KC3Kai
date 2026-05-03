@@ -82,6 +82,7 @@ module.exports = function(grunt) {
 					'!pages/devtools/themes/default/**',
 					'!pages/strategy/tabs/**/*.js',
 					'!pages/strategy/tabs/_tpl/**',
+					'service-worker.js',
 					'manifest.json',
 					'data/*.json',
 					'data/*.nedb',
@@ -236,7 +237,7 @@ module.exports = function(grunt) {
 				options: {
 					fields: {
 						"name": "KanColle Command Center 改",
-						"browser_action": {
+						"action": {
 							"default_icon": "assets/img/logo/19.png",
 							"default_popup": "pages/popup/popup.html"
 						}
@@ -250,24 +251,7 @@ module.exports = function(grunt) {
 				options: {
 					fields: {
 						"background": {
-							"scripts": [
-								"assets/js/global.js",
-								"assets/js/Dexie.min.js",
-								"library/objects.js",
-								"library/managers.js",
-								"library/modules/ChromeSync.js",
-								"library/modules/QuestSync/Sync.js",
-								"library/modules/QuestSync/Background.js",
-								"library/modules/Database.js",
-								"library/modules/Log/Log.js",
-								"library/modules/Log/Background.js",
-								"library/modules/ImageExport.js",
-								"library/modules/Master.js",
-								"library/modules/RemodelDb.js",
-								"library/modules/Meta.js",
-								"library/modules/Translation.js",
-								"library/modules/Service.js"
-							]
+							"service_worker": "service-worker.js"
 						},
 						"content_scripts": [
 							{
@@ -457,21 +441,36 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		// currently use just for running tests
-		babel: {
-			options: {
-				sourceMap: true,
-				presets: ['babel-preset-es2015']
-			},
-			testenv: {
+ 		// currently use just for running tests
+ 		babel: {
+ 			options: {
+ 				sourceMap: true,
+ 				presets: ['babel-preset-es2015']
+ 			},
+			build: {
 				files: [
+					{
+						expand: true,
+						cwd: 'build/tmp/',
+						src: [
+							'assets/js/global.js',
+							'library/**/*.js',
+							'pages/**/*.js'
+						],
+						dest: 'build/tmp/'
+					}
+				]
+			},
+ 			testenv: {
+ 				files: [
 					{  
 						expand: true,
 						cwd: 'build/testenv/',
 						// for now only transpile code in "library" & "pages" (whitelist)
 						// avoiding stepping into "assets" and "data".
 						// same reason for "tests/library".
-						src: [ "src/library/**/*.js",
+						src: [ "src/assets/js/global.js",
+							   "src/library/**/*.js",
 							   "src/pages/**/*.js",
 							   "tests/library/**/*.js",
 							   "tests/pages/**/*.js"
@@ -531,6 +530,7 @@ module.exports = function(grunt) {
 		'string-replace:devtooltitle',
 		'jshint:build',
 		'cssmin',
+		'babel:build',
 		'uglify',
 		'string-replace:allhtml',
 		'htmlmin',

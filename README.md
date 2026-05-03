@@ -2,22 +2,20 @@
 
 ![KC3改 Logo](http://puu.sh/h4Gbb.png)
 
+> [!IMPORTANT]
+> 這個 repository 是從原始專案 **[KC3Kai/KC3Kai](https://github.com/KC3Kai/KC3Kai)** fork 而來的個人維護版本。
+>
+> 此 fork 的主要目的，是以 **GitHub Copilot CLI** 協助整理並調整程式，使這個專案可以在 **Chrome Manifest V3** 環境下繼續安裝與使用。
+>
+> 這不是原開發團隊的官方延續版本，目前也**沒有上架到 Chrome Web Store**。本 repository 主要作為個人使用與後續維護之用；若要了解 KC3改 的完整背景、原始功能設計、文件與社群資訊，請以原開發者與原始專案內容為準。
+
 KC3改 is a feature-rich Chrome extension that helps you play [Kantai Collection](http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/), and view/analyze information not displayed in-game.
 
-### [Add to your Chrome -> ](https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh)
+### Original project
 
-[![Version](https://img.shields.io/chrome-web-store/v/hkgmldnainaglpjngpajnnjfhpdjkohh.svg?logo=Google%20Chrome)
-![Downloads](https://img.shields.io/chrome-web-store/d/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
-![Rating](https://img.shields.io/chrome-web-store/stars/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
-![Score](https://img.shields.io/chrome-web-store/rating/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
-![Reviews](https://img.shields.io/chrome-web-store/rating-count/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
-](https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh)
-
-[![Github Release Version](https://img.shields.io/github/v/release/KC3Kai/KC3Kai?logo=Github)
-![Github Release Date](https://img.shields.io/github/release-date/KC3Kai/KC3Kai)
-![GitHub Downloads Latest Release](https://img.shields.io/github/downloads/KC3Kai/KC3Kai/latest/total)
-![GitHub Downloads All Releases](https://img.shields.io/github/downloads/KC3Kai/KC3Kai/total?label=total%20downloads)
-](https://github.com/KC3Kai/KC3Kai/releases)
+* Original repository: <https://github.com/KC3Kai/KC3Kai>
+* Original releases and documentation: <https://github.com/KC3Kai/KC3Kai/releases>
+* This fork is an unofficial MV3-compatible maintenance branch for personal use.
 
 ## Why choose KC3改?
 * **SAFE**. Made with your account safety in mind by people studying game code since the game's early days.
