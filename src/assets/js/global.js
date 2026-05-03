@@ -3,19 +3,8 @@
 \*******************************/
 /* GOOGLE ANALYTICS
 -------------------------------*/
-if (!window.NO_GA) {
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-9789944-12']);
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = 'https://ssl.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0];
-		if(s && s.parentNode) s.parentNode.insertBefore(ga, s);
-	})();
-} else {
-	var _gaq = [];
-	_gaq.push = function() {};
-}
+var _gaq = [];
+_gaq.push = function() {};
 
 // Convenient method and attribute to get browser's version number
 if (!!navigator) {
