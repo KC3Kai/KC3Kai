@@ -520,7 +520,7 @@ Provides access to data on built-in JSON files
 			})[type2Id] || 0;
 			const ingameIconId = this.itemIconsByType2(type2Id)[index] || 0;
 			const customIconName = useCustom
-				&& [11, 12, 13, 22, 28, 32, 38, 49, 93, 94].includes(Number(type2Id))
+				&& [5, 11, 12, 13, 22, 28, 32, 38, 40, 42, 49, 93, 94].includes(Number(type2Id))
 				&& ("c" + type2Id);
 			return customIconName || ingameIconId;
 		},
