@@ -3,6 +3,11 @@ body {
 	display:block !important;
 	color:#cccccc;
 }
+body.dark input,
+body.dark select,
+body.dark textarea {
+	color-scheme:dark;
+}
 #wrapper {
 	width:800px;
 	min-width:800px;
