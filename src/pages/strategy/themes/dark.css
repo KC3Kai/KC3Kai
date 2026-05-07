@@ -2109,6 +2109,9 @@ button, input, select, textarea {
 	background:#414141;
 	border-radius:0px;
 }
+.tab_encounters .encounter_ship .encounter_id {
+	color:#ccc;
+}
 
 /* PVP
 --------------------------------*/

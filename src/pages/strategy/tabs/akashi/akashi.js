@@ -443,13 +443,15 @@
 					});
 					if(dbSecShips.length){
 						$(".eq_ships", ThisBox).attr("title", "[{0}]".format(dbSecShips.join(",")));
-						// Check inconsistent part of required ships for developers
+						// Check inconsistent part of required ships for developers, obsoleted since WCTFDB no longer updated
+						/*
 						if(ConfigManager.devOnlyPages){
 							if(shipList.length !== dbSecShips.length || dbSecShips.some(id => !shipList.includes(id)))
 								$(".eq_ships", ThisBox).css("background-color", "aquamarine");
 							if(shipList.some(id => !dbSecShips.includes(id)))
 								$(".eq_ships", ThisBox).css("background-color", "aliceblue");
 						}
+						*/
 					}
 					$.each(improveList, function(_, imp){
 						ResBox = $(".tab_akashi .factory .eq_res").clone();
