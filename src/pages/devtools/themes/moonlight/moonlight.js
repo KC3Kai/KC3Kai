@@ -3663,7 +3663,12 @@
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
-						.attr("title", KC3Meta.shipName(thisNode.drop))
+						.attr("title", [KC3Meta.shipName(thisNode.drop),
+							KC3Meta.term("BattleSlotRemains").format(
+								KC3ShipManager.max - KC3ShipManager.count(),
+								// Gear count for new drop may inaccurate, depending on known stockequip
+								KC3GearManager.max - KC3GearManager.countNonUseitem()
+							)].join("\n"))
 						.toggleClass("new_ship", ConfigManager.info_dex_owned_ship ?
 							// Not own this shipgirl of any remodel form, judged by picture book history or current ships
 							! PictureBook.isEverOwnedShip(thisNode.drop) :
