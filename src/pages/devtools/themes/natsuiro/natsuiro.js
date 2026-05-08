@@ -40,6 +40,9 @@
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
 
+	// Nosaki Sparkle notification flag
+	var sparkleNotif = 0
+
 	// UI Updating Timer
 	var uiTimerHandler = 0;
 	var uiTimerLastUpdated = 0;
@@ -286,20 +289,8 @@
 				if(ConfigManager.alert_morale_notif &&
 					!(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
 				){
-					// Play sound if alert sound setting is not none
-					if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
-					switch(ConfigManager.alert_type){
-						case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-						case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break;
-						case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
-						case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
-						case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
-						default: KC3TimerManager.notifSound = false; break;
-					}
-					if(KC3TimerManager.notifSound){
-						KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
-						KC3TimerManager.notifSound.play();
-					}
+					SendSoundNotification(ConfigManager.alert_type, ConfigManager.alert_custom);
+					
 					// Send desktop notification
 					(new RMsg("service", "notify_desktop", {
 						notifId: "morale",
@@ -319,6 +310,23 @@
 					}
 				}
 			}
+		}
+	}
+
+	function SendSoundNotification(alertType, customAlert) {
+		// Play sound if alert sound setting is not none
+		if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
+		switch(alertType){
+			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
+			case 2: KC3TimerManager.notifSound = new Audio(customAlert); break;
+			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
+			case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
+			case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
+			default: KC3TimerManager.notifSound = false; break;
+		}
+		if(KC3TimerManager.notifSound){
+			KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
+			KC3TimerManager.notifSound.play();
 		}
 	}
 
@@ -359,6 +367,12 @@
 					return acc;
 				}, {});
 			UpdateRepairTimerDisplays(data);
+			
+			// Nosaki Sparkle timer
+			const sparkleProgress = scopedFleetIds
+				.map(id => PlayerManager.fleets[id].getSparkleProgress())
+				.reduce((acc, cur) => Math.max(acc, cur));
+			UpdateSparkleTimerDisplay(sparkleProgress);
 		}
 		
 		// Akashi current timer for Ship Box list
@@ -2041,6 +2055,8 @@
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:
 						Math.max(MainRepairs.akashi,EscortRepairs.akashi),
+					nosaki:
+						Math.max(MainFleet.getSparkleProgress(), EscortFleet.getSparkleProgress()),
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
@@ -2460,6 +2476,10 @@
 				$(".module.status .status_docking .status_icon").attr("title", KC3Meta.term("PanelHighestDocking") );
 				$(".module.status .status_akashi .status_icon").attr("title", KC3Meta.term("PanelHighestAkashi") );
 				$(".module.status .status_support .status_icon").attr("title", KC3Meta.term("PanelSupportPower") );
+
+				// STATUS: NOSAKI SPARKLE
+				UpdateSparkleTimerDisplay(FleetSummary.nosaki);
+				$(".module.status .status_nosaki .status_icon").attr("title", KC3Meta.term("PanelSparkleTimer") );
 			}else{
 				$(".module.status").hide();
 			}
@@ -5503,5 +5523,74 @@
 			}
 			elm.attr("titlealt", title).lazyInitTooltip();
 		});
+	}
+
+	function UpdateSparkleTimerDisplay(sparkleProgress) {
+		let moduleNosaki = $(".module.status .status_nosaki");
+		let moduleDocking = $(".module.status .status_docking");
+		if (!sparkleProgress) {
+			if (moduleNosaki.is(":visible")) {
+				moduleNosaki.hide();
+				moduleDocking.show();
+			}
+			return;
+		}
+		if (moduleNosaki.is(":hidden")) {
+			moduleDocking.hide();
+			moduleNosaki.show();
+		}
+		const tick = [15 * 60, 30 * 60];
+		let timerText = $(".module.status .status_nosaki .status_text");
+		let timerIcon = $(".module.status .status_nosaki img");
+		timerText.text(String(sparkleProgress || 0).toHHMMSS());
+
+		if (sparkleProgress < tick[0]) {
+			if (sparkleNotif !== 0) {
+				sparkleNotif = 0;
+				timerIcon.attr("src", "../../../../assets/img/ui/btn-xgs.png");
+				timerText.css("color", "white");
+			} 
+		} else if (sparkleProgress < tick[1]) {
+			if (sparkleNotif === 0) {
+				sparkleNotif++;
+				timerIcon.attr("src", "../../../../assets/img/ui/btn-gs.png");
+				timerText.css("color", "yellow");
+				if (sparkleNotif === ConfigManager.alert_value_sparkle + 1) {
+					SendSparkleNotification();
+				}
+			}
+		} else {
+			if (sparkleNotif === 1) {
+				sparkleNotif++;
+				timerText.css("color", "orange");
+				if (sparkleNotif === ConfigManager.alert_value_sparkle + 1) {
+					SendSparkleNotification();
+				}
+			}
+		}
+	}
+
+	function SendSparkleNotification() {
+		if (!ConfigManager.alert_notif_sparkle) {
+			return;
+		}
+		SendSoundNotification(ConfigManager.alert_type_sparkle, ConfigManager.alert_custom_sparkle);
+		// Send desktop notification
+		(new RMsg("service", "notify_desktop", {
+			notifId: "sparkle",
+			data: {
+				type: "basic",
+				title: KC3Meta.term("DesktopNotifySparkleTitle"),
+				message: KC3Meta.term("DesktopNotifySparkleMessage"),
+				iconUrl: "../../../../assets/img/ui/btn-gs.png"
+			},
+			tabId: chrome.devtools.inspectedWindow.tabId
+		})).execute();
+		// Focus game tab if settings enabled
+		if (ConfigManager.alert_focustab) {
+			(new RMsg("service", "focusGameTab", {
+				tabId: chrome.devtools.inspectedWindow.tabId
+			})).execute();
+		}
 	}
 })();

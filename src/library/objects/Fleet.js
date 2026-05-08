@@ -117,6 +117,7 @@ Contains summary information about a fleet and its ships
 			}
 
 			this.updateAkashiRepairDisplay();
+			this.updateNosakiSparkleDisplay();
 		}
 	};
 	
@@ -207,6 +208,7 @@ Contains summary information about a fleet and its ships
 	KC3Fleet.prototype.clearNonFlagShips = function(){
 		this.ships.fill(-1, 1);
 		this.updateAkashiRepairDisplay();
+		this.updateNosakiSparkleDisplay();
 	};
 	
 	KC3Fleet.prototype.discard = function(shipId) {
@@ -274,6 +276,32 @@ Contains summary information about a fleet and its ships
 		return function (rosterId, position, ship) {
 			var inRange = position < repairSlotCount;
 			ship.akashiMark = inRange && !ship.isStriped() && ship.isFree();
+		};
+	};
+
+	/*--------------------------------------------------------*/
+	/*-------------------[ NOSAKI SPARKLE ]-------------------*/
+	/*--------------------------------------------------------*/
+
+	/** Mark the fleet's ships as being sparkled (or not)
+	 *  Called when the fleet changes or is on sortie or PvP
+	 */
+	KC3Fleet.prototype.updateNosakiSparkleDisplay = function () {
+		const sparklerShips = [996, 1002];
+    	let sparklerPos = 0;
+		if (sparklerShips.includes(this.ship(0).masterId)) {
+			sparklerPos = 1;
+		} else if (sparklerShips.includes(this.ship(1).masterId)) {
+			sparklerPos = 2;
+		}
+		this.ship(this._updateSparkleStatus(sparklerPos));
+	};
+
+	/** @return a function to pass to this.ship() that will update the ships' sparkle status */
+	KC3Fleet.prototype._updateSparkleStatus = function (sparklerPos) {
+		return function (rosterId, position, ship) {
+			ship.nosakiMark = !!sparklerPos && sparklerPos - 1 !== position
+				&& !this.isOnSortieOrPvP() && ship.isFree();
 		};
 	};
 
@@ -1134,6 +1162,11 @@ Contains summary information about a fleet and its ships
 	KC3Fleet.prototype.isOnExped = function(){
 		return this.fleetId > 1 && !!this.mission && this.mission[0] > 0;
 	};
+
+	KC3Fleet.prototype.isOnSortieOrPvP = function(){
+		return (KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
+			&&  KC3SortieManager.fleetSent === this.fleetId;
+	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){
 		var highestDocking = 0,
@@ -1160,6 +1193,14 @@ Contains summary information about a fleet and its ships
 			],
 		};
 	};
+
+	KC3Fleet.prototype.getSparkleProgress = function(){
+		const hasMark = this.shipsUnescaped().some(s => s.nosakiMark);
+		if (hasMark){
+			return Math.hrdInt('floor', PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1);
+		}
+		return 0;
+	}
 	
 	
 	/*--------------------------------------------------------*/
