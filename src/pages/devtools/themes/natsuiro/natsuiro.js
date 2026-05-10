@@ -41,7 +41,7 @@
 	var moraleClockRemain = 0;
 
 	// Nosaki Sparkle notification flag
-	var sparkleNotif = 0
+	var sparkleNotif = 0;
 
 	// UI Updating Timer
 	var uiTimerHandler = 0;
@@ -5524,7 +5524,7 @@
 		let moduleNosaki = $(".module.status .status_nosaki");
 		let moduleDocking = $(".module.status .status_docking");
 		const sparkleProgress = PlayerManager.fleets.some(fleet => fleet.hasNosakiMark())
-			? Math.hrdInt('floor', PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
+			? Math.hrdInt("floor", PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
 			: 0;
 		if (!sparkleProgress) {
 			if (moduleNosaki.is(":visible")) {

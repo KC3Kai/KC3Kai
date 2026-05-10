@@ -1164,8 +1164,11 @@ Contains summary information about a fleet and its ships
 	};
 
 	KC3Fleet.prototype.isOnSortieOrPvP = function(){
+		const fleetsSent = KC3SortieManager.isCombinedSortie()
+			? [1, 2]
+			: [KC3SortieManager.fleetSent];
 		return (KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
-			&&  KC3SortieManager.fleetSent === this.fleetId;
+			&& fleetsSent.includes(this.fleetId);
 	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){

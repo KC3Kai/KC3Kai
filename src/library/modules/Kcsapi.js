@@ -158,7 +158,7 @@ Previously known as "Reactor"
 			const lastSortie = [KC3SortieManager.map_world || 0, KC3SortieManager.map_num || 0];
 			KC3SortieManager.endSortie(response.api_data);
 			
-			PlayerManager.fleets.forEach(f => f.updateNosakiSparkleDisplay());
+			PlayerManager.fleets.forEach(fleet => fleet.updateNosakiSparkleDisplay());
 
 			PlayerManager.loadBases()
 				.setBaseConvertingSlots(response.api_data.api_plane_info);
@@ -1282,7 +1282,7 @@ Previously known as "Reactor"
 			);
 
 			const fleetsUsed = PlayerManager.combinedFleet && fleetNum === 1 ? [1, 2] : [fleetNum];
-			fleetsUsed.forEach(f => PlayerManager.fleets[f - 1].updateNosakiSparkleDisplay());
+			fleetsUsed.forEach(fleetId => PlayerManager.fleets[fleetId - 1].updateNosakiSparkleDisplay());
 
 			KC3Master.setCellData(response.api_data);
 			

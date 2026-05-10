@@ -41,7 +41,7 @@
 	var moraleClockRemain = 0;
 
 	// Nosaki Sparkle notification flag
-	var sparkleNotif = 0
+	var sparkleNotif = 0;
 
 	// UI Updating Timer
 	var uiTimerHandler = 0;
@@ -5603,7 +5603,7 @@
 		let timerText = $(".module.status .status_nosaki .status_text");
 		let timerIcon = $(".module.status .status_nosaki img");
 		const sparkleProgress = PlayerManager.fleets.some(fleet => fleet.hasNosakiMark())
-			? Math.hrdInt('floor', PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
+			? Math.hrdInt("floor", PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
 			: 0;
 		const secPerTick = 15 * 60;
 		const ticks = Math.floor(sparkleProgress / secPerTick);
