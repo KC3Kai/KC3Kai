@@ -287,14 +287,20 @@ Contains summary information about a fleet and its ships
 	 *  Called when the fleet changes or is on sortie or PvP
 	 */
 	KC3Fleet.prototype.updateNosakiSparkleDisplay = function () {
-		const sparklerShips = [996, 1002];
-    	let sparklerPos = 0;
-		if (sparklerShips.includes(this.ship(0).masterId)) {
-			sparklerPos = 1;
-		} else if (sparklerShips.includes(this.ship(1).masterId)) {
-			sparklerPos = 2;
+		let sparklerPos = KC3NosakiSparkle.getSparklerPosition(this);
+		if (sparklerPos && !this._canDoSparkle(sparklerPos)) {
+			sparklerPos = 0;
 		}
 		this.ship(this._updateSparkleStatus(sparklerPos));
+	};
+
+	/** @return true if the sparkler sparkle the fleet */
+	KC3Fleet.prototype._canDoSparkle = function (sparklerPos) {
+		if (!sparklerPos) {
+			return false;
+		}
+		const sparkler = this.ship(sparklerPos - 1);
+		return !sparkler.isShouha() && sparkler.isSupplied() && sparkler.isFree();
 	};
 
 	/** @return a function to pass to this.ship() that will update the ships' sparkle status */

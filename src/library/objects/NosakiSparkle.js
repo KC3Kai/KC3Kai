@@ -122,7 +122,7 @@ Manages the timer for the player's Nosaki sparkling mechanic.
       return 2;
     }
     return 0;
-  }
+  };
 
   // Returns the sparkler's morale per tick gain
   KC3NosakiSparkle.getSparklerPower = function (ship) {
@@ -135,5 +135,5 @@ Manages the timer for the player's Nosaki sparkling mechanic.
       return 3;
     }
     return 0;
-  }
+  };
 })();
