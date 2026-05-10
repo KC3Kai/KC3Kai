@@ -616,8 +616,9 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "SettingsSparkleFirstTick" ],
-						[ 1, "SettingsSparkleSecondTick" ]
+						[ 0, "SettingsSparkleEveryTick" ],
+						[ 1, "SettingsSparkleFirstTick" ],
+						[ 2, "SettingsSparkleSecondTick" ]
 					]
 				}
 			},

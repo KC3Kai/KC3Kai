@@ -369,10 +369,7 @@
 			UpdateRepairTimerDisplays(data);
 			
 			// Nosaki Sparkle timer
-			const sparkleProgress = scopedFleetIds
-				.map(id => PlayerManager.fleets[id].getSparkleProgress())
-				.reduce((acc, cur) => Math.max(acc, cur));
-			UpdateSparkleTimerDisplay(sparkleProgress);
+			UpdateSparkleTimerDisplay();
 		}
 		
 		// Akashi current timer for Ship Box list
@@ -2055,8 +2052,6 @@
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:
 						Math.max(MainRepairs.akashi,EscortRepairs.akashi),
-					nosaki:
-						Math.max(MainFleet.getSparkleProgress(), EscortFleet.getSparkleProgress()),
 					hasTaiha: MainFleet.hasTaiha() || EscortFleet.hasTaiha(),
 					taihaIndexes: MainFleet.getTaihas().concat( EscortFleet.getTaihas() ),
 					supplied: MainFleet.isSupplied() && EscortFleet.isSupplied(),
@@ -2478,7 +2473,7 @@
 				$(".module.status .status_support .status_icon").attr("title", KC3Meta.term("PanelSupportPower") );
 
 				// STATUS: NOSAKI SPARKLE
-				UpdateSparkleTimerDisplay(FleetSummary.nosaki);
+				UpdateSparkleTimerDisplay();
 				$(".module.status .status_nosaki .status_icon").attr("title", KC3Meta.term("PanelSparkleTimer") );
 			}else{
 				$(".module.status").hide();
@@ -5525,9 +5520,12 @@
 		});
 	}
 
-	function UpdateSparkleTimerDisplay(sparkleProgress) {
+	function UpdateSparkleTimerDisplay() {
 		let moduleNosaki = $(".module.status .status_nosaki");
 		let moduleDocking = $(".module.status .status_docking");
+		const sparkleProgress = PlayerManager.fleets.some(fleet => fleet.hasNosakiMark())
+			? Math.hrdInt('floor', PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
+			: 0;
 		if (!sparkleProgress) {
 			if (moduleNosaki.is(":visible")) {
 				moduleNosaki.hide();
@@ -5539,33 +5537,29 @@
 			moduleDocking.hide();
 			moduleNosaki.show();
 		}
-		const tick = [15 * 60, 30 * 60];
 		let timerText = $(".module.status .status_nosaki .status_text");
 		let timerIcon = $(".module.status .status_nosaki img");
-		timerText.text(String(sparkleProgress || 0).toHHMMSS());
+		const secPerTick = 15 * 60;
+		const ticks = Math.floor(sparkleProgress / secPerTick);
+		timerText.text(String(sparkleProgress).toHHMMSS());
 
-		if (sparkleProgress < tick[0]) {
+		if (ticks === 0) {
 			if (sparkleNotif !== 0) {
 				sparkleNotif = 0;
 				timerIcon.attr("src", "../../../../assets/img/ui/btn-xgs.png");
 				timerText.css("color", "white");
-			} 
-		} else if (sparkleProgress < tick[1]) {
-			if (sparkleNotif === 0) {
-				sparkleNotif++;
-				timerIcon.attr("src", "../../../../assets/img/ui/btn-gs.png");
-				timerText.css("color", "yellow");
-				if (sparkleNotif === ConfigManager.alert_value_sparkle + 1) {
-					SendSparkleNotification();
-				}
 			}
-		} else {
-			if (sparkleNotif === 1) {
-				sparkleNotif++;
-				timerText.css("color", "orange");
-				if (sparkleNotif === ConfigManager.alert_value_sparkle + 1) {
-					SendSparkleNotification();
-				}
+		} else if (sparkleNotif < ticks) {
+			sparkleNotif++;
+			const textColor = ticks === 1 ? "yellow" : "orange";
+			timerIcon.attr("src", "../../../../assets/img/ui/btn-gs.png");
+			timerText.css("color", textColor);
+			// Config option for each tick
+			const tickNotif = [[0, 1], [0, 2]];
+			const selectedNotif = ConfigManager.alert_value_sparkle;
+			if (sparkleNotif <= tickNotif.length
+				&& tickNotif[sparkleNotif - 1].includes(selectedNotif)) {
+				SendSparkleNotification();
 			}
 		}
 	}

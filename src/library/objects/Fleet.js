@@ -1194,14 +1194,9 @@ Contains summary information about a fleet and its ships
 		};
 	};
 
-	KC3Fleet.prototype.getSparkleProgress = function(){
-		const hasMark = this.shipsUnescaped().some(s => s.nosakiMark);
-		if (hasMark){
-			return Math.hrdInt('floor', PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1);
-		}
-		return 0;
-	}
-	
+	KC3Fleet.prototype.hasNosakiMark = function(){
+		return this.shipsUnescaped().some(ship => ship.nosakiMark);
+	};
 	
 	/*--------------------------------------------------------*/
 	/*-------------------[ ELOS FUNCTIONS ]-------------------*/

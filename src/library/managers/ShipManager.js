@@ -160,7 +160,7 @@ Saves and loads list to and from localStorage
 			if (this.onPort && cShip.nosakiMark && cShip.morale > tempData.morale) {
 				const secSinceLastPort = Date.toUTCseconds() - (PlayerManager.hq.lastPortTime || 0);
 				const moraleRegen = Math.ceil(secSinceLastPort / 180) * 3;
-				const moraleBase = Math.min(tempData.morale + moraleRegen, 49);
+				const moraleBase = Math.max(tempData.morale, Math.min(tempData.morale + moraleRegen, 49));
 				const moraleDiff = cShip.morale - moraleBase;
 
 				if (moraleDiff > 0) {
@@ -191,7 +191,7 @@ Saves and loads list to and from localStorage
 							return;
 						rp.forEach(function(x,i){
 							rp[i] -= dt[i]; // Reduce the source of supply reduction
-							df[i] += dt[i]; // Reduce the required supply to repair
+							df[i] += dt[i]; // Reduce the required supply to sparkle
 						});
 					});
 				}

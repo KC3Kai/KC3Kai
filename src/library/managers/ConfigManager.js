@@ -107,7 +107,7 @@ Retrieves when needed to apply on components
 				alert_type           : 1,
 				alert_custom         : "",
 				alert_notif_sparkle  : true,
-				alert_value_sparkle  : 1,
+				alert_value_sparkle  : 2,
 				alert_type_sparkle   : 1,
 				alert_custom_sparkle : "",
 				alert_type_exped     : 1,
