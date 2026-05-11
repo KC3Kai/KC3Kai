@@ -1,0 +1,15 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "selector-class-pattern": ["^([a-zA-Z][a-zA-Z0-9]*)([-_][a-zA-Z0-9]+)*$", {
+      "message": "Expected class selector \"%s\" to be kebab-case, underscored or use capitals"
+    }],
+    "selector-id-pattern": ["^([a-zA-Z][a-zA-Z0-9]*)([-_][a-zA-Z0-9]+)*$", {
+      "message": "Expected ID selector \"%s\" to be kebab-case, underscored or use capitals"
+    }],
+    "custom-property-pattern": ["^([a-zA-Z][a-zA-Z0-9]*)([-_][a-zA-Z0-9]+)*$", {
+      "message": "Expected custom property name \"%s\" to be kebab-case, underscored or use capitals"
+    }],
+    "no-descending-specificity": null
+  }
+}

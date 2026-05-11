@@ -30,11 +30,14 @@
     "grunt-modify-json": "KC3Kai/grunt-modify-json#master",
     "grunt-remove-logging": "~0.2.0",
     "grunt-string-replace": "~1.2.0",
+    "grunt-stylelint": "^0.21.0",
     "grunt-usemin": "~3.1.1",
     "grunt-webstore-upload": "KC3Kai/grunt-webstore-upload#master",
     "jquery": "^2.2.1",
     "load-grunt-tasks": "^3.5.2",
-    "qunitjs": "^1.22.0"
+    "qunitjs": "^1.22.0",
+    "stylelint": "^17.11.0",
+    "stylelint-config-standard": "^40.0.0"
   },
   "scripts": {
     "test": "grunt test-src && grunt test-unit",
