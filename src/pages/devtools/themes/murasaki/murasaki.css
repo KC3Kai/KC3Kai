@@ -432,8 +432,6 @@ body {
 	}
 
 	.activity_box {
-		width: 190px;
-		height: 235px;
 		display: none;
 		padding: 5px;
 
@@ -453,107 +451,104 @@ body {
 	/*------- ACTIVITY: BASIC -------*/
 	/* Consumables */
 	.consumables {
-		width: 180px;
-		height: 60px;
-		margin: 0 0 5px 0;
-	}
+		margin: 0 0 5px;
+		display: flex;
+		flex-wrap: wrap;
 
-	.consumable {
-		width: 90px;
-		height: 20px;
-		float: left;
-	}
+		.consumable {
+			width: 90px;
+			height: 20px;
 
-	.consumable_icon {
-		width: 20px;
-		height: 20px;
-		float: left;
+			.consumable_icon {
+				width: 20px;
+				height: 20px;
+				float: left;
 
-		img {
-			width: 14px;
-			height: 14px;
-			margin: 3px;
-			vertical-align: top;
-		}
-	}
-
-	.consumable_text {
-		width: 36px;
-		font-size: 14px;
-		line-height: 20px;
-		float: left;
-		color: #ccc;
-	}
-
-	.consumable_ltext {
-		width: 70px;
-		font-size: 14px;
-		line-height: 20px;
-		float: left;
-		color: #ccc;
-		white-space: nowrap;
-
-		&.regenCap {
-			color: #EAF918;
-		}
-
-		&.hardCap {
-			color: #FF7979;
-		}
-
-		&.danger {
-			color: #EAF918;
-		}
-
-		&.fulled {
-			color: #FF7979;
-		}
-	}
-
-	.consumable_max {
-		width: 34px;
-		font-size: 11px;
-		float: left;
-		line-height: 20px;
-		color: #aaa;
-	}
-
-	.consumables .consumable {
-		&.page1 {
-			display: block;
-		}
-
-		&.page2 {
-			display: none;
-		}
-
-		&.itemPage {
-			display: none;
-		}
-
-		&.itemPage,
-		&.column3 {
-			width: 60px;
-
-			.consumable_ltext {
-				width: 40px;
-			}
-		}
-
-		&.column3 {
-			&.narrower {
-				width: 55px;
-
-				.consumable_ltext {
-					width: 35px;
+				img {
+					width: 14px;
+					height: 14px;
+					margin: 3px;
+					vertical-align: top;
 				}
 			}
 
-			&.wider {
+			.consumable_text {
+				width: 36px;
+				font-size: 14px;
+				line-height: 20px;
+				float: left;
+				color: #ccc;
+			}
+
+			.consumable_ltext {
 				width: 70px;
+				font-size: 14px;
+				line-height: 20px;
+				float: left;
+				color: #ccc;
+				white-space: nowrap;
+
+				&.regenCap {
+					color: #EAF918;
+				}
+
+				&.hardCap {
+					color: #FF7979;
+				}
+
+				&.danger {
+					color: #EAF918;
+				}
+
+				&.fulled {
+					color: #FF7979;
+				}
+			}
+
+			.consumable_max {
+				width: 34px;
+				font-size: 11px;
+				float: left;
+				line-height: 20px;
+				color: #aaa;
+			}
+
+			&.page1 {
+				display: block;
+			}
+
+			&.page2 {
+				display: none;
+			}
+
+			&.itemPage {
+				display: none;
+			}
+
+			&.itemPage,
+			&.column3 {
+				width: 60px;
 
 				.consumable_ltext {
-					width: 50px;
+					width: 40px;
+				}
+			}
+
+			&.column3 {
+				&.narrower {
+					width: 55px;
+
+					.consumable_ltext {
+						width: 35px;
+					}
+				}
+
+				&.wider {
+					width: 70px;
+
+					.consumable_ltext {
+						width: 50px;
+					}
 				}
 			}
 		}
