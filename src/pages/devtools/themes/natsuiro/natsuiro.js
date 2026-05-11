@@ -5555,8 +5555,8 @@
 			timerIcon.attr("src", "../../../../assets/img/ui/btn-gs.png");
 			timerText.css("color", textColor);
 			// Config option for each tick
-			const tickNotif = [[0, 1], [0, 2]];
-			const selectedNotif = ConfigManager.alert_value_sparkle;
+			const tickNotif = [[1, 2], [1, 3]];
+			const selectedNotif = ConfigManager.alert_sparkle;
 			if (sparkleNotif <= tickNotif.length
 				&& tickNotif[sparkleNotif - 1].includes(selectedNotif)) {
 				SendSparkleNotification();
@@ -5565,7 +5565,7 @@
 	}
 
 	function SendSparkleNotification() {
-		if (!ConfigManager.alert_notif_sparkle) {
+		if (!ConfigManager.alert_sparkle) {
 			return;
 		}
 		SendSoundNotification(ConfigManager.alert_type_sparkle, ConfigManager.alert_custom_sparkle);

@@ -300,7 +300,7 @@ Contains summary information about a fleet and its ships
 			return false;
 		}
 		const sparkler = this.ship(sparklerPos - 1);
-		return !sparkler.isShouha() && sparkler.isSupplied() && sparkler.isFree();
+		return !sparkler.isShouha() && sparkler.isSupplied() && sparkler.morale >= 30 && sparkler.isFree();
 	};
 
 	/** @return a function to pass to this.ship() that will update the ships' sparkle status */

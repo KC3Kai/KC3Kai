@@ -605,20 +605,15 @@
 				"options" : { "label" : "%" }
 			},
 			{
-				"id" : "alert_notif_sparkle",
-				"name" : "SettingsNotifSparkle",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "alert_value_sparkle",
-				"name" : "SettingsValueSparkle",
+				"id" : "alert_sparkle",
+				"name" : "SettingsSparkleNotif",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 0, "SettingsSparkleEveryTick" ],
-						[ 1, "SettingsSparkleFirstTick" ],
-						[ 2, "SettingsSparkleSecondTick" ]
+						[ 0, "SettingsSparkleNever" ],
+						[ 1, "SettingsSparkleEveryTick" ],
+						[ 2, "SettingsSparkleFirstTick" ],
+						[ 3, "SettingsSparkleSecondTick" ]
 					]
 				}
 			},
