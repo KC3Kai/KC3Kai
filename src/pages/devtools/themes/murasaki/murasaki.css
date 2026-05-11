@@ -17,13 +17,15 @@ html,body {
 	z-index: 90;
 	pointer-events: none;
 	display: none;
-}
-#critical.anim1 {
-	box-shadow: inset 0 0 20px rgba(255,0,0,0.5);
-	transition: all 0.4s;
-}
-#critical.anim2 {
-	box-shadow: inset 0 0 60px rgba(255,0,0,0.8);
+
+	&.anim1 {
+		box-shadow: inset 0 0 20px rgba(255,0,0,0.5);
+		transition: all 0.4s;
+	}
+
+	&.anim2 {
+		box-shadow: inset 0 0 60px rgba(255,0,0,0.8);
+	}
 }
 .jp_fonts {
 	font-family: "Tahoma", "Helvetica", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
@@ -38,24 +40,29 @@ html,body {
 	font-family: "Microsoft JhengHei UI", "Microsoft JhengHei", "Heiti TC", "LiHei Pro Medium", sans-serif;
 }
 
-.waitingForActions.logo {
-	width: 100%;
-	height: 70px;
-	top: 16px;
-	position: absolute;
-	margin: 0 auto;
-	text-align: center;
-}
-.waitingForActions.text {
-	width: 300px;
-	height: 50px;
-	line-height: 50px;
-	background: #fff;
-	border-radius: 10px;
-	margin: 90px auto 0;
-	text-align: center;
-	font-weight: bold;
-	font-size: 14px;
+/* LOADING
+------------------------------*/
+.waitingForActions {
+	&.logo {
+		width: 100%;
+		height: 70px;
+		top: 16px;
+		position: absolute;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	&.text {
+		width: 300px;
+		height: 50px;
+		line-height: 50px;
+		background: #fff;
+		border-radius: 10px;
+		margin: 90px auto 0;
+		text-align: center;
+		font-weight: bold;
+		font-size: 14px;
+	}
 }
 
 /* MODALS
@@ -67,1018 +74,1170 @@ html,body {
 	top: 0;
 	left: 0;
 	display: none;
-}
-.modalBox .blackFilter {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	background: -webkit-gradient(radial, center center, 0, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
-	background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
-}
-.modalBox .content {
-	padding: 10px;
-	border-radius: 10px;
-	top: 50%;
-	left: 50%;
-	position: absolute;
-	z-index: 2;
+
+	.blackFilter {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		background: -webkit-gradient(radial, center center, 0, center center, 100%, color-stop(0%,rgba(0,0,0,0.5)), color-stop(100%,rgba(0,0,0,0.85)));
+		background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.85) 100%);
+	}
+
+	.content {
+		padding: 10px;
+		border-radius: 10px;
+		top: 50%;
+		left: 50%;
+		position: absolute;
+		z-index: 2;
+	}
 }
 
 /* CATBOMB MODAL
 ------------------------------*/
 #catBomb {
 	z-index: 102;
-}
-#catBomb .content {
-	width: 400px;
-	min-height: 120px;
-	max-height: 220px;
-	background-color: #fdd;
-	margin: -60px auto 0 -200px;
-	color: #c44;
-}
-#catBomb .content.withDownload {
-	margin: -70px auto 0 -200px;
-	height: 140px;
-}
-#catBomb .image {
-	width: 40px;
-	height: 40px;
-	margin: 0 10px 0 0;
-	float: left;
-}
-#catBomb .image img {
-	width: 40px;
-	height: 40px;
-}
-#catBomb .title {
-	width: 300px;
-	height: 40px;
-	line-height: 40px;
-	font-size: 14px;
-	font-weight: bold;
-	float: left;
-	white-space: nowrap;
-}
-#catBomb .closebtn {
-	width: 25px;
-	height: 40px;
-	line-height: 30px;
-	font-weight: bold;
-	float: left;
-	text-align: right;
-	font-size: 30px;
-	margin: 0 0 0 5px;
-	color: #e88;
-}
-#catBomb .closebtn:hover {
-	color: #f55;
-}
-#catBomb .description {
-	width: 380px;
-	margin: 10px 0 0 0;
-	font-size: 12px;
-}
-#catBomb .download {
-	text-align: center;
-	font-weight: bold;
-	font-size: 14px;
-	margin: 2px 0 0 0;
+
+	.content {
+		width: 400px;
+		min-height: 120px;
+		max-height: 220px;
+		background-color: #fdd;
+		margin: -60px auto 0 -200px;
+		color: #c44;
+
+		&.withDownload {
+			margin: -70px auto 0 -200px;
+			height: 140px;
+		}
+	}
+
+	.image {
+		width: 40px;
+		height: 40px;
+		margin: 0 10px 0 0;
+		float: left;
+
+		img {
+			width: 40px;
+			height: 40px;
+		}
+	}
+
+	.title {
+		width: 300px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 14px;
+		font-weight: bold;
+		float: left;
+		white-space: nowrap;
+	}
+
+	.closebtn {
+		width: 25px;
+		height: 40px;
+		line-height: 30px;
+		font-weight: bold;
+		float: left;
+		text-align: right;
+		font-size: 30px;
+		margin: 0 0 0 5px;
+		color: #e88;
+
+		&:hover {
+			color: #f55;
+		}
+	}
+
+	.description {
+		width: 380px;
+		margin: 10px 0 0 0;
+		font-size: 12px;
+	}
+
+	.download {
+		text-align: center;
+		font-weight: bold;
+		font-size: 14px;
+		margin: 2px 0 0 0;
+	}
 }
 
 /* GAME UPDATE MODAL
 ------------------------------*/
 #gameUpdate {
 	z-index: 101;
-}
-#gameUpdate .content {
-	width: 400px;
-	min-height: 120px;
-	max-height: 220px;
-	background-color: #dfd;
-	margin: -60px auto 0 -200px;
-	color: #0c0;
-}
-#gameUpdate .image {
-	width: 40px;
-	height: 40px;
-	margin: 0 10px 0 0;
-	float: left;
-}
-#gameUpdate .image img {
-	width: 40px;
-	height: 40px;
-}
-#gameUpdate .title {
-	width: 300px;
-	height: 40px;
-	line-height: 40px;
-	font-size: 14px;
-	font-weight: bold;
-	float: left;
-	white-space: nowrap;
-}
-#gameUpdate .closebtn {
-	width: 25px;
-	height: 40px;
-	line-height: 30px;
-	font-weight: bold;
-	float: left;
-	text-align: right;
-	font-size: 30px;
-	margin: 0 0 0 5px;
-	color: #8e8;
-}
-#gameUpdate .closebtn:hover {
-	color: #5f5;
-}
-#gameUpdate .description {
-	width: 380px;
-	margin: 10px 0 0 0;
-	font-size: 12px;
+
+	.content {
+		width: 400px;
+		min-height: 120px;
+		max-height: 220px;
+		background-color: #dfd;
+		margin: -60px auto 0 -200px;
+		color: #0c0;
+	}
+
+	.image {
+		width: 40px;
+		height: 40px;
+		margin: 0 10px 0 0;
+		float: left;
+
+		img {
+			width: 40px;
+			height: 40px;
+		}
+	}
+
+	.title {
+		width: 300px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 14px;
+		font-weight: bold;
+		float: left;
+		white-space: nowrap;
+	}
+
+	.closebtn {
+		width: 25px;
+		height: 40px;
+		line-height: 30px;
+		font-weight: bold;
+		float: left;
+		text-align: right;
+		font-size: 30px;
+		margin: 0 0 0 5px;
+		color: #8e8;
+
+		&:hover {
+			color: #5f5;
+		}
+	}
+
+	.description {
+		width: 380px;
+		margin: 10px 0 0 0;
+		font-size: 12px;
+	}
 }
 
-/* MODULES
+/* MURASAKI THEME
+------------------------------*/
+body {
+	background: #BEA3FB url(img/fubuki_bg.png) bottom right no-repeat;
+}
+
+/* WRAPPER, GRID AND MODULE SETUP
 ------------------------------*/
 .wrapper {
+	display: grid;
+	grid-auto-rows: auto;
 	overflow: hidden;
 	margin: 0 auto;
-	display: none;
 	position: relative;
 	white-space: nowrap;
-	/*background: #FFFFE8;*/
 }
+
+@media all and (width < 540px) {
+	.wrapper {
+		grid-template-columns: 100%;
+	}
+}
+
+@media all and (width <= 800px) {
+	.wrapper {
+		grid-template-columns: 2fr 3fr;
+	}
+}
+
+@media all and (width <= 960px) {
+	.wrapper {
+		grid-template-columns: 2fr 3fr 2fr;
+	}
+}
+
+@media all and (width > 960px) {
+	.wrapper {
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+	}
+}
+
 .wrapper_bg {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	left: 0;
-	background: url(img/wrapper.png);
+	background: transparent url(img/wrapper.png) no-repeat;
+	background-size: cover;
+	z-index: -1;
 }
+
 .module {
-	position: absolute;
-	/*background: rgba(255,0,0,.3);*/
+	margin: 10px;
 }
 
 /*------- HQ INFO -------*/
 .module.admiral {
-	width: 190px;
-	height: 56px;
-}
-.module.admiral .admiral_level {
-	width: 60px;
-	height: 56px;
-	float: right;
-	color: #eee;
-}
-.module.admiral .admiral_lvtxt {
-	width: 60px;
-	height: 24px;
-	line-height: 24px;
-	font-size: 12px;
-	text-align: center;
-	overflow: hidden;
-}
-.module.admiral .admiral_lvval {
-	font-size: 16px;
-}
-.module.admiral .admiral_lvbox {
-	width: 60px;
-	height: 14px;
-	border: 1px solid #fff;
-	background: #555;
-	margin: 1px 0;
-}
-.module.admiral .admiral_lvbar {
-	width: 58px;
-	height: 12px;
-	background: #0f0;
-}
-.module.admiral .admiral_lvnext {
-	width: 60px;
-	height: 16px;
-	line-height: 16px;
-	font-size: 11px;
-	text-align: center;
-	position: relative;
-}
-.module.admiral .admiral_lvnext:before {
-	content: attr(data-exp);
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	text-align: right;
-	top: 0;
-	left: -60px;
-}
-.module.admiral .admiral_lvnext:after {
-	content: attr(data-exp-gain);
-	color: red;
-	position: absolute;
-	top: -16px;
-	left: 0;
-	right: 0;
-	text-align: center;
-	text-shadow: 0 0 2px black;
-}
-.module.admiral .admiral_name {
-	width: 130px;
-	height: 24px;
-	line-height: 24px;
-	font-size: 18px;
-	float: left;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	user-select: none;
-	-webkit-user-select: none;
-	color: #ffcc00;
-}
-.module.admiral .admiral_name.censor {
-	color: transparent;
-	text-shadow: 0 0 8px rgba(255,220,0,0.4);
-}
-.module.admiral .admiral_name.censor:before {
-	content: 'U CANT SEE ME';
-}
-.module.admiral .admiral_comm {
-	width: 130px;
-	height: 16px;
-	line-height: 16px;
-	font-size: 12px;
-	float: left;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	color: #aaa;
-}
-.module.admiral .admiral_rank {
-	width: 130px;
-	height: 16px;
-	line-height: 16px;
-	font-size: 13px;
-	float: left;
-	color: #eee;
+	grid-area: 1 / 1 / 2 / 2;
+
+	.admiral_level {
+		color: #eee;
+		float: right;
+		width: 60px;
+
+		.admiral_lvtxt {
+			line-height: 24px;
+			font-size: 12px;
+			text-align: center;
+			overflow: hidden;
+		}
+
+		.admiral_lvval {
+			font-size: 16px;
+		}
+
+		.admiral_lvbox {
+			width: 60px;
+			height: 14px;
+			border: 1px solid #fff;
+			background: #555;
+			margin: 1px 0;
+
+			.admiral_lvbar {
+				width: 58px;
+				height: 12px;
+				background: #0f0;
+			}
+		}
+
+		.admiral_lvnext {
+			line-height: 16px;
+			font-size: 11px;
+			text-align: center;
+			position: relative;
+
+			&:before {
+				content: attr(data-exp);
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				text-align: right;
+				top: 0;
+				left: -60px;
+			}
+
+			&:after {
+				content: attr(data-exp-gain);
+				color: red;
+				position: absolute;
+				top: -16px;
+				left: 0;
+				right: 0;
+				text-align: center;
+				text-shadow: 0 0 2px black;
+			}
+		}
+	}
+
+	.admiral_name {
+		width: calc(100% - 60px);
+		height: 24px;
+		line-height: 24px;
+		font-size: 18px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		user-select: none;
+		-webkit-user-select: none;
+		color: #ffcc00;
+
+		&.censor {
+			color: transparent;
+			text-shadow: 0 0 8px rgba(255,220,0,0.4);
+
+			&:before {
+				content: 'U CANT SEE ME';
+			}
+		}
+	}
+
+	.admiral_comm {
+		width: calc(100% - 60px);
+		height: 16px;
+		line-height: 16px;
+		font-size: 12px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: #aaa;
+	}
+
+	.admiral_rank {
+		width: 130px;
+		height: 16px;
+		line-height: 16px;
+		font-size: 13px;
+		color: #eee;
+	}
 }
 
 /*------- ACTIVITY -------*/
-.module.activity {
-	width: 190px;
-	height: 255px;
-}
-.module.activity .activity_tabs {
-	width: 190px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.module.activity .activity_tab {
-	width: calc(180px / 4);
-	height: 20px;
-	background: rgba(100, 100, 100, 0.618);
-	color: #fff;
-	text-align: center;
-	line-height: 20px;
-	font-size: 11px;
-	border-radius: 5px 5px 0 0;
-	filter: brightness(0.7) drop-shadow(1px 0 0 black) opacity(0.62);
-	-webkit-filter: brightness(0.7) drop-shadow(1px 0 0 black) opacity(0.62);
-}
-.module.activity .activity_tab.tab_count_5 {
-	width: calc(180px / 5);
-}
-.module.activity .activity_tab+.activity_tab {
-	margin-left: 1px;
-}
 #atab_activity {
 	cursor: default;
 }
-.module.activity .activity_tab.active {
-	filter: brightness(1);
-	-webkit-filter: brightness(1);
-}
-.module.activity .activity_body {
-	width: 190px;
-	height: 235px;
-	border-radius: 5px;
-	overflow: hidden;
-	white-space: initial;
-}
-.module.activity .activity_box {
-	width: 190px;
-	height: 235px;
-	display: none;
-	padding: 5px;
-}
-.module.activity .activity_box.disabled {
-	filter: brightness(0.5);
-	-webkit-filter: brightness(0.5);
-	pointer-events: none;
-}
-.module.activity .activity_dismissable {
-	cursor: pointer;
-	user-select: none;
-	-webkit-user-select: none;
-}
 
-/*------- ACTIVITY: BASIC -------*/
-.module.activity .activity_basic {
+.module.activity {
+	grid-area: 2 / 1 / 3 / 2;
 
-}
-/* Consumables */
-.module.activity .consumables {
-	width: 180px;
-	height: 60px;
-	margin: 0 0 5px 0;
-}
-.module.activity .consumable {
-	width: 90px;
-	height: 20px;
-	float: left;
-}
-.module.activity .consumable_icon {
-	width: 20px;
-	height: 20px;
-	float: left;
-}
-.module.activity .consumable_icon img {
-	width: 14px;
-	height: 14px;
-	margin: 3px;
-	vertical-align: top;
-}
-.module.activity .consumable_text {
-	width: 36px;
-	font-size: 14px;
-	line-height: 20px;
-	float: left;
-	color: #ccc;
-}
-.module.activity .consumable_ltext {
-	width: 70px;
-	font-size: 14px;
-	line-height: 20px;
-	float: left;
-	color: #ccc;
-	white-space: nowrap;
-}
-.module.activity .consumable_ltext.regenCap {
-	color: #EAF918;
-}
-.module.activity .consumable_ltext.hardCap {
-	color: #FF7979;
-}
-.module.activity .consumable_text.danger {
-	color: #EAF918;
-}
-.module.activity .consumable_text.fulled {
-	color: #FF7979;
-}
-.module.activity .consumable_max {
-	width: 34px;
-	font-size: 11px;
-	float: left;
-	line-height: 20px;
-	color: #aaa;
-}
-.module.activity .consumables .consumable.page1 {
-	display: block;
-}
-.module.activity .consumables .consumable.page2 {
-	display: none;
-}
-.module.activity .consumables .consumable.itemPage {
-	display: none;
-}
-.module.activity .consumables .consumable.itemPage,
-.module.activity .consumables .consumable.column3 {
-	width: 60px;
-}
-.module.activity .consumables .consumable.itemPage .consumable_ltext,
-.module.activity .consumables .consumable.column3 .consumable_ltext {
-	width: 40px;
-}
-.module.activity .consumables .consumable.column3.narrower {
-	width: 55px;
-}
-.module.activity .consumables .consumable.column3.narrower .consumable_ltext {
-	width: 35px;
-}
-.module.activity .consumables .consumable.column3.wider {
-	width: 70px;
-}
-.module.activity .consumables .consumable.column3.wider .consumable_ltext {
-	width: 50px;
-}
+	.activity_tabs {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-/* Expedition */
-.module.activity .expeditions {
-	width: 180px;
-	height: 45px;
-	margin: 0 0 5px 0;
-}
-.module.activity .expeditions .expedition {
-	width: 60px;
-	height: 45px;
-	float: left;
-	position: relative;
-}
-.module.activity .expeditions .timer-img {
-	width: 29px;
-	height: 29px;
-	margin: 0 0 3px 15px;
-	border-radius: 15px;
-}
-.module.activity .expeditions .timer-img img {
-	width: 25px;
-	height: 25px;
-	margin: 2px;
-	border-radius: 50%;
-}
-.module.activity .expeditions .timer-img.locked {
-	background-image: url(../../../../assets/img/ui/lock.png);
-	background-size: 19px;
-	background-position: 5px 5px;
-	background-repeat: no-repeat;
-}
-.module.activity .expeditions .timer-expnum {
-	height: 14px;
-	line-height: 14px;
-	font-size: 12px;
-	position: absolute;
-	top: 2px;
-	left: 46px;
-	color: #ccc;
-}
-.module.activity .timer-time {
-	width: 60px;
-	height: 13px;
-	line-height: 13px;
-	font-size: 12px;
-	text-align: center;
-	color: #eee;
-}
+	.activity_tab {
+		width: calc(100% / 4);
+		height: 20px;
+		background: rgba(100, 100, 100, 0.618);
+		color: #fff;
+		text-align: center;
+		line-height: 20px;
+		font-size: 11px;
+		border-radius: 5px 5px 0 0;
+		filter: brightness(0.7) drop-shadow(1px 0 0 black) opacity(0.62);
 
-/* Timers */
-.module.activity .timers {
-	width: 180px;
-	height: 108px;
-}
-.module.activity .timer_boxes {
-	width: 90px;
-	height: 108px;
-	float: left;
-}
-.module.activity .timer_box {
-	width: 90px;
-	height: 26px;
-	margin: 0 0 1px 0;
-}
-.module.activity .timer_box .timer-img {
-	width: 24px;
-	height: 24px;
-	margin: 1px 4px 0 0;
-	border-radius: 13px;
-	float: left;
-}
-.module.activity .timer_box .timer-img img {
-	width: 20px;
-	height: 20px;
-	margin: 2px;
-	display: none;
-	border-radius: 50%;
-}
-.module.activity .timer_box .timer-time {
-	width: 60px;
-	height: 26px;
-	line-height: 26px;
-	float: left;
-	font-size: 13px;
-	text-align: left;
-	color: #eee;
-}
+		&.tab_count_5 {
+			width: calc(100% / 5);
+		}
 
-.module.activity .repairs {}
-.module.activity .repairs .timer-img {
-	background: #EDD286;
-}
+		+ .activity_tab {
+			margin-left: 1px;
+		}
 
-.module.activity .builds {}
-.module.activity .builds .timer-img {
-	background: #996600;
-}
+		&.active {
+			filter: brightness(1);
+			-webkit-filter: brightness(1);
+		}
+	}
 
-.module.activity .repairs .timer-img.locked,
-.module.activity .builds .timer-img.locked {
-	background-image: url(../../../../assets/img/ui/lock.png);
-	background-size: 17px;
-	background-position: 3px 3px;
-	background-repeat: no-repeat;
-}
+	.activity_body {
+		border-radius: 0 0 5px 5px;
+		white-space: initial;
+	}
 
-.module.activity .builds .timer-img.lsc {
-	background: #b70100;
-}
-.module.activity .builds .timer-img.new_ship {
-	filter: drop-shadow(0px 0 2px #1f1);
-	-webkit-filter: drop-shadow(0px 0 2px #1f1);
-}
+	.activity_box {
+		width: 190px;
+		height: 235px;
+		display: none;
+		padding: 5px;
 
-/*------- ACTIVITY: BATTLE -------*/
-.module.activity .activity_battle {
-	white-space: nowrap;
-}
-/* Map Info */
-.module.activity .map_info {
-	width: 180px;
-	height: 20px;
-	line-height: 20px;
-	margin: 0 0 5px 0;
-}
-.module.activity .map_world {
-	width: 45px;
-	height: 20px;
-	float: left;
-	font-weight: bold;
-	color: #ffcc00;
-	font-size: 14px;
-	text-align: center;
-	margin: 0 5px 0 0;
-}
-.module.activity .map_world.debuffed {
-	color: #dc8280;
-}
-.module.activity .map_gauge {
-	position: relative;
-	width: 60px;
-	height: 12px;
-	float: left;
-	margin: 4px 0;
-	background: #222;
-	border: 1px solid #fff;
-}
-.module.activity .map_gauge * {
-	position: absolute;
-	height: 10px;
-	float: left;
-}
-.module.activity .map_gauge .curhp {
-	background: #0f0;
-}
-.module.activity .map_gauge .nowhp {
-	background: #f00;
-}
-.module.activity .map_hp {
-	width: 70px;
-	height: 20px;
-	float: left;
-	font-size: 11px;
-	color: #eee;
-	padding: 0 0 0 5px;
-}
+		&.disabled {
+			filter: brightness(0.5);
+			-webkit-filter: brightness(0.5);
+			pointer-events: none;
+		}
+	}
 
-.module.activity .map_info.map_finisher.noBlink .map_gauge {
-	background-color: #b22;
-}
-.module.activity .map_info.map_finisher:not(.noBlink) .map_gauge {
-	animation: gauge-finish-her 0.25s infinite ease alternate;
-}
-.module.activity .map_info.map_finisher .map_hp {
-	color: #e66;
-}
-/* Sortie Nodes */
-.module.activity .sortie_nodes {
-	width: auto;
-	min-width: 180px;
-	height: 19px;
-	margin: 0 0 4px 0;
-	position: relative;
-	display: inline-flex;
-}
-.module.activity .sortie_node {
-	width: 19px;
-	height: 19px;
-	line-height: 17px;
-	margin: 0 1px 0 0;
-	float: left;
-	background: #000;
-	border-radius: 10px;
-	color: #fff;
-	font-size: 10px;
-	text-align: center;
-	border: 1px solid #aaa;
-}
-.module.activity .sortie_node.long_name {
-	font-size: 9px;
-	letter-spacing: -1px;
-}
-.module.activity .sortie_node.special_cutin {
-	box-shadow: 0 0 1px 2px #d0b;
-}
-.module.activity .sortie_node.smoke_screen {
-	box-shadow: 0 0 1px 2px #888;
-}
-.module.activity .sortie_nodes .boss_node {
-	float: left;
-	position: absolute;
-	display: none;
-}
-.module.activity .sortie_nodes .boss_node img {
-	width: 19px;
-	height: 19px;
-	margin-top: -10px;
-}
-.module.activity .sortie_nodes .boss_node .boss_circle {
-	position: absolute;
-	margin-top: -20px;
-	border-color: #a90a0a;
-	background: #7d0000;
-	z-index: 1;
-}
-.module.activity .sortie_node.nc_battle {
-	background: #7D0000;
-	text-shadow:
-		0 -1px 1px #7d0000,
-		1px 0 1px #7d0000,
-		0 1px 1px #7d0000,
-		-1px 0 1px #7d0000;
-}
-.module.activity .sortie_node.nc_resource {
-	background: #007A00;
-	text-shadow: none;
-}
-.module.activity .sortie_node.nc_maelstrom {
-	background: #D2C6FF;
-	color: #000;
-	text-shadow: none;
-}
-.module.activity .sortie_node.nc_select {
-	background: #FFF;
-	color: #000;
-	text-shadow: none;
-}
-.module.activity .sortie_node.nc_avoid {
-	background: #00B3B1;
-	text-shadow: none;
-}
-.module.activity .sortie_node.nc_night_battle {
-	background: #4233C3;
-}
-.module.activity .sortie_node.nc_night_to_day {
-	background:
-		-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
-		#7d0000;
-	background:
-		linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
-		#7d0000;
-	background-size: 400% 200%;
-	background-position: -8px 0;
-}
-.module.activity .sortie_node.nc_air_battle {
-	background:
-		-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
-		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
-		#7d0000;
-	background:
-		linear-gradient(to top right, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
-		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
-		#7d0000;
-	background-size: 18px 18px;
-	background-position: -9px -10px, -27px -45px;
-}
-.module.activity .sortie_node.nc_air_raid {
-	background:
-		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
-		#7d0000;
-	background:
-		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
-		#7d0000;
-	background-size: 28px 27px;
-	background-position: -53px -66px;
-}
-.module.activity .sortie_node.nc_long_range_raid {
-	background:
-		-webkit-linear-gradient(top left, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
-		#7d0000;
-	background:
-		linear-gradient(to bottom right, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
-		#7d0000;
-	background-size: 40px 40px;
-	background-position: -61px -107px;
-}
-.module.activity .sortie_node.nc_air_support_sub {
-	background:
-		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
-		#7d0000;
-	background:
-		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
-		#7d0000;
-	background-size: 28px 27px;
-	background-position: -52px -67px;
-	box-shadow: inset 0 0 4px 2px #2e15ca;
-}
-.module.activity .sortie_node.nc_enemy_combined {
-	background:
-		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-		#7d0000;
-	background-size: 25px 25px;
-	background-position: -7px -7px, 0 18px, -32px 24px, -50px 49px;
-}
+	.activity_dismissable {
+		cursor: pointer;
+		user-select: none;
+		-webkit-user-select: none;
+	}
 
-/* Abyss Ships */
-.module.activity .node_type_battle {
-	position: relative;
-}
+	/*------- ACTIVITY: BASIC -------*/
+	/* Consumables */
+	.consumables {
+		width: 180px;
+		height: 60px;
+		margin: 0 0 5px 0;
+	}
 
-/**
-ABYSS FLEET
-**/
+	.consumable {
+		width: 90px;
+		height: 20px;
+		float: left;
+	}
 
-/* Abyss single fleet */
-.module.activity .abyss_single .sink_icons {
-	width: 180px;
-	height: 0;
-	position: absolute;
-	z-index: 1;
-	pointer-events: none;
-}
-.module.activity .abyss_single .sink_icons .sunk {
-	width: 16px;
-	height: 16px;
-	line-height: 16px;
-	float: left;
-	margin: 8px 0 0 14px;
-}
-.module.activity .abyss_single .sink_icons .sunk img {
-	width: 16px;
-	height: 16px;
-	vertical-align: top;
-	display: none;
-	border-radius: 50%;
-	object-fit: cover;
-}
-.module.activity .abyss_single .sink_icons .shown img {
-	display: inline;
-}
-.module.activity .abyss_single .sink_icons .safe img {
-	filter: grayscale(100%);
-	-webkit-filter: grayscale(100%);
-}
-.module.activity .abyss_single .sink_icons .debuff img {
-	display: inline;
-	box-sizing: border-box;
-	padding-left: 16px;
-	background: url(../../../../assets/img/client/chuuha_land.png);
-	background-size: cover;
-}
-.module.activity .abyss_single .abyss_ships {
-	width: 180px;
-	height: 26px;
-	margin: 0 0 1px 0;
-}
-.module.activity .abyss_single .abyss_ship {
-	width: 26px;
-	height: 26px;
-	float: left;
-	margin: 0 2px;
-	border-radius: 13px;
-	border: 1px solid #000;
-	overflow: hidden;
-	background: #888;
-	position: relative;
-}
-.module.activity .abyss_single .abyss_ship img {
-	width: 26px;
-	height: 26px;
-	position: relative;
-	top: -1px;
-	left: -1px;
-	border-radius: 50%;
-}
-.module.activity .abyss_ships .boss {
-	border-color: #5ef;
-	box-shadow: 0 0 1px 1px #fe5;
-}
-.module.activity .abyss_ships .kai {
-	border-color: #2af;
-	box-shadow: 0 0 1px 0 #2af;
-}
-.module.activity .abyss_ships .flagship {
-	border-color: #fc3;
-	box-shadow: 0 0 1px 0 #fc3;
-}
-.module.activity .abyss_ships .elite {
-	border-color: #f33;
-	box-shadow: 0 0 1px 0 #f33;
-}
-.module.activity .abyss_ships .sunk {
-	opacity: 0.6;
-}
-.module.activity .abyss_single .abyss_hps {
-	width: 180px;
-	height: 4px;
-	margin: 0 0 5px 0;
-}
-.module.activity .abyss_single .abyss_hp {
-	width: 28px;
-	height: 4px;
-	margin: 0 1px;
-	background: #222;
-	float: left;
-}
-.module.activity .abyss_single .abyss_hp.sunk {
-	opacity: 0.5;
-}
-.module.activity .abyss_single .abyss_hp_bar {
-	height: 4px;
-	background: #0f0;
-}
+	.consumable_icon {
+		width: 20px;
+		height: 20px;
+		float: left;
 
-/* Abyss combined fleet */
-.module.activity .abyss_combined {
-	width: 180px;
-	margin: 0 0 4px 0;
-	display: none;
-}
-.module.activity .abyss_combined .abyss_fleet {
-	width: 180px;
-	height: 15px;
-	margin: 0 0 1px 0;
-}
-.module.activity .abyss_combined .abyss_fleet_1 {
+		img {
+			width: 14px;
+			height: 14px;
+			margin: 3px;
+			vertical-align: top;
+		}
+	}
 
-}
-.module.activity .abyss_combined .abyss_fleet_2 {
-	margin: 0 0 0 10px;
-}
+	.consumable_text {
+		width: 36px;
+		font-size: 14px;
+		line-height: 20px;
+		float: left;
+		color: #ccc;
+	}
 
-.module.activity .abyss_combined .sink_icons {
-	width: 180px;
-	height: 0;
-	position: absolute;
-	z-index: 1;
-	pointer-events: none;
-}
-.module.activity .abyss_combined .sink_icons .sunk {
-	width: 10px;
-	height: 10px;
-	line-height: 10px;
-	float: left;
-	margin: 4px 0 0 17px;
-}
-.module.activity .abyss_combined .sink_icons .sunk img {
-	width: 10px;
-	height: 10px;
-	vertical-align: top;
-	display: none;
-}
-.module.activity .abyss_combined .sink_icons .shown img {
-	display: inline;
-}
-.module.activity .abyss_combined .sink_icons .safe img {
-	filter: grayscale(100%);
-	-webkit-filter: grayscale(100%);
-}
-.module.activity .abyss_combined .sink_icons .debuff img {
-	display: inline;
-	box-sizing: border-box;
-	padding-left: 10px;
-	background: url(../../../../assets/img/client/chuuha_land.png);
-	background-size: cover;
-}
-.module.activity .abyss_combined .abyss_ships {
-	width: 180px;
-	height: 15px;
-	margin: 0 0 0 0;
-}
+	.consumable_ltext {
+		width: 70px;
+		font-size: 14px;
+		line-height: 20px;
+		float: left;
+		color: #ccc;
+		white-space: nowrap;
 
-.module.activity .abyss_combined .abyss_hp {
-	width: 2px;
-	height: 15px;
-	margin: 0 1px;
-	background: #222;
-	float: left;
-	overflow: hidden;
-}
-.module.activity .abyss_combined .abyss_hp.sunk {
-	opacity: 0.5;
-}
-.module.activity .abyss_combined .abyss_hp_bar {
-	height: 15px;
-	background: #0f0;
-}
+		&.regenCap {
+			color: #EAF918;
+		}
 
-.module.activity .abyss_combined .abyss_ship {
-	width: 15px;
-	height: 15px;
-	line-height: 15px;
-	float: left;
-	margin: 0 7px 0 2px;
-	border-radius: 8px;
-	overflow: hidden;
-	background: #888;
-	position: relative;
-}
-.module.activity .abyss_combined .abyss_ship img {
-	width: 15px;
-	height: 15px;
-	position: relative;
-	vertical-align: top;
-}
+		&.hardCap {
+			color: #FF7979;
+		}
 
-/* Battle Flags */
-.module.activity .battle_flags {
-	width: 180px;
-	height: 30px;
-	margin: 0 0 5px 0;
-}
-.module.activity .battle_flag {
-	width: 30px;
-	height: 30px;
-	float: left;
-}
-.module.activity .battle_flag img {
-	width: 24px;
-	height: 24px;
-	margin: 3px 6px;
-}
-.module.activity .battle_flag.battle_eformation {
-	width: 30px;
-	height: 30px;
-	margin: 0 0;
-	border-radius: 15px;
-	background: #fff;
-}
-.module.activity .battle_flag.battle_eformation img {
-	width: 24px;
-	height: 24px;
-	margin: 3px;
-}
-.module.activity .battle_flag.battle_fish img.rounded {
-	width: 25px;
-	height: 25px;
-	margin-top: 2px;
-	border-radius: 50%;
-}
-.module.activity .battle_flag .support_exped {
-	width: 12px;
-	height: 12px;
-	line-height: 13px;
-	border-radius: 6px;
-	margin: 16px 0 0 3px;
-	position: absolute;
-	font-size: 8px;
-	text-align: center;
-	color: #fff;
-	background: #a69de6;
-	overflow: hidden;
-	text-shadow: none;
-	pointer-events: none;
-	display: none;
-}
-.module.activity .battle_flag .support_lbas {
-	width: 14px;
-	height: 13px;
-	line-height: 13px;
-	border-radius: 6px;
-	margin: 15px 0 0 17px;
-	position: absolute;
-	font-size: 8px;
-	text-align: center;
-	color: #ff0;
-	background: #5b5;
-	overflow: hidden;
-	text-shadow: none;
-	pointer-events: none;
-	display: none;
-}
-.module.activity .battle_flag .support_balloon {
-	width: 13px;
-	height: 13px;
-	border-radius: 50%;
-	margin: 1px 0 0 18px;
-	position: absolute;
-	background: #fff;
-	opacity: 0.7;
-	overflow: hidden;
-	display: none;
-}
-.module.activity .battle_flag .support_balloon img {
-	width: 13px;
-	height: 13px;
-	vertical-align: top;
-	margin: 0 0;
-}
-.module.activity .battle_flag .support_balloon.deployed {
-	background: #fe5;
+		&.danger {
+			color: #EAF918;
+		}
+
+		&.fulled {
+			color: #FF7979;
+		}
+	}
+
+	.consumable_max {
+		width: 34px;
+		font-size: 11px;
+		float: left;
+		line-height: 20px;
+		color: #aaa;
+	}
+
+	.consumables .consumable {
+		&.page1 {
+			display: block;
+		}
+
+		&.page2 {
+			display: none;
+		}
+
+		&.itemPage {
+			display: none;
+		}
+
+		&.itemPage,
+		&.column3 {
+			width: 60px;
+
+			.consumable_ltext {
+				width: 40px;
+			}
+		}
+
+		&.column3 {
+			&.narrower {
+				width: 55px;
+
+				.consumable_ltext {
+					width: 35px;
+				}
+			}
+
+			&.wider {
+				width: 70px;
+
+				.consumable_ltext {
+					width: 50px;
+				}
+			}
+		}
+	}
+
+	/* Expedition */
+	.expeditions {
+		width: 180px;
+		height: 45px;
+		margin: 0 0 5px 0;
+
+		.expedition {
+			width: 60px;
+			height: 45px;
+			float: left;
+			position: relative;
+		}
+
+		.timer-img {
+			width: 29px;
+			height: 29px;
+			margin: 0 0 3px 15px;
+			border-radius: 15px;
+
+			img {
+				width: 25px;
+				height: 25px;
+				margin: 2px;
+				border-radius: 50%;
+			}
+
+			&.locked {
+				background-image: url(../../../../assets/img/ui/lock.png);
+				background-size: 19px;
+				background-position: 5px 5px;
+				background-repeat: no-repeat;
+			}
+		}
+
+		.timer-expnum {
+			height: 14px;
+			line-height: 14px;
+			font-size: 12px;
+			position: absolute;
+			top: 2px;
+			left: 46px;
+			color: #ccc;
+		}
+	}
+
+	.timer-time {
+		width: 60px;
+		height: 13px;
+		line-height: 13px;
+		font-size: 12px;
+		text-align: center;
+		color: #eee;
+	}
+
+	/* Timers */
+	.timers {
+		width: 180px;
+		height: 108px;
+	}
+
+	.timer_boxes {
+		width: 90px;
+		height: 108px;
+		float: left;
+	}
+
+	.timer_box {
+		width: 90px;
+		height: 26px;
+		margin: 0 0 1px 0;
+
+		.timer-img {
+			width: 24px;
+			height: 24px;
+			margin: 1px 4px 0 0;
+			border-radius: 13px;
+			float: left;
+
+			img {
+				width: 20px;
+				height: 20px;
+				margin: 2px;
+				display: none;
+				border-radius: 50%;
+			}
+		}
+
+		.timer-time {
+			width: 60px;
+			height: 26px;
+			line-height: 26px;
+			float: left;
+			font-size: 13px;
+			text-align: left;
+			color: #eee;
+		}
+	}
+
+	.repairs .timer-img {
+		background: #EDD286;
+	}
+
+	.builds .timer-img {
+		background: #996600;
+
+		&.lsc {
+			background: #b70100;
+		}
+
+		&.new_ship {
+			filter: drop-shadow(0px 0 2px #1f1);
+			-webkit-filter: drop-shadow(0px 0 2px #1f1);
+		}
+	}
+
+	.repairs .timer-img.locked,
+	.builds .timer-img.locked {
+		background-image: url(../../../../assets/img/ui/lock.png);
+		background-size: 17px;
+		background-position: 3px 3px;
+		background-repeat: no-repeat;
+	}
+
+	/*------- ACTIVITY: BATTLE -------*/
+	.activity_battle {
+		white-space: nowrap;
+	}
+
+	/* Map Info */
+	.map_info {
+		width: 180px;
+		height: 20px;
+		line-height: 20px;
+		margin: 0 0 5px 0;
+
+		&.map_finisher.noBlink .map_gauge {
+			background-color: #b22;
+		}
+
+		&.map_finisher:not(.noBlink) .map_gauge {
+			animation: gauge-finish-her 0.25s infinite ease alternate;
+		}
+
+		&.map_finisher .map_hp {
+			color: #e66;
+		}
+	}
+
+	.map_world {
+		width: 45px;
+		height: 20px;
+		float: left;
+		font-weight: bold;
+		color: #ffcc00;
+		font-size: 14px;
+		text-align: center;
+		margin: 0 5px 0 0;
+
+		&.debuffed {
+			color: #dc8280;
+		}
+	}
+
+	.map_gauge {
+		position: relative;
+		width: 60px;
+		height: 12px;
+		float: left;
+		margin: 4px 0;
+		background: #222;
+		border: 1px solid #fff;
+
+		* {
+			position: absolute;
+			height: 10px;
+			float: left;
+		}
+
+		.curhp {
+			background: #0f0;
+		}
+
+		.nowhp {
+			background: #f00;
+		}
+	}
+
+	.map_hp {
+		width: 70px;
+		height: 20px;
+		float: left;
+		font-size: 11px;
+		color: #eee;
+		padding: 0 0 0 5px;
+	}
+
+	/* Sortie Nodes */
+	.sortie_nodes {
+		width: auto;
+		min-width: 180px;
+		height: 19px;
+		margin: 0 0 4px 0;
+		position: relative;
+		display: inline-flex;
+	}
+
+	.sortie_node {
+		width: 19px;
+		height: 19px;
+		line-height: 17px;
+		margin: 0 1px 0 0;
+		float: left;
+		background: #000;
+		border-radius: 10px;
+		color: #fff;
+		font-size: 10px;
+		text-align: center;
+		border: 1px solid #aaa;
+
+		&.long_name {
+			font-size: 9px;
+			letter-spacing: -1px;
+		}
+
+		&.special_cutin {
+			box-shadow: 0 0 1px 2px #d0b;
+		}
+
+		&.smoke_screen {
+			box-shadow: 0 0 1px 2px #888;
+		}
+
+		.boss_node {
+			float: left;
+			position: absolute;
+			display: none;
+
+			img {
+				width: 19px;
+				height: 19px;
+				margin-top: -10px;
+			}
+
+			.boss_circle {
+				position: absolute;
+				margin-top: -20px;
+				border-color: #a90a0a;
+				background: #7d0000;
+				z-index: 1;
+			}
+		}
+
+		&.nc_battle {
+			background: #7D0000;
+			text-shadow:
+					0 -1px 1px #7d0000,
+					1px 0 1px #7d0000,
+					0 1px 1px #7d0000,
+					-1px 0 1px #7d0000;
+		}
+
+		&.nc_resource {
+			background: #007A00;
+			text-shadow: none;
+		}
+
+		&.nc_maelstrom {
+			background: #D2C6FF;
+			color: #000;
+			text-shadow: none;
+		}
+
+		&.nc_select {
+			background: #FFF;
+			color: #000;
+			text-shadow: none;
+		}
+
+		&.nc_avoid {
+			background: #00B3B1;
+			text-shadow: none;
+		}
+
+		&.nc_night_battle {
+			background: #4233C3;
+		}
+
+		&.nc_night_to_day {
+			background:
+					-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
+					#7d0000;
+			background:
+					linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
+					#7d0000;
+			background-size: 400% 200%;
+			background-position: -8px 0;
+		}
+
+		&.nc_air_battle {
+			background:
+					-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+					-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+					#7d0000;
+			background:
+					linear-gradient(to top right, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+					linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+					#7d0000;
+			background-size: 18px 18px;
+			background-position: -9px -10px, -27px -45px;
+		}
+
+		&.nc_air_raid {
+			background:
+					-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+					#7d0000;
+			background:
+					linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+					#7d0000;
+			background-size: 28px 27px;
+			background-position: -53px -66px;
+		}
+
+		&.nc_long_range_raid {
+			background:
+					-webkit-linear-gradient(top left, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+					#7d0000;
+			background:
+					linear-gradient(to bottom right, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+					#7d0000;
+			background-size: 40px 40px;
+			background-position: -61px -107px;
+		}
+
+		&.nc_air_support_sub {
+			background:
+					-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
+					#7d0000;
+			background:
+					linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
+					#7d0000;
+			background-size: 28px 27px;
+			background-position: -52px -67px;
+			box-shadow: inset 0 0 4px 2px #2e15ca;
+		}
+
+		&.nc_enemy_combined {
+			background:
+					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+					#7d0000;
+			background-size: 25px 25px;
+			background-position: -7px -7px, 0 18px, -32px 24px, -50px 49px;
+		}
+	}
+
+	/* Abyss Ships */
+	.node_type_battle {
+		position: relative;
+	}
+
+	/* ABYSS FLEET
+	---------------------*/
+	/* Abyss single fleet */
+	.abyss_single {
+		.sink_icons {
+			width: 180px;
+			height: 0;
+			position: absolute;
+			z-index: 1;
+			pointer-events: none;
+
+			.sunk {
+				width: 16px;
+				height: 16px;
+				line-height: 16px;
+				float: left;
+				margin: 8px 0 0 14px;
+
+				img {
+					width: 16px;
+					height: 16px;
+					vertical-align: top;
+					display: none;
+					border-radius: 50%;
+					object-fit: cover;
+				}
+			}
+
+			.shown img {
+				display: inline;
+			}
+
+			.safe img {
+				filter: grayscale(100%);
+				-webkit-filter: grayscale(100%);
+			}
+
+			.debuff img {
+				display: inline;
+				box-sizing: border-box;
+				padding-left: 16px;
+				background: url(../../../../assets/img/client/chuuha_land.png);
+				background-size: cover;
+			}
+		}
+
+		.abyss_ships {
+			width: 180px;
+			height: 26px;
+			margin: 0 0 1px 0;
+
+			.boss {
+				border-color: #5ef;
+				box-shadow: 0 0 1px 1px #fe5;
+			}
+
+			.kai {
+				border-color: #2af;
+				box-shadow: 0 0 1px 0 #2af;
+			}
+
+			.flagship {
+				border-color: #fc3;
+				box-shadow: 0 0 1px 0 #fc3;
+			}
+
+			.elite {
+				border-color: #f33;
+				box-shadow: 0 0 1px 0 #f33;
+			}
+
+			.sunk {
+				opacity: 0.6;
+			}
+
+			.abyss_hps {
+				width: 180px;
+				height: 4px;
+				margin: 0 0 5px 0;
+			}
+
+			.abyss_hp {
+				width: 28px;
+				height: 4px;
+				margin: 0 1px;
+				background: #222;
+				float: left;
+
+				&.sunk {
+					opacity: 0.5;
+				}
+			}
+		}
+
+		.abyss_ship {
+			width: 26px;
+			height: 26px;
+			float: left;
+			margin: 0 2px;
+			border-radius: 13px;
+			border: 1px solid #000;
+			overflow: hidden;
+			background: #888;
+			position: relative;
+
+			img {
+				width: 26px;
+				height: 26px;
+				position: relative;
+				top: -1px;
+				left: -1px;
+				border-radius: 50%;
+			}
+		}
+
+		.abyss_hp_bar {
+			height: 4px;
+			background: #0f0;
+		}
+	}
+
+	/* Abyss combined fleet */
+	.abyss_combined {
+		width: 180px;
+		margin: 0 0 4px 0;
+		display: none;
+
+		.abyss_fleet {
+			width: 180px;
+			height: 15px;
+			margin: 0 0 1px 0;
+		}
+
+		.abyss_fleet_2 {
+			margin: 0 0 0 10px;
+		}
+
+		.sink_icons {
+			width: 180px;
+			height: 0;
+			position: absolute;
+			z-index: 1;
+			pointer-events: none;
+
+			.sunk {
+				width: 10px;
+				height: 10px;
+				line-height: 10px;
+				float: left;
+				margin: 4px 0 0 17px;
+
+				img {
+					width: 10px;
+					height: 10px;
+					vertical-align: top;
+					display: none;
+				}
+			}
+
+			.shown img {
+				display: inline;
+			}
+
+			.safe img {
+				filter: grayscale(100%);
+				-webkit-filter: grayscale(100%);
+			}
+
+			.debuff img {
+				display: inline;
+				box-sizing: border-box;
+				padding-left: 10px;
+				background: url(../../../../assets/img/client/chuuha_land.png);
+				background-size: cover;
+			}
+		}
+
+		.abyss_ships {
+			width: 180px;
+			height: 15px;
+			margin: 0 0 0 0;
+		}
+
+		.abyss_hp {
+			width: 2px;
+			height: 15px;
+			margin: 0 1px;
+			background: #222;
+			float: left;
+			overflow: hidden;
+
+			&.sunk {
+				opacity: 0.5;
+			}
+		}
+
+		.abyss_hp_bar {
+			height: 15px;
+			background: #0f0;
+		}
+
+		.abyss_ship {
+			width: 15px;
+			height: 15px;
+			line-height: 15px;
+			float: left;
+			margin: 0 7px 0 2px;
+			border-radius: 8px;
+			overflow: hidden;
+			background: #888;
+			position: relative;
+
+			img {
+				width: 15px;
+				height: 15px;
+				position: relative;
+				vertical-align: top;
+			}
+		}
+	}
+
+	/* Battle Flags */
+	.battle_flags {
+		width: 180px;
+		height: 30px;
+		margin: 0 0 5px 0;
+	}
+
+	.battle_flag {
+		width: 30px;
+		height: 30px;
+		float: left;
+
+		img {
+			width: 24px;
+			height: 24px;
+			margin: 3px 6px;
+		}
+
+		&.battle_eformation {
+			width: 30px;
+			height: 30px;
+			margin: 0 0;
+			border-radius: 15px;
+			background: #fff;
+
+			img {
+				width: 24px;
+				height: 24px;
+				margin: 3px;
+			}
+		}
+
+		&.battle_fish img.rounded {
+			width: 25px;
+			height: 25px;
+			margin-top: 2px;
+			border-radius: 50%;
+		}
+
+		.support_exped {
+			width: 12px;
+			height: 12px;
+			line-height: 13px;
+			border-radius: 6px;
+			margin: 16px 0 0 3px;
+			position: absolute;
+			font-size: 8px;
+			text-align: center;
+			color: #fff;
+			background: #a69de6;
+			overflow: hidden;
+			text-shadow: none;
+			pointer-events: none;
+			display: none;
+		}
+
+		.support_lbas {
+			width: 14px;
+			height: 13px;
+			line-height: 13px;
+			border-radius: 6px;
+			margin: 15px 0 0 17px;
+			position: absolute;
+			font-size: 8px;
+			text-align: center;
+			color: #ff0;
+			background: #5b5;
+			overflow: hidden;
+			text-shadow: none;
+			pointer-events: none;
+			display: none;
+		}
+
+		.support_balloon {
+			width: 13px;
+			height: 13px;
+			border-radius: 50%;
+			margin: 1px 0 0 18px;
+			position: absolute;
+			background: #fff;
+			opacity: 0.7;
+			overflow: hidden;
+			display: none;
+
+			img {
+				width: 13px;
+				height: 13px;
+				vertical-align: top;
+				margin: 0 0;
+			}
+
+			&.deployed {
+				background: #fe5;
+			}
+		}
+	}
 }
 
 /* Battle Conditions */
@@ -4562,89 +4721,6 @@ ABYSS FLEET
 }
 .long_name .base_plane_name {
 	display: inline-block;
-}
-
-/* HORIZONTAL LAYOUT
-------------------------------*/
-.wrapper.h {
-	width: 550px;
-	height: 450px;
-}
-.h .module.admiral {
-	left: 5px; top: 5px;
-}
-.h .module.activity {
-	left: 5px; top: 65px;
-}
-.h .module.quests {
-	width: 190px;
-	height: 126px;
-	left: 5px; top: 322px;
-	overflow-x: hidden;
-	overflow-y: overlay;
-}
-.h .module.quests .quest {
-	width: 190px;
-}
-.h .module.quests .quest_text {
-	width: 128px;
-}
-.h .module.quests .untracked .quest_text {
-	width: 168px;
-}
-.h .module.controls {
-	width: 340px;
-	height: 30px;
-	left: 205px; top: 5px;
-}
-.h .module.controls .control_btn {
-/*	float: right;*/
-	width: 30px;
-	line-height: 29px;
-	padding: 1px;
-}
-.h .module.controls .control_btn img {
-	width: 26px;
-	height: 20px;
-}
-.h .module.controls .control_btn.btn_reload_quotes img,
-.h .module.controls .control_btn.btn_reload_quests img {
-	width: 22px;
-	height: 22px;
-}
-.h .module.summary {
-	width: 343px;
-	height: 20px;
-	left: 205px; top: 45px;
-}
-.h .module.fleet {
-	left: 205px; top: 75px;
-}
-.h .module.controls .fleet_num {
-	width: 23px;
-	line-height: 30px;
-	border-radius: 5px;
-	margin: 0 2px 3px 0;
-}
-.h .module.controls .fleet_num.preSortieCheck {
-	line-height: 26px;
-}
-.h .module.controls .fleet_num.onExped {
-	line-height: 26px;
-}
-.h .module.controls .fleet_num.needsSupply {
-	line-height: 26px;
-}
-.h .module.controls .fleet_rengo {
-	margin: 0 2px 3px 0;
-}
-.h .module.controls .scrollable {
-	width: 100px;
-}
-.h .module.status {
-	width: 340px;
-	height: 45px;
-	left: 205px; top: 400px;
 }
 
 /* VERTICAL LAYOUT
