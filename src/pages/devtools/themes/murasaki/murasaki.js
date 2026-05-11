@@ -508,7 +508,9 @@
 		$(".module.fleet .airbase_list").toggleClass("wide_column", !!ConfigManager.pan_wider_lbas_murasaki);
 
 		// Panel customizations: bg image
-		if(ConfigManager.pan_bg_image === ""){
+		if (ConfigManager.pan_bg_image === "" && ConfigManager.pan_bg_color === "#def") {
+			// Ignore the setting for default Murasaki visual
+		}else if(ConfigManager.pan_bg_image === ""){
 			$("body").css("background", ConfigManager.pan_bg_color);
 		}else{
 			$("body").css("background-image", "url("+ConfigManager.pan_bg_image+")");
@@ -1052,34 +1054,11 @@
 		$("<div></div>").addClass("waitingForActions text").html( KC3Meta.term("PanelWaitActions") ).appendTo("body");
 	});
 
-	$(window).on("resize", function(){
-		Orientation();
-	});
-
 	function Activate(){
 		if(isRunning === true){ return true; }
 		isRunning = true;
-		Orientation();
 		$(".waitingForActions").hide();
-		$(".wrapper").show();
-	}
-
-	function Orientation(){
-		if(!isRunning){ return false; }
-		var scrollBarWidth = (window.innerWidth - $(window).width()) || 0;
-		var expectedVerticalWidth = 800 - scrollBarWidth;
-		// Wide interface, switch to vertical if not yet
-		if($(window).width() >= expectedVerticalWidth && currentLayout != "vertical"){
-			$(".wrapper").removeClass("h").addClass("v");
-			currentLayout = "vertical";
-		// Narrow interface, switch to horizontal if not yet
-		} else if($(window).width() < expectedVerticalWidth && currentLayout != "horizontal"){
-			$(".wrapper").removeClass("v").addClass("h");
-			currentLayout = "horizontal";
-		}
-		$(".module.controls .scrollable").scrollLeft(0);
-		$(".module.controls .scroll_left").addClass("disabled");
-		$(".module.controls .scroll_right").removeClass("disabled");
+		$(".wrapper").removeClass("hidden");
 	}
 
 	function clearSortieData(){
