@@ -285,6 +285,7 @@ body {
 /*------- HQ INFO -------*/
 .module.admiral {
 	grid-area: 1 / 1 / 2 / 2;
+	min-width: 240px;
 
 	.admiral_level {
 		color: #eee;
@@ -394,51 +395,56 @@ body {
 
 .module.activity {
 	grid-area: 2 / 1 / 3 / 2;
+	min-width: 240px;
 
 	.activity_tabs {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
 
-	.activity_tab {
-		width: calc(100% / 4);
-		height: 20px;
-		background: rgba(100, 100, 100, 0.618);
-		color: #fff;
-		text-align: center;
-		line-height: 20px;
-		font-size: 11px;
-		border-radius: 5px 5px 0 0;
-		filter: brightness(0.7) drop-shadow(1px 0 0 black) opacity(0.62);
+		.activity_tab {
+			width: calc(100% / 4);
+			height: 20px;
+			background: rgba(100, 100, 100, 0.618);
+			color: #fff;
+			text-align: center;
+			line-height: 20px;
+			font-size: 11px;
+			border-radius: 5px 5px 0 0;
+			filter: brightness(0.7) drop-shadow(1px 0 0 black) opacity(0.62);
+			text-overflow: ellipsis;
+			overflow: hidden;
+			padding: 0 5px;
 
-		&.tab_count_5 {
-			width: calc(100% / 5);
-		}
+			&.tab_count_5 {
+				width: calc(100% / 5);
+			}
 
-		+ .activity_tab {
-			margin-left: 1px;
-		}
+			+ .activity_tab {
+				margin-left: 1px;
+			}
 
-		&.active {
-			filter: brightness(1);
-			-webkit-filter: brightness(1);
+			&.active {
+				filter: brightness(1);
+				-webkit-filter: brightness(1);
+			}
 		}
 	}
 
 	.activity_body {
 		border-radius: 0 0 5px 5px;
+		padding-bottom: 5px;
 		white-space: initial;
-	}
 
-	.activity_box {
-		display: none;
-		padding: 5px;
+		.activity_box {
+			display: none;
+			padding: 5px;
 
-		&.disabled {
-			filter: brightness(0.5);
-			-webkit-filter: brightness(0.5);
-			pointer-events: none;
+			&.disabled {
+				filter: brightness(0.5);
+				-webkit-filter: brightness(0.5);
+				pointer-events: none;
+			}
 		}
 	}
 
@@ -451,40 +457,55 @@ body {
 	/*------- ACTIVITY: BASIC -------*/
 	/* Consumables */
 	.consumables {
-		margin: 0 0 5px;
+		margin: 5px 5px 15px;
 		display: flex;
 		flex-wrap: wrap;
+		container-type: inline-size;
+		gap: 7px 0;
 
 		.consumable {
-			width: 90px;
-			height: 20px;
+			flex: 0 1 33.3%;
+			display: flex;
+			gap: 5px;
+			flex-direction: row;
+
+			&.wider {
+				flex: 0 1 66.7%;
+			}
 
 			.consumable_icon {
-				width: 20px;
-				height: 20px;
-				float: left;
+				width: 16px;
+				height: 16px;
 
 				img {
-					width: 14px;
-					height: 14px;
-					margin: 3px;
-					vertical-align: top;
+					width: 100%;
+					height: 100%;
+				}
+			}
+
+			&.itemPage {
+				flex: 0 1 max(55px, 20%);
+				align-items: center;
+
+				.consumable_icon {
+					width: 10cqw;
+					height: 10cqw;
+					min-width: 16px;
+					max-width: 25px;
+					min-height: 16px;
+					max-height: 30px;
 				}
 			}
 
 			.consumable_text {
-				width: 36px;
 				font-size: 14px;
 				line-height: 20px;
-				float: left;
 				color: #ccc;
 			}
 
 			.consumable_ltext {
-				width: 70px;
 				font-size: 14px;
 				line-height: 20px;
-				float: left;
 				color: #ccc;
 				white-space: nowrap;
 
@@ -506,175 +527,134 @@ body {
 			}
 
 			.consumable_max {
-				width: 34px;
 				font-size: 11px;
-				float: left;
 				line-height: 20px;
 				color: #aaa;
-			}
-
-			&.page1 {
-				display: block;
-			}
-
-			&.page2 {
-				display: none;
-			}
-
-			&.itemPage {
-				display: none;
-			}
-
-			&.itemPage,
-			&.column3 {
-				width: 60px;
-
-				.consumable_ltext {
-					width: 40px;
-				}
-			}
-
-			&.column3 {
-				&.narrower {
-					width: 55px;
-
-					.consumable_ltext {
-						width: 35px;
-					}
-				}
-
-				&.wider {
-					width: 70px;
-
-					.consumable_ltext {
-						width: 50px;
-					}
-				}
 			}
 		}
 	}
 
 	/* Expedition */
 	.expeditions {
-		width: 180px;
-		height: 45px;
-		margin: 0 0 5px 0;
+		margin: 5px 5px 15px;
+		display: flex;
 
 		.expedition {
-			width: 60px;
-			height: 45px;
-			float: left;
 			position: relative;
-		}
+			flex: 1 1 33.3%;
+			container-type: inline-size;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 
-		.timer-img {
-			width: 29px;
-			height: 29px;
-			margin: 0 0 3px 15px;
-			border-radius: 15px;
+			.timer-img {
+				width: 50cqw;
+				height: 50cqw;
+				max-width: 50px;
+				max-height: 50px;
+				margin: 0 0 5px;
+				border-radius: 51%;
 
-			img {
-				width: 25px;
-				height: 25px;
-				margin: 2px;
-				border-radius: 50%;
+				img {
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+				}
+
+				&.locked {
+					background-image: url(../../../../assets/img/ui/lock.png);
+					background-size: 19px;
+					background-position: 5px 5px;
+					background-repeat: no-repeat;
+				}
 			}
 
-			&.locked {
-				background-image: url(../../../../assets/img/ui/lock.png);
-				background-size: 19px;
-				background-position: 5px 5px;
-				background-repeat: no-repeat;
+			.timer-expnum {
+				line-height: 14px;
+				font-size: 12px;
+				position: absolute;
+				top: 2px;
+				left: 75%;
+				color: #ccc;
+			}
+
+			.timer-time {
+				line-height: 13px;
+				font-size: 12px;
+				text-align: center;
+				color: #eee;
 			}
 		}
-
-		.timer-expnum {
-			height: 14px;
-			line-height: 14px;
-			font-size: 12px;
-			position: absolute;
-			top: 2px;
-			left: 46px;
-			color: #ccc;
-		}
-	}
-
-	.timer-time {
-		width: 60px;
-		height: 13px;
-		line-height: 13px;
-		font-size: 12px;
-		text-align: center;
-		color: #eee;
 	}
 
 	/* Timers */
 	.timers {
-		width: 180px;
-		height: 108px;
-	}
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
 
-	.timer_boxes {
-		width: 90px;
-		height: 108px;
-		float: left;
-	}
+		.timer_boxes {
+			flex: 1 1 50%;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
 
-	.timer_box {
-		width: 90px;
-		height: 26px;
-		margin: 0 0 1px 0;
+			.timer_box {
+				container-type: inline-size;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				align-items: center;
+				gap: 5px;
 
-		.timer-img {
-			width: 24px;
-			height: 24px;
-			margin: 1px 4px 0 0;
-			border-radius: 13px;
-			float: left;
+				.timer-img {
+					width: 30cqw;
+					height: 30cqw;
+					max-width: 40px;
+					max-height: 40px;
+					border-radius: 51%;
 
-			img {
-				width: 20px;
-				height: 20px;
-				margin: 2px;
-				display: none;
-				border-radius: 50%;
+					img {
+						width: 100%;
+						height: 100%;
+						display: none;
+						border-radius: 51%;
+					}
+				}
+
+				.timer-time {
+					line-height: 26px;
+					font-size: 13px;
+					text-align: left;
+					color: #eee;
+				}
+			}
+
+			&.repairs .timer-img {
+				background: #EDD286;
+			}
+
+			&.builds .timer-img {
+				background: #996600;
+
+				&.lsc {
+					background: #b70100;
+				}
+
+				&.new_ship {
+					filter: drop-shadow(0px 0 2px #1f1);
+					-webkit-filter: drop-shadow(0px 0 2px #1f1);
+				}
+			}
+
+			&.repairs .timer-img.locked,
+			&.builds .timer-img.locked {
+				background-image: url(../../../../assets/img/ui/lock.png);
+				background-size: 17px;
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
 			}
 		}
-
-		.timer-time {
-			width: 60px;
-			height: 26px;
-			line-height: 26px;
-			float: left;
-			font-size: 13px;
-			text-align: left;
-			color: #eee;
-		}
-	}
-
-	.repairs .timer-img {
-		background: #EDD286;
-	}
-
-	.builds .timer-img {
-		background: #996600;
-
-		&.lsc {
-			background: #b70100;
-		}
-
-		&.new_ship {
-			filter: drop-shadow(0px 0 2px #1f1);
-			-webkit-filter: drop-shadow(0px 0 2px #1f1);
-		}
-	}
-
-	.repairs .timer-img.locked,
-	.builds .timer-img.locked {
-		background-image: url(../../../../assets/img/ui/lock.png);
-		background-size: 17px;
-		background-position: 3px 3px;
-		background-repeat: no-repeat;
 	}
 
 	/*------- ACTIVITY: BATTLE -------*/

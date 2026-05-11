@@ -1567,8 +1567,8 @@
 				ConfigManager.scrollHqInfoPage();
 			}
 			$(".consumables").hideChildrenTooltips();
-			$(".consumables .consumable").hide();
-			$(`.consumables .consumable.page${ConfigManager.hqInfoPage || 1}`).show();
+			$(".consumables .consumable").addClass("hidden");
+			$(`.consumables .consumable.page${ConfigManager.hqInfoPage || 1}`).removeClass("hidden");
 			$(".consumables").createChildrenTooltips();
 		},
 
