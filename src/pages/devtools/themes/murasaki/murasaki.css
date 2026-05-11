@@ -263,7 +263,7 @@ body {
 
 @media all and (width > 960px) {
 	.wrapper {
-		grid-template-columns: 1fr 1fr 1fr 1fr;
+		grid-template-columns: 2fr 3fr 2fr;
 	}
 }
 
@@ -660,1374 +660,1466 @@ body {
 	/*------- ACTIVITY: BATTLE -------*/
 	.activity_battle {
 		white-space: nowrap;
-	}
 
-	/* Map Info */
-	.map_info {
-		width: 180px;
-		height: 20px;
-		line-height: 20px;
-		margin: 0 0 5px 0;
+		/* Map Info */
+		.map_info {
+			width: 180px;
+			height: 20px;
+			line-height: 20px;
+			margin: 0 0 5px 0;
 
-		&.map_finisher.noBlink .map_gauge {
-			background-color: #b22;
+			&.map_finisher.noBlink .map_gauge {
+				background-color: #b22;
+			}
+
+			&.map_finisher:not(.noBlink) .map_gauge {
+				animation: gauge-finish-her 0.25s infinite ease alternate;
+			}
+
+			&.map_finisher .map_hp {
+				color: #e66;
+			}
+
+			.map_world {
+				width: 45px;
+				height: 20px;
+				float: left;
+				font-weight: bold;
+				color: #ffcc00;
+				font-size: 14px;
+				text-align: center;
+				margin: 0 5px 0 0;
+
+				&.debuffed {
+					color: #dc8280;
+				}
+			}
+
+			.map_gauge {
+				position: relative;
+				width: 60px;
+				height: 12px;
+				float: left;
+				margin: 4px 0;
+				background: #222;
+				border: 1px solid #fff;
+
+				* {
+					position: absolute;
+					height: 10px;
+					float: left;
+				}
+
+				.curhp {
+					background: #0f0;
+				}
+
+				.nowhp {
+					background: #f00;
+				}
+			}
+
+			.map_hp {
+				width: 70px;
+				height: 20px;
+				float: left;
+				font-size: 11px;
+				color: #eee;
+				padding: 0 0 0 5px;
+			}
 		}
 
-		&.map_finisher:not(.noBlink) .map_gauge {
-			animation: gauge-finish-her 0.25s infinite ease alternate;
-		}
+		/* Sortie Nodes */
+		.sortie_nodes {
+			width: auto;
+			min-width: 180px;
+			height: 19px;
+			margin: 0 0 4px 0;
+			position: relative;
+			display: inline-flex;
 
-		&.map_finisher .map_hp {
-			color: #e66;
-		}
-	}
+			.boss_node {
+				float: left;
+				position: absolute;
+				display: none;
 
-	.map_world {
-		width: 45px;
-		height: 20px;
-		float: left;
-		font-weight: bold;
-		color: #ffcc00;
-		font-size: 14px;
-		text-align: center;
-		margin: 0 5px 0 0;
+				img {
+					width: 19px;
+					height: 19px;
+					margin-top: -10px;
+				}
 
-		&.debuffed {
-			color: #dc8280;
-		}
-	}
+				.boss_circle {
+					position: absolute;
+					margin-top: -20px;
+					border-color: #a90a0a;
+					background: #7d0000;
+					z-index: 1;
+				}
+			}
 
-	.map_gauge {
-		position: relative;
-		width: 60px;
-		height: 12px;
-		float: left;
-		margin: 4px 0;
-		background: #222;
-		border: 1px solid #fff;
-
-		* {
-			position: absolute;
-			height: 10px;
-			float: left;
-		}
-
-		.curhp {
-			background: #0f0;
-		}
-
-		.nowhp {
-			background: #f00;
-		}
-	}
-
-	.map_hp {
-		width: 70px;
-		height: 20px;
-		float: left;
-		font-size: 11px;
-		color: #eee;
-		padding: 0 0 0 5px;
-	}
-
-	/* Sortie Nodes */
-	.sortie_nodes {
-		width: auto;
-		min-width: 180px;
-		height: 19px;
-		margin: 0 0 4px 0;
-		position: relative;
-		display: inline-flex;
-	}
-
-	.sortie_node {
-		width: 19px;
-		height: 19px;
-		line-height: 17px;
-		margin: 0 1px 0 0;
-		float: left;
-		background: #000;
-		border-radius: 10px;
-		color: #fff;
-		font-size: 10px;
-		text-align: center;
-		border: 1px solid #aaa;
-
-		&.long_name {
-			font-size: 9px;
-			letter-spacing: -1px;
-		}
-
-		&.special_cutin {
-			box-shadow: 0 0 1px 2px #d0b;
-		}
-
-		&.smoke_screen {
-			box-shadow: 0 0 1px 2px #888;
-		}
-
-		.boss_node {
-			float: left;
-			position: absolute;
-			display: none;
-
-			img {
+			.sortie_node {
 				width: 19px;
 				height: 19px;
-				margin-top: -10px;
+				line-height: 17px;
+				margin: 0 1px 0 0;
+				float: left;
+				background: #000;
+				border-radius: 10px;
+				color: #fff;
+				font-size: 10px;
+				text-align: center;
+				border: 1px solid #aaa;
+
+				&.long_name {
+					font-size: 9px;
+					letter-spacing: -1px;
+				}
+
+				&.special_cutin {
+					box-shadow: 0 0 1px 2px #d0b;
+				}
+
+				&.smoke_screen {
+					box-shadow: 0 0 1px 2px #888;
+				}
+
+				&.nc_battle {
+					background: #7D0000;
+					text-shadow:
+							0 -1px 1px #7d0000,
+							1px 0 1px #7d0000,
+							0 1px 1px #7d0000,
+							-1px 0 1px #7d0000;
+				}
+
+				&.nc_resource {
+					background: #007A00;
+					text-shadow: none;
+				}
+
+				&.nc_maelstrom {
+					background: #D2C6FF;
+					color: #000;
+					text-shadow: none;
+				}
+
+				&.nc_select {
+					background: #FFF;
+					color: #000;
+					text-shadow: none;
+				}
+
+				&.nc_avoid {
+					background: #00B3B1;
+					text-shadow: none;
+				}
+
+				&.nc_night_battle {
+					background: #4233C3;
+				}
+
+				&.nc_night_to_day {
+					background:
+							-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
+							#7d0000;
+					background:
+							linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
+							#7d0000;
+					background-size: 400% 200%;
+					background-position: -8px 0;
+				}
+
+				&.nc_air_battle {
+					background:
+							-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+							-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+							#7d0000;
+					background:
+							linear-gradient(to top right, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+							linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+							#7d0000;
+					background-size: 18px 18px;
+					background-position: -9px -10px, -27px -45px;
+				}
+
+				&.nc_air_raid {
+					background:
+							-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+							#7d0000;
+					background:
+							linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+							#7d0000;
+					background-size: 28px 27px;
+					background-position: -53px -66px;
+				}
+
+				&.nc_long_range_raid {
+					background:
+							-webkit-linear-gradient(top left, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+							#7d0000;
+					background:
+							linear-gradient(to bottom right, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+							#7d0000;
+					background-size: 40px 40px;
+					background-position: -61px -107px;
+				}
+
+				&.nc_air_support_sub {
+					background:
+							-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
+							#7d0000;
+					background:
+							linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
+							#7d0000;
+					background-size: 28px 27px;
+					background-position: -52px -67px;
+					box-shadow: inset 0 0 4px 2px #2e15ca;
+				}
+
+				&.nc_enemy_combined {
+					background:
+							radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+							radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+							radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+							radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+							#7d0000;
+					background-size: 25px 25px;
+					background-position: -7px -7px, 0 18px, -32px 24px, -50px 49px;
+				}
+			}
+		}
+
+		/* Battle nodes */
+		.node_type_battle {
+			position: relative;
+
+			/* Abyss single fleet */
+			.abyss_single {
+				.sink_icons {
+					width: 180px;
+					height: 0;
+					position: absolute;
+					z-index: 1;
+					pointer-events: none;
+
+					.sunk {
+						width: 16px;
+						height: 16px;
+						line-height: 16px;
+						float: left;
+						margin: 8px 0 0 14px;
+
+						img {
+							width: 16px;
+							height: 16px;
+							vertical-align: top;
+							display: none;
+							border-radius: 50%;
+							object-fit: cover;
+						}
+					}
+
+					.shown img {
+						display: inline;
+					}
+
+					.safe img {
+						filter: grayscale(100%);
+						-webkit-filter: grayscale(100%);
+					}
+
+					.debuff img {
+						display: inline;
+						box-sizing: border-box;
+						padding-left: 16px;
+						background: url(../../../../assets/img/client/chuuha_land.png);
+						background-size: cover;
+					}
+				}
+
+				.abyss_ships {
+					width: 180px;
+					height: 26px;
+					margin: 0 0 1px 0;
+
+					.boss {
+						border-color: #5ef;
+						box-shadow: 0 0 1px 1px #fe5;
+					}
+
+					.kai {
+						border-color: #2af;
+						box-shadow: 0 0 1px 0 #2af;
+					}
+
+					.flagship {
+						border-color: #fc3;
+						box-shadow: 0 0 1px 0 #fc3;
+					}
+
+					.elite {
+						border-color: #f33;
+						box-shadow: 0 0 1px 0 #f33;
+					}
+
+					.sunk {
+						opacity: 0.6;
+					}
+
+					.abyss_hps {
+						width: 180px;
+						height: 4px;
+						margin: 0 0 5px 0;
+					}
+
+					.abyss_hp {
+						width: 28px;
+						height: 4px;
+						margin: 0 1px;
+						background: #222;
+						float: left;
+
+						&.sunk {
+							opacity: 0.5;
+						}
+					}
+				}
+
+				.abyss_ship {
+					width: 26px;
+					height: 26px;
+					float: left;
+					margin: 0 2px;
+					border-radius: 13px;
+					border: 1px solid #000;
+					overflow: hidden;
+					background: #888;
+					position: relative;
+
+					img {
+						width: 26px;
+						height: 26px;
+						position: relative;
+						top: -1px;
+						left: -1px;
+						border-radius: 50%;
+					}
+				}
+
+				.abyss_hp_bar {
+					height: 4px;
+					background: #0f0;
+				}
 			}
 
-			.boss_circle {
-				position: absolute;
-				margin-top: -20px;
-				border-color: #a90a0a;
-				background: #7d0000;
+			/* Abyss combined fleet */
+			.abyss_combined {
+				width: 180px;
+				margin: 0 0 4px 0;
+				display: none;
+
+				.abyss_fleet {
+					width: 180px;
+					height: 15px;
+					margin: 0 0 1px 0;
+				}
+
+				.abyss_fleet_2 {
+					margin: 0 0 0 10px;
+				}
+
+				.sink_icons {
+					width: 180px;
+					height: 0;
+					position: absolute;
+					z-index: 1;
+					pointer-events: none;
+
+					.sunk {
+						width: 10px;
+						height: 10px;
+						line-height: 10px;
+						float: left;
+						margin: 4px 0 0 17px;
+
+						img {
+							width: 10px;
+							height: 10px;
+							vertical-align: top;
+							display: none;
+						}
+					}
+
+					.shown img {
+						display: inline;
+					}
+
+					.safe img {
+						filter: grayscale(100%);
+						-webkit-filter: grayscale(100%);
+					}
+
+					.debuff img {
+						display: inline;
+						box-sizing: border-box;
+						padding-left: 10px;
+						background: url(../../../../assets/img/client/chuuha_land.png);
+						background-size: cover;
+					}
+				}
+
+				.abyss_ships {
+					width: 180px;
+					height: 15px;
+					margin: 0 0 0 0;
+				}
+
+				.abyss_hp {
+					width: 2px;
+					height: 15px;
+					margin: 0 1px;
+					background: #222;
+					float: left;
+					overflow: hidden;
+
+					&.sunk {
+						opacity: 0.5;
+					}
+				}
+
+				.abyss_hp_bar {
+					height: 15px;
+					background: #0f0;
+				}
+
+				.abyss_ship {
+					width: 15px;
+					height: 15px;
+					line-height: 15px;
+					float: left;
+					margin: 0 7px 0 2px;
+					border-radius: 8px;
+					overflow: hidden;
+					background: #888;
+					position: relative;
+
+					img {
+						width: 15px;
+						height: 15px;
+						position: relative;
+						vertical-align: top;
+					}
+				}
+			}
+
+			/* Battle Flags */
+			.battle_flags {
+				width: 180px;
+				height: 30px;
+				margin: 0 0 5px 0;
+
+				.battle_flag {
+					width: 30px;
+					height: 30px;
+					float: left;
+
+					img {
+						width: 24px;
+						height: 24px;
+						margin: 3px 6px;
+					}
+
+					&.battle_eformation {
+						width: 30px;
+						height: 30px;
+						margin: 0 0;
+						border-radius: 15px;
+						background: #fff;
+
+						img {
+							width: 24px;
+							height: 24px;
+							margin: 3px;
+						}
+					}
+
+					&.battle_fish img.rounded {
+						width: 25px;
+						height: 25px;
+						margin-top: 2px;
+						border-radius: 50%;
+					}
+
+					.support_exped {
+						width: 12px;
+						height: 12px;
+						line-height: 13px;
+						border-radius: 6px;
+						margin: 16px 0 0 3px;
+						position: absolute;
+						font-size: 8px;
+						text-align: center;
+						color: #fff;
+						background: #a69de6;
+						overflow: hidden;
+						text-shadow: none;
+						pointer-events: none;
+						display: none;
+					}
+
+					.support_lbas {
+						width: 14px;
+						height: 13px;
+						line-height: 13px;
+						border-radius: 6px;
+						margin: 15px 0 0 17px;
+						position: absolute;
+						font-size: 8px;
+						text-align: center;
+						color: #ff0;
+						background: #5b5;
+						overflow: hidden;
+						text-shadow: none;
+						pointer-events: none;
+						display: none;
+					}
+
+					.support_balloon {
+						width: 13px;
+						height: 13px;
+						border-radius: 50%;
+						margin: 1px 0 0 18px;
+						position: absolute;
+						background: #fff;
+						opacity: 0.7;
+						overflow: hidden;
+						display: none;
+
+						img {
+							width: 13px;
+							height: 13px;
+							vertical-align: top;
+							margin: 0 0;
+						}
+
+						&.deployed {
+							background: #fe5;
+						}
+					}
+
+					&.battle_drop {
+						img.rounded {
+							border-radius: 50%;
+						}
+
+						&.new_ship {
+							filter: drop-shadow(0px 0 3px #1f1);
+							-webkit-filter: drop-shadow(0px 0 3px #1f1);
+						}
+					}
+				}
+			}
+
+			/* Battle Conditions */
+			.battle_conditions {
+				width: 180px;
+				height: 56px;
+				margin: 0 0 3px 0;
+
+				.battle_condition {
+					width: 180px;
+					height: 14px;
+
+					.battle_cond_icon {
+						width: 14px;
+						height: 14px;
+						line-height: 14px;
+						float: left;
+						margin: 0 5px 0 0;
+
+						img {
+							width: 14px;
+							height: 14px;
+							vertical-align: top;
+						}
+					}
+
+					.battle_cond_label {
+						width: 50px;
+						height: 14px;
+						line-height: 14px;
+						float: left;
+						font-size: 11px;
+						margin: 0 5px 0 0;
+						color: #ccc;
+					}
+
+					.battle_cond_value {
+						width: 106px;
+						height: 14px;
+						line-height: 14px;
+						font-size: 11px;
+						float: left;
+						color: #fff;
+						white-space: nowrap;
+						overflow: hidden;
+
+						&.best {
+							color: #1f1;
+						}
+
+						&.better {
+							color: #5f5;
+						}
+
+						&.good {
+							color: #afa;
+						}
+
+						&.bad {
+							color: #faa;
+						}
+
+						&.worse {
+							color: #f77;
+						}
+
+						&.worst {
+							color: #f44;
+						}
+
+						&.battle_contact img {
+							width: 15px;
+							height: 15px;
+							vertical-align: top;
+						}
+					}
+				}
+
+				.battle_cond_extra {
+					line-height: 14px;
+					font-size: 11px;
+					white-space: nowrap;
+					color: #fff;
+					display: none;
+
+					&.smoke_screen {
+						position: absolute;
+						margin: -35px 0 0 21px;
+						filter: drop-shadow(0 0 2px #222);
+						z-index: 2;
+
+						.smoke_icon {
+							width: 13px;
+							height: 13px;
+							border-radius: 50%;
+							background: #fff;
+							margin: 0 2px 0 0;
+							overflow: hidden;
+							vertical-align: top;
+							opacity: 0.7;
+
+							&.triggered {
+								background: #fe5;
+							}
+						}
+
+						.smoke_level {
+							pointer-events: none;
+						}
+					}
+				}
+			}
+
+			/* Battle Planes */
+			.battle_planes {
+				width: 180px;
+				height: 44px;
+
+				.plane_label {
+					width: 90px;
+					height: 14px;
+					line-height: 14px;
+					font-size: 11px;
+					color: #ffcc00;
+					text-align: center;
+					font-weight: bold;
+					float: left;
+				}
+
+				.plane_count {
+					width: 90px;
+					height: 15px;
+					line-height: 15px;
+					float: left;
+					margin: 0 0 1px 0;
+
+					.plane_icon {
+						width: 14px;
+						height: 14px;
+						margin: 0 5px 0 0;
+						float: left;
+						border-radius: 7px;
+						background: #fff;
+
+						img {
+							width: 15px;
+							height: 15px;
+							position: relative;
+							top: -1px;
+							left: -2px;
+							vertical-align: top;
+						}
+					}
+
+					.plane_text {
+						width: 70px;
+						height: 15px;
+						font-size: 11px;
+						float: left;
+
+						.plane_before {
+							color: #eee;
+						}
+
+						.plane_after {
+							color: #FF7979;
+						}
+					}
+				}
+			}
+		}
+
+		/* Resource Nodes */
+		.node_type_resource {
+			width: 150px;
+			line-height: 18px;
+			padding: 4px;
+			background: #B1FF5E;
+			border: 1px solid #70D800;
+			border-radius: 7px;
+			margin: 10px auto;
+			text-shadow: none;
+
+			.node_res_icon {
+				width: 18px;
+				height: 18px;
+				float: left;
+				margin: 0 5px 0 0;
+				vertical-align: top;
+
+				img {
+					width: 18px;
+					height: 18px;
+					vertical-align: top;
+				}
+			}
+
+			.node_res_text {
+				width: 140px;
+				height: 20px;
+				font-weight: bold;
+				font-size: 12px;
+			}
+
+			.node_type_maelstrom {
+				background: #D2C6FF;
+				border: 1px solid #AE87E9;
+			}
+		}
+
+		/* Previously encountered */
+		.node_type_prev_encounters {
+			color: #eee;
+			font-size: 12px;
+
+			.prev_encounter_label {
+				color: #ffcc00;
+				height: 17px;
+			}
+
+			.encounters {
+				height: 165px;
+				overflow-x: hidden;
+				overflow-y: auto;
+
+				.encounter_record {
+					width: 180px;
+					height: auto;
+					background: rgba(186,187,189,0.4);
+					border-radius: 5px;
+					margin: 0 0 2px 0;
+					float: left;
+
+					&.matched {
+						box-shadow: inset 0 0 5px 2px #e37;
+					}
+				}
+
+				.encounter_formation {
+					width: 24px;
+					height: 24px;
+					background: #fff;
+					border-radius: 50%;
+					margin: 1px 0 0 2px;
+					float: left;
+
+					img {
+						width: 25px;
+						height: 25px;
+						vertical-align: top;
+					}
+				}
+
+				.encounter_ships {
+					width: 154px;
+					height: 27px;
+					padding: 1px 0 0 2px;
+					float: left;
+
+					&.combined {
+						height: 53px;
+					}
+
+					.encounter_ship {
+						width: 25px;
+						height: 25px;
+						border-radius: 50%;
+						margin: 0 0 1px 0;
+						float: left;
+
+						img {
+							width: 25px;
+							height: 25px;
+							vertical-align: top;
+						}
+
+						&.boss {
+							box-shadow: 0 0 1px 1px #5ef, 0 0 3px 2px #fe5;
+						}
+
+						&.kai {
+							box-shadow: 0 0 1px 1px #2af;
+						}
+
+						&.flagship {
+							box-shadow: 0 0 1px 1px #fc3;
+						}
+
+						&.elite {
+							box-shadow: 0 0 1px 1px #f33;
+						}
+					}
+				}
+			}
+		}
+
+		/* Text Nodes */
+		.node_type_text {
+			width: 150px;
+			height: 28px;
+			line-height: 18px;
+			padding: 4px;
+			border-radius: 7px;
+			margin: 10px auto;
+			text-align: center;
+			font-size: 12px;
+
+			&.dud {
+				background: #79E7FF;
+				border: 1px solid #1ABAEF;
+				text-shadow: none;
+			}
+
+			&.select {
+				background: #FFF;
+				border: 1px solid #CCC;
+				text-shadow: none;
+			}
+		}
+	}
+
+	/*------- ACTIVITY: QUEST -------*/
+	.activity_quest {
+		color: #FFF;
+
+		.quest_filters {
+			display: flex;
+			height: 25px;
+			justify-content: center;
+
+			.quest_filter_button {
+				overflow: hidden;
+				width: calc(180px / 5);
+				opacity: 0.3;
+				transition: 0.2s;
+				cursor: pointer;
+
+				&.active {
+					opacity: 1;
+				}
+
+				&[filter="1"] {
+					background: #d75048;
+				}
+
+				&[filter="2"] {
+					background: #98e75f;
+				}
+
+				&[filter="3"] {
+					background: #aaccee;
+				}
+
+				&[filter="4"] {
+					background: #996600;
+				}
+
+				&[filter="5"] {
+					background: #ae76fa;
+				}
+			}
+
+			.quest_list {
+				display: block;
+				height: 195px;
+				overflow-y: auto;
+				margin-top: 5px;
+
+				&::-webkit-scrollbar {
+					width: 6px;
+				}
+
+				.quest_page {
+					position: sticky;
+					top: 0;
+					padding: 1px;
+					background: #444;
+					text-align: center;
+					font-size: 11px;
+				}
+
+				.quest {
+					display: flex;
+					align-items: center;
+					width: auto;
+
+					&.activated {
+						background: rgba(255,153,51,0.2);
+					}
+
+					&.completed {
+						background: rgba(0,255,0,0.2);
+					}
+
+					.quest_color {
+						width: 14px;
+						height: 14px;
+						margin: 2px;
+						border: 2px solid transparent;
+
+						&.label_daily {
+							border-right: 2px solid #6af;
+						}
+
+						&.label_weekly {
+							border-right: 2px solid #8ff;
+						}
+
+						&.label_monthly {
+							border-right: 2px solid #3f6;
+						}
+
+						&.label_quarterly {
+							border-right: 2px solid #f95;
+						}
+
+						&.label_yearly {
+							border-right: 2px solid #84f;
+						}
+
+						&.label_other {
+							border-right: 2px solid #fe6;
+						}
+					}
+
+					.quest_text {
+						width: 165px;
+						height: 14px;
+						overflow: hidden;
+						font-size: 11px;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}
+
+					&.percent50 .quest_text:before,
+					&.percent80 .quest_text:before {
+						float: right;
+						font-size: 10px;
+						color: #5cc;
+						text-shadow: -1px 1px 0 #333;
+					}
+
+					&.percent50 .quest_text:before {
+						content: "50%";
+					}
+
+					&.percent80 .quest_text:before {
+						content: "80%";
+					}
+				}
+			}
+
+			.quest_scrolltop_button {
+				position: relative;
+				float: right;
 				z-index: 1;
+				top: -199px;
+				right: 0;
+				width: 6px;
+				height: 5px;
+				border-left: 3px solid transparent;
+				border-right: 3px solid transparent;
+				border-bottom: 5px solid rgba(158,158,158,0.6);
+				background-color: transparent;
+
+				&:hover {
+					border-bottom-color: rgba(197,197,197,1);
+				}
+			}
+		}
+	}
+
+	/*------- ACTIVITY: CRAFTING -------*/
+	.activity_crafting {
+		padding: 10px;
+
+		.equipItem {
+			.equipIcon {
+				width: 28px;
+				height: 28px;
+				line-height: 14px;
+				float: left;
+				background: #fff;
+				border-radius: 50%;
+				margin: 0 5px 3px 0;
+
+				img {
+					width: 24px;
+					height: 24px;
+					margin: 2px;
+					vertical-align: top;
+				}
+			}
+
+			.equipName {
+				width: 135px;
+				line-height: 14px;
+				float: left;
+				font-size: 12px;
+				color: #fff;
+				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				margin: 0 0 3px 0;
+			}
+
+			.equipNote {
+				width: 170px;
+				line-height: 16px;
+				margin: 0 0 3px 0;
+				color: #ccc;
+				font-size: 12px;
+			}
+
+			.equipStats {
+				width: 170px;
+				line-height: 20px;
+				margin: 0 0 3px 0;
+
+				.equipStat {
+					width: 45px;
+					height: 20px;
+					margin: 0 0 3px 0;
+					float: left;
+
+					.equipStatIcon {
+						width: 20px;
+						height: 20px;
+						float: left;
+						margin: 0 3px 0 0;
+						background: #fff;
+						border-radius: 10px;
+						text-align: center;
+
+						img {
+							max-width: 18px;
+							height: 16px;
+							margin: 2px 1px;
+							vertical-align: top;
+						}
+					}
+
+					.equipStatText {
+						width: 20px;
+						height: 20px;
+						float: left;
+						font-size: 12px;
+						color: #fff;
+					}
+				}
 			}
 		}
 
-		&.nc_battle {
-			background: #7D0000;
-			text-shadow:
-					0 -1px 1px #7d0000,
-					1px 0 1px #7d0000,
-					0 1px 1px #7d0000,
-					-1px 0 1px #7d0000;
-		}
+		.equipResources {
+			width: 170px;
+			height: 36px;
+			line-height: 16px;
 
-		&.nc_resource {
-			background: #007A00;
-			text-shadow: none;
-		}
-
-		&.nc_maelstrom {
-			background: #D2C6FF;
-			color: #000;
-			text-shadow: none;
-		}
-
-		&.nc_select {
-			background: #FFF;
-			color: #000;
-			text-shadow: none;
-		}
-
-		&.nc_avoid {
-			background: #00B3B1;
-			text-shadow: none;
-		}
-
-		&.nc_night_battle {
-			background: #4233C3;
-		}
-
-		&.nc_night_to_day {
-			background:
-					-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
-					#7d0000;
-			background:
-					linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
-					#7d0000;
-			background-size: 400% 200%;
-			background-position: -8px 0;
-		}
-
-		&.nc_air_battle {
-			background:
-					-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
-					-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
-					#7d0000;
-			background:
-					linear-gradient(to top right, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
-					linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
-					#7d0000;
-			background-size: 18px 18px;
-			background-position: -9px -10px, -27px -45px;
-		}
-
-		&.nc_air_raid {
-			background:
-					-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
-					#7d0000;
-			background:
-					linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
-					#7d0000;
-			background-size: 28px 27px;
-			background-position: -53px -66px;
-		}
-
-		&.nc_long_range_raid {
-			background:
-					-webkit-linear-gradient(top left, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
-					#7d0000;
-			background:
-					linear-gradient(to bottom right, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
-					#7d0000;
-			background-size: 40px 40px;
-			background-position: -61px -107px;
-		}
-
-		&.nc_air_support_sub {
-			background:
-					-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
-					#7d0000;
-			background:
-					linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 121, 121, 0.8) 75%),
-					#7d0000;
-			background-size: 28px 27px;
-			background-position: -52px -67px;
-			box-shadow: inset 0 0 4px 2px #2e15ca;
-		}
-
-		&.nc_enemy_combined {
-			background:
-					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-					radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
-					#7d0000;
-			background-size: 25px 25px;
-			background-position: -7px -7px, 0 18px, -32px 24px, -50px 49px;
-		}
-	}
-
-	/* Abyss Ships */
-	.node_type_battle {
-		position: relative;
-	}
-
-	/* ABYSS FLEET
-	---------------------*/
-	/* Abyss single fleet */
-	.abyss_single {
-		.sink_icons {
-			width: 180px;
-			height: 0;
-			position: absolute;
-			z-index: 1;
-			pointer-events: none;
-
-			.sunk {
-				width: 16px;
+			.equipResource {
+				width: 85px;
+				float: left;
 				height: 16px;
 				line-height: 16px;
-				float: left;
-				margin: 8px 0 0 14px;
+				margin: 0 0 2px 0;
 
-				img {
+				.equipResoIcon {
 					width: 16px;
 					height: 16px;
-					vertical-align: top;
-					display: none;
-					border-radius: 50%;
-					object-fit: cover;
+					float: left;
+					margin: 0 9px 0 0;
 				}
-			}
 
-			.shown img {
-				display: inline;
-			}
-
-			.safe img {
-				filter: grayscale(100%);
-				-webkit-filter: grayscale(100%);
-			}
-
-			.debuff img {
-				display: inline;
-				box-sizing: border-box;
-				padding-left: 16px;
-				background: url(../../../../assets/img/client/chuuha_land.png);
-				background-size: cover;
-			}
-		}
-
-		.abyss_ships {
-			width: 180px;
-			height: 26px;
-			margin: 0 0 1px 0;
-
-			.boss {
-				border-color: #5ef;
-				box-shadow: 0 0 1px 1px #fe5;
-			}
-
-			.kai {
-				border-color: #2af;
-				box-shadow: 0 0 1px 0 #2af;
-			}
-
-			.flagship {
-				border-color: #fc3;
-				box-shadow: 0 0 1px 0 #fc3;
-			}
-
-			.elite {
-				border-color: #f33;
-				box-shadow: 0 0 1px 0 #f33;
-			}
-
-			.sunk {
-				opacity: 0.6;
-			}
-
-			.abyss_hps {
-				width: 180px;
-				height: 4px;
-				margin: 0 0 5px 0;
-			}
-
-			.abyss_hp {
-				width: 28px;
-				height: 4px;
-				margin: 0 1px;
-				background: #222;
-				float: left;
-
-				&.sunk {
-					opacity: 0.5;
+				.equipResoAmt {
+					width: 60px;
+					height: 16px;
+					float: left;
+					font-size: 12px;
+					color: #fff;
 				}
 			}
 		}
 
-		.abyss_ship {
-			width: 26px;
-			height: 26px;
-			float: left;
-			margin: 0 2px;
-			border-radius: 13px;
-			border: 1px solid #000;
-			overflow: hidden;
-			background: #888;
-			position: relative;
+		.equipFooter {
+			width: 170px;
+			line-height: 16px;
 
 			img {
-				width: 26px;
-				height: 26px;
-				position: relative;
-				top: -1px;
-				left: -1px;
-				border-radius: 50%;
+				width: 14px;
+				height: 14px;
+				vertical-align: text-bottom;
+				margin-right: 2px;
 			}
-		}
 
-		.abyss_hp_bar {
-			height: 4px;
-			background: #0f0;
+			span {
+				line-height: 16px;
+				font-size: 12px;
+				color: #fff;
+			}
 		}
 	}
 
-	/* Abyss combined fleet */
-	.abyss_combined {
-		width: 180px;
-		margin: 0 0 4px 0;
-		display: none;
+	/*------- EXPEDITION -------*/
+	.activity_expedition {
+		padding: 5px 10px;
+		white-space: nowrap;
 
-		.abyss_fleet {
-			width: 180px;
-			height: 15px;
-			margin: 0 0 1px 0;
+		.expres_img {
+			width: 170px;
+			height: 30px;
+			line-height: 30px;
+
+			img {
+				width: 170px;
+				height: 30px;
+				vertical-align: top;
+			}
 		}
 
-		.abyss_fleet_2 {
-			margin: 0 0 0 10px;
+		.expres_status {
+			width: 170px;
+			font-size: 14px;
+			color: #ffcc00;
+			font-weight: bold;
+			text-align: center;
 		}
 
-		.sink_icons {
-			width: 180px;
-			height: 0;
-			position: absolute;
-			z-index: 1;
-			pointer-events: none;
+		.expres_num {
+			width: 170px;
+			height: 14px;
+			line-height: 14px;
+			font-size: 12px;
+			color: #ccc;
+			text-align: center;
+			margin: 0 0 8px 0;
+		}
 
-			.sunk {
-				width: 10px;
-				height: 10px;
-				line-height: 10px;
+		.expres_resos {
+			width: 170px;
+			height: 36px;
+			line-height: 16px;
+			margin: 0 0 5px 0;
+
+			.expres_divHF { /* divide half */
+				display: inline-block;
+				width: 85px;
 				float: left;
-				margin: 4px 0 0 17px;
+
+				.expres_reso {
+					float: left;
+					height: 16px;
+					line-height: 16px;
+					margin: 0 0 2px 0;
+
+					.expres_icon {
+						width: 16px;
+						height: 16px;
+						float: left;
+						margin: 0 9px 0 0;
+					}
+
+					.expres_amt {
+						width: 60px;
+						height: 16px;
+						float: left;
+						font-size: 12px;
+						color: #fff;
+					}
+				}
+			}
+		}
+
+		.expres_items {
+			width: 170px;
+			height: 20px;
+			margin: 0 0 3px 0;
+
+			.expres_get {
+				max-width: 100px;
+				height: 20px;
+				line-height: 20px;
+				font-size: 12px;
+				color: #fff;
+				float: left;
+				margin: 0 5px 0 0;
+			}
+
+			.expres_noget {
+				height: 20px;
+				line-height: 20px;
+				font-size: 12px;
+				color: #faa;
+				float: left;
+				display: none;
+			}
+
+			.expres_item {
+				width: 35px;
+				height: 20px;
+				line-height: 20px;
+				float: left;
+				margin: 0 5px 0 0;
+
+				.expres_item_icon {
+					width: 16px;
+					height: 16px;
+					float: left;
+					margin: 0 2px 0 0;
+
+					img {
+						width: 16px;
+						height: 16px;
+						margin: 2px 0;
+						vertical-align: top;
+					}
+				}
+
+				.expres_item_text {
+					width: 17px;
+					height: 20px;
+					float: left;
+					font-size: 12px;
+					color: #fff;
+				}
+			}
+		}
+
+		.expres_hqexp {
+			width: 170px;
+			height: 20px;
+			line-height: 20px;
+			margin: 0 0 5px 0;
+			color: #fff;
+			font-size: 14px;
+
+			.expres_hqexp_lbl {
+				font-size: 14px;
+				font-weight: bold;
+			}
+
+			.expres_hqexp_amt {
+				font-size: 12px;
+
+				span.value {
+					color: #ffcc00;
+					font-size: 14px;
+					font-weight: bold;
+				}
+			}
+		}
+
+		.expres_ships {
+			width: 170px;
+			line-height: 18px;
+			font-size: 12px;
+
+			.expres_ship {
+				width: 85px;
+				height: 18px;
+				float: left;
+				margin: 0 0 2px 0;
+				display: none;
+
+				.expres_ship_img {
+					width: 18px;
+					height: 18px;
+					float: left;
+					margin: 0 2px 0 0;
+
+					img {
+						width: 18px;
+						height: 18px;
+						vertical-align: top;
+						border-radius: 50%;
+					}
+				}
+
+				.expres_ship_exp {
+					width: 65px;
+					height: 18px;
+					float: left;
+					color: #fff;
+				}
+
+				span.value {
+					font-weight: bold;
+					color: #ffcc00;
+				}
+			}
+		}
+	}
+
+	/*------- MODERNIZE -------*/
+	.activity_modernization {
+		padding: 5px 10px;
+
+		.mod_ship {
+			height: 50px;
+			padding: 5px 0;
+			margin: 0 0 5px 0;
+
+			.mod_ship_pic {
+				width: 40px;
+				height: 40px;
+				float: left;
+				border-radius: 20px;
+				border: 1px solid #000;
+				overflow: hidden;
+				margin: 0 5px 0 0;
 
 				img {
-					width: 10px;
-					height: 10px;
-					vertical-align: top;
-					display: none;
+					width: 40px;
+					height: 40px;
+					position: relative;
+					margin: -1px 0 0 -1px;
+					border-radius: 50%;
 				}
 			}
 
-			.shown img {
-				display: inline;
+			.mod_ship_name {
+				width: 125px;
+				height: 22px;
+				line-height: 22px;
+				float: left;
+				font-size: 13px;
+				font-weight: bold;
+				color: #ffcc00;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 
-			.safe img {
-				filter: grayscale(100%);
-				-webkit-filter: grayscale(100%);
-			}
-
-			.debuff img {
-				display: inline;
-				box-sizing: border-box;
-				padding-left: 10px;
-				background: url(../../../../assets/img/client/chuuha_land.png);
-				background-size: cover;
-			}
-		}
-
-		.abyss_ships {
-			width: 180px;
-			height: 15px;
-			margin: 0 0 0 0;
-		}
-
-		.abyss_hp {
-			width: 2px;
-			height: 15px;
-			margin: 0 1px;
-			background: #222;
-			float: left;
-			overflow: hidden;
-
-			&.sunk {
-				opacity: 0.5;
+			.mod_ship_level {
+				width: 125px;
+				height: 14px;
+				line-height: 14px;
+				float: left;
+				font-size: 12px;
+				color: #ccc;
 			}
 		}
 
-		.abyss_hp_bar {
-			height: 15px;
-			background: #0f0;
-		}
+		.mod_result_stats {
+			width: 170px;
+			height: 142px;
 
-		.abyss_ship {
-			width: 15px;
-			height: 15px;
-			line-height: 15px;
-			float: left;
-			margin: 0 7px 0 2px;
-			border-radius: 8px;
-			overflow: hidden;
-			background: #888;
-			position: relative;
+			.mod_result_stat {
+				width: 170px;
+				height: 18px;
+				line-height: 20px;
+				margin: 0 0 2px 0;
 
-			img {
-				width: 15px;
-				height: 15px;
-				position: relative;
-				vertical-align: top;
+				.mod_result_icon {
+					width: 20px;
+					height: 20px;
+					margin: 0 5px 0 0;
+					float: left;
+
+					img {
+						width: 20px;
+						height: 20px;
+						display: block;
+					}
+				}
+
+				.mod_result_old {
+					width: 35px;
+					height: 20px;
+					float: left;
+					color: #aaa;
+					font-size: 14px;
+				}
+
+				.mod_result_plus {
+					width: 40px;
+					height: 20px;
+					float: left;
+					font-weight: bold;
+					color: #0f0;
+					font-size: 16px;
+				}
+
+				.mod_result_left {
+					width: 70px;
+					height: 20px;
+					float: left;
+					color: #aaa;
+					font-size: 12px;
+				}
 			}
 		}
-	}
 
-	/* Battle Flags */
-	.battle_flags {
-		width: 180px;
-		height: 30px;
-		margin: 0 0 5px 0;
-	}
-
-	.battle_flag {
-		width: 30px;
-		height: 30px;
-		float: left;
-
-		img {
-			width: 24px;
-			height: 24px;
-			margin: 3px 6px;
-		}
-
-		&.battle_eformation {
-			width: 30px;
+		.mod_result_note {
+			width: 170px;
 			height: 30px;
-			margin: 0 0;
-			border-radius: 15px;
-			background: #fff;
-
-			img {
-				width: 24px;
-				height: 24px;
-				margin: 3px;
-			}
-		}
-
-		&.battle_fish img.rounded {
-			width: 25px;
-			height: 25px;
-			margin-top: 2px;
-			border-radius: 50%;
-		}
-
-		.support_exped {
-			width: 12px;
-			height: 12px;
-			line-height: 13px;
-			border-radius: 6px;
-			margin: 16px 0 0 3px;
-			position: absolute;
-			font-size: 8px;
+			color: #aaa;
+			font-size: 12px;
+			line-height: 15px;
 			text-align: center;
-			color: #fff;
-			background: #a69de6;
 			overflow: hidden;
-			text-shadow: none;
-			pointer-events: none;
-			display: none;
-		}
-
-		.support_lbas {
-			width: 14px;
-			height: 13px;
-			line-height: 13px;
-			border-radius: 6px;
-			margin: 15px 0 0 17px;
-			position: absolute;
-			font-size: 8px;
-			text-align: center;
-			color: #ff0;
-			background: #5b5;
-			overflow: hidden;
-			text-shadow: none;
-			pointer-events: none;
-			display: none;
-		}
-
-		.support_balloon {
-			width: 13px;
-			height: 13px;
-			border-radius: 50%;
-			margin: 1px 0 0 18px;
-			position: absolute;
-			background: #fff;
-			opacity: 0.7;
-			overflow: hidden;
-			display: none;
-
-			img {
-				width: 13px;
-				height: 13px;
-				vertical-align: top;
-				margin: 0 0;
-			}
-
-			&.deployed {
-				background: #fe5;
-			}
 		}
 	}
-}
-
-/* Battle Conditions */
-.module.activity .battle_conditions {
-	width: 180px;
-	height: 56px;
-	margin: 0 0 3px 0;
-}
-.module.activity .battle_condition {
-	width: 180px;
-	height: 14px;
-}
-.module.activity .battle_cond_icon {
-	width: 14px;
-	height: 14px;
-	line-height: 14px;
-	float: left;
-	margin: 0 5px 0 0;
-}
-.module.activity .battle_cond_icon img {
-	width: 14px;
-	height: 14px;
-	vertical-align: top;
-}
-.module.activity .battle_cond_label {
-	width: 50px;
-	height: 14px;
-	line-height: 14px;
-	float: left;
-	font-size: 11px;
-	margin: 0 5px 0 0;
-	color: #ccc;
-}
-.module.activity .battle_cond_value {
-	width: 106px;
-	height: 14px;
-	line-height: 14px;
-	font-size: 11px;
-	float: left;
-	color: #fff;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.module.activity .battle_cond_value.best {
-	color: #1f1;
-}
-.module.activity .battle_cond_value.better {
-	color: #5f5;
-}
-.module.activity .battle_cond_value.good {
-	color: #afa;
-}
-.module.activity .battle_cond_value.bad {
-	color: #faa;
-}
-.module.activity .battle_cond_value.worse {
-	color: #f77;
-}
-.module.activity .battle_cond_value.worst {
-	color: #f44;
-}
-.module.activity .battle_cond_extra {
-	line-height: 14px;
-	font-size: 11px;
-	white-space: nowrap;
-	color: #fff;
-	display: none;
-}
-.module.activity .battle_cond_extra.smoke_screen {
-	position: absolute;
-	margin: -35px 0 0 21px;
-	filter: drop-shadow(0 0 2px #222);
-	z-index: 2;
-}
-.module.activity .battle_cond_extra.smoke_screen .smoke_icon {
-	width: 13px;
-	height: 13px;
-	border-radius: 50%;
-	background: #fff;
-	margin: 0 2px 0 0;
-	overflow: hidden;
-	vertical-align: top;
-	opacity: 0.7;
-}
-.module.activity .battle_cond_extra.smoke_screen .smoke_icon.triggered {
-	background: #fe5;
-}
-.module.activity .battle_cond_extra.smoke_screen .smoke_level {
-	pointer-events: none;
-}
-.module.activity .battle_contact img {
-	width: 15px;
-	height: 15px;
-	vertical-align: top;
-}
-.module.activity .battle_drop img {
-}
-.module.activity .battle_drop img.rounded {
-	border-radius: 50%;
-}
-.module.activity .battle_drop.new_ship {
-	filter: drop-shadow(0px 0 3px #1f1);
-	-webkit-filter: drop-shadow(0px 0 3px #1f1);
-}
-/* Battle Planes */
-.module.activity .battle_planes {
-	width: 180px;
-	height: 44px;
-}
-.module.activity .plane_label {
-	width: 90px;
-	height: 14px;
-	line-height: 14px;
-	font-size: 11px;
-	color: #ffcc00;
-	text-align: center;
-	font-weight: bold;
-	float: left;
-}
-.module.activity .plane_count {
-	width: 90px;
-	height: 15px;
-	line-height: 15px;
-	float: left;
-	margin: 0 0 1px 0;
-}
-.module.activity .plane_icon {
-	width: 14px;
-	height: 14px;
-	margin: 0 5px 0 0;
-	float: left;
-	border-radius: 7px;
-	background: #fff;
-}
-.module.activity .plane_icon img {
-	width: 15px;
-	height: 15px;
-	position: relative;
-	top: -1px;
-	left: -2px;
-	vertical-align: top;
-}
-.module.activity .plane_text {
-	width: 70px;
-	height: 15px;
-	font-size: 11px;
-	float: left;
-}
-.module.activity .plane_before {
-	color: #eee;
-}
-.module.activity .plane_after {
-	color: #FF7979;
-}
-/* Resource Nodes */
-.module.activity .node_type_resource {
-	width: 150px;
-	line-height: 18px;
-	padding: 4px;
-	background: #B1FF5E;
-	border: 1px solid #70D800;
-	border-radius: 7px;
-	margin: 10px auto;
-	text-shadow: none;
-}
-.module.activity .node_res_icon {
-	width: 18px;
-	height: 18px;
-	float: left;
-	margin: 0 5px 0 0;
-	vertical-align: top;
-}
-.module.activity .node_res_icon img {
-	width: 18px;
-	height: 18px;
-	vertical-align: top;
-}
-.module.activity .node_res_text {
-	width: 140px;
-	height: 20px;
-	font-weight: bold;
-	font-size: 12px;
-}
-.module.activity .node_type_maelstrom {
-	background: #D2C6FF;
-	border: 1px solid #AE87E9;
-}
-/* Previously encountered */
-.module.activity .node_type_prev_encounters {
-	color: #eee;
-	font-size: 12px;
-}
-.module.activity .node_type_prev_encounters .prev_encounter_label {
-	color: #ffcc00;
-	height: 17px;
-}
-.module.activity .node_type_prev_encounters .encounters {
-	height: 165px;
-	overflow-x: hidden;
-	overflow-y: auto;
-}
-.module.activity .encounters .encounter_record {
-	width: 180px;
-	height: auto;
-	background: rgba(186,187,189,0.4);
-	border-radius: 5px;
-	margin: 0 0 2px 0;
-	float: left;
-}
-.module.activity .encounters .encounter_record.matched {
-	box-shadow: inset 0 0 5px 2px #e37;
-}
-.module.activity .encounters .encounter_formation {
-	width: 24px;
-	height: 24px;
-	background: #fff;
-	border-radius: 50%;
-	margin: 1px 0 0 2px;
-	float: left;
-}
-.module.activity .encounters .encounter_formation img {
-	width: 25px;
-	height: 25px;
-	vertical-align: top;
-}
-.module.activity .encounters .encounter_ships {
-	width: 154px;
-	height: 27px;
-	padding: 1px 0 0 2px;
-	float: left;
-}
-.module.activity .encounters .encounter_ships.combined {
-	height: 53px;
-}
-.module.activity .encounters .encounter_ship {
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	margin: 0 0 1px 0;
-	float: left;
-}
-.module.activity .encounters .encounter_ship img {
-	width: 25px;
-	height: 25px;
-	vertical-align: top;
-}
-.module.activity .encounters .encounter_ship.boss {
-	box-shadow: 0 0 1px 1px #5ef, 0 0 3px 2px #fe5;
-}
-.module.activity .encounters .encounter_ship.kai {
-	box-shadow: 0 0 1px 1px #2af;
-}
-.module.activity .encounters .encounter_ship.flagship {
-	box-shadow: 0 0 1px 1px #fc3;
-}
-.module.activity .encounters .encounter_ship.elite {
-	box-shadow: 0 0 1px 1px #f33;
-}
-/* Text Nodes */
-.module.activity .node_type_text {
-	width: 150px;
-	height: 28px;
-	line-height: 18px;
-	padding: 4px;
-	border-radius: 7px;
-	margin: 10px auto;
-	text-align: center;
-	font-size: 12px;
-}
-.module.activity .node_type_text.dud {
-	background: #79E7FF;
-	border: 1px solid #1ABAEF;
-	text-shadow: none;
-}
-.module.activity .node_type_text.select {
-	background: #FFF;
-	border: 1px solid #CCC;
-	text-shadow: none;
-}
-
-/*------- ACTIVITY: QUEST -------*/
-.module.activity .activity_quest {
-	color: #FFF;
-}
-
-.module.activity .activity_quest .quest_filters {
-	display: flex;
-	height: 25px;
-	justify-content: center;
-}
-
-.module.activity .activity_quest .quest_filter_button {
-	overflow: hidden;
-	width: calc(180px / 5);
-	opacity: 0.3;
-	transition: 0.2s;
-	cursor: pointer;
-}
-
-.module.activity .activity_quest .quest_filter_button.active {
-	opacity: 1;
-}
-
-.module.activity .activity_quest .quest_filter_button[filter="1"] {
-	background: #d75048;
-}
-
-.module.activity .activity_quest .quest_filter_button[filter="2"] {
-	background: #98e75f;
-}
-
-.module.activity .activity_quest .quest_filter_button[filter="3"] {
-	background: #aaccee;
-}
-
-.module.activity .activity_quest .quest_filter_button[filter="4"] {
-	background: #996600;
-}
-
-.module.activity .activity_quest .quest_filter_button[filter="5"] {
-	background: #ae76fa;
-}
-.module.activity .activity_quest .quest_list {
-	display: block;
-/*  flex-direction: column; */
-	height: 195px;
-	overflow-y: auto;
-	margin-top: 5px;
-}
-
-.module.activity .activity_quest .quest_list::-webkit-scrollbar {
-	width: 6px;
-}
-.module.activity .activity_quest .quest_scrolltop_button {
-	position: relative;
-	float: right;
-	z-index: 1;
-	top: -199px;
-	right: 0;
-	width: 6px;
-	height: 5px;
-	border-left: 3px solid transparent;
-	border-right: 3px solid transparent;
-	border-bottom: 5px solid rgba(158,158,158,0.6);
-	background-color: transparent;
-}
-.module.activity .activity_quest .quest_scrolltop_button:hover {
-	border-bottom-color: rgba(197,197,197,1);
-}
-
-.module.activity .activity_quest .quest_list .quest_page {
-	position: sticky;
-	top: 0;
-	padding: 1px;
-	background: #444;
-	text-align: center;
-	font-size: 11px;
-}
-
-.module.activity .activity_quest .quest_list .quest {
-	display: flex;
-	align-items: center;
-	width: auto;
-}
-
-.module.activity .activity_quest .quest_list .quest.activated {
-	background: rgba(255,153,51,0.2);
-}
-.module.activity .activity_quest .quest_list .quest.completed {
-	background: rgba(0,255,0,0.2);
-}
-
-.module.activity .activity_quest .quest_list .quest .quest_color {
-	width: 14px;
-	height: 14px;
-	margin: 2px;
-	border: 2px solid transparent;
-}
-.module.activity .activity_quest .quest_list .quest.activated .quest_color {
-/*	border-left: 2px solid #f93; */
-}
-.module.activity .activity_quest .quest_list .quest.percent50 .quest_color {
-/*	border-left: 2px solid #39a; */
-}
-.module.activity .activity_quest .quest_list .quest.percent80 .quest_color {
-/*	border-left: 2px solid #6cd; */
-}
-.module.activity .activity_quest .quest_list .quest.completed .quest_color {
-/*	border-left: 2px solid #0f0; */
-}
-.module.activity .activity_quest .quest_list .quest .quest_color.label_daily {
-	border-right: 2px solid #6af;
-}
-.module.activity .activity_quest .quest_list .quest .quest_color.label_weekly {
-	border-right: 2px solid #8ff;
-}
-.module.activity .activity_quest .quest_list .quest .quest_color.label_monthly {
-	border-right: 2px solid #3f6;
-}
-.module.activity .activity_quest .quest_list .quest .quest_color.label_quarterly {
-	border-right: 2px solid #f95;
-}
-.module.activity .activity_quest .quest_list .quest .quest_color.label_yearly {
-	border-right: 2px solid #84f;
-}
-.module.activity .activity_quest .quest_list .quest .quest_color.label_other {
-	border-right: 2px solid #fe6;
-}
-
-.module.activity .activity_quest .quest_list .quest .quest_text {
-	width: 165px;
-	height: 14px;
-	overflow: hidden;
-	font-size: 11px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_quest .quest_list .quest.percent50 .quest_text:before {
-	content: "50%";
-	float: right;
-	font-size: 10px;
-	color: #5cc;
-	text-shadow: -1px 1px 0 #333;
-}
-.module.activity .activity_quest .quest_list .quest.percent80 .quest_text:before {
-	content: "80%";
-	float: right;
-	font-size: 10px;
-	color: #5cc;
-	text-shadow: -1px 1px 0 #333;
-}
-
-/*------- ACTIVITY: CRAFTING -------*/
-.module.activity .activity_crafting {
-	padding: 10px;
-}
-.module.activity .activity_crafting .equipIcon {
-	width: 28px;
-	height: 28px;
-	line-height: 14px;
-	float: left;
-	background: #fff;
-	border-radius: 50%;
-	margin: 0 5px 3px 0;
-}
-.module.activity .activity_crafting .equipIcon img {
-	width: 24px;
-	height: 24px;
-	margin: 2px;
-	vertical-align: top;
-}
-.module.activity .activity_crafting .equipName {
-	width: 135px;
-	line-height: 14px;
-	float: left;
-	font-size: 12px;
-	color: #fff;
-	font-weight: bold;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	margin: 0 0 3px 0;
-}
-.module.activity .activity_crafting .equipNote {
-	width: 170px;
-	line-height: 16px;
-	margin: 0 0 3px 0;
-	color: #ccc;
-	font-size: 12px;
-}
-.module.activity .activity_crafting .equipStats {
-	width: 170px;
-	line-height: 20px;
-	margin: 0 0 3px 0;
-}
-.module.activity .activity_crafting .equipStat {
-	width: 45px;
-	height: 20px;
-	margin: 0 0 3px 0;
-	float: left;
-}
-.module.activity .activity_crafting .equipStatIcon {
-	width: 20px;
-	height: 20px;
-	float: left;
-	margin: 0 3px 0 0;
-	background: #fff;
-	border-radius: 10px;
-	text-align: center;
-}
-.module.activity .activity_crafting .equipStatIcon img {
-	max-width: 18px;
-	height: 16px;
-	margin: 2px 1px;
-	vertical-align: top;
-}
-.module.activity .activity_crafting .equipStatText {
-	width: 20px;
-	height: 20px;
-	float: left;
-	font-size: 12px;
-	color: #fff;
-}
-
-.module.activity .activity_crafting .equipResources {
-	width: 170px;
-	height: 36px;
-	line-height: 16px;
-}
-.module.activity .activity_crafting .equipResource {
-	width: 85px;
-	float: left;
-	height: 16px;
-	line-height: 16px;
-	margin: 0 0 2px 0;
-}
-.module.activity .activity_crafting .equipResoIcon {
-	width: 16px;
-	height: 16px;
-	float: left;
-	margin: 0 9px 0 0;
-}
-.module.activity .activity_crafting .equipResoAmt {
-	width: 60px;
-	height: 16px;
-	float: left;
-	font-size: 12px;
-	color: #fff;
-}
-.module.activity .activity_crafting .equipFooter {
-	width: 170px;
-	line-height: 16px;
-}
-.module.activity .activity_crafting .equipFooter img {
-	width: 14px;
-	height: 14px;
-	vertical-align: text-bottom;
-	margin-right: 2px;
-}
-.module.activity .activity_crafting .equipFooter span {
-	line-height: 16px;
-	font-size: 12px;
-	color: #fff;
-}
-
-/*------- EXPEDITION -------*/
-.module.activity .activity_expedition {
-	padding: 5px 10px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_expedition .expres_img {
-	width: 170px;
-	height: 30px;
-	line-height: 30px;
-}
-.module.activity .activity_expedition .expres_img img {
-	width: 170px;
-	height: 30px;
-	vertical-align: top;
-}
-
-.module.activity .activity_expedition .expres_status {
-	width: 170px;
-	font-size: 14px;
-	color: #ffcc00;
-	font-weight: bold;
-	text-align: center;
-}
-.module.activity .activity_expedition .expres_num {
-	width: 170px;
-	height: 14px;
-	line-height: 14px;
-	font-size: 12px;
-	color: #ccc;
-	text-align: center;
-	margin: 0 0 8px 0;
-}
-
-.module.activity .activity_expedition .expres_resos {
-	width: 170px;
-	/*background: #cfc;*/
-	height: 36px;
-	line-height: 16px;
-	margin: 0 0 5px 0;
-}
-.module.activity .activity_expedition .expres_divHF { /* divide half */
-	display: inline-block;
-	width: 85px;
-	float: left;
-}
-.module.activity .activity_expedition .expres_reso {
-	float: left;
-	/*background: #fcc;*/
-	height: 16px;
-	line-height: 16px;
-	margin: 0 0 2px 0;
-}
-.module.activity .activity_expedition .expres_icon {
-	width: 16px;
-	height: 16px;
-	float: left;
-	margin: 0 9px 0 0;
-	/*background: #fcf;*/
-}
-.module.activity .activity_expedition .expres_amt {
-	width: 60px;
-	height: 16px;
-	float: left;
-	/*background: #ccf;*/
-	font-size: 12px;
-	color: #fff;
-}
-
-.module.activity .activity_expedition .expres_items {
-	width: 170px;
-	height: 20px;
-	margin: 0 0 3px 0;
-}
-.module.activity .activity_expedition .expres_get {
-	max-width: 100px;
-	height: 20px;
-	line-height: 20px;
-	font-size: 12px;
-	color: #fff;
-	float: left;
-	margin: 0 5px 0 0;
-}
-.module.activity .activity_expedition .expres_noget {
-	height: 20px;
-	line-height: 20px;
-	font-size: 12px;
-	color: #faa;
-	float: left;
-	display: none;
-}
-.module.activity .activity_expedition .expres_item {
-	width: 35px;
-	height: 20px;
-	line-height: 20px;
-	float: left;
-	margin: 0 5px 0 0;
-}
-.module.activity .activity_expedition .expres_item_icon {
-	width: 16px;
-	height: 16px;
-	float: left;
-	margin: 0 2px 0 0;
-}
-.module.activity .activity_expedition .expres_item_icon img {
-	width: 16px;
-	height: 16px;
-	margin: 2px 0;
-	vertical-align: top;
-}
-.module.activity .activity_expedition .expres_item_text {
-	width: 17px;
-	height: 20px;
-	float: left;
-	font-size: 12px;
-	color: #fff;
-}
-
-.module.activity .activity_expedition .expres_hqexp {
-	width: 170px;
-	height: 20px;
-	line-height: 20px;
-	margin: 0 0 5px 0;
-	color: #fff;
-	font-size: 14px;
-}
-.module.activity .activity_expedition .expres_hqexp_lbl {
-	font-size: 14px;
-	font-weight: bold;
-}
-.module.activity .activity_expedition .expres_hqexp_amt {
-	font-size: 12px;
-}
-.module.activity .activity_expedition .expres_hqexp_amt span.value {
-	color: #ffcc00;
-	font-size: 14px;
-	font-weight: bold;
-}
-
-.module.activity .activity_expedition .expres_ships {
-	width: 170px;
-	line-height: 18px;
-	font-size: 12px;
-}
-.module.activity .activity_expedition .expres_ship {
-	width: 85px;
-	height: 18px;
-	float: left;
-	margin: 0 0 2px 0;
-	display: none;
-}
-.module.activity .activity_expedition .expres_ship_img {
-	width: 18px;
-	height: 18px;
-	float: left;
-	margin: 0 2px 0 0;
-}
-.module.activity .activity_expedition .expres_ship_img img {
-	width: 18px;
-	height: 18px;
-	vertical-align: top;
-	border-radius: 50%;
-}
-.module.activity .activity_expedition .expres_ship_exp {
-	width: 65px;
-	height: 18px;
-	float: left;
-	color: #fff;
-}
-.module.activity .activity_expedition .expres_ship_exp span.value {
-	font-weight: bold;
-	color: #ffcc00;
-}
-
-/*------- MODERNIZE -------*/
-.module.activity .activity_modernization {
-	padding: 5px 10px;
-}
-.module.activity .activity_modernization .mod_ship {
-	height: 50px;
-	padding: 5px 0;
-	margin: 0 0 5px 0;
-}
-.module.activity .activity_modernization .mod_ship_pic {
-	width: 40px;
-	height: 40px;
-	float: left;
-	border-radius: 20px;
-	border: 1px solid #000;
-	overflow: hidden;
-	margin: 0 5px 0 0;
-}
-.module.activity .activity_modernization .mod_ship_pic img {
-	width: 40px;
-	height: 40px;
-	position: relative;
-	margin: -1px 0 0 -1px;
-	border-radius: 50%;
-}
-.module.activity .activity_modernization .mod_ship_name {
-	width: 125px;
-	height: 22px;
-	line-height: 22px;
-	float: left;
-	font-size: 13px;
-	font-weight: bold;
-	color: #ffcc00;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-.module.activity .activity_modernization .mod_ship_level {
-	width: 125px;
-	height: 14px;
-	line-height: 14px;
-	float: left;
-	font-size: 12px;
-	color: #ccc;
-}
-.module.activity .activity_modernization .mod_result_stats {
-	width: 170px;
-	height: 142px;
-}
-.module.activity .activity_modernization .mod_result_stat {
-	width: 170px;
-	height: 18px;
-	line-height: 20px;
-	margin: 0 0 2px 0;
-}
-.module.activity .activity_modernization .mod_result_icon {
-	width: 20px;
-	height: 20px;
-	margin: 0 5px 0 0;
-	float: left;
-}
-.module.activity .activity_modernization .mod_result_icon img {
-	width: 20px;
-	height: 20px;
-	display: block;
-}
-.module.activity .activity_modernization .mod_result_old {
-	width: 35px;
-	height: 20px;
-	float: left;
-	color: #aaa;
-	font-size: 14px;
-}
-.module.activity .activity_modernization .mod_result_plus {
-	width: 40px;
-	height: 20px;
-	float: left;
-	font-weight: bold;
-	color: #0f0;
-	font-size: 16px;
-}
-.module.activity .activity_modernization .mod_result_left {
-	width: 70px;
-	height: 20px;
-	float: left;
-	color: #aaa;
-	font-size: 12px;
-}
-.module.activity .activity_modernization .mod_result_note {
-	width: 170px;
-	height: 30px;
-	color: #aaa;
-	font-size: 12px;
-	line-height: 15px;
-	text-align: center;
-	overflow: hidden;
 }
 
 /* ACTIVITY: Expedition Planner
