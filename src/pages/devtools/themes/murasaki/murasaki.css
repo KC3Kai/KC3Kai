@@ -134,7 +134,7 @@ html,body {
 	margin: 0 0 0 5px;
 	color: #e88;
 }
-#catBomb .closebtn: hover {
+#catBomb .closebtn:hover {
 	color: #f55;
 }
 #catBomb .description {
@@ -192,7 +192,7 @@ html,body {
 	margin: 0 0 0 5px;
 	color: #8e8;
 }
-#gameUpdate .closebtn: hover {
+#gameUpdate .closebtn:hover {
 	color: #5f5;
 }
 #gameUpdate .description {
@@ -266,7 +266,7 @@ html,body {
 	text-align: center;
 	position: relative;
 }
-.module.admiral .admiral_lvnext: before {
+.module.admiral .admiral_lvnext:before {
 	content: attr(data-exp);
 	position: absolute;
 	width: 100%;
@@ -275,7 +275,7 @@ html,body {
 	top: 0;
 	left: -60px;
 }
-.module.admiral .admiral_lvnext: after {
+.module.admiral .admiral_lvnext:after {
 	content: attr(data-exp-gain);
 	color: red;
 	position: absolute;
@@ -302,7 +302,7 @@ html,body {
 	color: transparent;
 	text-shadow: 0 0 8px rgba(255,220,0,0.4);
 }
-.module.admiral .admiral_name.censor: before {
+.module.admiral .admiral_name.censor:before {
 	content: 'U CANT SEE ME';
 }
 .module.admiral .admiral_comm {
@@ -645,7 +645,7 @@ html,body {
 .module.activity .map_info.map_finisher.noBlink .map_gauge {
 	background-color: #b22;
 }
-.module.activity .map_info.map_finisher: not(.noBlink) .map_gauge {
+.module.activity .map_info.map_finisher:not(.noBlink) .map_gauge {
 	animation: gauge-finish-her 0.25s infinite ease alternate;
 }
 .module.activity .map_info.map_finisher .map_hp {
@@ -1425,7 +1425,7 @@ ABYSS FLEET
 	border-bottom: 5px solid rgba(158,158,158,0.6);
 	background-color: transparent;
 }
-.module.activity .activity_quest .quest_scrolltop_button: hover {
+.module.activity .activity_quest .quest_scrolltop_button:hover {
 	border-bottom-color: rgba(197,197,197,1);
 }
 
@@ -1497,14 +1497,14 @@ ABYSS FLEET
 	text-overflow: ellipsis;
 }
 
-.module.activity .activity_quest .quest_list .quest.percent50 .quest_text: before {
+.module.activity .activity_quest .quest_list .quest.percent50 .quest_text:before {
 	content: "50%";
 	float: right;
 	font-size: 10px;
 	color: #5cc;
 	text-shadow: -1px 1px 0 #333;
 }
-.module.activity .activity_quest .quest_list .quest.percent80 .quest_text: before {
+.module.activity .activity_quest .quest_list .quest.percent80 .quest_text:before {
 	content: "80%";
 	float: right;
 	font-size: 10px;
@@ -1945,7 +1945,7 @@ ABYSS FLEET
 	border-width: 1px;
 }
 
-.module.activity .activity_expeditionPlanner li: hover {
+.module.activity .activity_expeditionPlanner li:hover {
 	background: #ffffff;
 }
 
@@ -1983,7 +1983,7 @@ ABYSS FLEET
 	display: none;
 }
 
-.module.activity .activity_expeditionPlanner li: hover > ul {
+.module.activity .activity_expeditionPlanner li:hover > ul {
 	display: block;
 }
 
@@ -3464,7 +3464,7 @@ ABYSS FLEET
 	height: 45px;
 	margin-bottom: 0;
 }
-.module.fleet .lship.ship-stamp: after {
+.module.fleet .lship.ship-stamp:after {
 	content: attr(title);
 	display: inline;
 	top: 4px;
@@ -3772,10 +3772,10 @@ ABYSS FLEET
 }
 
 /* ==> Akashi Timer <== */
-.module.fleet .lship: not(: hover) .ship_repair_data {
+.module.fleet .lship:not(:hover) .ship_repair_data {
 	display: none;
 }
-.module.fleet .lship: hover .ship_repair_data {
+.module.fleet .lship:hover .ship_repair_data {
 	display: block;
 }
 .module.fleet .lship .ship_repair_data {
@@ -3787,7 +3787,7 @@ ABYSS FLEET
 	width: 100%;
 	height: 100%;
 }
-.module.fleet .lship .ship_repair_tick: before {
+.module.fleet .lship .ship_repair_tick:before {
 	content:"+" attr(data-tick);
 }
 .module.fleet .lship .ship_repair_tick {
@@ -4030,7 +4030,7 @@ ABYSS FLEET
 	border-radius: 5px;
 	position: relative;
 }
-.module.fleet .sship.ship-stamp: after {
+.module.fleet .sship.ship-stamp:after {
 	content: attr(title);
 	display: inline;
 	top: 4px;
@@ -5012,6 +5012,6 @@ ABYSS FLEET
 	background: rgba(158,158,158,0.6);
 	border-radius: 8px;
 }
-::-webkit-scrollbar-thumb: window-inactive {
+::-webkit-scrollbar-thumb:window-inactive {
 	background: rgba(158,158,158,0.3);
 }
