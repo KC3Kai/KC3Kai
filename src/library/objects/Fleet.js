@@ -306,8 +306,7 @@ Contains summary information about a fleet and its ships
 	/** @return a function to pass to this.ship() that will update the ships' sparkle status */
 	KC3Fleet.prototype._updateSparkleStatus = function (sparklerPos) {
 		return function (rosterId, position, ship) {
-			ship.nosakiMark = !!sparklerPos && sparklerPos - 1 !== position
-				&& !this.isOnSortieOrPvP() && ship.isFree();
+			ship.nosakiMark = !!sparklerPos && sparklerPos - 1 !== position && ship.isFree();
 		};
 	};
 

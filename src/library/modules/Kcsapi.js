@@ -158,7 +158,6 @@ Previously known as "Reactor"
 			const lastSortie = [KC3SortieManager.map_world || 0, KC3SortieManager.map_num || 0];
 			KC3SortieManager.endSortie(response.api_data);
 			
-			PlayerManager.fleets.forEach(fleet => fleet.updateNosakiSparkleDisplay());
 
 			PlayerManager.loadBases()
 				.setBaseConvertingSlots(response.api_data.api_plane_info);
@@ -1280,10 +1279,6 @@ Previously known as "Reactor"
 				response.api_data.api_bosscell_no,
 				response.api_data.api_bosscomp
 			);
-
-			const fleetsUsed = PlayerManager.combinedFleet && fleetNum === 1 ? [1, 2] : [fleetNum];
-			fleetsUsed.forEach(fleetId => PlayerManager.fleets[fleetId - 1].updateNosakiSparkleDisplay());
-
 			KC3Master.setCellData(response.api_data);
 			
 			KC3QuestManager.get(214).increment(0); // Bw1: 1st requirement: Sortie 36 times (index:0)
@@ -2126,9 +2121,6 @@ Previously known as "Reactor"
 			KC3SortieManager.slotitemConsumed = false;
 			KC3SortieManager.clearNodes();
 			KC3SortieManager.snapshotFleetState();
-
-			PlayerManager.fleets[fleetNum - 1].updateNosakiSparkleDisplay();
-
 			// Create a battle node for the PvP battle
 			var pvpNode = (new KC3Node(0, 0, utcSeconds * 1000)).defineAsBattle();
 			pvpNode.isPvP = true;

@@ -154,17 +154,20 @@ Saves and loads list to and from localStorage
 
 			// Check previous morale state
 			// If an increase over the possible natural regen is detected
-			// On home port while being marked, it'll be treated as nosaki sparkle effect
+			// On homeport while being marked and not on sortie or PvP,
+			// It'll be treated as nosaki sparkle effect
 
-			cShip.nosakiMark &= !!cShip.onFleet();
-			if (this.onPort && cShip.nosakiMark && cShip.morale > tempData.morale) {
+			const fleetId = cShip.onFleet();
+			cShip.nosakiMark &= !!fleetId;
+			if (this.onPort && cShip.nosakiMark && cShip.morale > tempData.morale
+				&& !PlayerManager.fleets[fleetId - 1].isOnSortieOrPvP()) {
 				const secSinceLastPort = Date.toUTCseconds() - (PlayerManager.hq.lastPortTime || 0);
 				const moraleRegen = Math.ceil(secSinceLastPort / 180) * 3;
 				const moraleBase = Math.max(tempData.morale, Math.min(tempData.morale + moraleRegen, 49));
 				const moraleDiff = cShip.morale - moraleBase;
 
 				if (moraleDiff > 0) {
-					const fleet = PlayerManager.fleets[cShip.onFleet() - 1];
+					const fleet = PlayerManager.fleets[fleetId - 1];
 					const sparklerPos = KC3NosakiSparkle.getSparklerPosition(fleet);
 					const sparklerPower = KC3NosakiSparkle.getSparklerPower(fleet.ship(sparklerPos - 1));
 					const fuelCost = Math.ceil(moraleDiff / sparklerPower);
