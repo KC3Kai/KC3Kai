@@ -272,7 +272,7 @@ body {
 			"admiral fleet summary"
 			"activity fleet quests"
 			"activity fleet status";
-		grid-template-columns: 2fr 3fr 2fr;
+		grid-template-columns: 2fr 3fr 3fr;
 	}
 
 	@media all and (width > 960px) {
@@ -281,7 +281,7 @@ body {
 			"admiral fleet summary"
 			"activity fleet quests"
 			"activity fleet status";
-		grid-template-columns: 2fr 3fr 2fr;
+		grid-template-columns: 2fr 3fr 3fr;
 	}
 }
 
@@ -297,7 +297,7 @@ body {
 }
 
 .module {
-	margin: 10px;
+	margin: 5px;
 }
 
 /* ------- HQ INFO ------- */
@@ -974,30 +974,11 @@ body {
 					.sunk {
 						opacity: 0.6;
 					}
-
-					.abyss_hps {
-						display: flex;
-						flex-flow: row nowrap;
-						align-items: center;
-						justify-content: flex-start;
-						gap: 2cqw;
-						height: 4px;
-						margin: 0 0 5px;
-					}
-
-					.abyss_hp {
-						flex: 0 0 15cqw;
-						height: 4px;
-						background: #222;
-
-						&.sunk {
-							opacity: 0.5;
-						}
-					}
 				}
 
 				.abyss_ship {
 					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
 					border-radius: 51%;
 					border: 1px solid #000;
 					background: #888;
@@ -1007,6 +988,30 @@ body {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
+					}
+				}
+
+				.abyss_hps {
+					display: flex;
+					flex-flow: row nowrap;
+					align-items: center;
+					justify-content: flex-start;
+					gap: 2cqw;
+					height: 4px;
+					margin: 0 0 5px;
+
+					@container (width >= 230px) {
+						justify-content: center;
+					}
+				}
+
+				.abyss_hp {
+					flex: 0 0 min(35px, 15cqw);
+					height: 4px;
+					background: #222;
+
+					&.sunk {
+						opacity: 0.5;
 					}
 				}
 
@@ -1499,6 +1504,7 @@ body {
 
 	/* ------- ACTIVITY: QUEST ------- */
 	.activity_quest {
+		position: relative;
 		color: #FFF;
 
 		.quest_filters {
@@ -1508,11 +1514,12 @@ body {
 
 			.quest_filter_button {
 				overflow: hidden;
-				width: calc(180px / 5);
+				width: calc(100% / 5);
 				opacity: 0.3;
 				transition: 0.2s;
 				cursor: pointer;
 
+				&:hover,
 				&.active {
 					opacity: 1;
 				}
@@ -1537,113 +1544,112 @@ body {
 					background: #ae76fa;
 				}
 			}
+		}
 
-			.quest_list {
-				display: block;
-				height: 195px;
-				overflow-y: auto;
-				margin-top: 5px;
+		.quest_list {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 1px;
+			max-height: 320px;
+			overflow-y: auto;
 
-				&::-webkit-scrollbar {
-					width: 6px;
-				}
-
-				.quest_page {
-					position: sticky;
-					top: 0;
-					padding: 1px;
-					background: #444;
-					text-align: center;
-					font-size: 11px;
-				}
-
-				.quest {
-					display: flex;
-					align-items: center;
-					width: auto;
-
-					&.activated {
-						background: rgb(255 153 51 / 20%);
-					}
-
-					&.completed {
-						background: rgb(0 255 0 / 20%);
-					}
-
-					.quest_color {
-						width: 14px;
-						height: 14px;
-						margin: 2px;
-						border: 2px solid transparent;
-
-						&.label_daily {
-							border-right: 2px solid #6af;
-						}
-
-						&.label_weekly {
-							border-right: 2px solid #8ff;
-						}
-
-						&.label_monthly {
-							border-right: 2px solid #3f6;
-						}
-
-						&.label_quarterly {
-							border-right: 2px solid #f95;
-						}
-
-						&.label_yearly {
-							border-right: 2px solid #84f;
-						}
-
-						&.label_other {
-							border-right: 2px solid #fe6;
-						}
-					}
-
-					.quest_text {
-						width: 165px;
-						height: 14px;
-						overflow: hidden;
-						font-size: 11px;
-						white-space: nowrap;
-						text-overflow: ellipsis;
-					}
-
-					&.percent50 .quest_text::before,
-					&.percent80 .quest_text::before {
-						float: right;
-						font-size: 10px;
-						color: #5cc;
-						text-shadow: -1px 1px 0 #333;
-					}
-
-					&.percent50 .quest_text::before {
-						content: "50%";
-					}
-
-					&.percent80 .quest_text::before {
-						content: "80%";
-					}
-				}
+			&::-webkit-scrollbar {
+				width: 6px;
 			}
 
-			.quest_scrolltop_button {
-				position: relative;
-				float: right;
-				z-index: 1;
-				top: -199px;
-				right: 0;
-				width: 6px;
-				height: 5px;
-				border-left: 3px solid transparent;
-				border-right: 3px solid transparent;
-				border-bottom: 5px solid rgb(158 158 158 / 60%);
-				background-color: transparent;
+			.quest_page {
+				position: sticky;
+				top: 0;
+				padding: 1px;
+				background: #444;
+				text-align: center;
+				font-size: 11px;
+			}
 
-				&:hover {
-					border-bottom-color: rgb(197 197 197 / 100%);
+			.quest {
+				display: flex;
+				align-items: center;
+				gap: 3px;
+
+				&.activated {
+					background: rgb(255 153 51 / 20%);
 				}
+
+				&.completed {
+					background: rgb(0 255 0 / 20%);
+				}
+
+				.quest_color {
+					width: 14px;
+					height: 14px;
+					border: 3px solid transparent;
+					border-radius: 2px;
+
+					&.label_daily {
+						border-right: 3px solid #6af;
+					}
+
+					&.label_weekly {
+						border-right: 3px solid #8ff;
+					}
+
+					&.label_monthly {
+						border-right: 3px solid #3f6;
+					}
+
+					&.label_quarterly {
+						border-right: 3px solid #f95;
+					}
+
+					&.label_yearly {
+						border-right: 3px solid #84f;
+					}
+
+					&.label_other {
+						border-right: 3px solid #fe6;
+					}
+				}
+
+				.quest_text {
+					width: 100%;
+					font-size: 11px;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+
+				&.percent50 .quest_text::before,
+				&.percent80 .quest_text::before {
+					float: right;
+					font-size: 10px;
+					color: #5cc;
+					text-shadow: -1px 1px 0 #333;
+				}
+
+				&.percent50 .quest_text::before {
+					content: "50%";
+				}
+
+				&.percent80 .quest_text::before {
+					content: "80%";
+				}
+			}
+		}
+
+		.quest_scrolltop_button {
+			position: absolute;
+			z-index: 11;
+			top: 35px;
+			right: 13px;
+			width: 10px;
+			height: 10px;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-bottom: 10px solid rgb(158 158 158 / 60%);
+			background-color: transparent;
+
+			&:hover {
+				border-bottom-color: rgb(197 197 197 / 100%);
 			}
 		}
 	}
@@ -3430,62 +3436,38 @@ body {
 			display: none;
 		}
 	}
-
-	&.compact {
-		display: flex;
-		flex-direction: column;
-		overflow-y: hidden !important;
-
-		.quest {
-			display: flex;
-			height: auto;
-			line-height: unset;
-			align-items: center;
-			min-height: 12px;
-			max-height: 18px;
-
-			.quest_color {
-				width: 12px;
-				height: auto;
-				line-height: calc(100% - 4px);
-				min-height: 11px;
-				max-height: 14px;
-				float: unset;
-			}
-
-			.quest_text {
-				flex: 1;
-				height: auto;
-				line-height: 12px;
-				float: unset;
-			}
-
-			.quest_track {
-				height: auto;
-				line-height: 12px;
-				float: unset;
-				margin-right: 3px;
-			}
-		}
-	}
 }
 
 /* ------- CONTROLS ------- */
 .module.controls {
 	grid-area: controls;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 5px;
+	container-type: inline-size;
+
+	.control-separator {
+		display: none;
+
+		@container (width < 320px) {
+			display: block;
+			width: 100cqw;
+			height: 1px;
+		}
+	}
 
 	.control {
-		height: 30px;
-		float: left;
 		color: #ccc;
 
 		&.fleet_num {
 			width: 30px;
+			height: 30px;
 			line-height: 30px;
-			border-radius: 15px;
+			border-radius: 16px;
 			background: #333;
 			text-align: center;
-			margin: 0 5px 3px 0;
 			font-size: 19px;
 			font-weight: bold;
 
@@ -3511,17 +3493,13 @@ body {
 		}
 
 		&.fleet_rengo {
-			width: 45px;
+			width: 50px;
 			border-radius: 8px;
 			background: #333;
-			text-align: center;
-			margin: 0 5px 3px 0;
-			font-size: 16px;
-			font-weight: bold;
 
 			img {
-				width: 43px;
-				height: 28px;
+				width: 50px;
+				height: 30px;
 			}
 		}
 
@@ -3530,9 +3508,6 @@ body {
 			border-radius: 8px;
 			background: #333;
 			text-align: center;
-			margin: 0 5px 3px 0;
-			font-size: 16px;
-			font-weight: bold;
 
 			img {
 				width: 30px;
@@ -3554,19 +3529,23 @@ body {
 		}
 
 		&.scrollable {
-			height: 38px;
-			margin: 0 5px 3px 0;
-			font-size: 0;
-			word-spacing: 0;
-			letter-spacing: 0;
-			white-space: nowrap;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			flex: 0 0 calc(100cqw - 280px);
+			max-width: calc(100cqw - 280px);
 			overflow: hidden;
+			font-size: 0;
+
+			@container (width < 320px) {
+				flex: 1 1 calc(100cqw - 40px);
+				max-width: calc(100cqw - 40px);
+			}
 		}
 
 		&.scroll_btn {
 			width: 0;
 			height: 0;
-			margin: 2px 5px 3px 0;
 		}
 
 		&.scroll_left {
@@ -3590,15 +3569,17 @@ body {
 		}
 
 		&.control_btn {
-			width: 40px;
+			flex: 0 0 40px;
 			border-radius: 15px;
 			background: #999;
-			margin: 0 5px 0 0;
 			text-align: center;
 			overflow: hidden;
 			padding: 3px;
 			display: inline-block;
-			float: initial;
+
+			&:has(+ .control_btn) {
+				margin-right: 5px;
+			}
 
 			&.disabled {
 				background: #333;
@@ -3619,6 +3600,10 @@ body {
 
 /* ------- SUMMARY ------- */
 .module.summary {
+	display: inline-flex;
+	flex-flow: row wrap;
+	align-items: center;
+	gap: 5px 15px;
 	grid-area: summary;
 
 	&.disabled {
@@ -3627,17 +3612,14 @@ body {
 	}
 
 	.summary_box {
-		width: 61px;
-		height: 20px;
-		float: left;
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
 		line-height: 20px;
-		margin: 0 2px 3px;
 
 		.summary_icon {
 			width: 20px;
 			height: 20px;
-			float: left;
-			margin: 0 5px 0 0;
 			background: #fff;
 			border-radius: 10px;
 
@@ -3650,45 +3632,10 @@ body {
 		}
 
 		.summary_text {
-			width: 36px;
-			height: 20px;
-			float: left;
 			color: #eee;
 			font-size: 12px;
 			font-weight: bold;
-			white-space: nowrap
-		}
-
-		&.summary-level {
-			width: 57px;
-
-			.summary_text {
-				width: 32px;
-			}
-		}
-
-		&.summary-airfp {
-			width: 85px;
-
-			.summary_text {
-				width: 60px;
-			}
-		}
-
-		&.summary-antiair {
-			width: 50px;
-
-			.summary_text {
-				width: 25px;
-			}
-		}
-
-		&.summary-speed {
-			width: 66px;
-
-			.summary_text {
-				width: 41px;
-			}
+			white-space: nowrap;
 		}
 
 		.summary_sub {
@@ -3696,8 +3643,9 @@ body {
 			height: 12px;
 			line-height: 13px;
 			border-radius: 6px;
-			margin: 9px 0 0 9px;
 			position: absolute;
+			bottom: -2px;
+			left: 10px;
 			font-size: 8px;
 			text-align: center;
 			color: #78736f;
@@ -4393,20 +4341,18 @@ body {
 
 /* ------- STATUS ------- */
 .module.status {
+	display: flex;
+	flex-flow: row wrap;
+	align-content: flex-start;
+	gap: 5px 0;
 	grid-area: status;
 
 	.status_box {
-		width: 110px;
-		height: 20px;
 		line-height: 20px;
-		float: left;
-		margin: 0 3px 3px 0;
 
 		.status_icon {
 			width: 20px;
 			height: 20px;
-			float: left;
-			margin: 0 4px 0 1px;
 
 			&.enclose {
 				background: #fff;
@@ -4421,9 +4367,6 @@ body {
 		}
 
 		.status_text {
-			width: 85px;
-			height: 20px;
-			float: left;
 			color: #fff;
 			text-shadow: 0 0 5px #000;
 			font-size: 13px;

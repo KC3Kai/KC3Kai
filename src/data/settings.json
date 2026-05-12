@@ -1457,18 +1457,6 @@
 				"options" : {}
 			},
 			{
-				"id" : "pan_compact_quests_murasaki",
-				"name" : "SettingsPanelCompactQuests",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "pan_wider_lbas_murasaki",
-				"name" : "SettingsPanelWideLbasView",
-				"type" : "check",
-				"options" : {}
-			},
-			{
 				"id" : "pan_box_bcolor_murasaki",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",

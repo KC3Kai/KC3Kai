@@ -502,8 +502,6 @@
 		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
 			.css("box-shadow", shadowDirStr);
 		$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics_murasaki);
-		$(".module.quests").toggleClass("compact", !!ConfigManager.pan_compact_quests_murasaki);
-		$(".module.fleet .airbase_list").toggleClass("wide_column", !!ConfigManager.pan_wider_lbas_murasaki);
 
 		// Panel customizations: bg image
 		if (ConfigManager.pan_bg_image === "" && ConfigManager.pan_bg_color === "#def") {
@@ -550,8 +548,6 @@
 				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 				$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics_murasaki);
-				$(".module.quests").toggleClass("compact", !!ConfigManager.pan_compact_quests_murasaki);
-				$(".module.fleet .airbase_list").toggleClass("wide_column", !!ConfigManager.pan_wider_lbas_murasaki);
 				MurasakiListeners.Fleet({ quickStatus: true });
 				updateQuestActivityTab();
 			}
