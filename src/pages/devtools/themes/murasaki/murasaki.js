@@ -2286,7 +2286,7 @@
 							"width":"15px", "height":"15px",
 							"margin-top":"-3px", "margin-right":"3px"
 						};
-						document.createElement('img').css(iconStyles).css("image-rendering", "auto")
+						$("<img/>").css(iconStyles).css("image-rendering", "auto")
 							.attr("src", fcfInfo.shipToRetreat.shipIcon())
 							.appendTo(fcfTips);
 						fcfTips.append("{0} Lv {1} {2}\n".format(
@@ -2295,13 +2295,13 @@
 							KC3Meta.term("PanelFCFTipTaihaShip")
 						));
 						if(fcfInfo.isCombined) {
-							document.createElement('img').css(iconStyles).css("image-rendering", "auto")
+							$("<img/>").css(iconStyles).css("image-rendering", "auto")
 								.attr("src", fcfInfo.shipToEscort.shipIcon())
 								.appendTo(fcfTips);
 							fcfTips.append("{0}\n".format(KC3Meta.term("PanelFCFTipEscortShip")));
 							fcfInfo.sortiedFleets[0].setEscapeShip(...fcfInfo.shipIdsToBeAbsent);
 							fcfInfo.sortiedFleets[1].setEscapeShip(...fcfInfo.shipIdsToBeAbsent);
-							document.createElement('img').css(iconStyles)
+							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png")
 								.appendTo(fcfTips);
 							fcfTips.append("{0} \u2192 {1} \t".format(
@@ -2310,7 +2310,7 @@
 									Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS() + fcfInfo.sortiedFleets[1].eLoS(), 1) :
 									Math.qckInt("floor", fcfInfo.sortiedFleets[(selectedFleet-1) % 2].eLoS(), 1)
 							));
-							document.createElement('img').css(iconStyles)
+							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/ac.png")
 								.appendTo(fcfTips);
 							fcfTips.append("{0} \u2192 {1}\t".format(
@@ -2322,14 +2322,14 @@
 						} else {
 							fcfTips.append("{0}\n".format(KC3Meta.term("PanelFCFTipStrikingForce")));
 							fcfInfo.sortiedFleets[0].setEscapeShip(...fcfInfo.shipIdsToBeAbsent);
-							document.createElement('img').css(iconStyles)
+							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png")
 								.appendTo(fcfTips);
 							fcfTips.append("{0} \u2192 {1}\t".format(
 								FleetSummary.elos,
 								Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS(), 1)
 							));
-							document.createElement('img').css(iconStyles)
+							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/ac.png")
 								.appendTo(fcfTips);
 							fcfTips.append("{0} \u2192 {1}\t".format(
@@ -2765,7 +2765,7 @@
 						const shipList = [].concat(...thisNode.enemyPreview.map(f => f.api_ship_ids || []));
 						const encBox = $("#factory .encounter_record").clone();
 						$(".encounter_formation", encBox).hide();
-						$(".encounter_ships", encBox).css("margin-left", 26);
+						$(".encounter_ships", encBox).css("margin-left", 35);
 						$.each(shipList, function(_, shipId){
 							if(shipId > 0){
 								const shipBox = $("#factory .encounter_ship").clone();
@@ -4453,7 +4453,7 @@
 					let shipData = KC3ShipManager.get(shipId);
 					$(".expres_ship_img img", element).attr("src", KC3Meta.shipIcon(shipData.masterId));
 					$(".expres_ship_exp span.value", element).text(data.response.api_get_ship_exp[i]);
-					$(element).show();
+					$(element).attr("display", "flex");
 				} else {
 					$(element).hide();
 				}
@@ -5031,13 +5031,13 @@
 					if(aaciObj.icons.length > 1) {
 						for(let i = 1; i < aaciObj.icons.length; i++) {
 							const equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
-							document.createElement('img')
+							$("<img/>")
 								.attr("src", KC3Meta.itemIcon(equipIcon[0], 1))
 								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 								.lazyInitTooltip()
 								.appendTo($(".equipIcons", aaciBox));
 							if(equipIcon.length>1) {
-								document.createElement('img')
+								$("<img/>")
 									.attr("src", KC3Meta.itemIcon(equipIcon[1], 1))
 									.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
 									.appendTo($(".equipIcons", aaciBox));
@@ -5070,7 +5070,7 @@
 					const equipIcon = gear.icon;
 					for (let i = 0; i < gear.count; i++) {
 						if (i > 0) { $("<span></span>").text("+").appendTo($(".equipIcons", equipBox)); }
-						document.createElement('img').appendTo($(".equipIcons", equipBox))
+						$("<img/>").appendTo($(".equipIcons", equipBox))
 							.attr("src", KC3Meta.itemIcon(equipIcon))
 							.attr("title", gear.name)
 							.lazyInitTooltip();
@@ -5078,7 +5078,7 @@
 					gear.synergyIcons.forEach((icon, i) => {
 						const synergyName = gear.synergyNames[i];
 						$("<span></span>").text("+").appendTo($(".equipIcons", equipBox));
-						document.createElement('img').appendTo($(".equipIcons", equipBox))
+						$("<img/>").appendTo($(".equipIcons", equipBox))
 							.attr("src", KC3Meta.itemIcon(icon))
 							.attr("title", synergyName)
 							.lazyInitTooltip();
@@ -5090,7 +5090,7 @@
 				for (const key in stats) {
 					if (stats[key] !== 0) {
 						$("<div></div>").appendTo(statsBox)
-							.append(document.createElement('img').attr("src", KC3Meta.statIcon(key)))
+							.append($("<img/>").attr("src", KC3Meta.statIcon(key)))
 							.append($("<span></span>")
 								.text("{0}{1}".format(stats[key] >= 0 ? "+" : "", stats[key])))
 							.attr("title", KC3Meta.statNameTerm(key) || key)
@@ -5306,14 +5306,14 @@
 			contactSpan = $("<span/>");
 		if(fcontactId > 0){
 			let fcpMaster = KC3Master.slotitem(fcontactId);
-			fContactIcon = document.createElement('img')
+			fContactIcon = $("<img/>")
 				.attr("src", KC3Meta.itemIcon(fcpMaster.api_type[3]))
 				.attr("title", KC3Meta.gearName(fcpMaster.api_name))
 				.attr("alt", fcontactId);
 		}
 		if(econtactId > 0){
 			let ecpMaster = KC3Master.slotitem(econtactId);
-			eContactIcon = document.createElement('img')
+			eContactIcon = $("<img/>")
 				.attr("src", KC3Meta.itemIcon(ecpMaster.api_type[3]))
 				.attr("title", KC3Meta.gearName(ecpMaster.api_name))
 				.attr("alt", econtactId);
@@ -5343,7 +5343,7 @@
 			if(KC3SortieManager.isPvP() || KC3Meta.isEventWorld(KC3SortieManager.map_world)){
 				$(".module.activity .map_gauge").removeAttr("titlealt");
 			} else {
-				const minimapImg = document.createElement('img')
+				const minimapImg = $("<img/>")
 					.attr("src", "/assets/img/client/minimaps/m{0}.png".format(thisMapId))
 					.attr("width", 300).attr("height", 180)
 					.attr("alt", KC3Meta.term("MinimapImageFailure"));

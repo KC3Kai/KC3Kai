@@ -246,32 +246,42 @@ body {
 .wrapper {
 	display: grid;
 	grid-auto-rows: auto;
+	grid-auto-flow: column dense;
 	overflow: hidden;
 	margin: 0 auto;
 	position: relative;
 	white-space: nowrap;
-}
 
-@media all and (width < 540px) {
-	.wrapper {
-		grid-template-columns: 100%;
+	@media all and (width < 540px) {
+		display: flex;
+		flex-direction: column;
 	}
-}
 
-@media all and (width <= 800px) {
-	.wrapper {
+	@media all and (540px <= width <= 800px) {
+		grid-template-areas:
+			"admiral controls"
+			"admiral summary"
+			"activity fleet"
+			"quests fleet"
+			"quests status";
 		grid-template-columns: 2fr 3fr;
 	}
-}
 
-@media all and (width <= 960px) {
-	.wrapper {
+	@media all and (800px < width <= 960px) {
+		grid-template-areas:
+			"admiral fleet controls"
+			"admiral fleet summary"
+			"activity fleet quests"
+			"activity fleet status";
 		grid-template-columns: 2fr 3fr 2fr;
 	}
-}
 
-@media all and (width > 960px) {
-	.wrapper {
+	@media all and (width > 960px) {
+		grid-template-areas:
+			"admiral fleet controls"
+			"admiral fleet summary"
+			"activity fleet quests"
+			"activity fleet status";
 		grid-template-columns: 2fr 3fr 2fr;
 	}
 }
@@ -293,7 +303,7 @@ body {
 
 /* ------- HQ INFO ------- */
 .module.admiral {
-	grid-area: 1 / 1 / 2 / 2;
+	grid-area: admiral;
 	min-width: 240px;
 
 	.admiral_level {
@@ -402,7 +412,7 @@ body {
 }
 
 .module.activity {
-	grid-area: 2 / 1 / 3 / 2;
+	grid-area: activity;
 	min-width: 240px;
 
 	.activity_tabs {
@@ -440,7 +450,7 @@ body {
 
 	.activity_body {
 		border-radius: 0 0 5px 5px;
-		padding-bottom: 5px;
+		padding: 5px;
 		white-space: initial;
 
 		.activity_box {
@@ -490,7 +500,7 @@ body {
 			}
 
 			&.itemPage {
-				flex: 0 1 max(55px, 20%);
+				flex: 0 1 max(52px, 20%);
 				align-items: center;
 
 				.consumable_icon {
@@ -666,10 +676,12 @@ body {
 
 		/* Map Info */
 		.map_info {
-			width: 180px;
-			height: 20px;
-			line-height: 20px;
-			margin: 0 0 5px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 10px;
+			width: 100%;
+			margin-bottom: 5px;
 
 			&.map_finisher.noBlink .map_gauge {
 				background-color: #b22;
@@ -684,14 +696,10 @@ body {
 			}
 
 			.map_world {
-				width: 45px;
-				height: 20px;
-				float: left;
 				font-weight: bold;
 				color: #fc0;
 				font-size: 14px;
 				text-align: center;
-				margin: 0 5px 0 0;
 
 				&.debuffed {
 					color: #dc8280;
@@ -700,17 +708,14 @@ body {
 
 			.map_gauge {
 				position: relative;
-				width: 60px;
+				flex: 0 0 100px;
 				height: 12px;
-				float: left;
-				margin: 4px 0;
 				background: #222;
 				border: 1px solid #fff;
 
 				* {
 					position: absolute;
 					height: 10px;
-					float: left;
 				}
 
 				.curhp {
@@ -723,37 +728,33 @@ body {
 			}
 
 			.map_hp {
-				width: 70px;
-				height: 20px;
-				float: left;
 				font-size: 11px;
 				color: #eee;
-				padding: 0 0 0 5px;
 			}
 		}
 
 		/* Sortie Nodes */
 		.sortie_nodes {
-			width: auto;
-			min-width: 180px;
-			height: 19px;
-			margin: 0 0 4px;
+			width: 100%;
+			margin-bottom: 4px;
 			position: relative;
 			display: inline-flex;
+			justify-content: space-evenly;
+			container-type: inline-size;
 
 			.boss_node {
-				float: left;
 				position: absolute;
 				display: none;
 
 				img {
-					width: 19px;
-					height: 19px;
+					width: max(20px, 6cqw);
+					height: max(20px, 6cqw);
 					margin-top: -10px;
 				}
 
 				.boss_circle {
 					position: absolute;
+					width: max(20px, 6cqw);
 					margin-top: -20px;
 					border-color: #a90a0a;
 					background: #7d0000;
@@ -762,13 +763,11 @@ body {
 			}
 
 			.sortie_node {
-				width: 19px;
-				height: 19px;
-				line-height: 17px;
-				margin: 0 1px 0 0;
-				float: left;
+				flex: 0 0 max(20px, 6cqw);
+				height: max(20px, 6cqw);
+				line-height: max(20px, 6cqw);
 				background: #000;
-				border-radius: 10px;
+				border-radius: 51%;
 				color: #fff;
 				font-size: 10px;
 				text-align: center;
@@ -880,54 +879,78 @@ body {
 		/* Battle nodes */
 		.node_type_battle {
 			position: relative;
+			container-type: inline-size;
 
-			/* Abyss single fleet */
-			.abyss_single {
-				.sink_icons {
-					width: 180px;
-					height: 0;
-					position: absolute;
-					z-index: 1;
-					pointer-events: none;
+			/* Sunk icons for both single and combined fleet */
+			.sink_icons {
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: flex-start;
+				width: 100%;
+				gap: 2%;
+				height: 0;
+				position: absolute;
+				z-index: 1;
+				pointer-events: none;
+				container-type: inline-size;
 
-					.sunk {
+				@container (width >= 230px) {
+					justify-content: center;
+				}
+
+				.sunk {
+					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
+					display: none;
+					align-items: flex-end;
+					justify-content: end;
+
+					&.shown {
+						display: flex;
+					}
+
+					img {
 						width: 16px;
 						height: 16px;
-						line-height: 16px;
-						float: left;
-						margin: 8px 0 0 14px;
-
-						img {
-							width: 16px;
-							height: 16px;
-							vertical-align: top;
-							display: none;
-							border-radius: 50%;
-							object-fit: cover;
-						}
-					}
-
-					.shown img {
-						display: inline;
-					}
-
-					.safe img {
-						filter: grayscale(100%);
-					}
-
-					.debuff img {
-						display: inline;
-						box-sizing: border-box;
-						padding-left: 16px;
-						background: url("../../../../assets/img/client/chuuha_land.png");
-						background-size: cover;
+						display: none;
+						border-radius: 51%;
+						object-fit: cover;
 					}
 				}
 
+				.shown img {
+					display: inline;
+				}
+
+				.safe img {
+					filter: grayscale(100%);
+				}
+
+				.debuff img {
+					display: inline;
+					box-sizing: border-box;
+					padding-left: 16px;
+					background: url("../../../../assets/img/client/chuuha_land.png");
+					background-size: cover;
+				}
+			}
+
+			/* Abyss single fleet */
+			.abyss_single {
+				container-type: inline-size;
+
 				.abyss_ships {
-					width: 180px;
-					height: 26px;
-					margin: 0 0 1px;
+					display: flex;
+					flex-flow: row nowrap;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					gap: 2%;
+					margin-bottom: 5px;
+
+					@container (width >= 230px) {
+						justify-content: center;
+					}
 
 					.boss {
 						border-color: #5ef;
@@ -954,17 +977,19 @@ body {
 					}
 
 					.abyss_hps {
-						width: 180px;
+						display: flex;
+						flex-flow: row nowrap;
+						align-items: center;
+						justify-content: flex-start;
+						gap: 2cqw;
 						height: 4px;
 						margin: 0 0 5px;
 					}
 
 					.abyss_hp {
-						width: 28px;
+						flex: 0 0 15cqw;
 						height: 4px;
-						margin: 0 1px;
 						background: #222;
-						float: left;
 
 						&.sunk {
 							opacity: 0.5;
@@ -973,23 +998,16 @@ body {
 				}
 
 				.abyss_ship {
-					width: 26px;
-					height: 26px;
-					float: left;
-					margin: 0 2px;
-					border-radius: 13px;
+					flex: 0 0 min(35px, 15cqw);
+					border-radius: 51%;
 					border: 1px solid #000;
-					overflow: hidden;
 					background: #888;
 					position: relative;
 
 					img {
-						width: 26px;
-						height: 26px;
-						position: relative;
-						top: -1px;
-						left: -1px;
-						border-radius: 50%;
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
 					}
 				}
 
@@ -1001,63 +1019,29 @@ body {
 
 			/* Abyss combined fleet */
 			.abyss_combined {
-				width: 180px;
-				margin: 0 0 4px;
+				container-type: inline-size;
 				display: none;
 
 				.abyss_fleet {
-					width: 180px;
-					height: 15px;
-					margin: 0 0 1px;
+					margin-bottom: 1px;
 				}
 
 				.abyss_fleet_2 {
-					margin: 0 0 0 10px;
-				}
-
-				.sink_icons {
-					width: 180px;
-					height: 0;
-					position: absolute;
-					z-index: 1;
-					pointer-events: none;
-
-					.sunk {
-						width: 10px;
-						height: 10px;
-						line-height: 10px;
-						float: left;
-						margin: 4px 0 0 17px;
-
-						img {
-							width: 10px;
-							height: 10px;
-							vertical-align: top;
-							display: none;
-						}
-					}
-
-					.shown img {
-						display: inline;
-					}
-
-					.safe img {
-						filter: grayscale(100%);
-					}
-
-					.debuff img {
-						display: inline;
-						box-sizing: border-box;
-						padding-left: 10px;
-						background: url("../../../../assets/img/client/chuuha_land.png");
-						background-size: cover;
-					}
+					margin-bottom: 10px;
 				}
 
 				.abyss_ships {
-					width: 180px;
-					height: 15px;
-					margin: 0;
+					display: flex;
+					flex-flow: row nowrap;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					gap: 2%;
+					margin-bottom: 3px;
+
+					@container (width >= 230px) {
+						justify-content: center;
+					}
 				}
 
 				.abyss_hp {
@@ -1079,53 +1063,59 @@ body {
 				}
 
 				.abyss_ship {
-					width: 15px;
-					height: 15px;
-					line-height: 15px;
-					float: left;
-					margin: 0 7px 0 2px;
-					border-radius: 8px;
-					overflow: hidden;
+					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
+					border-radius: 51%;
+					border: 1px solid #000;
 					background: #888;
 					position: relative;
 
 					img {
-						width: 15px;
-						height: 15px;
-						position: relative;
-						vertical-align: top;
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
 					}
 				}
 			}
 
 			/* Battle Flags */
 			.battle_flags {
-				width: 180px;
-				height: 30px;
-				margin: 0 0 5px;
+				container-type: inline-size;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				justify-content: flex-start;
+				width: 100%;
+				gap: 2%;
+				margin-bottom: 5px;
+
+				@container (width >= 230px) {
+					justify-content: center;
+				}
 
 				.battle_flag {
-					width: 30px;
-					height: 30px;
-					float: left;
+					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					position: relative;
 
 					img {
-						width: 24px;
-						height: 24px;
-						margin: 3px 6px;
+						width: 27px;
+						height: 27px;
 					}
 
 					&.battle_eformation {
-						width: 30px;
+						flex: 0 0 30px;
 						height: 30px;
-						margin: 0;
-						border-radius: 15px;
+						border-radius: 16px;
 						background: #fff;
+						padding: 3px;
 
 						img {
 							width: 24px;
 							height: 24px;
-							margin: 3px;
 						}
 					}
 
@@ -1136,56 +1126,47 @@ body {
 						border-radius: 50%;
 					}
 
-					.support_exped {
-						width: 12px;
-						height: 12px;
+					.support_exped,
+					.support_lbas,
+					.support_balloon,
+					.smoke_screen {
+						width: 13px;
+						height: 13px;
 						line-height: 13px;
-						border-radius: 6px;
-						margin: 16px 0 0 3px;
+						border-radius: 7px;
 						position: absolute;
 						font-size: 8px;
 						text-align: center;
-						color: #fff;
-						background: #a69de6;
 						overflow: hidden;
 						text-shadow: none;
 						pointer-events: none;
 						display: none;
+					}
+
+					.support_exped {
+						bottom: 0;
+						left: 0;
+						color: #fff;
+						background: #a69de6;
 					}
 
 					.support_lbas {
-						width: 14px;
-						height: 13px;
-						line-height: 13px;
-						border-radius: 6px;
-						margin: 15px 0 0 17px;
-						position: absolute;
-						font-size: 8px;
-						text-align: center;
+						bottom: 0;
+						right: 0;
 						color: #ff0;
 						background: #5b5;
-						overflow: hidden;
-						text-shadow: none;
-						pointer-events: none;
-						display: none;
 					}
 
 					.support_balloon {
-						width: 13px;
-						height: 13px;
-						border-radius: 50%;
-						margin: 1px 0 0 18px;
-						position: absolute;
+						top: 0;
+						left: 0;
 						background: #fff;
 						opacity: 0.7;
-						overflow: hidden;
-						display: none;
 
 						img {
 							width: 13px;
 							height: 13px;
 							vertical-align: top;
-							margin: 0;
 						}
 
 						&.deployed {
@@ -1195,6 +1176,8 @@ body {
 
 					&.battle_drop {
 						img.rounded {
+							width: 100%;
+							height: 100%;
 							border-radius: 50%;
 						}
 
@@ -1202,25 +1185,56 @@ body {
 							filter: drop-shadow(0 0 3px #1f1);
 						}
 					}
+
+					.smoke_screen {
+						top: 0;
+						right: -7px;
+						filter: drop-shadow(0 0 2px #222);
+						z-index: 2;
+						width: 22px;
+						font-size: 10px;
+						text-align: right;
+
+						.smoke_icon {
+							width: 13px;
+							height: 13px;
+							border-radius: 50%;
+							background: #fff;
+							margin: 0 2px 0 0;
+							overflow: hidden;
+							vertical-align: top;
+							opacity: 0.7;
+
+							&.triggered {
+								background: #fe5;
+							}
+						}
+
+						.smoke_level {
+							pointer-events: none;
+						}
+					}
 				}
 			}
 
 			/* Battle Conditions */
 			.battle_conditions {
-				width: 180px;
-				height: 56px;
-				margin: 0 0 3px;
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 4px;
+				margin-bottom: 5px;
+
+				@container (width >=320px) {
+					display: inline-flex;
+					width: 50%;
+				}
 
 				.battle_condition {
-					width: 180px;
-					height: 14px;
+					display: flex;
+					flex-flow: row nowrap;
 
 					.battle_cond_icon {
-						width: 14px;
-						height: 14px;
 						line-height: 14px;
-						float: left;
-						margin: 0 5px 0 0;
 
 						img {
 							width: 14px;
@@ -1230,24 +1244,17 @@ body {
 					}
 
 					.battle_cond_label {
-						width: 50px;
-						height: 14px;
+						width: 80px;
 						line-height: 14px;
-						float: left;
 						font-size: 11px;
-						margin: 0 5px 0 0;
 						color: #ccc;
 					}
 
 					.battle_cond_value {
-						width: 106px;
-						height: 14px;
 						line-height: 14px;
 						font-size: 11px;
-						float: left;
 						color: #fff;
 						white-space: nowrap;
-						overflow: hidden;
 
 						&.best {
 							color: #1f1;
@@ -1287,81 +1294,54 @@ body {
 					white-space: nowrap;
 					color: #fff;
 					display: none;
-
-					&.smoke_screen {
-						position: absolute;
-						margin: -35px 0 0 21px;
-						filter: drop-shadow(0 0 2px #222);
-						z-index: 2;
-
-						.smoke_icon {
-							width: 13px;
-							height: 13px;
-							border-radius: 50%;
-							background: #fff;
-							margin: 0 2px 0 0;
-							overflow: hidden;
-							vertical-align: top;
-							opacity: 0.7;
-
-							&.triggered {
-								background: #fe5;
-							}
-						}
-
-						.smoke_level {
-							pointer-events: none;
-						}
-					}
 				}
 			}
 
 			/* Battle Planes */
 			.battle_planes {
-				width: 180px;
-				height: 44px;
+				display: flex;
+				flex-flow: row wrap;
+				gap: 5px 0;
+				margin-bottom: 5px;
+
+				@container (width >=320px) {
+					display: inline-flex;
+					width: 50%;
+				}
 
 				.plane_label {
-					width: 90px;
-					height: 14px;
+					flex: 0 0 50%;
 					line-height: 14px;
 					font-size: 11px;
 					color: #fc0;
 					text-align: center;
 					font-weight: bold;
-					float: left;
 				}
 
 				.plane_count {
-					width: 90px;
-					height: 15px;
+					flex: 0 0 50%;
 					line-height: 15px;
-					float: left;
-					margin: 0 0 1px;
+					display: flex;
+					gap: 5px;
+					align-items: center;
 
 					.plane_icon {
-						width: 14px;
-						height: 14px;
-						margin: 0 5px 0 0;
-						float: left;
-						border-radius: 7px;
+						width: 16px;
+						height: 16px;
+						border-radius: 9px;
 						background: #fff;
 
 						img {
-							width: 15px;
-							height: 15px;
+							width: 100%;
+							height: 100%;
 							position: relative;
-							top: -1px;
-							left: -2px;
+							left: -1px;
 							vertical-align: top;
 						}
 					}
 
 					.plane_text {
-						width: 70px;
-						height: 15px;
 						font-size: 11px;
-						float: left;
 
 						.plane_before {
 							color: #eee;
@@ -1424,58 +1404,53 @@ body {
 			}
 
 			.encounters {
-				height: 165px;
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
 				overflow: hidden auto;
 
 				.encounter_record {
-					width: 180px;
+					display: flex;
+					flex-flow: row nowrap;
+					gap: 5px;
+					padding: 1px;
 					height: auto;
 					background: rgb(186 187 189 / 40%);
 					border-radius: 5px;
-					margin: 0 0 2px;
-					float: left;
 
 					&.matched {
 						box-shadow: inset 0 0 5px 2px #e37;
 					}
-				}
 
-				.encounter_formation {
-					width: 24px;
-					height: 24px;
-					background: #fff;
-					border-radius: 50%;
-					margin: 1px 0 0 2px;
-					float: left;
+					.encounter_formation {
+						width: 30px;
+						height: 30px;
+						background: #fff;
+						border-radius: 50%;
 
-					img {
-						width: 25px;
-						height: 25px;
-						vertical-align: top;
+						img {
+							width: calc(100% - 2px);
+							height: calc(100% - 2px);
+							vertical-align: top;
+							margin: 1px;
+						}
 					}
 				}
 
 				.encounter_ships {
-					width: 154px;
-					height: 27px;
-					padding: 1px 0 0 2px;
-					float: left;
-
-					&.combined {
-						height: 53px;
-					}
+					display: flex;
+					flex-flow: row nowrap;
 
 					.encounter_ship {
-						width: 25px;
-						height: 25px;
-						border-radius: 50%;
-						margin: 0 0 1px;
-						float: left;
+						width: 30px;
+						height: 30px;
+						border-radius: 51%;
 
 						img {
-							width: 25px;
-							height: 25px;
+							width: 28px;
+							height: 28px;
 							vertical-align: top;
+							margin: 1px;
 						}
 
 						&.boss {
@@ -1805,13 +1780,10 @@ body {
 
 	/* ------- EXPEDITION ------- */
 	.activity_expedition {
-		padding: 5px 10px;
 		white-space: nowrap;
 
 		.expres_img {
-			width: 170px;
-			height: 30px;
-			line-height: 30px;
+			text-align: center;
 
 			img {
 				width: 170px;
@@ -1821,7 +1793,6 @@ body {
 		}
 
 		.expres_status {
-			width: 170px;
 			font-size: 14px;
 			color: #fc0;
 			font-weight: bold;
@@ -1829,43 +1800,38 @@ body {
 		}
 
 		.expres_num {
-			width: 170px;
-			height: 14px;
 			line-height: 14px;
 			font-size: 12px;
 			color: #ccc;
 			text-align: center;
-			margin: 0 0 8px;
+			margin-bottom: 8px;
 		}
 
 		.expres_resos {
-			width: 170px;
-			height: 36px;
+			display: flex;
+			flex-flow: row nowrap;
 			line-height: 16px;
-			margin: 0 0 5px;
+			margin-bottom: 5px;
 
-			.expres_divHF { /* divide half */
-				display: inline-block;
-				width: 85px;
-				float: left;
+			.expres_divHF {
+				display: flex;
+				flex-flow: column nowrap;
+				flex: 0 0 50%;
+				gap: 3px;
 
 				.expres_reso {
-					float: left;
+					display: flex;
+					flex-flow: row nowrap;
 					height: 16px;
 					line-height: 16px;
-					margin: 0 0 2px;
+					gap: 10px;
 
 					.expres_icon {
 						width: 16px;
 						height: 16px;
-						float: left;
-						margin: 0 9px 0 0;
 					}
 
 					.expres_amt {
-						width: 60px;
-						height: 16px;
-						float: left;
 						font-size: 12px;
 						color: #fff;
 					}
@@ -1874,54 +1840,42 @@ body {
 		}
 
 		.expres_items {
-			width: 170px;
-			height: 20px;
-			margin: 0 0 3px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 3px;
 
 			.expres_get {
-				max-width: 100px;
-				height: 20px;
 				line-height: 20px;
 				font-size: 12px;
 				color: #fff;
-				float: left;
-				margin: 0 5px 0 0;
 			}
 
 			.expres_noget {
-				height: 20px;
 				line-height: 20px;
 				font-size: 12px;
 				color: #faa;
-				float: left;
 				display: none;
 			}
 
 			.expres_item {
-				width: 35px;
-				height: 20px;
+				display: inline-flex;
+				gap: 3px;
 				line-height: 20px;
-				float: left;
-				margin: 0 5px 0 0;
 
 				.expres_item_icon {
-					width: 16px;
-					height: 16px;
-					float: left;
-					margin: 0 2px 0 0;
+					width: 18px;
+					height: 18px;
 
 					img {
-						width: 16px;
-						height: 16px;
-						margin: 2px 0;
+						width: 18px;
+						height: 18px;
 						vertical-align: top;
 					}
 				}
 
 				.expres_item_text {
-					width: 17px;
-					height: 20px;
-					float: left;
 					font-size: 12px;
 					color: #fff;
 				}
@@ -1929,10 +1883,8 @@ body {
 		}
 
 		.expres_hqexp {
-			width: 170px;
-			height: 20px;
 			line-height: 20px;
-			margin: 0 0 5px;
+			margin-bottom: 5px;
 			color: #fff;
 			font-size: 14px;
 
@@ -1953,35 +1905,32 @@ body {
 		}
 
 		.expres_ships {
-			width: 170px;
+			display: flex;
+			flex-flow: row wrap;
+			gap: 2px 0;
 			line-height: 18px;
 			font-size: 12px;
 
 			.expres_ship {
-				width: 85px;
-				height: 18px;
-				float: left;
-				margin: 0 0 2px;
+				flex-flow: row nowrap;
+				align-items: center;
+				flex: 0 0 50%;
+				gap: 5px;
 				display: none;
 
 				.expres_ship_img {
-					width: 18px;
-					height: 18px;
-					float: left;
-					margin: 0 2px 0 0;
+					width: 20px;
+					height: 20px;
 
 					img {
-						width: 18px;
-						height: 18px;
+						width: 20px;
+						height: 20px;
 						vertical-align: top;
-						border-radius: 50%;
+						border-radius: 51%;
 					}
 				}
 
 				.expres_ship_exp {
-					width: 65px;
-					height: 18px;
-					float: left;
 					color: #fff;
 				}
 
@@ -2103,3019 +2052,2686 @@ body {
 			overflow: hidden;
 		}
 	}
-}
-
-/* ACTIVITY: Expedition Planner
------------------------- */
-.module.activity .activity_expeditionPlanner {
-	text-align: center;
-	white-space: nowrap;
-	overflow-x: hidden;
-}
-
-.module.activity .activity_expeditionPlanner > div {
-	width: 180px;
-}
-
-.module.activity .activity_expeditionPlanner::-webkit-scrollbar {
-	width: 5px;
-}
-
-.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed {
-	color: #060;
-	text-shadow: none;
-}
-
-.module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_failed {
-	color: #c00;
-	text-shadow: none;
-}
-
-.module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
-	height: 28px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
-	width: 100%;
-	list-style: none;
-	position: relative;
-	float: left;
-	margin: 0;
-	padding: 0;
-	background: #ddd;
-	text-align: center;
-	text-decoration: none;
-	border-style: solid;
-	border-width: 3px;
-	text-shadow: none;
-}
-
-.module.activity .activity_expeditionPlanner li {
-	background: #ddd;
-	border-style: solid;
-	border-width: 1px;
-}
-
-.module.activity .activity_expeditionPlanner li:hover {
-	background: #fff;
-}
-
-.module.activity .activity_expeditionPlanner li ul {
-	list-style: none;
-	display: none;
-	position: absolute;
-	top: 100%;
-	left: 0;
-	background: #fff;
-	padding: 0;
-	width: 50%;
-	font-size: 13px;
-	line-height: 17px;
-}
-
-.module.activity .activity_expeditionPlanner li ul li {
-	display: none;
-	position: absolute;
-	top: 100%;
-	left: 0;
-	background: #fff;
-	width: 50px;
-}
-
-.module.activity .activity_expeditionPlanner li ul ul {
-	top: 0;
-	left: 100%;
-	cursor: pointer;
-	width: 100%;
-	line-height: 13px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
-	display: none;
-}
-
-.module.activity .activity_expeditionPlanner li:hover > ul {
-	display: block;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_timer {
-	height: 20px;
-	margin-bottom: 4px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_timer_description {
-	float: left;
-	text-align: left;
-	width: 110px;
-}
-
-.module.activity .activity_expeditionPlanner .estimated_time {
-	float: right;
-	text-align: right;
-	max-width: 68px;
-	margin-right: 2px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_resos_title {
-	text-align: center;
-	height: 20px;
-	margin-bottom: 2px;
-	display: none;
-}
-
-.module.activity .activity_expeditionPlanner .expres_resos {
-	height: 40px;
-	margin-bottom: 3px;
-}
-
-.module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
-	display: inline-block;
-	width: 65px;
-	height: 40px;
-	float: left;
-}
-
-.module.activity .activity_expeditionPlanner .expres_greatbtn {
-	width: 40px;
-	float: left;
-	height: 40px;
-	line-height: 40px;
-}
-
-.module.activity .activity_expeditionPlanner .expres_greatbtn img {
-	width: 40px;
-	height: 40px;
-}
-
-.module.activity .activity_expeditionPlanner .expres_reso {
-	float: left;
-	height: 16px;
-	line-height: 16px;
-	margin: 0 0 6px;
-}
-
-.module.activity .activity_expeditionPlanner .expres_icon {
-	width: 16px;
-	height: 16px;
-	float: left;
-	margin: 0 9px 0 0;
-}
-
-.module.activity .activity_expeditionPlanner .expres_icon img {
-	width: 16px;
-	height: 16px;
-	vertical-align: top;
-}
-
-.module.activity .activity_expeditionPlanner .expres_amt {
-	width: 30px;
-	height: 16px;
-	float: left;
-	font-size: 12px;
-	color: #fff;
-	text-align: left;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
-	margin-right: 10px;
-}
-
-.module.activity .activity_expeditionPlanner .requirements {
-	display: inline-block;
-}
-
-.module.activity .activity_expeditionPlanner .requirements_textbox {
-	display: inline-block;
-	margin-left: 2px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text {
-	font-size: 14px;
-	color: #ccc
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="impossible"] {
-	color: #F55;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="no-overdrum"] {
-	color: orange;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="likely"] {
-	color: gold;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="guaranteed"] {
-	color: #0C0;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_requirements {
-	margin-bottom: 4px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
-	margin-bottom: 1px;
-	white-space: initial;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias div {
-	font-size: 13px;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text_passed {
-	color: #0C0;
-}
-
-.module.activity .activity_expeditionPlanner .expPlanner_text_failed {
-	color: #F55;
-}
-
-.module.activity .activity_expeditionPlanner .expedition_entry.cond_passed {
-	color: green
-}
-
-.module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {
-	color: red
-}
-
-/* ------- ACTIVITY: FIT ------- */
-.module.activity .activity_gunfit {
-	padding: 5px 10px;
-}
-
-.module.activity .activity_gunfit .fit_profile {
-	height: 50px;
-	padding: 3px 0;
-	margin: 0 0 2px;
-}
-
-.module.activity .activity_gunfit .fit_profile_pic {
-	width: 40px;
-	height: 40px;
-	float: left;
-	border-radius: 20px;
-	border: 1px solid #000;
-	overflow: hidden;
-	margin: 0 5px 0 0;
-}
-
-.module.activity .activity_gunfit .fit_profile_pic img {
-	width: 40px;
-	height: 40px;
-	position: relative;
-	margin: -1px 0 0 -1px;
-	border-radius: 50%;
-}
-
-.module.activity .activity_gunfit .fit_profile_name {
-	width: 125px;
-	height: 22px;
-	line-height: 22px;
-	float: left;
-	font-size: 13px;
-	font-weight: bold;
-	color: #fc0;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_gunfit .fit_profile_level {
-	width: 125px;
-	height: 14px;
-	line-height: 14px;
-	float: left;
-	font-size: 12px;
-	color: #ccc;
-}
-
-.module.activity .activity_gunfit .fit_gear {
-	height: 40px;
-}
-
-.module.activity .activity_gunfit .fit_gear_pic {
-	width: 30px;
-	height: 30px;
-	border: 0 none;
-	background: #333;
-}
-
-.module.activity .activity_gunfit .fit_gear_pic img {
-	width: 30px;
-	height: 30px;
-	position: relative;
-	margin: 0;
-}
-
-.module.activity .activity_gunfit .fit_gear_name {
-	width: 135px;
-	height: 14px;
-	font-size: 12px;
-	line-height: 14px;
-}
-
-.module.activity .activity_gunfit .fit_gear_level {
-	color: #45a9a5;
-	font-weight: bold;
-}
-
-.module.activity .activity_gunfit .fit_gear_level img {
-	width: 12px;
-	height: 12px;
-	margin-top: 1px;
-	vertical-align: text-top;
-}
-
-.module.activity .activity_gunfit .fit_value {
-	width: 176px;
-	height: 50px;
-	line-height: 15px;
-	font-size: 11px;
-	border-radius: 8px;
-	margin: 0 0 4px;
-	padding: 1px 0;
-	color: #000;
-	background: #aaa;
-	text-shadow: none;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current {
-	float: left;
-	width: 100%;
-	height: 30px;
-	margin: 0 0 1px;
-	padding: 0 5px;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_label {
-	float: left;
-	width: 108px;
-	height: 30px;
-	margin-right: 2px;
-	padding-right: 2px;
-	text-align: center;
-	overflow: hidden;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_unknown {
-	float: left;
-	width: 50px;
-	text-align: center;
-	overflow: hidden;
-	white-space: nowrap;
-	display: none;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_unknown img {
-	width: 14px;
-	height: 14px;
-	vertical-align: text-top;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_day {
-	float: left;
-	width: 50px;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_day img {
-	width: 14px;
-	height: 14px;
-	margin-right: 1px;
-	vertical-align: text-bottom;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_night {
-	float: left;
-	width: 50px;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_night img {
-	width: 13px;
-	height: 13px;
-	margin-right: 2px;
-	vertical-align: text-bottom;
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_bonus {
-	font-weight: bold;
-	color: #3c3;
-	text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
-	filter: drop-shadow(0 0 1px #eee);
-}
-
-.module.activity .activity_gunfit .fit_value .fit_current .fit_penalty {
-	font-weight: bold;
-	color: #a55;
-	text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
-	filter: drop-shadow(0 0 1px #eee);
-}
-
-.module.activity .activity_gunfit .fit_value .fit_total {
-	float: left;
-	width: 100%;
-	height: 16px;
-	padding: 0 5px;
-	color: #eee;
-	text-align: center;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_gunfit .scrollable {
-	width: 176px;
-	max-height: 134px;
-	overflow: hidden auto;
-}
-
-.module.activity .activity_gunfit .scrollable::-webkit-scrollbar {
-	width: 3px;
-}
-
-.module.activity .activity_gunfit .oasw {
-	width: 176px;
-	height: 36px;
-	font-size: 11px;
-	line-height: 16px;
-	border-radius: 8px;
-	padding: 2px 5px;
-	margin: 0 0 4px;
-	color: #ddd;
-	background: #15c;
-}
-
-.module.activity .activity_gunfit .oasw .oasw_message {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_gunfit .oasw .oasw_power {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_gunfit .oasw .oasw_power .value {
-	font-weight: bold;
-}
-
-.module.activity .activity_gunfit .aaci {
-	width: 176px;
-	height: auto;
-	margin: 0 0 2px;
-	overflow: hidden;
-	overflow-y: auto;
-}
-
-.module.activity .activity_gunfit .aaci .aaciPattern {
-	width: 170px;
-	height: 20px;
-	margin: 0 0 1px;
-	border-radius: 6px;
-	font-size: 12px;
-	color: #ccc;
-}
-
-.module.activity .activity_gunfit .aaci .apiId {
-	width: 20px;
-	height: 20px;
-	margin: 0 2px 0 0;
-	padding: 1px 5px;
-	float: left;
-}
-
-.module.activity .activity_gunfit .aaci .shipIcon {
-	width: 18px;
-	height: 20px;
-	margin: 0 1px 0 0;
-	padding: 1px 2px;
-	float: left;
-}
-
-.module.activity .activity_gunfit .aaci .shipIcon img {
-	width: 18px;
-	height: 18px;
-	margin-top: -2px;
-	margin-left: -2px;
-	border-radius: 50%;
-}
-
-.module.activity .activity_gunfit .aaci .equipIcons {
-	width: 62px;
-	height: 20px;
-	margin: 0 1px;
-	padding: 1px 2px;
-	float: left;
-}
-
-.module.activity .activity_gunfit .aaci .equipIcons img {
-	width: 18px;
-	height: 18px;
-	margin-left: -4px;
-}
-
-.module.activity .activity_gunfit .aaci .equipIcons .plusIcon {
-	width: 15px;
-	height: 15px;
-	margin: 5px 0 0 -12px;
-	position: relative;
-	pointer-events: none;
-	filter: hue-rotate(75deg);
-	transform: scaleX(-1);
-}
-
-.module.activity .activity_gunfit .aaci .equipIcons .minusIcon {
-	width: 15px;
-	height: 15px;
-	margin: 5px 0 0 -12px;
-	position: relative;
-	pointer-events: none;
-	filter: hue-rotate(-90deg);
-	transform: scaleX(-1);
-}
-
-.module.activity .activity_gunfit .aaci .fixed {
-	width: 25px;
-	height: 20px;
-	margin: 0 1px 0 0;
-	padding: 1px 2px;
-	float: left;
-}
-
-.module.activity .activity_gunfit .aaci .modifier {
-	width: 34px;
-	height: 20px;
-	margin: 0 2px 0 0;
-	padding: 1px 2px;
-	float: left;
-}
-
-.module.activity .activity_gunfit .aaci .aaciPattern.triggerable {
-	background: #777;
-}
-
-.module.activity .activity_gunfit .landing {
-	width: 176px;
-	height: auto;
-	margin: 0 0 2px;
-	overflow: hidden;
-	overflow-y: auto;
-}
-
-.module.activity .activity_gunfit .landing .landingInfo {
-	width: 155px;
-	height: 20px;
-	line-height: 20px;
-	margin: 0 0 1px 6px;
-	border-radius: 6px;
-	font-size: 12px;
-	color: #ccc;
-	background: rgb(255 54 54 / 20%);
-}
-
-.module.activity .activity_gunfit .landing .shipIcon {
-	width: 18px;
-	height: 20px;
-	margin: 0 5px;
-	float: left;
-}
-
-.module.activity .activity_gunfit .landing .shipIcon img {
-	width: 18px;
-	height: 18px;
-	border-radius: 50%;
-	margin-top: 1px;
-	vertical-align: top;
-}
-
-.module.activity .activity_gunfit .landing .power {
-	width: 50px;
-	height: 20px;
-	margin: 0 2px 0 0;
-	float: left;
-	white-space: nowrap;
-	overflow: visible;
-}
-
-.module.activity .activity_gunfit .landing .power img {
-	width: 15px;
-	height: 15px;
-	vertical-align: text-top;
-}
-
-.module.activity .activity_gunfit .landing .power .value {
-	margin-left: 2px;
-}
-
-.module.activity .activity_gunfit .landing .modifiers {
-	width: 15px;
-}
-
-.module.activity .activity_gunfit .equip {
-	width: 176px;
-	height: auto;
-	margin: 0 0 2px;
-	overflow: hidden;
-	overflow-y: auto;
-}
-
-.module.activity .activity_gunfit .equip .equipInfo {
-	width: 155px;
-	height: auto;
-	margin: 0 0 1px 6px;
-	padding: 1px;
-	border-radius: 6px;
-	font-size: 12px;
-	color: #ccc;
-	background: rgb(54 255 182 / 20%);
-}
-
-.module.activity .activity_gunfit .equip .equipIcons {
-	margin: 0 5px;
-}
-
-.module.activity .activity_gunfit .equip .equipIcons img {
-	width: 22px;
-	height: 22px;
-	border-radius: 50%;
-	position: relative;
-	margin: 1px;
-	vertical-align: top;
-	background-color: #fff;
-}
-
-.module.activity .activity_gunfit .equip .equipIcons span {
-	line-height: 22px;
-	font-size: 20px;
-}
-
-.module.activity .activity_gunfit .equip .statsBox {
-	width: 155px;
-	height: auto;
-	margin: 4px 0 1px 6px;
-	border-radius: 6px;
-	line-height: 18px;
-	font-size: 12px;
-	padding: 2px;
-	background: rgb(146 146 146 / 49%);
-	color: #fff;
-}
-
-.module.activity .activity_gunfit .equip .statsBox div {
-	display: inline-block;
-	margin-right: 2px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_gunfit .equip .statsBox span {
-	vertical-align: baseline;
-}
-
-.module.activity .activity_gunfit .equip .statsBox img {
-	margin: auto 1px;
-	max-width: 18px;
-	height: 16px;
-	vertical-align: text-bottom;
-	background: #fff;
-	border-radius: 50%;
-	padding: 1px;
-}
-
-/* ------- ACTIVITY: PvP Info ------- */
-.module.activity .activity_pvp {
-	padding: 5px 10px;
-	color: #ddd;
-	font-size: 12px;
-}
-
-.module.activity .activity_pvp .pvp_header {
-	width: 170px;
-	margin: 0 0 1px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_pvp .pvp_title {
-	color: #fc0;
-	font-weight: bold;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_pvp .pvp_create_kind {
-	color: #86b465;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_pvp .pvpEnemyInfo {
-	width: 170px;
-	margin-bottom: 2px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_pvp .pvp_enemy_pic {
-	width: 35px;
-	height: 35px;
-	float: left;
-	margin-right: 1px;
-	border: 1px solid #000;
-	border-radius: 20px;
-}
-
-.module.activity .activity_pvp .pvp_enemy_pic img {
-	width: 33px;
-	height: 33px;
-	border-radius: 50%;
-}
-
-.module.activity .activity_pvp .pvp_enemy_name {
-	width: 53px;
-	height: 17px;
-	line-height: 17px;
-	float: left;
-	padding-left: 2px;
-	margin: 0 1px 1px 0;
-	color: #3ec0bf;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_pvp .pvpEnemyInfo.friend .pvp_enemy_name {
-	color: #3ec03e;
-}
-
-.module.activity .activity_pvp .pvp_enemy_level {
-	width: 20px;
-	height: 17px;
-	line-height: 17px;
-	float: left;
-	padding-left: 2px;
-	margin: 0 1px 1px 0;
-	font-size: 11px;
-}
-
-.module.activity .activity_pvp .pvp_enemy_rank {
-	width: 38px;
-	height: 17px;
-	line-height: 17px;
-	float: left;
-	padding-left: 2px;
-	margin: 0 1px 1px 0;
-	overflow: hidden;
-	font-size: 11px;
-}
-
-.module.activity .activity_pvp .pvp_enemy_comment {
-	width: 95px;
-	height: 17px;
-	line-height: 15px;
-	float: left;
-	padding: 0 0 0 3px;
-	margin: 0 1px 0 0;
-	border: 1px solid #222;
-	border-radius: 5px;
-	color: #222;
-	font-size: 11px;
-	background-color: #eee;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	text-shadow: none;
-}
-
-.module.activity .activity_pvp .pvp_enemy_medals {
-	width: 17px;
-	height: 18px;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvp_enemy_medals img {
-	width: 13px;
-	height: 13px;
-}
-
-.module.activity .activity_pvp .pvp_enemy_medals span {
-	font-size: 10px;
-	position: relative;
-	float: right;
-	margin-top: -12px;
-	margin-right: 1px;
-}
-
-.module.activity .activity_pvp .pvp_enemy_state {
-	width: 20px;
-	height: 36px;
-	margin-top: -18px;
-	float: right;
-}
-
-.module.activity .activity_pvp .pvp_enemy_state img {
-	width: 24px;
-	height: 24px;
-	margin-left: -2px;
-	margin-top: 6px;
-}
-
-.module.activity .activity_pvp .pvp_admiral {
-	width: 170px;
-	height: 92px;
-	margin: 0 0 1px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name {
-	width: 170px;
-	height: 14px;
-	margin: 0 0 1px;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name .l10n {
-	width: 42px;
-	margin: 0 1px 0 0;
-	float: left;
-	font-size: 11px;
-	color: #3ec0bf;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_name .value {
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_level {
-	width: 42px;
-	height: 15px;
-	line-height: 15px;
-	margin: 0 1px 1px 0;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_level .l10n {
-	width: 16px;
-	color: #3ec0bf;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_rank {
-	width: 76px;
-	height: 15px;
-	line-height: 15px;
-	margin: 0 1px 1px 0;
-	float: left;
-	font-size: 11px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_exp {
-	width: 50px;
-	height: 15px;
-	line-height: 15px;
-	float: left;
-	font-size: 11px;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment {
-	width: 170px;
-	height: 17px;
-	line-height: 17px;
-	padding: 0 0 0 3px;
-	margin: 0 0 2px;
-	color: #222;
-	font-size: 11px;
-	background-color: #eee;
-	border-radius: 5px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	text-shadow: none;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_label {
-	width: 110px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0 1px 1px 0;
-	float: left;
-	overflow: hidden;
-	font-size: 11px;
-	color: #c3b180;
-}
-
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_ships,
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_gears,
-.module.activity .activity_pvp .pvp_admiral .pvp_admiral_furniture {
-	width: 59px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0 0 1px;
-	float: left;
-	font-size: 11px;
-	text-align: right;
-}
-
-.module.activity .activity_pvp .pvp_fleet_name {
-	width: 170px;
-	height: 17px;
-	line-height: 17px;
-	padding: 0 0 0 3px;
-	margin: 1px 0 2px;
-	color: #222;
-	font-size: 11px;
-	background-color: #eee;
-	border-radius: 5px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	text-shadow: none;
-}
-
-.module.activity .activity_pvp .pvp_fleet_list {
-	width: 170px;
-	height: 93px;
-	margin: 0 0 2px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_pvp .pvpFleetShip {
-	width: 83px;
-	height: 30px;
-	margin: 0 2px 1px 0;
-	float: left;
-	font-size: 11px;
-	border: 1px solid #faa;
-	border-radius: 17px 5px 5px 17px;
-	background-color: rgb(85 85 85 / 70%);
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon {
-	width: 28px;
-	height: 28px;
-	margin: 0 3px 1px 0;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon img {
-	width: 28px;
-	height: 28px;
-	border-radius: 50%;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_name {
-	width: 49px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0 0 1px;
-	float: left;
-	overflow: hidden;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level {
-	width: 32px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .l10n {
-	width: 13px;
-	float: left;
-	overflow: hidden;
-	color: #3ec0bf;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_level .value {
-	width: 19px;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_star {
-	width: 18px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_star .star {
-	color: #eedab1;
-}
-
-.module.activity .activity_pvp .pvp_prediction {
-	width: 170px;
-	height: 15px;
-	line-height: 15px;
-	font-size: 11px;
-	margin: 2px 0 1px;
-	white-space: nowrap;
-}
-
-.module.activity .activity_pvp .pvp_base_exp {
-	width: 88px;
-	height: 15px;
-	float: left;
-	margin: 0 1px 0 0;
-}
-
-.module.activity .activity_pvp .pvp_base_exp .l10n {
-	width: 59px;
-	float: left;
-	margin: 0 1px 0 0;
-	color: #3ec0bf;
-	overflow: hidden;
-}
-
-.module.activity .activity_pvp .pvp_base_exp .value {
-	width: 28px;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvp_formation {
-	width: 81px;
-	height: 15px;
-	float: left;
-}
-
-.module.activity .activity_pvp .pvp_formation .l10n {
-	width: 64px;
-	float: left;
-	margin: 0 1px 0 0;
-	color: #3ec0bf;
-	overflow: hidden;
-}
-
-.module.activity .activity_pvp .pvp_formation img {
-	width: 15px;
-	height: 15px;
-	background-color: #fff;
-	border-radius: 10px;
-	vertical-align: inherit;
-}
-
-/* ------- ACTIVITY: Remodel Info ------- */
-.module.activity .activity_remodel {
-	padding: 5px 10px;
-	color: #ddd;
-	font-size: 12px;
-}
-
-.module.activity .activity_remodel .remodel_header {
-	width: 170px;
-	height: 34px;
-	margin: 0 0 1px;
-}
-
-.module.activity .activity_remodel .remodel_header .recipe_title,
-.module.activity .activity_remodel .remodel_header .result_title {
-	float: left;
-	width: 138px;
-	color: #fc0;
-	font-weight: bold;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.activity .activity_remodel .remodel_header .recipe_title span {
-	color: #3ec0bf;
-}
-
-.module.activity .activity_remodel .remodel_header .result_title.failure {
-	color: #f00;
-}
-
-.module.activity .activity_remodel .remodel_header .assistant_ship {
-	float: right;
-	width: 30px;
-	height: 30px;
-	margin-top: 2px;
-	border: 1px solid #000;
-	border-radius: 15px;
-	overflow: hidden;
-}
-
-.module.activity .activity_remodel .remodel_header .assistant_ship img {
-	width: 30px;
-	height: 30px;
-	margin: -1px 0 0 -1px;
-	border-radius: 50%;
-}
-
-.module.activity .activity_remodel .remodel_scrollable {
-	width: 176px;
-	max-height: 106px;
-	overflow: hidden auto;
-}
-
-.module.activity .activity_remodel .remodel_slotlist,
-.module.activity .activity_remodel .remodel_to_improve,
-.module.activity .activity_remodel .remodel_consumptions,
-.module.activity .activity_remodel .remodel_upgrade_to,
-.module.activity .activity_remodel .remodel_improved {
-	width: 170px;
-	height: auto;
-}
-
-.module.activity .activity_remodel .remodelSlotItem {
-	width: 170px;
-	height: 56px;
-	background: rgb(255 255 255 / 20%);
-	border-radius: 5px;
-	margin: 0 0 2px;
-	padding: 1px;
-	overflow: hidden;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.sptype1 {
-	box-shadow: 0 0 7px 0 #6b8;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.sptype2 {
-	box-shadow: 0 0 5px 0 #1e4;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.withStar {
-	height: 69px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.noReqs {
-	height: 22px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_itemon {
-	float: left;
-	width: 40px;
-	height: 56px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_itemon {
-	display: none;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_itemon img {
-	width: 40px;
-	height: 56px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_icon {
-	float: left;
-	width: 20px;
-	height: 20px;
-	margin-right: 2px;
-	background: rgb(0 0 0 / 60%);
-	border-radius: 10px;
-	overflow: hidden;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_icon img {
-	width: 20px;
-	height: 20px;
-	vertical-align: top;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_name {
-	float: left;
-	width: 106px;
-	height: 20px;
-	color: #eee;
-	line-height: 20px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_name {
-	width: 144px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.withStar .remodel_slot_name {
-	width: 106px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_star {
-	float: left;
-	font-size: 11px;
-	font-weight: bold;
-	min-width: 38px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0 0 0 2px;
-	color: #45a9a5;
-	display: none;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_star {
-	margin-top: 3px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_star img {
-	width: 12px;
-	height: 12px;
-	margin-top: -2px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_success {
-	float: left;
-	font-size: 11px;
-	min-width: 38px;
-	height: 13px;
-	line-height: 13px;
-	margin: 0 0 0 2px;
-	color: #8ae9e4;
-	display: none;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs {
-	float: left;
-	width: 127px;
-	height: 32px;
-	color: #222;
-	font-size: 11px;
-	margin-top: 2px;
-	overflow: hidden auto;
-	text-shadow: none;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs::-webkit-scrollbar {
-	width: 3px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_reqs {
-	display: none;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs div {
-	float: left;
-	height: 15px;
-	line-height: 15px;
-	margin-left: 2px;
-	display: inline-block;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs img {
-	width: 12px;
-	height: 12px;
-	vertical-align: text-bottom;
-	margin-right: 1px;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.req {
-	color: #ddd;
-}
-
-.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.certain {
-	color: #8ae9e4;
-	margin-left: 1px;
-}
-
-.module.activity .activity_remodel .remodel_consumptions {
-	font-size: 11px;
-}
-
-.module.activity .activity_remodel .remodel_consume_item {
-	width: 170px;
-	height: 14px;
-	margin-bottom: 1px;
-}
-
-.module.activity .activity_remodel .remodel_consume_item .remodel_slot_icon {
-	float: left;
-	width: 14px;
-	height: 14px;
-	margin-right: 4px;
-	background: rgb(0 0 0 / 60%);
-	border-radius: 7px;
-	overflow: hidden;
-}
-
-.module.activity .activity_remodel .remodel_consume_item .remodel_slot_icon img {
-	width: 14px;
-	height: 14px;
-	vertical-align: top;
-}
-
-.module.activity .activity_remodel .remodel_consume_item .remodel_slot_name {
-	float: left;
-	width: 130px;
-	height: 14px;
-	color: #45a9a5;
-	line-height: 14px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.module.activity .activity_remodel .remodel_consume_item .remodel_consume_amount {
-	float: left;
-	color: #45a9a5;
-	font-weight: bold;
-	line-height: 14px;
-}
-
-.module.activity .activity_remodel .remodel_consumptions .owned_item {
-	float: left;
-	margin-right: 5px;
-	display: none;
-}
-
-.module.activity .activity_remodel .remodel_consumptions .owned_item img {
-	width: 12px;
-	height: 12px;
-	vertical-align: text-top;
-}
-
-.module.activity .activity_remodel .remodel_consumptions .owned_star0_item .star0 {
-	color: #45a9a5;
-	font-weight: bold;
-}
-
-.module.activity .activity_remodel .remodel_consumptions .owned_item .value {
-	color: #45a9a5;
-	margin-left: 2px;
-}
-
-.module.activity .activity_remodel .remodel_consumptions .owned_item .value.red {
-	color: #f00;
-}
-
-.module.activity .activity_remodel .remodel_upgrade_title {
-	color: #fc0;
-	font-size: 11px;
-	margin-top: 1px;
-}
-
-.module.activity .activity_remodel .remodel_footer > div {
-	float: right;
-	height: 17px;
-	line-height: 17px;
-	margin-left: 10px;
-}
-
-.module.activity .activity_remodel .remodel_footer img {
-	width: 14px;
-	height: 14px;
-	vertical-align: text-bottom;
-	margin-right: 2px;
+
+	/* ------- ACTIVITY: Expedition Planner ------- */
+	.activity_expeditionPlanner {
+		text-align: center;
+		white-space: nowrap;
+		overflow-x: hidden;
+
+		> div {
+			width: 180px;
+		}
+
+		&::-webkit-scrollbar {
+			width: 5px;
+		}
+
+		.dropdown_title {
+			&.expPlanner_text_passed {
+				color: #060;
+				text-shadow: none;
+			}
+
+			&.expPlanner_text_failed {
+				color: #c00;
+				text-shadow: none;
+			}
+		}
+
+		.expPlan_dropdown_menu {
+			height: 28px;
+		}
+
+		.expPlan_dropdown_title {
+			width: 100%;
+			list-style: none;
+			position: relative;
+			float: left;
+			margin: 0;
+			padding: 0;
+			background: #ddd;
+			text-align: center;
+			text-decoration: none;
+			border-style: solid;
+			border-width: 3px;
+			text-shadow: none;
+
+			.expPlan_dropdown_topEntry {
+				display: none;
+			}
+
+			li {
+				background: #ddd;
+				border-style: solid;
+				border-width: 1px;
+
+				&:hover {
+					background: #fff;
+
+					> ul {
+						display: block;
+					}
+				}
+
+				ul {
+					list-style: none;
+					display: none;
+					position: absolute;
+					top: 100%;
+					left: 0;
+					background: #fff;
+					padding: 0;
+					width: 50%;
+					font-size: 13px;
+					line-height: 17px;
+
+					li {
+						display: none;
+						position: absolute;
+						top: 100%;
+						left: 0;
+						background: #fff;
+						width: 50px;
+					}
+
+					ul {
+						top: 0;
+						left: 100%;
+						cursor: pointer;
+						width: 100%;
+						line-height: 13px;
+					}
+				}
+			}
+		}
+
+		.expPlanner_timer {
+			height: 20px;
+			margin-bottom: 4px;
+
+			.expPlanner_timer_description {
+				float: left;
+				text-align: left;
+				width: 110px;
+			}
+
+			.estimated_time {
+				float: right;
+				text-align: right;
+				max-width: 68px;
+				margin-right: 2px;
+			}
+		}
+
+		.expPlanner_resos_title {
+			text-align: center;
+			height: 20px;
+			margin-bottom: 2px;
+			display: none;
+		}
+
+		.expres_resos {
+			height: 40px;
+			margin-bottom: 3px;
+
+			.expres_divHF {/* divide half */
+				display: inline-block;
+				width: 65px;
+				height: 40px;
+				float: left;
+
+				.expres_reso {
+					float: left;
+					height: 16px;
+					line-height: 16px;
+					margin: 0 0 6px;
+
+					.expres_icon {
+						width: 16px;
+						height: 16px;
+						float: left;
+						margin: 0 9px 0 0;
+
+						img {
+							width: 16px;
+							height: 16px;
+							vertical-align: top;
+						}
+					}
+
+					.expres_amt {
+						width: 30px;
+						height: 16px;
+						float: left;
+						font-size: 12px;
+						color: #fff;
+						text-align: left;
+					}
+				}
+			}
+
+			.expres_greatbtn {
+				width: 40px;
+				float: left;
+				height: 40px;
+				line-height: 40px;
+
+				img {
+					width: 40px;
+					height: 40px;
+				}
+			}
+		}
+
+		.expPlanner_shipReqBox {
+			margin-right: 10px;
+		}
+
+		.requirements {
+			display: inline-block;
+
+			.requirements_textbox {
+				display: inline-block;
+				margin-left: 2px;
+			}
+
+			.expPlanner_text {
+				font-size: 14px;
+				color: #ccc;
+
+				&.gsrate_content[data-gsState="impossible"] {
+					color: #F55;
+				}
+
+				&.gsrate_content[data-gsState="no-overdrum"] {
+					color: orange;
+				}
+
+				&.gsrate_content[data-gsState="likely"] {
+					color: gold;
+				}
+
+				&.gsrate_content[data-gsState="guaranteed"] {
+					color: #0C0;
+				}
+			}
+		}
+
+		.expPlanner_requirements {
+			margin-bottom: 4px;
+
+			.expPlanner_checker_criterias {
+				margin-bottom: 1px;
+				white-space: initial;
+
+				div {
+					font-size: 13px;
+				}
+
+				.expPlanner_text_passed {
+					color: #0C0;
+				}
+
+				.expPlanner_text_failed {
+					color: #F55;
+				}
+			}
+		}
+
+		.expedition_entry {
+			&.cond_passed {
+				color: green
+			}
+
+			&.cond_failed {
+				color: red
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: FIT ------- */
+	.activity_gunfit {
+		padding: 5px 10px;
+
+		.fit_profile {
+			height: 50px;
+			padding: 3px 0;
+			margin: 0 0 2px;
+
+			.fit_profile_pic {
+				width: 40px;
+				height: 40px;
+				float: left;
+				border-radius: 20px;
+				border: 1px solid #000;
+				overflow: hidden;
+				margin: 0 5px 0 0;
+
+				img {
+					width: 40px;
+					height: 40px;
+					position: relative;
+					margin: -1px 0 0 -1px;
+					border-radius: 50%;
+				}
+			}
+
+			.fit_profile_name {
+				width: 125px;
+				height: 22px;
+				line-height: 22px;
+				float: left;
+				font-size: 13px;
+				font-weight: bold;
+				color: #fc0;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			.fit_profile_level {
+				width: 125px;
+				height: 14px;
+				line-height: 14px;
+				float: left;
+				font-size: 12px;
+				color: #ccc;
+			}
+		}
+
+		.fit_gear {
+			height: 40px;
+
+			.fit_gear_pic {
+				width: 30px;
+				height: 30px;
+				border: 0 none;
+				background: #333;
+
+				img {
+					width: 30px;
+					height: 30px;
+					position: relative;
+					margin: 0;
+				}
+			}
+
+			.fit_gear_name {
+				width: 135px;
+				height: 14px;
+				font-size: 12px;
+				line-height: 14px;
+			}
+
+			.fit_gear_level {
+				color: #45a9a5;
+				font-weight: bold;
+
+				img {
+					width: 12px;
+					height: 12px;
+					margin-top: 1px;
+					vertical-align: text-top;
+				}
+			}
+		}
+
+		.fit_value {
+			width: 176px;
+			height: 50px;
+			line-height: 15px;
+			font-size: 11px;
+			border-radius: 8px;
+			margin: 0 0 4px;
+			padding: 1px 0;
+			color: #000;
+			background: #aaa;
+			text-shadow: none;
+
+			.fit_current {
+				float: left;
+				width: 100%;
+				height: 30px;
+				margin: 0 0 1px;
+				padding: 0 5px;
+
+				.fit_label {
+					float: left;
+					width: 108px;
+					height: 30px;
+					margin-right: 2px;
+					padding-right: 2px;
+					text-align: center;
+					overflow: hidden;
+				}
+
+				.fit_unknown {
+					float: left;
+					width: 50px;
+					text-align: center;
+					overflow: hidden;
+					white-space: nowrap;
+					display: none;
+
+					img {
+						width: 14px;
+						height: 14px;
+						vertical-align: text-top;
+					}
+				}
+
+				.fit_day {
+					float: left;
+					width: 50px;
+
+					img {
+						width: 14px;
+						height: 14px;
+						margin-right: 1px;
+						vertical-align: text-bottom;
+					}
+				}
+
+				.fit_night {
+					float: left;
+					width: 50px;
+
+					img {
+						width: 13px;
+						height: 13px;
+						margin-right: 2px;
+						vertical-align: text-bottom;
+					}
+				}
+
+				.fit_bonus {
+					font-weight: bold;
+					color: #3c3;
+					text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
+					filter: drop-shadow(0 0 1px #eee);
+				}
+
+				.fit_penalty {
+					font-weight: bold;
+					color: #a55;
+					text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
+					filter: drop-shadow(0 0 1px #eee);
+				}
+			}
+
+			.fit_total {
+				float: left;
+				width: 100%;
+				height: 16px;
+				padding: 0 5px;
+				color: #eee;
+				text-align: center;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+
+		.scrollable {
+			width: 176px;
+			max-height: 134px;
+			overflow: hidden auto;
+
+			&::-webkit-scrollbar {
+				width: 3px;
+			}
+		}
+
+		.oasw {
+			width: 176px;
+			height: 36px;
+			font-size: 11px;
+			line-height: 16px;
+			border-radius: 8px;
+			padding: 2px 5px;
+			margin: 0 0 4px;
+			color: #ddd;
+			background: #15c;
+
+			.oasw_message {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+
+				.oasw_power {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+
+					.value {
+						font-weight: bold;
+					}
+				}
+			}
+		}
+
+		.aaci {
+			width: 176px;
+			height: auto;
+			margin: 0 0 2px;
+			overflow: hidden;
+			overflow-y: auto;
+
+			.aaciPattern {
+				width: 170px;
+				height: 20px;
+				margin: 0 0 1px;
+				border-radius: 6px;
+				font-size: 12px;
+				color: #ccc;
+
+				&.triggerable {
+					background: #777;
+				}
+			}
+
+			.apiId {
+				width: 20px;
+				height: 20px;
+				margin: 0 2px 0 0;
+				padding: 1px 5px;
+				float: left;
+			}
+
+			.shipIcon {
+				width: 18px;
+				height: 20px;
+				margin: 0 1px 0 0;
+				padding: 1px 2px;
+				float: left;
+
+				img {
+					width: 18px;
+					height: 18px;
+					margin-top: -2px;
+					margin-left: -2px;
+					border-radius: 50%;
+				}
+			}
+
+			.equipIcons {
+				width: 62px;
+				height: 20px;
+				margin: 0 1px;
+				padding: 1px 2px;
+				float: left;
+
+				img {
+					width: 18px;
+					height: 18px;
+					margin-left: -4px;
+				}
+
+				.plusIcon {
+					width: 15px;
+					height: 15px;
+					margin: 5px 0 0 -12px;
+					position: relative;
+					pointer-events: none;
+					filter: hue-rotate(75deg);
+					transform: scaleX(-1);
+				}
+
+				.minusIcon {
+					width: 15px;
+					height: 15px;
+					margin: 5px 0 0 -12px;
+					position: relative;
+					pointer-events: none;
+					filter: hue-rotate(-90deg);
+					transform: scaleX(-1);
+				}
+			}
+
+			.fixed {
+				width: 25px;
+				height: 20px;
+				margin: 0 1px 0 0;
+				padding: 1px 2px;
+				float: left;
+			}
+
+			.modifier {
+				width: 34px;
+				height: 20px;
+				margin: 0 2px 0 0;
+				padding: 1px 2px;
+				float: left;
+			}
+
+			.landing {
+				width: 176px;
+				height: auto;
+				margin: 0 0 2px;
+				overflow: hidden;
+				overflow-y: auto;
+
+				.landingInfo {
+					width: 155px;
+					height: 20px;
+					line-height: 20px;
+					margin: 0 0 1px 6px;
+					border-radius: 6px;
+					font-size: 12px;
+					color: #ccc;
+					background: rgb(255 54 54 / 20%);
+				}
+
+				.shipIcon {
+					width: 18px;
+					height: 20px;
+					margin: 0 5px;
+					float: left;
+
+					img {
+						width: 18px;
+						height: 18px;
+						border-radius: 50%;
+						margin-top: 1px;
+						vertical-align: top;
+					}
+				}
+
+				.power {
+					width: 50px;
+					height: 20px;
+					margin: 0 2px 0 0;
+					float: left;
+					white-space: nowrap;
+					overflow: visible;
+
+					img {
+						width: 15px;
+						height: 15px;
+						vertical-align: text-top;
+					}
+
+					.value {
+						margin-left: 2px;
+					}
+				}
+
+				.modifiers {
+					width: 15px;
+				}
+			}
+
+			.equip {
+				width: 176px;
+				height: auto;
+				margin: 0 0 2px;
+				overflow: hidden;
+				overflow-y: auto;
+
+				.equipInfo {
+					width: 155px;
+					height: auto;
+					margin: 0 0 1px 6px;
+					padding: 1px;
+					border-radius: 6px;
+					font-size: 12px;
+					color: #ccc;
+					background: rgb(54 255 182 / 20%);
+				}
+
+				.equipIcons {
+					margin: 0 5px;
+
+					img {
+						width: 22px;
+						height: 22px;
+						border-radius: 50%;
+						position: relative;
+						margin: 1px;
+						vertical-align: top;
+						background-color: #fff;
+					}
+
+					span {
+						line-height: 22px;
+						font-size: 20px;
+					}
+				}
+
+				.statsBox {
+					width: 155px;
+					height: auto;
+					margin: 4px 0 1px 6px;
+					border-radius: 6px;
+					line-height: 18px;
+					font-size: 12px;
+					padding: 2px;
+					background: rgb(146 146 146 / 49%);
+					color: #fff;
+
+					div {
+						display: inline-block;
+						margin-right: 2px;
+						white-space: nowrap;
+					}
+
+					span {
+						vertical-align: baseline;
+					}
+
+					img {
+						margin: auto 1px;
+						max-width: 18px;
+						height: 16px;
+						vertical-align: text-bottom;
+						background: #fff;
+						border-radius: 50%;
+						padding: 1px;
+					}
+				}
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: PvP Info ------- */
+	.activity_pvp {
+		color: #ddd;
+		font-size: 12px;
+
+		.pvp_header {
+			white-space: nowrap;
+
+			.pvp_title {
+				color: #fc0;
+				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.pvp_create_kind {
+				color: #86b465;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+
+		.pvpEnemyInfo {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 3px;
+			margin-bottom: 4px;
+			container-type: inline-size;
+
+			.pvp_enemy_pic {
+				flex: 0 0 min(40px, 15cqw);
+				height: min(40px, 15cqw);
+				margin-right: 1px;
+				border: 1px solid #000;
+				border-radius: 51%;
+
+				img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
+			}
+
+			.pvp_enemy_texts {
+				display: flex;
+				flex-flow: row wrap;
+				flex: 1 1 auto;
+
+				.pvp_enemy_name {
+					line-height: 17px;
+					padding-left: 2px;
+					margin: 0 1px 1px 0;
+					color: #3ec0bf;
+				}
+
+				&.friend .pvp_enemy_name {
+					color: #3ec03e;
+				}
+
+				.pvp_enemy_level {
+					line-height: 17px;
+					padding-left: 2px;
+					margin: 0 1px 1px auto;
+					font-size: 11px;
+				}
+
+				.pvp_enemy_rank {
+					line-height: 17px;
+					padding-left: 2px;
+					margin: 0 1px 1px 0;
+					font-size: 11px;
+				}
+
+				.pvp_enemy_comment {
+					flex: 1 0 calc(100% - 17px);
+					height: 17px;
+					line-height: 15px;
+					padding: 0 0 0 3px;
+					border: 1px solid #222;
+					border-radius: 5px;
+					color: #222;
+					font-size: 11px;
+					background-color: #eee;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					text-shadow: none;
+				}
+
+				.pvp_enemy_medals {
+					position: relative;
+					width: 17px;
+					height: 17px;
+
+					img {
+						width: 13px;
+						height: 13px;
+					}
+
+					span {
+						font-size: 10px;
+						position: absolute;
+						bottom: 0;
+						right: -1px;
+					}
+				}
+			}
+
+			.pvp_enemy_state {
+				width: 26px;
+
+				img {
+					width: 26px;
+					height: 26px;
+				}
+			}
+		}
+
+		.pvp_admiral {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 3px;
+			white-space: nowrap;
+			align-items: center;
+
+			.pvp_admiral_name {
+				display: flex;
+				width: 100%;
+				align-items: center;
+
+				.l10n {
+					width: 42px;
+					font-size: 11px;
+					color: #3ec0bf;
+				}
+
+				.value {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+
+			.pvp_admiral_level {
+				display: flex;
+				flex-flow: row nowrap;
+				width: 42px;
+				line-height: 15px;
+
+				.l10n {
+					width: 16px;
+					color: #3ec0bf;
+				}
+			}
+
+			.pvp_admiral_rank {
+				line-height: 15px;
+				font-size: 11px;
+			}
+
+			.pvp_admiral_exp {
+				margin-left: auto;
+				line-height: 15px;
+				font-size: 11px;
+			}
+
+			.pvp_admiral_comment {
+				width: 100%;
+				height: 17px;
+				line-height: 17px;
+				padding: 0 0 0 3px;
+				margin: 0 0 3px;
+				color: #222;
+				font-size: 11px;
+				background-color: #eee;
+				border-radius: 5px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-shadow: none;
+			}
+
+			.pvp_admiral_label {
+				width: 110px;
+				line-height: 13px;
+				margin: 0 0 2px;
+				font-size: 11px;
+				color: #c3b180;
+			}
+
+			.pvp_admiral_ships,
+			.pvp_admiral_gears,
+			.pvp_admiral_furniture {
+				width: calc(100% - 113px); /* 110px + 3px gap */
+				line-height: 13px;
+				margin-left: auto;
+				font-size: 11px;
+				text-align: right;
+			}
+		}
+
+		.pvp_fleet_name {
+			line-height: 17px;
+			padding: 0 0 0 3px;
+			margin-bottom: 3px;
+			color: #222;
+			font-size: 11px;
+			background-color: #eee;
+			border-radius: 5px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-shadow: none;
+		}
+
+		.pvp_fleet_list {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 3px;
+			white-space: nowrap;
+			margin-bottom: 3px;
+
+			.pvpFleetShip {
+				display: flex;
+				flex-flow: row nowrap;
+				gap: 3px;
+				flex: 1 1 calc(50% - 2px);
+				height: 40px;
+				font-size: 11px;
+				border: 2px solid #faa;
+				border-radius: 21px 6px 6px 21px;
+				background-color: rgb(85 85 85 / 70%);
+				overflow: hidden;
+
+				.pvp_fleet_ship_icon {
+					flex: 0 0 36px;
+					height: 36px;
+
+					img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+					}
+				}
+
+				.pvp_fleet_ship_texts {
+					flex: 1 1 calc(100% - 39px);
+					display: flex;
+					flex-flow: row wrap;
+
+					.pvp_fleet_ship_name {
+						flex: 1 1 100%;
+						line-height: 18px;
+					}
+
+					.pvp_fleet_ship_level {
+						display: inline-flex;
+						flex-flow: row nowrap;
+						line-height: 18px;
+
+						.l10n {
+							color: #3ec0bf;
+						}
+					}
+
+					.pvp_fleet_ship_star {
+						line-height: 18px;
+						margin-left: auto;
+						padding-right: 3px;
+
+						.star {
+							color: #eedab1;
+						}
+					}
+				}
+			}
+		}
+
+		.pvp_prediction {
+			display: flex;
+			gap: 6%;
+			flex-flow: row nowrap;
+			align-items: center;
+			line-height: 15px;
+			font-size: 11px;
+			white-space: nowrap;
+
+			.pvp_base_exp,
+			.pvp_formation {
+				flex: 0 0 47%;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+
+				.l10n {
+					color: #3ec0bf;
+				}
+			}
+
+			.pvp_base_exp {
+				.value {
+					margin-left: auto;
+				}
+			}
+
+			.pvp_formation {
+				img {
+					margin-left: auto;
+					width: 20px;
+					height: 20px;
+					background-color: #fff;
+					border-radius: 11px;
+					vertical-align: inherit;
+				}
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: Remodel Info ------- */
+	.activity_remodel {
+		padding: 5px 10px;
+		color: #ddd;
+		font-size: 12px;
+
+		.remodel_header {
+			width: 170px;
+			height: 34px;
+			margin: 0 0 1px;
+
+			.recipe_title,
+			.result_title {
+				float: left;
+				width: 138px;
+				color: #fc0;
+				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.recipe_title span {
+				color: #3ec0bf;
+			}
+
+			.result_title.failure {
+				color: #f00;
+			}
+
+			.assistant_ship {
+				float: right;
+				width: 30px;
+				height: 30px;
+				margin-top: 2px;
+				border: 1px solid #000;
+				border-radius: 15px;
+				overflow: hidden;
+
+				img {
+					width: 30px;
+					height: 30px;
+					margin: -1px 0 0 -1px;
+					border-radius: 50%;
+				}
+			}
+		}
+
+		.remodel_scrollable {
+			width: 176px;
+			max-height: 106px;
+			overflow: hidden auto;
+		}
+
+		.remodel_slotlist,
+		.remodel_to_improve,
+		.remodel_consumptions,
+		.remodel_upgrade_to,
+		.remodel_improved {
+			width: 170px;
+			height: auto;
+
+			.remodelSlotItem {
+				width: 170px;
+				height: 56px;
+				background: rgb(255 255 255 / 20%);
+				border-radius: 5px;
+				margin: 0 0 2px;
+				padding: 1px;
+				overflow: hidden;
+
+				&.sptype1 {
+					box-shadow: 0 0 7px 0 #6b8;
+				}
+
+				&.sptype2 {
+					box-shadow: 0 0 5px 0 #1e4;
+				}
+
+				&.withStar {
+					height: 69px;
+				}
+
+				&.noReqs {
+					height: 22px;
+
+					.remodel_slot_itemon {
+						display: none;
+					}
+				}
+
+				.remodel_slot_itemon {
+					float: left;
+					width: 40px;
+					height: 56px;
+
+					img {
+						width: 40px;
+						height: 56px;
+					}
+				}
+
+				.remodel_slot_icon {
+					float: left;
+					width: 20px;
+					height: 20px;
+					margin-right: 2px;
+					background: rgb(0 0 0 / 60%);
+					border-radius: 10px;
+					overflow: hidden;
+
+					img {
+						width: 20px;
+						height: 20px;
+						vertical-align: top;
+					}
+				}
+
+				.remodel_slot_name {
+					float: left;
+					width: 106px;
+					height: 20px;
+					color: #eee;
+					line-height: 20px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				&.noReqs .remodel_slot_name {
+					width: 144px;
+				}
+
+				&.withStar .remodel_slot_name {
+					width: 106px;
+				}
+
+				.remodel_slot_star {
+					float: left;
+					font-size: 11px;
+					font-weight: bold;
+					min-width: 38px;
+					height: 13px;
+					line-height: 13px;
+					margin: 0 0 0 2px;
+					color: #45a9a5;
+					display: none;
+
+					img {
+						width: 12px;
+						height: 12px;
+						margin-top: -2px;
+					}
+				}
+
+				&.noReqs .remodel_slot_star {
+					margin-top: 3px;
+				}
+
+				.remodel_slot_success {
+					float: left;
+					font-size: 11px;
+					min-width: 38px;
+					height: 13px;
+					line-height: 13px;
+					margin: 0 0 0 2px;
+					color: #8ae9e4;
+					display: none;
+				}
+
+				.remodel_slot_reqs {
+					float: left;
+					width: 127px;
+					height: 32px;
+					color: #222;
+					font-size: 11px;
+					margin-top: 2px;
+					overflow: hidden auto;
+					text-shadow: none;
+
+					&::-webkit-scrollbar {
+						width: 3px;
+					}
+
+					div {
+						float: left;
+						height: 15px;
+						line-height: 15px;
+						margin-left: 2px;
+						display: inline-block;
+					}
+
+					img {
+						width: 12px;
+						height: 12px;
+						vertical-align: text-bottom;
+						margin-right: 1px;
+					}
+
+					span {
+						&.req {
+							color: #ddd;
+						}
+
+						&.certain {
+							color: #8ae9e4;
+							margin-left: 1px;
+						}
+					}
+				}
+
+				&.noReqs .remodel_slot_reqs {
+					display: none;
+				}
+			}
+		}
+
+		.remodel_consumptions {
+			font-size: 11px;
+
+			.remodel_consume_item {
+				width: 170px;
+				height: 14px;
+				margin-bottom: 1px;
+
+				.remodel_slot_icon {
+					float: left;
+					width: 14px;
+					height: 14px;
+					margin-right: 4px;
+					background: rgb(0 0 0 / 60%);
+					border-radius: 7px;
+					overflow: hidden;
+
+					img {
+						width: 14px;
+						height: 14px;
+						vertical-align: top;
+					}
+				}
+
+				.remodel_slot_name {
+					float: left;
+					width: 130px;
+					height: 14px;
+					color: #45a9a5;
+					line-height: 14px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.remodel_consume_amount {
+					float: left;
+					color: #45a9a5;
+					font-weight: bold;
+					line-height: 14px;
+				}
+			}
+
+			.owned_item {
+				float: left;
+				margin-right: 5px;
+				display: none;
+
+				img {
+					width: 12px;
+					height: 12px;
+					vertical-align: text-top;
+				}
+
+				&.owned_star0_item .star0 {
+					color: #45a9a5;
+					font-weight: bold;
+				}
+
+				.value {
+					color: #45a9a5;
+					margin-left: 2px;
+
+					&.red {
+						color: #f00;
+					}
+				}
+			}
+		}
+
+		.remodel_upgrade_title {
+			color: #fc0;
+			font-size: 11px;
+			margin-top: 1px;
+		}
+
+		.remodel_footer {
+			> div {
+				float: right;
+				height: 17px;
+				line-height: 17px;
+				margin-left: 10px;
+			}
+
+			img {
+				width: 14px;
+				height: 14px;
+				vertical-align: text-bottom;
+				margin-right: 2px;
+			}
+		}
+	}
 }
 
 /* ------- QUESTS ------- */
-.module.quests .quest {
-	height: 18px;
-	line-height: 18px;
-}
-
-.module.quests .quest.complete {
-	background: rgb(0 255 0 / 25%);
-}
-
-.module.quests .quest_color {
-	width: 14px;
-	height: 14px;
-	margin: 2px;
-	line-height: 12px;
-	font-size: 12px;
-	text-align: center;
-	text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 2px #fff;
-	background: #555;
-	border: 2px solid transparent;
-	float: left;
-}
-
-.module.quests .quest.percent50 .quest_color {
-	border-left: 2px solid #39a;
-}
-
-.module.quests .quest.percent80 .quest_color {
-	border-left: 2px solid #6cd;
-}
-
-.module.quests .quest.complete .quest_color {
-	border-left: 2px solid #0f0;
-}
-
-.module.quests .quest .quest_color.label_daily {
-	border-right: 2px solid #6af;
-}
-
-.module.quests .quest .quest_color.label_weekly {
-	border-right: 2px solid #8ff;
-}
-
-.module.quests .quest .quest_color.label_monthly {
-	border-right: 2px solid #3f6;
-}
-
-.module.quests .quest .quest_color.label_quarterly {
-	border-right: 2px solid #f95;
-}
-
-.module.quests .quest .quest_color.label_yearly {
-	border-right: 2px solid #94f;
-}
-
-.module.quests .quest .quest_color.label_other {
-	border-right: 2px solid #fe6;
-}
-
-.module.quests .quest_text {
-	width: 130px;
-	float: left;
-	font-size: 11px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	color: #eee;
-}
-
-.module.quests .quest_track {
-	width: 40px;
-	height: 16px;
-	line-height: 16px;
-	margin: 1px 0;
-	background: rgb(60 60 60 / 70%);
-	font-size: 12px;
-	float: left;
-	text-align: center;
-	color: #eee;
-	overflow: hidden;
-}
-
-.module.quests .untracked .quest_track {
-	display: none;
-}
-
-.module.quests.compact {
+.module.quests {
+	grid-area: quests;
 	display: flex;
-	flex-direction: column;
-	overflow-y: hidden !important;
-}
+	flex-flow: column nowrap;
+	gap: 3px;
+	container-type: inline-size;
 
-.module.quests.compact .quest {
-	display: flex;
-	height: auto;
-	line-height: unset;
-	align-items: center;
-	min-height: 12px;
-	max-height: 18px;
-}
+	.quest {
+		line-height: 18px;
+		display: flex;
+		flex-flow: row nowrap;
+		gap: 5px;
+		align-items: center;
 
-.module.quests.compact .quest_color {
-	width: 12px;
-	height: auto;
-	line-height: calc(100% - 4px);
-	min-height: 11px;
-	max-height: 14px;
-	float: unset;
-}
+		&.complete {
+			background: rgb(0 255 0 / 25%);
 
-.module.quests.compact .quest .quest_text {
-	flex: 1;
-	height: auto;
-	line-height: 12px;
-	float: unset;
-}
+			.quest_color {
+				border-left: 2px solid #0f0;
+			}
+		}
 
-.module.quests.compact .quest_track {
-	height: auto;
-	line-height: 12px;
-	float: unset;
-	margin-right: 3px;
+		.quest_color {
+			width: 14px;
+			height: 14px;
+			line-height: 12px;
+			font-size: 12px;
+			text-align: center;
+			text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 2px #fff;
+			background: #555;
+			border: 3px solid transparent;
+			border-radius: 2px;
+
+			&.label_daily {
+				border-right: 3px solid #6af;
+			}
+
+			&.label_weekly {
+				border-right: 3px solid #8ff;
+			}
+
+			&.label_monthly {
+				border-right: 3px solid #3f6;
+			}
+
+			&.label_quarterly {
+				border-right: 3px solid #f95;
+			}
+
+			&.label_yearly {
+				border-right: 3px solid #94f;
+			}
+
+			&.label_other {
+				border-right: 3px solid #fe6;
+			}
+		}
+
+		&.percent50 .quest_color {
+			border-left: 3px solid #39a;
+		}
+
+		&.percent80 .quest_color {
+			border-left: 3px solid #6cd;
+		}
+
+		.quest_text {
+			flex: 1 1 calc(100% - 54px);
+			font-size: 11px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			color: #eee;
+		}
+
+		.quest_track {
+			margin-left: auto;
+			width: 40px;
+			height: 16px;
+			line-height: 16px;
+			background: rgb(60 60 60 / 70%);
+			font-size: 12px;
+			text-align: center;
+			color: #eee;
+			overflow: hidden;
+			border-radius: 2px;
+		}
+
+		.untracked .quest_track {
+			display: none;
+		}
+	}
+
+	&.compact {
+		display: flex;
+		flex-direction: column;
+		overflow-y: hidden !important;
+
+		.quest {
+			display: flex;
+			height: auto;
+			line-height: unset;
+			align-items: center;
+			min-height: 12px;
+			max-height: 18px;
+
+			.quest_color {
+				width: 12px;
+				height: auto;
+				line-height: calc(100% - 4px);
+				min-height: 11px;
+				max-height: 14px;
+				float: unset;
+			}
+
+			.quest_text {
+				flex: 1;
+				height: auto;
+				line-height: 12px;
+				float: unset;
+			}
+
+			.quest_track {
+				height: auto;
+				line-height: 12px;
+				float: unset;
+				margin-right: 3px;
+			}
+		}
+	}
 }
 
 /* ------- CONTROLS ------- */
-.module.controls .control {
-	height: 30px;
-	float: left;
-	color: #ccc;
-}
+.module.controls {
+	grid-area: controls;
 
-.module.controls .fleet_num {
-	width: 30px;
-	line-height: 30px;
-	border-radius: 15px;
-	background: #333;
-	text-align: center;
-	margin: 0 5px 3px 0;
-	font-size: 19px;
-	font-weight: bold;
-}
+	.control {
+		height: 30px;
+		float: left;
+		color: #ccc;
 
-.module.controls .fleet_num.preSortieCheck {
-	border: 2px dotted #fa2;
-	line-height: 26px;
-}
+		&.fleet_num {
+			width: 30px;
+			line-height: 30px;
+			border-radius: 15px;
+			background: #333;
+			text-align: center;
+			margin: 0 5px 3px 0;
+			font-size: 19px;
+			font-weight: bold;
 
-.module.controls .fleet_num.onExped {
-	border: 2px solid #a69de6;
-	line-height: 26px;
-}
+			&.preSortieCheck {
+				border: 2px dotted #fa2;
+				line-height: 26px;
+			}
 
-.module.controls .fleet_num.needsSupply {
-	border: 2px solid #f00;
-	line-height: 26px;
-}
+			&.onExped {
+				border: 2px solid #a69de6;
+				line-height: 26px;
+			}
 
-.module.controls .fleet_num.hasTaiha {
-	background: #faa;
-	color: #000;
-}
+			&.needsSupply {
+				border: 2px solid #f00;
+				line-height: 26px;
+			}
 
-.module.controls .fleet_rengo {
-	width: 45px;
-	border-radius: 8px;
-	background: #333;
-	text-align: center;
-	margin: 0 5px 3px 0;
-	font-size: 16px;
-	font-weight: bold;
-}
+			&.hasTaiha {
+				background: #faa;
+				color: #000;
+			}
+		}
 
-.module.controls .fleet_rengo img {
-	width: 43px;
-	height: 28px;
-}
+		&.fleet_rengo {
+			width: 45px;
+			border-radius: 8px;
+			background: #333;
+			text-align: center;
+			margin: 0 5px 3px 0;
+			font-size: 16px;
+			font-weight: bold;
 
-.module.controls .fleet_lbas {
-	width: 40px;
-	border-radius: 8px;
-	background: #333;
-	text-align: center;
-	margin: 0 5px 3px 0;
-	font-size: 16px;
-	font-weight: bold;
-}
+			img {
+				width: 43px;
+				height: 28px;
+			}
+		}
 
-.module.controls .fleet_lbas img {
-	width: 30px;
-	height: 30px;
-}
+		&.fleet_lbas {
+			width: 40px;
+			border-radius: 8px;
+			background: #333;
+			text-align: center;
+			margin: 0 5px 3px 0;
+			font-size: 16px;
+			font-weight: bold;
 
-.module.controls .fleet_lbas.badMorale {
-	border: 2px solid #faa;
-}
+			img {
+				width: 30px;
+				height: 30px;
+			}
 
-.module.controls .fleet_lbas.needsSupply {
-	border: 2px solid #f00;
-}
+			&.badMorale {
+				border: 2px solid #faa;
+			}
 
-.module.controls .fleet_lbas.badMorale img,
-.module.controls .fleet_lbas.needsSupply img {
-	margin-top: -2px;
-}
+			&.needsSupply {
+				border: 2px solid #f00;
+			}
 
-.module.controls .scrollable {
-	height: 38px;
-	margin: 0 5px 3px 0;
-	font-size: 0;
-	word-spacing: 0;
-	letter-spacing: 0;
-	white-space: nowrap;
-	overflow: hidden;
-}
+			&.badMorale img,
+			&.needsSupply img {
+				margin-top: -2px;
+			}
+		}
 
-.module.controls .scroll_btn {
-	width: 0;
-	height: 0;
-	margin: 2px 5px 3px 0;
-}
+		&.scrollable {
+			height: 38px;
+			margin: 0 5px 3px 0;
+			font-size: 0;
+			word-spacing: 0;
+			letter-spacing: 0;
+			white-space: nowrap;
+			overflow: hidden;
+		}
 
-.module.controls .scroll_left {
-	border-top: 13px solid transparent;
-	border-bottom: 13px solid transparent;
-	border-right: 15px solid #999;
-}
+		&.scroll_btn {
+			width: 0;
+			height: 0;
+			margin: 2px 5px 3px 0;
+		}
 
-.module.controls .scroll_right {
-	border-top: 13px solid transparent;
-	border-bottom: 13px solid transparent;
-	border-left: 15px solid #999;
-}
+		&.scroll_left {
+			border-top: 13px solid transparent;
+			border-bottom: 13px solid transparent;
+			border-right: 15px solid #999;
 
-.module.controls .scroll_left.disabled {
-	border-right: 15px solid #333;
-}
+			&.disabled {
+				border-right: 15px solid #333;
+			}
+		}
 
-.module.controls .scroll_right.disabled {
-	border-left: 15px solid #333;
-}
+		&.scroll_right {
+			border-top: 13px solid transparent;
+			border-bottom: 13px solid transparent;
+			border-left: 15px solid #999;
 
-.module.controls .control_btn {
-	width: 40px;
-	border-radius: 15px;
-	background: #999;
-	margin: 0 5px 0 0;
-	text-align: center;
-	overflow: hidden;
-	padding: 3px;
-	display: inline-block;
-	float: initial;
-}
+			&.disabled {
+				border-left: 15px solid #333;
+			}
+		}
 
-.module.controls .control_btn.disabled {
-	background: #333;
-}
+		&.control_btn {
+			width: 40px;
+			border-radius: 15px;
+			background: #999;
+			margin: 0 5px 0 0;
+			text-align: center;
+			overflow: hidden;
+			padding: 3px;
+			display: inline-block;
+			float: initial;
 
-.module.controls .control_btn img {
-	width: 34px;
-	height: 24px;
-}
+			&.disabled {
+				background: #333;
+			}
 
-.module.controls .control.active {
-	background: #fc0;
-	color: #000;
+			img {
+				width: 34px;
+				height: 24px;
+			}
+		}
+
+		&.active {
+			background: #fc0;
+			color: #000;
+		}
+	}
 }
 
 /* ------- SUMMARY ------- */
-.module.summary.disabled {
-	filter: brightness(0.5);
-	pointer-events: none;
-}
+.module.summary {
+	grid-area: summary;
 
-.module.summary .summary_box {
-	width: 61px;
-	height: 20px;
-	float: left;
-	line-height: 20px;
-	margin: 0 2px 3px;
-}
+	&.disabled {
+		filter: brightness(0.5);
+		pointer-events: none;
+	}
 
-.module.summary .summary_icon {
-	width: 20px;
-	height: 20px;
-	float: left;
-	margin: 0 5px 0 0;
-	background: #fff;
-	border-radius: 10px;
-}
+	.summary_box {
+		width: 61px;
+		height: 20px;
+		float: left;
+		line-height: 20px;
+		margin: 0 2px 3px;
 
-.module.summary .summary_icon img {
-	width: 16px;
-	height: 16px;
-	margin: 2px;
-	vertical-align: top;
-}
+		.summary_icon {
+			width: 20px;
+			height: 20px;
+			float: left;
+			margin: 0 5px 0 0;
+			background: #fff;
+			border-radius: 10px;
 
-.module.summary .summary_text {
-	width: 36px;
-	height: 20px;
-	float: left;
-	color: #eee;
-	font-size: 12px;
-	font-weight: bold;
-	white-space: nowrap
-}
+			img {
+				width: 16px;
+				height: 16px;
+				margin: 2px;
+				vertical-align: top;
+			}
+		}
 
-.module.summary .summary-level {
-	width: 57px;
-}
+		.summary_text {
+			width: 36px;
+			height: 20px;
+			float: left;
+			color: #eee;
+			font-size: 12px;
+			font-weight: bold;
+			white-space: nowrap
+		}
 
-.module.summary .summary-level .summary_text {
-	width: 32px;
-}
+		&.summary-level {
+			width: 57px;
 
-.module.summary .summary-airfp {
-	width: 85px;
-}
+			.summary_text {
+				width: 32px;
+			}
+		}
 
-.module.summary .summary-airfp .summary_text {
-	width: 60px;
-}
+		&.summary-airfp {
+			width: 85px;
 
-.module.summary .summary-antiair {
-	width: 50px;
-}
+			.summary_text {
+				width: 60px;
+			}
+		}
 
-.module.summary .summary-antiair .summary_text {
-	width: 25px;
-}
+		&.summary-antiair {
+			width: 50px;
 
-.module.summary .summary-speed {
-	width: 66px;
-}
+			.summary_text {
+				width: 25px;
+			}
+		}
 
-.module.summary .summary-speed .summary_text {
-	width: 41px;
-}
+		&.summary-speed {
+			width: 66px;
 
-.module.summary .summary_sub {
-	width: 12px;
-	height: 12px;
-	line-height: 13px;
-	border-radius: 6px;
-	margin: 9px 0 0 9px;
-	position: absolute;
-	font-size: 8px;
-	text-align: center;
-	color: #78736f;
-	background: #fff;
-	overflow: hidden;
-	pointer-events: none;
-	display: none;
+			.summary_text {
+				width: 41px;
+			}
+		}
+
+		.summary_sub {
+			width: 12px;
+			height: 12px;
+			line-height: 13px;
+			border-radius: 6px;
+			margin: 9px 0 0 9px;
+			position: absolute;
+			font-size: 8px;
+			text-align: center;
+			color: #78736f;
+			background: #fff;
+			overflow: hidden;
+			pointer-events: none;
+			display: none;
+		}
+	}
 }
 
 /* ------- FLEET ------- */
 .module.fleet {
+	grid-area: fleet;
 	width: 340px;
 	height: 315px;
 	border-radius: 5px;
-}
-
-.module.fleet .shiplist {
-	width: 340px;
-	height: 315px;
-}
-
-.module.fleet .shiplist_combined_fleet {
-	width: 165px;
-	height: 315px;
-	float: left;
-	margin: 0 5px 0 0;
-}
-
-.module.fleet .shiplist .special_cutin {
-	background-color: rgb(170 0 136 / 40%);
-}
-
-.module.fleet .shiplist .hp_repairing {
-	background-color: rgb(100 255 100 / 30%);
-}
-
-.module.fleet .shiplist .hp_fcf {
-	background-color: rgb(255 255 255 / 40%);
-}
-
-.module.fleet .shiplist .akashiMark {
-	background-color: rgb(191 255 100 / 15%);
-}
-
-.module.fleet .shiplist .hp_taiha {
-	background-color: rgb(255 0 0 / 40%);
-}
-
-/* Long Ship */
-.module.fleet .lship {
-	width: 340px;
-	height: 50px;
-	margin: 0 0 3px;
-	border-radius: 5px;
-	padding: 3px 0 0;
-	position: relative;
-}
-
-.module.fleet .lship.seven {
-	height: 45px;
-	margin-bottom: 0;
-}
-
-.module.fleet .lship.ship-stamp::after {
-	content: attr(title);
-	display: inline;
-	top: 4px;
-	left: 20%;
-	position: absolute;
-	font-size: 20pt;
-	color: red;
-	transform: rotate(-3deg);
-	text-shadow: 1px 1px 1px black;
-	border: 1px red solid;
-	text-align: center;
-	vertical-align: middle;
-	width: 160px;
-	background-color: rgb(255 0 0 / 50%);
-	z-index: 1;
-}
-
-.module.fleet .lship .ex_item {
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-	position: absolute;
-	top: 30px;
-	left: 25px;
-	background: #fff;
-	border-radius: 9px;
-	z-index: 1;
-}
-
-.module.fleet .lship .ex_item .gear_star {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 8px 0 0 -5px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 12px;
-	color: #ff0;
-	background: #45a9a5;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .lship .ex_item.empty {
-	background: rgb(255 255 255 / 80%);
-}
-
-.module.fleet .lship .ex_item.item_being_used {
-	background: #fe3;
-}
-
-.module.fleet .lship .ex_item.goddess {
-	box-shadow: 0 0 4px #ff0,
-		0 0 4px #ff0,
-		0 0 4px #ff0 !important;
-}
-
-.module.fleet .lship .ex_item .gear_icon {
-	overflow: hidden;
-}
-
-.module.fleet .lship .ex_item .gear_icon img {
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-	vertical-align: top;
-}
-
-.module.fleet .lship .ship_img {
-	width: 40px;
-	height: 40px;
-	float: left;
-	margin: 0 5px 0 0;
-	border-radius: 20px;
-	overflow: hidden;
-}
-
-.module.fleet .lship .ship_img img {
-	width: 40px;
-	height: 40px;
-	position: relative;
-	margin: -1px 0 0 -1px;
-	border-radius: 50%;
-}
-
-.module.fleet .lship .mvp_icon {
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	float: left;
-	position: absolute;
-	left: 0;
-	top: 28px;
-	z-index: 2;
-	overflow: hidden;
-	display: none;
-}
-
-.module.fleet .lship .mvp_icon img {
-	width: 20px;
-	height: 20px;
-	vertical-align: top;
-}
-
-.module.fleet .lship .locktag,
-.module.fleet .sship .locktag {
-	width: 15px;
-	height: 15px;
-	line-height: 12px;
-	float: left;
-	position: absolute;
-	left: 28px;
-	top: 0;
-	z-index: 1;
-	overflow: hidden;
-	border-radius: 50%;
-	border: 1px #fff solid;
-	color: #fff;
-	background: #aaa;
-	opacity: 0.8;
-	font-size: 10px;
-	text-align: center;
-	text-shadow: 1px 1px 1px #224169;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .lship .ribbon,
-.module.fleet .sship .ribbon {
-	width: 12px;
-	height: 28px;
-	float: left;
-	position: absolute;
-	left: 1px;
-	top: 0;
-	transform: rotate(34deg);
-	z-index: 1;
-	overflow: visible;
-	opacity: 0.8;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .sship .ribbon {
-	top: -3px;
-}
-
-.module.fleet .lship .ribbon img,
-.module.fleet .sship .ribbon img {
-	width: 12px;
-	height: 28px;
-}
-
-.module.fleet .lship .ribbon.r-1 img,
-.module.fleet .sship .ribbon.r-1 img {
-	content: url("/assets/img/client/ribbons/1.png");
-	filter: drop-shadow(0 0 2px rgb(255 243 140 / 100%));
-}
-
-.module.fleet .lship .ribbon.r-2 img,
-.module.fleet .sship .ribbon.r-2 img {
-	content: url("/assets/img/client/ribbons/2.png");
-	filter: drop-shadow(0 0 2px rgb(255 87 112 / 100%));
-}
-
-.module.fleet .lship .ship_col1 {
-	width: 120px;
-	height: 41px;
-	float: left;
-	margin: 0 5px 0 0;
-}
-
-.module.fleet .lship .ship_name {
-	width: 120px;
-	height: 15px;
-	line-height: 14px;
-	font-size: 12px;
-	float: left;
-	color: #ddd;
-	font-weight: bold;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.fleet .lship .ship_type {
-	width: 33px;
-	height: 15px;
-	line-height: 15px;
-	float: left;
-	font-size: 10px;
-	color: #0ff;
-	white-space: nowrap;
-}
-
-.module.fleet .lship .ship_level {
-	width: 32px;
-	height: 15px;
-	line-height: 15px;
-	float: left;
-	font-size: 11px;
-	color: #fff;
-	white-space: nowrap;
-}
-
-.module.fleet .lship .ship_level .value.goaled {
-	filter: drop-shadow(0 0 2px #fe2);
-}
-
-.module.fleet .lship .ship_hp_text {
-	width: 55px;
-	height: 15px;
-	line-height: 15px;
-	float: left;
-	color: #0f0;
-	text-align: right;
-	white-space: nowrap;
-}
-
-.module.fleet .lship .ship_hp_cur {
-	color: #0f0;
-	font-size: 12px;
-}
-
-.module.fleet .lship .ship_hp_max {
-	color: #aaa;
-	font-size: 11px;
-}
-
-.module.fleet .lship .ship_hp_box {
-	width: 120px;
-	height: 11px;
-	float: left;
-	border: 1px solid #000;
-	background: #555;
-	position: relative;
-}
-
-.module.fleet .ship_hp_bar.hp_normal,
-.module.fleet .ship_hp_prediction.hp_normal {
-	background-color: #0f0;
-}
-
-.module.fleet .ship_hp_bar.hp_shouha,
-.module.fleet .ship_hp_prediction.hp_shouha {
-	background-color: #ff0;
-}
-
-.module.fleet .ship_hp_bar.hp_chuuha,
-.module.fleet .ship_hp_prediction.hp_chuuha {
-	background-color: #f90;
-}
-
-.module.fleet .ship_hp_bar.hp_taiha,
-.module.fleet .ship_hp_prediction.hp_taiha {
-	background-color: #f00;
-}
-
-.module.fleet .ship_hp_bar.hp_repairing {
-	background-color: #ace;
-}
-
-.module.fleet .ship_hp_bar.hp_fcf {
-	background-color: #fff;
-}
-
-.module.fleet .ship_hp_bar.hp_sunk {
-	background-color: #ccc;
-}
-
-.module.fleet .ship_hp_bar_metrics {
-	height: 5px;
-	float: left;
-	background-image: linear-gradient(
-		to right,
-		rgb(0 0 0 / 0%) 0%,
-		rgb(0 0 0 / 0%) 24%,
-		rgb(0 0 0 / 30%) 24%,
-		rgb(255 255 255 / 30%) 25%,
-		rgb(255 255 255 / 0%) 26%,
-		rgb(0 0 0 / 0%) 49%,
-		rgb(0 0 0 / 30%) 49.5%,
-		rgb(255 255 255 / 30%) 50.5%,
-		rgb(255 255 255 / 0%) 51%,
-		rgb(0 0 0 / 0%) 74%,
-		rgb(0 0 0 / 30%) 74%,
-		rgb(255 255 255 / 30%) 75%,
-		rgb(255 255 255 / 0%) 76%,
-		rgb(0 0 0 / 0%) 100%
-	);
-}
-
-.module.fleet .lship .ship_hp_bar {
-	height: 9px;
-}
-
-.module.fleet .lship .ship_hp_prediction {
-	height: 9px;
-}
-
-.module.fleet .lship.seven .ship_hp_box {
-	height: 9px;
-}
-
-.module.fleet .lship.seven .ship_hp_bar {
-	height: 7px;
-}
-
-.module.fleet .lship.seven .ship_hp_prediction {
-	height: 7px;
-}
-
-.module.fleet .lship.seven .ship_hp_bar_metrics {
-	height: 4px;
-}
-
-.module.fleet .lship .ship_hp_pred_value,
-.module.fleet .sship .ship_hp_pred_value {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	line-height: 7px;
-	text-align: center;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .lship .ship_hp_pred_value .ship_hp_diff,
-.module.fleet .sship .ship_hp_pred_value .ship_hp_diff {
-	color: #ff6565;
-	font-size: 11px;
-	text-shadow:
-		-1px -1px 1px #3d1414, 0 -1px 1px #3d1414, 1px -1px 1px #3d1414,
-		-1px 0 1px #3d1414, 1px 0 1px #3d1414,
-		-1px 1px 1px #3d1414, 0 1px 1px #3d1414, 1px 1px 1px #3d1414;
-	opacity: 0.84;
-}
-
-.module.fleet .lship.seven .ship_hp_pred_value {
-	top: -1px;
-}
-
-/* ==> Akashi Timer <== */
-.module.fleet .lship:not(:hover) .ship_repair_data {
-	display: none;
-}
-
-.module.fleet .lship:hover .ship_repair_data {
-	display: block;
-}
-
-.module.fleet .lship .ship_repair_data {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	font-size: 10px;
-	width: 100%;
-	height: 100%;
-}
-
-.module.fleet .lship .ship_repair_tick::before {
-	content:"+" attr(data-tick);
-}
-
-.module.fleet .lship .ship_repair_tick {
-	width: 50%;
-	float: left;
-	text-align: center;
-	background-color: white;
-	color: green;
-}
-
-.module.fleet .lship .ship_repair_timer {
-	width: 50%;
-	float: left;
-	text-align: center;
-	background-color: white;
-	color: red;
-}
-
-/* ==> Akashi Timer <== */
-.module.fleet .lship .ship_col2 {
-	width: 40px;
-	height: 40px;
-	float: left;
-	margin: 0 5px 0 0;
-}
-
-.module.fleet .lship .ship_morale {
-	width: 40px;
-	height: 16px;
-	line-height: 16px;
-	text-align: center;
-	font-size: 12px;
-	margin: 0 0 2px;
-	border-radius: 5px;
-}
-
-.module.fleet .lship .ship_morale.glowing {
-	box-shadow: 0 0 10px 1px rgb(255 255 0 / 100%);
-}
-
-.module.fleet .lship .ship_morale.glowing.strong {
-	box-shadow: 0 0 10px 2px rgb(255 224 0 / 100%);
-}
-
-.module.fleet .lship .ship_morale.glowing.strongplus {
-	box-shadow: 0 0 10px 3px rgb(255 192 0 / 100%);
-}
-
-.module.fleet .lship .ship_exp_label {
-	width: 40px;
-	height: 11px;
-	line-height: 11px;
-	font-size: 11px;
-	text-align: center;
-	color: #aaa;
-	position: relative;
-}
-
-.module.fleet .lship .ship_exp_label .expNotice {
-	width: 40px;
-	height: 22px;
-	line-height: 22px;
-	position: absolute;
-	top: 0;
-	left: 0;
-	font-size: 14px;
-	text-shadow:
-		0 0 4px #000,
-		0 0 4px #000,
-		0 0 4px #000;
-	text-align: center;
-	color: #fc0;
-}
-
-.module.fleet .lship .ship_exp_next {
-	width: 40px;
-	height: 11px;
-	line-height: 11px;
-	font-size: 10px;
-	text-align: center;
-	color: #eee;
-}
-
-.module.fleet .lship .ship_gears {
-	width: 80px;
-	height: 40px;
-	float: left;
-	margin: 0 3px 0 0;
-}
-
-.module.fleet .lship .ship_gear {
-	width: 40px;
-	height: 20px;
-	float: left;
-}
-
-.module.fleet .lship .ship_gear.ship_gear_5 {
-	display: none;
-	position: relative;
-	left: 83px;
-	top: -40px;
-}
-
-.module.fleet .lship .ship_gear_star {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 8px 0 0 -5px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 12px;
-	color: #ff0;
-	background: #45a9a5;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .lship .ship_gear_ace {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 4px 0 0 15px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 12px;
-	color: #ff0;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .lship .ship_gear_ace img {
-	vertical-align: middle;
-	width: 17px;
-	height: 10px;
-	position: absolute;
-	left: -2px;
-	top: 1px;
-}
-
-.module.fleet .lship .ship_gear_icon {
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-	float: left;
-	border-radius: 9px;
-	margin: 1px 3px 0 0;
-}
-
-.module.fleet .lship .ship_gear.equipped .ship_gear_icon {
-	background: #fff;
-}
-
-.module.fleet .lship .ship_gear.equipped .ship_gear_icon.item_being_used {
-	background: #fe3;
-}
-
-.module.fleet .lship .ship_gear.empty .ship_gear_icon {
-	background: rgb(150 150 150 / 40%);
-}
-
-.module.fleet .lship .ship_gear_icon.goddess {
-	box-shadow: 0 0 4px #ff0,
-		0 0 4px #ff0,
-		0 0 4px #ff0 !important;
-}
-
-.module.fleet .lship .ship_gear_icon img {
-	width: 16px;
-	height: 16px;
-	margin: 1px;
-	vertical-align: top;
-}
-
-.module.fleet .lship .ship_gear_slot {
-	width: 15px;
-	height: 20px;
-	float: left;
-	margin-left: 3px;
-	line-height: 20px;
-	font-size: 12px;
-}
-
-.module.fleet .lship .ship_gear.equipped .ship_gear_slot {
-	color: #ddd;
-}
-
-.module.fleet .lship .ship_gear.empty .ship_gear_slot {
-	color: #999;
-}
-
-.module.fleet .lship .ship_supplies {
-	width: 40px;
-	height: 40px;
-	float: left;
-}
-
-.module.fleet .lship .ship_supply {
-	width: 40px;
-	height: 16px;
-	margin: 2px 0;
-	position: relative;
-	background: #555;
-	border: 1px solid #000;
-}
-
-.module.fleet .lship .ship_supply_text {
-	width: 38px;
-	height: 14px;
-	line-height: 14px;
-	font-size: 10px;
-	color: #fff;
-	top: 0;
-	left: 0;
-	position: absolute;
-	text-align: center;
-}
-
-.module.fleet .lship .ship_supply_bar {
-	height: 14px;
-}
-
-.module.fleet .lship .ship_fuel .ship_supply_bar {
-	background: #0C0;
-}
-
-.module.fleet .lship .ship_ammo .ship_supply_bar {
-	background: #990;
-}
-
-.module.fleet .lship .ship_supplies.slot5 {
-	height: 20px;
-	margin-top: 20px;
-}
-
-.module.fleet .lship .slot5 .ship_supply {
-	height: 10px;
-	margin: 0;
-}
-
-.module.fleet .lship .slot5 .ship_supply_text {
-	height: 8px;
-	line-height: 8px;
-	font-size: 8px;
-}
-
-.module.fleet .lship .slot5 .ship_supply_bar {
-	height: 8px;
-}
-
-.module.fleet .lship .ship_exp_box {
-	width: 290px;
-	height: 2px;
-	background: #555;
-	margin: 0 0 0 46px;
-}
-
-.module.fleet .lship.seven .ship_exp_box {
-	display: none;
-}
-
-.module.fleet .lship .ship_exp_bar {
-	height: 2px;
-	background: #78A9DA;
-	margin: 2px 0 0;
-}
-
-/* Short Ship */
-.module.fleet .sship {
-	width: 165px;
-	height: 50px;
-	margin: 0 0 2px;
-	border-radius: 5px;
-	position: relative;
-}
-
-.module.fleet .sship.ship-stamp::after {
-	content: attr(title);
-	display: inline;
-	top: 4px;
-	left: 20%;
-	position: absolute;
-	font-size: 20pt;
-	color: red;
-	transform: rotate(-3deg);
-	text-shadow: 1px 1px 1px black;
-	border: 1px red solid;
-	text-align: center;
-	vertical-align: middle;
-	width: 160px;
-	background-color: rgb(255 0 0 / 50%);
-	z-index: 1;
-}
-
-.module.fleet .sship .ex_item {
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-	position: absolute;
-	top: 30px;
-	left: 25px;
-	background: #fff;
-	border-radius: 9px;
-	z-index: 1;
-}
-
-.module.fleet .sship .ex_item .gear_star {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 8px 0 0 -5px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 12px;
-	color: #ff0;
-	background: #45a9a5;
-	pointer-events: none;
-	display: none;
-}
-
-.module.fleet .sship .ex_item.empty {
-	background: rgb(255 255 255 / 80%);
-}
-
-.module.fleet .sship .ex_item.item_being_used {
-	background: #fe3;
-}
-
-.module.fleet .sship .ex_item.goddess {
-	box-shadow: 0 0 4px #ff0,
-		0 0 4px #ff0,
-		0 0 4px #ff0 !important;
-}
-
-.module.fleet .sship .ex_item .gear_icon {
-	overflow: hidden;
-}
-
-.module.fleet .sship .ex_item .gear_icon img {
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-	vertical-align: top;
-}
-
-.module.fleet .sship .mvp_icon {
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	float: left;
-	position: absolute;
-	left: 0;
-	top: 28px;
-	z-index: 2;
-	overflow: hidden;
-	display: none;
-}
-
-.module.fleet .sship .mvp_icon img {
-	width: 20px;
-	height: 20px;
-	vertical-align: top;
-}
-
-.module.fleet .sship .ship_img {
-	width: 40px;
-	height: 40px;
-	float: left;
-	margin: 0 5px 0 0;
-	border-radius: 20px;
-	overflow: hidden;
-}
-
-.module.fleet .sship .ship_img img {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	position: relative;
-	margin: -1px 0 0 -1px;
-}
-
-.module.fleet .sship .ship_info {
-	width: 120px;
-	height: 40px;
-	float: left;
-}
-
-.module.fleet .sship .ship_name {
-	width: 120px;
-	height: 16px;
-	line-height: 16px;
-	font-size: 12px;
-	float: left;
-	color: #ddd;
-	font-weight: bold;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.module.fleet .sship .ship_hp {
-	width: 90px;
-	height: 24px;
-	float: left;
-	margin: 0 6px 0 0;
-}
-
-.module.fleet .sship .ship_type {
-	width: 33px;
-	height: 16px;
-	line-height: 16px;
-	float: left;
-	font-size: 10px;
-	color: #0FF;
-}
-
-.module.fleet .sship .ship_hp_text {
-	width: 57px;
-	height: 16px;
-	line-height: 16px;
-	float: left;
-	color: #0F0;
-	text-align: right;
-}
-
-.module.fleet .sship .ship_hp_cur {
-	color: #0f0;
-	font-size: 12px;
-}
-
-.module.fleet .sship .ship_hp_max {
-	color: #aaa;
-	font-size: 11px;
-}
-
-.module.fleet .sship .ship_hp_box {
-	width: 90px;
-	height: 8px;
-	float: left;
-	border: 1px solid #000;
-	background: #555;
-	position: relative;
-}
-
-.module.fleet .sship .ship_hp_bar {
-	height: 6px;
-}
-
-.module.fleet .sship .ship_hp_prediction {
-	height: 6px;
-}
-
-.module.fleet .sship .ship_hp_pred_value {
-	top: -13px;
-	left: -11px;
-}
-
-.module.fleet .sship .ship_hp_bar_metrics {
-	height: 4px;
-}
-
-.module.fleet .sship .ship_morale {
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	float: left;
-	margin: 2px;
-	background: #ff0;
-	border-radius: 10px;
-	font-size: 10px;
-	text-align: center;
-}
-
-.module.fleet .sship .ship_morale.glowing {
-	box-shadow: 0 0 10px 1px rgb(255 255 0 / 100%);
-}
-
-.module.fleet .sship .ship_bars {
-	width: 120px;
-	height: 6px;
-	margin: 1px 0 0 45px;
-	background: #555;
-}
-
-.module.fleet .sship .ship_bar {
-	width: 120px;
-	height: 2px;
-	user-select: none;
-}
-
-.module.fleet .sship .ship_bar.ship_exp {
-	background: #67ACF1;
-}
-
-.module.fleet .sship .ship_bar.ship_fuel {
-	background: #0C0;
-}
-
-.module.fleet .sship .ship_bar.ship_ammo {
-	background: #990;
-}
-
-/* Ship Misc Marker */
-.module.fleet .sSalt {
-	filter: blur(1.5px);
-}
-
-.module.fleet .sWife .ship_name {
-	color: #fbb;
-}
-
-.module.fleet .ship_no_lock {
-	visibility: hidden;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	text-align: center;
-	background-color: pink;
-	color: red;
-}
-
-.module.fleet .sLock .ship_no_lock {
-	animation: lock-warning 0.5s steps(5,start) infinite;
-	visibility: visible;
+
+	.shiplist {
+		width: 340px;
+		height: 315px;
+
+		.shiplist_combined_fleet {
+			width: 165px;
+			height: 315px;
+			float: left;
+			margin: 0 5px 0 0;
+		}
+
+		.special_cutin {
+			background-color: rgb(170 0 136 / 40%);
+		}
+
+		.hp_repairing {
+			background-color: rgb(100 255 100 / 30%);
+		}
+
+		.hp_fcf {
+			background-color: rgb(255 255 255 / 40%);
+		}
+
+		.akashiMark {
+			background-color: rgb(191 255 100 / 15%);
+		}
+
+		.hp_taiha {
+			background-color: rgb(255 0 0 / 40%);
+		}
+
+		/* Single kanmusu */
+		.lship {
+			width: 340px;
+			height: 50px;
+			margin: 0 0 3px;
+			border-radius: 5px;
+			padding: 3px 0 0;
+			position: relative;
+
+			.locktag {
+				width: 15px;
+				height: 15px;
+				line-height: 12px;
+				float: left;
+				position: absolute;
+				left: 28px;
+				top: 0;
+				z-index: 1;
+				overflow: hidden;
+				border-radius: 50%;
+				border: 1px #fff solid;
+				color: #fff;
+				background: #aaa;
+				opacity: 0.8;
+				font-size: 10px;
+				text-align: center;
+				text-shadow: 1px 1px 1px #224169;
+				pointer-events: none;
+				display: none;
+			}
+
+			.ribbon {
+				width: 12px;
+				height: 28px;
+				float: left;
+				position: absolute;
+				left: 1px;
+				top: 0;
+				transform: rotate(34deg);
+				z-index: 1;
+				overflow: visible;
+				opacity: 0.8;
+				pointer-events: none;
+				display: none;
+
+				img {
+					width: 12px;
+					height: 28px;
+				}
+
+				&.r-1 img {
+					content: url("/assets/img/client/ribbons/1.png");
+					filter: drop-shadow(0 0 2px rgb(255 243 140 / 100%));
+				}
+
+				&.r-2 img {
+					content: url("/assets/img/client/ribbons/2.png");
+					filter: drop-shadow(0 0 2px rgb(255 87 112 / 100%));
+				}
+			}
+
+			.ship_hp_pred_value {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				line-height: 7px;
+				text-align: center;
+				pointer-events: none;
+				display: none;
+
+				.ship_hp_diff {
+					color: #ff6565;
+					font-size: 11px;
+					text-shadow:
+							-1px -1px 1px #3d1414, 0 -1px 1px #3d1414, 1px -1px 1px #3d1414,
+							-1px 0 1px #3d1414, 1px 0 1px #3d1414,
+							-1px 1px 1px #3d1414, 0 1px 1px #3d1414, 1px 1px 1px #3d1414;
+					opacity: 0.84;
+				}
+			}
+
+			&.ship-stamp::after {
+				content: attr(title);
+				display: inline;
+				top: 4px;
+				left: 20%;
+				position: absolute;
+				font-size: 20pt;
+				color: red;
+				transform: rotate(-3deg);
+				text-shadow: 1px 1px 1px black;
+				border: 1px red solid;
+				text-align: center;
+				vertical-align: middle;
+				width: 160px;
+				background-color: rgb(255 0 0 / 50%);
+				z-index: 1;
+			}
+
+			.ex_item {
+				width: 18px;
+				height: 18px;
+				line-height: 18px;
+				position: absolute;
+				top: 30px;
+				left: 25px;
+				background: #fff;
+				border-radius: 9px;
+				z-index: 1;
+
+				.gear_star {
+					width: 12px;
+					position: absolute;
+					font-size: 8px;
+					margin: 8px 0 0 -5px;
+					height: 12px;
+					overflow: hidden;
+					border-radius: 6px;
+					text-align: center;
+					line-height: 12px;
+					color: #ff0;
+					background: #45a9a5;
+					pointer-events: none;
+					display: none;
+				}
+
+				&.empty {
+					background: rgb(255 255 255 / 80%);
+				}
+
+				&.item_being_used {
+					background: #fe3;
+				}
+
+				&.goddess {
+					box-shadow: 0 0 4px #ff0,
+					0 0 4px #ff0,
+					0 0 4px #ff0 !important;
+				}
+
+				.gear_icon {
+					overflow: hidden;
+
+					img {
+						width: 18px;
+						height: 18px;
+						line-height: 18px;
+						vertical-align: top;
+					}
+				}
+
+				.ship_img {
+					width: 40px;
+					height: 40px;
+					float: left;
+					margin: 0 5px 0 0;
+					border-radius: 20px;
+					overflow: hidden;
+
+					img {
+						width: 40px;
+						height: 40px;
+						position: relative;
+						margin: -1px 0 0 -1px;
+						border-radius: 50%;
+					}
+				}
+
+				.mvp_icon {
+					width: 20px;
+					height: 20px;
+					line-height: 20px;
+					float: left;
+					position: absolute;
+					left: 0;
+					top: 28px;
+					z-index: 2;
+					overflow: hidden;
+					display: none;
+
+					img {
+						width: 20px;
+						height: 20px;
+						vertical-align: top;
+					}
+				}
+			}
+
+			/* ------- Name, type, level, HP column ------- */
+			.ship_col1 {
+				width: 120px;
+				height: 41px;
+				float: left;
+				margin: 0 5px 0 0;
+
+				.ship_name {
+					width: 120px;
+					height: 15px;
+					line-height: 14px;
+					font-size: 12px;
+					float: left;
+					color: #ddd;
+					font-weight: bold;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				.ship_type {
+					width: 33px;
+					height: 15px;
+					line-height: 15px;
+					float: left;
+					font-size: 10px;
+					color: #0ff;
+					white-space: nowrap;
+				}
+
+				.ship_level {
+					width: 32px;
+					height: 15px;
+					line-height: 15px;
+					float: left;
+					font-size: 11px;
+					color: #fff;
+					white-space: nowrap;
+
+					.value.goaled {
+						filter: drop-shadow(0 0 2px #fe2);
+					}
+				}
+
+				.ship_hp_text {
+					width: 55px;
+					height: 15px;
+					line-height: 15px;
+					float: left;
+					color: #0f0;
+					text-align: right;
+					white-space: nowrap;
+				}
+
+				.ship_hp_cur {
+					color: #0f0;
+					font-size: 12px;
+				}
+
+				.ship_hp_max {
+					color: #aaa;
+					font-size: 11px;
+				}
+
+				.ship_hp_box {
+					width: 120px;
+					height: 11px;
+					float: left;
+					border: 1px solid #000;
+					background: #555;
+					position: relative;
+
+					.ship_hp_bar {
+						height: 9px;
+
+						&.hp_repairing {
+							background-color: #ace;
+						}
+
+						&.hp_fcf {
+							background-color: #fff;
+						}
+
+						&.hp_sunk {
+							background-color: #ccc;
+						}
+					}
+
+					.ship_hp_prediction {
+						height: 9px;
+					}
+
+					.ship_hp_bar,
+					.ship_hp_prediction {
+						&.hp_normal {
+							background-color: #0f0;
+						}
+
+						&.hp_shouha {
+							background-color: #ff0;
+						}
+
+						&.hp_chuuha {
+							background-color: #f90;
+						}
+
+						&.hp_taiha {
+							background-color: #f00;
+						}
+					}
+
+					.ship_hp_bar_metrics {
+						height: 5px;
+						float: left;
+						background-image: linear-gradient(
+								to right,
+								rgb(0 0 0 / 0%) 0%,
+								rgb(0 0 0 / 0%) 24%,
+								rgb(0 0 0 / 30%) 24%,
+								rgb(255 255 255 / 30%) 25%,
+								rgb(255 255 255 / 0%) 26%,
+								rgb(0 0 0 / 0%) 49%,
+								rgb(0 0 0 / 30%) 49.5%,
+								rgb(255 255 255 / 30%) 50.5%,
+								rgb(255 255 255 / 0%) 51%,
+								rgb(0 0 0 / 0%) 74%,
+								rgb(0 0 0 / 30%) 74%,
+								rgb(255 255 255 / 30%) 75%,
+								rgb(255 255 255 / 0%) 76%,
+								rgb(0 0 0 / 0%) 100%
+						);
+					}
+				}
+			}
+
+			/* ------- Akashi Timer ------- */
+			.ship_repair_data {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				font-size: 10px;
+				width: 100%;
+				height: 100%;
+			}
+
+			&:not(:hover) .ship_repair_data {
+				display: none;
+			}
+
+			&:hover .ship_repair_data {
+				display: block;
+			}
+
+			.ship_repair_tick {
+				width: 50%;
+				float: left;
+				text-align: center;
+				background-color: white;
+				color: green;
+
+				&::before {
+					content:"+" attr(data-tick);
+				}
+			}
+
+			.ship_repair_timer {
+				width: 50%;
+				float: left;
+				text-align: center;
+				background-color: white;
+				color: red;
+			}
+
+			/* ------- Morale, XP column ------- */
+			.ship_col2 {
+				width: 40px;
+				height: 40px;
+				float: left;
+				margin: 0 5px 0 0;
+
+				.ship_morale {
+					width: 40px;
+					height: 16px;
+					line-height: 16px;
+					text-align: center;
+					font-size: 12px;
+					margin: 0 0 2px;
+					border-radius: 5px;
+
+					&.glowing {
+						box-shadow: 0 0 10px 1px rgb(255 255 0 / 100%);
+
+						&.strong {
+							box-shadow: 0 0 10px 2px rgb(255 224 0 / 100%);
+						}
+
+						&.strongplus {
+							box-shadow: 0 0 10px 3px rgb(255 192 0 / 100%);
+						}
+					}
+				}
+
+				.ship_exp_label {
+					width: 40px;
+					height: 11px;
+					line-height: 11px;
+					font-size: 11px;
+					text-align: center;
+					color: #aaa;
+					position: relative;
+
+					.expNotice {
+						width: 40px;
+						height: 22px;
+						line-height: 22px;
+						position: absolute;
+						top: 0;
+						left: 0;
+						font-size: 14px;
+						text-shadow:
+								0 0 4px #000,
+								0 0 4px #000,
+								0 0 4px #000;
+						text-align: center;
+						color: #fc0;
+					}
+				}
+
+				.ship_exp_next {
+					width: 40px;
+					height: 11px;
+					line-height: 11px;
+					font-size: 10px;
+					text-align: center;
+					color: #eee;
+				}
+			}
+
+			/* ------- Ship equipment ------- */
+			.ship_gears {
+				width: 80px;
+				height: 40px;
+				float: left;
+				margin: 0 3px 0 0;
+
+				.ship_gear {
+					width: 40px;
+					height: 20px;
+					float: left;
+
+					&.ship_gear_5 {
+						display: none;
+						position: relative;
+						left: 83px;
+						top: -40px;
+					}
+
+					.ship_gear_star {
+						width: 12px;
+						position: absolute;
+						font-size: 8px;
+						margin: 8px 0 0 -5px;
+						height: 12px;
+						overflow: hidden;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 12px;
+						color: #ff0;
+						background: #45a9a5;
+						pointer-events: none;
+						display: none;
+					}
+
+					.ship_gear_ace {
+						width: 12px;
+						position: absolute;
+						font-size: 8px;
+						margin: 4px 0 0 15px;
+						height: 12px;
+						overflow: hidden;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 12px;
+						color: #ff0;
+						pointer-events: none;
+						display: none;
+
+						img {
+							vertical-align: middle;
+							width: 17px;
+							height: 10px;
+							position: absolute;
+							left: -2px;
+							top: 1px;
+						}
+					}
+
+					.ship_gear_icon {
+						width: 18px;
+						height: 18px;
+						line-height: 18px;
+						float: left;
+						border-radius: 9px;
+						margin: 1px 3px 0 0;
+
+						&.goddess {
+							box-shadow: 0 0 4px #ff0,
+							0 0 4px #ff0,
+							0 0 4px #ff0 !important;
+						}
+
+						img {
+							width: 16px;
+							height: 16px;
+							margin: 1px;
+							vertical-align: top;
+						}
+					}
+
+					&.equipped {
+						.ship_gear_icon {
+							background: #fff;
+
+							&.item_being_used {
+								background: #fe3;
+							}
+						}
+					}
+
+					&.empty .ship_gear_icon {
+						background: rgb(150 150 150 / 40%);
+					}
+
+					.ship_gear_slot {
+						width: 15px;
+						height: 20px;
+						float: left;
+						margin-left: 3px;
+						line-height: 20px;
+						font-size: 12px;
+					}
+
+					&.equipped .ship_gear_slot {
+						color: #ddd;
+					}
+
+					&.empty .ship_gear_slot {
+						color: #999;
+					}
+				}
+			}
+
+			/* ------- Ship fuel and ammo ------- */
+			.ship_supplies {
+				width: 40px;
+				height: 40px;
+				float: left;
+
+				.ship_supply {
+					width: 40px;
+					height: 16px;
+					margin: 2px 0;
+					position: relative;
+					background: #555;
+					border: 1px solid #000;
+
+					.ship_supply_text {
+						width: 38px;
+						height: 14px;
+						line-height: 14px;
+						font-size: 10px;
+						color: #fff;
+						top: 0;
+						left: 0;
+						position: absolute;
+						text-align: center;
+					}
+
+					.ship_supply_bar {
+						height: 14px;
+					}
+
+					&.ship_fuel .ship_supply_bar {
+						background: #0C0;
+					}
+
+					&.ship_ammo .ship_supply_bar {
+						background: #990;
+					}
+				}
+
+				&.slot5 {
+					height: 20px;
+					margin-top: 20px;
+
+					.ship_supply {
+						height: 10px;
+						margin: 0;
+
+						.ship_supply_text {
+							height: 8px;
+							line-height: 8px;
+							font-size: 8px;
+						}
+
+						.ship_supply_bar {
+							height: 8px;
+						}
+					}
+				}
+			}
+
+			/* ------- Ship experience bar ------- */
+			.ship_exp_box {
+				width: 290px;
+				height: 2px;
+				background: #555;
+				margin: 0 0 0 46px;
+
+				.ship_exp_bar {
+					height: 2px;
+					background: #78A9DA;
+					margin: 2px 0 0;
+				}
+			}
+		}
+	}
+
+	/* Ship Misc Marker */
+	.sSalt {
+		filter: blur(1.5px);
+	}
+
+	.sWife .ship_name {
+		color: #fbb;
+	}
+
+	.ship_no_lock {
+		visibility: hidden;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+		background-color: pink;
+		color: red;
+	}
+
+	.sLock .ship_no_lock {
+		animation: lock-warning 0.5s steps(5,start) infinite;
+		visibility: visible;
+	}
 }
 
 /* ------- STATUS ------- */
-.module.status .status_box {
-	width: 110px;
-	height: 20px;
-	line-height: 20px;
-	float: left;
-	margin: 0 3px 3px 0;
-}
+.module.status {
+	grid-area: status;
 
-.module.status .status_icon {
-	width: 20px;
-	height: 20px;
-	float: left;
-	margin: 0 4px 0 1px;
-}
+	.status_box {
+		width: 110px;
+		height: 20px;
+		line-height: 20px;
+		float: left;
+		margin: 0 3px 3px 0;
 
-.module.status .status_icon.enclose {
-	background: #fff;
-	border-radius: 10px;
-}
+		.status_icon {
+			width: 20px;
+			height: 20px;
+			float: left;
+			margin: 0 4px 0 1px;
 
-.module.status .status_icon img {
-	width: 20px;
-	height: 20px;
-	vertical-align: top;
-}
+			&.enclose {
+				background: #fff;
+				border-radius: 10px;
+			}
 
-.module.status .status_text {
-	width: 85px;
-	height: 20px;
-	float: left;
-	color: #fff;
-	text-shadow: 0 0 5px #000;
-	font-size: 13px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	user-select: none;
-}
+			img {
+				width: 20px;
+				height: 20px;
+				vertical-align: top;
+			}
+		}
 
-.module.status .status_text.bad {
-	color: #faa;
-}
+		.status_text {
+			width: 85px;
+			height: 20px;
+			float: left;
+			color: #fff;
+			text-shadow: 0 0 5px #000;
+			font-size: 13px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			user-select: none;
 
-.module.status .status_text.good {
-	color: #afa;
-}
+			&.bad {
+				color: #faa;
+			}
 
-.module.status .status_text.slotsWarn {
-	color: #ffa;
-}
+			&.good {
+				color: #afa;
+			}
 
-.module.status .status_support {
-	display: none;
-}
+			&.slotsWarn {
+				color: #ffa;
+			}
+		}
 
-.module.status .status_support img {
-	width: 14px;
-	height: 14px;
-	margin: 3px;
+		&.status_support {
+			display: none;
+
+			img {
+				width: 14px;
+				height: 14px;
+				margin: 3px;
+			}
+		}
+	}
 }
 
 /* AIR BASES
 ------------------------------ */
-.module.fleet .airbase_list {
+.module.fleet .shiplist.airbase_list {
 	overflow: hidden auto;
-}
 
-.airbase {
-	width: 340px;
-	height: 75px;
-	margin: 0 0 3px;
-}
+	.airbase {
+		width: 340px;
+		height: 75px;
+		margin: 0 0 3px;
 
-.wide_column .airbase {
-	height: 128px;
-}
+		.airbase_infos {
+			width: 340px;
+			height: 20px;
+			margin: 0 0 2px;
+			background: rgb(0 0 0 / 40%);
+			border-radius: 6px;
 
-.airbase .airbase_infos {
-	width: 340px;
-	height: 20px;
-	margin: 0 0 2px;
-	background: rgb(0 0 0 / 40%);
-	border-radius: 6px;
-}
+			.airbase_info {
+				float: left;
 
-.airbase .airbase_info {
-	float: left;
-}
+				&.base_map {
+					width: 18px;
+					font-size: 11px;
+					font-weight: bold;
+					color: #fc0;
+					text-shadow: 1px 1px 3px #333;
+					text-align: right;
+					line-height: 20px;
+					margin: 0 4px 0 0;
+					white-space: nowrap;
+					overflow: hidden;
+				}
 
-.airbase .base_map {
-	width: 18px;
-	font-size: 11px;
-	font-weight: bold;
-	color: #fc0;
-	text-shadow: 1px 1px 3px #333;
-	text-align: right;
-	line-height: 20px;
-	margin: 0 4px 0 0;
-	white-space: nowrap;
-	overflow: hidden;
-}
+				&.base_name {
+					width: 65px;
+					height: 20px;
+					float: left;
+					color: #ccc;
+					text-shadow: 1px 1px 3px #333;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					font-size: 11px;
+					line-height: 20px;
+					margin: 0 3px 0 0;
+				}
 
-.airbase .base_name {
-	width: 65px;
-	height: 20px;
-	float: left;
-	color: #ccc;
-	text-shadow: 1px 1px 3px #333;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	font-size: 11px;
-	line-height: 20px;
-	margin: 0 3px 0 0;
-}
+				&.base_stats {
+					width: 200px;
+					height: 20px;
+					float: left;
+					overflow: hidden;
 
-.airbase .base_stats {
-	width: 200px;
-	height: 20px;
-	float: left;
-	overflow: hidden;
-}
+					.base_stat {
+						width: 55px;
+						height: 20px;
+						float: left;
+						overflow: hidden;
 
-.airbase .base_stats .base_stat {
-	width: 55px;
-	height: 20px;
-	float: left;
-	overflow: hidden;
-}
+						.base_stat_icon {
+							width: 18px;
+							height: 18px;
+							line-height: 16px;
+							margin: 1px 2px 1px 0;
+							border-radius: 9px;
+							background: #131313;
+							float: left;
+							padding: 1px;
 
-.airbase .base_stats .base_stat_icon {
-	width: 18px;
-	height: 18px;
-	line-height: 16px;
-	margin: 1px 2px 1px 0;
-	border-radius: 9px;
-	background: #131313;
-	float: left;
-	padding: 1px;
-}
+							img {
+								width: 16px;
+								height: 16px;
+								filter: invert(100%);
+								vertical-align: top;
+							}
+						}
 
-.airbase .base_stats .base_stat_icon img {
-	width: 16px;
-	height: 16px;
-	filter: invert(100%);
-	vertical-align: top;
-}
+						.base_stat_value {
+							width: 35px;
+							height: 20px;
+							line-height: 20px;
+							float: left;
+							text-align: left;
+							white-space: nowrap;
+							color: #ccc;
+							font-size: 11px;
+						}
 
-.airbase .base_stats .base_stat_value {
-	width: 35px;
-	height: 20px;
-	line-height: 20px;
-	float: left;
-	text-align: left;
-	white-space: nowrap;
-	color: #ccc;
-	font-size: 11px;
-}
+						&.base_level {
+							width: 35px;
 
-.airbase .base_stats .base_stat.base_level {
-	width: 35px;
-}
+							.base_stat_value {
+								width: 15px;
+							}
+						}
 
-.airbase .base_stats .base_stat.base_level .base_stat_value {
-	width: 15px;
-}
+						&.base_range {
+							width: 35px;
 
-.airbase .base_stats .base_stat.base_range {
-	width: 35px;
-}
+							.base_stat_value {
+								width: 15px;
+							}
+						}
 
-.airbase .base_stats .base_stat.base_range .base_stat_value {
-	width: 15px;
-}
+						&.base_afp {
+							width: 75px;
 
-.airbase .base_stats .base_stat.base_afp {
-	width: 75px;
-}
+							.base_stat_value {
+								width: 50px;
+							}
+						}
+					}
+				}
 
-.airbase .base_stats .base_stat.base_afp .base_stat_value {
-	width: 50px;
-}
+				&.base_action {
+					width: 40px;
+					height: 20px;
+					line-height: 20px;
+					white-space: nowrap;
+					overflow: hidden;
+					float: left;
+					color: #fff;
+					text-align: right;
+					font-size: 11px;
+				}
+			}
 
-.airbase .base_action {
-	width: 40px;
-	height: 20px;
-	line-height: 20px;
-	white-space: nowrap;
-	overflow: hidden;
-	float: left;
-	color: #fff;
-	text-align: right;
-	font-size: 11px;
-}
+			.base_planes {
+				width: 340px;
+				height: 52px;
+				float: left;
+				overflow: hidden;
 
-.airbase .base_planes {
-	width: 340px;
-	height: 52px;
-	float: left;
-	overflow: hidden;
-}
+				.airbase_plane {
+					width: 165px;
+					height: 24px;
+					margin: 0 0 2px 5px;
+					background: rgb(0 0 0 / 40%);
+					float: left;
+					border-radius: 6px;
+					overflow: hidden;
+					white-space: nowrap;
 
-.wide_column .airbase .base_planes {
-	height: 106px;
-}
+					&.moving {
+						background: rgb(255 200 0 / 20%);
+					}
 
-/* PLANES */
-.airbase_plane {
-	width: 165px;
-	height: 24px;
-	margin: 0 0 2px 5px;
-	background: rgb(0 0 0 / 40%);
-	float: left;
-	border-radius: 6px;
-	overflow: hidden;
-	white-space: nowrap;
-}
+					.base_plane_col {
+						float: left;
+						height: 24px;
+						overflow: hidden;
+					}
 
-.wide_column .airbase_plane {
-	width: 334px;
-}
+					.base_plane_img {
+						width: 80px;
+						text-align: center;
+						position: relative;
+						margin: 0 -5px 0 -10px;
 
-.airbase_plane.moving {
-	background: rgb(255 200 0 / 20%);
-}
+						img {
+							width: 100%;
+							vertical-align: middle;
+							margin: -60% -50%;
+							mask-image: linear-gradient(to right, rgb(34 34 34 / 100%) 30%, rgb(34 34 34 / 0%) 100%);
+						}
+					}
 
-.base_plane_col {
-	float: left;
-	height: 24px;
-	overflow: hidden;
-}
+					.base_plane_star {
+						width: 12px;
+						height: 12px;
+						position: relative;
+						float: left;
+						margin: 10px 0 0 -24px;
+						border-radius: 6px;
+						font-size: 10px;
+						line-height: 12px;
+						text-align: center;
+						overflow: hidden;
+						color: #ff0;
+						background: #45a9a5;
+						pointer-events: none;
+						display: none;
+					}
 
-.base_plane_img {
-	width: 80px;
-	text-align: center;
-	position: relative;
-	margin: 0 -5px 0 -10px;
-}
+					.base_plane_icon {
+						width: 20px;
+						line-height: 20px;
+						margin: 2px 0 0 5px;
 
-.base_plane_img img {
-	width: 100%;
-	vertical-align: middle;
-	margin: -60% -50%;
-	mask-image: linear-gradient(to right, rgb(34 34 34 / 100%) 30%, rgb(34 34 34 / 0%) 100%);
-}
+						img {
+							width: 20px;
+							height: 20px;
+							vertical-align: top;
+						}
+					}
 
-.base_plane_star {
-	width: 12px;
-	height: 12px;
-	position: relative;
-	float: left;
-	margin: 10px 0 0 -24px;
-	border-radius: 6px;
-	font-size: 10px;
-	line-height: 12px;
-	text-align: center;
-	overflow: hidden;
-	color: #ff0;
-	background: #45a9a5;
-	pointer-events: none;
-	display: none;
-}
+					.base_plane_chevs {
+						width: 15px;
+						margin: 0 2px 0 0;
 
-.base_plane_icon {
-	width: 20px;
-	line-height: 20px;
-	margin: 2px 0 0 5px;
-}
+						img {
+							width: 25px;
+							margin: 5px 0 5px -5px;
+							position: relative;
+						}
+					}
 
-.base_plane_icon img {
-	width: 20px;
-	height: 20px;
-	vertical-align: top;
-}
+					.base_plane_name {
+						display: none;
+						line-height: 24px;
+						font-size: 11px;
+						text-shadow: 2px 2px 4px #333,
+						2px 2px 4px #333;
+						color: #ccc;
+						margin: 0 0 0 2px;
+						width: 120px;
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}
 
-.base_plane_chevs {
-	width: 15px;
-	margin: 0 2px 0 0;
-}
+					.base_plane_count {
+						max-width: 35px;
+						line-height: 24px;
+						font-size: 11px;
+						text-shadow: 2px 2px 4px #333,
+						2px 2px 4px #333;
+						text-align: center;
+						color: #ccc;
+						margin: 0 1px 0 0;
 
-.base_plane_chevs img {
-	width: 25px;
-	margin: 5px 0 5px -5px;
-	position: relative;
-}
+						&.unsupplied {
+							color: #f55;
+						}
+					}
 
-.base_plane_name {
-	display: none;
-	line-height: 24px;
-	font-size: 11px;
-	text-shadow: 2px 2px 4px #333,
-		2px 2px 4px #333;
-	color: #ccc;
-	margin: 0 0 0 2px;
-	width: 120px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
+					.base_plane_cond {
+						width: 16px;
+						padding: 4px 0;
+						line-height: 16px;
+						float: right;
 
-.wide_column .base_plane_name {
-	display: inline-block !important;
-	width: 164px;
-	margin-right: 2px;
-}
-
-.wide_column.long_name .base_plane_name {
-	width: 287px;
-}
-
-.base_plane_count {
-	max-width: 35px;
-	line-height: 24px;
-	font-size: 11px;
-	text-shadow: 2px 2px 4px #333,
-		2px 2px 4px #333;
-	text-align: center;
-	color: #ccc;
-	margin: 0 1px 0 0;
-}
-
-.base_plane_count.unsupplied {
-	color: #f55;
-}
-
-.base_plane_cond {
-	width: 16px;
-	padding: 4px 0;
-	line-height: 16px;
-	float: right;
-}
-
-.base_plane_cond img {
-	width: 16px;
-	height: 16px;
-	vertical-align: top;
-}
-
-.wide_column .base_plane_cond {
-	margin-right: 5px;
-}
-
-.long_name .name_toggle_group {
-	display: none;
-}
-
-.long_name .base_plane_name {
-	display: inline-block;
+						img {
+							width: 16px;
+							height: 16px;
+							vertical-align: top;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 /* ANIMATIONS
