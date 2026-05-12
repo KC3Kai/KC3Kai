@@ -96,7 +96,9 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
+			KC3ShipManager.onPort = true;
 			KC3ShipManager.set(response.api_data.api_ship, true);
+			KC3ShipManager.onPort = false;
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			var utcSeconds = Date.toUTCseconds(headers.Date);
@@ -156,6 +158,7 @@ Previously known as "Reactor"
 			const lastSortie = [KC3SortieManager.map_world || 0, KC3SortieManager.map_num || 0];
 			KC3SortieManager.endSortie(response.api_data);
 			
+
 			PlayerManager.loadBases()
 				.setBaseConvertingSlots(response.api_data.api_plane_info);
 			
@@ -635,6 +638,7 @@ Previously known as "Reactor"
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
 			PlayerManager.akashiRepair.onPresetSelect(PlayerManager.fleets[deckId-1]);
+			PlayerManager.nosakiSparkle.onPresetSelect(PlayerManager.fleets[deckId-1]);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
 			PlayerManager.saveFleets();
 			console.log("Applied Preset", params.api_preset_no, "to fleet", deckId, response.api_data);
@@ -942,10 +946,12 @@ Previously known as "Reactor"
 						PlayerManager.fleets[oldFleetIndex].ships.splice(oldShipIndex, 1);
 						PlayerManager.fleets[oldFleetIndex].ships.push(-1);
 					}
-					// If not the same fleet, also recheck akashi repair of source fleet
+					// If not the same fleet, also recheck akashi repair and nosaki sparkle of source fleet
 					if(oldFleetIndex !== fleetIndex){
 						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleetIndex]);
 						PlayerManager.fleets[oldFleetIndex].updateAkashiRepairDisplay();
+						PlayerManager.nosakiSparkle.onChange(PlayerManager.fleets[oldFleetIndex]);
+						PlayerManager.fleets[oldFleetIndex].updateNosakiSparkleDisplay();
 					}
 					// If the same fleet, target ship might be dragged to an empty slot after another empty slot
 					else {
@@ -960,6 +966,8 @@ Previously known as "Reactor"
 			}
 			PlayerManager.akashiRepair.onChange(PlayerManager.fleets[fleetIndex]);
 			PlayerManager.fleets[fleetIndex].updateAkashiRepairDisplay();
+			PlayerManager.nosakiSparkle.onChange(PlayerManager.fleets[fleetIndex]);
+			PlayerManager.fleets[fleetIndex].updateNosakiSparkleDisplay();
 			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: fleetNum });
 		},

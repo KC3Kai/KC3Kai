@@ -53,6 +53,7 @@ KC3改 Ship Object
 		this.lock = 0;
 		this.sally = 0;
 		this.akashiMark = false;
+		this.nosakiMark = false;
 		this.preExpedCond = [
 			/* Data Example
 			["exped300",12,20, 0], // fully supplied

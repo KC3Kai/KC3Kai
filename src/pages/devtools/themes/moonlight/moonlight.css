@@ -4012,6 +4012,9 @@ ABYSS FLEET
 .module.fleet .shiplist .akashiMark {
 	background-image: radial-gradient(rgba(255,0,255, 0.07) 65%, rgba(255,0,255, 0.4) 90%, rgba(255,0,255, 0.6) 99%) !important;
 }
+.module.fleet .shiplist .nosakiMark {
+	background-image: radial-gradient(rgba(255, 255, 0, 0.1) 65%, rgba(255, 255, 0, 0.6) 90%, rgba(255, 255, 0, 0.8) 99%) !important;
+}
 .module.fleet .shiplist .hp_taiha {
 	background:rgba(155,0,0,1);
 	/*animation: taihaPulse 5s infinite;
@@ -6066,7 +6069,9 @@ ABYSS FLEET
 .h .module.status.squish .status_akashi,
 .v .module.status.squish .status_akashi,
 .h .module.status.squish .status_docking,
-.v .module.status.squish .status_docking {
+.v .module.status.squish .status_docking,
+.h .module.status.squish .status_nosaki,
+.v .module.status.squish .status_nosaki {
 	display:none;
 }
 

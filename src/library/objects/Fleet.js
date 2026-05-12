@@ -117,6 +117,7 @@ Contains summary information about a fleet and its ships
 			}
 
 			this.updateAkashiRepairDisplay();
+			this.updateNosakiSparkleDisplay();
 		}
 	};
 	
@@ -207,6 +208,7 @@ Contains summary information about a fleet and its ships
 	KC3Fleet.prototype.clearNonFlagShips = function(){
 		this.ships.fill(-1, 1);
 		this.updateAkashiRepairDisplay();
+		this.updateNosakiSparkleDisplay();
 	};
 	
 	KC3Fleet.prototype.discard = function(shipId) {
@@ -274,6 +276,37 @@ Contains summary information about a fleet and its ships
 		return function (rosterId, position, ship) {
 			var inRange = position < repairSlotCount;
 			ship.akashiMark = inRange && !ship.isStriped() && ship.isFree();
+		};
+	};
+
+	/*--------------------------------------------------------*/
+	/*-------------------[ NOSAKI SPARKLE ]-------------------*/
+	/*--------------------------------------------------------*/
+
+	/** Mark the fleet's ships as being sparkled (or not)
+	 *  Called when the fleet changes or is on sortie or PvP
+	 */
+	KC3Fleet.prototype.updateNosakiSparkleDisplay = function () {
+		let sparklerPos = KC3NosakiSparkle.getSparklerPosition(this);
+		if (sparklerPos && !this._canDoSparkle(sparklerPos)) {
+			sparklerPos = 0;
+		}
+		this.ship(this._updateSparkleStatus(sparklerPos));
+	};
+
+	/** @return true if the sparkler sparkle the fleet */
+	KC3Fleet.prototype._canDoSparkle = function (sparklerPos) {
+		if (!sparklerPos) {
+			return false;
+		}
+		const sparkler = this.ship(sparklerPos - 1);
+		return !sparkler.isShouha() && sparkler.isSupplied() && sparkler.morale >= 30 && sparkler.isFree();
+	};
+
+	/** @return a function to pass to this.ship() that will update the ships' sparkle status */
+	KC3Fleet.prototype._updateSparkleStatus = function (sparklerPos) {
+		return function (rosterId, position, ship) {
+			ship.nosakiMark = !!sparklerPos && sparklerPos - 1 !== position && ship.isFree();
 		};
 	};
 
@@ -1134,6 +1167,14 @@ Contains summary information about a fleet and its ships
 	KC3Fleet.prototype.isOnExped = function(){
 		return this.fleetId > 1 && !!this.mission && this.mission[0] > 0;
 	};
+
+	KC3Fleet.prototype.isOnSortieOrPvP = function(){
+		const fleetsSent = KC3SortieManager.isCombinedSortie()
+			? [1, 2]
+			: [KC3SortieManager.fleetSent];
+		return (KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
+			&& fleetsSent.includes(this.fleetId);
+	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){
 		var highestDocking = 0,
@@ -1160,7 +1201,10 @@ Contains summary information about a fleet and its ships
 			],
 		};
 	};
-	
+
+	KC3Fleet.prototype.hasNosakiMark = function(){
+		return this.shipsUnescaped().some(ship => ship.nosakiMark);
+	};
 	
 	/*--------------------------------------------------------*/
 	/*-------------------[ ELOS FUNCTIONS ]-------------------*/

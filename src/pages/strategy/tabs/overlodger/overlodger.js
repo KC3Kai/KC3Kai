@@ -50,8 +50,8 @@
 		},
 		dataType       = [
 			// Apply grouping
-			['sortie','pvp'   ,'exped' ,'quest' ,'akashi' ,'regen'  ,'useitem'],
-			['crship','critem','dsship','dsitem','remodel','rmditem','lbas'   ],
+			['sortie','pvp'   ,'exped' ,'quest' ,'akashi' ,'nosaki' ,'regen','useitem'],
+			['crship','critem','dsship','dsitem','remodel','rmditem','lbas' ],
 			['overall']
 		],
 		dataScale      = [

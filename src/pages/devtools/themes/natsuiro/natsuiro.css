@@ -3455,6 +3455,9 @@ ABYSS FLEET
 .module.fleet .shiplist .akashiMark {
 	background-color:rgba(191, 255, 100, 0.15);
 }
+.module.fleet .shiplist .nosakiMark {
+	background-color:rgba(220, 220, 0, 0.3);
+}
 .module.fleet .shiplist .hp_taiha {
 	background-color:rgba(255, 0, 0, 0.4);
 }

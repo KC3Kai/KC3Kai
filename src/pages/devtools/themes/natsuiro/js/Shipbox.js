@@ -285,7 +285,7 @@
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box & hp bar color classes
-		var hpClasses = ["akashiMark", "hp_fcf", "hp_repairing", // used by root element
+		var hpClasses = ["akashiMark", "nosakiMark", "hp_fcf", "hp_repairing", // used by root element
 			"hp_sunk", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
 		this.element.removeClass(hpClasses);
 		$(".ship_hp_bar", this.element).removeClass(hpClasses);
@@ -338,6 +338,10 @@
 
 			if (this.shipData.akashiMark) {
 				this.element.addClass("akashiMark");
+			}
+
+			if (this.shipData.nosakiMark) {
+				this.element.addClass("nosakiMark");
 			}
 		}
 

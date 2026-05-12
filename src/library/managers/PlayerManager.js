@@ -55,6 +55,7 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3LandBase()
 			];
 			this.akashiRepair = new KC3AkashiRepair();
+			this.nosakiSparkle = new KC3NosakiSparkle();
 			return this;
 		},
 
@@ -439,6 +440,7 @@ Does not include Ships and Gears which are managed by other Managers
 			}
 
 			this.akashiRepair.onPort(this.fleets);
+			this.nosakiSparkle.onPort(this.fleets);
 
 			var
 				// get current player regen cap
