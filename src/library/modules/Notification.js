@@ -32,13 +32,11 @@
     clear();
 
     const src = getSrc(alertType, alertCustomSrc);
-    if (src) {
-      audio = new Audio(src);
-    }
-    if (!audio) {
+    if (!src) {
       return;
     }
 
+    audio = new Audio(src);
     audio.volume = ConfigManager.alert_volume / 100;
     audio.play();
   }
