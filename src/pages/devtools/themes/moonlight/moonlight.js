@@ -5612,13 +5612,13 @@
 		if (ticks === 0) {
 			if (sparkleNotif !== 0) {
 				sparkleNotif = 0;
-				timerIcon.attr("src", "../../../../assets/img/ui/btn-xgs.png");
+				timerIcon.attr("src", "/assets/img/ui/foodsup-x.png");
 				timerText.css("color", "white");
 			}
 		} else if (sparkleNotif < ticks) {
 			sparkleNotif++;
 			const textColor = ticks === 1 ? "yellow" : "orange";
-			timerIcon.attr("src", "../../../../assets/img/ui/btn-gs.png");
+			timerIcon.attr("src", "/assets/img/ui/foodsup.png");
 			timerText.css("color", textColor);
 			// Config option for each tick
 			const tickNotif = [[1, 2], [1, 3]];
@@ -5642,7 +5642,7 @@
 				type: "basic",
 				title: KC3Meta.term("DesktopNotifySparkleTitle"),
 				message: KC3Meta.term("DesktopNotifySparkleMessage"),
-				iconUrl: "../../../../assets/img/ui/btn-gs.png"
+				iconUrl: "/assets/img/ui/foodsup.png"
 			},
 			tabId: chrome.devtools.inspectedWindow.tabId
 		})).execute();
