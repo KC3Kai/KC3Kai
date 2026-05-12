@@ -356,33 +356,7 @@
 					moraleClockEnd = 0;
 					moraleClockRemain = 0;
 					$(".module.status .status_morale .status_text").text(KC3Meta.term("PanelRecoveredMorale"));
-					
-					// Morale Notification
-					if(ConfigManager.alert_morale_notif){
-						// Play sound
-						if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
-						switch(ConfigManager.alert_type){
-							case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-							case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break; 
-							case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break; 
-							default: KC3TimerManager.notifSound = false; break;
-						}
-						if(KC3TimerManager.notifSound){
-							KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
-							KC3TimerManager.notifSound.play();
-						}
-						// Desktop notif regardless of settings, we consider Morale Notif as "yes"
-						(new RMsg("service", "notify_desktop", {
-							notifId: "morale",
-							data: {
-								type: "basic",
-								title: KC3Meta.term("DesktopNotifyMoraleTitle"),
-								message: KC3Meta.term("DesktopNotifyMoraleMessage"),
-								iconUrl: "../../assets/img/ui/morale.png"
-							},
-							tabId: chrome.devtools.inspectedWindow.tabId
-						})).execute();
-					}
+					KC3Notification.notifyMorale();
 				}
 			}
 		}, 1000);

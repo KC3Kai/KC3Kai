@@ -275,49 +275,8 @@
 				moraleClockEnd = 0;
 				moraleClockRemain = 0;
 				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelRecoveredMorale") );
-
-				// Morale desktop notification if not on sortie/PvP,
-				if(ConfigManager.alert_morale_notif &&
-					!(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
-				){
-					SendSoundNotification(ConfigManager.alert_type, ConfigManager.alert_custom);
-
-					// Send desktop notification
-					(new RMsg("service", "notify_desktop", {
-						notifId: "morale",
-						data: {
-							type: "basic",
-							title: KC3Meta.term("DesktopNotifyMoraleTitle"),
-							message: KC3Meta.term("DesktopNotifyMoraleMessage"),
-							iconUrl: "../../assets/img/ui/morale.png"
-						},
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-					// Focus game tab if settings enabled
-					if(ConfigManager.alert_focustab){
-						(new RMsg("service", "focusGameTab", {
-							tabId: chrome.devtools.inspectedWindow.tabId
-						})).execute();
-					}
-				}
+				KC3Notification.notifyMorale();
 			}
-		}
-	}
-
-	function SendSoundNotification(alertType, customAlert) {
-		// Play sound if alert sound setting is not none
-		if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
-		switch(alertType){
-			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-			case 2: KC3TimerManager.notifSound = new Audio(customAlert); break;
-			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
-			case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
-			case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
-			default: KC3TimerManager.notifSound = false; break;
-		}
-		if(KC3TimerManager.notifSound){
-			KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
-			KC3TimerManager.notifSound.play();
 		}
 	}
 
@@ -5625,32 +5584,9 @@
 			const selectedNotif = ConfigManager.alert_sparkle;
 			if (sparkleNotif <= tickNotif.length
 				&& tickNotif[sparkleNotif - 1].includes(selectedNotif)) {
-				SendSparkleNotification();
+				KC3Notification.notifySparkle();
 			}
 		}
 	}
 
-	function SendSparkleNotification() {
-		if (!ConfigManager.alert_sparkle) {
-			return;
-		}
-		SendSoundNotification(ConfigManager.alert_type_sparkle, ConfigManager.alert_custom_sparkle);
-		// Send desktop notification
-		(new RMsg("service", "notify_desktop", {
-			notifId: "sparkle",
-			data: {
-				type: "basic",
-				title: KC3Meta.term("DesktopNotifySparkleTitle"),
-				message: KC3Meta.term("DesktopNotifySparkleMessage"),
-				iconUrl: "/assets/img/ui/foodsup.png"
-			},
-			tabId: chrome.devtools.inspectedWindow.tabId
-		})).execute();
-		// Focus game tab if settings enabled
-		if (ConfigManager.alert_focustab) {
-			(new RMsg("service", "focusGameTab", {
-				tabId: chrome.devtools.inspectedWindow.tabId
-			})).execute();
-		}
-	}
 })();
