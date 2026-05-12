@@ -158,12 +158,12 @@ module.exports = function(grunt) {
 			}
 		},
 		stylelint: {
-			src: {
+			all: {
 				options: {
 					syntax: 'css'
 				},
 				src: [
-					'src/pages/devtools/themes/murasaki/**/*.css',
+					'src/pages/devtools/themes/murasaki/**/*.css', // Only Murasaki theme for now, more can be added later
 				]
 			}
 		},
@@ -562,7 +562,7 @@ module.exports = function(grunt) {
 		'jshint:src',
 		'jshint:test',
 		'jsonlint:src',
-		'stylelint:src'
+		'stylelint'
 	]);
 	
 	grunt.registerTask('test-unit', [
