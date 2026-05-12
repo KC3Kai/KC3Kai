@@ -4831,9 +4831,9 @@ KC3改 Ship Object
 			5: 140, // MainApshell (main+sec+apshell)
 			6: 150, // MainMain (main+main+apshell)
 			7: ({
-				"CutinJFJBJB": 135,
-				"CutinJFJB"  : 125,
-				"CutinJFDBTB": 115,
+				"CutinJFJBJB": 130, // 128.87?
+				"CutinJFJB"  : 135, // 136.17?
+				"CutinJFDBTB": 140, // unknown
 				"CutinFDBTB" : 125,
 				"CutinDBDBTB": 140,
 				"CutinDBTB"  : 155,

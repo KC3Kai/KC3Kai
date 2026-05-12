@@ -51,7 +51,7 @@
 		dataType       = [
 			// Apply grouping
 			['sortie','pvp'   ,'exped' ,'quest' ,'akashi' ,'nosaki' ,'regen','useitem'],
-			['crship','critem','dsship','dsitem','remodel','rmditem','lbas' ],
+			['crship','critem','dsship','dsitem','remodel','rmditem','lbas'],
 			['overall']
 		],
 		dataScale      = [

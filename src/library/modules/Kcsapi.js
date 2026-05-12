@@ -96,9 +96,7 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
-			KC3ShipManager.onPort = true;
-			KC3ShipManager.set(response.api_data.api_ship, true);
-			KC3ShipManager.onPort = false;
+			KC3ShipManager.set(response.api_data.api_ship, true, true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			var utcSeconds = Date.toUTCseconds(headers.Date);
@@ -158,7 +156,6 @@ Previously known as "Reactor"
 			const lastSortie = [KC3SortieManager.map_world || 0, KC3SortieManager.map_num || 0];
 			KC3SortieManager.endSortie(response.api_data);
 			
-
 			PlayerManager.loadBases()
 				.setBaseConvertingSlots(response.api_data.api_plane_info);
 			
