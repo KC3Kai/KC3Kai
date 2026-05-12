@@ -247,7 +247,6 @@ body {
 	display: grid;
 	grid-auto-rows: auto;
 	grid-auto-flow: column dense;
-	overflow: hidden;
 	margin: 0 auto;
 	position: relative;
 	white-space: nowrap;
@@ -2057,11 +2056,8 @@ body {
 	.activity_expeditionPlanner {
 		text-align: center;
 		white-space: nowrap;
-		overflow-x: hidden;
-
-		> div {
-			width: 180px;
-		}
+		position: relative;
+		z-index: 11;
 
 		&::-webkit-scrollbar {
 			width: 5px;
@@ -2079,60 +2075,56 @@ body {
 			}
 		}
 
-		.expPlan_dropdown_menu {
-			height: 28px;
-		}
-
 		.expPlan_dropdown_title {
 			width: 100%;
 			list-style: none;
 			position: relative;
-			float: left;
 			margin: 0;
 			padding: 0;
 			background: #ddd;
 			text-align: center;
 			text-decoration: none;
-			border-style: solid;
-			border-width: 3px;
+			border: 3px solid #000;
 			text-shadow: none;
 
 			.expPlan_dropdown_topEntry {
 				display: none;
 			}
 
-			li {
-				background: #ddd;
-				border-style: solid;
-				border-width: 1px;
+			&:hover {
+				background: #fff;
 
-				&:hover {
-					background: #fff;
-
-					> ul {
-						display: block;
-					}
+				> ul,
+				> ul li {
+					display: block;
 				}
+			}
 
-				ul {
-					list-style: none;
+			ul {
+				list-style: none;
+				display: none;
+				position: absolute;
+				top: calc(100% + 2px);
+				left: -1px;
+				background: #fff;
+				padding: 0;
+				width: 50%;
+				font-size: 13px;
+				line-height: 17px;
+
+				li {
 					display: none;
-					position: absolute;
-					top: 100%;
-					left: 0;
 					background: #fff;
-					padding: 0;
-					width: 50%;
-					font-size: 13px;
-					line-height: 17px;
+					border: 1px solid #000;
+					line-height: 15px;
 
-					li {
-						display: none;
-						position: absolute;
-						top: 100%;
-						left: 0;
-						background: #fff;
-						width: 50px;
+					&:hover {
+						background-color: #DED;
+
+						> ul,
+						> ul li {
+							display: block;
+						}
 					}
 
 					ul {
@@ -2147,63 +2139,54 @@ body {
 		}
 
 		.expPlanner_timer {
-			height: 20px;
-			margin-bottom: 4px;
-
-			.expPlanner_timer_description {
-				float: left;
-				text-align: left;
-				width: 110px;
-			}
+			font-size: 12px;
+			padding: 4px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			color: #FFF;
 
 			.estimated_time {
-				float: right;
+				margin-left: auto;
 				text-align: right;
-				max-width: 68px;
-				margin-right: 2px;
 			}
 		}
 
 		.expPlanner_resos_title {
 			text-align: center;
-			height: 20px;
+			color: #FFF;
 			margin-bottom: 2px;
 			display: none;
 		}
 
 		.expres_resos {
-			height: 40px;
+			display: flex;
+			flex-flow: row nowrap;
 			margin-bottom: 3px;
 
-			.expres_divHF {/* divide half */
-				display: inline-block;
-				width: 65px;
-				height: 40px;
-				float: left;
+			.expres_divHF {
+				flex: 0 0 40%;
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 4px;
 
 				.expres_reso {
-					float: left;
-					height: 16px;
 					line-height: 16px;
-					margin: 0 0 6px;
+					display: flex;
+					gap: 10px;
 
 					.expres_icon {
-						width: 16px;
-						height: 16px;
-						float: left;
-						margin: 0 9px 0 0;
+						width: 18px;
+						height: 18px;
 
 						img {
-							width: 16px;
-							height: 16px;
+							width: 100%;
+							height: 100%;
 							vertical-align: top;
 						}
 					}
 
 					.expres_amt {
-						width: 30px;
-						height: 16px;
-						float: left;
 						font-size: 12px;
 						color: #fff;
 						text-align: left;
@@ -2212,20 +2195,13 @@ body {
 			}
 
 			.expres_greatbtn {
-				width: 40px;
-				float: left;
-				height: 40px;
-				line-height: 40px;
+				margin-left: auto;
 
 				img {
 					width: 40px;
 					height: 40px;
 				}
 			}
-		}
-
-		.expPlanner_shipReqBox {
-			margin-right: 10px;
 		}
 
 		.requirements {
@@ -2235,48 +2211,50 @@ body {
 				display: inline-block;
 				margin-left: 2px;
 			}
+		}
 
-			.expPlanner_text {
-				font-size: 14px;
-				color: #ccc;
+		.expPlanner_text {
+			display: inline-block;
+			font-size: 14px;
+			color: #ccc;
 
-				&.gsrate_content[data-gsState="impossible"] {
-					color: #F55;
-				}
+			&.gsrate_content[data-gsState="impossible"] {
+				color: #F55;
+			}
 
-				&.gsrate_content[data-gsState="no-overdrum"] {
-					color: orange;
-				}
+			&.gsrate_content[data-gsState="no-overdrum"] {
+				color: orange;
+			}
 
-				&.gsrate_content[data-gsState="likely"] {
-					color: gold;
-				}
+			&.gsrate_content[data-gsState="likely"] {
+				color: gold;
+			}
 
-				&.gsrate_content[data-gsState="guaranteed"] {
-					color: #0C0;
-				}
+			&.gsrate_content[data-gsState="guaranteed"] {
+				color: #0C0;
 			}
 		}
 
 		.expPlanner_requirements {
 			margin-bottom: 4px;
+		}
 
-			.expPlanner_checker_criterias {
-				margin-bottom: 1px;
-				white-space: initial;
+		.expPlanner_text_passed {
+			color: #0C0;
+		}
 
-				div {
-					font-size: 13px;
-				}
+		.expPlanner_text_failed {
+			color: #F55;
+		}
 
-				.expPlanner_text_passed {
-					color: #0C0;
-				}
+		.expPlanner_checker_criterias {
+			white-space: initial;
+		}
 
-				.expPlanner_text_failed {
-					color: #F55;
-				}
-			}
+		.expPlanner_checker {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.expedition_entry {
@@ -3439,7 +3417,6 @@ body {
 		.quest_track {
 			margin-left: auto;
 			width: 40px;
-			height: 16px;
 			line-height: 16px;
 			background: rgb(60 60 60 / 70%);
 			font-size: 12px;
