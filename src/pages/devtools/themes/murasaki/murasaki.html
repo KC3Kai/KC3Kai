@@ -588,6 +588,9 @@
 									<div class="support_exped">0</div>
 									<div class="support_lbas">AB</div>
 									<div class="support_balloon i18n_title" title="BattleBalloonNode"><img src="/assets/img/items/55.png" /></div>
+									<div class="battle_cond_extra smoke_screen">
+										<img class="smoke_icon" src="/assets/img/items/54.png" /><span class="smoke_level">0</span>
+									</div>
 									<img/>
 								</div>
 								<div class="battle_flag battle_fish i18n_title" title="BattleItemDrop"><img src="../../../../assets/img/ui/map_drop.png" /></div>
@@ -601,9 +604,6 @@
 									<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
 									<div class="battle_cond_label i18n">BattleDetection</div>
 									<div class="battle_cond_value battle_detection"></div>
-									<div class="battle_cond_extra smoke_screen">
-										<img class="smoke_icon" src="/assets/img/items/54.png" /><span class="smoke_level">0</span>
-									</div>
 								</div>
 								<div class="battle_condition">
 									<div class="battle_cond_icon"><img src="../../../../assets/img/ui/empty.png" /></div>
@@ -1300,19 +1300,23 @@
 			<!-- Clonable: PvP enemy list -->
 			<div class="pvpEnemyInfo">
 				<div class="pvp_enemy_pic shipiconbox"><img/></div>
-				<div class="pvp_enemy_name jp_fonts"></div>
-				<div class="pvp_enemy_level"></div>
-				<div class="pvp_enemy_rank"></div>
-				<div class="pvp_enemy_comment jp_fonts"></div>
-				<div class="pvp_enemy_medals"><img src="/assets/img/client/medal.png" /><span></span></div>
+				<div class="pvp_enemy_texts">
+					<div class="pvp_enemy_name jp_fonts"></div>
+					<div class="pvp_enemy_level"></div>
+					<div class="pvp_enemy_rank"></div>
+					<div class="pvp_enemy_comment jp_fonts"></div>
+					<div class="pvp_enemy_medals"><img src="/assets/img/client/medal.png" /><span></span></div>
+				</div>
 				<div class="pvp_enemy_state"><img/></div>
 			</div>
 			<!-- Clonable: PvP fleet info -->
 			<div class="pvpFleetShip">
 				<div class="pvp_fleet_ship_icon shipiconbox"><img/></div>
-				<div class="pvp_fleet_ship_name"></div>
-				<div class="pvp_fleet_ship_level"><div class="i18n">LevelShort</div><div class="value"></div></div>
-				<div class="pvp_fleet_ship_star"><span class="star">&#9733;</span><span class="value"></span></div>
+				<div class="pvp_fleet_ship_texts">
+					<div class="pvp_fleet_ship_name"></div>
+					<div class="pvp_fleet_ship_level"><div class="i18n">LevelShort</div><div class="value"></div></div>
+					<div class="pvp_fleet_ship_star"><span class="star">&#9733;</span><span class="value"></span></div>
+				</div>
 			</div>
 
 			<!-- Clonable: Remodel item list -->
