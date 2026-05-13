@@ -10,7 +10,6 @@ Container object for timers for expedition, construction, and repair
 		_exped: [],
 		_repair: [],
 		_build: [],
-		notifSound: false,
 		
 		init :function(eMap, rMap, bMap){
 			this._exped = [

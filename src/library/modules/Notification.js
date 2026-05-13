@@ -45,20 +45,24 @@
     audio.play();
   }
 
-  function notifyDesktop(notifId, data) {
-    (new RMsg('service', 'notify_desktop', {
-      notifId,
-      data,
-      tabId: chrome.devtools.inspectedWindow.tabId
-    })).execute();
-  }
-
   function focusTab() {
     if (!ConfigManager.alert_focustab) {
       return;
     }
 
     (new RMsg('service', 'focusGameTab', {
+      tabId: chrome.devtools.inspectedWindow.tabId
+    })).execute();
+  }
+
+  function notifyDesktop(notifId, data) {
+    if (!ConfigManager.alert_desktop) {
+      return;
+    }
+
+    (new RMsg('service', 'notify_desktop', {
+      notifId,
+      data,
       tabId: chrome.devtools.inspectedWindow.tabId
     })).execute();
   }
