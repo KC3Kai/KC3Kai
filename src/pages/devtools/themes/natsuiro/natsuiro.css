@@ -4281,6 +4281,7 @@ ABYSS FLEET
 .module.status .status_icon.enclose {
 	background:#fff;
 	border-radius:10px;
+	overflow:hidden;
 }
 .module.status .status_icon img {
 	width:20px;
