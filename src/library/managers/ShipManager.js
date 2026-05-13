@@ -169,32 +169,14 @@ Saves and loads list to and from localStorage
 					const sparklerPos = KC3NosakiSparkle.getSparklerPosition(fleet);
 					const sparklerPower = KC3NosakiSparkle.getSparklerPower(fleet.ship(sparklerPos - 1));
 					const fuelCost = Math.ceil(moraleDiff / sparklerPower);
-					let data = Array.apply(null,{length:8}).map(function(){return 0;});
-					data[0] = -fuelCost;
-					let pc = cShip.pendingConsumption;
-					let df = [fuelCost, 0, 0];
-
+					const data = [-fuelCost, 0, 0, 0, 0, 0, 0, 0];
 					// Store Difference to Database
 					KC3Database.Naverall({
 						hour: Date.toUTChours(),
 						type: 'nosaki' + cShip.masterId,
 						data: data
 					});
-					console.log("Nosaki sparkled", cShip.rosterId, cShip.name(), moraleDiff, df);
-					Object.keys(pc).reverse().forEach(function(d){
-						// if the difference is not all-zero, keep going
-						if(df.every(function(x){return !x;}))
-							return;
-						var rp = pc[d][1],
-							dt = rp.map(function(x,i){return Math.max(x,-df[i]);});
-						// if the delta is not all-zero, keep going
-						if(dt.every(function(x){return !x;}))
-							return;
-						rp.forEach(function(x,i){
-							rp[i] -= dt[i]; // Reduce the source of supply reduction
-							df[i] += dt[i]; // Reduce the required supply to sparkle
-						});
-					});
+					console.log("Nosaki sparkled", cShip.rosterId, cShip.name(), moraleDiff, fuelCost);
 				}
 			}
 
