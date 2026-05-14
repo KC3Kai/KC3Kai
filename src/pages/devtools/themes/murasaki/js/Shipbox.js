@@ -157,45 +157,12 @@
 		
 		return this;
 	};
+
 	
-	
-	/* DEFINE SHORT
-	Short ship box for combined fleets
+	/* DEFINE SHIP
+	Ship box for fleet views
 	---------------------------------------------------*/
-	KC3MurasakiShipbox.prototype.defineShort = function( currentFleet ){
-		this.hpBarLength = 88;
-		this.showHP();
-		this.showPrediction();
-		this.showMorale();
-		
-		// Thin bars below the ship box
-		$(".ship_exp", this.element).css("width", (120 * this.expPercent)+"px");
-		$(".ship_fuel", this.element).css("width", (120 * Math.min(this.fuelPercent, 1))+"px");
-		$(".ship_ammo", this.element).css("width", (120 * Math.min(this.ammoPercent, 1))+"px");
-		var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
-		$(".ship_bars", this.element).attr("title",
-			KC3Meta.term("PanelCombinedShipBarsHint")
-			.format(this.shipData.exp[1], Math.ceil(this.fuelPercent*100), Math.ceil(this.ammoPercent*100))
-			+ "\n" + KC3Meta.term("PanelResupplyCosts").format(
-				"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
-				"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
-				resupplyCost.bauxite,
-				this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
-			)
-		).lazyInitTooltip();
-		
-		if(!this.showCombinedFleetBars){
-			$(".ship_bars", this.element).css("opacity", "0");
-		}
-		
-		return this.element;
-	};
-	
-	/* DEFINE LONG
-	Long ship box for single-view fleets
-	---------------------------------------------------*/
-	KC3MurasakiShipbox.prototype.defineLong = function( currentFleet ){
-		this.hpBarLength = 118;
+	KC3MurasakiShipbox.prototype.defineShip = function( currentFleet ){
 		this.showHP();
 		this.showPrediction();
 		this.showMorale();
@@ -222,13 +189,13 @@
 				return title;
 			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( KC3Meta.formatNumber(this.shipData.exp[1]) );
-		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
+		$(".ship_exp_bar", this.element).css("width", `${this.expPercent * 100}%`);
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
 		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");
 		
-		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * Math.min(this.fuelPercent, 1))+"px");
-		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * Math.min(this.ammoPercent, 1))+"px");
+		$(".ship_fuel .ship_supply_bar", this.element).css("width", `${100 * Math.min(this.fuelPercent, 1)}%`);
+		$(".ship_ammo .ship_supply_bar", this.element).css("width", `${100 * Math.min(this.ammoPercent, 1)}%`);
 		
 		if(this.fuelPercent < 1 || this.ammoPercent < 1){
 			var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
@@ -269,8 +236,7 @@
 		
 		// HP bar
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
-		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
-		$(".ship_hp_bar_metrics", this.element).css("width", this.hpBarLength+"px");
+		$(".ship_hp_bar", this.element).css("width", `${hpPercent * 100}%`);
 		
 		// Left HP to be Taiha & Chuuha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
@@ -371,7 +337,7 @@
 			
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
-			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
+			$(".ship_hp_prediction", this.element).css("width", `${afterHpPercent * 100}%`);
 			
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
@@ -545,7 +511,7 @@
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
 			}
 			
-			$(".ship_gear_"+(slot+1), this.element).show();
+			$(".ship_gear_"+(slot+1), this.element).css("display", "flex");
 		}else{
 			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
 			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).hide();

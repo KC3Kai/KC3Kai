@@ -366,7 +366,7 @@
 		baseElement.forEach(function(baseKey){
 			const baseContainer = $([".shiplist",baseKey].join('_'));
 
-			$(".sship,.lship", baseContainer).each(function(index, shipBox){
+			$(".lship", baseContainer).each(function(index, shipBox){
 				const repairBox = $('.ship_repair_data',shipBox);
 				const shipData = KC3ShipManager.get(repairBox.data('sid')),
 					hpLost = shipData.hp[1] - shipData.hp[0],
@@ -497,7 +497,7 @@
 			+", 1px 1px 1px "+ConfigManager.pan_drop_shadow_murasaki
 		);
 		$(".module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type"
-			+",.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot")
+			+",.lship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.ship_gear_slot")
 			.css("text-shadow", shadowDirStr);
 		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
 			.css("box-shadow", shadowDirStr);
@@ -866,13 +866,13 @@
 		});
 
 		// Toggle mini-bars under combined fleet ship list
-		$(".module.fleet .shiplist_combined").on("click", ".sship .ship_bars", function(){
+		$(".module.fleet .shiplist_combined").on("click", ".lship .ship_bars", function(){
 			if($(this).css("opacity") === "0"){
 				showCombinedFleetBars = true;
-				$(".module.fleet .sship .ship_bars").css("opacity", "1");
+				$(".module.fleet .lship .ship_bars").css("opacity", "1");
 			}else{
 				showCombinedFleetBars = false;
-				$(".module.fleet .sship .ship_bars").css("opacity", "0");
+				$(".module.fleet .lship .ship_bars").css("opacity", "0");
 			}
 		});
 
@@ -1943,9 +1943,9 @@
 								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index);
 							spCutinUsed = sortieSpecialCutins[index] === 1 && KC3SortieManager.fleetSent === 1;
 						}
-						(new KC3MurasakiShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
+						(new KC3MurasakiShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
 							.commonElements()
-							.defineShort(MainFleet)
+							.defineShip(MainFleet)
 							.toggleClass("special_cutin", spCutinUsed)
 							.appendTo(".module.fleet .shiplist_main");
 					}
@@ -1976,16 +1976,16 @@
 							spCutinUsed = (sortieSpecialCutins[index] === 1 && KC3SortieManager.fleetSent === 2) ||
 								(sortieSpecialCutins[index] === 2 && KC3SortieManager.isCombinedSortie());
 						}
-						(new KC3MurasakiShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
+						(new KC3MurasakiShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
 							.commonElements(true)
-							.defineShort(EscortFleet)
+							.defineShip(EscortFleet)
 							.toggleClass("special_cutin", spCutinUsed)
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
 
 				// Show fleet containers on UI
-				$(".shiplist_combined").show();
+				$(".shiplist_combined").css("display", "flex");
 
 				// Calculate Highest Repair Times for status indicators
 				MainRepairs = MainFleet.highestRepairTimes(true);
@@ -2077,7 +2077,7 @@
 						}
 						(new KC3MurasakiShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage, smokeType))
 							.commonElements()
-							.defineLong(CurrentFleet)
+							.defineShip(CurrentFleet)
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)
 							.toggleClass("special_cutin", spCutinUsed)
 							.appendTo(".module.fleet .shiplist_single");
@@ -2085,7 +2085,7 @@
 				});
 
 				// Show fleet containers on UI
-				$(".shiplist_single").show();
+				$(".shiplist_single").css("display", "flex");
 				
 				// Compile fleet attributes
 				FleetSummary = {
@@ -2729,10 +2729,7 @@
 
 			//console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
-				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId)
-					.toggleClass("long_name", longNodeLetter);
-				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes - 1));
-				$(".module.activity .sortie_nodes .boss_node").show();
+				$(".module.activity .sortie_nodes .sortie_node")[numNodes - 1].addClass("boss-node");
 			}
 			switch(thisNode.type){
 				// Battle node

@@ -454,10 +454,6 @@
 							<div class="map_hp">0000/0000</div>
 						</div>
 						<div class="sortie_nodes">
-							<div class="boss_node">
-								<img src="../../../../assets/img/client/boss.png" />
-								<div class="sortie_node boss_circle"></div>
-							</div>
 							<div class="sortie_node sortie_node_1"></div>
 							<div class="sortie_node sortie_node_2"></div>
 							<div class="sortie_node sortie_node_3"></div>
@@ -1144,73 +1140,77 @@
 				<div class="quest_track">00/00</div>
 			</div>
 
-			<!-- Clonable: Long Ship -->
+			<!-- Clonable: Ship -->
 			<div class="lship">
-				<div class="ex_item">
-					<div class="gear_star"></div>
-					<div class="gear_icon"><img/></div>
-				</div>
-				<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
-				<div class="locktag"><span class="solid"></span></div>
-				<div class="ribbon"><img src="/assets/img/client/ribbons/1.png" /></div>
-				<div class="ship_img shipiconbox"><img/></div>
-				<div class="ship_col1">
-					<div class="ship_name"></div>
-					<div class="ship_type"></div>
-					<div class="ship_level"><span class="i18n">LevelShort</span> <span class="value"></span></div>
-					<div class="ship_hp_text">
-						<span class="ship_hp_cur"></span>
-						<span class="ship_hp_max"></span>
+				<div class="lship-line">
+					<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
+					<div class="locktag"><span class="solid"></span></div>
+					<div class="ribbon"><img src="/assets/img/client/ribbons/1.png" /></div>
+					<div class="ship_img shipiconbox">
+						<div class="ex_item">
+							<div class="gear_star"></div>
+							<div class="gear_icon"><img/></div>
+						</div>
+						<img/>
 					</div>
-					<div class="ship_hp_box">
-						<div class="ship_hp_bar">
+					<div class="ship_col1">
+						<div class="ship_name"></div>
+						<div class="ship_type"></div>
+						<div class="ship_level"><span class="i18n">LevelShort</span> <span class="value"></span></div>
+						<div class="ship_hp_text">
+							<span class="ship_hp_cur"></span>
+							<span class="ship_hp_max"></span>
+						</div>
+						<div class="ship_hp_box">
 							<div class="ship_hp_bar_metrics"></div>
-							<div class="ship_hp_prediction"></div>
-							<div class="ship_hp_pred_value">
-								<span class="ship_hp_diff"></span>
+							<div class="ship_hp_bar">
+								<div class="ship_hp_prediction"></div>
+								<div class="ship_hp_pred_value">
+									<span class="ship_hp_diff"></span>
+								</div>
+							</div>
+							<div class="ship_repair_data">
+								<div class="ship_repair_tick" data-tick="0"> </div>
+								<div class="ship_repair_timer">--:--:--</div>
 							</div>
 						</div>
-						<div class="ship_repair_data">
-							<div class="ship_repair_tick" data-tick="0"> </div>
-							<div class="ship_repair_timer">--:--:--</div>
+					</div>
+					<div class="ship_col2">
+						<div class="ship_morale"></div>
+						<div class="ship_exp_label i18n">LevelNext</div>
+						<div class="ship_exp_next"></div>
+					</div>
+					<div class="ship_gears">
+						<div class="ship_gear ship_gear_1">
+							<div class="ship_gear_star"></div>
+							<div class="ship_gear_icon"><img/></div>
+							<div class="ship_gear_ace"><img/></div>
+							<div class="ship_gear_slot">00</div>
 						</div>
-					</div>
-				</div>
-				<div class="ship_col2">
-					<div class="ship_morale"></div>
-					<div class="ship_exp_label i18n">LevelNext</div>
-					<div class="ship_exp_next"></div>
-				</div>
-				<div class="ship_gears">
-					<div class="ship_gear ship_gear_1">
-						<div class="ship_gear_star"></div>
-						<div class="ship_gear_icon"><img/></div>
-						<div class="ship_gear_ace"><img/></div>
-						<div class="ship_gear_slot">00</div>
-					</div>
-					<div class="ship_gear ship_gear_2">
-						<div class="ship_gear_star"></div>
-						<div class="ship_gear_icon"><img/></div>
-						<div class="ship_gear_ace"><img/></div>
-						<div class="ship_gear_slot">00</div>
-					</div>
-					<div class="ship_gear ship_gear_3">
-						<div class="ship_gear_star"></div>
-						<div class="ship_gear_icon"><img/></div>
-						<div class="ship_gear_ace"><img/></div>
-						<div class="ship_gear_slot">00</div>
-					</div>
-					<div class="ship_gear ship_gear_4">
-						<div class="ship_gear_star"></div>
-						<div class="ship_gear_icon"><img/></div>
-						<div class="ship_gear_ace"><img/></div>
-						<div class="ship_gear_slot">00</div>
-					</div>
-					<div class="ship_gear ship_gear_5">
-						<div class="ship_gear_star"></div>
-						<div class="ship_gear_icon"><img/></div>
-						<div class="ship_gear_ace"><img/></div>
-						<div class="ship_gear_slot">00</div>
+						<div class="ship_gear ship_gear_2">
+							<div class="ship_gear_star"></div>
+							<div class="ship_gear_icon"><img/></div>
+							<div class="ship_gear_ace"><img/></div>
+							<div class="ship_gear_slot">00</div>
+						</div>
+						<div class="ship_gear ship_gear_3">
+							<div class="ship_gear_star"></div>
+							<div class="ship_gear_icon"><img/></div>
+							<div class="ship_gear_ace"><img/></div>
+							<div class="ship_gear_slot">00</div>
+						</div>
+						<div class="ship_gear ship_gear_4">
+							<div class="ship_gear_star"></div>
+							<div class="ship_gear_icon"><img/></div>
+							<div class="ship_gear_ace"><img/></div>
+							<div class="ship_gear_slot">00</div>
+						</div>
+						<div class="ship_gear ship_gear_5" style="display: none">
+							<div class="ship_gear_star"></div>
+							<div class="ship_gear_icon"><img/></div>
+							<div class="ship_gear_ace"><img/></div>
+							<div class="ship_gear_slot">00</div>
+						</div>
 					</div>
 				</div>
 				<div class="ship_supplies">
@@ -1229,43 +1229,6 @@
 				<div class="ship_no_lock"></div>
 			</div>
 
-			<!-- Clonable: Short Ship -->
-			<div class="sship">
-				<div class="ship_img shipiconbox"><img/></div>
-				<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
-				<div class="locktag"><span class="solid"></span></div>
-				<div class="ex_item">
-					<div class="gear_star"></div>
-					<div class="gear_icon"><img/></div>
-				</div>
-				<div class="ribbon"><img src="/assets/img/client/ribbons/1.png" /></div>
-				<div class="ship_info">
-					<div class="ship_name"></div>
-					<div class="ship_hp">
-						<div class="ship_type">WWW</div>
-						<div class="ship_hp_text">
-							<span class="ship_hp_cur">000</span>
-							<span class="ship_hp_max">/000</span>
-						</div>
-						<div class="ship_hp_box">
-							<div class="ship_hp_bar">
-								<div class="ship_hp_bar_metrics"></div>
-								<div class="ship_hp_prediction"></div>
-								<div class="ship_hp_pred_value">
-									<span class="ship_hp_diff"></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="ship_morale">100</div>
-				</div>
-				<div class="ship_bars hover">
-					<div class="ship_bar ship_exp"></div>
-					<div class="ship_bar ship_fuel"></div>
-					<div class="ship_bar ship_ammo"></div>
-				</div>
-				<div class="ship_no_lock"></div>
-			</div>
 			<!-- Equipment stats -->
 			<div class="equipStat">
 				<div class="equipStatIcon"><img/></div>
