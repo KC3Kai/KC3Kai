@@ -247,6 +247,7 @@ body {
 	display: grid;
 	grid-auto-rows: auto;
 	grid-auto-flow: column dense;
+	grid-template-rows: auto auto 1fr auto;
 	margin: 0 auto;
 	position: relative;
 	white-space: nowrap;
@@ -272,7 +273,7 @@ body {
 			"admiral fleet summary"
 			"activity fleet quests"
 			"activity fleet status";
-		grid-template-columns: 2fr 3fr 3fr;
+		grid-template-columns: 2fr 4fr 2fr;
 	}
 
 	@media all and (width > 960px) {
@@ -281,7 +282,7 @@ body {
 			"admiral fleet summary"
 			"activity fleet quests"
 			"activity fleet status";
-		grid-template-columns: 2fr 3fr 3fr;
+		grid-template-columns: 2fr 4fr 2fr;
 	}
 }
 
@@ -303,7 +304,6 @@ body {
 /* ------- HQ INFO ------- */
 .module.admiral {
 	grid-area: admiral;
-	min-width: 240px;
 
 	.admiral_level {
 		color: #eee;
@@ -412,7 +412,6 @@ body {
 
 .module.activity {
 	grid-area: activity;
-	min-width: 240px;
 
 	.activity_tabs {
 		display: flex;
@@ -741,26 +740,6 @@ body {
 			justify-content: space-evenly;
 			container-type: inline-size;
 
-			.boss_node {
-				position: absolute;
-				display: none;
-
-				img {
-					width: max(20px, 6cqw);
-					height: max(20px, 6cqw);
-					margin-top: -10px;
-				}
-
-				.boss_circle {
-					position: absolute;
-					width: max(20px, 6cqw);
-					margin-top: -20px;
-					border-color: #a90a0a;
-					background: #7d0000;
-					z-index: 1;
-				}
-			}
-
 			.sortie_node {
 				flex: 0 0 max(20px, 6cqw);
 				height: max(20px, 6cqw);
@@ -771,6 +750,22 @@ body {
 				font-size: 10px;
 				text-align: center;
 				border: 1px solid #aaa;
+
+                &.boss-node {
+					border-color: #a90a0a;
+					background: #7d0000;
+
+					&::before {
+						content: '';
+						width: 12px;
+						height: 12px;
+						position: absolute;
+						top: 0;
+						left: 0;
+						z-index: 0;
+						background: transparent url("/assets/img/client/boss.png");
+					}
+				}
 
 				&.long_name {
 					font-size: 9px;
@@ -2257,6 +2252,13 @@ body {
 			white-space: initial;
 		}
 
+		.expPlanner_req_fleetComposition,
+		.expPlanner_checker_criterias.canister_criterias {
+			display: flex;
+			justify-content: center;
+			gap: 8px;
+		}
+
 		.expPlanner_checker {
 			display: flex;
 			align-items: center;
@@ -3660,49 +3662,56 @@ body {
 /* ------- FLEET ------- */
 .module.fleet {
 	grid-area: fleet;
-	width: 340px;
-	height: 315px;
 	border-radius: 5px;
 
 	.shiplist {
-		width: 340px;
-		height: 315px;
+		flex-flow: column nowrap;
+		gap: 15px;
 
-		.shiplist_combined_fleet {
-			width: 165px;
-			height: 315px;
-			float: left;
-			margin: 0 5px 0 0;
-		}
-
-		.special_cutin {
-			background-color: rgb(170 0 136 / 40%);
-		}
-
-		.hp_repairing {
-			background-color: rgb(100 255 100 / 30%);
-		}
-
-		.hp_fcf {
-			background-color: rgb(255 255 255 / 40%);
-		}
-
-		.akashiMark {
-			background-color: rgb(191 255 100 / 15%);
-		}
-
-		.hp_taiha {
-			background-color: rgb(255 0 0 / 40%);
-		}
-
-		/* Single kanmusu */
+		/* Single kanmusu
+		   l now stands for lucky */
 		.lship {
-			width: 340px;
-			height: 50px;
-			margin: 0 0 3px;
+			container-type: inline-size;
+			container-name: ship;
+			display: flex;
+			flex-flow: column nowrap;
 			border-radius: 5px;
-			padding: 3px 0 0;
 			position: relative;
+			gap: 2px;
+			padding: 3px;
+
+			/* ------- Status backgrounds ------- */
+			&.special_cutin {
+				background-color: rgb(170 0 136 / 40%);
+			}
+
+			&.hp_repairing {
+				background-color: rgb(100 255 100 / 30%);
+			}
+
+			&.hp_fcf {
+				background-color: rgb(255 255 255 / 40%);
+			}
+
+			&.akashiMark {
+				background-color: rgb(191 255 100 / 15%);
+			}
+
+			&.hp_taiha {
+				background-color: rgb(255 0 0 / 40%);
+			}
+
+			/* ------- Wrapper and image ------- */
+			.lship-line {
+				container-type: inline-size;
+				display: flex;
+				flex-flow: row nowrap;
+				gap: 2px 5px;
+
+				@container ship (width < 400px) {
+					flex-flow: row wrap;
+				}
+			}
 
 			.locktag {
 				width: 15px;
@@ -3727,13 +3736,12 @@ body {
 			}
 
 			.ribbon {
-				width: 12px;
-				height: 28px;
-				float: left;
+				width: 24px;
+				height: 71px;
 				position: absolute;
-				left: 1px;
-				top: 0;
-				transform: rotate(34deg);
+				left: -2px;
+				top: -20px;
+				transform: scale(0.5) rotate(34deg);
 				z-index: 1;
 				overflow: visible;
 				opacity: 0.8;
@@ -3741,8 +3749,8 @@ body {
 				display: none;
 
 				img {
-					width: 12px;
-					height: 28px;
+					width: 24px;
+					height: 71px;
 				}
 
 				&.r-1 img {
@@ -3753,27 +3761,6 @@ body {
 				&.r-2 img {
 					content: url("/assets/img/client/ribbons/2.png");
 					filter: drop-shadow(0 0 2px rgb(255 87 112 / 100%));
-				}
-			}
-
-			.ship_hp_pred_value {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				line-height: 7px;
-				text-align: center;
-				pointer-events: none;
-				display: none;
-
-				.ship_hp_diff {
-					color: #ff6565;
-					font-size: 11px;
-					text-shadow:
-							-1px -1px 1px #3d1414, 0 -1px 1px #3d1414, 1px -1px 1px #3d1414,
-							-1px 0 1px #3d1414, 1px 0 1px #3d1414,
-							-1px 1px 1px #3d1414, 0 1px 1px #3d1414, 1px 1px 1px #3d1414;
-					opacity: 0.84;
 				}
 			}
 
@@ -3795,108 +3782,125 @@ body {
 				z-index: 1;
 			}
 
-			.ex_item {
-				width: 18px;
-				height: 18px;
-				line-height: 18px;
-				position: absolute;
-				top: 30px;
-				left: 25px;
-				background: #fff;
-				border-radius: 9px;
-				z-index: 1;
+			.ship_img {
+				position: relative;
+				flex: 0 0 max(40px, 15cqw);
+				max-width: 60px;
+				height: max(40px, 15cqw);
+				max-height: 60px;
+				border-radius: 51%;
 
-				.gear_star {
-					width: 12px;
+				.ex_item {
+					width: 18px;
+					height: 18px;
+					line-height: 18px;
 					position: absolute;
-					font-size: 8px;
-					margin: 8px 0 0 -5px;
-					height: 12px;
-					overflow: hidden;
-					border-radius: 6px;
-					text-align: center;
-					line-height: 12px;
-					color: #ff0;
-					background: #45a9a5;
-					pointer-events: none;
-					display: none;
-				}
+					bottom: 0;
+					right: 0;
+					background: #fff;
+					border-radius: 9px;
+					z-index: 1;
 
-				&.empty {
-					background: rgb(255 255 255 / 80%);
-				}
-
-				&.item_being_used {
-					background: #fe3;
-				}
-
-				&.goddess {
-					box-shadow: 0 0 4px #ff0,
-					0 0 4px #ff0,
-					0 0 4px #ff0 !important;
-				}
-
-				.gear_icon {
-					overflow: hidden;
-
-					img {
-						width: 18px;
-						height: 18px;
-						line-height: 18px;
-						vertical-align: top;
+					.gear_star {
+						width: 12px;
+						position: absolute;
+						font-size: 8px;
+						margin: 8px 0 0 -5px;
+						height: 12px;
+						overflow: hidden;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 12px;
+						color: #ff0;
+						background: #45a9a5;
+						pointer-events: none;
+						display: none;
 					}
-				}
 
-				.ship_img {
-					width: 40px;
-					height: 40px;
-					float: left;
-					margin: 0 5px 0 0;
-					border-radius: 20px;
-					overflow: hidden;
+					&.empty {
+						background: rgb(255 255 255 / 80%);
+					}
 
-					img {
+					&.item_being_used {
+						background: #fe3;
+					}
+
+					&.goddess {
+						box-shadow: 0 0 4px #ff0,
+						0 0 4px #ff0,
+						0 0 4px #ff0 !important;
+					}
+
+					.gear_icon {
+						overflow: hidden;
+
+						img {
+							width: 18px;
+							height: 18px;
+							line-height: 18px;
+							vertical-align: top;
+						}
+					}
+
+					.ship_img {
 						width: 40px;
 						height: 40px;
-						position: relative;
-						margin: -1px 0 0 -1px;
-						border-radius: 50%;
+						float: left;
+						margin: 0 5px 0 0;
+						border-radius: 20px;
+						overflow: hidden;
+
+						img {
+							width: 40px;
+							height: 40px;
+							position: relative;
+							margin: -1px 0 0 -1px;
+							border-radius: 50%;
+						}
 					}
 				}
 
-				.mvp_icon {
-					width: 20px;
-					height: 20px;
-					line-height: 20px;
-					float: left;
-					position: absolute;
-					left: 0;
-					top: 28px;
-					z-index: 2;
-					overflow: hidden;
-					display: none;
+				img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
+			}
 
-					img {
-						width: 20px;
-						height: 20px;
-						vertical-align: top;
-					}
+			.mvp_icon {
+				width: 22px;
+				height: 22px;
+				position: absolute;
+				left: -2px;
+				top: -2px;
+				z-index: 2;
+				overflow: hidden;
+				display: none;
+
+				img {
+					width: 100%;
+					height: 100%;
 				}
 			}
 
 			/* ------- Name, type, level, HP column ------- */
 			.ship_col1 {
-				width: 120px;
-				height: 41px;
-				float: left;
-				margin: 0 5px 0 0;
+				flex: 0 0 41%;
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				align-content: center;
+				gap: 1px 10px;
+				overflow: hidden;
+
+				@container ship (width < 400px) {
+					flex: 0 0 calc(100% - max(40px, 15cqw) - 50px);
+				}
 
 				.ship_name {
-					width: 120px;
-					height: 15px;
+					flex: 1 1 100%;
 					line-height: 14px;
 					font-size: 12px;
-					float: left;
 					color: #ddd;
 					font-weight: bold;
 					white-space: nowrap;
@@ -3905,20 +3909,14 @@ body {
 				}
 
 				.ship_type {
-					width: 33px;
-					height: 15px;
 					line-height: 15px;
-					float: left;
 					font-size: 10px;
 					color: #0ff;
 					white-space: nowrap;
 				}
 
 				.ship_level {
-					width: 32px;
-					height: 15px;
 					line-height: 15px;
-					float: left;
 					font-size: 11px;
 					color: #fff;
 					white-space: nowrap;
@@ -3929,10 +3927,8 @@ body {
 				}
 
 				.ship_hp_text {
-					width: 55px;
-					height: 15px;
+					margin-left: auto;
 					line-height: 15px;
-					float: left;
 					color: #0f0;
 					text-align: right;
 					white-space: nowrap;
@@ -3949,35 +3945,28 @@ body {
 				}
 
 				.ship_hp_box {
-					width: 120px;
+					flex: 1 1 100%;
 					height: 11px;
-					float: left;
 					border: 1px solid #000;
 					background: #555;
 					position: relative;
 
-					.ship_hp_bar {
-						height: 9px;
-
-						&.hp_repairing {
-							background-color: #ace;
-						}
-
-						&.hp_fcf {
-							background-color: #fff;
-						}
-
-						&.hp_sunk {
-							background-color: #ccc;
-						}
-					}
-
-					.ship_hp_prediction {
-						height: 9px;
+					@container ship (width >= 400px) {
+						height: 15px;
 					}
 
 					.ship_hp_bar,
 					.ship_hp_prediction {
+						position: absolute;
+						top: 0;
+						left: 0;
+						z-index: 1;
+						height: 9px;
+
+						@container ship (width >= 400px) {
+							height: 13px;
+						}
+
 						&.hp_normal {
 							background-color: #0f0;
 						}
@@ -3993,28 +3982,77 @@ body {
 						&.hp_taiha {
 							background-color: #f00;
 						}
+
+						&.hp_repairing {
+							background-color: #ace;
+						}
+
+						&.hp_fcf {
+							background-color: #fff;
+						}
+
+						&.hp_sunk {
+							background-color: #ccc;
+						}
+
+						.ship_hp_pred_value {
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100%;
+							line-height: 7px;
+							text-align: center;
+							pointer-events: none;
+							display: none;
+
+							@container (width >= 400px) {
+								line-height: 12px;
+							}
+
+							.ship_hp_diff {
+								color: #ff6565;
+								font-size: 11px;
+								text-shadow:
+										-1px -1px 1px #3d1414, 0 -1px 1px #3d1414, 1px -1px 1px #3d1414,
+										-1px 0 1px #3d1414, 1px 0 1px #3d1414,
+										-1px 1px 1px #3d1414, 0 1px 1px #3d1414, 1px 1px 1px #3d1414;
+								opacity: 0.84;
+
+								@container (width >= 400px) {
+									font-size: 12px;
+								}
+							}
+						}
+					}
+
+					.ship_hp_prediction {
+						z-index: 2;
 					}
 
 					.ship_hp_bar_metrics {
+						position: relative;
+						top: 0;
+						left: 25%;
+						z-index: 3;
 						height: 5px;
-						float: left;
-						background-image: linear-gradient(
-								to right,
-								rgb(0 0 0 / 0%) 0%,
-								rgb(0 0 0 / 0%) 24%,
-								rgb(0 0 0 / 30%) 24%,
-								rgb(255 255 255 / 30%) 25%,
-								rgb(255 255 255 / 0%) 26%,
-								rgb(0 0 0 / 0%) 49%,
-								rgb(0 0 0 / 30%) 49.5%,
-								rgb(255 255 255 / 30%) 50.5%,
-								rgb(255 255 255 / 0%) 51%,
-								rgb(0 0 0 / 0%) 74%,
-								rgb(0 0 0 / 30%) 74%,
-								rgb(255 255 255 / 30%) 75%,
-								rgb(255 255 255 / 0%) 76%,
-								rgb(0 0 0 / 0%) 100%
-						);
+						width: 50%;
+						border-width: 0 1px;
+						border-style: solid;
+						border-color: rgb(0 0 0 / 75%);
+
+						@container ship (width >= 400px) {
+							height: 7px;
+						}
+
+						&::before {
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 50%;
+							width: 1px;
+							height: 5px;
+							background-color: rgb(0 0 0 / 75%);
+						}
 					}
 				}
 			}
@@ -4060,18 +4098,19 @@ body {
 
 			/* ------- Morale, XP column ------- */
 			.ship_col2 {
-				width: 40px;
-				height: 40px;
-				float: left;
-				margin: 0 5px 0 0;
+				flex: 0 0 auto;
+				display: flex;
+				flex-flow: column nowrap;
+				align-items: center;
+				justify-content: center;
+				gap: 3px;
+				text-align: center;
 
 				.ship_morale {
 					width: 40px;
 					height: 16px;
 					line-height: 16px;
-					text-align: center;
 					font-size: 12px;
-					margin: 0 0 2px;
 					border-radius: 5px;
 
 					&.glowing {
@@ -4088,11 +4127,8 @@ body {
 				}
 
 				.ship_exp_label {
-					width: 40px;
-					height: 11px;
 					line-height: 11px;
 					font-size: 11px;
-					text-align: center;
 					color: #aaa;
 					position: relative;
 
@@ -4108,45 +4144,54 @@ body {
 								0 0 4px #000,
 								0 0 4px #000,
 								0 0 4px #000;
-						text-align: center;
 						color: #fc0;
 					}
 				}
 
 				.ship_exp_next {
-					width: 40px;
-					height: 11px;
 					line-height: 11px;
 					font-size: 10px;
-					text-align: center;
 					color: #eee;
 				}
 			}
 
-			/* ------- Ship equipment ------- */
+			/* ------- Equipment ------- */
 			.ship_gears {
-				width: 80px;
-				height: 40px;
-				float: left;
-				margin: 0 3px 0 0;
+				flex: 1 1 auto;
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				align-content: space-evenly;
+				gap: 0 6px;
+				max-width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px) - 33cqw - 50px);
+
+				@container ship (width < 400px) {
+					flex: 0 0 calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px));
+					width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px));
+					margin-left: auto;
+					max-width: initial;
+					flex-flow: row nowrap;
+					justify-content: flex-start;
+					gap: 0;
+					padding-left: 5px;
+					margin-bottom: 2px;
+				}
 
 				.ship_gear {
-					width: 40px;
-					height: 20px;
-					float: left;
+					position: relative;
+					gap: 3px;
+					flex: 0 0 calc(100% / 3 - 4px);
 
-					&.ship_gear_5 {
-						display: none;
-						position: relative;
-						left: 83px;
-						top: -40px;
+					@container ship (width < 400px) {
+						flex: 0 0 20%;
 					}
 
 					.ship_gear_star {
 						width: 12px;
 						position: absolute;
+						bottom: -3px;
+						left: -3px;
 						font-size: 8px;
-						margin: 8px 0 0 -5px;
 						height: 12px;
 						overflow: hidden;
 						border-radius: 6px;
@@ -4156,39 +4201,34 @@ body {
 						background: #45a9a5;
 						pointer-events: none;
 						display: none;
+
+						@container ship (width < 400px) {
+							left: 2px;
+						}
 					}
 
 					.ship_gear_ace {
-						width: 12px;
-						position: absolute;
-						font-size: 8px;
-						margin: 4px 0 0 15px;
-						height: 12px;
+						width: 35px;
+						height: 20px;
 						overflow: hidden;
-						border-radius: 6px;
-						text-align: center;
-						line-height: 12px;
-						color: #ff0;
 						pointer-events: none;
 						display: none;
+						transform: scale(0.5);
+						margin: -1px -16px 0 -15px;
 
 						img {
-							vertical-align: middle;
-							width: 17px;
-							height: 10px;
-							position: absolute;
-							left: -2px;
-							top: 1px;
+							width: 100%;
+							height: 100%;
 						}
 					}
 
 					.ship_gear_icon {
-						width: 18px;
-						height: 18px;
+						width: max(18px, 4.5cqw);
+						height: max(18px, 4.5cqw);
+						max-width: 22px;
+						max-height: 22px;
 						line-height: 18px;
-						float: left;
-						border-radius: 9px;
-						margin: 1px 3px 0 0;
+						border-radius: 51%;
 
 						&.goddess {
 							box-shadow: 0 0 4px #ff0,
@@ -4197,8 +4237,8 @@ body {
 						}
 
 						img {
-							width: 16px;
-							height: 16px;
+							width: calc(100% - 2px);
+							height: calc(100% - 2px);
 							margin: 1px;
 							vertical-align: top;
 						}
@@ -4219,10 +4259,6 @@ body {
 					}
 
 					.ship_gear_slot {
-						width: 15px;
-						height: 20px;
-						float: left;
-						margin-left: 3px;
 						line-height: 20px;
 						font-size: 12px;
 					}
@@ -4237,25 +4273,25 @@ body {
 				}
 			}
 
-			/* ------- Ship fuel and ammo ------- */
+			/* ------- Fuel and ammo ------- */
 			.ship_supplies {
-				width: 40px;
-				height: 40px;
-				float: left;
+				width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px));
+				margin-left: auto;
+				display: flex;
+				flex-flow: row nowrap;
+				align-content: center;
+				gap: 2%;
 
 				.ship_supply {
-					width: 40px;
-					height: 16px;
-					margin: 2px 0;
+					flex: 0 0 49%;
 					position: relative;
 					background: #555;
 					border: 1px solid #000;
 
 					.ship_supply_text {
-						width: 38px;
-						height: 14px;
-						line-height: 14px;
-						font-size: 10px;
+						width: calc(100% - 2px);
+						line-height: 10px;
+						font-size: 8px;
 						color: #fff;
 						top: 0;
 						left: 0;
@@ -4264,7 +4300,7 @@ body {
 					}
 
 					.ship_supply_bar {
-						height: 14px;
+						height: 8px;
 					}
 
 					&.ship_fuel .ship_supply_bar {
@@ -4275,67 +4311,87 @@ body {
 						background: #990;
 					}
 				}
-
-				&.slot5 {
-					height: 20px;
-					margin-top: 20px;
-
-					.ship_supply {
-						height: 10px;
-						margin: 0;
-
-						.ship_supply_text {
-							height: 8px;
-							line-height: 8px;
-							font-size: 8px;
-						}
-
-						.ship_supply_bar {
-							height: 8px;
-						}
-					}
-				}
 			}
 
-			/* ------- Ship experience bar ------- */
+			/* ------- Experience bar ------- */
 			.ship_exp_box {
-				width: 290px;
+				position: relative;
+				width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px));
 				height: 2px;
 				background: #555;
-				margin: 0 0 0 46px;
+				margin-left: auto;
 
 				.ship_exp_bar {
 					height: 2px;
 					background: #78A9DA;
-					margin: 2px 0 0;
 				}
 			}
+
+			/* ------- Misc ship markers ------- */
+			&.sSalt {
+				filter: blur(1.5px);
+			}
+
+			&.sWife .ship_name {
+				color: #fbb;
+			}
+
+			.ship_no_lock {
+				visibility: hidden;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				text-align: center;
+				background-color: pink;
+				color: red;
+			}
+
+			&.sLock .ship_no_lock {
+				animation: lock-warning 0.5s steps(5,start) infinite;
+				visibility: visible;
+			}
 		}
-	}
 
-	/* Ship Misc Marker */
-	.sSalt {
-		filter: blur(1.5px);
-	}
+		&.shiplist_combined {
+			flex-flow: row nowrap;
+			gap: 10px;
 
-	.sWife .ship_name {
-		color: #fbb;
-	}
+			.ship_gears,
+			.ship_exp_box,
+			.ship_exp_label,
+			.ship_exp_next {
+				display: none;
+			}
 
-	.ship_no_lock {
-		visibility: hidden;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		text-align: center;
-		background-color: pink;
-		color: red;
-	}
+			.ship_col1 {
+				flex: 0 0 calc(100% - max(40px, 15cqw) - 30px);
 
-	.sLock .ship_no_lock {
-		animation: lock-warning 0.5s steps(5,start) infinite;
-		visibility: visible;
+				.ship_hp_text {
+					line-height: 10px;
+					position: absolute;
+					left: 1px;
+					bottom: -12px;
+					width: max(40px, 15cqw);
+					max-width: 60px;
+					text-align: center;
+				}
+			}
+
+			.ship_col2 .ship_morale {
+				width: 20px;
+				height: 20px;
+				border-radius: 16px;
+				line-height: 21px;
+				font-size: 10px;
+			}
+		}
+
+		.shiplist_combined_fleet {
+			display: flex;
+			flex-flow: column nowrap;
+			flex: 0 0 calc(50% - 5px);
+		}
 	}
 }
 
@@ -4348,6 +4404,10 @@ body {
 	grid-area: status;
 
 	.status_box {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		flex: 0 0 50%;
 		line-height: 20px;
 
 		.status_icon {
