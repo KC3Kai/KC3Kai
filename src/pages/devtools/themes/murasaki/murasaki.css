@@ -83,6 +83,9 @@ html,body {
 	position: absolute;
 	top: 0;
 	left: 0;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
 	display: none;
 
 	.blackFilter {
@@ -97,142 +100,80 @@ html,body {
 
 	.content {
 		padding: 10px;
+		margin: 10px;
 		border-radius: 10px;
-		top: 50%;
-		left: 50%;
-		position: absolute;
 		z-index: 2;
 	}
 }
 
 /* CATBOMB MODAL
 ------------------------------ */
-#catBomb {
+#catBomb,
+#gameUpdate {
 	z-index: 102;
 
 	.content {
-		width: 400px;
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
+		gap: 10px;
+		max-width: 400px;
 		min-height: 120px;
 		max-height: 220px;
 		background-color: #fdd;
-		margin: -60px auto 0 -200px;
 		color: #c44;
 
 		&.withDownload {
-			margin: -70px auto 0 -200px;
 			height: 140px;
 		}
-	}
 
-	.image {
-		width: 40px;
-		height: 40px;
-		margin: 0 10px 0 0;
-		float: left;
-
-		img {
+		.image {
 			width: 40px;
 			height: 40px;
+
+			img {
+				width: 40px;
+				height: 40px;
+			}
 		}
-	}
 
-	.title {
-		width: 300px;
-		height: 40px;
-		line-height: 40px;
-		font-size: 14px;
-		font-weight: bold;
-		float: left;
-		white-space: nowrap;
-	}
-
-	.closebtn {
-		width: 25px;
-		height: 40px;
-		line-height: 30px;
-		font-weight: bold;
-		float: left;
-		text-align: right;
-		font-size: 30px;
-		margin: 0 0 0 5px;
-		color: #e88;
-
-		&:hover {
-			color: #f55;
+		.title {
+			flex: 0 0 calc(100% - 80px);
+			line-height: 16px;
+			font-size: 14px;
+			font-weight: bold;
 		}
-	}
 
-	.description {
-		width: 380px;
-		margin: 10px 0 0;
-		font-size: 12px;
-	}
+		.closebtn {
+			width: 20px;
+			height: 40px;
+			line-height: 30px;
+			font-weight: bold;
+			font-size: 30px;
+			color: #e88;
+			margin-left: auto;
 
-	.download {
-		text-align: center;
-		font-weight: bold;
-		font-size: 14px;
-		margin: 2px 0 0;
+			&:hover {
+				color: #f55;
+			}
+		}
+
+		.description {
+			font-size: 12px;
+		}
+
+		.download {
+			text-align: center;
+			font-weight: bold;
+			font-size: 14px;
+			margin-top: 2px;
+			width: 100%;
+		}
 	}
 }
 
-/* GAME UPDATE MODAL
------------------------------- */
 #gameUpdate {
 	z-index: 101;
-
-	.content {
-		width: 400px;
-		min-height: 120px;
-		max-height: 220px;
-		background-color: #dfd;
-		margin: -60px auto 0 -200px;
-		color: #0c0;
-	}
-
-	.image {
-		width: 40px;
-		height: 40px;
-		margin: 0 10px 0 0;
-		float: left;
-
-		img {
-			width: 40px;
-			height: 40px;
-		}
-	}
-
-	.title {
-		width: 300px;
-		height: 40px;
-		line-height: 40px;
-		font-size: 14px;
-		font-weight: bold;
-		float: left;
-		white-space: nowrap;
-	}
-
-	.closebtn {
-		width: 25px;
-		height: 40px;
-		line-height: 30px;
-		font-weight: bold;
-		float: left;
-		text-align: right;
-		font-size: 30px;
-		margin: 0 0 0 5px;
-		color: #8e8;
-
-		&:hover {
-			color: #5f5;
-		}
-	}
-
-	.description {
-		width: 380px;
-		margin: 10px 0 0;
-		font-size: 12px;
-	}
 }
 
 /* MURASAKI THEME
@@ -752,18 +693,20 @@ body {
 				border: 1px solid #aaa;
 
                 &.boss-node {
+					position: relative;
 					border-color: #a90a0a;
 					background: #7d0000;
 
 					&::before {
 						content: '';
-						width: 12px;
-						height: 12px;
+						width: 100%;
+						height: 100%;
 						position: absolute;
-						top: 0;
+						top: -5px;
 						left: 0;
-						z-index: 0;
+						z-index: -1;
 						background: transparent url("/assets/img/client/boss.png");
+						background-size: cover;
 					}
 				}
 
@@ -1356,32 +1299,30 @@ body {
 
 		/* Resource Nodes */
 		.node_type_resource {
-			width: 150px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 5px;
 			line-height: 18px;
 			padding: 4px;
 			background: #B1FF5E;
 			border: 1px solid #70D800;
 			border-radius: 7px;
-			margin: 10px auto;
+			margin: 10px;
 			text-shadow: none;
 
 			.node_res_icon {
 				width: 18px;
 				height: 18px;
-				float: left;
-				margin: 0 5px 0 0;
-				vertical-align: top;
 
 				img {
-					width: 18px;
-					height: 18px;
+					width: 100%;
+					height: 100%;
 					vertical-align: top;
 				}
 			}
 
 			.node_res_text {
-				width: 140px;
-				height: 20px;
 				font-weight: bold;
 				font-size: 12px;
 			}
@@ -1439,6 +1380,7 @@ body {
 				.encounter_ships {
 					display: flex;
 					flex-flow: row nowrap;
+					gap: 3px;
 
 					.encounter_ship {
 						width: 30px;
@@ -1474,12 +1416,10 @@ body {
 
 		/* Text Nodes */
 		.node_type_text {
-			width: 150px;
-			height: 28px;
 			line-height: 18px;
 			padding: 4px;
 			border-radius: 7px;
-			margin: 10px auto;
+			margin: 10px;
 			text-align: center;
 			font-size: 12px;
 
@@ -2278,74 +2218,59 @@ body {
 
 	/* ------- ACTIVITY: FIT ------- */
 	.activity_gunfit {
-		padding: 5px 10px;
+		flex-flow: column nowrap;
+		gap: 5px;
+		padding: 5px;
 
 		.fit_profile {
-			height: 50px;
-			padding: 3px 0;
-			margin: 0 0 2px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 5px;
 
 			.fit_profile_pic {
-				width: 40px;
+				flex: 0 0 40px;
 				height: 40px;
-				float: left;
-				border-radius: 20px;
+				border-radius: 51%;
 				border: 1px solid #000;
 				overflow: hidden;
-				margin: 0 5px 0 0;
 
 				img {
-					width: 40px;
-					height: 40px;
-					position: relative;
-					margin: -1px 0 0 -1px;
-					border-radius: 50%;
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
 				}
 			}
 
 			.fit_profile_name {
-				width: 125px;
-				height: 22px;
-				line-height: 22px;
-				float: left;
 				font-size: 13px;
+				line-height: 16px;
 				font-weight: bold;
 				color: #fc0;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
 			}
 
 			.fit_profile_level {
-				width: 125px;
-				height: 14px;
-				line-height: 14px;
-				float: left;
+				margin-left: auto;
 				font-size: 12px;
+				white-space: nowrap;
 				color: #ccc;
 			}
 		}
 
 		.fit_gear {
-			height: 40px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 5px;
 
 			.fit_gear_pic {
-				width: 30px;
+				flex: 0 0 30px;
 				height: 30px;
 				border: 0 none;
 				background: #333;
-
-				img {
-					width: 30px;
-					height: 30px;
-					position: relative;
-					margin: 0;
-				}
 			}
 
 			.fit_gear_name {
-				width: 135px;
-				height: 14px;
 				font-size: 12px;
 				line-height: 14px;
 			}
@@ -2363,127 +2288,109 @@ body {
 			}
 		}
 
-		.fit_value {
-			width: 176px;
-			height: 50px;
-			line-height: 15px;
-			font-size: 11px;
-			border-radius: 8px;
-			margin: 0 0 4px;
-			padding: 1px 0;
-			color: #000;
-			background: #aaa;
-			text-shadow: none;
+		.fit-values {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 3px;
 
-			.fit_current {
-				float: left;
-				width: 100%;
-				height: 30px;
-				margin: 0 0 1px;
-				padding: 0 5px;
+			.fit_value {
+				flex-flow: column wrap;
+				line-height: 15px;
+				font-size: 11px;
+				border-radius: 6px;
+				padding: 3px 5px;
+				color: #000;
+				background: #aaa;
+				text-shadow: none;
 
-				.fit_label {
-					float: left;
-					width: 108px;
-					height: 30px;
-					margin-right: 2px;
-					padding-right: 2px;
-					text-align: center;
-					overflow: hidden;
+				.fit_current {
+					display: flex;
+					flex-flow: row nowrap;
+					align-items: center;
+					gap: 3px;
+
+					.fit_label {
+						line-height: 14px;
+					}
+
+					.fit_current_value {
+						display: flex;
+						flex-flow: column nowrap;
+						gap: 1px;
+						margin-left: auto;
+
+						.fit_unknown {
+							flex-flow: column nowrap;
+							gap: 1px;
+							align-items: center;
+							display: none;
+
+							img {
+								width: 14px;
+								height: 14px;
+							}
+						}
+
+						.fit_day,
+						.fit_night {
+							flex-flow: row nowrap;
+							align-items: flex-end;
+							gap: 3px;
+
+							img {
+								width: 14px;
+								height: 14px;
+							}
+						}
+
+						.fit_night img {
+								width: 13px;
+								height: 13px;
+						}
+
+						.fit_bonus {
+							font-weight: bold;
+							color: #3c3;
+							text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
+							filter: drop-shadow(0 0 1px #eee);
+						}
+
+						.fit_penalty {
+							font-weight: bold;
+							color: #a55;
+							text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
+							filter: drop-shadow(0 0 1px #eee);
+						}
+					}
 				}
 
-				.fit_unknown {
-					float: left;
-					width: 50px;
+				.fit_total {
+					flex: 0 0 100%;
+					padding: 0 5px;
+					color: #eee;
 					text-align: center;
 					overflow: hidden;
 					white-space: nowrap;
-					display: none;
-
-					img {
-						width: 14px;
-						height: 14px;
-						vertical-align: text-top;
-					}
-				}
-
-				.fit_day {
-					float: left;
-					width: 50px;
-
-					img {
-						width: 14px;
-						height: 14px;
-						margin-right: 1px;
-						vertical-align: text-bottom;
-					}
-				}
-
-				.fit_night {
-					float: left;
-					width: 50px;
-
-					img {
-						width: 13px;
-						height: 13px;
-						margin-right: 2px;
-						vertical-align: text-bottom;
-					}
-				}
-
-				.fit_bonus {
-					font-weight: bold;
-					color: #3c3;
-					text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
-					filter: drop-shadow(0 0 1px #eee);
-				}
-
-				.fit_penalty {
-					font-weight: bold;
-					color: #a55;
-					text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
-					filter: drop-shadow(0 0 1px #eee);
+					text-overflow: ellipsis;
 				}
 			}
 
-			.fit_total {
-				float: left;
-				width: 100%;
-				height: 16px;
-				padding: 0 5px;
-				color: #eee;
-				text-align: center;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-			}
-		}
+			.oasw {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
+				font-size: 11px;
+				line-height: 12px;
+				border-radius: 6px;
+				padding: 5px 7px;
+				color: #ddd;
+				background: #15c;
 
-		.scrollable {
-			width: 176px;
-			max-height: 134px;
-			overflow: hidden auto;
-
-			&::-webkit-scrollbar {
-				width: 3px;
-			}
-		}
-
-		.oasw {
-			width: 176px;
-			height: 36px;
-			font-size: 11px;
-			line-height: 16px;
-			border-radius: 8px;
-			padding: 2px 5px;
-			margin: 0 0 4px;
-			color: #ddd;
-			background: #15c;
-
-			.oasw_message {
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
+				.oasw_message {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
 
 				.oasw_power {
 					overflow: hidden;
@@ -2495,171 +2402,82 @@ body {
 					}
 				}
 			}
-		}
 
-		.aaci {
-			width: 176px;
-			height: auto;
-			margin: 0 0 2px;
-			overflow: hidden;
-			overflow-y: auto;
+			.aaci .aaciList {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
+				width: 100%;
 
-			.aaciPattern {
-				width: 170px;
-				height: 20px;
-				margin: 0 0 1px;
-				border-radius: 6px;
-				font-size: 12px;
-				color: #ccc;
-
-				&.triggerable {
-					background: #777;
-				}
-			}
-
-			.apiId {
-				width: 20px;
-				height: 20px;
-				margin: 0 2px 0 0;
-				padding: 1px 5px;
-				float: left;
-			}
-
-			.shipIcon {
-				width: 18px;
-				height: 20px;
-				margin: 0 1px 0 0;
-				padding: 1px 2px;
-				float: left;
-
-				img {
-					width: 18px;
-					height: 18px;
-					margin-top: -2px;
-					margin-left: -2px;
-					border-radius: 50%;
-				}
-			}
-
-			.equipIcons {
-				width: 62px;
-				height: 20px;
-				margin: 0 1px;
-				padding: 1px 2px;
-				float: left;
-
-				img {
-					width: 18px;
-					height: 18px;
-					margin-left: -4px;
-				}
-
-				.plusIcon {
-					width: 15px;
-					height: 15px;
-					margin: 5px 0 0 -12px;
-					position: relative;
-					pointer-events: none;
-					filter: hue-rotate(75deg);
-					transform: scaleX(-1);
-				}
-
-				.minusIcon {
-					width: 15px;
-					height: 15px;
-					margin: 5px 0 0 -12px;
-					position: relative;
-					pointer-events: none;
-					filter: hue-rotate(-90deg);
-					transform: scaleX(-1);
-				}
-			}
-
-			.fixed {
-				width: 25px;
-				height: 20px;
-				margin: 0 1px 0 0;
-				padding: 1px 2px;
-				float: left;
-			}
-
-			.modifier {
-				width: 34px;
-				height: 20px;
-				margin: 0 2px 0 0;
-				padding: 1px 2px;
-				float: left;
-			}
-
-			.landing {
-				width: 176px;
-				height: auto;
-				margin: 0 0 2px;
-				overflow: hidden;
-				overflow-y: auto;
-
-				.landingInfo {
-					width: 155px;
-					height: 20px;
-					line-height: 20px;
-					margin: 0 0 1px 6px;
+				.aaciPattern {
+					display: flex;
+					flex-flow: row nowrap;
+					gap: 3px;
+					align-items: center;
 					border-radius: 6px;
 					font-size: 12px;
 					color: #ccc;
-					background: rgb(255 54 54 / 20%);
+					padding: 1px 5px;
+
+					&.triggerable {
+						background: #777;
+					}
+				}
+
+				.apiId {
+					min-width: 14px;
+					text-align: right;
 				}
 
 				.shipIcon {
-					width: 18px;
+					width: 20px;
 					height: 20px;
-					margin: 0 5px;
-					float: left;
+
+					img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+					}
+				}
+
+				.equipIcons {
+					flex: 1 0 auto;
 
 					img {
 						width: 18px;
 						height: 18px;
-						border-radius: 50%;
-						margin-top: 1px;
-						vertical-align: top;
 					}
-				}
 
-				.power {
-					width: 50px;
-					height: 20px;
-					margin: 0 2px 0 0;
-					float: left;
-					white-space: nowrap;
-					overflow: visible;
-
-					img {
+					/* TODO - find out what this is and possibly fix it */
+					.plusIcon {
 						width: 15px;
 						height: 15px;
-						vertical-align: text-top;
+						margin: 5px 0 0 -12px;
+						position: relative;
+						pointer-events: none;
+						filter: hue-rotate(75deg);
+						transform: scaleX(-1);
 					}
 
-					.value {
-						margin-left: 2px;
+					.minusIcon {
+						width: 15px;
+						height: 15px;
+						margin: 5px 0 0 -12px;
+						position: relative;
+						pointer-events: none;
+						filter: hue-rotate(-90deg);
+						transform: scaleX(-1);
 					}
-				}
-
-				.modifiers {
-					width: 15px;
 				}
 			}
 
 			.equip {
-				width: 176px;
-				height: auto;
-				margin: 0 0 2px;
-				overflow: hidden;
-				overflow-y: auto;
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
 
 				.equipInfo {
-					width: 155px;
-					height: auto;
-					margin: 0 0 1px 6px;
-					padding: 1px;
+					padding: 4px;
 					border-radius: 6px;
 					font-size: 12px;
 					color: #ccc;
@@ -2667,54 +2485,101 @@ body {
 				}
 
 				.equipIcons {
-					margin: 0 5px;
+					display: flex;
+					flex-flow: row nowrap;
+					gap: 2px;
 
 					img {
-						width: 22px;
-						height: 22px;
-						border-radius: 50%;
-						position: relative;
-						margin: 1px;
+						width: 27px;
+						height: 27px;
+						border-radius: 51%;
 						vertical-align: top;
 						background-color: #fff;
 					}
 
 					span {
-						line-height: 22px;
+						line-height: 27px;
 						font-size: 20px;
 					}
 				}
 
 				.statsBox {
-					width: 155px;
-					height: auto;
-					margin: 4px 0 1px 6px;
+					display: flex;
+					flex-flow: row nowrap;
+					gap: 5px;
 					border-radius: 6px;
 					line-height: 18px;
 					font-size: 12px;
-					padding: 2px;
+					padding: 4px;
 					background: rgb(146 146 146 / 49%);
 					color: #fff;
 
 					div {
-						display: inline-block;
-						margin-right: 2px;
-						white-space: nowrap;
-					}
-
-					span {
-						vertical-align: baseline;
+						display: inline-flex;
+						flex-flow: row nowrap;
+						align-items: center;
+						gap: 2px;
 					}
 
 					img {
-						margin: auto 1px;
-						max-width: 18px;
-						height: 16px;
-						vertical-align: text-bottom;
+						width: 18px;
+						height: 18px;
 						background: #fff;
-						border-radius: 50%;
-						padding: 1px;
+						border-radius: 41%;
+						padding: 2px;
+						box-sizing: content-box;
 					}
+
+					span {
+						line-height: 24px;
+					}
+				}
+			}
+
+			.landing .landingList {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 1px;
+
+				.landingInfo {
+					display: flex;
+					flex-flow: row nowrap;
+					gap: 5px;
+					align-items: center;
+					line-height: 20px;
+					border-radius: 6px;
+					font-size: 12px;
+					color: #ccc;
+					background: rgb(255 54 54 / 20%);
+					padding: 2px;
+				}
+
+				.shipIcon {
+					width: 20px;
+					height: 20px;
+
+					img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+						vertical-align: top;
+					}
+				}
+
+				.power {
+					display: inline-flex;
+					flex-flow: row nowrap;
+					gap: 3px;
+					align-items: center;
+
+					img {
+						width: 15px;
+						height: 15px;
+					}
+				}
+
+				.modifiers {
+					margin-left: auto;
 				}
 			}
 		}
@@ -3038,19 +2903,17 @@ body {
 
 	/* ------- ACTIVITY: Remodel Info ------- */
 	.activity_remodel {
-		padding: 5px 10px;
 		color: #ddd;
 		font-size: 12px;
 
 		.remodel_header {
-			width: 170px;
-			height: 34px;
-			margin: 0 0 1px;
+			margin-bottom: 2px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
 
 			.recipe_title,
 			.result_title {
-				float: left;
-				width: 138px;
 				color: #fc0;
 				font-weight: bold;
 				overflow: hidden;
@@ -3066,27 +2929,20 @@ body {
 			}
 
 			.assistant_ship {
-				float: right;
+				margin-left: auto;
 				width: 30px;
 				height: 30px;
 				margin-top: 2px;
 				border: 1px solid #000;
-				border-radius: 15px;
+				border-radius: 51%;
 				overflow: hidden;
 
 				img {
-					width: 30px;
-					height: 30px;
-					margin: -1px 0 0 -1px;
-					border-radius: 50%;
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
 				}
 			}
-		}
-
-		.remodel_scrollable {
-			width: 176px;
-			max-height: 106px;
-			overflow: hidden auto;
 		}
 
 		.remodel_slotlist,
@@ -3094,16 +2950,17 @@ body {
 		.remodel_consumptions,
 		.remodel_upgrade_to,
 		.remodel_improved {
-			width: 170px;
-			height: auto;
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 5px;
 
 			.remodelSlotItem {
-				width: 170px;
-				height: 56px;
+				display: flex;
+				flex-flow: row nowrap;
 				background: rgb(255 255 255 / 20%);
 				border-radius: 5px;
-				margin: 0 0 2px;
-				padding: 1px;
+				margin-bottom: 2px;
+				gap: 5px;
 				overflow: hidden;
 
 				&.sptype1 {
@@ -3114,124 +2971,110 @@ body {
 					box-shadow: 0 0 5px 0 #1e4;
 				}
 
-				&.withStar {
-					height: 69px;
-				}
-
-				&.noReqs {
-					height: 22px;
-
-					.remodel_slot_itemon {
-						display: none;
-					}
+				&.noReqs .remodel_slot_itemon {
+					display: none;
 				}
 
 				.remodel_slot_itemon {
-					float: left;
-					width: 40px;
+					flex: 0 0 40px;
 					height: 56px;
 
 					img {
-						width: 40px;
-						height: 56px;
+						width: 100%;
+						height: 100%;
 					}
 				}
 
-				.remodel_slot_icon {
-					float: left;
-					width: 20px;
-					height: 20px;
-					margin-right: 2px;
-					background: rgb(0 0 0 / 60%);
-					border-radius: 10px;
-					overflow: hidden;
+				.remodel_slot_desc {
+					display: flex;
+					flex-flow: column nowrap;
+					flex: 0 0 calc(100% - 45px);
+					overflow: clip visible;
+					gap: 2px;
 
-					img {
-						width: 20px;
-						height: 20px;
-						vertical-align: top;
+					.remodel_slot_imgname {
+						display: flex;
+						flex-flow: row nowrap;
+						align-items: center;
+						gap: 2px;
+						flex: 0 0 auto;
+						margin-top: 2px;
+
+						.remodel_slot_icon {
+							width: 20px;
+							height: 20px;
+							background: rgb(0 0 0 / 60%);
+							border-radius: 10px;
+							overflow: hidden;
+
+							img {
+								width: 100%;
+								height: 100%;
+								vertical-align: top;
+							}
+						}
+
+						.remodel_slot_name {
+							color: #eee;
+							line-height: 20px;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
 					}
 				}
 
-				.remodel_slot_name {
-					float: left;
-					width: 106px;
-					height: 20px;
-					color: #eee;
-					line-height: 20px;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
-
-				&.noReqs .remodel_slot_name {
-					width: 144px;
-				}
-
-				&.withStar .remodel_slot_name {
-					width: 106px;
+				&.noReqs .remodel_slot_desc {
+					flex: 0 0 100%;
+					margin: 0 0 2px 2px;
+					padding-right: 4px;
 				}
 
 				.remodel_slot_star {
-					float: left;
 					font-size: 11px;
 					font-weight: bold;
-					min-width: 38px;
-					height: 13px;
-					line-height: 13px;
-					margin: 0 0 0 2px;
 					color: #45a9a5;
+					white-space: nowrap;
+					margin: 0 5px 0 auto;
 					display: none;
 
 					img {
-						width: 12px;
-						height: 12px;
-						margin-top: -2px;
+						width: 13px;
+						height: 13px;
+						margin-top: -3px;
 					}
 				}
 
-				&.noReqs .remodel_slot_star {
-					margin-top: 3px;
-				}
-
 				.remodel_slot_success {
-					float: left;
 					font-size: 11px;
-					min-width: 38px;
-					height: 13px;
-					line-height: 13px;
-					margin: 0 0 0 2px;
+					margin-right: 5px;
 					color: #8ae9e4;
 					display: none;
 				}
 
 				.remodel_slot_reqs {
-					float: left;
-					width: 127px;
-					height: 32px;
-					color: #222;
+					display: flex;
+					flex-flow: row wrap;
+					align-items: center;
+					gap: 1px 5px;
 					font-size: 11px;
-					margin-top: 2px;
-					overflow: hidden auto;
 					text-shadow: none;
+					margin-bottom: 3px;
 
-					&::-webkit-scrollbar {
-						width: 3px;
+					.remodel-req-separator {
+						width: 100%;
 					}
 
 					div {
-						float: left;
-						height: 15px;
 						line-height: 15px;
-						margin-left: 2px;
-						display: inline-block;
+						display: inline-flex;
+						flex-flow: row nowrap;
+						gap: 3px;
 					}
 
 					img {
 						width: 12px;
 						height: 12px;
-						vertical-align: text-bottom;
-						margin-right: 1px;
 					}
 
 					span {
@@ -3241,7 +3084,6 @@ body {
 
 						&.certain {
 							color: #8ae9e4;
-							margin-left: 1px;
 						}
 					}
 				}
@@ -3254,69 +3096,74 @@ body {
 
 		.remodel_consumptions {
 			font-size: 11px;
+			margin: 5px 0 2px;
 
-			.remodel_consume_item {
-				width: 170px;
-				height: 14px;
-				margin-bottom: 1px;
+			.remodel_consume_items {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 4px;
 
-				.remodel_slot_icon {
-					float: left;
-					width: 14px;
-					height: 14px;
-					margin-right: 4px;
-					background: rgb(0 0 0 / 60%);
-					border-radius: 7px;
-					overflow: hidden;
+				.remodel_consume_item {
+					display: flex;
+					align-items: center;
+					gap: 4px;
 
-					img {
-						width: 14px;
-						height: 14px;
-						vertical-align: top;
+					.remodel_slot_icon {
+						width: 16px;
+						height: 16px;
+						background: rgb(0 0 0 / 60%);
+						border-radius: 7px;
+
+						img {
+							width: 100%;
+							height: 100%;
+							vertical-align: top;
+						}
 					}
-				}
 
-				.remodel_slot_name {
-					float: left;
-					width: 130px;
-					height: 14px;
-					color: #45a9a5;
-					line-height: 14px;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
+					.remodel_slot_name {
+						color: #45a9a5;
+						line-height: 14px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
 
-				.remodel_consume_amount {
-					float: left;
-					color: #45a9a5;
-					font-weight: bold;
-					line-height: 14px;
+					.remodel_consume_amount {
+						margin-left: auto;
+						color: #45a9a5;
+						font-weight: bold;
+						line-height: 14px;
+					}
 				}
 			}
 
-			.owned_item {
-				float: left;
-				margin-right: 5px;
-				display: none;
+			.remodel_owned_items {
+				display: flex;
+				flex-flow: row nowrap;
+				gap: 7px;
 
-				img {
-					width: 12px;
-					height: 12px;
-					vertical-align: text-top;
-				}
+				.owned_item {
+					display: none;
+					gap: 3px;
 
-				&.owned_star0_item .star0 {
-					color: #45a9a5;
-					font-weight: bold;
-				}
+					img {
+						width: 12px;
+						height: 12px;
+						vertical-align: text-top;
+					}
 
-				.value {
-					color: #45a9a5;
-					margin-left: 2px;
+					&.owned_star0_item .star0 {
+						color: #45a9a5;
+						font-weight: bold;
+					}
 
-					&.red {
-						color: #f00;
+					.value {
+						color: #45a9a5;
+
+						&.red {
+							color: #f00;
+						}
 					}
 				}
 			}
@@ -3325,22 +3172,27 @@ body {
 		.remodel_upgrade_title {
 			color: #fc0;
 			font-size: 11px;
-			margin-top: 1px;
 		}
 
 		.remodel_footer {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			justify-content: flex-end;
+			gap: 7px;
+			margin-top: 4px;
+
 			> div {
-				float: right;
-				height: 17px;
-				line-height: 17px;
-				margin-left: 10px;
+				line-height: 18px;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				gap: 3px;
 			}
 
 			img {
-				width: 14px;
-				height: 14px;
-				vertical-align: text-bottom;
-				margin-right: 2px;
+				width: 16px;
+				height: 16px;
 			}
 		}
 	}
@@ -3447,7 +3299,7 @@ body {
 	flex-flow: row wrap;
 	align-items: center;
 	justify-content: space-between;
-	gap: 5px;
+	gap: 5px 1px;
 	container-type: inline-size;
 
 	.control-separator {
@@ -3464,56 +3316,60 @@ body {
 		color: #ccc;
 
 		&.fleet_num {
-			width: 30px;
-			height: 30px;
-			line-height: 30px;
-			border-radius: 16px;
+			flex: 1 1 auto;
+			max-width: 30px;
+			max-height: 30px;
+			border-radius: 51%;
 			background: #333;
-			text-align: center;
-			font-size: 19px;
+			font-size: min(19px, 6cqw);
 			font-weight: bold;
+			aspect-ratio: 1 / 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
 			&.preSortieCheck {
 				border: 2px dotted #fa2;
-				line-height: 26px;
 			}
 
 			&.onExped {
 				border: 2px solid #a69de6;
-				line-height: 26px;
 			}
 
 			&.needsSupply {
 				border: 2px solid #f00;
-				line-height: 26px;
 			}
 
 			&.hasTaiha {
 				background: #faa;
 				color: #000;
 			}
+
+			&.active {
+				border: 2px solid #fc0;
+			}
 		}
 
 		&.fleet_rengo {
-			width: 50px;
+			flex: 0 1 auto;
 			border-radius: 8px;
 			background: #333;
 
 			img {
-				width: 50px;
-				height: 30px;
+				width: 100%;
+				height: 100%;
 			}
 		}
 
 		&.fleet_lbas {
-			width: 40px;
+			flex: 1 0 auto;
+			max-width: 40px;
 			border-radius: 8px;
 			background: #333;
 			text-align: center;
 
 			img {
-				width: 30px;
-				height: 30px;
+				max-height: 30px;
 			}
 
 			&.badMorale {
@@ -3666,7 +3522,7 @@ body {
 
 	.shiplist {
 		flex-flow: column nowrap;
-		gap: 15px;
+		gap: 5px;
 
 		/* Single kanmusu
 		   l now stands for lucky */
@@ -3707,32 +3563,13 @@ body {
 				display: flex;
 				flex-flow: row nowrap;
 				gap: 2px 5px;
+				align-items: center;
+				position: relative;
+				z-index: 2;
 
 				@container ship (width < 400px) {
 					flex-flow: row wrap;
 				}
-			}
-
-			.locktag {
-				width: 15px;
-				height: 15px;
-				line-height: 12px;
-				float: left;
-				position: absolute;
-				left: 28px;
-				top: 0;
-				z-index: 1;
-				overflow: hidden;
-				border-radius: 50%;
-				border: 1px #fff solid;
-				color: #fff;
-				background: #aaa;
-				opacity: 0.8;
-				font-size: 10px;
-				text-align: center;
-				text-shadow: 1px 1px 1px #224169;
-				pointer-events: none;
-				display: none;
 			}
 
 			.ribbon {
@@ -3789,6 +3626,12 @@ body {
 				height: max(40px, 15cqw);
 				max-height: 60px;
 				border-radius: 51%;
+
+				img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
 
 				.ex_item {
 					width: 18px;
@@ -3860,10 +3703,25 @@ body {
 					}
 				}
 
-				img {
-					width: 100%;
-					height: 100%;
-					border-radius: 51%;
+				.locktag {
+					width: 18px;
+					height: 18px;
+					line-height: 16px;
+					position: absolute;
+					right: 0;
+					top: 0;
+					z-index: 1;
+					overflow: hidden;
+					border-radius: 50%;
+					border: 1px #fff solid;
+					color: #fff;
+					background: #aaa;
+					opacity: 0.8;
+					font-size: 10px;
+					text-align: center;
+					text-shadow: 1px 1px 1px #224169;
+					pointer-events: none;
+					display: none;
 				}
 			}
 
@@ -3891,7 +3749,7 @@ body {
 				align-items: center;
 				align-content: center;
 				gap: 1px 10px;
-				overflow: hidden;
+				overflow: clip visible;
 
 				@container ship (width < 400px) {
 					flex: 0 0 calc(100% - max(40px, 15cqw) - 50px);
@@ -4062,38 +3920,39 @@ body {
 				position: absolute;
 				top: 0;
 				left: 0;
-				right: 0;
-				font-size: 10px;
 				width: 100%;
 				height: 100%;
-			}
-
-			&:not(:hover) .ship_repair_data {
+				z-index: 4;
+				font-size: 10px;
 				display: none;
-			}
+				flex-flow: row nowrap;
 
-			&:hover .ship_repair_data {
-				display: block;
-			}
+				@container ship (width < 400px) {
+					height: 150%;
+				}
 
-			.ship_repair_tick {
-				width: 50%;
-				float: left;
-				text-align: center;
-				background-color: white;
-				color: green;
+				.ship_repair_tick,
+				.ship_repair_timer {
+					flex: 0 0 50%;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background-color: white;
+					color: green;
+				}
 
-				&::before {
+				.ship_repair_tick::before {
 					content:"+" attr(data-tick);
+				}
+
+				.ship_repair_timer {
+					color: red;
 				}
 			}
 
-			.ship_repair_timer {
-				width: 50%;
-				float: left;
-				text-align: center;
-				background-color: white;
-				color: red;
+			&:hover .ship_repair_data {
+				display: flex;
 			}
 
 			/* ------- Morale, XP column ------- */
@@ -4162,7 +4021,7 @@ body {
 				flex-flow: row wrap;
 				align-items: center;
 				align-content: space-evenly;
-				gap: 0 6px;
+				gap: 6px;
 				max-width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px) - 33cqw - 50px);
 
 				@container ship (width < 400px) {
@@ -4391,6 +4250,7 @@ body {
 			display: flex;
 			flex-flow: column nowrap;
 			flex: 0 0 calc(50% - 5px);
+			gap: 3px;
 		}
 	}
 }

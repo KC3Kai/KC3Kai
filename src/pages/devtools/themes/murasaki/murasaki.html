@@ -862,13 +862,15 @@
 							<div class="fit_gear_name fit_profile_name"></div>
 							<div class="fit_gear_level fit_profile_level"><img src="/assets/img/client/eqstar.png">+<span></span></div>
 						</div>
-						<div class="scrollable">
+						<div class="fit-values">
 							<div class="fit_value">
 								<div class="fit_current">
 									<div class="fit_label i18n">FitWeightValue</div>
-									<div class="fit_unknown"><img src="/assets/img/stats/sb.png"><br/><span class="i18n">FitWeightUnknown</span></div>
-									<div class="fit_day"><img src="/assets/img/ui/dark_day.png"><span></span></div>
-									<div class="fit_night"><img src="/assets/img/ui/dark_yasen.png"><span></span></div>
+									<div class="fit_current_value">
+										<div class="fit_unknown"><img src="/assets/img/stats/sb.png"><span class="i18n">FitWeightUnknown</span></div>
+										<div class="fit_day"><img src="/assets/img/ui/dark_day.png"><span></span></div>
+										<div class="fit_night"><img src="/assets/img/ui/dark_yasen.png"><span></span></div>
+									</div>
 								</div>
 								<div class="fit_total">
 									<span class="i18n">FitWeightTotal</span> <span class="value"></span>
@@ -954,9 +956,11 @@
 											<div class="remodel_consume_amount"></div>
 										</div>
 									</div>
-									<div class="owned_item owned_star0_item"><img src="/assets/img/client/eqstar.png"/><span class="star0">0</span><span class="value">x0</span></div>
-									<div class="owned_item owned_free_item"><img src="/assets/img/client/equiplock-x.png"/><span class="value">x0</span></div>
-									<div class="owned_item owned_use_items first"><img/><span class="value">x0</span></div>
+									<div class="remodel_owned_items">
+										<div class="owned_item owned_star0_item"><img src="/assets/img/client/eqstar.png"/><span class="star0">0</span><span class="value">x0</span></div>
+										<div class="owned_item owned_free_item"><img src="/assets/img/client/equiplock-x.png"/><span class="value">x0</span></div>
+										<div class="owned_item owned_use_items first"><img/><span class="value">x0</span></div>
+									</div>
 								</div>
 								<div class="remodel_upgrade_title i18n">RemodelItemUpgradeTo</div>
 								<div class="remodel_upgrade_to">
@@ -1144,9 +1148,9 @@
 			<div class="lship">
 				<div class="lship-line">
 					<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
-					<div class="locktag"><span class="solid"></span></div>
 					<div class="ribbon"><img src="/assets/img/client/ribbons/1.png" /></div>
 					<div class="ship_img shipiconbox">
+						<div class="locktag"><span class="solid"></span></div>
 						<div class="ex_item">
 							<div class="gear_star"></div>
 							<div class="gear_icon"><img/></div>
@@ -1285,17 +1289,22 @@
 			<!-- Clonable: Remodel item list -->
 			<div class="remodelSlotItem">
 				<div class="remodel_slot_itemon hover"><img/></div>
-				<div class="remodel_slot_icon"><img/></div>
-				<div class="remodel_slot_name"></div>
-				<div class="remodel_slot_star"><img src="/assets/img/client/eqstar.png">+<span></span></div>
-				<div class="remodel_slot_success">(<span>?</span>%)</div>
-				<div class="remodel_slot_reqs">
-					<div class="remodel_req_fuel"><img src="/assets/img/client/fuel.png"/><span></span></div>
-					<div class="remodel_req_ammo"><img src="/assets/img/client/ammo.png"/><span></span></div>
-					<div class="remodel_req_steel"><img src="/assets/img/client/steel.png"/><span></span></div>
-					<div class="remodel_req_bauxite"><img src="/assets/img/client/bauxite.png"/><span></span></div>
-					<div class="remodel_req_devmats"><img src="/assets/img/client/devmat.png"/><span class="req">x1</span><span class="certain">(2)</span></div>
-					<div class="remodel_req_screws"><img src="/assets/img/client/screws.png"/><span class="req">x1</span><span class="certain">(2)</span></div>
+				<div class="remodel_slot_desc">
+					<div class="remodel_slot_imgname">
+						<div class="remodel_slot_icon"><img/></div>
+						<div class="remodel_slot_name"></div>
+						<div class="remodel_slot_star"><img src="/assets/img/client/eqstar.png">+<span></span></div>
+						<div class="remodel_slot_success">(<span>?</span>%)</div>
+					</div>
+					<div class="remodel_slot_reqs">
+						<div class="remodel_req_fuel"><img src="/assets/img/client/fuel.png"/><span></span></div>
+						<div class="remodel_req_ammo"><img src="/assets/img/client/ammo.png"/><span></span></div>
+						<div class="remodel_req_steel"><img src="/assets/img/client/steel.png"/><span></span></div>
+						<div class="remodel_req_bauxite"><img src="/assets/img/client/bauxite.png"/><span></span></div>
+						<div class="remodel-req-separator"></div>
+						<div class="remodel_req_devmats"><img src="/assets/img/client/devmat.png"/><span class="req">x1</span><span class="certain">(2)</span></div>
+						<div class="remodel_req_screws"><img src="/assets/img/client/screws.png"/><span class="req">x1</span><span class="certain">(2)</span></div>
+					</div>
 				</div>
 			</div>
 

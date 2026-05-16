@@ -26,7 +26,7 @@
 	};
 	
 	/* SET SHIP
-	Short ship box for combined fleets
+	Setup common ship data
 	---------------------------------------------------*/
 	KC3MurasakiShipbox.prototype.commonElements = function( isCombinedEscort ){
 		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
