@@ -1878,98 +1878,91 @@ body {
 
 	/* ------- MODERNIZE ------- */
 	.activity_modernization {
-		padding: 5px 10px;
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 10px;
 
 		.mod_ship {
-			height: 50px;
-			padding: 5px 0;
-			margin: 0 0 5px;
+			display: flex;
+			flex-flow: row nowrap;
+			gap: 5px;
 
 			.mod_ship_pic {
 				width: 40px;
 				height: 40px;
-				float: left;
-				border-radius: 20px;
+				border-radius: 51%;
 				border: 1px solid #000;
 				overflow: hidden;
-				margin: 0 5px 0 0;
 
 				img {
-					width: 40px;
-					height: 40px;
-					position: relative;
-					margin: -1px 0 0 -1px;
-					border-radius: 50%;
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
 				}
 			}
 
-			.mod_ship_name {
-				width: 125px;
-				height: 22px;
-				line-height: 22px;
-				float: left;
-				font-size: 13px;
-				font-weight: bold;
-				color: #fc0;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
+			.mod_ship_details {
+				display: flex;
+				flex-flow: column nowrap;
+				justify-content: center;
+				flex: 0 0 calc(100% - 45px);
 
-			.mod_ship_level {
-				width: 125px;
-				height: 14px;
-				line-height: 14px;
-				float: left;
-				font-size: 12px;
-				color: #ccc;
+				.mod_ship_name {
+					line-height: 16px;
+					font-size: 13px;
+					font-weight: bold;
+					color: #fc0;
+				}
+
+				.mod_ship_level {
+					line-height: 14px;
+					font-size: 12px;
+					color: #ccc;
+				}
 			}
 		}
 
 		.mod_result_stats {
-			width: 170px;
-			height: 142px;
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 1px;
 
 			.mod_result_stat {
-				width: 170px;
-				height: 18px;
-				line-height: 20px;
-				margin: 0 0 2px;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				gap: 5px;
+				padding: 1px 5px;
+				border-radius: 6px;
+
+				&:nth-child(2n+1) {
+					background: rgb(0 0 0 / 15%);
+				}
 
 				.mod_result_icon {
 					width: 20px;
 					height: 20px;
-					margin: 0 5px 0 0;
-					float: left;
 
 					img {
-						width: 20px;
-						height: 20px;
-						display: block;
+						width: 100%;
+						height: 100%;
+						vertical-align: top;
 					}
 				}
 
 				.mod_result_old {
-					width: 35px;
-					height: 20px;
-					float: left;
 					color: #aaa;
 					font-size: 14px;
 				}
 
 				.mod_result_plus {
-					width: 40px;
-					height: 20px;
-					float: left;
 					font-weight: bold;
 					color: #0f0;
 					font-size: 16px;
 				}
 
 				.mod_result_left {
-					width: 70px;
-					height: 20px;
-					float: left;
+					margin-left: auto;
 					color: #aaa;
 					font-size: 12px;
 				}
@@ -1977,8 +1970,6 @@ body {
 		}
 
 		.mod_result_note {
-			width: 170px;
-			height: 30px;
 			color: #aaa;
 			font-size: 12px;
 			line-height: 15px;

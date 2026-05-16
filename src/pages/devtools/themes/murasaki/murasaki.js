@@ -3706,7 +3706,7 @@
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hideChildrenTooltips();
 			$(".module.activity .activity_box").hide();
-			$(".module.activity .activity_modernization").fadeIn(500);
+			$(".module.activity .activity_modernization").css("display", "flex");
 		},
 
 		ClearedMap: function(data){},
