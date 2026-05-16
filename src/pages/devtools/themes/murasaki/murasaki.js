@@ -1064,7 +1064,7 @@
 		$(".module.activity .sortie_nodes .extra_node").remove();
 		$(".module.activity .sortie_nodes").removeAttr("style");
 		$(".module.activity .sortie_node").text("").removeAttr("title")
-			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
+			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name boss-node")
 			.removeClass("special_cutin smoke_screen")
 			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
@@ -1288,7 +1288,7 @@
 			} else {
 				$("#gameUpdate .description a").hide();
 			}
-			$("#gameUpdate").fadeIn(300);
+			$("#gameUpdate").css("display", "flex");
 		},
 
 		GameUpdate: function(data){
@@ -2729,7 +2729,7 @@
 
 			//console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
-				$(".module.activity .sortie_nodes .sortie_node")[numNodes - 1].addClass("boss-node");
+				$($(".module.activity .sortie_nodes .sortie_node")[numNodes - 1]).addClass("boss-node");
 			}
 			switch(thisNode.type){
 				// Battle node
@@ -2880,8 +2880,7 @@
 						$("img", iconDiv).attr("src", icon("../../../../assets/img/client/"));
 						textDiv.text( thisNode.amount[i] );
 					});
-					resBoxDiv.append($('<div class="clear clone"></div>'));
-					resBoxDiv.show();
+					resBoxDiv.css("display", "flex");
 					break;
 
 				// Bounty node on 1-6
@@ -4157,7 +4156,7 @@
 						$(".owned_star0_item .value", remodelDetailBox)
 							.text("x{0}".format(totalAmount))
 							.toggleClass("red", totalAmount < consumeSlotNum);
-						$(".owned_star0_item", remodelDetailBox).show();
+						$(".owned_star0_item", remodelDetailBox).css("display", "flex");
 						const freeAmount = KC3GearManager.countFree(consumeSlotId, true, true)
 							- (isToConsumeSameGear & 1);
 						$(".owned_free_item .value", remodelDetailBox)
@@ -4956,7 +4955,7 @@
 					.attr("title", data.gearObj.name()).lazyInitTooltip();
 				if (data.gearObj.stars > 0) {
 					$(".activity_gunfit .fit_gear_level span").text(data.gearObj.stars);
-					$(".activity_gunfit .fit_gear_level").show();
+					$(".activity_gunfit .fit_gear_level").css("display", "flex");
 				} else {
 					$(".activity_gunfit .fit_gear_level").hide();
 				}
@@ -4971,7 +4970,7 @@
 				const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 				$(".fit_current span", gunfitBox).removeClass("fit_bonus fit_penalty");
 				if(data.gunFit.unknown === true) {
-					$(".fit_current .fit_unknown", gunfitBox).show();
+					$(".fit_current .fit_unknown", gunfitBox).css("display", "flex");
 					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).hide();
 				} else {
 					const fitDay = data.gunFit.day,
@@ -4982,7 +4981,7 @@
 					$(".fit_current .fit_night span", gunfitBox)
 						.text(signedNumber(fitNight))
 						.addClass(fitNight < 0 ? "fit_penalty" : fitNight > 0 ? "fit_bonus" : "");
-					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).show();
+					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).css("display", "flex");
 					$(".fit_current .fit_unknown", gunfitBox).hide();
 				}
 				const totalFit = data.shipObj.shellingGunFitAccuracy();
@@ -4994,7 +4993,7 @@
 					})).execute();
 					e.stopPropagation();
 				});
-				gunfitBox.show();
+				gunfitBox.css("display", "flex");
 			} else {
 				gunfitBox.hide();
 			}
@@ -5003,7 +5002,7 @@
 			if (data.oaswPower !== false && data.gunFit === false) {
 				$(".activity_gunfit .oasw .oasw_power .value")
 					.text(Math.qckInt("floor", data.oaswPower, 1));
-				$(".activity_gunfit .oasw").show();
+				$(".activity_gunfit .oasw").css("display", "flex");
 			} else {
 				$(".activity_gunfit .oasw").hide();
 			}
@@ -5048,7 +5047,7 @@
 					})).execute();
 					e.stopPropagation();
 				});
-				$(".activity_gunfit .aaci").show();
+				$(".activity_gunfit .aaci").css("display", "flex");
 			} else {
 				$(".activity_gunfit .aaci").hide();
 			}
@@ -5091,7 +5090,7 @@
 					}
 				}
 				statsBox.appendTo(".activity_gunfit .equip");
-				$(".activity_gunfit .equip").show();
+				$(".activity_gunfit .equip").css("display", "flex");
 			} else {
 				$(".activity_gunfit .equip").hide();
 			}
@@ -5122,7 +5121,7 @@
 						$(".modifiers", enemyBox).attr("title", tooltip).lazyInitTooltip();
 					}
 				});
-				$(".activity_gunfit .landing").show();
+				$(".activity_gunfit .landing").css("display", "flex");
 			} else {
 				$(".activity_gunfit .landing").hide();
 			}
@@ -5131,7 +5130,7 @@
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hideChildrenTooltips();
 			$(".module.activity .activity_box").hide();
-			$(".module.activity .activity_gunfit").fadeIn(500);
+			$(".module.activity .activity_gunfit").css("display", "flex");
 		},
 		
 		shipDoubleClickFunction: function() {
