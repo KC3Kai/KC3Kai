@@ -3631,7 +3631,6 @@
 						CraftGearStats(masterItem, "houk", "ev");
 						CraftGearStats(masterItem, "saku", "ls");
 						CraftGearStats(masterItem, "leng", "rn");
-						$("<div />").addClass("clear").appendTo($(".equipStats", itemDiv));
 					} else {
 						$(".equipIcon img", itemDiv).attr("src", penguinIcon);
 						$(".equipName", itemDiv).text(KC3Meta.term("CraftEquipNotePenguin"));
@@ -3657,7 +3656,7 @@
 			$(".activity_crafting .equipResources .used4").text(data.resourceUsed[3]);
 			// Show multiple crafting amount
 			$(".activity_crafting .equipFooter .multiCount").html(
-				data.multiFlag && data.items ? `x${data.items.length || 1}&emsp;` : ""
+				data.multiFlag && data.items ? `x${data.items.length || 1}` : ""
 			);
 			// Show devmats change
 			$(".activity_crafting .equipFooter .devmatsBefore").text(data.devmats[0]);
@@ -3668,7 +3667,7 @@
 			$("#atab_activity").addClass("active");
 			$(".module.activity .activity_box").hideChildrenTooltips();
 			$(".module.activity .activity_box").hide();
-			$(".module.activity .activity_crafting").fadeIn(500);
+			$(".module.activity .activity_crafting").css("display", "flex");
 		},
 
 		CraftShip: function(data){},

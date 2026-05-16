@@ -83,7 +83,6 @@ html,body {
 	position: absolute;
 	top: 0;
 	left: 0;
-	flex-flow: row nowrap;
 	justify-content: center;
 	align-items: center;
 	display: none;
@@ -545,7 +544,6 @@ body {
 	/* Timers */
 	.timers {
 		display: flex;
-		flex-flow: row nowrap;
 
 		.timer_boxes {
 			flex: 1 1 50%;
@@ -556,7 +554,6 @@ body {
 			.timer_box {
 				container-type: inline-size;
 				display: flex;
-				flex-flow: row nowrap;
 				align-items: center;
 				gap: 5px;
 
@@ -616,7 +613,6 @@ body {
 		/* Map Info */
 		.map_info {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			gap: 10px;
 			width: 100%;
@@ -821,7 +817,6 @@ body {
 			/* Sunk icons for both single and combined fleet */
 			.sink_icons {
 				display: flex;
-				flex-flow: row nowrap;
 				justify-content: flex-start;
 				width: 100%;
 				gap: 2%;
@@ -878,7 +873,6 @@ body {
 
 				.abyss_ships {
 					display: flex;
-					flex-flow: row nowrap;
 					align-items: center;
 					justify-content: flex-start;
 					width: 100%;
@@ -931,7 +925,6 @@ body {
 
 				.abyss_hps {
 					display: flex;
-					flex-flow: row nowrap;
 					align-items: center;
 					justify-content: flex-start;
 					gap: 2cqw;
@@ -974,7 +967,6 @@ body {
 
 				.abyss_ships {
 					display: flex;
-					flex-flow: row nowrap;
 					align-items: center;
 					justify-content: flex-start;
 					width: 100%;
@@ -1024,7 +1016,6 @@ body {
 			.battle_flags {
 				container-type: inline-size;
 				display: flex;
-				flex-flow: row nowrap;
 				align-items: center;
 				justify-content: flex-start;
 				width: 100%;
@@ -1173,7 +1164,6 @@ body {
 
 				.battle_condition {
 					display: flex;
-					flex-flow: row nowrap;
 
 					.battle_cond_icon {
 						line-height: 14px;
@@ -1300,7 +1290,6 @@ body {
 		/* Resource Nodes */
 		.node_type_resource {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			gap: 5px;
 			line-height: 18px;
@@ -1351,7 +1340,6 @@ body {
 
 				.encounter_record {
 					display: flex;
-					flex-flow: row nowrap;
 					gap: 5px;
 					padding: 1px;
 					height: auto;
@@ -1379,7 +1367,6 @@ body {
 
 				.encounter_ships {
 					display: flex;
-					flex-flow: row nowrap;
 					gap: 3px;
 
 					.encounter_ship {
@@ -1591,108 +1578,112 @@ body {
 
 	/* ------- ACTIVITY: CRAFTING ------- */
 	.activity_crafting {
-		padding: 10px;
+		flex-flow: column nowrap;
+		gap: 10px;
 
-		.equipItem {
-			.equipIcon {
-				width: 28px;
-				height: 28px;
-				line-height: 14px;
-				float: left;
-				background: #fff;
-				border-radius: 50%;
-				margin: 0 5px 3px 0;
+		.equipItems {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 3px;
 
-				img {
-					width: 24px;
-					height: 24px;
-					margin: 2px;
-					vertical-align: top;
+			.equipItem {
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				gap: 5px 8px;
+
+				.equipIcon {
+					width: 28px;
+					height: 28px;
+					background: #fff;
+					border-radius: 51%;
+
+					img {
+						width: calc(100% - 4px);
+						height: calc(100% - 4px);
+						margin: 2px;
+					}
 				}
-			}
 
-			.equipName {
-				width: 135px;
-				line-height: 14px;
-				float: left;
-				font-size: 12px;
-				color: #fff;
-				font-weight: bold;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				margin: 0 0 3px;
-			}
+				.equipName {
+					flex: 0 0 calc(100% - 36px);
+					line-height: 14px;
+					font-size: 12px;
+					color: #fff;
+					font-weight: bold;
+				}
 
-			.equipNote {
-				width: 170px;
-				line-height: 16px;
-				margin: 0 0 3px;
-				color: #ccc;
-				font-size: 12px;
-			}
+				.equipNote {
+					flex: 0 0 100%;
+					color: #ccc;
+					font-size: 12px;
 
-			.equipStats {
-				width: 170px;
-				line-height: 20px;
-				margin: 0 0 3px;
+					&:empty {
+						display: none;
+					}
+				}
 
-				.equipStat {
-					width: 45px;
-					height: 20px;
-					margin: 0 0 3px;
-					float: left;
+				.equipStats {
+					flex: 0 0 100%;
+					display: flex;
+					align-items: center;
+					gap: 10px;
 
-					.equipStatIcon {
-						width: 20px;
-						height: 20px;
-						float: left;
-						margin: 0 3px 0 0;
-						background: #fff;
-						border-radius: 10px;
-						text-align: center;
+					.equipStat {
+						display: flex;
+						align-items: center;
+						gap: 3px;
 
-						img {
-							max-width: 18px;
-							height: 16px;
-							margin: 2px 1px;
-							vertical-align: top;
+						.equipStatIcon {
+							width: 20px;
+							height: 20px;
+							background: #fff;
+							border-radius: 51%;
+							text-align: center;
+
+							img {
+								width: calc(100% - 4px);
+								height: calc(100% - 4px);
+								margin: 2px;
+							}
+						}
+
+						.equipStatText {
+							font-size: 12px;
+							color: #fff;
 						}
 					}
 
-					.equipStatText {
-						width: 20px;
-						height: 20px;
-						float: left;
-						font-size: 12px;
-						color: #fff;
+					&:empty {
+						display: none;
 					}
 				}
 			}
 		}
 
 		.equipResources {
-			width: 170px;
-			height: 36px;
-			line-height: 16px;
+			display: flex;
+			flex-flow: row wrap;
+			gap: 3px 0;
 
 			.equipResource {
-				width: 85px;
-				float: left;
-				height: 16px;
+				flex: 0 0 50%;
 				line-height: 16px;
-				margin: 0 0 2px;
+				display: inline-flex;
+				gap: 7px;
 
 				.equipResoIcon {
-					width: 16px;
-					height: 16px;
-					float: left;
-					margin: 0 9px 0 0;
+					width: 18px;
+					height: 18px;
+
+					img {
+						width: 100%;
+						height: 100%;
+						vertical-align: top;
+					}
 				}
 
 				.equipResoAmt {
-					width: 60px;
-					height: 16px;
-					float: left;
 					font-size: 12px;
 					color: #fff;
 				}
@@ -1700,14 +1691,21 @@ body {
 		}
 
 		.equipFooter {
-			width: 170px;
-			line-height: 16px;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+
+			.multiCount {
+				margin-right: 10px;
+
+				&:empty {
+					display: none;
+				}
+			}
 
 			img {
 				width: 14px;
 				height: 14px;
-				vertical-align: text-bottom;
-				margin-right: 2px;
 			}
 
 			span {
@@ -1749,7 +1747,6 @@ body {
 
 		.expres_resos {
 			display: flex;
-			flex-flow: row nowrap;
 			line-height: 16px;
 			margin-bottom: 5px;
 
@@ -1761,7 +1758,6 @@ body {
 
 				.expres_reso {
 					display: flex;
-					flex-flow: row nowrap;
 					height: 16px;
 					line-height: 16px;
 					gap: 10px;
@@ -1781,7 +1777,6 @@ body {
 
 		.expres_items {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			gap: 10px;
 			margin-bottom: 3px;
@@ -1852,7 +1847,6 @@ body {
 			font-size: 12px;
 
 			.expres_ship {
-				flex-flow: row nowrap;
 				align-items: center;
 				flex: 0 0 50%;
 				gap: 5px;
@@ -2083,7 +2077,6 @@ body {
 			font-size: 12px;
 			padding: 4px;
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			color: #FFF;
 
@@ -2102,7 +2095,6 @@ body {
 
 		.expres_resos {
 			display: flex;
-			flex-flow: row nowrap;
 			margin-bottom: 3px;
 
 			.expres_divHF {
@@ -2224,7 +2216,6 @@ body {
 
 		.fit_profile {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			gap: 5px;
 
@@ -2259,7 +2250,6 @@ body {
 
 		.fit_gear {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			gap: 5px;
 
@@ -2305,7 +2295,6 @@ body {
 
 				.fit_current {
 					display: flex;
-					flex-flow: row nowrap;
 					align-items: center;
 					gap: 3px;
 
@@ -2333,7 +2322,6 @@ body {
 
 						.fit_day,
 						.fit_night {
-							flex-flow: row nowrap;
 							align-items: flex-end;
 							gap: 3px;
 
@@ -2411,7 +2399,6 @@ body {
 
 				.aaciPattern {
 					display: flex;
-					flex-flow: row nowrap;
 					gap: 3px;
 					align-items: center;
 					border-radius: 6px;
@@ -2486,7 +2473,6 @@ body {
 
 				.equipIcons {
 					display: flex;
-					flex-flow: row nowrap;
 					gap: 2px;
 
 					img {
@@ -2505,7 +2491,6 @@ body {
 
 				.statsBox {
 					display: flex;
-					flex-flow: row nowrap;
 					gap: 5px;
 					border-radius: 6px;
 					line-height: 18px;
@@ -2516,7 +2501,6 @@ body {
 
 					div {
 						display: inline-flex;
-						flex-flow: row nowrap;
 						align-items: center;
 						gap: 2px;
 					}
@@ -2543,7 +2527,6 @@ body {
 
 				.landingInfo {
 					display: flex;
-					flex-flow: row nowrap;
 					gap: 5px;
 					align-items: center;
 					line-height: 20px;
@@ -2568,7 +2551,6 @@ body {
 
 				.power {
 					display: inline-flex;
-					flex-flow: row nowrap;
 					gap: 3px;
 					align-items: center;
 
@@ -2609,7 +2591,6 @@ body {
 
 		.pvpEnemyInfo {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			gap: 3px;
 			margin-bottom: 4px;
@@ -2729,7 +2710,6 @@ body {
 
 			.pvp_admiral_level {
 				display: flex;
-				flex-flow: row nowrap;
 				width: 42px;
 				line-height: 15px;
 
@@ -2807,7 +2787,6 @@ body {
 
 			.pvpFleetShip {
 				display: flex;
-				flex-flow: row nowrap;
 				gap: 3px;
 				flex: 1 1 calc(50% - 2px);
 				height: 40px;
@@ -2840,7 +2819,6 @@ body {
 
 					.pvp_fleet_ship_level {
 						display: inline-flex;
-						flex-flow: row nowrap;
 						line-height: 18px;
 
 						.l10n {
@@ -2864,7 +2842,6 @@ body {
 		.pvp_prediction {
 			display: flex;
 			gap: 6%;
-			flex-flow: row nowrap;
 			align-items: center;
 			line-height: 15px;
 			font-size: 11px;
@@ -2874,7 +2851,6 @@ body {
 			.pvp_formation {
 				flex: 0 0 47%;
 				display: flex;
-				flex-flow: row nowrap;
 				align-items: center;
 
 				.l10n {
@@ -2909,7 +2885,6 @@ body {
 		.remodel_header {
 			margin-bottom: 2px;
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 
 			.recipe_title,
@@ -2956,7 +2931,6 @@ body {
 
 			.remodelSlotItem {
 				display: flex;
-				flex-flow: row nowrap;
 				background: rgb(255 255 255 / 20%);
 				border-radius: 5px;
 				margin-bottom: 2px;
@@ -2994,7 +2968,6 @@ body {
 
 					.remodel_slot_imgname {
 						display: flex;
-						flex-flow: row nowrap;
 						align-items: center;
 						gap: 2px;
 						flex: 0 0 auto;
@@ -3068,7 +3041,6 @@ body {
 					div {
 						line-height: 15px;
 						display: inline-flex;
-						flex-flow: row nowrap;
 						gap: 3px;
 					}
 
@@ -3140,7 +3112,6 @@ body {
 
 			.remodel_owned_items {
 				display: flex;
-				flex-flow: row nowrap;
 				gap: 7px;
 
 				.owned_item {
@@ -3176,7 +3147,6 @@ body {
 
 		.remodel_footer {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			justify-content: flex-end;
 			gap: 7px;
@@ -3185,7 +3155,6 @@ body {
 			> div {
 				line-height: 18px;
 				display: flex;
-				flex-flow: row nowrap;
 				align-items: center;
 				gap: 3px;
 			}
@@ -3209,7 +3178,6 @@ body {
 	.quest {
 		line-height: 18px;
 		display: flex;
-		flex-flow: row nowrap;
 		gap: 5px;
 		align-items: center;
 
@@ -3388,7 +3356,6 @@ body {
 
 		&.scrollable {
 			display: flex;
-			flex-flow: row nowrap;
 			align-items: center;
 			flex: 0 0 calc(100cqw - 280px);
 			max-width: calc(100cqw - 280px);
@@ -3561,7 +3528,6 @@ body {
 			.lship-line {
 				container-type: inline-size;
 				display: flex;
-				flex-flow: row nowrap;
 				gap: 2px 5px;
 				align-items: center;
 				position: relative;
@@ -3925,7 +3891,6 @@ body {
 				z-index: 4;
 				font-size: 10px;
 				display: none;
-				flex-flow: row nowrap;
 
 				@container ship (width < 400px) {
 					height: 150%;
@@ -4029,7 +3994,6 @@ body {
 					width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px));
 					margin-left: auto;
 					max-width: initial;
-					flex-flow: row nowrap;
 					justify-content: flex-start;
 					gap: 0;
 					padding-left: 5px;
@@ -4137,7 +4101,6 @@ body {
 				width: calc(100cqw - min(max(45px, calc(15cqw + 5px)), 65px));
 				margin-left: auto;
 				display: flex;
-				flex-flow: row nowrap;
 				align-content: center;
 				gap: 2%;
 
@@ -4213,7 +4176,6 @@ body {
 		}
 
 		&.shiplist_combined {
-			flex-flow: row nowrap;
 			gap: 10px;
 
 			.ship_gears,
