@@ -3642,6 +3642,7 @@ body {
 						}
 					}
 
+					/* TODO Examine and fix this, can ship_img be inside exslot? */
 					.ship_img {
 						width: 40px;
 						height: 40px;
@@ -4167,6 +4168,7 @@ body {
 		}
 
 		&.shiplist_combined {
+			flex-direction: row;
 			gap: 10px;
 
 			.ship_gears,
@@ -4276,176 +4278,147 @@ body {
 /* AIR BASES
 ------------------------------ */
 .module.fleet .shiplist.airbase_list {
-	overflow: hidden auto;
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
 
 	.airbase {
-		width: 340px;
-		height: 75px;
-		margin: 0 0 3px;
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 3px;
 
 		.airbase_infos {
-			width: 340px;
-			height: 20px;
-			margin: 0 0 2px;
+			position: relative;
+			display: flex;
+			flex-flow: row wrap;
+			align-items: center;
+			gap: 0 10px;
 			background: rgb(0 0 0 / 40%);
 			border-radius: 6px;
+			padding: 1px 55px 1px 10px;
 
 			.airbase_info {
-				float: left;
-
 				&.base_map {
-					width: 18px;
 					font-size: 11px;
 					font-weight: bold;
 					color: #fc0;
 					text-shadow: 1px 1px 3px #333;
 					text-align: right;
 					line-height: 20px;
-					margin: 0 4px 0 0;
-					white-space: nowrap;
-					overflow: hidden;
 				}
 
 				&.base_name {
-					width: 65px;
-					height: 20px;
-					float: left;
 					color: #ccc;
 					text-shadow: 1px 1px 3px #333;
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					overflow: hidden;
 					font-size: 11px;
 					line-height: 20px;
-					margin: 0 3px 0 0;
 				}
 
 				&.base_stats {
-					width: 200px;
-					height: 20px;
-					float: left;
-					overflow: hidden;
+					display: inline-flex;
+					align-items: center;
+					gap: 10px;
 
 					.base_stat {
-						width: 55px;
-						height: 20px;
-						float: left;
-						overflow: hidden;
+						display: inline-flex;
+						align-items: center;
+						gap: 3px;
 
 						.base_stat_icon {
 							width: 18px;
 							height: 18px;
 							line-height: 16px;
-							margin: 1px 2px 1px 0;
 							border-radius: 9px;
 							background: #131313;
-							float: left;
-							padding: 1px;
 
 							img {
-								width: 16px;
-								height: 16px;
+								width: calc(100% - 2px);
+								height: calc(100% - 2px);
 								filter: invert(100%);
 								vertical-align: top;
 							}
 						}
 
 						.base_stat_value {
-							width: 35px;
-							height: 20px;
 							line-height: 20px;
-							float: left;
-							text-align: left;
-							white-space: nowrap;
 							color: #ccc;
 							font-size: 11px;
-						}
-
-						&.base_level {
-							width: 35px;
-
-							.base_stat_value {
-								width: 15px;
-							}
-						}
-
-						&.base_range {
-							width: 35px;
-
-							.base_stat_value {
-								width: 15px;
-							}
-						}
-
-						&.base_afp {
-							width: 75px;
-
-							.base_stat_value {
-								width: 50px;
-							}
 						}
 					}
 				}
 
 				&.base_action {
-					width: 40px;
-					height: 20px;
 					line-height: 20px;
-					white-space: nowrap;
-					overflow: hidden;
-					float: left;
 					color: #fff;
 					text-align: right;
 					font-size: 11px;
+					position: absolute;
+					top: 0;
+					right: 7px;
 				}
 			}
+		}
 
-			.base_planes {
-				width: 340px;
-				height: 52px;
-				float: left;
-				overflow: hidden;
+		.base_planes {
+			display: flex;
+			flex-flow: row wrap;
+			align-items: center;
+			gap: 5px;
 
-				.airbase_plane {
-					width: 165px;
-					height: 24px;
-					margin: 0 0 2px 5px;
-					background: rgb(0 0 0 / 40%);
-					float: left;
-					border-radius: 6px;
-					overflow: hidden;
-					white-space: nowrap;
+			.airbase_plane {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				flex: 1 0 calc(50% - 2.5px);
+				min-width: 200px;
+				background: rgb(0 0 0 / 40%);
+				border-radius: 6px;
+				container-type: inline-size;
+				container-name: plane;
 
-					&.moving {
-						background: rgb(255 200 0 / 20%);
+				&.moving {
+					background: rgb(255 200 0 / 20%);
+				}
+
+				.base_plane_img {
+					flex: 0 0 80px;
+
+					@container plane (width >= 300px) {
+						flex: 0 0 100px;
 					}
 
-					.base_plane_col {
-						float: left;
-						height: 24px;
-						overflow: hidden;
-					}
+					img {
+						width: 100%;
+						height: 25px;
+						object-fit: cover;
+						mask-image: linear-gradient(to right, rgb(34 34 34 / 100%) 30%, rgb(34 34 34 / 0%) 100%);
 
-					.base_plane_img {
-						width: 80px;
-						text-align: center;
-						position: relative;
-						margin: 0 -5px 0 -10px;
-
-						img {
-							width: 100%;
-							vertical-align: middle;
-							margin: -60% -50%;
-							mask-image: linear-gradient(to right, rgb(34 34 34 / 100%) 30%, rgb(34 34 34 / 0%) 100%);
+						@container plane (width >= 300px) {
+							height: 35px;
 						}
+					}
+				}
+
+				.base_plane_icon {
+					position: relative;
+					flex: 0 0 23px;
+					line-height: 23px;
+
+					@container plane (width >= 300px) {
+						flex: 0 0 28px;
+					}
+
+					img {
+						width: 100%;
+						height: 100%;
 					}
 
 					.base_plane_star {
 						width: 12px;
 						height: 12px;
-						position: relative;
-						float: left;
-						margin: 10px 0 0 -24px;
+						position: absolute;
+						bottom: 0;
+						left: 0;
 						border-radius: 6px;
 						font-size: 10px;
 						line-height: 12px;
@@ -4456,70 +4429,55 @@ body {
 						pointer-events: none;
 						display: none;
 					}
+				}
 
-					.base_plane_icon {
-						width: 20px;
-						line-height: 20px;
-						margin: 2px 0 0 5px;
+				.base_plane_chevs {
+					flex: 0 0 15px;
+					line-height: 25px;
 
-						img {
-							width: 20px;
-							height: 20px;
-							vertical-align: top;
-						}
+					img {
+						width: 25px;
+						margin: 0 -5px;
 					}
+				}
 
-					.base_plane_chevs {
-						width: 15px;
-						margin: 0 2px 0 0;
+				.base_plane_name {
+					display: none;
+					line-height: 24px;
+					font-size: 11px;
+					text-shadow: 2px 2px 4px #333,
+					2px 2px 4px #333;
+					color: #ccc;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 
-						img {
-							width: 25px;
-							margin: 5px 0 5px -5px;
-							position: relative;
-						}
+					@container plane (width >= 250px) {
+						display: initial;
 					}
+				}
 
-					.base_plane_name {
-						display: none;
-						line-height: 24px;
-						font-size: 11px;
-						text-shadow: 2px 2px 4px #333,
-						2px 2px 4px #333;
-						color: #ccc;
-						margin: 0 0 0 2px;
-						width: 120px;
-						overflow: hidden;
-						white-space: nowrap;
-						text-overflow: ellipsis;
+				.base_plane_count {
+					line-height: 24px;
+					font-size: 11px;
+					text-shadow: 2px 2px 4px #333,
+					2px 2px 4px #333;
+					color: #ccc;
+					margin-left: auto;
+
+					&.unsupplied {
+						color: #f55;
 					}
+				}
 
-					.base_plane_count {
-						max-width: 35px;
-						line-height: 24px;
-						font-size: 11px;
-						text-shadow: 2px 2px 4px #333,
-						2px 2px 4px #333;
-						text-align: center;
-						color: #ccc;
-						margin: 0 1px 0 0;
+				.base_plane_cond {
+					flex: 0 0 16px;
+					line-height: 16px;
+					margin-right: 4px;
 
-						&.unsupplied {
-							color: #f55;
-						}
-					}
-
-					.base_plane_cond {
-						width: 16px;
-						padding: 4px 0;
-						line-height: 16px;
-						float: right;
-
-						img {
-							width: 16px;
-							height: 16px;
-							vertical-align: top;
-						}
+					img {
+						width: 100%;
+						height: 100%;
 					}
 				}
 			}

@@ -2443,7 +2443,7 @@
 				$(".shiplist_combined_fleet").empty();
 				$(".shiplist_combined").hide();
 				$(".airbase_list").empty();
-				$(".airbase_list").show();
+				$(".airbase_list").css("display", "flex");
 				
 				const togglePlaneName = function(){
 					$(".module.fleet .airbase_list").toggleClass("long_name");
