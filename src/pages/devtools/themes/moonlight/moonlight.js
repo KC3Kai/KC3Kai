@@ -317,10 +317,9 @@
 					return acc;
 				}, {});
 			UpdateRepairTimerDisplays(data);
-
-			// Nosaki Sparkle timer
-			UpdateSparkleTimerDisplay();
 		}
+		// Nosaki Sparkle timer
+		UpdateSparkleTimerDisplay();
 		
 		// Akashi current timer for Ship Box list
 		const baseElement = scopedFleetIds.length ?
