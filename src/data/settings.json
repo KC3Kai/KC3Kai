@@ -605,6 +605,40 @@
 				"options" : { "label" : "%" }
 			},
 			{
+				"id" : "alert_sparkle",
+				"name" : "SettingsSparkleNotif",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsSparkleNever" ],
+						[ 1, "SettingsSparkleEveryTick" ],
+						[ 2, "SettingsSparkleFirstTick" ],
+						[ 3, "SettingsSparkleSecondTick" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_type_sparkle",
+				"name" : "SettingsSoundTypeSparkle",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_sparkle",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
 				"id" : "alert_type_exped",
 				"name" : "SettingsSoundTypeExped",
 				"type" : "radio",

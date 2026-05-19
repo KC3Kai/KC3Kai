@@ -3,6 +3,11 @@ body {
 	display:block !important;
 	color:#cccccc;
 }
+body.dark input,
+body.dark select,
+body.dark textarea {
+	color-scheme:dark;
+}
 #wrapper {
 	width:800px;
 	min-width:800px;
@@ -2103,6 +2108,9 @@ button, input, select, textarea {
 .tab_encounters .encounter_record {
 	background:#414141;
 	border-radius:0px;
+}
+.tab_encounters .encounter_ship .encounter_id {
+	color:#ccc;
 }
 
 /* PVP

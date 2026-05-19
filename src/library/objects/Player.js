@@ -188,6 +188,7 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("lastUseitem");
 		localStorage.removeItem("lastExperience");
 		localStorage.removeItem("akashiRepairStartTime");
+		localStorage.removeItem("nosakiSparkleStartTime");
 		localStorage.removeItem("baseConvertingSlots");
 		localStorage.removeItem("bases");
 		localStorage.removeItem("consumables");

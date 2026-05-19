@@ -3455,6 +3455,9 @@ ABYSS FLEET
 .module.fleet .shiplist .akashiMark {
 	background-color:rgba(191, 255, 100, 0.15);
 }
+.module.fleet .shiplist .nosakiMark {
+	background-color:rgba(225, 116, 0, 0.2);
+}
 .module.fleet .shiplist .hp_taiha {
 	background-color:rgba(255, 0, 0, 0.4);
 }
@@ -4278,6 +4281,7 @@ ABYSS FLEET
 .module.status .status_icon.enclose {
 	background:#fff;
 	border-radius:10px;
+	overflow:hidden;
 }
 .module.status .status_icon img {
 	width:20px;

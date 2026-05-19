@@ -3486,11 +3486,11 @@
 	},
 	"5435": {
 		"api_id": 5435,
-		"api_name": "お出掛け明石改",
+		"api_name": "お出掛け明石",
 		"api_yomi": "あかし",
 		"api_stype": 19,
 		"api_soku": 5,
-		"api_slot_num": 4
+		"api_slot_num": 3
 	},
 	"5436": {
 		"api_id": 5436,
@@ -9958,11 +9958,11 @@
 	},
 	"6244": {
 		"api_id": 6244,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "お出掛け明石改",
+		"api_yomi": "あかし",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"6245": {
 		"api_id": 6245,

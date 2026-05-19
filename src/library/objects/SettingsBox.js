@@ -14,7 +14,6 @@ To be dynamically used on the settings page
 		if(info.options && info.options.tooltip){
 			$(".title", this.element).attr("title", KC3Meta.term(info.options.tooltip));
 		}
-		this.soundPreview = false;
 		this.bound = $.extend({
 			min:-Infinity,
 			max:Infinity,
@@ -108,22 +107,8 @@ To be dynamically used on the settings page
 				elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 
 				// If changed volume, test play the alert sound
-				if(self.config == "alert_volume"){
-					if(self.soundPreview){
-						self.soundPreview.pause();
-					}
-					switch(ConfigManager.alert_type){
-						case 1: self.soundPreview = new Audio("/assets/snd/pop.mp3"); break;
-						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
-						case 3: self.soundPreview = new Audio("/assets/snd/ding.mp3"); break;
-						case 4: self.soundPreview = new Audio("/assets/snd/dong.mp3"); break;
-						case 5: self.soundPreview = new Audio("/assets/snd/bell.mp3"); break;
-						default: self.soundPreview = false; break;
-					}
-					if(self.soundPreview){
-						self.soundPreview.volume = ConfigManager.alert_volume / 100;
-						self.soundPreview.play();
-					}
+				if (self.config == "alert_volume") {
+					KC3Notification.playSound(ConfigManager.alert_type, ConfigManager.alert_custom);
 				}
 			})
 		);
@@ -195,22 +180,8 @@ To be dynamically used on the settings page
 			// If changed sound type, test play the alert sound
 			const baseKey = "alert_type",
 				configKeys = self.config.split(baseKey);
-			if(configKeys[0] === ""){
-				if(self.soundPreview){
-					self.soundPreview.pause();
-				}
-				switch(ConfigManager[baseKey + configKeys[1]]){
-					case 1: self.soundPreview = new Audio("/assets/snd/pop.mp3"); break;
-					case 2: self.soundPreview = new Audio(ConfigManager["alert_custom" + configKeys[1]]); break;
-					case 3: self.soundPreview = new Audio("/assets/snd/ding.mp3"); break;
-					case 4: self.soundPreview = new Audio("/assets/snd/dong.mp3"); break;
-					case 5: self.soundPreview = new Audio("/assets/snd/bell.mp3"); break;
-					default: self.soundPreview = false; break;
-				}
-				if(self.soundPreview){
-					self.soundPreview.volume = ConfigManager.alert_volume / 100;
-					self.soundPreview.play();
-				}
+			if (configKeys[0] === "") {
+				KC3Notification.playSound(ConfigManager[baseKey + configKeys[1]], ConfigManager["alert_custom" + configKeys[1]]);
 			}
 
 			// Refresh page when a language option is clicked
