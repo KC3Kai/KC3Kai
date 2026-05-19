@@ -611,9 +611,8 @@ Uses KC3Quest objects to play around with
 			// Weekly Arsenal Fw5
 			this.resetCounterLoop([1167], false);
 			
-			// Progress counter not changed at all on daily reset:
-			// Monthly PvP Cm2
-			//this.resetCounterLoop([318], false);
+			// Progress counter not touched at all on daily reset, no matter completed or not:
+			// Monthly PvP Cm2 [318]
 			
 			this.save();
 		},
