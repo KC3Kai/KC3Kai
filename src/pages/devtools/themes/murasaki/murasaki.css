@@ -814,56 +814,60 @@ body {
 			position: relative;
 			container-type: inline-size;
 
+			.abyss_ship {
+				flex-flow: column nowrap;
+				gap: 5px;
+			}
+
 			/* Sunk icons for both single and combined fleet */
-			.sink_icons {
-				display: flex;
-				justify-content: flex-start;
-				width: 100%;
-				gap: 2%;
-				height: 0;
+			.abyss_ship .sunk:first-child {
 				position: absolute;
-				z-index: 1;
-				pointer-events: none;
-				container-type: inline-size;
+				bottom: 0;
+				right: 0;
+				width: 16px;
+				height: 16px;
+				display: none;
 
-				@container (width >= 230px) {
-					justify-content: center;
+				&.shown {
+					display: block;
 				}
 
-				.sunk {
-					flex: 0 0 min(35px, 15cqw);
-					height: min(35px, 15cqw);
-					display: none;
-					align-items: flex-end;
-					justify-content: end;
-
-					&.shown {
-						display: flex;
-					}
-
-					img {
-						width: 16px;
-						height: 16px;
-						display: none;
-						border-radius: 51%;
-						object-fit: cover;
-					}
+				img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+					object-fit: cover;
 				}
 
-				.shown img {
-					display: inline;
-				}
-
-				.safe img {
+				&.safe img {
 					filter: grayscale(100%);
 				}
 
-				.debuff img {
+				&.debuff img {
 					display: inline;
 					box-sizing: border-box;
 					padding-left: 16px;
 					background: url("../../../../assets/img/client/chuuha_land.png");
 					background-size: cover;
+				}
+			}
+
+			/* HP bars for both single and combined fleet */
+			.abyss_ship .abyss_hp {
+				width: 100%;
+				height: 4px;
+				background: #222;
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+
+				&.sunk {
+					opacity: 0.5;
+				}
+
+				.abyss_hp_bar {
+					height: 4px;
+					background: #0f0;
 				}
 			}
 
@@ -915,40 +919,13 @@ body {
 					border: 1px solid #000;
 					background: #888;
 					position: relative;
+					margin-bottom: 10px;
 
 					img {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
 					}
-				}
-
-				.abyss_hps {
-					display: flex;
-					align-items: center;
-					justify-content: flex-start;
-					gap: 2cqw;
-					height: 4px;
-					margin: 0 0 5px;
-
-					@container (width >= 230px) {
-						justify-content: center;
-					}
-				}
-
-				.abyss_hp {
-					flex: 0 0 min(35px, 15cqw);
-					height: 4px;
-					background: #222;
-
-					&.sunk {
-						opacity: 0.5;
-					}
-				}
-
-				.abyss_hp_bar {
-					height: 4px;
-					background: #0f0;
 				}
 			}
 
@@ -958,11 +935,16 @@ body {
 				display: none;
 
 				.abyss_fleet {
-					margin-bottom: 1px;
-				}
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					gap: 2%;
+					margin-bottom: 15px;
 
-				.abyss_fleet_2 {
-					margin-bottom: 10px;
+					@container (width >= 230px) {
+						justify-content: center;
+					}
 				}
 
 				.abyss_ships {
@@ -978,24 +960,6 @@ body {
 					}
 				}
 
-				.abyss_hp {
-					width: 2px;
-					height: 15px;
-					margin: 0 1px;
-					background: #222;
-					float: left;
-					overflow: hidden;
-
-					&.sunk {
-						opacity: 0.5;
-					}
-				}
-
-				.abyss_hp_bar {
-					height: 15px;
-					background: #0f0;
-				}
-
 				.abyss_ship {
 					flex: 0 0 min(35px, 15cqw);
 					height: min(35px, 15cqw);
@@ -1003,6 +967,7 @@ body {
 					border: 1px solid #000;
 					background: #888;
 					position: relative;
+					margin-bottom: 10px;
 
 					img {
 						width: 100%;
@@ -1351,7 +1316,7 @@ body {
 					}
 
 					.encounter_formation {
-						width: 30px;
+						flex: 0 0 30px;
 						height: 30px;
 						background: #fff;
 						border-radius: 50%;
@@ -1396,6 +1361,10 @@ body {
 						&.elite {
 							box-shadow: 0 0 1px 1px #f33;
 						}
+					}
+
+                    &.combined {
+						flex-flow: row wrap;
 					}
 				}
 			}
@@ -4128,28 +4097,42 @@ body {
 						height: 8px;
 					}
 
+					&.ship_fuel,
+					&.ship_ammo {
+						container-type: inline-size;
+					}
+
 					&.ship_fuel .ship_supply_bar {
 						background: linear-gradient(
 							to right,
-							rgb(0 0 0 / 100%) 0%,
-							rgb(0 0 0 / 100%) 25%,
-							rgb(239 191 4 / 70%) 50%,
-							rgb(0 0 0 / 100%) 75%,
-							rgb(0 0 0 / 100%) 100%
+							rgb(0 0 0 / 100%) 0,
+							rgb(0 0 0 / 100%) 25cqw,
+							rgb(239 191 4 / 70%) 50cqw,
+							rgb(0 0 0 / 100%) 75cqw,
+							rgb(0 0 0 / 100%) 100cqw
 						)
 					}
 
 					&.ship_ammo .ship_supply_bar {
 						background: linear-gradient(
 							to right,
-							rgb(162 162 162 / 100%) 0%,
-							rgb(226 226 226 / 100%) 50%,
-							rgb(162 162 162 / 100%) 100%
+							rgb(162 162 162 / 100%) 0,
+							rgb(226 226 226 / 100%) 50cqw,
+							rgb(162 162 162 / 100%) 100cqw
 						);
 					}
 
 					&.ship_ammo .ship_supply_text {
 						color: rgb(0 0 0 / 100%);
+						text-shadow:
+							1px 1px rgb(255 255 255 / 100%),
+							-1px -1px rgb(255 255 255 / 100%),
+							-1px 1px rgb(255 255 255 / 100%),
+							1px -1px rgb(255 255 255 / 100%),
+							0 1px rgb(255 255 255 / 100%),
+							0 -1px rgb(255 255 255 / 100%),
+							1px 0 rgb(255 255 255 / 100%),
+							-1px 0 rgb(255 255 255 / 100%);
 					}
 				}
 			}
