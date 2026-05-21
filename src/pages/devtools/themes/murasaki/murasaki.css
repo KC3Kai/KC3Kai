@@ -64,14 +64,18 @@ html,body {
 
 	&.text {
 		width: 300px;
+		max-width: 90%;
 		height: 50px;
 		line-height: 50px;
 		background: #fff;
 		border-radius: 10px;
-		margin: 90px auto 0;
 		text-align: center;
 		font-weight: bold;
 		font-size: 14px;
+		position: absolute;
+		top: 90px;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 }
 
@@ -204,7 +208,7 @@ body {
 			"activity fleet"
 			"quests fleet"
 			"quests status";
-		grid-template-columns: 2fr 3fr;
+		grid-template-columns: minmax(240px, 2fr) 3fr;
 	}
 
 	@media all and (800px < width <= 960px) {
@@ -213,7 +217,7 @@ body {
 			"admiral fleet summary"
 			"activity fleet quests"
 			"activity fleet status";
-		grid-template-columns: 2fr 4fr 2fr;
+		grid-template-columns: minmax(240px, 2fr) 4fr 2fr;
 	}
 
 	@media all and (width > 960px) {
@@ -222,7 +226,7 @@ body {
 			"admiral fleet summary"
 			"activity fleet quests"
 			"activity fleet status";
-		grid-template-columns: 2fr 4fr 2fr;
+		grid-template-columns: minmax(240px, 2fr) 4fr 2fr;
 	}
 }
 
@@ -232,8 +236,7 @@ body {
 	height: 100%;
 	top: 0;
 	left: 0;
-	background: transparent url("img/wrapper.png") no-repeat;
-	background-size: cover;
+	background: transparent url("img/wrapper.jpg") center top repeat;
 	z-index: -1;
 }
 
@@ -3134,6 +3137,10 @@ body {
 	flex-flow: column nowrap;
 	gap: 3px;
 	container-type: inline-size;
+
+	@media all and (width < 540px) {
+		order: 1;
+	}
 
 	.quest {
 		line-height: 18px;
