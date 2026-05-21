@@ -4561,14 +4561,25 @@ body {
 			width: 252px;
 			height: 314px;
 			padding: 0;
+			display: flex;
+			flex-flow: row wrap;
+
+			.ship_stats_row {
+				flex: 0 0 250px;
+				display: flex;
+			}
+
+			.ship_stats_col {
+				flex: 0 0 126px;
+				display: flex;
+				flex-flow: row wrap;
+				gap: 2px;
+			}
 
 			.ship_full_name {
-				width: 208px;
+				flex: 0 0 208px;
 				height: 17px;
 				line-height: 17px;
-				padding: 0 2px;
-				margin: 0;
-				float: left;
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
@@ -4583,34 +4594,26 @@ body {
 			}
 
 			.ship_rosterId {
-				width: 40px;
+				flex: 0 0 40px;
 				height: 17px;
 				line-height: 17px;
-				margin: 0 2px 0 0;
 				font-size: 11px;
-				float: left;
 				color: #a9a150;
 				text-align: right;
 			}
 
 			.ship_stype {
-				width: 35px;
+				flex: 0 0 35px;
 				height: 17px;
 				line-height: 17px;
-				padding: 0 0 0 2px;
-				margin: 0 2px 0 0;
-				float: left;
 				overflow: hidden;
 				white-space: nowrap;
 			}
 
 			.ship_level {
-				width: 42px;
+				flex: 0 0 42px;
 				height: 17px;
 				line-height: 17px;
-				padding: 0;
-				margin: 0 2px 0 0;
-				float: left;
 				overflow: hidden;
 				white-space: nowrap;
 
@@ -4632,13 +4635,10 @@ body {
 			}
 
 			.ship_exp_next {
-				width: 75px;
+				flex: 0 0 75px;
 				height: 17px;
 				line-height: 16px;
-				padding: 0;
-				margin: 0 2px 0 0;
 				font-size: 11px;
-				float: left;
 				overflow: hidden;
 				white-space: nowrap;
 
@@ -4648,13 +4648,10 @@ body {
 			}
 
 			.ship_morale {
-				width: 32px;
+				flex: 0 0 32px;
 				height: 17px;
 				line-height: 16px;
-				padding: 0;
-				margin: 0 2px 0 0;
 				font-size: 11px;
-				float: left;
 				overflow: hidden;
 				white-space: nowrap;
 
@@ -4667,36 +4664,18 @@ body {
 			}
 
 			.ship_hp {
-				width: 48px;
+				flex: 0 0 48px;
 				height: 17px;
 				line-height: 17px;
-				padding: 0;
-				margin: 0 2px 0 0;
 				text-align: right;
-				float: right;
 				overflow: hidden;
 				white-space: nowrap;
 			}
 
-			.ship_stats_col {
-				width: 126px;
-				margin: 0;
-				float: left;
-			}
-
-			.ship_stats_row {
-				width: 250px;
-				margin: 0;
-				float: left;
-			}
-
 			.stat_icon {
-				width: 52px;
+				flex: 0 0 52px;
 				height: 19px;
 				line-height: 17px;
-				padding: 0 0 0 1px;
-				margin: 0 0 1px;
-				float: left;
 				overflow: hidden;
 				white-space: nowrap;
 				background-color: #ffe;
@@ -4714,17 +4693,13 @@ body {
 			.stat_name {
 				color: #b49a47;
 				font-size: 11px;
-				margin: 0 0 0 2px;
 			}
 
 			.stat_value {
 				display: inline-block;
-				width: 71px;
+				flex: 0 0 71px;
 				height: 19px;
 				line-height: 17px;
-				padding: 0 2px 1px;
-				margin: 0 2px 1px 0;
-				float: left;
 				font-size: 11px;
 				text-align: right;
 				overflow: hidden;
@@ -4780,7 +4755,7 @@ body {
 			}
 
 			.stat_wide {
-				width: 249px;
+				flex: 0 0 249px;
 
 				.slide {
 					animation: slide infinite 3s alternate 1s;
@@ -4794,12 +4769,9 @@ body {
 			}
 
 			.aa_col {
-				width: 49px;
+				flex: 0 0 49px;
 				height: 19px;
 				line-height: 17px;
-				padding: 0 2px;
-				margin: 0 1px 1px 0;
-				float: left;
 				font-size: 11px;
 				text-align: right;
 				overflow: hidden;
