@@ -157,16 +157,6 @@ module.exports = function(grunt) {
 				}]
 			}
 		},
-		stylelint: {
-			all: {
-				options: {
-					syntax: 'css'
-				},
-				src: [
-					'src/pages/devtools/themes/murasaki/**/*.css', // Only Murasaki theme for now, more can be added later
-				]
-			}
-		},
 		uglify: {
 			all : {
 				options: {
@@ -508,7 +498,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-webstore-upload');
 	grunt.loadNpmTasks('grunt-modify-json');
-	grunt.loadNpmTasks('grunt-stylelint');
 
 	grunt.registerTask('local', [
 		'clean:tmp',
@@ -562,7 +551,6 @@ module.exports = function(grunt) {
 		'jshint:src',
 		'jshint:test',
 		'jsonlint:src',
-		'stylelint'
 	]);
 	
 	grunt.registerTask('test-unit', [
