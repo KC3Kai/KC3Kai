@@ -91,7 +91,7 @@ html,body {
 	align-items: center;
 	display: none;
 
-	.blackFilter {
+	& .blackFilter {
 		width: 100%;
 		height: 100%;
 		position: fixed;
@@ -101,7 +101,7 @@ html,body {
 		background: radial-gradient(ellipse at center,  rgb(0 0 0 / 50%) 0,rgb(0 0 0 / 85%) 100%);
 	}
 
-	.content {
+	& .content {
 		padding: 10px;
 		margin: 10px;
 		border-radius: 10px;
@@ -130,24 +130,24 @@ html,body {
 			height: 140px;
 		}
 
-		.image {
+	& .image {
 			width: 40px;
 			height: 40px;
 
-			img {
+		& img {
 				width: 40px;
 				height: 40px;
 			}
 		}
 
-		.title {
+	& .title {
 			flex: 0 0 calc(100% - 80px);
 			line-height: 16px;
 			font-size: 14px;
 			font-weight: bold;
 		}
 
-		.closebtn {
+	& .closebtn {
 			width: 20px;
 			height: 40px;
 			line-height: 30px;
@@ -161,11 +161,11 @@ html,body {
 			}
 		}
 
-		.description {
+	& .description {
 			font-size: 12px;
 		}
 
-		.download {
+	& .download {
 			text-align: center;
 			font-weight: bold;
 			font-size: 14px;
@@ -248,37 +248,37 @@ body {
 .module.admiral {
 	grid-area: admiral;
 
-	.admiral_level {
+	& .admiral_level {
 		color: #eee;
 		float: right;
 		width: 60px;
 
-		.admiral_lvtxt {
+		& .admiral_lvtxt {
 			line-height: 24px;
 			font-size: 12px;
 			text-align: center;
 			overflow: hidden;
 		}
 
-		.admiral_lvval {
+		& .admiral_lvval {
 			font-size: 16px;
 		}
 
-		.admiral_lvbox {
+		& .admiral_lvbox {
 			width: 60px;
 			height: 14px;
 			border: 1px solid #fff;
 			background: #555;
 			margin: 1px 0;
 
-			.admiral_lvbar {
+			& .admiral_lvbar {
 				width: 58px;
 				height: 12px;
 				background: #0f0;
 			}
 		}
 
-		.admiral_lvnext {
+		& .admiral_lvnext {
 			line-height: 16px;
 			font-size: 11px;
 			text-align: center;
@@ -307,7 +307,7 @@ body {
 		}
 	}
 
-	.admiral_name {
+	& .admiral_name {
 		width: calc(100% - 60px);
 		height: 24px;
 		line-height: 24px;
@@ -328,7 +328,7 @@ body {
 		}
 	}
 
-	.admiral_comm {
+	& .admiral_comm {
 		width: calc(100% - 60px);
 		height: 16px;
 		line-height: 16px;
@@ -339,7 +339,7 @@ body {
 		color: #aaa;
 	}
 
-	.admiral_rank {
+	& .admiral_rank {
 		width: 130px;
 		height: 16px;
 		line-height: 16px;
@@ -356,12 +356,12 @@ body {
 .module.activity {
 	grid-area: activity;
 
-	.activity_tabs {
+	& .activity_tabs {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 
-		.activity_tab {
+		& .activity_tab {
 			width: calc(100% / 4);
 			height: 20px;
 			background: rgb(100 100 100 / 61.8%);
@@ -379,7 +379,7 @@ body {
 				width: calc(100% / 5);
 			}
 
-			+ .activity_tab {
+			& + .activity_tab {
 				margin-left: 1px;
 			}
 
@@ -389,12 +389,12 @@ body {
 		}
 	}
 
-	.activity_body {
+	& .activity_body {
 		border-radius: 0 0 5px 5px;
 		padding: 5px;
 		white-space: initial;
 
-		.activity_box {
+		& .activity_box {
 			display: none;
 			padding: 5px;
 
@@ -405,7 +405,7 @@ body {
 		}
 	}
 
-	.activity_dismissable {
+	& .activity_dismissable {
 		cursor: pointer;
 		user-select: none;
 	}
@@ -413,14 +413,14 @@ body {
 	/* ------- ACTIVITY: BASIC ------- */
 
 	/* Consumables */
-	.consumables {
+	& .consumables {
 		margin: 5px 5px 15px;
 		display: flex;
 		flex-wrap: wrap;
 		container-type: inline-size;
 		gap: 7px 0;
 
-		.consumable {
+		& .consumable {
 			flex: 0 1 33.3%;
 			display: flex;
 			gap: 5px;
@@ -430,11 +430,11 @@ body {
 				flex: 0 1 66.7%;
 			}
 
-			.consumable_icon {
+			& .consumable_icon {
 				width: 16px;
 				height: 16px;
 
-				img {
+				& img {
 					width: 100%;
 					height: 100%;
 				}
@@ -444,7 +444,7 @@ body {
 				flex: 0 1 max(52px, 20%);
 				align-items: center;
 
-				.consumable_icon {
+				& .consumable_icon {
 					width: 10cqw;
 					height: 10cqw;
 					min-width: 16px;
@@ -454,13 +454,13 @@ body {
 				}
 			}
 
-			.consumable_text {
+			& .consumable_text {
 				font-size: 14px;
 				line-height: 20px;
 				color: #ccc;
 			}
 
-			.consumable_ltext {
+			& .consumable_ltext {
 				font-size: 14px;
 				line-height: 20px;
 				color: #ccc;
@@ -483,7 +483,7 @@ body {
 				}
 			}
 
-			.consumable_max {
+			& .consumable_max {
 				font-size: 11px;
 				line-height: 20px;
 				color: #aaa;
@@ -492,11 +492,11 @@ body {
 	}
 
 	/* Expedition */
-	.expeditions {
+	& .expeditions {
 		margin: 5px 5px 15px;
 		display: flex;
 
-		.expedition {
+		& .expedition {
 			position: relative;
 			flex: 1 1 33.3%;
 			container-type: inline-size;
@@ -504,7 +504,7 @@ body {
 			flex-direction: column;
 			align-items: center;
 
-			.timer-img {
+			& .timer-img {
 				width: 50cqw;
 				height: 50cqw;
 				max-width: 50px;
@@ -512,7 +512,7 @@ body {
 				margin: 0 0 5px;
 				border-radius: 51%;
 
-				img {
+				& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 50%;
@@ -526,7 +526,7 @@ body {
 				}
 			}
 
-			.timer-expnum {
+			& .timer-expnum {
 				line-height: 14px;
 				font-size: 12px;
 				position: absolute;
@@ -535,7 +535,7 @@ body {
 				color: #ccc;
 			}
 
-			.timer-time {
+			& .timer-time {
 				line-height: 13px;
 				font-size: 12px;
 				text-align: center;
@@ -545,29 +545,29 @@ body {
 	}
 
 	/* Timers */
-	.timers {
+	& .timers {
 		display: flex;
 
-		.timer_boxes {
+		& .timer_boxes {
 			flex: 1 1 50%;
 			display: flex;
 			flex-direction: column;
 			gap: 5px;
 
-			.timer_box {
+			& .timer_box {
 				container-type: inline-size;
 				display: flex;
 				align-items: center;
 				gap: 5px;
 
-				.timer-img {
+				& .timer-img {
 					width: 30cqw;
 					height: 30cqw;
 					max-width: 40px;
 					max-height: 40px;
 					border-radius: 51%;
 
-					img {
+					& img {
 						width: 100%;
 						height: 100%;
 						display: none;
@@ -575,7 +575,7 @@ body {
 					}
 				}
 
-				.timer-time {
+				& .timer-time {
 					line-height: 26px;
 					font-size: 13px;
 					text-align: left;
@@ -610,11 +610,11 @@ body {
 	}
 
 	/* ------- ACTIVITY: BATTLE ------- */
-	.activity_battle {
+	& .activity_battle {
 		white-space: nowrap;
 
 		/* Map Info */
-		.map_info {
+		& .map_info {
 			display: flex;
 			align-items: center;
 			gap: 10px;
@@ -633,7 +633,7 @@ body {
 				color: #e66;
 			}
 
-			.map_world {
+			& .map_world {
 				font-weight: bold;
 				color: #fc0;
 				font-size: 14px;
@@ -644,35 +644,35 @@ body {
 				}
 			}
 
-			.map_gauge {
+			& .map_gauge {
 				position: relative;
 				flex: 0 0 100px;
 				height: 12px;
 				background: #222;
 				border: 1px solid #fff;
 
-				* {
+				& * {
 					position: absolute;
 					height: 10px;
 				}
 
-				.curhp {
+				& .curhp {
 					background: #0f0;
 				}
 
-				.nowhp {
+				& .nowhp {
 					background: #f00;
 				}
 			}
 
-			.map_hp {
+			& .map_hp {
 				font-size: 11px;
 				color: #eee;
 			}
 		}
 
 		/* Sortie Nodes */
-		.sortie_nodes {
+		& .sortie_nodes {
 			width: 100%;
 			margin-bottom: 4px;
 			position: relative;
@@ -680,7 +680,7 @@ body {
 			justify-content: space-evenly;
 			container-type: inline-size;
 
-			.sortie_node {
+			& .sortie_node {
 				flex: 0 0 max(20px, 6cqw);
 				height: max(20px, 6cqw);
 				line-height: max(20px, 6cqw);
@@ -813,17 +813,17 @@ body {
 		}
 
 		/* Battle nodes */
-		.node_type_battle {
+		& .node_type_battle {
 			position: relative;
 			container-type: inline-size;
 
-			.abyss_ship {
+			& .abyss_ship {
 				flex-flow: column nowrap;
 				gap: 5px;
 			}
 
 			/* Sunk icons for both single and combined fleet */
-			.abyss_ship .sunk:first-child {
+			& .abyss_ship .sunk:first-child {
 				position: absolute;
 				bottom: 0;
 				right: 0;
@@ -835,7 +835,7 @@ body {
 					display: block;
 				}
 
-				img {
+				& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 51%;
@@ -856,7 +856,7 @@ body {
 			}
 
 			/* HP bars for both single and combined fleet */
-			.abyss_ship .abyss_hp {
+			& .abyss_ship .abyss_hp {
 				width: 100%;
 				height: 4px;
 				background: #222;
@@ -868,17 +868,17 @@ body {
 					opacity: 0.5;
 				}
 
-				.abyss_hp_bar {
+				& .abyss_hp_bar {
 					height: 4px;
 					background: #0f0;
 				}
 			}
 
 			/* Abyss single fleet */
-			.abyss_single {
+			& .abyss_single {
 				container-type: inline-size;
 
-				.abyss_ships {
+				& .abyss_ships {
 					display: flex;
 					align-items: center;
 					justify-content: flex-start;
@@ -890,32 +890,32 @@ body {
 						justify-content: center;
 					}
 
-					.boss {
+					& .boss {
 						border-color: #5ef;
 						box-shadow: 0 0 1px 1px #fe5;
 					}
 
-					.kai {
+					& .kai {
 						border-color: #2af;
 						box-shadow: 0 0 1px 0 #2af;
 					}
 
-					.flagship {
+					& .flagship {
 						border-color: #fc3;
 						box-shadow: 0 0 1px 0 #fc3;
 					}
 
-					.elite {
+					& .elite {
 						border-color: #f33;
 						box-shadow: 0 0 1px 0 #f33;
 					}
 
-					.sunk {
+					& .sunk {
 						opacity: 0.6;
 					}
 				}
 
-				.abyss_ship {
+				& .abyss_ship {
 					flex: 0 0 min(35px, 15cqw);
 					height: min(35px, 15cqw);
 					border-radius: 51%;
@@ -924,7 +924,7 @@ body {
 					position: relative;
 					margin-bottom: 10px;
 
-					img {
+					& img {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
@@ -933,11 +933,11 @@ body {
 			}
 
 			/* Abyss combined fleet */
-			.abyss_combined {
+			& .abyss_combined {
 				container-type: inline-size;
 				display: none;
 
-				.abyss_fleet {
+				& .abyss_fleet {
 					display: flex;
 					align-items: center;
 					justify-content: flex-start;
@@ -950,7 +950,7 @@ body {
 					}
 				}
 
-				.abyss_ships {
+				& .abyss_ships {
 					display: flex;
 					align-items: center;
 					justify-content: flex-start;
@@ -963,7 +963,7 @@ body {
 					}
 				}
 
-				.abyss_ship {
+				& .abyss_ship {
 					flex: 0 0 min(35px, 15cqw);
 					height: min(35px, 15cqw);
 					border-radius: 51%;
@@ -972,7 +972,7 @@ body {
 					position: relative;
 					margin-bottom: 10px;
 
-					img {
+					& img {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
@@ -981,7 +981,7 @@ body {
 			}
 
 			/* Battle Flags */
-			.battle_flags {
+			& .battle_flags {
 				container-type: inline-size;
 				display: flex;
 				align-items: center;
@@ -994,7 +994,7 @@ body {
 					justify-content: center;
 				}
 
-				.battle_flag {
+				& .battle_flag {
 					flex: 0 0 min(35px, 15cqw);
 					height: min(35px, 15cqw);
 					display: flex;
@@ -1002,7 +1002,7 @@ body {
 					align-items: center;
 					position: relative;
 
-					img {
+					& img {
 						width: 27px;
 						height: 27px;
 					}
@@ -1014,7 +1014,7 @@ body {
 						background: #fff;
 						padding: 3px;
 
-						img {
+						& img {
 							width: 24px;
 							height: 24px;
 						}
@@ -1027,10 +1027,10 @@ body {
 						border-radius: 50%;
 					}
 
-					.support_exped,
-					.support_lbas,
-					.support_balloon,
-					.smoke_screen {
+					& .support_exped,
+					& .support_lbas,
+					& .support_balloon,
+					& .smoke_screen {
 						width: 13px;
 						height: 13px;
 						line-height: 13px;
@@ -1044,27 +1044,27 @@ body {
 						display: none;
 					}
 
-					.support_exped {
+					& .support_exped {
 						bottom: 0;
 						left: 0;
 						color: #fff;
 						background: #a69de6;
 					}
 
-					.support_lbas {
+					& .support_lbas {
 						bottom: 0;
 						right: 0;
 						color: #ff0;
 						background: #5b5;
 					}
 
-					.support_balloon {
+					& .support_balloon {
 						top: 0;
 						left: 0;
 						background: #fff;
 						opacity: 0.7;
 
-						img {
+						& img {
 							width: 13px;
 							height: 13px;
 							vertical-align: top;
@@ -1076,7 +1076,7 @@ body {
 					}
 
 					&.battle_drop {
-						img.rounded {
+						& img.rounded {
 							width: 100%;
 							height: 100%;
 							border-radius: 50%;
@@ -1087,7 +1087,7 @@ body {
 						}
 					}
 
-					.smoke_screen {
+					& .smoke_screen {
 						top: 0;
 						right: -7px;
 						filter: drop-shadow(0 0 2px #222);
@@ -1096,7 +1096,7 @@ body {
 						font-size: 10px;
 						text-align: right;
 
-						.smoke_icon {
+						& .smoke_icon {
 							width: 13px;
 							height: 13px;
 							border-radius: 50%;
@@ -1111,7 +1111,7 @@ body {
 							}
 						}
 
-						.smoke_level {
+						& .smoke_level {
 							pointer-events: none;
 						}
 					}
@@ -1119,7 +1119,7 @@ body {
 			}
 
 			/* Battle Conditions */
-			.battle_conditions {
+			& .battle_conditions {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 4px;
@@ -1130,27 +1130,27 @@ body {
 					width: 50%;
 				}
 
-				.battle_condition {
+				& .battle_condition {
 					display: flex;
 
-					.battle_cond_icon {
+					& .battle_cond_icon {
 						line-height: 14px;
 
-						img {
+						& img {
 							width: 14px;
 							height: 14px;
 							vertical-align: top;
 						}
 					}
 
-					.battle_cond_label {
+					& .battle_cond_label {
 						width: 80px;
 						line-height: 14px;
 						font-size: 11px;
 						color: #ccc;
 					}
 
-					.battle_cond_value {
+					& .battle_cond_value {
 						line-height: 14px;
 						font-size: 11px;
 						color: #fff;
@@ -1188,7 +1188,7 @@ body {
 					}
 				}
 
-				.battle_cond_extra {
+				& .battle_cond_extra {
 					line-height: 14px;
 					font-size: 11px;
 					white-space: nowrap;
@@ -1198,7 +1198,7 @@ body {
 			}
 
 			/* Battle Planes */
-			.battle_planes {
+			& .battle_planes {
 				display: flex;
 				flex-flow: row wrap;
 				gap: 5px 0;
@@ -1209,7 +1209,7 @@ body {
 					width: 50%;
 				}
 
-				.plane_label {
+				& .plane_label {
 					flex: 0 0 50%;
 					line-height: 14px;
 					font-size: 11px;
@@ -1218,20 +1218,20 @@ body {
 					font-weight: bold;
 				}
 
-				.plane_count {
+				& .plane_count {
 					flex: 0 0 50%;
 					line-height: 15px;
 					display: flex;
 					gap: 5px;
 					align-items: center;
 
-					.plane_icon {
+					& .plane_icon {
 						width: 16px;
 						height: 16px;
 						border-radius: 9px;
 						background: #fff;
 
-						img {
+						& img {
 							width: 100%;
 							height: 100%;
 							position: relative;
@@ -1240,14 +1240,14 @@ body {
 						}
 					}
 
-					.plane_text {
+					& .plane_text {
 						font-size: 11px;
 
-						.plane_before {
+						& .plane_before {
 							color: #eee;
 						}
 
-						.plane_after {
+						& .plane_after {
 							color: #FF7979;
 						}
 					}
@@ -1256,7 +1256,7 @@ body {
 		}
 
 		/* Resource Nodes */
-		.node_type_resource {
+		& .node_type_resource {
 			display: flex;
 			align-items: center;
 			gap: 5px;
@@ -1268,45 +1268,45 @@ body {
 			margin: 10px;
 			text-shadow: none;
 
-			.node_res_icon {
+			& .node_res_icon {
 				width: 18px;
 				height: 18px;
 
-				img {
+				& img {
 					width: 100%;
 					height: 100%;
 					vertical-align: top;
 				}
 			}
 
-			.node_res_text {
+			& .node_res_text {
 				font-weight: bold;
 				font-size: 12px;
 			}
 
-			.node_type_maelstrom {
+			& .node_type_maelstrom {
 				background: #D2C6FF;
 				border: 1px solid #AE87E9;
 			}
 		}
 
 		/* Previously encountered */
-		.node_type_prev_encounters {
+		& .node_type_prev_encounters {
 			color: #eee;
 			font-size: 12px;
 
-			.prev_encounter_label {
+		& .prev_encounter_label {
 				color: #fc0;
 				height: 17px;
 			}
 
-			.encounters {
+		& .encounters {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 3px;
 				overflow: hidden auto;
 
-				.encounter_record {
+			& .encounter_record {
 					display: flex;
 					gap: 5px;
 					padding: 1px;
@@ -1318,13 +1318,13 @@ body {
 						box-shadow: inset 0 0 5px 2px #e37;
 					}
 
-					.encounter_formation {
+				& .encounter_formation {
 						flex: 0 0 30px;
 						height: 30px;
 						background: #fff;
 						border-radius: 50%;
 
-						img {
+					& img {
 							width: calc(100% - 2px);
 							height: calc(100% - 2px);
 							vertical-align: top;
@@ -1333,16 +1333,16 @@ body {
 					}
 				}
 
-				.encounter_ships {
+			& .encounter_ships {
 					display: flex;
 					gap: 3px;
 
-					.encounter_ship {
+				& .encounter_ship {
 						width: 30px;
 						height: 30px;
 						border-radius: 51%;
 
-						img {
+					& img {
 							width: 28px;
 							height: 28px;
 							vertical-align: top;
@@ -1374,7 +1374,7 @@ body {
 		}
 
 		/* Text Nodes */
-		.node_type_text {
+		& .node_type_text {
 			line-height: 18px;
 			padding: 4px;
 			border-radius: 7px;
@@ -1401,12 +1401,12 @@ body {
 		position: relative;
 		color: #FFF;
 
-		.quest_filters {
+	& .quest_filters {
 			display: flex;
 			height: 25px;
 			justify-content: center;
 
-			.quest_filter_button {
+		& .quest_filter_button {
 				overflow: hidden;
 				width: calc(100% / 5);
 				opacity: 0.3;
@@ -1440,7 +1440,7 @@ body {
 			}
 		}
 
-		.quest_list {
+	& .quest_list {
 			display: flex;
 			flex-flow: column nowrap;
 			gap: 1px;
@@ -1451,7 +1451,7 @@ body {
 				width: 6px;
 			}
 
-			.quest_page {
+		& .quest_page {
 				position: sticky;
 				top: 0;
 				padding: 1px;
@@ -1460,7 +1460,7 @@ body {
 				font-size: 11px;
 			}
 
-			.quest {
+		& .quest {
 				display: flex;
 				align-items: center;
 				gap: 3px;
@@ -1473,7 +1473,7 @@ body {
 					background: rgb(0 255 0 / 20%);
 				}
 
-				.quest_color {
+			& .quest_color {
 					width: 14px;
 					height: 14px;
 					border: 3px solid transparent;
@@ -1504,7 +1504,7 @@ body {
 					}
 				}
 
-				.quest_text {
+			& .quest_text {
 					width: 100%;
 					font-size: 11px;
 					overflow: hidden;
@@ -1530,7 +1530,7 @@ body {
 			}
 		}
 
-		.quest_scrolltop_button {
+	& .quest_scrolltop_button {
 			position: absolute;
 			z-index: 11;
 			top: 35px;
@@ -1553,31 +1553,31 @@ body {
 		flex-flow: column nowrap;
 		gap: 10px;
 
-		.equipItems {
+	& .equipItems {
 			display: flex;
 			flex-flow: column nowrap;
 			gap: 3px;
 
-			.equipItem {
+		& .equipItem {
 				display: flex;
 				flex-flow: row wrap;
 				align-items: center;
 				gap: 5px 8px;
 
-				.equipIcon {
+			& .equipIcon {
 					width: 28px;
 					height: 28px;
 					background: #fff;
 					border-radius: 51%;
 
-					img {
+				& img {
 						width: calc(100% - 4px);
 						height: calc(100% - 4px);
 						margin: 2px;
 					}
 				}
 
-				.equipName {
+			& .equipName {
 					flex: 0 0 calc(100% - 36px);
 					line-height: 14px;
 					font-size: 12px;
@@ -1585,7 +1585,7 @@ body {
 					font-weight: bold;
 				}
 
-				.equipNote {
+			& .equipNote {
 					flex: 0 0 100%;
 					color: #ccc;
 					font-size: 12px;
@@ -1595,32 +1595,32 @@ body {
 					}
 				}
 
-				.equipStats {
+			& .equipStats {
 					flex: 0 0 100%;
 					display: flex;
 					align-items: center;
 					gap: 10px;
 
-					.equipStat {
+				& .equipStat {
 						display: flex;
 						align-items: center;
 						gap: 3px;
 
-						.equipStatIcon {
+					& .equipStatIcon {
 							width: 20px;
 							height: 20px;
 							background: #fff;
 							border-radius: 51%;
 							text-align: center;
 
-							img {
+						& img {
 								width: calc(100% - 4px);
 								height: calc(100% - 4px);
 								margin: 2px;
 							}
 						}
 
-						.equipStatText {
+					& .equipStatText {
 							font-size: 12px;
 							color: #fff;
 						}
@@ -1633,41 +1633,41 @@ body {
 			}
 		}
 
-		.equipResources {
+	& .equipResources {
 			display: flex;
 			flex-flow: row wrap;
 			gap: 3px 0;
 
-			.equipResource {
+		& .equipResource {
 				flex: 0 0 50%;
 				line-height: 16px;
 				display: inline-flex;
 				gap: 7px;
 
-				.equipResoIcon {
+			& .equipResoIcon {
 					width: 18px;
 					height: 18px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 						vertical-align: top;
 					}
 				}
 
-				.equipResoAmt {
+			& .equipResoAmt {
 					font-size: 12px;
 					color: #fff;
 				}
 			}
 		}
 
-		.equipFooter {
+	& .equipFooter {
 			display: flex;
 			align-items: center;
 			gap: 5px;
 
-			.multiCount {
+		& .multiCount {
 				margin-right: 10px;
 
 				&:empty {
@@ -1675,12 +1675,12 @@ body {
 				}
 			}
 
-			img {
+		& img {
 				width: 14px;
 				height: 14px;
 			}
 
-			span {
+		& span {
 				line-height: 16px;
 				font-size: 12px;
 				color: #fff;
@@ -1692,24 +1692,24 @@ body {
 	.activity_expedition {
 		white-space: nowrap;
 
-		.expres_img {
+	& .expres_img {
 			text-align: center;
 
-			img {
+		& img {
 				width: 170px;
 				height: 30px;
 				vertical-align: top;
 			}
 		}
 
-		.expres_status {
+	& .expres_status {
 			font-size: 14px;
 			color: #fc0;
 			font-weight: bold;
 			text-align: center;
 		}
 
-		.expres_num {
+	& .expres_num {
 			line-height: 14px;
 			font-size: 12px;
 			color: #ccc;
@@ -1717,29 +1717,29 @@ body {
 			margin-bottom: 8px;
 		}
 
-		.expres_resos {
+	& .expres_resos {
 			display: flex;
 			line-height: 16px;
 			margin-bottom: 5px;
 
-			.expres_divHF {
+		& .expres_divHF {
 				display: flex;
 				flex-flow: column nowrap;
 				flex: 0 0 50%;
 				gap: 3px;
 
-				.expres_reso {
+			& .expres_reso {
 					display: flex;
 					height: 16px;
 					line-height: 16px;
 					gap: 10px;
 
-					.expres_icon {
+				& .expres_icon {
 						width: 16px;
 						height: 16px;
 					}
 
-					.expres_amt {
+				& .expres_amt {
 						font-size: 12px;
 						color: #fff;
 					}
@@ -1747,63 +1747,63 @@ body {
 			}
 		}
 
-		.expres_items {
+	& .expres_items {
 			display: flex;
 			align-items: center;
 			gap: 10px;
 			margin-bottom: 3px;
 
-			.expres_get {
+		& .expres_get {
 				line-height: 20px;
 				font-size: 12px;
 				color: #fff;
 			}
 
-			.expres_noget {
+		& .expres_noget {
 				line-height: 20px;
 				font-size: 12px;
 				color: #faa;
 				display: none;
 			}
 
-			.expres_item {
+		& .expres_item {
 				display: inline-flex;
 				gap: 3px;
 				line-height: 20px;
 
-				.expres_item_icon {
+			& .expres_item_icon {
 					width: 18px;
 					height: 18px;
 
-					img {
+				& img {
 						width: 18px;
 						height: 18px;
 						vertical-align: top;
 					}
 				}
 
-				.expres_item_text {
+			& .expres_item_text {
 					font-size: 12px;
 					color: #fff;
 				}
 			}
 		}
 
-		.expres_hqexp {
+	& .expres_hqexp {
 			line-height: 20px;
 			margin-bottom: 5px;
 			color: #fff;
 			font-size: 14px;
 
-			.expres_hqexp_lbl {
+		& .expres_hqexp_lbl {
 				font-size: 14px;
 				font-weight: bold;
 			}
 
-			.expres_hqexp_amt {
+		& .expres_hqexp_amt {
 				font-size: 12px;
 
-				span.value {
+			& span.value {
 					color: #fc0;
 					font-size: 14px;
 					font-weight: bold;
@@ -1811,24 +1811,24 @@ body {
 			}
 		}
 
-		.expres_ships {
+	& .expres_ships {
 			display: flex;
 			flex-flow: row wrap;
 			gap: 2px 0;
 			line-height: 18px;
 			font-size: 12px;
 
-			.expres_ship {
+		& .expres_ship {
 				align-items: center;
 				flex: 0 0 50%;
 				gap: 5px;
 				display: none;
 
-				.expres_ship_img {
+			& .expres_ship_img {
 					width: 20px;
 					height: 20px;
 
-					img {
+				& img {
 						width: 20px;
 						height: 20px;
 						vertical-align: top;
@@ -1836,11 +1836,11 @@ body {
 					}
 				}
 
-				.expres_ship_exp {
+			& .expres_ship_exp {
 					color: #fff;
 				}
 
-				span.value {
+			& span.value {
 					font-weight: bold;
 					color: #fc0;
 				}
@@ -1854,39 +1854,39 @@ body {
 		flex-flow: column nowrap;
 		gap: 10px;
 
-		.mod_ship {
+	& .mod_ship {
 			display: flex;
 			flex-flow: row nowrap;
 			gap: 5px;
 
-			.mod_ship_pic {
+		& .mod_ship_pic {
 				width: 40px;
 				height: 40px;
 				border-radius: 51%;
 				border: 1px solid #000;
 				overflow: hidden;
 
-				img {
+			& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 51%;
 				}
 			}
 
-			.mod_ship_details {
+		& .mod_ship_details {
 				display: flex;
 				flex-flow: column nowrap;
 				justify-content: center;
 				flex: 0 0 calc(100% - 45px);
 
-				.mod_ship_name {
+			& .mod_ship_name {
 					line-height: 16px;
 					font-size: 13px;
 					font-weight: bold;
 					color: #fc0;
 				}
 
-				.mod_ship_level {
+			& .mod_ship_level {
 					line-height: 14px;
 					font-size: 12px;
 					color: #ccc;
@@ -1894,12 +1894,12 @@ body {
 			}
 		}
 
-		.mod_result_stats {
+	& .mod_result_stats {
 			display: flex;
 			flex-flow: column nowrap;
 			gap: 1px;
 
-			.mod_result_stat {
+		& .mod_result_stat {
 				display: flex;
 				flex-flow: row nowrap;
 				align-items: center;
@@ -1911,29 +1911,29 @@ body {
 					background: rgb(0 0 0 / 15%);
 				}
 
-				.mod_result_icon {
+			& .mod_result_icon {
 					width: 20px;
 					height: 20px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 						vertical-align: top;
 					}
 				}
 
-				.mod_result_old {
+			& .mod_result_old {
 					color: #aaa;
 					font-size: 14px;
 				}
 
-				.mod_result_plus {
+			& .mod_result_plus {
 					font-weight: bold;
 					color: #0f0;
 					font-size: 16px;
 				}
 
-				.mod_result_left {
+			& .mod_result_left {
 					margin-left: auto;
 					color: #aaa;
 					font-size: 12px;
@@ -1941,7 +1941,7 @@ body {
 			}
 		}
 
-		.mod_result_note {
+	& .mod_result_note {
 			color: #aaa;
 			font-size: 12px;
 			line-height: 15px;
@@ -1961,7 +1961,7 @@ body {
 			width: 5px;
 		}
 
-		.dropdown_title {
+	& .dropdown_title {
 			&.expPlanner_text_passed {
 				color: #060;
 				text-shadow: none;
@@ -1973,7 +1973,7 @@ body {
 			}
 		}
 
-		.expPlan_dropdown_title {
+	& .expPlan_dropdown_title {
 			width: 100%;
 			list-style: none;
 			position: relative;
@@ -1985,7 +1985,7 @@ body {
 			border: 3px solid #000;
 			text-shadow: none;
 
-			.expPlan_dropdown_topEntry {
+		& .expPlan_dropdown_topEntry {
 				display: none;
 			}
 
@@ -2036,53 +2036,53 @@ body {
 			}
 		}
 
-		.expPlanner_timer {
+	& .expPlanner_timer {
 			font-size: 12px;
 			padding: 4px;
 			display: flex;
 			align-items: center;
 			color: #FFF;
 
-			.estimated_time {
+		& .estimated_time {
 				margin-left: auto;
 				text-align: right;
 			}
 		}
 
-		.expPlanner_resos_title {
+	& .expPlanner_resos_title {
 			text-align: center;
 			color: #FFF;
 			margin-bottom: 2px;
 			display: none;
 		}
 
-		.expres_resos {
+	& .expres_resos {
 			display: flex;
 			margin-bottom: 3px;
 
-			.expres_divHF {
+		& .expres_divHF {
 				flex: 0 0 40%;
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 4px;
 
-				.expres_reso {
+			& .expres_reso {
 					line-height: 16px;
 					display: flex;
 					gap: 10px;
 
-					.expres_icon {
+				& .expres_icon {
 						width: 18px;
 						height: 18px;
 
-						img {
+					& img {
 							width: 100%;
 							height: 100%;
 							vertical-align: top;
 						}
 					}
 
-					.expres_amt {
+				& .expres_amt {
 						font-size: 12px;
 						color: #fff;
 						text-align: left;
@@ -2090,26 +2090,26 @@ body {
 				}
 			}
 
-			.expres_greatbtn {
+		& .expres_greatbtn {
 				margin-left: auto;
 
-				img {
+			& img {
 					width: 40px;
 					height: 40px;
 				}
 			}
 		}
 
-		.requirements {
+	& .requirements {
 			display: inline-block;
 
-			.requirements_textbox {
+		& .requirements_textbox {
 				display: inline-block;
 				margin-left: 2px;
 			}
 		}
 
-		.expPlanner_text {
+	& .expPlanner_text {
 			display: inline-block;
 			font-size: 14px;
 			color: #ccc;
@@ -2131,36 +2131,36 @@ body {
 			}
 		}
 
-		.expPlanner_requirements {
+	& .expPlanner_requirements {
 			margin-bottom: 4px;
 		}
 
-		.expPlanner_text_passed {
+	& .expPlanner_text_passed {
 			color: #0C0;
 		}
 
-		.expPlanner_text_failed {
+	& .expPlanner_text_failed {
 			color: #F55;
 		}
 
-		.expPlanner_checker_criterias {
+	& .expPlanner_checker_criterias {
 			white-space: initial;
 		}
 
-		.expPlanner_req_fleetComposition,
-		.expPlanner_checker_criterias.canister_criterias {
+	& .expPlanner_req_fleetComposition,
+	& .expPlanner_checker_criterias.canister_criterias {
 			display: flex;
 			justify-content: center;
 			gap: 8px;
 		}
 
-		.expPlanner_checker {
+	& .expPlanner_checker {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 		}
 
-		.expedition_entry {
+	& .expedition_entry {
 			&.cond_passed {
 				color: green
 			}
@@ -2177,33 +2177,33 @@ body {
 		gap: 5px;
 		padding: 5px;
 
-		.fit_profile {
+	& .fit_profile {
 			display: flex;
 			align-items: center;
 			gap: 5px;
 
-			.fit_profile_pic {
+		& .fit_profile_pic {
 				flex: 0 0 40px;
 				height: 40px;
 				border-radius: 51%;
 				border: 1px solid #000;
 				overflow: hidden;
 
-				img {
+			& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 51%;
 				}
 			}
 
-			.fit_profile_name {
+		& .fit_profile_name {
 				font-size: 13px;
 				line-height: 16px;
 				font-weight: bold;
 				color: #fc0;
 			}
 
-			.fit_profile_level {
+		& .fit_profile_level {
 				margin-left: auto;
 				font-size: 12px;
 				white-space: nowrap;
@@ -2211,28 +2211,28 @@ body {
 			}
 		}
 
-		.fit_gear {
+	& .fit_gear {
 			display: flex;
 			align-items: center;
 			gap: 5px;
 
-			.fit_gear_pic {
+		& .fit_gear_pic {
 				flex: 0 0 30px;
 				height: 30px;
 				border: 0 none;
 				background: #333;
 			}
 
-			.fit_gear_name {
+		& .fit_gear_name {
 				font-size: 12px;
 				line-height: 14px;
 			}
 
-			.fit_gear_level {
+		& .fit_gear_level {
 				color: #45a9a5;
 				font-weight: bold;
 
-				img {
+			& img {
 					width: 12px;
 					height: 12px;
 					margin-top: 1px;
@@ -2241,12 +2241,12 @@ body {
 			}
 		}
 
-		.fit-values {
+	& .fit-values {
 			display: flex;
 			flex-flow: column nowrap;
 			gap: 3px;
 
-			.fit_value {
+		& .fit_value {
 				flex-flow: column wrap;
 				line-height: 15px;
 				font-size: 11px;
@@ -2256,57 +2256,57 @@ body {
 				background: #aaa;
 				text-shadow: none;
 
-				.fit_current {
+			& .fit_current {
 					display: flex;
 					align-items: center;
 					gap: 3px;
 
-					.fit_label {
+				& .fit_label {
 						line-height: 14px;
 					}
 
-					.fit_current_value {
+				& .fit_current_value {
 						display: flex;
 						flex-flow: column nowrap;
 						gap: 1px;
 						margin-left: auto;
 
-						.fit_unknown {
+					& .fit_unknown {
 							flex-flow: column nowrap;
 							gap: 1px;
 							align-items: center;
 							display: none;
 
-							img {
+						& img {
 								width: 14px;
 								height: 14px;
 							}
 						}
 
-						.fit_day,
-						.fit_night {
+					& .fit_day,
+					& .fit_night {
 							align-items: flex-end;
 							gap: 3px;
 
-							img {
+						& img {
 								width: 14px;
 								height: 14px;
 							}
 						}
 
-						.fit_night img {
+					& .fit_night img {
 								width: 13px;
 								height: 13px;
 						}
 
-						.fit_bonus {
+					& .fit_bonus {
 							font-weight: bold;
 							color: #3c3;
 							text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
 							filter: drop-shadow(0 0 1px #eee);
 						}
 
-						.fit_penalty {
+					& .fit_penalty {
 							font-weight: bold;
 							color: #a55;
 							text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
@@ -2315,7 +2315,7 @@ body {
 					}
 				}
 
-				.fit_total {
+			& .fit_total {
 					flex: 0 0 100%;
 					padding: 0 5px;
 					color: #eee;
@@ -2326,7 +2326,7 @@ body {
 				}
 			}
 
-			.oasw {
+		& .oasw {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 3px;
@@ -2337,30 +2337,30 @@ body {
 				color: #ddd;
 				background: #15c;
 
-				.oasw_message {
+			& .oasw_message {
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 				}
 
-				.oasw_power {
+			& .oasw_power {
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 
-					.value {
+				& .value {
 						font-weight: bold;
 					}
 				}
 			}
 
-			.aaci .aaciList {
+		& .aaci .aaciList {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 3px;
 				width: 100%;
 
-				.aaciPattern {
+			& .aaciPattern {
 					display: flex;
 					gap: 3px;
 					align-items: center;
@@ -2374,32 +2374,32 @@ body {
 					}
 				}
 
-				.apiId {
+			& .apiId {
 					min-width: 14px;
 					text-align: right;
 				}
 
-				.shipIcon {
+			& .shipIcon {
 					width: 20px;
 					height: 20px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
 					}
 				}
 
-				.equipIcons {
+			& .equipIcons {
 					flex: 1 0 auto;
 
-					img {
+				& img {
 						width: 18px;
 						height: 18px;
 					}
 
 					/* TODO - find out what this is and possibly fix it */
-					.plusIcon {
+				& .plusIcon {
 						width: 15px;
 						height: 15px;
 						margin: 5px 0 0 -12px;
@@ -2409,7 +2409,7 @@ body {
 						transform: scaleX(-1);
 					}
 
-					.minusIcon {
+				& .minusIcon {
 						width: 15px;
 						height: 15px;
 						margin: 5px 0 0 -12px;
@@ -2421,12 +2421,12 @@ body {
 				}
 			}
 
-			.equip {
+		& .equip {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 3px;
 
-				.equipInfo {
+			& .equipInfo {
 					padding: 4px;
 					border-radius: 6px;
 					font-size: 12px;
@@ -2434,11 +2434,11 @@ body {
 					background: rgb(54 255 182 / 20%);
 				}
 
-				.equipIcons {
+			& .equipIcons {
 					display: flex;
 					gap: 2px;
 
-					img {
+				& img {
 						width: 27px;
 						height: 27px;
 						border-radius: 51%;
@@ -2446,13 +2446,13 @@ body {
 						background-color: #fff;
 					}
 
-					span {
+				& span {
 						line-height: 27px;
 						font-size: 20px;
 					}
 				}
 
-				.statsBox {
+			& .statsBox {
 					display: flex;
 					gap: 5px;
 					border-radius: 6px;
@@ -2462,13 +2462,13 @@ body {
 					background: rgb(146 146 146 / 49%);
 					color: #fff;
 
-					div {
+				& div {
 						display: inline-flex;
 						align-items: center;
 						gap: 2px;
 					}
 
-					img {
+				& img {
 						width: 18px;
 						height: 18px;
 						background: #fff;
@@ -2477,18 +2477,18 @@ body {
 						box-sizing: content-box;
 					}
 
-					span {
+				& span {
 						line-height: 24px;
 					}
 				}
 			}
 
-			.landing .landingList {
+		& .landing .landingList {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 1px;
 
-				.landingInfo {
+			& .landingInfo {
 					display: flex;
 					gap: 5px;
 					align-items: center;
@@ -2500,11 +2500,11 @@ body {
 					padding: 2px;
 				}
 
-				.shipIcon {
+			& .shipIcon {
 					width: 20px;
 					height: 20px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
@@ -2512,18 +2512,18 @@ body {
 					}
 				}
 
-				.power {
+			& .power {
 					display: inline-flex;
 					gap: 3px;
 					align-items: center;
 
-					img {
+				& img {
 						width: 15px;
 						height: 15px;
 					}
 				}
 
-				.modifiers {
+			& .modifiers {
 					margin-left: auto;
 				}
 			}
@@ -2535,50 +2535,50 @@ body {
 		color: #ddd;
 		font-size: 12px;
 
-		.pvp_header {
+	& .pvp_header {
 			white-space: nowrap;
 
-			.pvp_title {
+		& .pvp_title {
 				color: #fc0;
 				font-weight: bold;
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
 
-			.pvp_create_kind {
+		& .pvp_create_kind {
 				color: #86b465;
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
 		}
 
-		.pvpEnemyInfo {
+	& .pvpEnemyInfo {
 			display: flex;
 			align-items: center;
 			gap: 3px;
 			margin-bottom: 4px;
 			container-type: inline-size;
 
-			.pvp_enemy_pic {
+		& .pvp_enemy_pic {
 				flex: 0 0 min(40px, 15cqw);
 				height: min(40px, 15cqw);
 				margin-right: 1px;
 				border: 1px solid #000;
 				border-radius: 51%;
 
-				img {
+			& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 51%;
 				}
 			}
 
-			.pvp_enemy_texts {
+		& .pvp_enemy_texts {
 				display: flex;
 				flex-flow: row wrap;
 				flex: 1 1 auto;
 
-				.pvp_enemy_name {
+			& .pvp_enemy_name {
 					line-height: 17px;
 					padding-left: 2px;
 					margin: 0 1px 1px 0;
@@ -2589,21 +2589,21 @@ body {
 					color: #3ec03e;
 				}
 
-				.pvp_enemy_level {
+			& .pvp_enemy_level {
 					line-height: 17px;
 					padding-left: 2px;
 					margin: 0 1px 1px auto;
 					font-size: 11px;
 				}
 
-				.pvp_enemy_rank {
+			& .pvp_enemy_rank {
 					line-height: 17px;
 					padding-left: 2px;
 					margin: 0 1px 1px 0;
 					font-size: 11px;
 				}
 
-				.pvp_enemy_comment {
+			& .pvp_enemy_comment {
 					flex: 1 0 calc(100% - 17px);
 					height: 17px;
 					line-height: 15px;
@@ -2618,17 +2618,17 @@ body {
 					text-shadow: none;
 				}
 
-				.pvp_enemy_medals {
+			& .pvp_enemy_medals {
 					position: relative;
 					width: 17px;
 					height: 17px;
 
-					img {
+				& img {
 						width: 13px;
 						height: 13px;
 					}
 
-					span {
+				& span {
 						font-size: 10px;
 						position: absolute;
 						bottom: 0;
@@ -2637,63 +2637,63 @@ body {
 				}
 			}
 
-			.pvp_enemy_state {
+		& .pvp_enemy_state {
 				width: 26px;
 
-				img {
+			& img {
 					width: 26px;
 					height: 26px;
 				}
 			}
 		}
 
-		.pvp_admiral {
+	& .pvp_admiral {
 			display: flex;
 			flex-flow: row wrap;
 			gap: 3px;
 			white-space: nowrap;
 			align-items: center;
 
-			.pvp_admiral_name {
+		& .pvp_admiral_name {
 				display: flex;
 				width: 100%;
 				align-items: center;
 
-				.l10n {
+			& .l10n {
 					width: 42px;
 					font-size: 11px;
 					color: #3ec0bf;
 				}
 
-				.value {
+			& .value {
 					overflow: hidden;
 					text-overflow: ellipsis;
 				}
 			}
 
-			.pvp_admiral_level {
+		& .pvp_admiral_level {
 				display: flex;
 				width: 42px;
 				line-height: 15px;
 
-				.l10n {
+			& .l10n {
 					width: 16px;
 					color: #3ec0bf;
 				}
 			}
 
-			.pvp_admiral_rank {
+		& .pvp_admiral_rank {
 				line-height: 15px;
 				font-size: 11px;
 			}
 
-			.pvp_admiral_exp {
+		& .pvp_admiral_exp {
 				margin-left: auto;
 				line-height: 15px;
 				font-size: 11px;
 			}
 
-			.pvp_admiral_comment {
+		& .pvp_admiral_comment {
 				width: 100%;
 				height: 17px;
 				line-height: 17px;
@@ -2708,7 +2708,7 @@ body {
 				text-shadow: none;
 			}
 
-			.pvp_admiral_label {
+		& .pvp_admiral_label {
 				width: 110px;
 				line-height: 13px;
 				margin: 0 0 2px;
@@ -2716,9 +2716,9 @@ body {
 				color: #c3b180;
 			}
 
-			.pvp_admiral_ships,
-			.pvp_admiral_gears,
-			.pvp_admiral_furniture {
+		& .pvp_admiral_ships,
+		& .pvp_admiral_gears,
+		& .pvp_admiral_furniture {
 				width: calc(100% - 113px); /* 110px + 3px gap */
 				line-height: 13px;
 				margin-left: auto;
@@ -2727,7 +2727,7 @@ body {
 			}
 		}
 
-		.pvp_fleet_name {
+	& .pvp_fleet_name {
 			line-height: 17px;
 			padding: 0 0 0 3px;
 			margin-bottom: 3px;
@@ -2741,14 +2741,14 @@ body {
 			text-shadow: none;
 		}
 
-		.pvp_fleet_list {
+	& .pvp_fleet_list {
 			display: flex;
 			flex-flow: row wrap;
 			gap: 3px;
 			white-space: nowrap;
 			margin-bottom: 3px;
 
-			.pvpFleetShip {
+		& .pvpFleetShip {
 				display: flex;
 				gap: 3px;
 				flex: 1 1 calc(50% - 2px);
@@ -2759,42 +2759,42 @@ body {
 				background-color: rgb(85 85 85 / 70%);
 				overflow: hidden;
 
-				.pvp_fleet_ship_icon {
+			& .pvp_fleet_ship_icon {
 					flex: 0 0 36px;
 					height: 36px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 						border-radius: 51%;
 					}
 				}
 
-				.pvp_fleet_ship_texts {
+			& .pvp_fleet_ship_texts {
 					flex: 1 1 calc(100% - 39px);
 					display: flex;
 					flex-flow: row wrap;
 
-					.pvp_fleet_ship_name {
+				& .pvp_fleet_ship_name {
 						flex: 1 1 100%;
 						line-height: 18px;
 					}
 
-					.pvp_fleet_ship_level {
+				& .pvp_fleet_ship_level {
 						display: inline-flex;
 						line-height: 18px;
 
-						.l10n {
+					& .l10n {
 							color: #3ec0bf;
 						}
 					}
 
-					.pvp_fleet_ship_star {
+				& .pvp_fleet_ship_star {
 						line-height: 18px;
 						margin-left: auto;
 						padding-right: 3px;
 
-						.star {
+					& .star {
 							color: #eedab1;
 						}
 					}
@@ -2802,7 +2802,7 @@ body {
 			}
 		}
 
-		.pvp_prediction {
+	& .pvp_prediction {
 			display: flex;
 			gap: 6%;
 			align-items: center;
@@ -2810,25 +2810,25 @@ body {
 			font-size: 11px;
 			white-space: nowrap;
 
-			.pvp_base_exp,
-			.pvp_formation {
+		& .pvp_base_exp,
+		& .pvp_formation {
 				flex: 0 0 47%;
 				display: flex;
 				align-items: center;
 
-				.l10n {
+			& .l10n {
 					color: #3ec0bf;
 				}
 			}
 
-			.pvp_base_exp {
-				.value {
+		& .pvp_base_exp {
+			& .value {
 					margin-left: auto;
 				}
 			}
 
-			.pvp_formation {
-				img {
+		& .pvp_formation {
+			& img {
 					margin-left: auto;
 					width: 20px;
 					height: 20px;
@@ -2845,28 +2845,28 @@ body {
 		color: #ddd;
 		font-size: 12px;
 
-		.remodel_header {
+	& .remodel_header {
 			margin-bottom: 2px;
 			display: flex;
 			align-items: center;
 
-			.recipe_title,
-			.result_title {
+		& .recipe_title,
+		& .result_title {
 				color: #fc0;
 				font-weight: bold;
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
 
-			.recipe_title span {
+		& .recipe_title span {
 				color: #3ec0bf;
 			}
 
-			.result_title.failure {
+		& .result_title.failure {
 				color: #f00;
 			}
 
-			.assistant_ship {
+		& .assistant_ship {
 				margin-left: auto;
 				width: 30px;
 				height: 30px;
@@ -2875,7 +2875,7 @@ body {
 				border-radius: 51%;
 				overflow: hidden;
 
-				img {
+			& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 51%;
@@ -2883,16 +2883,16 @@ body {
 			}
 		}
 
-		.remodel_slotlist,
-		.remodel_to_improve,
-		.remodel_consumptions,
-		.remodel_upgrade_to,
-		.remodel_improved {
+	& .remodel_slotlist,
+	& .remodel_to_improve,
+	& .remodel_consumptions,
+	& .remodel_upgrade_to,
+	& .remodel_improved {
 			display: flex;
 			flex-flow: column nowrap;
 			gap: 5px;
 
-			.remodelSlotItem {
+		& .remodelSlotItem {
 				display: flex;
 				background: rgb(255 255 255 / 20%);
 				border-radius: 5px;
@@ -2912,45 +2912,45 @@ body {
 					display: none;
 				}
 
-				.remodel_slot_itemon {
+			& .remodel_slot_itemon {
 					flex: 0 0 40px;
 					height: 56px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 					}
 				}
 
-				.remodel_slot_desc {
+			& .remodel_slot_desc {
 					display: flex;
 					flex-flow: column nowrap;
 					flex: 0 0 calc(100% - 45px);
 					overflow: clip visible;
 					gap: 2px;
 
-					.remodel_slot_imgname {
+				& .remodel_slot_imgname {
 						display: flex;
 						align-items: center;
 						gap: 2px;
 						flex: 0 0 auto;
 						margin-top: 2px;
 
-						.remodel_slot_icon {
+					& .remodel_slot_icon {
 							width: 20px;
 							height: 20px;
 							background: rgb(0 0 0 / 60%);
 							border-radius: 10px;
 							overflow: hidden;
 
-							img {
+						& img {
 								width: 100%;
 								height: 100%;
 								vertical-align: top;
 							}
 						}
 
-						.remodel_slot_name {
+					& .remodel_slot_name {
 							color: #eee;
 							line-height: 20px;
 							overflow: hidden;
@@ -2966,7 +2966,7 @@ body {
 					padding-right: 4px;
 				}
 
-				.remodel_slot_star {
+			& .remodel_slot_star {
 					font-size: 11px;
 					font-weight: bold;
 					color: #45a9a5;
@@ -2974,21 +2974,21 @@ body {
 					margin: 0 5px 0 auto;
 					display: none;
 
-					img {
+				& img {
 						width: 13px;
 						height: 13px;
 						margin-top: -3px;
 					}
 				}
 
-				.remodel_slot_success {
+			& .remodel_slot_success {
 					font-size: 11px;
 					margin-right: 5px;
 					color: #8ae9e4;
 					display: none;
 				}
 
-				.remodel_slot_reqs {
+			& .remodel_slot_reqs {
 					display: flex;
 					flex-flow: row wrap;
 					align-items: center;
@@ -2997,22 +2997,22 @@ body {
 					text-shadow: none;
 					margin-bottom: 3px;
 
-					.remodel-req-separator {
+				& .remodel-req-separator {
 						width: 100%;
 					}
 
-					div {
+				& div {
 						line-height: 15px;
 						display: inline-flex;
 						gap: 3px;
 					}
 
-					img {
+				& img {
 						width: 12px;
 						height: 12px;
 					}
 
-					span {
+				& span {
 						&.req {
 							color: #ddd;
 						}
@@ -3029,34 +3029,34 @@ body {
 			}
 		}
 
-		.remodel_consumptions {
+	& .remodel_consumptions {
 			font-size: 11px;
 			margin: 5px 0 2px;
 
-			.remodel_consume_items {
+		& .remodel_consume_items {
 				display: flex;
 				flex-flow: column nowrap;
 				gap: 4px;
 
-				.remodel_consume_item {
+			& .remodel_consume_item {
 					display: flex;
 					align-items: center;
 					gap: 4px;
 
-					.remodel_slot_icon {
+				& .remodel_slot_icon {
 						width: 16px;
 						height: 16px;
 						background: rgb(0 0 0 / 60%);
 						border-radius: 7px;
 
-						img {
+					& img {
 							width: 100%;
 							height: 100%;
 							vertical-align: top;
 						}
 					}
 
-					.remodel_slot_name {
+				& .remodel_slot_name {
 						color: #45a9a5;
 						line-height: 14px;
 						overflow: hidden;
@@ -3064,7 +3064,7 @@ body {
 						white-space: nowrap;
 					}
 
-					.remodel_consume_amount {
+				& .remodel_consume_amount {
 						margin-left: auto;
 						color: #45a9a5;
 						font-weight: bold;
@@ -3073,15 +3073,15 @@ body {
 				}
 			}
 
-			.remodel_owned_items {
+		& .remodel_owned_items {
 				display: flex;
 				gap: 7px;
 
-				.owned_item {
+			& .owned_item {
 					display: none;
 					gap: 3px;
 
-					img {
+				& img {
 						width: 12px;
 						height: 12px;
 						vertical-align: text-top;
@@ -3092,7 +3092,7 @@ body {
 						font-weight: bold;
 					}
 
-					.value {
+					& .value {
 						color: #45a9a5;
 
 						&.red {
@@ -3103,12 +3103,12 @@ body {
 			}
 		}
 
-		.remodel_upgrade_title {
+		& .remodel_upgrade_title {
 			color: #fc0;
 			font-size: 11px;
 		}
 
-		.remodel_footer {
+	& .remodel_footer {
 			display: flex;
 			align-items: center;
 			justify-content: flex-end;
@@ -3122,7 +3122,7 @@ body {
 				gap: 3px;
 			}
 
-			img {
+		& img {
 				width: 16px;
 				height: 16px;
 			}
@@ -3142,7 +3142,7 @@ body {
 		order: 1;
 	}
 
-	.quest {
+& .quest {
 		line-height: 18px;
 		display: flex;
 		gap: 5px;
@@ -3151,12 +3151,12 @@ body {
 		&.complete {
 			background: rgb(0 255 0 / 25%);
 
-			.quest_color {
+		& .quest_color {
 				border-left: 2px solid #0f0;
 			}
 		}
 
-		.quest_color {
+	& .quest_color {
 			width: 14px;
 			height: 14px;
 			line-height: 12px;
@@ -3200,7 +3200,7 @@ body {
 			border-left: 3px solid #6cd;
 		}
 
-		.quest_text {
+	& .quest_text {
 			flex: 1 1 calc(100% - 54px);
 			font-size: 11px;
 			white-space: nowrap;
@@ -3209,7 +3209,7 @@ body {
 			color: #eee;
 		}
 
-		.quest_track {
+	& .quest_track {
 			margin-left: auto;
 			width: 40px;
 			line-height: 16px;
@@ -3221,7 +3221,7 @@ body {
 			border-radius: 2px;
 		}
 
-		.untracked .quest_track {
+	& .untracked .quest_track {
 			display: none;
 		}
 	}
@@ -3237,7 +3237,7 @@ body {
 	gap: 5px 1px;
 	container-type: inline-size;
 
-	.control-separator {
+& .control-separator {
 		display: none;
 
 		@container (width < 320px) {
@@ -3247,7 +3247,7 @@ body {
 		}
 	}
 
-	.control {
+& .control {
 		color: #ccc;
 
 		&.fleet_num {
@@ -3290,7 +3290,7 @@ body {
 			border-radius: 8px;
 			background: #333;
 
-			img {
+		& img {
 				width: 100%;
 				height: 100%;
 			}
@@ -3303,7 +3303,7 @@ body {
 			background: #333;
 			text-align: center;
 
-			img {
+		& img {
 				max-height: 30px;
 			}
 
@@ -3377,7 +3377,7 @@ body {
 				background: #333;
 			}
 
-			img {
+		& img {
 				width: 34px;
 				height: 24px;
 			}
@@ -3403,19 +3403,19 @@ body {
 		pointer-events: none;
 	}
 
-	.summary_box {
+& .summary_box {
 		display: inline-flex;
 		align-items: center;
 		gap: 5px;
 		line-height: 20px;
 
-		.summary_icon {
+	& .summary_icon {
 			width: 20px;
 			height: 20px;
 			background: #fff;
 			border-radius: 10px;
 
-			img {
+		& img {
 				width: 16px;
 				height: 16px;
 				margin: 2px;
@@ -3423,14 +3423,14 @@ body {
 			}
 		}
 
-		.summary_text {
+	& .summary_text {
 			color: #eee;
 			font-size: 12px;
 			font-weight: bold;
 			white-space: nowrap;
 		}
 
-		.summary_sub {
+	& .summary_sub {
 			width: 12px;
 			height: 12px;
 			line-height: 13px;
@@ -3454,14 +3454,14 @@ body {
 	grid-area: fleet;
 	border-radius: 5px;
 
-	.shiplist {
+	& .shiplist {
 		container-type: inline-size;
 		flex-flow: column nowrap;
 		gap: 5px;
 
 		/* Single kanmusu
 		   l now stands for lucky */
-		.lship {
+		& .lship {
 			container-type: inline-size;
 			container-name: ship;
 			display: grid;
@@ -3494,13 +3494,13 @@ body {
 			}
 
 			/* ------- Wrappers ------- */
-			.lship-image {
+		& .lship-image {
 				position: relative;
 				grid-row: 1 / 2;
 				grid-column: 1 / 2;
 			}
 
-			.lship-details {
+		& .lship-details {
 				grid-row: 1 / 2;
 				grid-column: 2 / 3;
 				display: flex;
@@ -3509,7 +3509,7 @@ body {
 			}
 
 			/* ------- Ship image details ------- */
-			.ribbon {
+			& .ribbon {
 				width: 24px;
 				height: 71px;
 				position: absolute;
@@ -3522,7 +3522,7 @@ body {
 				pointer-events: none;
 				display: none;
 
-				img {
+			& img {
 					width: 24px;
 					height: 71px;
 				}
@@ -3556,7 +3556,7 @@ body {
 				z-index: 1;
 			}
 
-			.ship_img {
+			& .ship_img {
 				position: relative;
 				flex: 0 0 max(40px, 15cqw);
 				max-width: 60px;
@@ -3564,13 +3564,13 @@ body {
 				max-height: 60px;
 				border-radius: 51%;
 
-				img {
+				& img {
 					width: 100%;
 					height: 100%;
 					border-radius: 51%;
 				}
 
-				.ex_item {
+			& .ex_item {
 					width: 18px;
 					height: 18px;
 					line-height: 18px;
@@ -3581,7 +3581,7 @@ body {
 					border-radius: 9px;
 					z-index: 1;
 
-					.gear_star {
+				& .gear_star {
 						width: 12px;
 						position: absolute;
 						font-size: 8px;
@@ -3611,10 +3611,10 @@ body {
 						0 0 4px #ff0 !important;
 					}
 
-					.gear_icon {
+				& .gear_icon {
 						overflow: hidden;
 
-						img {
+					& img {
 							width: 18px;
 							height: 18px;
 							line-height: 18px;
@@ -3623,7 +3623,7 @@ body {
 					}
 
 					/* TODO Examine and fix this, can ship_img be inside exslot? */
-					.ship_img {
+				& .ship_img {
 						width: 40px;
 						height: 40px;
 						float: left;
@@ -3631,7 +3631,7 @@ body {
 						border-radius: 20px;
 						overflow: hidden;
 
-						img {
+					& img {
 							width: 40px;
 							height: 40px;
 							position: relative;
@@ -3641,7 +3641,7 @@ body {
 					}
 				}
 
-				.locktag {
+			& .locktag {
 					width: 18px;
 					height: 18px;
 					line-height: 16px;
@@ -3663,7 +3663,7 @@ body {
 				}
 			}
 
-			.mvp_icon {
+		& .mvp_icon {
 				width: 22px;
 				height: 22px;
 				position: absolute;
@@ -3673,14 +3673,14 @@ body {
 				overflow: hidden;
 				display: none;
 
-				img {
+			& img {
 					width: 100%;
 					height: 100%;
 				}
 			}
 
 			/* ------- Name, type, level, HP column ------- */
-			.ship_col1 {
+		& .ship_col1 {
 				flex: 0 0 calc(50% - 27px);
 				display: flex;
 				flex-flow: row wrap;
@@ -3693,7 +3693,7 @@ body {
 					flex: 0 0 calc(100% - 47px);
 				}
 
-				.ship_name {
+			& .ship_name {
 					flex: 1 1 100%;
 					line-height: 14px;
 					font-size: 12px;
@@ -3704,25 +3704,25 @@ body {
 					text-overflow: ellipsis;
 				}
 
-				.ship_type {
+			& .ship_type {
 					line-height: 15px;
 					font-size: 10px;
 					color: #0ff;
 					white-space: nowrap;
 				}
 
-				.ship_level {
+			& .ship_level {
 					line-height: 15px;
 					font-size: 11px;
 					color: #fff;
 					white-space: nowrap;
 
-					.value.goaled {
+				& .value.goaled {
 						filter: drop-shadow(0 0 2px #fe2);
 					}
 				}
 
-				.ship_hp_text {
+			& .ship_hp_text {
 					margin-left: auto;
 					line-height: 15px;
 					color: #0f0;
@@ -3730,17 +3730,17 @@ body {
 					white-space: nowrap;
 				}
 
-				.ship_hp_cur {
+			& .ship_hp_cur {
 					color: #0f0;
 					font-size: 12px;
 				}
 
-				.ship_hp_max {
+			& .ship_hp_max {
 					color: #aaa;
 					font-size: 11px;
 				}
 
-				.ship_hp_box {
+			& .ship_hp_box {
 					flex: 1 1 100%;
 					height: 11px;
 					border: 1px solid #000;
@@ -3751,8 +3751,8 @@ body {
 						height: 15px;
 					}
 
-					.ship_hp_bar,
-					.ship_hp_prediction {
+					& .ship_hp_bar,
+				& .ship_hp_prediction {
 						position: absolute;
 						top: 0;
 						left: 0;
@@ -3791,7 +3791,7 @@ body {
 							background-color: #ccc;
 						}
 
-						.ship_hp_pred_value {
+					& .ship_hp_pred_value {
 							position: absolute;
 							top: 0;
 							left: 0;
@@ -3805,7 +3805,7 @@ body {
 								line-height: 12px;
 							}
 
-							.ship_hp_diff {
+						& .ship_hp_diff {
 								color: #ff6565;
 								font-size: 11px;
 								text-shadow:
@@ -3821,11 +3821,11 @@ body {
 						}
 					}
 
-					.ship_hp_prediction {
+				& .ship_hp_prediction {
 						z-index: 2;
 					}
 
-					.ship_hp_bar_metrics {
+				& .ship_hp_bar_metrics {
 						position: relative;
 						top: 0;
 						left: 25%;
@@ -3854,7 +3854,7 @@ body {
 			}
 
 			/* ------- Akashi Timer ------- */
-			.ship_repair_data {
+		& .ship_repair_data {
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -3868,8 +3868,8 @@ body {
 					height: 150%;
 				}
 
-				.ship_repair_tick,
-				.ship_repair_timer {
+			& .ship_repair_tick,
+			& .ship_repair_timer {
 					flex: 0 0 50%;
 					height: 100%;
 					display: flex;
@@ -3879,11 +3879,11 @@ body {
 					color: green;
 				}
 
-				.ship_repair_tick::before {
+			& .ship_repair_tick::before {
 					content:"+" attr(data-tick);
 				}
 
-				.ship_repair_timer {
+			& .ship_repair_timer {
 					color: red;
 				}
 			}
@@ -3893,7 +3893,7 @@ body {
 			}
 
 			/* ------- Morale, XP column ------- */
-			.ship_col2 {
+		& .ship_col2 {
 				flex: 0 0 40px;
 				display: flex;
 				flex-flow: column nowrap;
@@ -3902,7 +3902,7 @@ body {
 				gap: 3px;
 				text-align: center;
 
-				.ship_morale {
+			& .ship_morale {
 					width: 40px;
 					height: 16px;
 					line-height: 16px;
@@ -3922,13 +3922,13 @@ body {
 					}
 				}
 
-				.ship_exp_label {
+			& .ship_exp_label {
 					line-height: 11px;
 					font-size: 11px;
 					color: #aaa;
 					position: relative;
 
-					.expNotice {
+				& .expNotice {
 						width: 40px;
 						height: 22px;
 						line-height: 22px;
@@ -3944,7 +3944,7 @@ body {
 					}
 				}
 
-				.ship_exp_next {
+			& .ship_exp_next {
 					line-height: 11px;
 					font-size: 10px;
 					color: #eee;
@@ -3952,7 +3952,7 @@ body {
 			}
 
 			/* ------- Equipment ------- */
-			.ship_gears {
+		& .ship_gears {
 				flex: 0 0 calc(50% - 27px);
 				display: flex;
 				flex-flow: row wrap;
@@ -3975,7 +3975,7 @@ body {
 					gap: 8px 0;
 				}
 
-				.ship_gear {
+			& .ship_gear {
 					position: relative;
 					gap: 3px;
 					flex: 0 0 calc(100% / 3 - 4px);
@@ -3988,7 +3988,7 @@ body {
 						flex: 0 0 25%;
 					}
 
-					.ship_gear_star {
+				& .ship_gear_star {
 						width: 12px;
 						position: absolute;
 						bottom: -3px;
@@ -4009,7 +4009,7 @@ body {
 						}
 					}
 
-					.ship_gear_ace {
+				& .ship_gear_ace {
 						width: 35px;
 						height: 20px;
 						overflow: hidden;
@@ -4018,13 +4018,13 @@ body {
 						transform: scale(0.5);
 						margin: -1px -16px 0 -15px;
 
-						img {
+					& img {
 							width: 100%;
 							height: 100%;
 						}
 					}
 
-					.ship_gear_icon {
+				& .ship_gear_icon {
 						width: max(18px, 4.5cqw);
 						height: max(18px, 4.5cqw);
 						max-width: 22px;
@@ -4038,7 +4038,7 @@ body {
 							0 0 4px #ff0 !important;
 						}
 
-						img {
+					& img {
 							width: calc(100% - 2px);
 							height: calc(100% - 2px);
 							margin: 1px;
@@ -4047,7 +4047,7 @@ body {
 					}
 
 					&.equipped {
-						.ship_gear_icon {
+					& .ship_gear_icon {
 							background: #fff;
 
 							&.item_being_used {
@@ -4060,7 +4060,7 @@ body {
 						background: rgb(150 150 150 / 40%);
 					}
 
-					.ship_gear_slot {
+				& .ship_gear_slot {
 						line-height: 20px;
 						font-size: 12px;
 					}
@@ -4076,20 +4076,20 @@ body {
 			}
 
 			/* ------- Fuel and ammo ------- */
-			.ship_supplies {
+		& .ship_supplies {
 				width: 100%;
 				height: 10px;
 				display: flex;
 				align-content: center;
 				gap: 2%;
 
-				.ship_supply {
+			& .ship_supply {
 					flex: 0 0 49%;
 					position: relative;
 					background: rgb(148 58 58 / 100%);
 					border: 1px solid rgb(255 255 255 / 70%);
 
-					.ship_supply_text {
+				& .ship_supply_text {
 						width: calc(100% - 2px);
 						line-height: 10px;
 						font-size: 8px;
@@ -4100,7 +4100,7 @@ body {
 						text-align: center;
 					}
 
-					.ship_supply_bar {
+				& .ship_supply_bar {
 						height: 8px;
 					}
 
@@ -4145,14 +4145,14 @@ body {
 			}
 
 			/* ------- Experience bar ------- */
-			.ship_exp_box {
+		& .ship_exp_box {
 				position: relative;
 				width: 100%;
 				height: 2px;
 				background: #555;
 				margin-left: auto;
 
-				.ship_exp_bar {
+			& .ship_exp_bar {
 					height: 2px;
 					background: #78A9DA;
 				}
@@ -4167,7 +4167,7 @@ body {
 				color: #fbb;
 			}
 
-			.ship_no_lock {
+		& .ship_no_lock {
 				visibility: hidden;
 				position: absolute;
 				bottom: 0;
@@ -4188,24 +4188,24 @@ body {
 			flex-direction: row;
 			gap: 10px;
 
-			.lship {
+		& .lship {
 				grid-template-columns: min(60px, max(40px, 7.5cqw)) 1fr;
 
-				.ship_gears,
-				.ship_exp_box,
-				.ship_exp_label,
-				.ship_exp_next {
+			& .ship_gears,
+			& .ship_exp_box,
+			& .ship_exp_label,
+			& .ship_exp_next {
 					display: none;
 				}
 
-				.lship-image {
+			& .lship-image {
 					margin-bottom: 11px;
 				}
 
-				.ship_col1 {
+			& .ship_col1 {
 					flex: 0 0 calc(100% - 27px);
 
-					.ship_hp_text {
+				& .ship_hp_text {
 						line-height: 10px;
 						position: absolute;
 						left: 3px;
@@ -4216,10 +4216,10 @@ body {
 					}
 				}
 
-				.ship_col2 {
+			& .ship_col2 {
 					flex: 0 0 20px;
 
-					.ship_morale {
+				& .ship_morale {
 						width: 20px;
 						height: 20px;
 						border-radius: 16px;
@@ -4230,7 +4230,7 @@ body {
 			}
 		}
 
-		.shiplist_combined_fleet {
+	& .shiplist_combined_fleet {
 			display: flex;
 			flex-flow: column nowrap;
 			flex: 0 0 calc(50% - 5px);
@@ -4247,14 +4247,14 @@ body {
 	gap: 5px 0;
 	grid-area: status;
 
-	.status_box {
+& .status_box {
 		display: inline-flex;
 		align-items: center;
 		gap: 5px;
 		flex: 0 0 50%;
 		line-height: 20px;
 
-		.status_icon {
+	& .status_icon {
 			width: 20px;
 			height: 20px;
 
@@ -4263,14 +4263,14 @@ body {
 				border-radius: 10px;
 			}
 
-			img {
+		& img {
 				width: 20px;
 				height: 20px;
 				vertical-align: top;
 			}
 		}
 
-		.status_text {
+	& .status_text {
 			color: #fff;
 			text-shadow: 0 0 5px #000;
 			font-size: 13px;
@@ -4295,7 +4295,7 @@ body {
 		&.status_support {
 			display: none;
 
-			img {
+		& img {
 				width: 14px;
 				height: 14px;
 				margin: 3px;
@@ -4311,12 +4311,12 @@ body {
 	flex-flow: column nowrap;
 	gap: 10px;
 
-	.airbase {
+& .airbase {
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 3px;
 
-		.airbase_infos {
+	& .airbase_infos {
 			position: relative;
 			display: flex;
 			flex-flow: row wrap;
@@ -4326,7 +4326,7 @@ body {
 			border-radius: 6px;
 			padding: 1px 55px 1px 10px;
 
-			.airbase_info {
+		& .airbase_info {
 				&.base_map {
 					font-size: 11px;
 					font-weight: bold;
@@ -4348,19 +4348,19 @@ body {
 					align-items: center;
 					gap: 10px;
 
-					.base_stat {
+				& .base_stat {
 						display: inline-flex;
 						align-items: center;
 						gap: 3px;
 
-						.base_stat_icon {
+					& .base_stat_icon {
 							width: 18px;
 							height: 18px;
 							line-height: 16px;
 							border-radius: 9px;
 							background: #131313;
 
-							img {
+						& img {
 								width: calc(100% - 2px);
 								height: calc(100% - 2px);
 								filter: invert(100%);
@@ -4368,7 +4368,7 @@ body {
 							}
 						}
 
-						.base_stat_value {
+					& .base_stat_value {
 							line-height: 20px;
 							color: #ccc;
 							font-size: 11px;
@@ -4388,13 +4388,13 @@ body {
 			}
 		}
 
-		.base_planes {
+	& .base_planes {
 			display: flex;
 			flex-flow: row wrap;
 			align-items: center;
 			gap: 5px;
 
-			.airbase_plane {
+		& .airbase_plane {
 				display: flex;
 				align-items: center;
 				gap: 5px;
@@ -4409,14 +4409,14 @@ body {
 					background: rgb(255 200 0 / 20%);
 				}
 
-				.base_plane_img {
+			& .base_plane_img {
 					flex: 0 0 80px;
 
 					@container plane (width >= 300px) {
 						flex: 0 0 100px;
 					}
 
-					img {
+				& img {
 						width: 100%;
 						height: 25px;
 						object-fit: cover;
@@ -4428,7 +4428,7 @@ body {
 					}
 				}
 
-				.base_plane_icon {
+			& .base_plane_icon {
 					position: relative;
 					flex: 0 0 23px;
 					line-height: 23px;
@@ -4437,12 +4437,12 @@ body {
 						flex: 0 0 28px;
 					}
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 					}
 
-					.base_plane_star {
+				& .base_plane_star {
 						width: 12px;
 						height: 12px;
 						position: absolute;
@@ -4460,17 +4460,17 @@ body {
 					}
 				}
 
-				.base_plane_chevs {
+			& .base_plane_chevs {
 					flex: 0 0 15px;
 					line-height: 25px;
 
-					img {
+				& img {
 						width: 25px;
 						margin: 0 -5px;
 					}
 				}
 
-				.base_plane_name {
+			& .base_plane_name {
 					display: none;
 					line-height: 24px;
 					font-size: 11px;
@@ -4486,7 +4486,7 @@ body {
 					}
 				}
 
-				.base_plane_count {
+			& .base_plane_count {
 					line-height: 24px;
 					font-size: 11px;
 					text-shadow: 2px 2px 4px #333,
@@ -4499,12 +4499,12 @@ body {
 					}
 				}
 
-				.base_plane_cond {
+			& .base_plane_cond {
 					flex: 0 0 16px;
 					line-height: 16px;
 					margin-right: 4px;
 
-					img {
+				& img {
 						width: 100%;
 						height: 100%;
 					}
@@ -4569,7 +4569,7 @@ body {
 		object-fit: cover;
 	}
 
-	.ui-tooltip-content {
+& .ui-tooltip-content {
 		hr {
 			margin: 3px 0;
 		}
@@ -4578,34 +4578,34 @@ body {
 			margin: 0;
 		}
 
-		.monofont {
+	& .monofont {
 			font-family: Consolas, 'Courier New', Courier, monospace;
 		}
 
-		.power_capped {
+	& .power_capped {
 			color: #a08;
 		}
 
-		.ship_face_tooltip {
+	& .ship_face_tooltip {
 			width: 252px;
 			height: 314px;
 			padding: 0;
 			display: flex;
 			flex-flow: row wrap;
 
-			.ship_stats_row {
+		& .ship_stats_row {
 				flex: 0 0 250px;
 				display: flex;
 			}
 
-			.ship_stats_col {
+		& .ship_stats_col {
 				flex: 0 0 126px;
 				display: flex;
 				flex-flow: row wrap;
 				gap: 2px;
 			}
 
-			.ship_full_name {
+		& .ship_full_name {
 				flex: 0 0 208px;
 				height: 17px;
 				line-height: 17px;
@@ -4613,16 +4613,16 @@ body {
 				white-space: nowrap;
 				text-overflow: ellipsis;
 
-				span.ship_masterId {
+			& span.ship_masterId {
 					color: #c4a957;
 				}
 
-				span.ship_yomi {
+			& span.ship_yomi {
 					color: #ccc;
 				}
 			}
 
-			.ship_rosterId {
+		& .ship_rosterId {
 				flex: 0 0 40px;
 				height: 17px;
 				line-height: 17px;
@@ -4631,7 +4631,7 @@ body {
 				text-align: right;
 			}
 
-			.ship_stype {
+		& .ship_stype {
 				flex: 0 0 35px;
 				height: 17px;
 				line-height: 17px;
@@ -4639,31 +4639,31 @@ body {
 				white-space: nowrap;
 			}
 
-			.ship_level {
+		& .ship_level {
 				flex: 0 0 42px;
 				height: 17px;
 				line-height: 17px;
 				overflow: hidden;
 				white-space: nowrap;
 
-				span.l10n {
+			& span.l10n {
 					color: #3ec0bf;
 				}
 
-				span.value.married {
+			& span.value.married {
 					color: #a97417;
 				}
 
-				span.value.high {
+			& span.value.high {
 					color: #107e57;
 				}
 
-				span.value.medium {
+			& span.value.medium {
 					color: #36c2db;
 				}
 			}
 
-			.ship_exp_next {
+		& .ship_exp_next {
 				flex: 0 0 75px;
 				height: 17px;
 				line-height: 16px;
@@ -4671,12 +4671,12 @@ body {
 				overflow: hidden;
 				white-space: nowrap;
 
-				span.l10n {
+			& span.l10n {
 					color: #7ca99f;
 				}
 			}
 
-			.ship_morale {
+		& .ship_morale {
 				flex: 0 0 32px;
 				height: 17px;
 				line-height: 16px;
@@ -4684,7 +4684,7 @@ body {
 				overflow: hidden;
 				white-space: nowrap;
 
-				img {
+			& img {
 					width: 13px;
 					height: 13px;
 					vertical-align: text-bottom;
@@ -4692,7 +4692,7 @@ body {
 				}
 			}
 
-			.ship_hp {
+		& .ship_hp {
 				flex: 0 0 48px;
 				height: 17px;
 				line-height: 17px;
@@ -4701,7 +4701,7 @@ body {
 				white-space: nowrap;
 			}
 
-			.stat_icon {
+		& .stat_icon {
 				flex: 0 0 52px;
 				height: 19px;
 				line-height: 17px;
@@ -4712,19 +4712,19 @@ body {
 				border-right-color: #ffe;
 				border-bottom-color: #fcfcfc;
 
-				img {
+			& img {
 					max-width: 19px;
 					height: 16px;
 					vertical-align: bottom;
 				}
 			}
 
-			.stat_name {
+		& .stat_name {
 				color: #b49a47;
 				font-size: 11px;
 			}
 
-			.stat_value {
+		& .stat_value {
 				display: inline-block;
 				flex: 0 0 71px;
 				height: 19px;
@@ -4738,41 +4738,41 @@ body {
 				border-right-color: #f0f0f0;
 				border-bottom-color: #f0f0f0;
 
-				span {
+			& span {
 					display: inline;
 				}
 
-				.equip {
+			& .equip {
 					font-size: 10px;
 					color: #888;
 					margin-right: 1px;
 				}
 
-				.mod {
+			& .mod {
 					font-size: 10px;
 					color: #aaa;
 					margin-left: 1px;
 				}
 
-				.level {
+			& .level {
 					font-size: 10px;
 					color: #3ec0bf;
 					margin-left: 1px;
 				}
 
-				.luck {
+			& .luck {
 					font-size: 10px;
 					color: #2b2;
 					margin-left: 1px;
 				}
 
-				.sp {
+			& .sp {
 					font-size: 10px;
 					color: #00f;
 					margin-left: 1px;
 				}
 
-				.oasw {
+			& .oasw {
 					color: #0cd;
 				}
 
@@ -4783,10 +4783,10 @@ body {
 				}
 			}
 
-			.stat_wide {
+		& .stat_wide {
 				flex: 0 0 249px;
 
-				.slide {
+			& .slide {
 					animation: slide infinite 3s alternate 1s;
 				}
 
@@ -4797,7 +4797,7 @@ body {
 				}
 			}
 
-			.aa_col {
+		& .aa_col {
 				flex: 0 0 49px;
 				height: 19px;
 				line-height: 17px;
@@ -4825,15 +4825,15 @@ body {
 				}
 			}
 
-			.text_center {
+		& .text_center {
 				text-align: center;
 			}
 
-			.text_left {
+		& .text_left {
 				text-align: left;
 			}
 
-			.text_right {
+		& .text_right {
 				text-align: right;
 			}
 		}
