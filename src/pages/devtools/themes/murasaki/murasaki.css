@@ -115,7 +115,7 @@ html,body {
 #gameUpdate {
 	z-index: 102;
 
-	.content {
+	& .content {
 		display: flex;
 		flex-flow: row wrap;
 		align-items: center;
@@ -1397,7 +1397,7 @@ body {
 	}
 
 	/* ------- ACTIVITY: QUEST ------- */
-	.activity_quest {
+	& .activity_quest {
 		position: relative;
 		color: #FFF;
 
@@ -1549,7 +1549,7 @@ body {
 	}
 
 	/* ------- ACTIVITY: CRAFTING ------- */
-	.activity_crafting {
+	& .activity_crafting {
 		flex-flow: column nowrap;
 		gap: 10px;
 
@@ -1689,7 +1689,7 @@ body {
 	}
 
 	/* ------- EXPEDITION ------- */
-	.activity_expedition {
+	& .activity_expedition {
 		white-space: nowrap;
 
 	& .expres_img {
@@ -1849,7 +1849,7 @@ body {
 	}
 
 	/* ------- MODERNIZE ------- */
-	.activity_modernization {
+	& .activity_modernization {
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 10px;
@@ -1951,7 +1951,7 @@ body {
 	}
 
 	/* ------- ACTIVITY: Expedition Planner ------- */
-	.activity_expeditionPlanner {
+	& .activity_expeditionPlanner {
 		text-align: center;
 		white-space: nowrap;
 		position: relative;
@@ -1992,13 +1992,13 @@ body {
 			&:hover {
 				background: #fff;
 
-				> ul,
-				> ul li {
+				& > ul,
+				& > ul li {
 					display: block;
 				}
 			}
 
-			ul {
+		& ul {
 				list-style: none;
 				display: none;
 				position: absolute;
@@ -2010,7 +2010,7 @@ body {
 				font-size: 13px;
 				line-height: 17px;
 
-				li {
+			& li {
 					display: none;
 					background: #fff;
 					border: 1px solid #000;
@@ -2019,13 +2019,13 @@ body {
 					&:hover {
 						background-color: #DED;
 
-						> ul,
-						> ul li {
+						& > ul,
+						& > ul li {
 							display: block;
 						}
 					}
 
-					ul {
+				& ul {
 						top: 0;
 						left: 100%;
 						cursor: pointer;
@@ -2172,7 +2172,7 @@ body {
 	}
 
 	/* ------- ACTIVITY: FIT ------- */
-	.activity_gunfit {
+	& .activity_gunfit {
 		flex-flow: column nowrap;
 		gap: 5px;
 		padding: 5px;
@@ -2531,7 +2531,7 @@ body {
 	}
 
 	/* ------- ACTIVITY: PvP Info ------- */
-	.activity_pvp {
+	& .activity_pvp {
 		color: #ddd;
 		font-size: 12px;
 
@@ -2841,7 +2841,7 @@ body {
 	}
 
 	/* ------- ACTIVITY: Remodel Info ------- */
-	.activity_remodel {
+	& .activity_remodel {
 		color: #ddd;
 		font-size: 12px;
 
@@ -3115,7 +3115,7 @@ body {
 			gap: 7px;
 			margin-top: 4px;
 
-			> div {
+		& > div {
 				line-height: 18px;
 				display: flex;
 				align-items: center;
@@ -4565,16 +4565,16 @@ body {
 	font-size: 12px;
 	background: #fff;
 
-	img {
+	& img {
 		object-fit: cover;
 	}
 
-& .ui-tooltip-content {
-		hr {
+.ui-tooltip-content {
+		& hr {
 			margin: 3px 0;
 		}
 
-		p {
+		& p {
 			margin: 0;
 		}
 
@@ -4590,11 +4590,13 @@ body {
 			width: 252px;
 			height: 314px;
 			padding: 0;
+			gap: 0;
 			display: flex;
 			flex-flow: row wrap;
 
 		& .ship_stats_row {
 				flex: 0 0 250px;
+				flex-flow: row nowrap;
 				display: flex;
 			}
 
