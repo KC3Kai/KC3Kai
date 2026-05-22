@@ -3489,6 +3489,10 @@ body {
 				background-color: rgb(191 255 100 / 15%);
 			}
 
+			&.nosakiMark {
+				background-color:rgba(225, 116, 0, 0.2);
+			}
+
 			&.hp_taiha {
 				background-color: rgb(255 0 0 / 40%);
 			}

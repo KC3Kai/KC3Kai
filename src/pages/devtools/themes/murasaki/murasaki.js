@@ -39,6 +39,9 @@
 	let moraleClockEnd = 0;
 	let moraleClockRemain = 0;
 
+	// Nosaki Sparkle notification flag
+	let sparkleNotif = 0;
+
 	// UI Updating Timer
 	let uiTimerHandler = 0;
 	let uiTimerLastUpdated = 0;
@@ -358,6 +361,9 @@
 				}, {});
 			UpdateRepairTimerDisplays(data);
 		}
+
+		// Nosaki Sparkle timer
+		UpdateSparkleTimerDisplay();
 		
 		// Akashi current timer for Ship Box list
 		const baseElement = scopedFleetIds.length ?
@@ -679,6 +685,9 @@
 			ConfigManager.scrollTimerType();
 			UpdateRepairTimerDisplays();
 		}).addClass("hover");
+
+		// Initial Hidden Nosaki Timer
+		$(".module.status .status_nosaki").hide();
 
 		// Screenshot buttons
 		$(".module.controls .btn_ss1").on("click", function(){
@@ -2429,6 +2438,10 @@
 				$(".module.status .status_docking .status_icon").attr("title", KC3Meta.term("PanelHighestDocking") );
 				$(".module.status .status_akashi .status_icon").attr("title", KC3Meta.term("PanelHighestAkashi") );
 				$(".module.status .status_support .status_icon").attr("title", KC3Meta.term("PanelSupportPower") );
+
+				// STATUS: NOSAKI SPARKLE
+				UpdateSparkleTimerDisplay();
+				$(".module.status .status_nosaki .status_icon").attr("title", KC3Meta.term("PanelSparkleTimer") );
 			}else{
 				$(".module.status").hide();
 			}
@@ -5449,5 +5462,49 @@
 			}
 			elm.attr("titlealt", title).lazyInitTooltip();
 		});
+	}
+
+	function UpdateSparkleTimerDisplay() {
+		let moduleNosaki = $(".module.status .status_nosaki");
+		let moduleDocking = $(".module.status .status_docking");
+		const sparkleProgress = PlayerManager.fleets.some(fleet => fleet.hasNosakiMark())
+			? Math.hrdInt("floor", PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
+			: 0;
+		if (!sparkleProgress) {
+			if (moduleNosaki.is(":visible")) {
+				moduleNosaki.hide();
+				moduleDocking.show();
+			}
+			return;
+		}
+		if (moduleNosaki.is(":hidden")) {
+			moduleDocking.hide();
+			moduleNosaki.show();
+		}
+		let timerText = $(".module.status .status_nosaki .status_text");
+		let timerIcon = $(".module.status .status_nosaki img");
+		const secPerTick = 15 * 60;
+		const ticks = Math.floor(sparkleProgress / secPerTick);
+		timerText.text(String(sparkleProgress).toHHMMSS());
+
+		if (ticks === 0) {
+			if (sparkleNotif !== 0) {
+				sparkleNotif = 0;
+				timerIcon.attr("src", "/assets/img/ui/foodsup-x.png");
+				timerText.css("color", "white");
+			}
+		} else if (sparkleNotif < ticks) {
+			sparkleNotif++;
+			const textColor = ticks === 1 ? "yellow" : "orange";
+			timerIcon.attr("src", "/assets/img/ui/foodsup.png");
+			timerText.css("color", textColor);
+			// Config option for each tick
+			const tickNotif = [[1, 2], [1, 3]];
+			const selectedNotif = ConfigManager.alert_sparkle;
+			if (sparkleNotif <= tickNotif.length
+				&& tickNotif[sparkleNotif - 1].includes(selectedNotif)) {
+				KC3Notification.notifySparkle();
+			}
+		}
 	}
 })();
