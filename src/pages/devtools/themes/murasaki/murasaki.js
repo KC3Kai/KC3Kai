@@ -2409,7 +2409,7 @@
 							FleetSummary.tpValueTank[1].isNaN() ? "?" : FleetSummary.tpValueTank[1].valueOf()
 						)].join("\n")
 					).lazyInitTooltip();
-					$(".module.status .status_butai").show();
+					$(".module.status .status_butai").css("display", "flex");
 					$(".module.status .status_support").hide();
 				}else{
 					// STATUS: SUPPORT
@@ -2663,7 +2663,7 @@
 				$(".module.status .status_butai .status_text")
 					.text( KC3Meta.term("CombinedLbas") )
 					.attr("title", "");
-				$(".module.status .status_butai").show();
+				$(".module.status .status_butai").css("display", "flex");
 				$(".module.status .status_support").hide();
 				// hide unused summary line
 				$(".module.summary").hideChildrenTooltips();
