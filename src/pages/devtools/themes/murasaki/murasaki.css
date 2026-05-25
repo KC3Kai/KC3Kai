@@ -454,12 +454,7 @@ body {
 				}
 			}
 
-			& .consumable_text {
-				font-size: 14px;
-				line-height: 20px;
-				color: #ccc;
-			}
-
+			& .consumable_text,
 			& .consumable_ltext {
 				font-size: 14px;
 				line-height: 20px;
@@ -3750,13 +3745,14 @@ body {
 					border: 1px solid #000;
 					background: #555;
 					position: relative;
+					container-type: inline-size;
 
 					@container ship (width >= 400px) {
 						height: 15px;
 					}
 
 					& .ship_hp_bar,
-				& .ship_hp_prediction {
+					& .ship_hp_prediction {
 						position: absolute;
 						top: 0;
 						left: 0;
@@ -3795,17 +3791,18 @@ body {
 							background-color: #ccc;
 						}
 
-					& .ship_hp_pred_value {
+						& .ship_hp_pred_value {
 							position: absolute;
 							top: 0;
 							left: 0;
-							width: 100%;
+							width: 100cqw;
 							line-height: 7px;
 							text-align: center;
 							pointer-events: none;
 							display: none;
+							z-index: 10;
 
-							@container (width >= 400px) {
+							@container ship (width >= 400px) {
 								line-height: 12px;
 							}
 
@@ -3832,10 +3829,10 @@ body {
 				& .ship_hp_bar_metrics {
 						position: relative;
 						top: 0;
-						left: 25%;
+						left: 25cqw;
 						z-index: 3;
 						height: 5px;
-						width: 50%;
+						width: 50cqw;
 						border-width: 0 1px;
 						border-style: solid;
 						border-color: rgb(0 0 0 / 75%);
@@ -4080,31 +4077,40 @@ body {
 			}
 
 			/* ------- Fuel and ammo ------- */
-		& .ship_supplies {
+			& .ship_supplies {
 				width: 100%;
 				height: 10px;
 				display: flex;
 				align-content: center;
 				gap: 2%;
 
-			& .ship_supply {
+				& .ship_supply {
 					flex: 0 0 49%;
 					position: relative;
 					background: rgb(148 58 58 / 100%);
 					border: 1px solid rgb(255 255 255 / 70%);
 
-				& .ship_supply_text {
+					& .ship_supply_text {
 						width: calc(100% - 2px);
 						line-height: 10px;
 						font-size: 8px;
-						color: #fff;
+						color: rgb(0 0 0 / 100%);
+						text-shadow:
+							1px 1px rgb(255 255 255 / 50%),
+							-1px -1px rgb(255 255 255 / 50%),
+							-1px 1px rgb(255 255 255 / 50%),
+							1px -1px rgb(255 255 255 / 50%),
+							0 1px rgb(255 255 255 / 50%),
+							0 -1px rgb(255 255 255 / 50%),
+							1px 0 rgb(255 255 255 / 50%),
+							-1px 0 rgb(255 255 255 / 50%);
 						top: 0;
 						left: 0;
 						position: absolute;
 						text-align: center;
 					}
 
-				& .ship_supply_bar {
+					& .ship_supply_bar {
 						height: 8px;
 					}
 
@@ -4131,19 +4137,6 @@ body {
 							rgb(226 226 226 / 100%) 50cqw,
 							rgb(162 162 162 / 100%) 100cqw
 						);
-					}
-
-					&.ship_ammo .ship_supply_text {
-						color: rgb(0 0 0 / 100%);
-						text-shadow:
-							1px 1px rgb(255 255 255 / 100%),
-							-1px -1px rgb(255 255 255 / 100%),
-							-1px 1px rgb(255 255 255 / 100%),
-							1px -1px rgb(255 255 255 / 100%),
-							0 1px rgb(255 255 255 / 100%),
-							0 -1px rgb(255 255 255 / 100%),
-							1px 0 rgb(255 255 255 / 100%),
-							-1px 0 rgb(255 255 255 / 100%);
 					}
 				}
 			}

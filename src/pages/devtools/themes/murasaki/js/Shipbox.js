@@ -34,7 +34,7 @@
 		tooltipBox.hide().appendTo(this.element);
 		this.shipData.htmlTooltip(tooltipBox);
 		// Show a rich text tool-tip like stats in game
-		$(".ship_img", this.element).tooltip({
+		$(".ship_img > img", this.element).tooltip({
 			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
 				at: "left top", of: $(".module.fleet") },
 			items: "div",
@@ -42,13 +42,13 @@
 			open: KC3Ship.onShipTooltipOpen
 		});
 		// Double click on icon to show Strategy Room Ship Library page
-		$(".ship_img", this.element).data("masterId", this.shipData.masterId)
+		$(".ship_img > img", this.element).data("masterId", this.shipData.masterId)
 			.on("dblclick", function(e){
 				(new RMsg("service", "strategyRoomPage", {
 					tabPath: "mstship-{0}".format($(this).data("masterId"))
 				})).execute();
 			});
-		$(".ship_img img", this.element).attr("src", this.shipData.shipIcon() );
+		$(".ship_img > img", this.element).attr("src", this.shipData.shipIcon() );
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -372,7 +372,7 @@
 			
 			// Change to damaged ship icon if worse than 'chuuha'
 			if(ConfigManager.info_chuuha_icon) {
-				$(".ship_img img", this.element).attr("src",
+				$(".ship_img > img", this.element).attr("src",
 					KC3Ship.shipIcon(this.shipData.masterId, this.shipData.hp[1], this.shipData.afterHp[0])
 				);
 			}
