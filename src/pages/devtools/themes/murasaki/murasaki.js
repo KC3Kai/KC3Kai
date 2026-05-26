@@ -2430,7 +2430,7 @@
 						].join("\n")
 					).lazyInitTooltip();
 					$(".module.status .status_butai").hide();
-					$(".module.status .status_support").show();
+					$(".module.status .status_support").css("display", "flex");
 				}
 
 				// STATUS: REPAIRS
@@ -4448,7 +4448,7 @@
 					let shipData = KC3ShipManager.get(shipId);
 					$(".expres_ship_img img", element).attr("src", KC3Meta.shipIcon(shipData.masterId));
 					$(".expres_ship_exp span.value", element).text(data.response.api_get_ship_exp[i]);
-					$(element).attr("display", "flex");
+					$(element).css("display", "flex");
 				} else {
 					$(element).hide();
 				}
