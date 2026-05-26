@@ -341,7 +341,7 @@
 			
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
-			$(".ship_hp_prediction", this.element).css("width", `${afterHpPercent * 100}%`);
+			$(".ship_hp_prediction", this.element).css("width", `${afterHpPercent * 100}cqw`);
 			
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
