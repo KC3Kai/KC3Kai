@@ -587,6 +587,7 @@ body {
 
 				&.lsc {
 					background: #b70100;
+					border: 2px solid #b70100;
 				}
 
 				&.new_ship {
