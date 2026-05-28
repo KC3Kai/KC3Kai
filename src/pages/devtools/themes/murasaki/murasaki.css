@@ -187,6 +187,12 @@ body {
 
 /* WRAPPER, GRID AND MODULE SETUP
 ------------------------------ */
+.width-wrapper {
+	margin: 0 auto;
+	container-type: inline-size;
+	container-name: wrapper;
+}
+
 .wrapper {
 	display: grid;
 	grid-auto-rows: auto;
@@ -196,12 +202,12 @@ body {
 	position: relative;
 	white-space: nowrap;
 
-	@media all and (width < 540px) {
+	@container wrapper (width < 540px) {
 		display: flex;
 		flex-direction: column;
 	}
 
-	@media all and (540px <= width <= 800px) {
+	@container wrapper (540px <= width <= 800px) {
 		grid-template-areas:
 			"admiral controls"
 			"admiral summary"
@@ -211,7 +217,7 @@ body {
 		grid-template-columns: minmax(240px, 2fr) 3fr;
 	}
 
-	@media all and (800px < width <= 960px) {
+	@container wrapper (800px < width <= 960px) {
 		grid-template-areas:
 			"admiral fleet controls"
 			"admiral fleet summary"
@@ -220,7 +226,7 @@ body {
 		grid-template-columns: minmax(240px, 2fr) 4fr 2fr;
 	}
 
-	@media all and (width > 960px) {
+	@container wrapper (width > 960px) {
 		grid-template-areas:
 			"admiral fleet controls"
 			"admiral fleet summary"
@@ -3145,7 +3151,7 @@ body {
 	gap: 3px;
 	container-type: inline-size;
 
-	@media all and (width < 540px) {
+	@container wrapper (width < 540px) {
 		order: 1;
 	}
 
