@@ -3588,7 +3588,7 @@
 							}
 						};
 						// Hide equipment stats if multiple crafting for limited spaces
-						$(".equipStats", itemDiv).empty().toggle(!data.multiFlag);
+						$(".equipStats", itemDiv).empty().toggleClass("hidden", data.multiFlag);
 						CraftGearStats(masterItem, "souk", "ar");
 						CraftGearStats(masterItem, "houg", "fp");
 						CraftGearStats(masterItem, "raig", "tp");
