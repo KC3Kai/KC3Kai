@@ -1443,18 +1443,19 @@ body {
 			}
 		}
 
-	& .quest_list {
+		& .quest_list {
 			display: flex;
 			flex-flow: column nowrap;
 			gap: 1px;
 			max-height: 320px;
+			padding-bottom: 10px;
 			overflow-y: auto;
 
 			&::-webkit-scrollbar {
 				width: 6px;
 			}
 
-		& .quest_page {
+			& .quest_page {
 				position: sticky;
 				top: 0;
 				padding: 1px;
@@ -1463,7 +1464,7 @@ body {
 				font-size: 11px;
 			}
 
-		& .quest {
+			& .quest {
 				display: flex;
 				align-items: center;
 				gap: 3px;
@@ -1476,7 +1477,7 @@ body {
 					background: rgb(0 255 0 / 20%);
 				}
 
-			& .quest_color {
+				& .quest_color {
 					width: 14px;
 					height: 14px;
 					border: 3px solid transparent;
@@ -1507,7 +1508,7 @@ body {
 					}
 				}
 
-			& .quest_text {
+				& .quest_text {
 					width: 100%;
 					font-size: 11px;
 					overflow: hidden;
@@ -1533,7 +1534,7 @@ body {
 			}
 		}
 
-	& .quest_scrolltop_button {
+		& .quest_scrolltop_button {
 			position: absolute;
 			z-index: 11;
 			top: 35px;
