@@ -102,6 +102,10 @@ html,body {
 	}
 
 	& .content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(calc(-1* 50% - 10px), calc(-1* 50% - 10px));
 		padding: 10px;
 		margin: 10px;
 		border-radius: 10px;
@@ -120,9 +124,9 @@ html,body {
 		flex-flow: row wrap;
 		align-items: center;
 		gap: 10px;
-		max-width: 400px;
+		max-width: calc(90vw - 20px);
 		min-height: 120px;
-		max-height: 220px;
+		min-width: 220px;
 		background-color: #fdd;
 		color: #c44;
 
