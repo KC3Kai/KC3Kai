@@ -608,6 +608,9 @@ Previously known as "Reactor"
 			if(remodel.armmat > 0){
 				PlayerManager.consumables.newArmamentMaterial -= remodel.armmat;
 			}
+			if(remodel.arsenalmat > 0){
+				PlayerManager.consumables.arsenalMaterial -= remodel.arsenalmat;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
@@ -2576,6 +2579,16 @@ Previously known as "Reactor"
 					if(thisMap.api_gauge_num !== undefined) {
 						localMap.gaugeNum = thisMap.api_gauge_num;
 					}
+				}
+				// TP gauge implemented in map 5-6 since 2026-05-29, using `api_required_defeat_count` as max TP
+				if(thisMap.api_gauge_type === 3 && thisMap.api_eventmap === undefined) {
+					localMap.kind = "gauge-tp";
+					localMap.gaugeNum = thisMap.api_gauge_num;
+					localMap.maxhp = this.api_required_defeat_count || KC3Meta.gauge(key.substr(1), localMap.gaugeNum) || 9999;
+					localMap.curhp = localMap.maxhp - (thisMap.api_defeat_count || 0);
+					if(thisMap.api_defeat_count === undefined) localMap.curhp = 0;
+					delete localMap.kills;
+					delete localMap.killsRequired;
 				}
 				// Max Land-bases allowed to be sortied
 				if(thisMap.api_air_base_decks !== undefined) {

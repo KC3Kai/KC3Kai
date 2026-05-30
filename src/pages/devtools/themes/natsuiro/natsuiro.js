@@ -1545,7 +1545,7 @@
 					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
 					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
-			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0) + (PlayerManager.consumables.arsenalMaterial || 0))
+			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
 					PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71),
 					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100)

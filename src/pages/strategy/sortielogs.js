@@ -1568,6 +1568,8 @@
 					sortieData.required_defeat_count = maxKills;
 					// pass to replayer for the 2nd/3rd gauge of world 7
 					sortieData.gauge_num = sortieData.mapinfo.api_gauge_num || 1;
+					// tp gauge type of map 5-6
+					sortieData.gauge_type = sortieData.mapinfo.api_gauge_type || 1;
 				}
 				console.debug("Map {0} boss gauge {3}: {1}/{2} kills".format(mapId,
 					sortieData.defeat_count || (sortieData.mapinfo.api_cleared ? "post-cleared" : "?"),
