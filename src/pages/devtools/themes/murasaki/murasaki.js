@@ -1516,17 +1516,26 @@
 					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
 					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
-			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0) + (PlayerManager.consumables.arsenalMaterial || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5}".format(
-					PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71),
-					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100),
-					PlayerManager.consumables.arsenalMaterial || 0, KC3Meta.useItemName(104)
+			$(".count_neEngines").text(PlayerManager.consumables.nEngine || 0)
+				.parent().attr("title", "x{0} {1}".format(
+			PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71)
 				));
-			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
-					PlayerManager.consumables.blueprints || 0, KC3Meta.useItemName(58),
-					PlayerManager.consumables.newAircraftBlueprint || 0, KC3Meta.useItemName(74)
-				));
+			$(".count_overseasMats").text(PlayerManager.consumables.overseaTechMaterial || 0)
+				.parent().attr("title", "x{0} {1}".format(
+			PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100)
+			));
+			$(".count_arsenalResources").text(PlayerManager.consumables.arsenalMaterial || 0)
+				.parent().attr("title", "x{0} {1}".format(
+			PlayerManager.consumables.arsenalMaterial || 0, KC3Meta.useItemName(104)
+			));
+			$(".count_shipBlueprints").text(PlayerManager.consumables.blueprints || 0)
+				.parent().attr("title", "x{0} {1}".format(
+			PlayerManager.consumables.blueprints || 0, KC3Meta.useItemName(58)
+			));
+			$(".count_aircraftBlueprints").text(PlayerManager.consumables.newAircraftBlueprint || 0)
+				.parent().attr("title", "x{0} {1}".format(
+			PlayerManager.consumables.newAircraftBlueprint || 0, KC3Meta.useItemName(74)
+			));
 			// Update 1 more page for food(or any item?) collecting event
 			if(KC3Meta.isDuringFoodEvent()){
 				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
