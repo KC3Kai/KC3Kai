@@ -4218,7 +4218,7 @@ body {
 			gap: 10px;
 
 		& .lship {
-				grid-template-columns: min(60px, max(40px, 7.5cqw)) 1fr;
+				grid-template-columns: min(60px, max(40px, 7.5cqw)) calc(100% - 5px - min(60px, max(40px, 7.5cqw)));
 
 			& .ship_gears,
 			& .ship_exp_box,
@@ -4238,7 +4238,7 @@ body {
 						line-height: 10px;
 						position: absolute;
 						left: 3px;
-						bottom: 0;
+						bottom: 2px;
 						width: max(40px, 15cqw);
 						max-width: 60px;
 						text-align: center;
