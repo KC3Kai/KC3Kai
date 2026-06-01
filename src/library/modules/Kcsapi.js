@@ -2539,11 +2539,22 @@ Previously known as "Reactor"
 				}
 			};
 			
-			// Exclude gauge based maps from being kept every time
+			// Prevent gauge based normal maps from being kept every times
 			const mapKeys = Object.keys(maps);
 			for(const key of mapKeys) {
-				if(KC3Meta.gauge(key.substr(1)))
+				const keyno = key.substr(1);
+				if(KC3Meta.gauge(keyno))
 					maps[key].clear = maps[key].kills = false;
+				// EO map-2 relocked after map-1 on monthly reset, specially 5-6 reset to 1st, the TP gauge
+				if(["m56"].includes(key) && raws.length
+					&& !raws.some(m => m.api_id == keyno)) {
+					maps[key].gaugeNum = 1;
+					maps[key].kind = "gauge-tp";
+					maps[key].maxhp = KC3Meta.gauge(keyno, 1);
+					maps[key].curhp = maps[key].maxhp;
+					delete maps[key].kills;
+					delete maps[key].killsRequired;
+				}
 			}
 			
 			// Combine current storage and current available maps data
@@ -2580,11 +2591,12 @@ Previously known as "Reactor"
 						localMap.gaugeNum = thisMap.api_gauge_num;
 					}
 				}
-				// TP gauge implemented in map 5-6 since 2026-05-29, using `api_required_defeat_count` as max TP
-				if(thisMap.api_gauge_type === 3 && thisMap.api_eventmap === undefined) {
+				// TP gauge implemented in normal map 5-6 since 2026-05-29,
+				// using `api_required_defeat_count` as max tp, and countup `api_defeat_count` as now
+				if(thisMap.api_gauge_type === 3 && thisMap.api_eventmap === undefined && thisMap.api_required_defeat_count > 0) {
 					localMap.kind = "gauge-tp";
 					localMap.gaugeNum = thisMap.api_gauge_num;
-					localMap.maxhp = this.api_required_defeat_count || KC3Meta.gauge(key.substr(1), localMap.gaugeNum) || 9999;
+					localMap.maxhp = thisMap.api_required_defeat_count;
 					localMap.curhp = localMap.maxhp - (thisMap.api_defeat_count || 0);
 					if(thisMap.api_defeat_count === undefined) localMap.curhp = 0;
 					delete localMap.kills;
