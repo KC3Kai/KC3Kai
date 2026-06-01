@@ -498,7 +498,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-webstore-upload');
 	grunt.loadNpmTasks('grunt-modify-json');
-
+	
 	grunt.registerTask('local', [
 		'clean:tmp',
 		'clean:release',
@@ -550,7 +550,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('test-src', [
 		'jshint:src',
 		'jshint:test',
-		'jsonlint:src',
+		'jsonlint:src'
 	]);
 	
 	grunt.registerTask('test-unit', [
