@@ -1,0 +1,4893 @@
+@charset "utf-8";
+
+/* GLOBAL
+------------------------------ */
+:root {
+	--maxOverflow: 0;
+}
+
+#factory {
+	display: none;
+}
+
+html,body {
+	height: 100%;
+}
+
+#critical {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	pointer-events: none;
+	display: none;
+
+	&.anim1 {
+		box-shadow: inset 0 0 20px rgb(255 0 0 / 50%);
+		transition: all 0.4s;
+	}
+
+	&.anim2 {
+		box-shadow: inset 0 0 60px rgb(255 0 0 / 80%);
+	}
+}
+
+.jp_fonts {
+	font-family: Tahoma, Helvetica, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+.kr_fonts {
+	font-family: AppleGothic, "Malgun Gothic", GulimChe, Dotum, UnDotum, sans-serif;
+}
+
+.scn_fonts {
+	font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei Sharp", "WenQuanYi Zen Hei", "Heiti SC", "ST Heiti", SimHei, sans-serif;
+}
+
+.tcn_fonts {
+	font-family: "Microsoft JhengHei UI", "Microsoft JhengHei", "Heiti TC", "LiHei Pro Medium", sans-serif;
+}
+
+/* LOADING
+------------------------------ */
+.waitingForActions {
+	&.logo {
+		width: 100%;
+		height: 70px;
+		top: 16px;
+		position: absolute;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	&.text {
+		width: 300px;
+		max-width: 90%;
+		height: 50px;
+		line-height: 50px;
+		background: #fff;
+		border-radius: 10px;
+		text-align: center;
+		font-weight: bold;
+		font-size: 14px;
+		position: absolute;
+		top: 90px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+
+/* MODALS
+------------------------------ */
+.modalBox {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	justify-content: center;
+	align-items: center;
+	display: none;
+
+	& .blackFilter {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		background: radial-gradient(ellipse at center,  rgb(0 0 0 / 50%) 0,rgb(0 0 0 / 85%) 100%);
+	}
+
+	& .content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(calc(-1* 50% - 10px), calc(-1* 50% - 10px));
+		padding: 10px;
+		margin: 10px;
+		border-radius: 10px;
+		z-index: 2;
+	}
+}
+
+/* CATBOMB MODAL
+------------------------------ */
+#catBomb,
+#gameUpdate {
+	z-index: 102;
+
+	& .content {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
+		gap: 10px;
+		max-width: calc(90vw - 20px);
+		min-height: 120px;
+		min-width: 220px;
+		background-color: #fdd;
+		color: #c44;
+
+		&.withDownload {
+			height: 140px;
+		}
+
+	& .image {
+			width: 40px;
+			height: 40px;
+
+		& img {
+				width: 40px;
+				height: 40px;
+			}
+		}
+
+	& .title {
+			flex: 0 0 calc(100% - 80px);
+			line-height: 16px;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+	& .closebtn {
+			width: 20px;
+			height: 40px;
+			line-height: 30px;
+			font-weight: bold;
+			font-size: 30px;
+			color: #e88;
+			margin-left: auto;
+
+			&:hover {
+				color: #f55;
+			}
+		}
+
+	& .description {
+			font-size: 12px;
+		}
+
+	& .download {
+			text-align: center;
+			font-weight: bold;
+			font-size: 14px;
+			margin-top: 2px;
+			width: 100%;
+		}
+	}
+}
+
+#gameUpdate {
+	z-index: 101;
+}
+
+/* MURASAKI THEME
+------------------------------ */
+body {
+	background: #BEA3FB url("img/fubuki_bg.png") bottom right no-repeat;
+}
+
+/* WRAPPER, GRID AND MODULE SETUP
+------------------------------ */
+.width-wrapper {
+	margin: 0 auto;
+	container-type: inline-size;
+	container-name: wrapper;
+}
+
+.wrapper {
+	display: grid;
+	grid-auto-rows: auto;
+	grid-auto-flow: column dense;
+	grid-template-rows: auto auto 1fr auto;
+	margin: 0 auto;
+	position: relative;
+	white-space: nowrap;
+
+	@container wrapper (width < 540px) {
+		display: flex;
+		flex-direction: column;
+	}
+
+	@container wrapper (540px <= width <= 800px) {
+		grid-template-areas:
+			"admiral controls"
+			"admiral summary"
+			"activity fleet"
+			"quests fleet"
+			"quests status";
+		grid-template-columns: minmax(240px, 2fr) 3fr;
+	}
+
+	@container wrapper (800px < width <= 960px) {
+		grid-template-areas:
+			"admiral fleet controls"
+			"admiral fleet summary"
+			"activity fleet quests"
+			"activity fleet status";
+		grid-template-columns: minmax(240px, 2fr) 4fr 2fr;
+	}
+
+	@container wrapper (width > 960px) {
+		grid-template-areas:
+			"admiral fleet controls"
+			"admiral fleet summary"
+			"activity fleet quests"
+			"activity fleet status";
+		grid-template-columns: minmax(240px, 2fr) 4fr 2fr;
+	}
+}
+
+.wrapper_bg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: transparent url("img/wrapper.jpg") center top repeat;
+	z-index: -1;
+}
+
+.module {
+	margin: 5px;
+}
+
+/* ------- HQ INFO ------- */
+.module.admiral {
+	grid-area: admiral;
+
+	& .admiral_level {
+		color: #eee;
+		float: right;
+		width: 60px;
+
+		& .admiral_lvtxt {
+			line-height: 24px;
+			font-size: 12px;
+			text-align: center;
+			overflow: hidden;
+		}
+
+		& .admiral_lvval {
+			font-size: 16px;
+		}
+
+		& .admiral_lvbox {
+			width: 60px;
+			height: 14px;
+			border: 1px solid #fff;
+			background: #555;
+			margin: 1px 0;
+
+			& .admiral_lvbar {
+				width: 58px;
+				height: 12px;
+				background: #0f0;
+			}
+		}
+
+		& .admiral_lvnext {
+			line-height: 16px;
+			font-size: 11px;
+			text-align: center;
+			position: relative;
+
+			&::before {
+				content: attr(data-exp);
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				text-align: right;
+				top: 0;
+				left: -60px;
+			}
+
+			&::after {
+				content: attr(data-exp-gain);
+				color: red;
+				position: absolute;
+				top: -16px;
+				left: 0;
+				right: 0;
+				text-align: center;
+				text-shadow: 0 0 2px black;
+			}
+		}
+	}
+
+	& .admiral_name {
+		width: calc(100% - 60px);
+		height: 24px;
+		line-height: 24px;
+		font-size: 18px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		user-select: none;
+		color: #fc0;
+
+		&.censor {
+			color: transparent;
+			text-shadow: 0 0 8px rgb(255 220 0 / 40%);
+
+			&::before {
+				content: 'U CANT SEE ME';
+			}
+		}
+	}
+
+	& .admiral_comm {
+		width: calc(100% - 60px);
+		height: 16px;
+		line-height: 16px;
+		font-size: 12px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: #aaa;
+	}
+
+	& .admiral_rank {
+		width: 130px;
+		height: 16px;
+		line-height: 16px;
+		font-size: 13px;
+		color: #eee;
+	}
+}
+
+/* ------- ACTIVITY ------- */
+#atab_activity {
+	cursor: default;
+}
+
+.module.activity {
+	grid-area: activity;
+
+	& .activity_tabs {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		& .activity_tab {
+			width: calc(100% / 4);
+			height: 20px;
+			background: rgb(100 100 100 / 61.8%);
+			color: #fff;
+			text-align: center;
+			line-height: 20px;
+			font-size: 11px;
+			border-radius: 5px 5px 0 0;
+			filter: brightness(0.7) drop-shadow(1px 0 0 black) opacity(0.62);
+			text-overflow: ellipsis;
+			overflow: hidden;
+			padding: 0 5px;
+
+			&.tab_count_5 {
+				width: calc(100% / 5);
+			}
+
+			& + .activity_tab {
+				margin-left: 1px;
+			}
+
+			&.active {
+				filter: brightness(1);
+			}
+		}
+	}
+
+	& .activity_body {
+		border-radius: 0 0 5px 5px;
+		padding: 5px;
+		white-space: initial;
+
+		& .activity_box {
+			display: none;
+			padding: 5px;
+
+			&.disabled {
+				filter: brightness(0.5);
+				pointer-events: none;
+			}
+		}
+	}
+
+	& .activity_dismissable {
+		cursor: pointer;
+		user-select: none;
+	}
+
+	/* ------- ACTIVITY: BASIC ------- */
+
+	/* Consumables */
+	& .consumables {
+		margin: 5px 5px 15px;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+		container-type: inline-size;
+		gap: 7px 5px;
+
+		& .consumable {
+			display: flex;
+			gap: 5px;
+			flex-direction: row;
+			align-items: center;
+
+			&.wider {
+				&:has(> .max_ships) {
+					grid-row: 1 / 2;
+					grid-column: 1 / 3;
+				}
+
+				&:has(> .max_gear) {
+					grid-row: 2 / 3;
+					grid-column: 1 / 3;
+				}
+			}
+
+			& .consumable_icon {
+				flex: 0 0 16px;
+				height: 16px;
+
+				& img {
+					width: 100%;
+					height: 100%;
+					vertical-align: top;
+				}
+			}
+
+			&.itemPage {
+				align-items: center;
+
+				& .consumable_icon {
+					flex: 0 0 10cqw;
+					height: 10cqw;
+					min-width: 16px;
+					max-width: 30px;
+					min-height: 16px;
+					max-height: 30px;
+				}
+			}
+
+			& .consumable_text,
+			& .consumable_ltext {
+				font-size: 13px;
+				color: #ccc;
+				white-space: nowrap;
+
+				&.regenCap {
+					color: #EAF918;
+				}
+
+				&.hardCap {
+					color: #FF7979;
+				}
+
+				&.danger {
+					color: #EAF918;
+				}
+
+				&.fulled {
+					color: #FF7979;
+				}
+			}
+
+			& .consumable_max {
+				font-size: 11px;
+				line-height: 20px;
+				color: #aaa;
+			}
+		}
+	}
+
+	/* Expedition */
+	& .expeditions {
+		margin: 5px 5px 15px;
+		display: flex;
+
+		& .expedition {
+			position: relative;
+			flex: 1 1 33.3%;
+			container-type: inline-size;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			& .timer-img {
+				width: 50cqw;
+				height: 50cqw;
+				max-width: 50px;
+				max-height: 50px;
+				margin: 0 0 5px;
+				border-radius: 51%;
+
+				& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+				}
+
+				&.locked {
+					background-image: url("../../../../assets/img/ui/lock.png");
+					background-size: 19px;
+					background-position: 5px 5px;
+					background-repeat: no-repeat;
+				}
+			}
+
+			& .timer-expnum {
+				line-height: 14px;
+				font-size: 12px;
+				position: absolute;
+				top: 2px;
+				left: 75%;
+				color: #ccc;
+			}
+
+			& .timer-time {
+				line-height: 13px;
+				font-size: 12px;
+				text-align: center;
+				color: #eee;
+			}
+		}
+	}
+
+	/* Timers */
+	& .timers {
+		display: flex;
+
+		& .timer_boxes {
+			flex: 1 1 50%;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+
+			& .timer_box {
+				container-type: inline-size;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+
+				& .timer-img {
+					width: 30cqw;
+					height: 30cqw;
+					max-width: 40px;
+					max-height: 40px;
+					border-radius: 51%;
+
+					& img {
+						width: 100%;
+						height: 100%;
+						display: none;
+						border-radius: 51%;
+					}
+				}
+
+				& .timer-time {
+					line-height: 26px;
+					font-size: 13px;
+					text-align: left;
+					color: #eee;
+				}
+			}
+
+			&.repairs .timer-img {
+				background: #EDD286;
+			}
+
+			&.builds .timer-img {
+				background: #960;
+
+				&.lsc {
+					background: #b70100;
+					border: 2px solid #b70100;
+				}
+
+				&.new_ship {
+					filter: drop-shadow(0 0 2px #1f1);
+				}
+			}
+
+			&.repairs .timer-img.locked,
+			&.builds .timer-img.locked {
+				background-image: url("../../../../assets/img/ui/lock.png");
+				background-size: 17px;
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: BATTLE ------- */
+	& .activity_battle {
+		white-space: nowrap;
+
+		/* Map Info */
+		& .map_info {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			width: 100%;
+			margin-bottom: 5px;
+
+			&.map_finisher.noBlink .map_gauge {
+				background-color: #b22;
+			}
+
+			&.map_finisher:not(.noBlink) .map_gauge {
+				animation: gauge-finish-her 0.25s infinite ease alternate;
+			}
+
+			&.map_finisher .map_hp {
+				color: #e66;
+			}
+
+			& .map_world {
+				font-weight: bold;
+				color: #fc0;
+				font-size: 14px;
+				text-align: center;
+
+				&.debuffed {
+					color: #dc8280;
+				}
+			}
+
+			& .map_gauge {
+				position: relative;
+				flex: 0 0 100px;
+				height: 12px;
+				background: #222;
+				border: 1px solid #fff;
+
+				& * {
+					position: absolute;
+					height: 10px;
+				}
+
+				& .curhp {
+					background: #0f0;
+				}
+
+				& .nowhp {
+					background: #f00;
+				}
+			}
+
+			& .map_hp {
+				font-size: 11px;
+				color: #eee;
+			}
+		}
+
+		/* Sortie Nodes */
+		& .sortie_nodes {
+			width: 100%;
+			margin-bottom: 4px;
+			position: relative;
+			display: inline-flex;
+			justify-content: space-evenly;
+			container-type: inline-size;
+
+			& .sortie_node {
+				flex: 0 0 max(20px, 6cqw);
+				height: max(20px, 6cqw);
+				line-height: max(20px, 6cqw);
+				background: #000;
+				border-radius: 51%;
+				color: #fff;
+				font-size: 10px;
+				text-align: center;
+				border: 1px solid #aaa;
+
+                &.boss-node {
+					position: relative;
+					border-color: #a90a0a;
+					background: #7d0000;
+
+					&::before {
+						content: '';
+						width: 100%;
+						height: 100%;
+						position: absolute;
+						top: -5px;
+						left: 0;
+						z-index: -1;
+						background: transparent url("/assets/img/client/boss.png");
+						background-size: cover;
+					}
+				}
+
+				&.long_name {
+					font-size: 9px;
+					letter-spacing: -1px;
+				}
+
+				&.special_cutin {
+					box-shadow: 0 0 1px 2px #d0b;
+				}
+
+				&.smoke_screen {
+					box-shadow: 0 0 1px 2px #888;
+				}
+
+				&.nc_battle {
+					background: #7D0000;
+					text-shadow:
+							0 -1px 1px #7d0000,
+							1px 0 1px #7d0000,
+							0 1px 1px #7d0000,
+							-1px 0 1px #7d0000;
+				}
+
+				&.nc_resource {
+					background: #007A00;
+					text-shadow: none;
+				}
+
+				&.nc_maelstrom {
+					background: #D2C6FF;
+					color: #000;
+					text-shadow: none;
+				}
+
+				&.nc_select {
+					background: #FFF;
+					color: #000;
+					text-shadow: none;
+				}
+
+				&.nc_avoid {
+					background: #00B3B1;
+					text-shadow: none;
+				}
+
+				&.nc_night_battle {
+					background: #4233C3;
+				}
+
+				&.nc_night_to_day {
+					background:
+							linear-gradient(105deg, rgb(106 98 241 / 60%) 25%, rgb(0 0 0 / 0%) 25%),
+							#7d0000;
+					background-size: 400% 200%;
+					background-position: -8px 0;
+				}
+
+				&.nc_air_battle {
+					background:
+							linear-gradient(to top right, rgb(0 0 0 / 0%) 75%, rgb(17 17 170 / 90%) 75%),
+							linear-gradient(to bottom left, rgb(0 0 0 / 0%) 75%, rgb(238 34 0 / 70%) 75%),
+							#7d0000;
+					background-size: 18px 18px;
+					background-position: -9px -10px, -27px -45px;
+				}
+
+				&.nc_air_raid {
+					background:
+							linear-gradient(to bottom left, rgb(0 0 0 / 0%) 75%, rgb(238 34 0 / 70%) 75%),
+							#7d0000;
+					background-size: 28px 27px;
+					background-position: -53px -66px;
+				}
+
+				&.nc_long_range_raid {
+					background:
+							linear-gradient(to bottom right, rgb(0 0 0 / 0%) 75%, rgb(255 152 0 / 80%) 75%),
+							#7d0000;
+					background-size: 40px 40px;
+					background-position: -61px -107px;
+				}
+
+				&.nc_air_support_sub {
+					background:
+							linear-gradient(to bottom left, rgb(0 0 0 / 0%) 75%, rgb(255 121 121 / 80%) 75%),
+							#7d0000;
+					background-size: 28px 27px;
+					background-position: -52px -67px;
+					box-shadow: inset 0 0 4px 2px #2e15ca;
+				}
+
+				&.nc_enemy_combined {
+					background:
+							radial-gradient(#e20 0, #c00 7%, rgb(0 0 0 / 0%) 16%, rgb(0 0 0 / 0%) 100%),
+							radial-gradient(#e20 0, #c00 7%, rgb(0 0 0 / 0%) 16%, rgb(0 0 0 / 0%) 100%),
+							radial-gradient(#e20 0, #c00 7%, rgb(0 0 0 / 0%) 16%, rgb(0 0 0 / 0%) 100%),
+							radial-gradient(#e20 0, #c00 7%, rgb(0 0 0 / 0%) 16%, rgb(0 0 0 / 0%) 100%),
+							#7d0000;
+					background-size: 25px 25px;
+					background-position: -7px -7px, 0 18px, -32px 24px, -50px 49px;
+				}
+			}
+		}
+
+		/* Battle nodes */
+		& .node_type_battle {
+			position: relative;
+			container-type: inline-size;
+
+			& .abyss_ship {
+				flex-flow: column nowrap;
+				gap: 5px;
+			}
+
+			/* Sunk icons for both single and combined fleet */
+			& .abyss_ship .sunk:first-child {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				width: 16px;
+				height: 16px;
+				display: none;
+
+				&.shown {
+					display: block;
+				}
+
+				& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+					object-fit: cover;
+				}
+
+				&.safe img {
+					filter: grayscale(100%);
+				}
+
+				&.debuff img {
+					display: inline;
+					box-sizing: border-box;
+					padding-left: 16px;
+					background: url("../../../../assets/img/client/chuuha_land.png");
+					background-size: cover;
+				}
+			}
+
+			/* HP bars for both single and combined fleet */
+			& .abyss_ship .abyss_hp {
+				width: 100%;
+				height: 4px;
+				background: #222;
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+
+				&.sunk {
+					opacity: 0.5;
+				}
+
+				& .abyss_hp_bar {
+					height: 4px;
+					background: #0f0;
+				}
+			}
+
+			/* Abyss single fleet */
+			& .abyss_single {
+				container-type: inline-size;
+
+				& .abyss_ships {
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					gap: 2%;
+					margin-bottom: 5px;
+
+					@container (width >= 230px) {
+						justify-content: center;
+					}
+
+					& .boss {
+						border-color: #5ef;
+						box-shadow: 0 0 1px 1px #fe5;
+					}
+
+					& .kai {
+						border-color: #2af;
+						box-shadow: 0 0 1px 0 #2af;
+					}
+
+					& .flagship {
+						border-color: #fc3;
+						box-shadow: 0 0 1px 0 #fc3;
+					}
+
+					& .elite {
+						border-color: #f33;
+						box-shadow: 0 0 1px 0 #f33;
+					}
+
+					& .sunk {
+						opacity: 0.6;
+					}
+				}
+
+				& .abyss_ship {
+					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
+					border-radius: 51%;
+					border: 1px solid #000;
+					background: #888;
+					position: relative;
+					margin-bottom: 10px;
+
+					& img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+					}
+				}
+			}
+
+			/* Abyss combined fleet */
+			& .abyss_combined {
+				container-type: inline-size;
+				display: none;
+
+				& .abyss_fleet {
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					gap: 2%;
+					margin-bottom: 15px;
+
+					@container (width >= 230px) {
+						justify-content: center;
+					}
+				}
+
+				& .abyss_ships {
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					gap: 2%;
+					margin-bottom: 3px;
+
+					@container (width >= 230px) {
+						justify-content: center;
+					}
+				}
+
+				& .abyss_ship {
+					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
+					border-radius: 51%;
+					border: 1px solid #000;
+					background: #888;
+					position: relative;
+					margin-bottom: 10px;
+
+					& img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+					}
+				}
+			}
+
+			/* Battle Flags */
+			& .battle_flags {
+				container-type: inline-size;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				width: 100%;
+				gap: 2%;
+				margin-bottom: 5px;
+
+				@container (width >= 230px) {
+					justify-content: center;
+				}
+
+				& .battle_flag {
+					flex: 0 0 min(35px, 15cqw);
+					height: min(35px, 15cqw);
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					position: relative;
+
+					& img {
+						width: 27px;
+						height: 27px;
+					}
+
+					&.battle_eformation {
+						flex: 0 0 30px;
+						height: 30px;
+						border-radius: 16px;
+						background: #fff;
+						padding: 3px;
+
+						& img {
+							width: 24px;
+							height: 24px;
+						}
+					}
+
+					&.battle_fish img.rounded {
+						width: 25px;
+						height: 25px;
+						margin-top: 2px;
+						border-radius: 50%;
+					}
+
+					& .support_exped,
+					& .support_lbas,
+					& .support_balloon,
+					& .smoke_screen {
+						width: 13px;
+						height: 13px;
+						line-height: 13px;
+						border-radius: 7px;
+						position: absolute;
+						font-size: 8px;
+						text-align: center;
+						overflow: hidden;
+						text-shadow: none;
+						pointer-events: none;
+						display: none;
+					}
+
+					& .support_exped {
+						bottom: 0;
+						left: 0;
+						color: #fff;
+						background: #a69de6;
+					}
+
+					& .support_lbas {
+						bottom: 0;
+						right: 0;
+						color: #ff0;
+						background: #5b5;
+					}
+
+					& .support_balloon {
+						top: 0;
+						left: 0;
+						background: #fff;
+						opacity: 0.7;
+
+						& img {
+							width: 13px;
+							height: 13px;
+							vertical-align: top;
+						}
+
+						&.deployed {
+							background: #fe5;
+						}
+					}
+
+					&.battle_drop {
+						& img.rounded {
+							width: 100%;
+							height: 100%;
+							border-radius: 50%;
+						}
+
+						&.new_ship {
+							filter: drop-shadow(0 0 3px #1f1);
+						}
+					}
+
+					& .smoke_screen {
+						top: 0;
+						right: -7px;
+						filter: drop-shadow(0 0 2px #222);
+						z-index: 2;
+						width: 22px;
+						font-size: 10px;
+						text-align: right;
+
+						& .smoke_icon {
+							width: 13px;
+							height: 13px;
+							border-radius: 50%;
+							background: #fff;
+							margin: 0 2px 0 0;
+							overflow: hidden;
+							vertical-align: top;
+							opacity: 0.7;
+
+							&.triggered {
+								background: #fe5;
+							}
+						}
+
+						& .smoke_level {
+							pointer-events: none;
+						}
+					}
+				}
+			}
+
+			/* Battle Conditions */
+			& .battle_conditions {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 4px;
+				margin-bottom: 5px;
+
+				@container (width >=320px) {
+					display: inline-flex;
+					width: 50%;
+				}
+
+				& .battle_condition {
+					display: flex;
+
+					& .battle_cond_icon {
+						line-height: 14px;
+
+						& img {
+							width: 14px;
+							height: 14px;
+							vertical-align: top;
+						}
+					}
+
+					& .battle_cond_label {
+						width: 80px;
+						line-height: 14px;
+						font-size: 11px;
+						color: #ccc;
+					}
+
+					& .battle_cond_value {
+						line-height: 14px;
+						font-size: 11px;
+						color: #fff;
+						white-space: nowrap;
+
+						&.best {
+							color: #1f1;
+						}
+
+						&.better {
+							color: #5f5;
+						}
+
+						&.good {
+							color: #afa;
+						}
+
+						&.bad {
+							color: #faa;
+						}
+
+						&.worse {
+							color: #f77;
+						}
+
+						&.worst {
+							color: #f44;
+						}
+
+						&.battle_contact img {
+							width: 15px;
+							height: 15px;
+							vertical-align: top;
+						}
+					}
+				}
+
+				& .battle_cond_extra {
+					line-height: 14px;
+					font-size: 11px;
+					white-space: nowrap;
+					color: #fff;
+					display: none;
+				}
+			}
+
+			/* Battle Planes */
+			& .battle_planes {
+				display: flex;
+				flex-flow: row wrap;
+				gap: 5px 0;
+				margin-bottom: 5px;
+
+				@container (width >=320px) {
+					display: inline-flex;
+					width: 50%;
+				}
+
+				& .plane_label {
+					flex: 0 0 50%;
+					line-height: 14px;
+					font-size: 11px;
+					color: #fc0;
+					text-align: center;
+					font-weight: bold;
+				}
+
+				& .plane_count {
+					flex: 0 0 50%;
+					line-height: 15px;
+					display: flex;
+					gap: 5px;
+					align-items: center;
+
+					& .plane_icon {
+						width: 16px;
+						height: 16px;
+						border-radius: 9px;
+						background: #fff;
+
+						& img {
+							width: 100%;
+							height: 100%;
+							position: relative;
+							left: -1px;
+							vertical-align: top;
+						}
+					}
+
+					& .plane_text {
+						font-size: 11px;
+
+						& .plane_before {
+							color: #eee;
+						}
+
+						& .plane_after {
+							color: #FF7979;
+						}
+					}
+				}
+			}
+		}
+
+		/* Resource Nodes */
+		& .node_type_resource {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			line-height: 18px;
+			padding: 4px;
+			background: #B1FF5E;
+			border: 1px solid #70D800;
+			border-radius: 7px;
+			margin: 10px;
+			text-shadow: none;
+
+			& .node_res_icon {
+				width: 18px;
+				height: 18px;
+
+				& img {
+					width: 100%;
+					height: 100%;
+					vertical-align: top;
+				}
+			}
+
+			& .node_res_text {
+				font-weight: bold;
+				font-size: 12px;
+			}
+
+			& .node_type_maelstrom {
+				background: #D2C6FF;
+				border: 1px solid #AE87E9;
+			}
+		}
+
+		/* Previously encountered */
+		& .node_type_prev_encounters {
+			color: #eee;
+			font-size: 12px;
+
+		& .prev_encounter_label {
+				color: #fc0;
+				height: 17px;
+			}
+
+		& .encounters {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
+				overflow: hidden auto;
+
+			& .encounter_record {
+					display: flex;
+					gap: 5px;
+					padding: 1px;
+					height: auto;
+					background: rgb(186 187 189 / 40%);
+					border-radius: 5px;
+
+					&.matched {
+						box-shadow: inset 0 0 5px 2px #e37;
+					}
+
+				& .encounter_formation {
+						flex: 0 0 30px;
+						height: 30px;
+						background: #fff;
+						border-radius: 50%;
+
+					& img {
+							width: calc(100% - 2px);
+							height: calc(100% - 2px);
+							vertical-align: top;
+							margin: 1px;
+						}
+					}
+				}
+
+			& .encounter_ships {
+					display: flex;
+					gap: 3px;
+
+				& .encounter_ship {
+						width: 30px;
+						height: 30px;
+						border-radius: 51%;
+
+					& img {
+							width: 28px;
+							height: 28px;
+							vertical-align: top;
+							margin: 1px;
+						}
+
+						&.boss {
+							box-shadow: 0 0 1px 1px #5ef, 0 0 3px 2px #fe5;
+						}
+
+						&.kai {
+							box-shadow: 0 0 1px 1px #2af;
+						}
+
+						&.flagship {
+							box-shadow: 0 0 1px 1px #fc3;
+						}
+
+						&.elite {
+							box-shadow: 0 0 1px 1px #f33;
+						}
+					}
+
+                    &.combined {
+						flex-flow: row wrap;
+					}
+				}
+			}
+		}
+
+		/* Text Nodes */
+		& .node_type_text {
+			line-height: 18px;
+			padding: 4px;
+			border-radius: 7px;
+			margin: 10px;
+			text-align: center;
+			font-size: 12px;
+
+			&.dud {
+				background: #79E7FF;
+				border: 1px solid #1ABAEF;
+				text-shadow: none;
+			}
+
+			&.select {
+				background: #FFF;
+				border: 1px solid #CCC;
+				text-shadow: none;
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: QUEST ------- */
+	& .activity_quest {
+		position: relative;
+		color: #FFF;
+
+	& .quest_filters {
+			display: flex;
+			height: 25px;
+			justify-content: center;
+
+		& .quest_filter_button {
+				overflow: hidden;
+				width: calc(100% / 5);
+				opacity: 0.3;
+				transition: 0.2s;
+				cursor: pointer;
+
+				&:hover,
+				&.active {
+					opacity: 1;
+				}
+
+				&[filter="1"] {
+					background: #d75048;
+				}
+
+				&[filter="2"] {
+					background: #98e75f;
+				}
+
+				&[filter="3"] {
+					background: #ace;
+				}
+
+				&[filter="4"] {
+					background: #960;
+				}
+
+				&[filter="5"] {
+					background: #ae76fa;
+				}
+			}
+		}
+
+		& .quest_list {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 1px;
+			max-height: 320px;
+			padding-bottom: 10px;
+			overflow-y: auto;
+
+			&::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			& .quest_page {
+				position: sticky;
+				top: 0;
+				padding: 1px;
+				background: #444;
+				text-align: center;
+				font-size: 11px;
+			}
+
+			& .quest {
+				display: flex;
+				align-items: center;
+				gap: 3px;
+
+				&.activated {
+					background: rgb(255 153 51 / 20%);
+				}
+
+				&.completed {
+					background: rgb(0 255 0 / 20%);
+				}
+
+				& .quest_color {
+					width: 14px;
+					height: 14px;
+					border: 3px solid transparent;
+					border-radius: 2px;
+
+					&.label_daily {
+						border-right: 3px solid #6af;
+					}
+
+					&.label_weekly {
+						border-right: 3px solid #8ff;
+					}
+
+					&.label_monthly {
+						border-right: 3px solid #3f6;
+					}
+
+					&.label_quarterly {
+						border-right: 3px solid #f95;
+					}
+
+					&.label_yearly {
+						border-right: 3px solid #84f;
+					}
+
+					&.label_other {
+						border-right: 3px solid #fe6;
+					}
+				}
+
+				& .quest_text {
+					width: 100%;
+					font-size: 11px;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+
+				&.percent50 .quest_text::before,
+				&.percent80 .quest_text::before {
+					float: right;
+					font-size: 10px;
+					color: #5cc;
+					text-shadow: -1px 1px 0 #333;
+				}
+
+				&.percent50 .quest_text::before {
+					content: "50%";
+				}
+
+				&.percent80 .quest_text::before {
+					content: "80%";
+				}
+			}
+		}
+
+		& .quest_scrolltop_button {
+			position: absolute;
+			z-index: 11;
+			top: 35px;
+			right: 13px;
+			width: 10px;
+			height: 10px;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+			border-bottom: 10px solid rgb(158 158 158 / 60%);
+			background-color: transparent;
+
+			&:hover {
+				border-bottom-color: rgb(197 197 197 / 100%);
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: CRAFTING ------- */
+	& .activity_crafting {
+		flex-flow: column nowrap;
+		gap: 10px;
+
+	& .equipItems {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 3px;
+
+		& .equipItem {
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				gap: 5px 8px;
+
+			& .equipIcon {
+					width: 28px;
+					height: 28px;
+					background: #fff;
+					border-radius: 51%;
+
+				& img {
+						width: calc(100% - 4px);
+						height: calc(100% - 4px);
+						margin: 2px;
+					}
+				}
+
+				& .equipName {
+					flex: 0 0 calc(100% - 36px);
+					line-height: 14px;
+					font-size: 12px;
+					color: #fff;
+					font-weight: bold;
+				}
+
+				& .equipNote {
+					flex: 0 0 100%;
+					color: #ccc;
+					font-size: 12px;
+
+					&:empty {
+						display: none;
+					}
+				}
+
+				& .equipStats {
+					flex: 0 0 100%;
+					display: flex;
+					flex-flow: row wrap;
+					align-items: center;
+					gap: 10px;
+
+					& .equipStat {
+						display: flex;
+						align-items: center;
+						gap: 3px;
+
+						& .equipStatIcon {
+							width: 20px;
+							height: 20px;
+							background: #fff;
+							border-radius: 51%;
+							text-align: center;
+
+						& img {
+								width: calc(100% - 4px);
+								height: calc(100% - 4px);
+								margin: 2px;
+								vertical-align: top;
+							}
+						}
+
+						& .equipStatText {
+							font-size: 12px;
+							color: #fff;
+						}
+					}
+
+					&:empty {
+						display: none;
+					}
+				}
+			}
+		}
+
+		& .equipResources {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 3px 0;
+
+			& .equipResource {
+				flex: 0 0 50%;
+				line-height: 16px;
+				display: inline-flex;
+				gap: 7px;
+
+				& .equipResoIcon {
+					width: 18px;
+					height: 18px;
+
+					& img {
+						width: 100%;
+						height: 100%;
+						vertical-align: top;
+					}
+				}
+
+				& .equipResoAmt {
+					font-size: 12px;
+					color: #fff;
+				}
+			}
+		}
+
+	& .equipFooter {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+
+		& .multiCount {
+				margin-right: 10px;
+
+				&:empty {
+					display: none;
+				}
+			}
+
+		& img {
+				width: 14px;
+				height: 14px;
+			}
+
+		& span {
+				line-height: 16px;
+				font-size: 12px;
+				color: #fff;
+			}
+		}
+	}
+
+	/* ------- EXPEDITION ------- */
+	& .activity_expedition {
+		white-space: nowrap;
+
+	& .expres_img {
+			text-align: center;
+
+		& img {
+				width: 170px;
+				height: 30px;
+				vertical-align: top;
+			}
+		}
+
+	& .expres_status {
+			font-size: 14px;
+			color: #fc0;
+			font-weight: bold;
+			text-align: center;
+		}
+
+	& .expres_num {
+			line-height: 14px;
+			font-size: 12px;
+			color: #ccc;
+			text-align: center;
+			margin-bottom: 8px;
+		}
+
+	& .expres_resos {
+			display: flex;
+			line-height: 16px;
+			margin-bottom: 5px;
+
+		& .expres_divHF {
+				display: flex;
+				flex-flow: column nowrap;
+				flex: 0 0 50%;
+				gap: 3px;
+
+			& .expres_reso {
+					display: flex;
+					height: 16px;
+					line-height: 16px;
+					gap: 10px;
+
+				& .expres_icon {
+						width: 16px;
+						height: 16px;
+					}
+
+				& .expres_amt {
+						font-size: 12px;
+						color: #fff;
+					}
+				}
+			}
+		}
+
+	& .expres_items {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 3px;
+
+		& .expres_get {
+				line-height: 20px;
+				font-size: 12px;
+				color: #fff;
+			}
+
+		& .expres_noget {
+				line-height: 20px;
+				font-size: 12px;
+				color: #faa;
+				display: none;
+			}
+
+		& .expres_item {
+				display: inline-flex;
+				gap: 3px;
+				line-height: 20px;
+
+			& .expres_item_icon {
+					width: 18px;
+					height: 18px;
+
+				& img {
+						width: 18px;
+						height: 18px;
+						vertical-align: top;
+					}
+				}
+
+			& .expres_item_text {
+					font-size: 12px;
+					color: #fff;
+				}
+			}
+		}
+
+	& .expres_hqexp {
+			line-height: 20px;
+			margin-bottom: 5px;
+			color: #fff;
+			font-size: 14px;
+
+		& .expres_hqexp_lbl {
+				font-size: 14px;
+				font-weight: bold;
+			}
+
+		& .expres_hqexp_amt {
+				font-size: 12px;
+
+			& span.value {
+					color: #fc0;
+					font-size: 14px;
+					font-weight: bold;
+				}
+			}
+		}
+
+	& .expres_ships {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 2px 0;
+			line-height: 18px;
+			font-size: 12px;
+
+		& .expres_ship {
+				align-items: center;
+				flex: 0 0 50%;
+				gap: 5px;
+				display: none;
+
+			& .expres_ship_img {
+					width: 20px;
+					height: 20px;
+
+				& img {
+						width: 20px;
+						height: 20px;
+						vertical-align: top;
+						border-radius: 51%;
+					}
+				}
+
+			& .expres_ship_exp {
+					color: #fff;
+				}
+
+			& span.value {
+					font-weight: bold;
+					color: #fc0;
+				}
+			}
+		}
+	}
+
+	/* ------- MODERNIZE ------- */
+	& .activity_modernization {
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 10px;
+
+	& .mod_ship {
+			display: flex;
+			flex-flow: row nowrap;
+			gap: 5px;
+
+		& .mod_ship_pic {
+				width: 40px;
+				height: 40px;
+				border-radius: 51%;
+				border: 1px solid #000;
+				overflow: hidden;
+
+			& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
+			}
+
+		& .mod_ship_details {
+				display: flex;
+				flex-flow: column nowrap;
+				justify-content: center;
+				flex: 0 0 calc(100% - 45px);
+
+			& .mod_ship_name {
+					line-height: 16px;
+					font-size: 13px;
+					font-weight: bold;
+					color: #fc0;
+				}
+
+			& .mod_ship_level {
+					line-height: 14px;
+					font-size: 12px;
+					color: #ccc;
+				}
+			}
+		}
+
+	& .mod_result_stats {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 1px;
+
+		& .mod_result_stat {
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				gap: 5px;
+				padding: 1px 5px;
+				border-radius: 6px;
+
+				&:nth-child(2n+1) {
+					background: rgb(0 0 0 / 15%);
+				}
+
+			& .mod_result_icon {
+					width: 20px;
+					height: 20px;
+
+				& img {
+						width: 100%;
+						height: 100%;
+						vertical-align: top;
+					}
+				}
+
+			& .mod_result_old {
+					color: #aaa;
+					font-size: 14px;
+				}
+
+			& .mod_result_plus {
+					font-weight: bold;
+					color: #0f0;
+					font-size: 16px;
+				}
+
+			& .mod_result_left {
+					margin-left: auto;
+					color: #aaa;
+					font-size: 12px;
+				}
+			}
+		}
+
+	& .mod_result_note {
+			color: #aaa;
+			font-size: 12px;
+			line-height: 15px;
+			text-align: center;
+			overflow: hidden;
+		}
+	}
+
+	/* ------- ACTIVITY: Expedition Planner ------- */
+	& .activity_expeditionPlanner {
+		text-align: center;
+		white-space: nowrap;
+		position: relative;
+		z-index: 11;
+
+		&::-webkit-scrollbar {
+			width: 5px;
+		}
+
+	& .dropdown_title {
+			&.expPlanner_text_passed {
+				color: #060;
+				text-shadow: none;
+			}
+
+			&.expPlanner_text_failed {
+				color: #c00;
+				text-shadow: none;
+			}
+		}
+
+	& .expPlan_dropdown_title {
+			width: 100%;
+			list-style: none;
+			position: relative;
+			margin: 0;
+			padding: 0;
+			background: #ddd;
+			text-align: center;
+			text-decoration: none;
+			border: 3px solid #000;
+			text-shadow: none;
+
+		& .expPlan_dropdown_topEntry {
+				display: none;
+			}
+
+			&:hover {
+				background: #fff;
+
+				& > ul,
+				& > ul li {
+					display: block;
+				}
+			}
+
+		& ul {
+				list-style: none;
+				display: none;
+				position: absolute;
+				top: calc(100% + 2px);
+				left: -1px;
+				background: #fff;
+				padding: 0;
+				width: 50%;
+				font-size: 13px;
+				line-height: 17px;
+
+			& li {
+					display: none;
+					background: #fff;
+					border: 1px solid #000;
+					line-height: 15px;
+
+					&:hover {
+						background-color: #DED;
+
+						& > ul,
+						& > ul li {
+							display: block;
+						}
+					}
+
+				& ul {
+						top: 0;
+						left: 100%;
+						cursor: pointer;
+						width: 100%;
+						line-height: 13px;
+					}
+				}
+			}
+		}
+
+	& .expPlanner_timer {
+			font-size: 12px;
+			padding: 4px;
+			display: flex;
+			align-items: center;
+			color: #FFF;
+
+		& .estimated_time {
+				margin-left: auto;
+				text-align: right;
+			}
+		}
+
+	& .expPlanner_resos_title {
+			text-align: center;
+			color: #FFF;
+			margin-bottom: 2px;
+			display: none;
+		}
+
+	& .expres_resos {
+			display: flex;
+			margin-bottom: 3px;
+
+		& .expres_divHF {
+				flex: 0 0 40%;
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 4px;
+
+			& .expres_reso {
+					line-height: 16px;
+					display: flex;
+					gap: 10px;
+
+				& .expres_icon {
+						width: 18px;
+						height: 18px;
+
+					& img {
+							width: 100%;
+							height: 100%;
+							vertical-align: top;
+						}
+					}
+
+				& .expres_amt {
+						font-size: 12px;
+						color: #fff;
+						text-align: left;
+					}
+				}
+			}
+
+		& .expres_greatbtn {
+				margin-left: auto;
+
+			& img {
+					width: 40px;
+					height: 40px;
+				}
+			}
+		}
+
+	& .requirements {
+			display: inline-block;
+
+		& .requirements_textbox {
+				display: inline-block;
+				margin-left: 2px;
+			}
+		}
+
+	& .expPlanner_text {
+			display: inline-block;
+			font-size: 14px;
+			color: #ccc;
+
+			&.gsrate_content[data-gsState="impossible"] {
+				color: #F55;
+			}
+
+			&.gsrate_content[data-gsState="no-overdrum"] {
+				color: orange;
+			}
+
+			&.gsrate_content[data-gsState="likely"] {
+				color: gold;
+			}
+
+			&.gsrate_content[data-gsState="guaranteed"] {
+				color: #0C0;
+			}
+		}
+
+	& .expPlanner_requirements {
+			margin-bottom: 4px;
+		}
+
+	& .expPlanner_text_passed {
+			color: #0C0;
+		}
+
+	& .expPlanner_text_failed {
+			color: #F55;
+		}
+
+	& .expPlanner_checker_criterias {
+			white-space: initial;
+		}
+
+	& .expPlanner_req_fleetComposition,
+	& .expPlanner_checker_criterias.canister_criterias {
+			display: flex;
+			justify-content: center;
+			gap: 8px;
+		}
+
+	& .expPlanner_checker {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+	& .expedition_entry {
+			&.cond_passed {
+				color: green
+			}
+
+			&.cond_failed {
+				color: red
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: FIT ------- */
+	& .activity_gunfit {
+		flex-flow: column nowrap;
+		gap: 5px;
+		padding: 5px;
+
+	& .fit_profile {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+
+		& .fit_profile_pic {
+				flex: 0 0 40px;
+				height: 40px;
+				border-radius: 51%;
+				border: 1px solid #000;
+				overflow: hidden;
+
+			& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
+			}
+
+		& .fit_profile_name {
+				font-size: 13px;
+				line-height: 16px;
+				font-weight: bold;
+				color: #fc0;
+			}
+
+		& .fit_profile_level {
+				margin-left: auto;
+				font-size: 12px;
+				white-space: nowrap;
+				color: #ccc;
+			}
+		}
+
+	& .fit_gear {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+
+		& .fit_gear_pic {
+				flex: 0 0 30px;
+				height: 30px;
+				border: 0 none;
+				background: #333;
+			}
+
+		& .fit_gear_name {
+				font-size: 12px;
+				line-height: 14px;
+			}
+
+		& .fit_gear_level {
+				color: #45a9a5;
+				font-weight: bold;
+
+			& img {
+					width: 12px;
+					height: 12px;
+					margin-top: 1px;
+					vertical-align: text-top;
+				}
+			}
+		}
+
+	& .fit-values {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 3px;
+
+		& .fit_value {
+				flex-flow: column wrap;
+				line-height: 15px;
+				font-size: 11px;
+				border-radius: 6px;
+				padding: 3px 5px;
+				color: #000;
+				background: #aaa;
+				text-shadow: none;
+
+			& .fit_current {
+					display: flex;
+					align-items: center;
+					gap: 3px;
+
+				& .fit_label {
+						line-height: 14px;
+					}
+
+				& .fit_current_value {
+						display: flex;
+						flex-flow: column nowrap;
+						gap: 1px;
+						margin-left: auto;
+
+					& .fit_unknown {
+							flex-flow: column nowrap;
+							gap: 1px;
+							align-items: center;
+							display: none;
+
+						& img {
+								width: 14px;
+								height: 14px;
+							}
+						}
+
+					& .fit_day,
+					& .fit_night {
+							align-items: flex-end;
+							gap: 3px;
+
+						& img {
+								width: 14px;
+								height: 14px;
+							}
+						}
+
+					& .fit_night img {
+								width: 13px;
+								height: 13px;
+						}
+
+					& .fit_bonus {
+							font-weight: bold;
+							color: #3c3;
+							text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
+							filter: drop-shadow(0 0 1px #eee);
+						}
+
+					& .fit_penalty {
+							font-weight: bold;
+							color: #a55;
+							text-shadow: 0 0 7px #fff, 1px 1px 1px #333;
+							filter: drop-shadow(0 0 1px #eee);
+						}
+					}
+				}
+
+			& .fit_total {
+					flex: 0 0 100%;
+					padding: 0 5px;
+					color: #eee;
+					text-align: center;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+			}
+
+		& .oasw {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
+				font-size: 11px;
+				line-height: 12px;
+				border-radius: 6px;
+				padding: 5px 7px;
+				color: #ddd;
+				background: #15c;
+
+			& .oasw_message {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+
+			& .oasw_power {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+
+				& .value {
+						font-weight: bold;
+					}
+				}
+			}
+
+		& .aaci .aaciList {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
+				width: 100%;
+
+			& .aaciPattern {
+					display: flex;
+					gap: 3px;
+					align-items: center;
+					border-radius: 6px;
+					font-size: 12px;
+					color: #ccc;
+					padding: 1px 5px;
+
+					&.triggerable {
+						background: #777;
+					}
+				}
+
+			& .apiId {
+					min-width: 14px;
+					text-align: right;
+				}
+
+			& .shipIcon {
+					width: 20px;
+					height: 20px;
+
+				& img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+					}
+				}
+
+			& .equipIcons {
+					flex: 1 0 auto;
+
+				& img {
+						width: 18px;
+						height: 18px;
+					}
+
+					/* TODO - find out what this is and possibly fix it */
+				& .plusIcon {
+						width: 15px;
+						height: 15px;
+						margin: 5px 0 0 -12px;
+						position: relative;
+						pointer-events: none;
+						filter: hue-rotate(75deg);
+						transform: scaleX(-1);
+					}
+
+				& .minusIcon {
+						width: 15px;
+						height: 15px;
+						margin: 5px 0 0 -12px;
+						position: relative;
+						pointer-events: none;
+						filter: hue-rotate(-90deg);
+						transform: scaleX(-1);
+					}
+				}
+			}
+
+		& .equip {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 3px;
+
+			& .equipInfo {
+					padding: 4px;
+					border-radius: 6px;
+					font-size: 12px;
+					color: #ccc;
+					background: rgb(54 255 182 / 20%);
+				}
+
+			& .equipIcons {
+					display: flex;
+					gap: 2px;
+
+				& img {
+						width: 27px;
+						height: 27px;
+						border-radius: 51%;
+						vertical-align: top;
+						background-color: #fff;
+					}
+
+				& span {
+						line-height: 27px;
+						font-size: 20px;
+					}
+				}
+
+				& .statsBox {
+					display: flex;
+					flex-flow: row wrap;
+					gap: 5px 0;
+					border-radius: 6px;
+					line-height: 18px;
+					font-size: 12px;
+					padding: 4px;
+					background: rgb(146 146 146 / 49%);
+					color: #fff;
+
+					& div {
+						flex: 0 0 25%;
+						display: inline-flex;
+						align-items: center;
+						gap: 2px;
+					}
+
+					& img {
+						width: 18px;
+						height: 18px;
+						background: #fff;
+						border-radius: 41%;
+						padding: 2px;
+						box-sizing: content-box;
+					}
+
+					& span {
+						line-height: 24px;
+					}
+				}
+			}
+
+		& .landing .landingList {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 1px;
+
+			& .landingInfo {
+					display: flex;
+					gap: 5px;
+					align-items: center;
+					line-height: 20px;
+					border-radius: 6px;
+					font-size: 12px;
+					color: #ccc;
+					background: rgb(255 54 54 / 20%);
+					padding: 2px;
+				}
+
+			& .shipIcon {
+					width: 20px;
+					height: 20px;
+
+				& img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+						vertical-align: top;
+					}
+				}
+
+			& .power {
+					display: inline-flex;
+					gap: 3px;
+					align-items: center;
+
+				& img {
+						width: 15px;
+						height: 15px;
+					}
+				}
+
+			& .modifiers {
+					margin-left: auto;
+				}
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: PvP Info ------- */
+	& .activity_pvp {
+		color: #ddd;
+		font-size: 12px;
+
+	& .pvp_header {
+			white-space: nowrap;
+
+		& .pvp_title {
+				color: #fc0;
+				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+		& .pvp_create_kind {
+				color: #86b465;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+
+	& .pvpEnemyInfo {
+			display: flex;
+			align-items: center;
+			gap: 3px;
+			margin-bottom: 4px;
+			container-type: inline-size;
+
+		& .pvp_enemy_pic {
+				flex: 0 0 min(40px, 15cqw);
+				height: min(40px, 15cqw);
+				margin-right: 1px;
+				border: 1px solid #000;
+				border-radius: 51%;
+
+			& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
+			}
+
+		& .pvp_enemy_texts {
+				display: flex;
+				flex-flow: row wrap;
+				flex: 1 1 auto;
+
+			& .pvp_enemy_name {
+					line-height: 17px;
+					padding-left: 2px;
+					margin: 0 1px 1px 0;
+					color: #3ec0bf;
+				}
+
+				&.friend .pvp_enemy_name {
+					color: #3ec03e;
+				}
+
+			& .pvp_enemy_level {
+					line-height: 17px;
+					padding-left: 2px;
+					margin: 0 1px 1px auto;
+					font-size: 11px;
+				}
+
+			& .pvp_enemy_rank {
+					line-height: 17px;
+					padding-left: 2px;
+					margin: 0 1px 1px 0;
+					font-size: 11px;
+				}
+
+			& .pvp_enemy_comment {
+					flex: 1 0 calc(100% - 17px);
+					height: 17px;
+					line-height: 15px;
+					padding: 0 0 0 3px;
+					border: 1px solid #222;
+					border-radius: 5px;
+					color: #222;
+					font-size: 11px;
+					background-color: #eee;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					text-shadow: none;
+				}
+
+			& .pvp_enemy_medals {
+					position: relative;
+					width: 17px;
+					height: 17px;
+
+				& img {
+						width: 13px;
+						height: 13px;
+					}
+
+				& span {
+						font-size: 10px;
+						position: absolute;
+						bottom: 0;
+						right: -1px;
+					}
+				}
+			}
+
+		& .pvp_enemy_state {
+				width: 26px;
+
+			& img {
+					width: 26px;
+					height: 26px;
+				}
+			}
+		}
+
+	& .pvp_admiral {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 3px;
+			white-space: nowrap;
+			align-items: center;
+
+		& .pvp_admiral_name {
+				display: flex;
+				width: 100%;
+				align-items: center;
+
+			& .l10n {
+					width: 42px;
+					font-size: 11px;
+					color: #3ec0bf;
+				}
+
+			& .value {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+
+		& .pvp_admiral_level {
+				display: flex;
+				width: 42px;
+				line-height: 15px;
+
+			& .l10n {
+					width: 16px;
+					color: #3ec0bf;
+				}
+			}
+
+		& .pvp_admiral_rank {
+				line-height: 15px;
+				font-size: 11px;
+			}
+
+		& .pvp_admiral_exp {
+				margin-left: auto;
+				line-height: 15px;
+				font-size: 11px;
+			}
+
+		& .pvp_admiral_comment {
+				width: 100%;
+				height: 17px;
+				line-height: 17px;
+				padding: 0 0 0 3px;
+				margin: 0 0 3px;
+				color: #222;
+				font-size: 11px;
+				background-color: #eee;
+				border-radius: 5px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-shadow: none;
+			}
+
+		& .pvp_admiral_label {
+				width: 110px;
+				line-height: 13px;
+				margin: 0 0 2px;
+				font-size: 11px;
+				color: #c3b180;
+			}
+
+		& .pvp_admiral_ships,
+		& .pvp_admiral_gears,
+		& .pvp_admiral_furniture {
+				width: calc(100% - 113px); /* 110px + 3px gap */
+				line-height: 13px;
+				margin-left: auto;
+				font-size: 11px;
+				text-align: right;
+			}
+		}
+
+	& .pvp_fleet_name {
+			line-height: 17px;
+			padding: 0 0 0 3px;
+			margin-bottom: 3px;
+			color: #222;
+			font-size: 11px;
+			background-color: #eee;
+			border-radius: 5px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-shadow: none;
+		}
+
+	& .pvp_fleet_list {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 3px;
+			white-space: nowrap;
+			margin-bottom: 3px;
+
+		& .pvpFleetShip {
+				display: flex;
+				gap: 3px;
+				flex: 1 1 calc(50% - 2px);
+				height: 40px;
+				font-size: 11px;
+				border: 2px solid #faa;
+				border-radius: 21px 6px 6px 21px;
+				background-color: rgb(85 85 85 / 70%);
+				overflow: hidden;
+
+			& .pvp_fleet_ship_icon {
+					flex: 0 0 36px;
+					height: 36px;
+
+				& img {
+						width: 100%;
+						height: 100%;
+						border-radius: 51%;
+					}
+				}
+
+			& .pvp_fleet_ship_texts {
+					flex: 1 1 calc(100% - 39px);
+					display: flex;
+					flex-flow: row wrap;
+
+				& .pvp_fleet_ship_name {
+						flex: 1 1 100%;
+						line-height: 18px;
+					}
+
+				& .pvp_fleet_ship_level {
+						display: inline-flex;
+						line-height: 18px;
+
+					& .l10n {
+							color: #3ec0bf;
+						}
+					}
+
+				& .pvp_fleet_ship_star {
+						line-height: 18px;
+						margin-left: auto;
+						padding-right: 3px;
+
+					& .star {
+							color: #eedab1;
+						}
+					}
+				}
+			}
+		}
+
+	& .pvp_prediction {
+			display: flex;
+			gap: 6%;
+			align-items: center;
+			line-height: 15px;
+			font-size: 11px;
+			white-space: nowrap;
+
+		& .pvp_base_exp,
+		& .pvp_formation {
+				flex: 0 0 47%;
+				display: flex;
+				align-items: center;
+
+			& .l10n {
+					color: #3ec0bf;
+				}
+			}
+
+		& .pvp_base_exp {
+			& .value {
+					margin-left: auto;
+				}
+			}
+
+		& .pvp_formation {
+			& img {
+					margin-left: auto;
+					width: 20px;
+					height: 20px;
+					background-color: #fff;
+					border-radius: 11px;
+					vertical-align: inherit;
+				}
+			}
+		}
+	}
+
+	/* ------- ACTIVITY: Remodel Info ------- */
+	& .activity_remodel {
+		color: #ddd;
+		font-size: 12px;
+
+	& .remodel_header {
+			margin-bottom: 5px;
+			display: flex;
+			align-items: center;
+
+		& .recipe_title,
+		& .result_title {
+				color: #fc0;
+				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+		& .recipe_title span {
+				color: #3ec0bf;
+			}
+
+		& .result_title.failure {
+				color: #f00;
+			}
+
+		& .assistant_ship {
+				margin-left: auto;
+				width: 30px;
+				height: 30px;
+				border: 1px solid #000;
+				border-radius: 51%;
+				overflow: hidden;
+
+			& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+				}
+			}
+		}
+
+	& .remodel_slotlist,
+	& .remodel_to_improve,
+	& .remodel_consumptions,
+	& .remodel_upgrade_to,
+	& .remodel_improved {
+			display: flex;
+			flex-flow: column nowrap;
+			gap: 5px;
+
+		& .remodelSlotItem {
+				display: flex;
+				background: rgb(255 255 255 / 20%);
+				border-radius: 5px;
+				margin-bottom: 2px;
+				gap: 5px;
+				overflow: hidden;
+
+				&.sptype1 {
+					box-shadow: 0 0 7px 0 #6b8;
+				}
+
+				&.sptype2 {
+					box-shadow: 0 0 5px 0 #1e4;
+				}
+
+				&.noReqs .remodel_slot_itemon {
+					display: none;
+				}
+
+			& .remodel_slot_itemon {
+					flex: 0 0 40px;
+					height: 56px;
+
+				& img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+			& .remodel_slot_desc {
+					display: flex;
+					flex-flow: column nowrap;
+					flex: 0 0 calc(100% - 45px);
+					overflow: clip visible;
+					gap: 2px;
+
+				& .remodel_slot_imgname {
+						display: flex;
+						align-items: center;
+						gap: 2px;
+						flex: 0 0 auto;
+						margin-top: 2px;
+
+					& .remodel_slot_icon {
+							width: 20px;
+							height: 20px;
+							background: rgb(0 0 0 / 60%);
+							border-radius: 10px;
+							overflow: hidden;
+
+						& img {
+								width: 100%;
+								height: 100%;
+								vertical-align: top;
+							}
+						}
+
+					& .remodel_slot_name {
+							color: #eee;
+							line-height: 20px;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
+					}
+				}
+
+				&.noReqs .remodel_slot_desc {
+					flex: 0 0 100%;
+					margin: 0 0 2px 2px;
+					padding-right: 4px;
+				}
+
+			& .remodel_slot_star {
+					font-size: 11px;
+					font-weight: bold;
+					color: #45a9a5;
+					white-space: nowrap;
+					margin: 0 5px 0 auto;
+					display: none;
+
+				& img {
+						width: 13px;
+						height: 13px;
+						margin-top: -3px;
+					}
+				}
+
+			& .remodel_slot_success {
+					font-size: 11px;
+					margin-right: 5px;
+					color: #8ae9e4;
+					display: none;
+				}
+
+			& .remodel_slot_reqs {
+					display: flex;
+					flex-flow: row wrap;
+					align-items: center;
+					gap: 1px 5px;
+					font-size: 11px;
+					text-shadow: none;
+					margin-bottom: 3px;
+
+				& .remodel-req-separator {
+						width: 100%;
+					}
+
+				& div {
+						line-height: 15px;
+						display: inline-flex;
+						gap: 3px;
+					}
+
+				& img {
+						width: 12px;
+						height: 12px;
+					}
+
+				& span {
+						&.req {
+							color: #ddd;
+						}
+
+						&.certain {
+							color: #8ae9e4;
+						}
+					}
+				}
+
+				&.noReqs .remodel_slot_reqs {
+					display: none;
+				}
+			}
+		}
+
+	& .remodel_consumptions {
+			font-size: 11px;
+			margin: 5px 0 2px;
+
+		& .remodel_consume_items {
+				display: flex;
+				flex-flow: column nowrap;
+				gap: 4px;
+
+			& .remodel_consume_item {
+					display: flex;
+					align-items: center;
+					gap: 4px;
+
+				& .remodel_slot_icon {
+						width: 16px;
+						height: 16px;
+						background: rgb(0 0 0 / 60%);
+						border-radius: 7px;
+
+					& img {
+							width: 100%;
+							height: 100%;
+							vertical-align: top;
+						}
+					}
+
+				& .remodel_slot_name {
+						color: #45a9a5;
+						line-height: 14px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+
+				& .remodel_consume_amount {
+						margin-left: auto;
+						color: #45a9a5;
+						font-weight: bold;
+						line-height: 14px;
+					}
+				}
+			}
+
+		& .remodel_owned_items {
+				display: flex;
+				gap: 7px;
+
+			& .owned_item {
+					display: none;
+					gap: 3px;
+
+				& img {
+						width: 12px;
+						height: 12px;
+						vertical-align: text-top;
+					}
+
+					&.owned_star0_item .star0 {
+						color: #45a9a5;
+						font-weight: bold;
+					}
+
+					& .value {
+						color: #45a9a5;
+
+						&.red {
+							color: #f00;
+						}
+					}
+				}
+			}
+		}
+
+		& .remodel_upgrade_title {
+			color: #fc0;
+			font-size: 11px;
+		}
+
+	& .remodel_footer {
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			gap: 7px;
+			margin-top: 4px;
+
+		& > div {
+				line-height: 18px;
+				display: flex;
+				align-items: center;
+				gap: 3px;
+			}
+
+		& img {
+				width: 16px;
+				height: 16px;
+			}
+		}
+	}
+}
+
+/* ------- QUESTS ------- */
+.module.quests {
+	grid-area: quests;
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 3px;
+	container-type: inline-size;
+
+	@container wrapper (width < 540px) {
+		order: 1;
+	}
+
+& .quest {
+		line-height: 18px;
+		display: flex;
+		gap: 5px;
+		align-items: center;
+
+		&.complete {
+			background: rgb(0 255 0 / 25%);
+
+		& .quest_color {
+				border-left: 2px solid #0f0;
+			}
+		}
+
+	& .quest_color {
+			width: 14px;
+			height: 14px;
+			line-height: 12px;
+			font-size: 12px;
+			text-align: center;
+			text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 2px #fff;
+			background: #555;
+			border: 3px solid transparent;
+			border-radius: 2px;
+
+			&.label_daily {
+				border-right: 3px solid #6af;
+			}
+
+			&.label_weekly {
+				border-right: 3px solid #8ff;
+			}
+
+			&.label_monthly {
+				border-right: 3px solid #3f6;
+			}
+
+			&.label_quarterly {
+				border-right: 3px solid #f95;
+			}
+
+			&.label_yearly {
+				border-right: 3px solid #94f;
+			}
+
+			&.label_other {
+				border-right: 3px solid #fe6;
+			}
+		}
+
+		&.percent50 .quest_color {
+			border-left: 3px solid #39a;
+		}
+
+		&.percent80 .quest_color {
+			border-left: 3px solid #6cd;
+		}
+
+	& .quest_text {
+			flex: 1 1 calc(100% - 54px);
+			font-size: 11px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			color: #eee;
+		}
+
+	& .quest_track {
+			margin-left: auto;
+			width: 40px;
+			line-height: 16px;
+			background: rgb(60 60 60 / 70%);
+			font-size: 12px;
+			text-align: center;
+			color: #eee;
+			overflow: hidden;
+			border-radius: 2px;
+		}
+
+	& .untracked .quest_track {
+			display: none;
+		}
+	}
+}
+
+/* ------- CONTROLS ------- */
+.module.controls {
+	grid-area: controls;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 5px 1px;
+	container-type: inline-size;
+
+& .control-separator {
+		display: none;
+
+		@container (width < 320px) {
+			display: block;
+			width: 100cqw;
+			height: 1px;
+		}
+	}
+
+& .control {
+		color: #ccc;
+
+		&.fleet_num {
+			flex: 1 1 auto;
+			max-width: 30px;
+			max-height: 30px;
+			border-radius: 51%;
+			background: #333;
+			font-size: min(19px, 6cqw);
+			font-weight: bold;
+			aspect-ratio: 1 / 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&.preSortieCheck {
+				border: 2px dotted #fa2;
+			}
+
+			&.onExped {
+				border: 2px solid #a69de6;
+			}
+
+			&.needsSupply {
+				border: 2px solid #f00;
+			}
+
+			&.hasTaiha {
+				background: #faa;
+				color: #000;
+			}
+
+			&.active {
+				border: 2px solid #fc0;
+			}
+		}
+
+		&.fleet_rengo {
+			flex: 0 1 auto;
+			border-radius: 8px;
+			background: #333;
+
+		& img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		&.fleet_lbas {
+			flex: 1 0 auto;
+			max-width: 40px;
+			border-radius: 8px;
+			background: #333;
+			text-align: center;
+
+		& img {
+				max-height: 30px;
+			}
+
+			&.badMorale {
+				border: 2px solid #faa;
+			}
+
+			&.needsSupply {
+				border: 2px solid #f00;
+			}
+
+			&.badMorale img,
+			&.needsSupply img {
+				margin-top: -2px;
+			}
+		}
+
+		&.scrollable {
+			display: flex;
+			align-items: center;
+			flex: 0 0 calc(100cqw - 280px);
+			max-width: calc(100cqw - 280px);
+			overflow: hidden;
+			font-size: 0;
+
+			@container (width < 320px) {
+				flex: 1 1 calc(100cqw - 40px);
+				max-width: calc(100cqw - 40px);
+			}
+		}
+
+		&.scroll_btn {
+			width: 0;
+			height: 0;
+		}
+
+		&.scroll_left {
+			border-top: 13px solid transparent;
+			border-bottom: 13px solid transparent;
+			border-right: 15px solid #999;
+
+			&.disabled {
+				border-right: 15px solid #333;
+			}
+		}
+
+		&.scroll_right {
+			border-top: 13px solid transparent;
+			border-bottom: 13px solid transparent;
+			border-left: 15px solid #999;
+
+			&.disabled {
+				border-left: 15px solid #333;
+			}
+		}
+
+		&.control_btn {
+			flex: 0 0 40px;
+			border-radius: 15px;
+			background: #999;
+			text-align: center;
+			overflow: hidden;
+			padding: 3px;
+			display: inline-block;
+
+			&:has(+ .control_btn) {
+				margin-right: 5px;
+			}
+
+			&.disabled {
+				background: #333;
+			}
+
+		& img {
+				width: 34px;
+				height: 24px;
+			}
+		}
+
+		&.active {
+			background: #fc0;
+			color: #000;
+		}
+	}
+}
+
+/* ------- SUMMARY ------- */
+.module.summary {
+	display: inline-flex;
+	flex-flow: row wrap;
+	align-items: center;
+	gap: 5px 15px;
+	grid-area: summary;
+
+	&.disabled {
+		filter: brightness(0.5);
+		pointer-events: none;
+	}
+
+& .summary_box {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		line-height: 20px;
+
+	& .summary_icon {
+			width: 20px;
+			height: 20px;
+			background: #fff;
+			border-radius: 10px;
+
+		& img {
+				width: 16px;
+				height: 16px;
+				margin: 2px;
+				vertical-align: top;
+			}
+		}
+
+	& .summary_text {
+			color: #eee;
+			font-size: 12px;
+			font-weight: bold;
+			white-space: nowrap;
+		}
+
+	& .summary_sub {
+			width: 12px;
+			height: 12px;
+			line-height: 13px;
+			border-radius: 6px;
+			position: absolute;
+			bottom: -2px;
+			left: 10px;
+			font-size: 8px;
+			text-align: center;
+			color: #78736f;
+			background: #fff;
+			overflow: hidden;
+			pointer-events: none;
+			display: none;
+		}
+	}
+}
+
+/* ------- FLEET ------- */
+.module.fleet {
+	grid-area: fleet;
+	border-radius: 5px;
+
+	& .shiplist {
+		container-type: inline-size;
+		flex-flow: column nowrap;
+		gap: 5px;
+
+		/* Single kanmusu
+		   l now stands for lucky */
+		& .lship {
+			container-type: inline-size;
+			container-name: ship;
+			display: grid;
+			grid-template-columns: min(60px, max(40px, 15cqw)) 1fr;
+			grid-auto-rows: auto;
+			border-radius: 5px;
+			position: relative;
+			gap: 5px;
+			padding: 3px;
+
+			/* ------- Status backgrounds ------- */
+			&.special_cutin {
+				background-color: rgb(170 0 136 / 40%);
+			}
+
+			&.hp_repairing {
+				background-color: rgb(100 255 100 / 30%);
+			}
+
+			&.hp_fcf {
+				background-color: rgb(255 255 255 / 40%);
+			}
+
+			&.akashiMark {
+				background-color: rgb(191 255 100 / 15%);
+			}
+
+			&.nosakiMark {
+				background-color:rgba(225, 116, 0, 0.2);
+			}
+
+			&.hp_taiha {
+				background-color: rgb(255 0 0 / 40%);
+			}
+
+			/* ------- Wrappers ------- */
+			& .lship-image {
+				display: flex;
+				position: relative;
+				grid-row: 1 / 2;
+				grid-column: 1 / 2;
+			}
+
+			& .lship-details {
+				grid-row: 1 / 2;
+				grid-column: 2 / 3;
+				display: flex;
+				flex-flow: row wrap;
+				gap: 3px 7px;
+			}
+
+			/* ------- Ship image details ------- */
+			& .ribbon {
+				width: 24px;
+				height: 71px;
+				position: absolute;
+				left: -2px;
+				top: -20px;
+				transform: scale(0.5) rotate(34deg);
+				z-index: 1;
+				overflow: visible;
+				opacity: 0.8;
+				pointer-events: none;
+				display: none;
+
+				& img {
+					width: 24px;
+					height: 71px;
+				}
+
+				&.r-1 img {
+					content: url("/assets/img/client/ribbons/1.png");
+					filter: drop-shadow(0 0 2px rgb(255 243 140 / 100%));
+				}
+
+				&.r-2 img {
+					content: url("/assets/img/client/ribbons/2.png");
+					filter: drop-shadow(0 0 2px rgb(255 87 112 / 100%));
+				}
+			}
+
+			&.ship-stamp::after {
+				content: attr(title);
+				display: inline;
+				top: 4px;
+				left: 20%;
+				position: absolute;
+				font-size: 20pt;
+				color: red;
+				transform: rotate(-3deg);
+				text-shadow: 1px 1px 1px black;
+				border: 1px red solid;
+				text-align: center;
+				vertical-align: middle;
+				width: 160px;
+				background-color: rgb(255 0 0 / 50%);
+				z-index: 1;
+			}
+
+			& .ship_img {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				position: relative;
+				flex: 0 0 max(40px, 15cqw);
+				max-width: 60px;
+				height: max(40px, 15cqw);
+				max-height: 60px;
+				border-radius: 51%;
+
+				& img {
+					width: 100%;
+					height: 100%;
+					border-radius: 51%;
+
+					&[src$="empty.png"] {
+						max-width: 40px;
+						max-height: 40px;
+						margin-left: 1px;
+					}
+				}
+
+				& .ex_item {
+					width: 18px;
+					height: 18px;
+					line-height: 18px;
+					position: absolute;
+					bottom: 0;
+					right: 0;
+					background: #fff;
+					border-radius: 9px;
+					z-index: 1;
+
+					& .gear_star {
+						width: 12px;
+						position: absolute;
+						font-size: 8px;
+						margin: 8px 0 0 -5px;
+						height: 12px;
+						overflow: hidden;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 12px;
+						color: #ff0;
+						background: #45a9a5;
+						pointer-events: none;
+						display: none;
+					}
+
+					&.empty {
+						background: rgb(255 255 255 / 80%);
+					}
+
+					&.item_being_used {
+						background: #fe3;
+					}
+
+					&.goddess {
+						box-shadow: 0 0 4px #ff0,
+						0 0 4px #ff0,
+						0 0 4px #ff0 !important;
+					}
+
+					& .gear_icon {
+						overflow: hidden;
+
+						& img {
+							width: 18px;
+							height: 18px;
+							line-height: 18px;
+							vertical-align: top;
+						}
+					}
+
+					/* TODO Examine and fix this, can ship_img be inside exslot? */
+					& .ship_img {
+						width: 40px;
+						height: 40px;
+						float: left;
+						margin: 0 5px 0 0;
+						border-radius: 20px;
+						overflow: hidden;
+
+						& img {
+							width: 40px;
+							height: 40px;
+							position: relative;
+							margin: -1px 0 0 -1px;
+							border-radius: 50%;
+						}
+					}
+				}
+
+				& .locktag {
+					width: 18px;
+					height: 18px;
+					line-height: 16px;
+					position: absolute;
+					right: 0;
+					top: 0;
+					z-index: 1;
+					overflow: hidden;
+					border-radius: 50%;
+					border: 1px #fff solid;
+					color: #fff;
+					background: #aaa;
+					opacity: 0.8;
+					font-size: 10px;
+					text-align: center;
+					text-shadow: 1px 1px 1px #224169;
+					pointer-events: none;
+					display: none;
+				}
+			}
+
+		& .mvp_icon {
+				width: 22px;
+				height: 22px;
+				position: absolute;
+				left: -2px;
+				top: -2px;
+				z-index: 2;
+				overflow: hidden;
+				display: none;
+
+			& img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+
+			/* ------- Name, type, level, HP column ------- */
+		& .ship_col1 {
+				flex: 0 0 calc(50% - 27px);
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				align-content: center;
+				gap: 1px 10px;
+				overflow: clip visible;
+
+				@container ship (width < 400px) {
+					flex: 0 0 calc(100% - 47px);
+				}
+
+			& .ship_name {
+					flex: 1 1 100%;
+					line-height: 14px;
+					font-size: 12px;
+					color: #ddd;
+					font-weight: bold;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+			& .ship_type {
+					line-height: 15px;
+					font-size: 10px;
+					color: #0ff;
+					white-space: nowrap;
+				}
+
+			& .ship_level {
+					line-height: 15px;
+					font-size: 11px;
+					color: #fff;
+					white-space: nowrap;
+
+				& .value.goaled {
+						filter: drop-shadow(0 0 2px #fe2);
+					}
+				}
+
+			& .ship_hp_text {
+					margin-left: auto;
+					line-height: 15px;
+					color: #0f0;
+					text-align: right;
+					white-space: nowrap;
+				}
+
+			& .ship_hp_cur {
+					color: #0f0;
+					font-size: 12px;
+				}
+
+			& .ship_hp_max {
+					color: #aaa;
+					font-size: 11px;
+				}
+
+			& .ship_hp_box {
+					flex: 1 1 100%;
+					height: 11px;
+					border: 1px solid #000;
+					background: #555;
+					position: relative;
+					container-type: inline-size;
+
+					@container ship (width >= 400px) {
+						height: 15px;
+					}
+
+					& .ship_hp_bar,
+					& .ship_hp_prediction {
+						position: absolute;
+						top: 0;
+						left: 0;
+						z-index: 1;
+						height: 9px;
+
+						@container ship (width >= 400px) {
+							height: 13px;
+						}
+
+						&.hp_normal {
+							background-color: #0f0;
+						}
+
+						&.hp_shouha {
+							background-color: #ff0;
+						}
+
+						&.hp_chuuha {
+							background-color: #f90;
+						}
+
+						&.hp_taiha {
+							background-color: #f00;
+						}
+
+						&.hp_repairing {
+							background-color: #ace;
+						}
+
+						&.hp_fcf {
+							background-color: #fff;
+						}
+
+						&.hp_sunk {
+							background-color: #ccc;
+						}
+
+						& .ship_hp_pred_value {
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100cqw;
+							line-height: 7px;
+							text-align: center;
+							pointer-events: none;
+							display: none;
+							z-index: 10;
+
+							@container ship (width >= 400px) {
+								line-height: 12px;
+							}
+
+						& .ship_hp_diff {
+								color: #ff6565;
+								font-size: 11px;
+								text-shadow:
+										-1px -1px 1px #3d1414, 0 -1px 1px #3d1414, 1px -1px 1px #3d1414,
+										-1px 0 1px #3d1414, 1px 0 1px #3d1414,
+										-1px 1px 1px #3d1414, 0 1px 1px #3d1414, 1px 1px 1px #3d1414;
+								opacity: 0.84;
+
+								@container (width >= 400px) {
+									font-size: 12px;
+								}
+							}
+						}
+					}
+
+				& .ship_hp_prediction {
+						z-index: 2;
+					}
+
+				& .ship_hp_bar_metrics {
+						position: relative;
+						top: 0;
+						left: 25cqw;
+						z-index: 3;
+						height: 5px;
+						width: 50cqw;
+						border-width: 0 1px;
+						border-style: solid;
+						border-color: rgb(0 0 0 / 75%);
+
+						@container ship (width >= 400px) {
+							height: 7px;
+						}
+
+						&::before {
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 50%;
+							width: 1px;
+							height: 5px;
+							background-color: rgb(0 0 0 / 75%);
+						}
+					}
+				}
+			}
+
+			/* ------- Akashi Timer ------- */
+		& .ship_repair_data {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 4;
+				font-size: 10px;
+				display: none;
+
+				@container ship (width < 400px) {
+					height: 150%;
+				}
+
+			& .ship_repair_tick,
+			& .ship_repair_timer {
+					flex: 0 0 50%;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background-color: white;
+					color: green;
+				}
+
+			& .ship_repair_tick::before {
+					content:"+" attr(data-tick);
+				}
+
+			& .ship_repair_timer {
+					color: red;
+				}
+			}
+
+			&:hover .ship_repair_data {
+				display: flex;
+			}
+
+			/* ------- Morale, XP column ------- */
+		& .ship_col2 {
+				flex: 0 0 40px;
+				display: flex;
+				flex-flow: column nowrap;
+				align-items: center;
+				justify-content: center;
+				gap: 3px;
+				text-align: center;
+
+			& .ship_morale {
+					width: 40px;
+					height: 16px;
+					line-height: 16px;
+					font-size: 12px;
+					border-radius: 5px;
+
+					&.glowing {
+						box-shadow: 0 0 10px 1px rgb(255 255 0 / 100%);
+
+						&.strong {
+							box-shadow: 0 0 10px 2px rgb(255 224 0 / 100%);
+						}
+
+						&.strongplus {
+							box-shadow: 0 0 10px 3px rgb(255 192 0 / 100%);
+						}
+					}
+				}
+
+			& .ship_exp_label {
+					line-height: 11px;
+					font-size: 11px;
+					color: #aaa;
+					position: relative;
+
+				& .expNotice {
+						width: 40px;
+						height: 22px;
+						line-height: 22px;
+						position: absolute;
+						top: 0;
+						left: 0;
+						font-size: 14px;
+						text-shadow:
+								0 0 4px #000,
+								0 0 4px #000,
+								0 0 4px #000;
+						color: #fc0;
+					}
+				}
+
+			& .ship_exp_next {
+					line-height: 11px;
+					font-size: 10px;
+					color: #eee;
+				}
+			}
+
+			/* ------- Equipment ------- */
+		& .ship_gears {
+				flex: 0 0 calc(50% - 27px);
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				align-content: space-evenly;
+				gap: 6px;
+
+				@container ship (width < 400px) {
+					flex: 1 0 100%;
+					flex-flow: row nowrap;
+					justify-content: flex-start;
+					gap: 0;
+					padding-left: 5px;
+					margin-bottom: 2px;
+					order: 1;
+				}
+
+				@container ship (width < 320px) {
+					flex-flow: row wrap;
+					gap: 8px 0;
+				}
+
+			& .ship_gear {
+					position: relative;
+					gap: 3px;
+					flex: 0 0 calc(100% / 3 - 4px);
+
+					@container ship (width < 400px) {
+						flex: 0 0 20%;
+					}
+
+					@container ship (width < 320px) {
+						flex: 0 0 25%;
+					}
+
+				& .ship_gear_star {
+						width: 12px;
+						position: absolute;
+						bottom: -3px;
+						left: -3px;
+						font-size: 8px;
+						height: 12px;
+						overflow: hidden;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 12px;
+						color: #ff0;
+						background: #45a9a5;
+						pointer-events: none;
+						display: none;
+
+						@container ship (width < 400px) {
+							left: 2px;
+						}
+					}
+
+				& .ship_gear_ace {
+						width: 35px;
+						height: 20px;
+						overflow: hidden;
+						pointer-events: none;
+						display: none;
+						transform: scale(0.5);
+						margin: -1px -16px 0 -15px;
+
+					& img {
+							width: 100%;
+							height: 100%;
+						}
+					}
+
+				& .ship_gear_icon {
+						width: max(18px, 4.5cqw);
+						height: max(18px, 4.5cqw);
+						max-width: 22px;
+						max-height: 22px;
+						line-height: 18px;
+						border-radius: 51%;
+
+						&.goddess {
+							box-shadow: 0 0 4px #ff0,
+							0 0 4px #ff0,
+							0 0 4px #ff0 !important;
+						}
+
+					& img {
+							width: calc(100% - 2px);
+							height: calc(100% - 2px);
+							margin: 1px;
+							vertical-align: top;
+						}
+					}
+
+					&.equipped {
+					& .ship_gear_icon {
+							background: #fff;
+
+							&.item_being_used {
+								background: #fe3;
+							}
+						}
+					}
+
+					&.empty .ship_gear_icon {
+						background: rgb(150 150 150 / 40%);
+					}
+
+				& .ship_gear_slot {
+						line-height: 20px;
+						font-size: 12px;
+					}
+
+					&.equipped .ship_gear_slot {
+						color: #ddd;
+					}
+
+					&.empty .ship_gear_slot {
+						color: #999;
+					}
+				}
+			}
+
+			/* ------- Fuel and ammo ------- */
+			& .ship_supplies {
+				width: 100%;
+				height: 10px;
+				display: flex;
+				align-content: center;
+				gap: 2%;
+
+				& .ship_supply {
+					flex: 0 0 49%;
+					position: relative;
+					background: rgb(148 58 58 / 100%);
+					border: 1px solid rgb(255 255 255 / 70%);
+
+					& .ship_supply_text {
+						width: calc(100% - 2px);
+						line-height: 10px;
+						font-size: 8px;
+						color: rgb(0 0 0 / 100%);
+						text-shadow:
+							1px 1px rgb(255 255 255 / 50%),
+							-1px -1px rgb(255 255 255 / 50%),
+							-1px 1px rgb(255 255 255 / 50%),
+							1px -1px rgb(255 255 255 / 50%),
+							0 1px rgb(255 255 255 / 50%),
+							0 -1px rgb(255 255 255 / 50%),
+							1px 0 rgb(255 255 255 / 50%),
+							-1px 0 rgb(255 255 255 / 50%);
+						top: 0;
+						left: 0;
+						position: absolute;
+						text-align: center;
+					}
+
+					& .ship_supply_bar {
+						height: 8px;
+					}
+
+					&.ship_fuel,
+					&.ship_ammo {
+						container-type: inline-size;
+					}
+
+					&.ship_fuel .ship_supply_bar {
+						background: linear-gradient(
+							to right,
+							rgb(0 0 0 / 100%) 0,
+							rgb(0 0 0 / 100%) 25cqw,
+							rgb(239 191 4 / 70%) 50cqw,
+							rgb(0 0 0 / 100%) 75cqw,
+							rgb(0 0 0 / 100%) 100cqw
+						)
+					}
+
+					&.ship_ammo .ship_supply_bar {
+						background: linear-gradient(
+							to right,
+							rgb(162 162 162 / 100%) 0,
+							rgb(226 226 226 / 100%) 50cqw,
+							rgb(162 162 162 / 100%) 100cqw
+						);
+					}
+				}
+			}
+
+			/* ------- Experience bar ------- */
+		& .ship_exp_box {
+				position: relative;
+				width: 100%;
+				height: 2px;
+				background: #555;
+				margin-left: auto;
+
+			& .ship_exp_bar {
+					height: 2px;
+					background: #78A9DA;
+				}
+			}
+
+			/* ------- Misc ship markers ------- */
+			&.sSalt {
+				filter: blur(1.5px);
+			}
+
+			&.sWife .ship_name {
+				color: #fbb;
+			}
+
+		& .ship_no_lock {
+				visibility: hidden;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				text-align: center;
+				background-color: pink;
+				color: red;
+			}
+
+			&.sLock .ship_no_lock {
+				animation: lock-warning 0.5s steps(5,start) infinite;
+				visibility: visible;
+			}
+		}
+
+		&.shiplist_combined {
+			flex-direction: row;
+			gap: 10px;
+
+		& .lship {
+				grid-template-columns: min(60px, max(40px, 7.5cqw)) calc(100% - 5px - min(60px, max(40px, 7.5cqw)));
+
+			& .ship_gears,
+			& .ship_exp_box,
+			& .ship_exp_label,
+			& .ship_exp_next {
+					display: none;
+				}
+
+			& .lship-image {
+					margin-bottom: 11px;
+				}
+
+			& .ship_col1 {
+					flex: 0 0 calc(100% - 27px);
+
+				& .ship_hp_text {
+						line-height: 10px;
+						position: absolute;
+						left: 3px;
+						bottom: 2px;
+						width: max(40px, 15cqw);
+						max-width: 60px;
+						text-align: center;
+					}
+				}
+
+			& .ship_col2 {
+					flex: 0 0 20px;
+
+				& .ship_morale {
+						width: 20px;
+						height: 20px;
+						border-radius: 16px;
+						line-height: 21px;
+						font-size: 10px;
+					}
+				}
+			}
+		}
+
+	& .shiplist_combined_fleet {
+			display: flex;
+			flex-flow: column nowrap;
+			flex: 0 0 calc(50% - 5px);
+			gap: 3px;
+		}
+	}
+}
+
+/* ------- STATUS ------- */
+.module.status {
+	display: flex;
+	flex-flow: row wrap;
+	align-content: flex-start;
+	gap: 5px 0;
+	grid-area: status;
+
+& .status_box {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		flex: 0 0 50%;
+		line-height: 20px;
+
+	& .status_icon {
+			width: 20px;
+			height: 20px;
+
+			&.enclose {
+				background: #fff;
+				border-radius: 10px;
+			}
+
+		& img {
+				width: 20px;
+				height: 20px;
+				vertical-align: top;
+			}
+		}
+
+	& .status_text {
+			color: #fff;
+			text-shadow: 0 0 5px #000;
+			font-size: 13px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			user-select: none;
+
+			&.bad {
+				color: #faa;
+			}
+
+			&.good {
+				color: #afa;
+			}
+
+			&.slotsWarn {
+				color: #ffa;
+			}
+		}
+
+		&.status_support {
+			display: none;
+
+		& img {
+				width: 14px;
+				height: 14px;
+				margin: 3px;
+			}
+		}
+	}
+}
+
+/* AIR BASES
+------------------------------ */
+.module.fleet .shiplist.airbase_list {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+
+& .airbase {
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 3px;
+
+	& .airbase_infos {
+			position: relative;
+			display: flex;
+			flex-flow: row wrap;
+			align-items: center;
+			gap: 0 10px;
+			background: rgb(0 0 0 / 40%);
+			border-radius: 6px;
+			padding: 1px 55px 1px 10px;
+
+		& .airbase_info {
+				&.base_map {
+					font-size: 11px;
+					font-weight: bold;
+					color: #fc0;
+					text-shadow: 1px 1px 3px #333;
+					text-align: right;
+					line-height: 20px;
+				}
+
+				&.base_name {
+					color: #ccc;
+					text-shadow: 1px 1px 3px #333;
+					font-size: 11px;
+					line-height: 20px;
+				}
+
+				&.base_stats {
+					display: inline-flex;
+					align-items: center;
+					gap: 10px;
+
+				& .base_stat {
+						display: inline-flex;
+						align-items: center;
+						gap: 3px;
+
+					& .base_stat_icon {
+							width: 18px;
+							height: 18px;
+							line-height: 16px;
+							border-radius: 9px;
+							background: #131313;
+
+						& img {
+								width: calc(100% - 2px);
+								height: calc(100% - 2px);
+								filter: invert(100%);
+								vertical-align: top;
+							}
+						}
+
+					& .base_stat_value {
+							line-height: 20px;
+							color: #ccc;
+							font-size: 11px;
+						}
+					}
+				}
+
+				&.base_action {
+					line-height: 20px;
+					color: #fff;
+					text-align: right;
+					font-size: 11px;
+					position: absolute;
+					top: 0;
+					right: 7px;
+				}
+			}
+		}
+
+	& .base_planes {
+			display: flex;
+			flex-flow: row wrap;
+			align-items: center;
+			gap: 5px;
+
+		& .airbase_plane {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				flex: 1 0 calc(50% - 2.5px);
+				min-width: 200px;
+				background: rgb(0 0 0 / 40%);
+				border-radius: 6px;
+				container-type: inline-size;
+				container-name: plane;
+
+				&.moving {
+					background: rgb(255 200 0 / 20%);
+				}
+
+			& .base_plane_img {
+					flex: 0 0 80px;
+
+					@container plane (width >= 300px) {
+						flex: 0 0 100px;
+					}
+
+				& img {
+						width: 100%;
+						height: 25px;
+						object-fit: cover;
+						mask-image: linear-gradient(to right, rgb(34 34 34 / 100%) 30%, rgb(34 34 34 / 0%) 100%);
+
+						@container plane (width >= 300px) {
+							height: 35px;
+						}
+					}
+				}
+
+			& .base_plane_icon {
+					position: relative;
+					flex: 0 0 23px;
+					line-height: 23px;
+
+					@container plane (width >= 300px) {
+						flex: 0 0 28px;
+					}
+
+				& img {
+						width: 100%;
+						height: 100%;
+					}
+
+				& .base_plane_star {
+						width: 12px;
+						height: 12px;
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						border-radius: 6px;
+						font-size: 10px;
+						line-height: 12px;
+						text-align: center;
+						overflow: hidden;
+						color: #ff0;
+						background: #45a9a5;
+						pointer-events: none;
+						display: none;
+					}
+				}
+
+			& .base_plane_chevs {
+					flex: 0 0 15px;
+					line-height: 25px;
+
+				& img {
+						width: 25px;
+						margin: 0 -5px;
+					}
+				}
+
+			& .base_plane_name {
+					display: none;
+					line-height: 24px;
+					font-size: 11px;
+					text-shadow: 2px 2px 4px #333,
+					2px 2px 4px #333;
+					color: #ccc;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+
+					@container plane (width >= 250px) {
+						display: initial;
+					}
+				}
+
+			& .base_plane_count {
+					line-height: 24px;
+					font-size: 11px;
+					text-shadow: 2px 2px 4px #333,
+					2px 2px 4px #333;
+					color: #ccc;
+					margin-left: auto;
+
+					&.unsupplied {
+						color: #f55;
+					}
+				}
+
+			& .base_plane_cond {
+					flex: 0 0 16px;
+					line-height: 16px;
+					margin-right: 4px;
+
+				& img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+		}
+	}
+}
+
+/* ANIMATIONS
+----------------------------------- */
+.pinkglowanim {
+	animation: glowa10 1s infinite alternate;
+}
+
+@keyframes glowa10 {
+	from {
+		filter:
+			drop-shadow(0 0 5px rgb(255 87 112 / 50%))
+			drop-shadow(0 0 7px rgb(228 66 141 / 40%))
+			drop-shadow(0 0 9px rgb(196 45 168 / 30%))
+			drop-shadow(0 0 7px rgb(228 66 141 / 40%))
+			drop-shadow(0 0 5px rgb(255 87 112 / 50%));
+	}
+
+	to {
+		filter: drop-shadow(0 0 5px #f5c1f5);
+	}
+}
+
+@keyframes lock-warning {
+	to {
+		visibility: hidden;
+	}
+}
+
+@keyframes gauge-finish-her {
+	0% {
+		background: #222;
+	}
+
+	100% {
+		background: #d22;
+	}
+}
+
+/* TOOLTIP
+----------------------------------- */
+
+.ui-tooltip {
+	max-width: 500px;
+	padding: 1px 4px 1px 5px;
+	border-color: #222;
+	border-style: solid;
+	border-width: 1px !important;
+	box-shadow: 0 0 5px 1px #888;
+	font-family: inherit;
+	font-size: 12px;
+	background: #fff;
+
+	& img {
+		object-fit: cover;
+	}
+
+.ui-tooltip-content {
+		& hr {
+			margin: 3px 0;
+		}
+
+		& p {
+			margin: 0;
+		}
+
+	& .monofont {
+			font-family: Consolas, 'Courier New', Courier, monospace;
+		}
+
+	& .power_capped {
+			color: #a08;
+		}
+
+	& .ship_face_tooltip {
+			width: 252px;
+			height: 314px;
+			padding: 0;
+			gap: 0;
+			display: flex;
+			flex-flow: row wrap;
+
+		& .ship_stats_row {
+				flex: 0 0 250px;
+				flex-flow: row nowrap;
+				display: flex;
+			}
+
+		& .ship_stats_col {
+				flex: 0 0 126px;
+				display: flex;
+				flex-flow: row wrap;
+				gap: 2px;
+			}
+
+		& .ship_full_name {
+				flex: 0 0 208px;
+				height: 17px;
+				line-height: 17px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+
+			& span.ship_masterId {
+					color: #c4a957;
+				}
+
+			& span.ship_yomi {
+					color: #ccc;
+				}
+			}
+
+		& .ship_rosterId {
+				flex: 0 0 40px;
+				height: 17px;
+				line-height: 17px;
+				font-size: 11px;
+				color: #a9a150;
+				text-align: right;
+			}
+
+		& .ship_stype {
+				flex: 0 0 35px;
+				height: 17px;
+				line-height: 17px;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+		& .ship_level {
+				flex: 0 0 42px;
+				height: 17px;
+				line-height: 17px;
+				overflow: hidden;
+				white-space: nowrap;
+
+			& span.l10n {
+					color: #3ec0bf;
+				}
+
+			& span.value.married {
+					color: #a97417;
+				}
+
+			& span.value.high {
+					color: #107e57;
+				}
+
+			& span.value.medium {
+					color: #36c2db;
+				}
+			}
+
+		& .ship_exp_next {
+				flex: 0 0 75px;
+				height: 17px;
+				line-height: 16px;
+				font-size: 11px;
+				overflow: hidden;
+				white-space: nowrap;
+
+			& span.l10n {
+					color: #7ca99f;
+				}
+			}
+
+		& .ship_morale {
+				flex: 0 0 32px;
+				height: 17px;
+				line-height: 16px;
+				font-size: 11px;
+				overflow: hidden;
+				white-space: nowrap;
+
+			& img {
+					width: 13px;
+					height: 13px;
+					vertical-align: text-bottom;
+					margin-right: 1px;
+				}
+			}
+
+		& .ship_hp {
+				flex: 0 0 48px;
+				height: 17px;
+				line-height: 17px;
+				text-align: right;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+		& .stat_icon {
+				flex: 0 0 52px;
+				height: 19px;
+				line-height: 17px;
+				overflow: hidden;
+				white-space: nowrap;
+				background-color: #ffe;
+				border: 1px solid #ddd;
+				border-right-color: #ffe;
+				border-bottom-color: #fcfcfc;
+
+			& img {
+					max-width: 19px;
+					height: 16px;
+					vertical-align: bottom;
+				}
+			}
+
+		& .stat_name {
+				color: #b49a47;
+				font-size: 11px;
+			}
+
+		& .stat_value {
+				display: inline-block;
+				flex: 0 0 71px;
+				height: 19px;
+				line-height: 17px;
+				font-size: 11px;
+				text-align: right;
+				overflow: hidden;
+				white-space: nowrap;
+				background-color: #ffffe3;
+				border: 1px solid #aaa;
+				border-right-color: #f0f0f0;
+				border-bottom-color: #f0f0f0;
+
+			& span {
+					display: inline;
+				}
+
+			& .equip {
+					font-size: 10px;
+					color: #888;
+					margin-right: 1px;
+				}
+
+			& .mod {
+					font-size: 10px;
+					color: #aaa;
+					margin-left: 1px;
+				}
+
+			& .level {
+					font-size: 10px;
+					color: #3ec0bf;
+					margin-left: 1px;
+				}
+
+			& .luck {
+					font-size: 10px;
+					color: #2b2;
+					margin-left: 1px;
+				}
+
+			& .sp {
+					font-size: 10px;
+					color: #00f;
+					margin-left: 1px;
+				}
+
+			& .oasw {
+					color: #0cd;
+				}
+
+				&.SpeedFaster,
+				&.SpeedFastest,
+				&.RangeChanged {
+					color: #7aabb8;
+				}
+			}
+
+		& .stat_wide {
+				flex: 0 0 249px;
+
+			& .slide {
+					animation: slide infinite 3s alternate 1s;
+				}
+
+				@keyframes slide {
+					0% { margin-left: 0; }
+					30% { margin-left: 0; }
+					100% { margin-left: var(--maxOverflow, -50px); }
+				}
+			}
+
+		& .aa_col {
+				flex: 0 0 49px;
+				height: 19px;
+				line-height: 17px;
+				font-size: 11px;
+				text-align: right;
+				overflow: hidden;
+				white-space: nowrap;
+				background-color: #ffffe3;
+				border: 1px solid #aaa;
+				border-right-color: #f0f0f0;
+				border-bottom-color: #f0f0f0;
+
+				&.bomberSlot img {
+					width: 15px;
+					height: 15px;
+					margin-top: -5px;
+					margin-left: -2px;
+				}
+
+				&.sd_both,
+				&.sd_prop,
+				&.sd_fixed,
+				&.sd_fail {
+					color: #f00;
+				}
+			}
+
+		& .text_center {
+				text-align: center;
+			}
+
+		& .text_left {
+				text-align: left;
+			}
+
+		& .text_right {
+				text-align: right;
+			}
+		}
+	}
+}
+
+/* Customized Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgb(0 0 0 / 30%);
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	box-shadow: inset 0 0 6px rgb(0 0 0 / 50%);
+	background: rgb(158 158 158 / 60%);
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgb(158 158 158 / 30%);
+}
