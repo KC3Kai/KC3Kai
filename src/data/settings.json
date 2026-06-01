@@ -1282,9 +1282,9 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "moonlight", "Moonlight" ],
 						[ "natsuiro", "Natsuiro" ],
 						[ "murasaki", "Murasaki" ],
+						[ "moonlight", "Moonlight" ],
 						[ "plain", "Plain" ]
 					]
 				}
