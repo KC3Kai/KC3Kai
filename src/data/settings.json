@@ -1618,6 +1618,7 @@
 	},
 	{
 		"section": "Murasaki",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Panel-Theme%3A-Murasaki",
 		"contents" : [
 			{
 				"id" : "pan_hp_bar_metrics_murasaki",
