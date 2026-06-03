@@ -79,7 +79,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			};
 			// Add optional properties
 			// Record states of unclear normal (or EO) maps
-			if(world < 10 && (mapnum > 4 || thisMap.kind === "multiple")){
+			if(world <= 20 && (mapnum > 4 || thisMap.kind === "multiple")){
 				sortie.mapinfo = { "api_cleared": thisMap.clear };
 				if(thisMap.kills !== false || thisMap.killsRequired){
 					sortie.mapinfo.api_defeat_count = thisMap.kills || 0;
@@ -88,6 +88,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				}
 				if(thisMap.gaugeNum > 1){
 					sortie.mapinfo.api_gauge_num = thisMap.gaugeNum;
+				}
+				if(thisMap.kind === "gauge-tp"){
+					sortie.mapinfo.api_defeat_count = (thisMap.maxhp - thisMap.curhp) || 0;
+					sortie.mapinfo.api_required_defeat_count = thisMap.maxhp;
+					sortie.mapinfo.api_gauge_type = 3;
 				}
 			}
 			// Record boss HP gauge states of event maps

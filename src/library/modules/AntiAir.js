@@ -646,12 +646,16 @@ AntiAir: anti-air related calculations
 	var isHayanamiKai2 = masterIdEq( 982 );
 	var isHamanamiKai2 = masterIdEq( 983 );
 	var isTamanamiKai2 = masterIdEq( 1033 );
+	var isSuzunamiKai2 = masterIdIn([1034, 745]);
 	var isFubukiKai2 = masterIdEq( 426 );
 	var isFubukiKai3 = masterIdEq( 1035 );
 	var isFubukiKai3Go = masterIdEq( 1040 );
 	var isShirayukiKai2 = masterIdEq( shirayukiK2Icon );
 	var isHatsuyukiKai2 = masterIdEq( 987 );
-	var isFujinamiKai2AndTokugataKai2 = predAnyOf(isFujinamiKai2, isHayanamiKai2, isHamanamiKai2, isTamanamiKai2, isFubukiKai2, isFubukiKai3, isFubukiKai3Go, isShirayukiKai2, isHatsuyukiKai2);
+	var isDesDiv32Kai2OrTokugataKai2 = predAnyOf(
+		isFujinamiKai2, isHayanamiKai2, isHamanamiKai2, isTamanamiKai2, isSuzunamiKai2,
+		isFubukiKai2, isFubukiKai3, isFubukiKai3Go, isShirayukiKai2, isHatsuyukiKai2
+	);
 	var isHiryuuKai3 = masterIdEq( hiryuuK3Icon );
 	var isNotHiryuuKai3 = predNot( isHiryuuKai3 );
 
@@ -1327,7 +1331,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		49, 6, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAnyOf(isFujinamiKai2AndTokugataKai2),
+		predAnyOf(isDesDiv32Kai2OrTokugataKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isBuiltinHighAngleMount, 2 ),
@@ -1339,7 +1343,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		50, 7, 1, 1.5, 60, 2244,
 		[shirayukiK2Icon, biHaMountIcon, biHaMountIcon, aaFdIcon, radarIcon],
-		predAnyOf(isFujinamiKai2AndTokugataKai2, isAkizukiClass),
+		predAnyOf(isDesDiv32Kai2OrTokugataKai2, isAkizukiClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKaiOrAAFDKai, 2 ),
@@ -1352,7 +1356,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		51, 5, 1, 1.4, 50, 2246,
 		[shirayukiK2Icon, biHaMountIcon, aaGunIcon, radarIcon],
-		predAnyOf(isFujinamiKai2AndTokugataKai2),
+		predAnyOf(isDesDiv32Kai2OrTokugataKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleMountKaiOrAAFDKai ),
@@ -1365,7 +1369,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		52, 5, 1, 1.4, 50, 2247,
 		[shirayukiK2Icon, haMountIcon, haMountIcon, aaFdIcon],
-		predAnyOf(isFujinamiKai2AndTokugataKai2, isAkizukiClass),
+		predAnyOf(isDesDiv32Kai2OrTokugataKai2, isAkizukiClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleMountKai, 2 ),

@@ -121,6 +121,13 @@
                     return 78;
                 case 718: // Tamanami Kai
                     return 81;
+                case 710: // Suzunami Kai
+                    return 82;
+                case 1034: // Suzunami K2
+                case 578: // Asashimo K2
+                    return 36;
+                case 543: // Naganami K2
+                    return 48;
                 case 202: // Shirayuki
                 case 208: // Shikinami
                 case 225: // Kagerou
@@ -294,6 +301,11 @@
                     return 20;
                 case 651: // Tan Yang
                     return 30;
+                case 578: // Asashimo K2
+                case 1034: // Suzunami K2
+                    return 48;
+                case 543: // Naganami K2
+                    return 60;
                 case 503: // Suzuya K2
                 case 504: // Kumano K2
                 case 508: // Suzuya Kou K2
@@ -420,6 +432,11 @@
             switch(ship_id_from) {
                 case 1035: // to Fubuki K3Go (T6)
                     return 5;
+                case 543:  // to Naganami K2Ho
+                    return 3;
+                case 578:  // to Asashimo K2Ho
+                case 1034: // to Suzunami K2Ho
+                    return 2;
                 default: return 0;
             }
         },

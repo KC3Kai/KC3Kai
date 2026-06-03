@@ -250,7 +250,8 @@ KC3改 Ship Object
 	// 2018-08-17: 165->175
 	// 2023-05-26: 175->180
 	// 2025-05-12: 180->185
-	KC3Ship.getMaxLevel = function(){ return 185; };
+	// 2026-05-29: 185->188
+	KC3Ship.getMaxLevel = function(){ return 188; };
 	// hard-coded at `Core.swf/vo.UserShipData.VHP` / `main.js#ShipModel.prototype.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
 	// hard-coded at `Core.swf/vo.UserShipData.VAS` / `main.js#ShipModel.prototype.VAS`

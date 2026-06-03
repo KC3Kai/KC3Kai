@@ -608,6 +608,9 @@ Previously known as "Reactor"
 			if(remodel.armmat > 0){
 				PlayerManager.consumables.newArmamentMaterial -= remodel.armmat;
 			}
+			if(remodel.arsenalmat > 0){
+				PlayerManager.consumables.arsenalMaterial -= remodel.arsenalmat;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
@@ -2536,11 +2539,22 @@ Previously known as "Reactor"
 				}
 			};
 			
-			// Exclude gauge based maps from being kept every time
+			// Prevent gauge based normal maps from being kept every times
 			const mapKeys = Object.keys(maps);
 			for(const key of mapKeys) {
-				if(KC3Meta.gauge(key.substr(1)))
+				const keyno = key.substr(1);
+				if(KC3Meta.gauge(keyno))
 					maps[key].clear = maps[key].kills = false;
+				// EO map-2 relocked after map-1 on monthly reset, specially 5-6 reset to 1st, the TP gauge
+				if(["m56"].includes(key) && raws.length
+					&& !raws.some(m => m.api_id == keyno)) {
+					maps[key].gaugeNum = 1;
+					maps[key].kind = "gauge-tp";
+					maps[key].maxhp = KC3Meta.gauge(keyno, 1);
+					maps[key].curhp = maps[key].maxhp;
+					delete maps[key].kills;
+					delete maps[key].killsRequired;
+				}
 			}
 			
 			// Combine current storage and current available maps data
@@ -2576,6 +2590,17 @@ Previously known as "Reactor"
 					if(thisMap.api_gauge_num !== undefined) {
 						localMap.gaugeNum = thisMap.api_gauge_num;
 					}
+				}
+				// TP gauge implemented in normal map 5-6 since 2026-05-29,
+				// using `api_required_defeat_count` as max tp, and countup `api_defeat_count` as now
+				if(thisMap.api_gauge_type === 3 && thisMap.api_eventmap === undefined && thisMap.api_required_defeat_count > 0) {
+					localMap.kind = "gauge-tp";
+					localMap.gaugeNum = thisMap.api_gauge_num;
+					localMap.maxhp = thisMap.api_required_defeat_count;
+					localMap.curhp = localMap.maxhp - (thisMap.api_defeat_count || 0);
+					if(thisMap.api_defeat_count === undefined) localMap.curhp = 0;
+					delete localMap.kills;
+					delete localMap.killsRequired;
 				}
 				// Max Land-bases allowed to be sortied
 				if(thisMap.api_air_base_decks !== undefined) {
