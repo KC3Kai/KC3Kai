@@ -55,6 +55,7 @@ Does not include Ships and Gears which are managed by other Managers
 				new KC3LandBase()
 			];
 			this.akashiRepair = new KC3AkashiRepair();
+			this.nosakiSparkle = new KC3NosakiSparkle();
 			return this;
 		},
 
@@ -439,6 +440,7 @@ Does not include Ships and Gears which are managed by other Managers
 			}
 
 			this.akashiRepair.onPort(this.fleets);
+			this.nosakiSparkle.onPort(this.fleets);
 
 			var
 				// get current player regen cap
@@ -567,7 +569,8 @@ Does not include Ships and Gears which are managed by other Managers
 				"102": "airUnitRation",
 				"103": "arsenalKey", // virtual payitem
 				"104": "arsenalMaterial",
-				"895": "rankPoints440", // virtual reward
+				"892": "rankPoints500", // virtual reward
+				"895": "rankPoints440",
 				"896": "rankPoints50",
 				"897": "rankPoints11",
 				"898": "rankPoints800",

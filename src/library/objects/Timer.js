@@ -111,46 +111,34 @@ Has functions for TimerManager to use
 	};
 	
 	KC3Timer.prototype.completionAlert = function(){
-		if(this.alerted){ return false; }
-		this.alerted = true;
-		
-		// Sound Alerts
-		if(KC3TimerManager.notifSound){
-			KC3TimerManager.notifSound.pause();
+		if (this.alerted) {
+			return false;
 		}
+
+		this.alerted = true;
+
 		const baseKey = "alert_type", customUrlKey = "alert_custom",
 			soundType = [
 				"alert_type_exped", "alert_type_repair", "alert_type_cship"
 			][this.type] || baseKey;
 		const configKeys = soundType.split(baseKey);
-		switch(ConfigManager[baseKey + configKeys[1]]){
-			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager[customUrlKey + configKeys[1]]); break;
-			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
-			case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
-			case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
-			default: KC3TimerManager.notifSound = false; break;
-		}
-		if(KC3TimerManager.notifSound){
-			KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
-			KC3TimerManager.notifSound.play();
-		}
-		
+		KC3Notification.playSound(ConfigManager[baseKey + configKeys[1]], ConfigManager[customUrlKey + configKeys[1]]);
+
 		// Desktop notification
 		var notifData = { type: "basic" };
 		var shipName;
-		
+
 		// Notification types show varying messages
-		switch(this.type){
+		switch (this.type) {
 			case 0:
-				var thisFleet = PlayerManager.fleets[this.num+1];
+				var thisFleet = PlayerManager.fleets[this.num + 1];
 				notifData.title = KC3Meta.term("DesktopNotifyExpedCompleteTitle");
 				notifData.message = KC3Meta.term("DesktopNotifyExpedCompleteMessage")
 					.format(this.num + 2, KC3Master.missionDispNo(thisFleet.mission[1]));
 				notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
 				break;
 			case 1:
-				var shipRef = KC3ShipManager.get(PlayerManager.repairShips[this.num+1]);
+				var shipRef = KC3ShipManager.get(PlayerManager.repairShips[this.num + 1]);
 				shipName = shipRef.name();
 				notifData.title = KC3Meta.term("DesktopNotifyRepairCompleteTitle");
 				notifData.message = KC3Meta.term("DesktopNotifyRepairCompleteMessage").format(shipName);
@@ -160,31 +148,19 @@ Has functions for TimerManager to use
 			case 2:
 				shipName = KC3Meta.shipName(this.faceId);
 				notifData.title = KC3Meta.term("DesktopNotifyConstrCompleteTitle");
-				if(ConfigManager.info_face){
+				if (ConfigManager.info_face) {
 					notifData.message = KC3Meta.term("DesktopNotifyConstrCompleteMessageFaced").format(shipName);
-				}else{
+				} else {
 					notifData.message = KC3Meta.term("DesktopNotifyConstrCompleteMessageUnknown");
 				}
 				notifData.iconUrl = "../../assets/img/quests/build.jpg";
 				break;
-			default:break;
+			default:
+				break;
 		}
-		
-		// Tell background page to show the notification, cant do it here
-		if(ConfigManager.alert_desktop){
-			(new RMsg("service", "notify_desktop", {
-				notifId: [this.type, this.num].join('_'),
-				data: notifData,
-				tabId: chrome.devtools.inspectedWindow.tabId
-			})).execute();
-		}
-		// Tell background page to focus game tab
-		if(ConfigManager.alert_focustab){
-			(new RMsg("service", "focusGameTab", {
-				tabId: chrome.devtools.inspectedWindow.tabId
-			})).execute();
-		}
-	
+
+		KC3Notification.notifyDesktop([this.type, this.num].join('_'), notifData);
+		KC3Notification.focusTab();
 	};
 
 })();

@@ -1285,6 +1285,7 @@
 			// Suisei Model 22 (634 Air Group)
 			"291": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ise Class Kai Ni
 					"2": {
@@ -1292,6 +1293,24 @@
 						multiple: { "houg": 6, "houk": 1 },
 					},
 				},
+				byShip: [
+					{
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "tyku": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
 			"292": {
@@ -5686,14 +5705,25 @@
 			// Prototype 51cm Triple Gun Mount
 			"465": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Yamato Class
-					"37": {
-						synergy: {
-							flags: [ "rangefinderAirRadar" ],
-							single: { "houg": 2, "houm": 2 },
+					"37": [
+						{
+							synergy: {
+								flags: [ "rangefinderAirRadar" ],
+								single: { "houg": 2, "houm": 2 },
+								byStars: {
+									gearId: 465,
+									"4": { "houm": 1 },
+								},
+							},
 						},
-					},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
@@ -5713,6 +5743,11 @@
 							flags: [ "rangefinderKaiAirRadar" ],
 							single: { "houk": 2, "houm": 1 },
 						},
+					},
+					{
+						ids: [916],
+						minStars: 5,
+						multiple: { "houm": 1 },
 					},
 				],
 			},
@@ -8952,8 +8987,8 @@
 						multiple: { "houg": 1, "houm": 1, "houk": 1 },
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni
-						ids: [981, 983, 982, 1033],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				],
@@ -9013,27 +9048,27 @@
 						],
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni
-						ids: [981, 983, 982, 1033],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 7,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 9,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -9124,27 +9159,27 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni
-						ids: [981, 983, 982, 1033],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 4,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 6,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 8,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -9230,32 +9265,32 @@
 						multiple: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni
-						ids: [981, 983, 982, 1033],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 2,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 4,
 						multiple: { "houg": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 6,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 8,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [981, 983, 982, 1033],
+						ids: [981, 983, 982, 1033, 1034, 745],
 						minStars: 10,
 						multiple: { "houk": 1 },
 					},
@@ -9682,6 +9717,11 @@
 						// Fujinami K2, Tamanami K2
 						ids: [981, 1033],
 						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+					{
+						// Suzunami K2+
+						ids: [1034, 745],
+						multiple: { "tais": 1 },
 					},
 					{
 						// Tan Yang
@@ -12735,8 +12775,8 @@
 						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
 					},
 					{
-						// Asashimo K2, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D
-						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960],
+						// Asashimo K2+, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D
+						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960, 744],
 						single: { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
 					},
 					{
@@ -12816,13 +12856,13 @@
 						single: { "houg": 2, "houk": 3, "houm": 1, "saku": 2 },
 					},
 					{
-						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2, Kiyoshimo K2, Harusame K2, Fubuki K3+
-						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955, 975, 1035, 1040],
+						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2+, Kiyoshimo K2, Harusame K2, Fubuki K3+
+						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955, 975, 1035, 1040, 744],
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
 					},
 					{
-						// Fujinami K2, Hamanami K2, Hayanami K2, Tamanami K2
-						ids: [981, 983, 982, 1033],
+						// Fujinami K2, Hamanami K2, Hayanami K2, Tamanami K2, Suzunami K2+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						single: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
@@ -13088,6 +13128,160 @@
 					},
 				],
 			},
+			// 25mm Triple Autocannon Mount (Concentrated Deployment)
+			"131": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 2, "houk": 2 },
+						},
+					},
+				},
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni
+						ids: [662, 663],
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni B
+						ids: [668],
+						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						minStars: 10,
+						multiple: { "tyku": 2 },
+					},
+				],
+			},
+			// 25mm Twin Autocannon Mount (Skilled Machine Gunner Squadron)
+			"575": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Japan": [
+						// All IJN DD
+						{
+							stypes: [2],
+							multiple: { "tyku": 1, "houk": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 7,
+							multiple: { "tyku": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 9,
+							multiple: { "houm": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+						// All IJN CL
+						{
+							stypes: [3],
+							multiple: { "houk": 1 },
+						},
+						{
+							stypes: [3],
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							stypes: [3],
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							stypes: [3],
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Yuugumo Class
+					"38": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Katori Class, from get25mmMachinegunEffect
+					"56": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 2, "houk": 2 },
+						},
+					},
+				},
+				byShip: [
+					// Any DE
+					{
+						stypes: [1],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 9,
+						multiple: { "houm": 1 },
+					},
+					{
+						stypes: [1],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Suzunami K2+, Tamanami K2, Fujinami K2, Hayanami K2, Hamanami K2
+						ids: [1034, 745, 1033, 981, 982, 983],
+						multiple: { "houg": 1, "houm": 1 },
+					},
+					// from get25mmMachinegunEffect
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni
+						ids: [662, 663],
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni B
+						ids: [668],
+						multiple: { "tyku": 3, "houk": 2 },
+					},
+					{
+						// Inagi Kai Ni
+						ids: [979],
+						multiple: { "tyku": 2, "houk": 3 },
+					},
+				],
+			},
 			// 2cm Flakvierling 38
 			"84": {
 				count: 0,
@@ -13163,44 +13357,6 @@
 					},
 				],
 			},
-			// 25mm Triple Autocannon Mount (Concentrated Deployment)
-			"131": {
-				count: 0,
-				starsDist: [],
-				byClass: {
-					// Katori Class
-					"56": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
-						synergy: {
-							flags: [ "airRadar" ],
-							distinct: { "tyku": 2, "houk": 2 },
-						},
-					},
-				},
-				byShip: [
-					{
-						// Noshiro Kai Ni, Yahagi Kai Ni
-						ids: [662, 663],
-						multiple: { "tyku": 2, "houk": 1 },
-					},
-					{
-						// Yahagi Kai Ni B
-						ids: [668],
-						multiple: { "tyku": 3, "houk": 2 },
-					},
-					{
-						// Inagi Kai Ni
-						ids: [979],
-						multiple: { "tyku": 2, "houk": 3 },
-					},
-					{
-						// Inagi Kai Ni
-						ids: [979],
-						minStars: 10,
-						multiple: { "tyku": 2 },
-					},
-				],
-			},
 			// 25mm Anti-aircraft Autocannon Mount & Machine Guns
 			"505": {
 				count: 0,
@@ -13251,13 +13407,13 @@
 						single: { "tyku": 1, "houk": 2 },
 					},
 					{
-						// Kasumi K2B/K2, Hibiki Kai+, Asashimo K2, Isokaze B Kai, Hamakaze B Kai, Ushio K2, Hatsushimo K2, Kiyoshimo K2+
-						ids: [470, 464, 235, 147, 578, 557, 558, 407, 419, 955, 960],
+						// Kasumi K2B/K2, Hibiki Kai+, Asashimo K2+, Isokaze B Kai, Hamakaze B Kai, Ushio K2, Hatsushimo K2, Kiyoshimo K2+
+						ids: [470, 464, 235, 147, 578, 744, 557, 558, 407, 419, 955, 960],
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// Fujinami K2, Hamanami K2, Hyanami K2, Tamanami K2
-						ids: [981, 983, 982, 1033],
+						// Fujinami K2, Hamanami K2, Hyanami K2, Tamanami K2, Suzunami K2+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						single: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -13320,8 +13476,8 @@
 						},
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni
-						ids: [981, 983, 982, 1033],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+
+						ids: [981, 983, 982, 1033, 1034, 745],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -13780,26 +13936,26 @@
 						single: { "houk": 1, "tais": 1 },
 					},
 					{
-						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
-						ids: [145, 961, 363, 476, 578, 588, 667],
+						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
+						ids: [145, 961, 363, 476, 578, 744, 588, 667],
 						minStars: 4,
 						single: { "tais": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
-						ids: [145, 363, 476, 578, 588, 667],
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
+						ids: [145, 363, 476, 578, 744, 588, 667],
 						minStars: 6,
 						single: { "houk": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
-						ids: [145, 363, 476, 578, 588, 667],
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
+						ids: [145, 363, 476, 578, 744, 588, 667],
 						minStars: 8,
 						single: { "tais": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
-						ids: [145, 363, 476, 578, 588, 667],
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
+						ids: [145, 363, 476, 578, 744, 588, 667],
 						minStars: 10,
 						single: { "houk": 1 },
 					},
@@ -14880,8 +15036,8 @@
 						single: { "houg": 2 },
 					},
 					{
-						// Naganami Kai Ni
-						ids: [543],
+						// Naganami Kai Ni/Kai Ni Ho
+						ids: [543, 743],
 						single: { "houg": 1, "houk": 1 },
 					},
 				],
@@ -15091,8 +15247,8 @@
 						},
 					},
 					{
-						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2, Hamanami K2, Hayanami K2, Tamanami K2
-						ids: [955, 960, 956, 981, 983, 982, 1033],
+						// Kiyoshimo K2/K2D, Hayashimo K2, Fujinami K2, Hamanami K2, Hayanami K2, Tamanami K2, Suzunami K2+
+						ids: [955, 960, 956, 981, 983, 982, 1033, 1034, 745],
 						synergy: [
 							{
 								flags: [ "airRadar" ],

@@ -611,9 +611,8 @@ Uses KC3Quest objects to play around with
 			// Weekly Arsenal Fw5
 			this.resetCounterLoop([1167], false);
 			
-			// Progress counter not changed at all on daily reset:
-			// Monthly PvP Cm2
-			//this.resetCounterLoop([318], false);
+			// Progress counter not touched at all on daily reset, no matter completed or not:
+			// Monthly PvP Cm2 [318]
 			
 			this.save();
 		},
@@ -987,11 +986,11 @@ Uses KC3Quest objects to play around with
 				"875": // Bq6 Sortie DesDiv 31
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.hasShip([543]) // Naganami K2
+						return fleet.hasShip([543, 743]) // Naganami K2/K2Ho
 							&& fleet.hasShip([
 								345, 649, // Takanami Kai/K2
 								359, 569, // Okinami Kai/K2
-								344, 578, // Asashimo Kai/K2
+								344, 578, 744, // Asashimo Kai/K2/K2Ho
 							]);
 					},
 				"888": // Bq7 Sortie New Mikawa Fleet

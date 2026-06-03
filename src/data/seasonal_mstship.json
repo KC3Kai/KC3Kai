@@ -3486,11 +3486,11 @@
 	},
 	"5435": {
 		"api_id": 5435,
-		"api_name": "お出掛け明石改",
+		"api_name": "お出掛け明石",
 		"api_yomi": "あかし",
 		"api_stype": 19,
 		"api_soku": 5,
-		"api_slot_num": 4
+		"api_slot_num": 3
 	},
 	"5436": {
 		"api_id": 5436,
@@ -4198,7 +4198,7 @@
 	},
 	"5524": {
 		"api_id": 5524,
-		"api_name": "桜迅鯨",
+		"api_name": "お花見迅鯨",
 		"api_yomi": "じんげい",
 		"api_stype": 20,
 		"api_soku": 5,
@@ -4206,7 +4206,7 @@
 	},
 	"5525": {
 		"api_id": 5525,
-		"api_name": "桜迅鯨改",
+		"api_name": "お花見迅鯨改",
 		"api_yomi": "じんげい",
 		"api_stype": 20,
 		"api_soku": 5,
@@ -9870,27 +9870,27 @@
 	},
 	"6233": {
 		"api_id": 6233,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "お出掛け三隈改",
+		"api_yomi": "みくま",
+		"api_stype": 6,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6234": {
 		"api_id": 6234,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "お出掛け三隈改二",
+		"api_yomi": "みくま",
+		"api_stype": 6,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6235": {
 		"api_id": 6235,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "お出掛け三隈改二特",
+		"api_yomi": "みくま",
+		"api_stype": 16,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6236": {
 		"api_id": 6236,
@@ -9918,11 +9918,11 @@
 	},
 	"6239": {
 		"api_id": 6239,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お出掛け天津風改二",
+		"api_yomi": "あまつかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6240": {
 		"api_id": 6240,
@@ -9934,11 +9934,11 @@
 	},
 	"6241": {
 		"api_id": 6241,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "買い物海風改二",
+		"api_yomi": "うみかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6242": {
 		"api_id": 6242,
@@ -9958,154 +9958,234 @@
 	},
 	"6244": {
 		"api_id": 6244,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "お出掛け明石改",
+		"api_yomi": "あかし",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"6245": {
 		"api_id": 6245,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "お出掛けSouth Dakota改",
+		"api_yomi": "サウスダコタ",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6246": {
 		"api_id": 6246,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "お出掛けJean Bart",
+		"api_yomi": "ジャン・バール",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6247": {
 		"api_id": 6247,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "記念日Gambier Bay Mk.II",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"6248": {
 		"api_id": 6248,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "記念日天霧改二",
+		"api_yomi": "あまぎり",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6249": {
 		"api_id": 6249,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "記念日天霧改二丁",
+		"api_yomi": "あまぎり",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6250": {
 		"api_id": 6250,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "記念日Helena改",
+		"api_yomi": "ヘレナ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6251": {
 		"api_id": 6251,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "記念日屋代改",
+		"api_yomi": "やしろ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"6252": {
 		"api_id": 6252,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "お祝い迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"6253": {
 		"api_id": 6253,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "お祝い熊野丸改",
+		"api_yomi": "くまのまる",
+		"api_stype": 17,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"6254": {
 		"api_id": 6254,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "カクテルドレス翔鶴改二",
+		"api_yomi": "しょうかく",
+		"api_stype": 11,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6255": {
 		"api_id": 6255,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "カクテルドレス翔鶴改二甲",
+		"api_yomi": "しょうかく",
+		"api_stype": 18,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6256": {
 		"api_id": 6256,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "カクテルドレスTuscaloosa改",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6257": {
 		"api_id": 6257,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "カクテルドレスHouston改",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"6258": {
 		"api_id": 6258,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "カクテルドレス大和改",
+		"api_yomi": "やまと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"6259": {
 		"api_id": 6259,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "カクテルドレス大和改二",
+		"api_yomi": "やまと",
+		"api_stype": 8,
+		"api_soku": 5,
+		"api_slot_num": 5
 	},
 	"6260": {
 		"api_id": 6260,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "カクテルドレス大和改二重",
+		"api_yomi": "やまと",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 5
 	},
 	"6261": {
 		"api_id": 6261,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "フォーマルドレスGotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6262": {
+		"api_id": 6262,
+		"api_name": "フォーマルドレスMogador改",
+		"api_yomi": "モガドール",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6263": {
+		"api_id": 6263,
+		"api_name": "フォーマルドレス大泊改",
+		"api_yomi": "おおとまり",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6264": {
+		"api_id": 6264,
+		"api_name": "フォーマルドレス杉",
+		"api_yomi": "すぎ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"6262": {
-		"api_id": 6262,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+	"6265": {
+		"api_id": 6265,
+		"api_name": "フォーマルドレス杉改",
+		"api_yomi": "すぎ",
 		"api_stype": 2,
 		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6266": {
+		"api_id": 6266,
+		"api_name": "フォーマルドレスThonburi",
+		"api_yomi": "トンブリ",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"6267": {
+		"api_id": 6267,
+		"api_name": "フォーマルドレスThonburi改",
+		"api_yomi": "トンブリ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6268": {
+		"api_id": 6268,
+		"api_name": "フォーマルドレス瑞穂",
+		"api_yomi": "みずほ",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6269": {
+		"api_id": 6269,
+		"api_name": "フォーマルドレス南海",
+		"api_yomi": "のさき",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"6270": {
+		"api_id": 6270,
+		"api_name": "フォーマルドレス野埼",
+		"api_yomi": "のさき",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6271": {
+		"api_id": 6271,
+		"api_name": "フォーマルドレス野埼改",
+		"api_yomi": "のさき",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6272": {
+		"api_id": 6272,
+		"api_name": "桜迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
 	}
 }

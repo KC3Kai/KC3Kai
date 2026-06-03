@@ -40,6 +40,9 @@
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
 
+	// Nosaki Sparkle notification flag
+	var sparkleNotif = 0;
+
 	// UI Updating Timer
 	var uiTimerHandler = 0;
 	var uiTimerLastUpdated = 0;
@@ -281,43 +284,7 @@
 				moraleClockEnd = 0;
 				moraleClockRemain = 0;
 				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelRecoveredMorale") );
-
-				// Morale desktop notification if not on sortie/PvP,
-				if(ConfigManager.alert_morale_notif &&
-					!(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
-				){
-					// Play sound if alert sound setting is not none
-					if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
-					switch(ConfigManager.alert_type){
-						case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-						case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break;
-						case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
-						case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
-						case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
-						default: KC3TimerManager.notifSound = false; break;
-					}
-					if(KC3TimerManager.notifSound){
-						KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
-						KC3TimerManager.notifSound.play();
-					}
-					// Send desktop notification
-					(new RMsg("service", "notify_desktop", {
-						notifId: "morale",
-						data: {
-							type: "basic",
-							title: KC3Meta.term("DesktopNotifyMoraleTitle"),
-							message: KC3Meta.term("DesktopNotifyMoraleMessage"),
-							iconUrl: "../../assets/img/ui/morale.png"
-						},
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-					// Focus game tab if settings enabled
-					if(ConfigManager.alert_focustab){
-						(new RMsg("service", "focusGameTab", {
-							tabId: chrome.devtools.inspectedWindow.tabId
-						})).execute();
-					}
-				}
+				KC3Notification.notifyMorale();
 			}
 		}
 	}
@@ -360,6 +327,8 @@
 				}, {});
 			UpdateRepairTimerDisplays(data);
 		}
+		// Nosaki Sparkle timer
+		UpdateSparkleTimerDisplay();
 		
 		// Akashi current timer for Ship Box list
 		const baseElement = scopedFleetIds.length ?
@@ -684,6 +653,8 @@
 			ConfigManager.scrollTimerType();
 			UpdateRepairTimerDisplays();
 		}).addClass("hover");
+		// Initial Hidden Nosaki Timer
+		$(".module.status .status_nosaki").hide();
 
 		// Screenshot buttons
 		$(".module.controls .btn_ss1").on("click", function(){
@@ -1455,8 +1426,12 @@
 			$(".count_screws")
 				.text( KC3Meta.formatNumber(screws) )
 				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable))
-				.attr("title", KC3Meta.term("ConsumablesScrewExchanges").format( [hardMedals, hardMedals * 10, medals, medals * 4, presents, presents,
-					exchgscrewsTotal, exchgscrewsTotal + screws].map((n) => KC3Meta.formatNumber(n)) )).lazyInitTooltip();
+				.attr("title",
+					KC3Meta.term("ConsumablesScrewExchanges").format(
+						[hardMedals, hardMedals * 10, medals, medals * 4, presents, presents, exchgscrewsTotal, exchgscrewsTotal + screws].map((n) => KC3Meta.formatNumber(n))
+					) + "\n({0} x{1})".format(
+						KC3Meta.useItemName(104), PlayerManager.consumables.arsenalMaterial || 0
+					)).lazyInitTooltip();
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
@@ -1570,11 +1545,10 @@
 					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59),
 					PlayerManager.consumables.airUnitRation || 0, KC3Meta.useItemName(102)
 				));
-			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0) + (PlayerManager.consumables.arsenalMaterial || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5}".format(
+			$(".count_newTechMats").text((PlayerManager.consumables.nEngine || 0) + (PlayerManager.consumables.overseaTechMaterial || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
 					PlayerManager.consumables.nEngine || 0, KC3Meta.useItemName(71),
-					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100),
-					PlayerManager.consumables.arsenalMaterial || 0, KC3Meta.useItemName(104)
+					PlayerManager.consumables.overseaTechMaterial || 0, KC3Meta.useItemName(100)
 				));
 			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
@@ -2457,6 +2431,10 @@
 				$(".module.status .status_docking .status_icon").attr("title", KC3Meta.term("PanelHighestDocking") );
 				$(".module.status .status_akashi .status_icon").attr("title", KC3Meta.term("PanelHighestAkashi") );
 				$(".module.status .status_support .status_icon").attr("title", KC3Meta.term("PanelSupportPower") );
+
+				// STATUS: NOSAKI SPARKLE
+				UpdateSparkleTimerDisplay();
+				$(".module.status .status_nosaki .status_icon").attr("title", KC3Meta.term("PanelSparkleTimer") );
 			}else{
 				$(".module.status").hide();
 			}
@@ -3554,7 +3532,12 @@
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
-						.attr("title", KC3Meta.shipName(thisNode.drop))
+						.attr("title", [KC3Meta.shipName(thisNode.drop),
+							KC3Meta.term("BattleSlotRemains").format(
+								KC3ShipManager.max - KC3ShipManager.count(),
+								// Gear count for new drop may inaccurate, depending on known stockequip
+								KC3GearManager.max - KC3GearManager.countNonUseitem()
+							)].join("\n"))
 						.toggleClass("new_ship", ConfigManager.info_dex_owned_ship ?
 							// Not own this shipgirl of any remodel form, judged by picture book history or current ships
 							! PictureBook.isEverOwnedShip(thisNode.drop) :
@@ -4356,6 +4339,7 @@
 			$(".remodel_footer .owned_arsenal span", remodelResultBox).text(PlayerManager.consumables.arsenalMaterial || 0);
 			$(".remodel_footer .owned_devmats span", remodelResultBox).text(PlayerManager.consumables.devmats);
 			$(".remodel_footer .owned_screws span", remodelResultBox).text(PlayerManager.consumables.screws);
+			$(".remodel_improved", remodelResultBox).empty();
 			if(result.api_recover_flag) {
 				const afterRemodelSlot = result.api_after_slot;
 				if(afterRemodelSlot) {
@@ -5495,4 +5479,49 @@
 			elm.attr("titlealt", title).lazyInitTooltip();
 		});
 	}
+
+	function UpdateSparkleTimerDisplay() {
+		let moduleNosaki = $(".module.status .status_nosaki");
+		let moduleDocking = $(".module.status .status_docking");
+		const sparkleProgress = PlayerManager.fleets.some(fleet => fleet.hasNosakiMark())
+			? Math.hrdInt("floor", PlayerManager.nosakiSparkle.getElapsed() || 0, 3, 1)
+			: 0;
+		if (!sparkleProgress) {
+			if (moduleNosaki.is(":visible")) {
+				moduleNosaki.hide();
+				moduleDocking.show();
+			}
+			return;
+		}
+		if (moduleNosaki.is(":hidden")) {
+			moduleDocking.hide();
+			moduleNosaki.show();
+		}
+		let timerText = $(".module.status .status_nosaki .status_text");
+		let timerIcon = $(".module.status .status_nosaki img");
+		const secPerTick = 15 * 60;
+		const ticks = Math.floor(sparkleProgress / secPerTick);
+		timerText.text(String(sparkleProgress).toHHMMSS());
+
+		if (ticks === 0) {
+			if (sparkleNotif !== 0) {
+				sparkleNotif = 0;
+				timerIcon.attr("src", "/assets/img/ui/foodsup-x.png");
+				timerText.css("color", "white");
+			}
+		} else if (sparkleNotif < ticks) {
+			sparkleNotif++;
+			const textColor = ticks === 1 ? "yellow" : "orange";
+			timerIcon.attr("src", "/assets/img/ui/foodsup.png");
+			timerText.css("color", textColor);
+			// Config option for each tick
+			const tickNotif = [[1, 2], [1, 3]];
+			const selectedNotif = ConfigManager.alert_sparkle;
+			if (sparkleNotif <= tickNotif.length
+				&& tickNotif[sparkleNotif - 1].includes(selectedNotif)) {
+				KC3Notification.notifySparkle();
+			}
+		}
+	}
+
 })();

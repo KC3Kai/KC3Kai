@@ -53,6 +53,7 @@ KC3改 Ship Object
 		this.lock = 0;
 		this.sally = 0;
 		this.akashiMark = false;
+		this.nosakiMark = false;
 		this.preExpedCond = [
 			/* Data Example
 			["exped300",12,20, 0], // fully supplied
@@ -249,7 +250,8 @@ KC3改 Ship Object
 	// 2018-08-17: 165->175
 	// 2023-05-26: 175->180
 	// 2025-05-12: 180->185
-	KC3Ship.getMaxLevel = function(){ return 185; };
+	// 2026-05-29: 185->188
+	KC3Ship.getMaxLevel = function(){ return 188; };
 	// hard-coded at `Core.swf/vo.UserShipData.VHP` / `main.js#ShipModel.prototype.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
 	// hard-coded at `Core.swf/vo.UserShipData.VAS` / `main.js#ShipModel.prototype.VAS`
@@ -4507,13 +4509,14 @@ KC3改 Ship Object
 					// https://docs.google.com/spreadsheets/d/1_e0M6asJUbu9EEW4PrGCu9hOxZnY7OQEDHH2DUAzjN8/htmlview
 					const modelDK2SmallGunCnt = this.countEquipment(267),
 					      modelDK3SmallGunCnt = this.countEquipment(366);
-					// possible to equip 2 D guns for 4 slots Tashkent,
+					// possible to equip 2+ D guns for 4 slots Tashkent etc,
 					// or surface radar in ex-slot ships since 2023-06-14
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					// https://twitter.com/grapefox_zuizui/status/1664695317625819145
+					// three DK3 the same with two: https://x.com/yukicacoon/status/2052322144332427412
 					const modelDSmallGunModifier =
 						([1, 1.25, 1.4][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.4)
-							* (1 + modelDK3SmallGunCnt * 0.05);
+						* ([1, 1.05, 1.1][modelDK3SmallGunCnt] || 1.1);
 					const addDestroyerSpAttacksToId = (diff) => {
 						if(hasCapableRadar && smallMainGunCnt >= 1)
 							results.push(KC3Ship.specialAttackTypeNight(7 + diff, null, 1.3 * modelDSmallGunModifier));
@@ -4829,9 +4832,9 @@ KC3改 Ship Object
 			5: 140, // MainApshell (main+sec+apshell)
 			6: 150, // MainMain (main+main+apshell)
 			7: ({
-				"CutinJFJBJB": 135,
-				"CutinJFJB"  : 125,
-				"CutinJFDBTB": 115,
+				"CutinJFJBJB": 130, // 128.87?
+				"CutinJFJB"  : 135, // 136.17?
+				"CutinJFDBTB": 140, // unknown
 				"CutinFDBTB" : 125,
 				"CutinDBDBTB": 140,
 				"CutinDBTB"  : 155,

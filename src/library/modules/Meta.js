@@ -96,7 +96,7 @@ Provides access to data on built-in JSON files
 			123, 142, 295, // Kinugasa
 			126, 398,      // I-168
 			127, 399,      // I-58
-			135, 304, 543, // Naganami
+			135, 304, 543, 743, // Naganami
 			136,           // Yamato Kai (Poke dupe)
 			145, 961,      // Shigure Kai Ni(San) (Event/Equip2 reuse)
 			196, 1031,     // Hiryuu Kai Ni(San)
@@ -112,7 +112,7 @@ Provides access to data on built-in JSON files
 			549,           // Intrepid (Poke dupe)
 			568,           // Kuroshio Kai Ni (Poke dupe)
 			573,           // Mutsu Kai Ni (Poke dupe)
-			578,           // Asashimo Kai Ni
+			578, 744,      // Asashimo Kai Ni+
 			580,           // Maestrale Kai (Base Poke1 dupe)
 			591,           // Kongou K2C (Attack dupe)
 			651,           // Tang Yang
@@ -520,7 +520,7 @@ Provides access to data on built-in JSON files
 			})[type2Id] || 0;
 			const ingameIconId = this.itemIconsByType2(type2Id)[index] || 0;
 			const customIconName = useCustom
-				&& [11, 12, 13, 22, 28, 32, 38, 49, 93, 94].includes(Number(type2Id))
+				&& [5, 11, 12, 13, 22, 28, 32, 38, 40, 42, 49, 93, 94].includes(Number(type2Id))
 				&& ("c" + type2Id);
 			return customIconName || ingameIconId;
 		},

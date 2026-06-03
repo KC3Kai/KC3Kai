@@ -96,7 +96,7 @@ Previously known as "Reactor"
 		"api_port/port":function(params, response, headers){
 			KC3Network.trigger("HomeScreen");
 			
-			KC3ShipManager.set(response.api_data.api_ship, true);
+			KC3ShipManager.set(response.api_data.api_ship, true, true);
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			var utcSeconds = Date.toUTCseconds(headers.Date);
@@ -608,6 +608,9 @@ Previously known as "Reactor"
 			if(remodel.armmat > 0){
 				PlayerManager.consumables.newArmamentMaterial -= remodel.armmat;
 			}
+			if(remodel.arsenalmat > 0){
+				PlayerManager.consumables.arsenalMaterial -= remodel.arsenalmat;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
@@ -635,6 +638,7 @@ Previously known as "Reactor"
 		"api_req_hensei/preset_select":function(params, response, headers){
 			var deckId = parseInt(params.api_deck_id, 10);
 			PlayerManager.akashiRepair.onPresetSelect(PlayerManager.fleets[deckId-1]);
+			PlayerManager.nosakiSparkle.onPresetSelect(PlayerManager.fleets[deckId-1]);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
 			PlayerManager.saveFleets();
 			console.log("Applied Preset", params.api_preset_no, "to fleet", deckId, response.api_data);
@@ -942,10 +946,12 @@ Previously known as "Reactor"
 						PlayerManager.fleets[oldFleetIndex].ships.splice(oldShipIndex, 1);
 						PlayerManager.fleets[oldFleetIndex].ships.push(-1);
 					}
-					// If not the same fleet, also recheck akashi repair of source fleet
+					// If not the same fleet, also recheck akashi repair and nosaki sparkle of source fleet
 					if(oldFleetIndex !== fleetIndex){
 						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleetIndex]);
 						PlayerManager.fleets[oldFleetIndex].updateAkashiRepairDisplay();
+						PlayerManager.nosakiSparkle.onChange(PlayerManager.fleets[oldFleetIndex]);
+						PlayerManager.fleets[oldFleetIndex].updateNosakiSparkleDisplay();
 					}
 					// If the same fleet, target ship might be dragged to an empty slot after another empty slot
 					else {
@@ -960,6 +966,8 @@ Previously known as "Reactor"
 			}
 			PlayerManager.akashiRepair.onChange(PlayerManager.fleets[fleetIndex]);
 			PlayerManager.fleets[fleetIndex].updateAkashiRepairDisplay();
+			PlayerManager.nosakiSparkle.onChange(PlayerManager.fleets[fleetIndex]);
+			PlayerManager.fleets[fleetIndex].updateNosakiSparkleDisplay();
 			PlayerManager.saveFleets();
 			KC3Network.trigger("Fleet", { switchTo: fleetNum });
 		},
@@ -2531,11 +2539,22 @@ Previously known as "Reactor"
 				}
 			};
 			
-			// Exclude gauge based maps from being kept every time
+			// Prevent gauge based normal maps from being kept every times
 			const mapKeys = Object.keys(maps);
 			for(const key of mapKeys) {
-				if(KC3Meta.gauge(key.substr(1)))
+				const keyno = key.substr(1);
+				if(KC3Meta.gauge(keyno))
 					maps[key].clear = maps[key].kills = false;
+				// EO map-2 relocked after map-1 on monthly reset, specially 5-6 reset to 1st, the TP gauge
+				if(["m56"].includes(key) && raws.length
+					&& !raws.some(m => m.api_id == keyno)) {
+					maps[key].gaugeNum = 1;
+					maps[key].kind = "gauge-tp";
+					maps[key].maxhp = KC3Meta.gauge(keyno, 1);
+					maps[key].curhp = maps[key].maxhp;
+					delete maps[key].kills;
+					delete maps[key].killsRequired;
+				}
 			}
 			
 			// Combine current storage and current available maps data
@@ -2571,6 +2590,17 @@ Previously known as "Reactor"
 					if(thisMap.api_gauge_num !== undefined) {
 						localMap.gaugeNum = thisMap.api_gauge_num;
 					}
+				}
+				// TP gauge implemented in normal map 5-6 since 2026-05-29,
+				// using `api_required_defeat_count` as max tp, and countup `api_defeat_count` as now
+				if(thisMap.api_gauge_type === 3 && thisMap.api_eventmap === undefined && thisMap.api_required_defeat_count > 0) {
+					localMap.kind = "gauge-tp";
+					localMap.gaugeNum = thisMap.api_gauge_num;
+					localMap.maxhp = thisMap.api_required_defeat_count;
+					localMap.curhp = localMap.maxhp - (thisMap.api_defeat_count || 0);
+					if(thisMap.api_defeat_count === undefined) localMap.curhp = 0;
+					delete localMap.kills;
+					delete localMap.killsRequired;
 				}
 				// Max Land-bases allowed to be sortied
 				if(thisMap.api_air_base_decks !== undefined) {

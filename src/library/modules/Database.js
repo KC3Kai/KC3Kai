@@ -914,6 +914,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				dsship    ShipMaster
 				dsitem    ItemMaster
 				akashi    ShipMaster
+				nosaki    ShipMaster
 				rmditem   ItemMaster
 				remodel   ShipMaster
 				regen     ------

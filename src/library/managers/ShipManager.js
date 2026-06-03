@@ -10,14 +10,15 @@ Saves and loads list to and from localStorage
 	/* this variable will keep the kc3-specific variables */
 	const defaults = (new KC3Ship()),
 		devVariables = {
-			capture: ['didFlee','pendingConsumption','lastSortie','repair','akashiMark'],
-			norepl : ['repair']
+			capture: ['didFlee','pendingConsumption','lastSortie','repair','akashiMark', 'morale', 'nosakiMark'],
+			norepl : ['repair', 'morale']
 		};
 	
 	window.KC3ShipManager = {
 		list: {},
 		max: 100,
 		pendingShipNum: 0,
+		enteringPort: false,
 		
 		// Get a specific ship by ID
 		get :function( rosterId ){
@@ -110,7 +111,6 @@ Saves and loads list to and from localStorage
 			// Check previous repair state
 			// If there's a change detected (without applying applyRepair proc)
 			// It'll be treated as akashi effect
-			
 			cShip.akashiMark &= !!cShip.onFleet();
 			if(tempData.repair[0] > cShip.repair[0] && cShip.akashiMark) {
 				/* Disabling this --
@@ -150,7 +150,36 @@ Saves and loads list to and from localStorage
 				});
 				/* COMMENT STOPPER */
 			}
-			
+
+			// Check previous morale state
+			// If an increase over the possible natural regen is detected
+			// On homeport while being marked and not on sortie or PvP,
+			// It'll be treated as nosaki sparkle effect
+			const fleetId = cShip.onFleet();
+			cShip.nosakiMark &= !!fleetId;
+			if (this.enteringPort && cShip.nosakiMark && cShip.morale > tempData.morale
+				&& !PlayerManager.fleets[fleetId - 1].isOnSortieOrPvP()) {
+				const secSinceLastPort = Date.toUTCseconds() - (PlayerManager.hq.lastPortTime || 0);
+				const moraleRegen = Math.ceil(secSinceLastPort / 180) * 3;
+				const moraleBase = Math.max(tempData.morale, Math.min(tempData.morale + moraleRegen, 49));
+				const moraleDiff = cShip.morale - moraleBase;
+
+				if (moraleDiff > 0) {
+					const fleet = PlayerManager.fleets[fleetId - 1];
+					const sparklerPos = KC3NosakiSparkle.getSparklerPosition(fleet);
+					const sparklerPower = KC3NosakiSparkle.getSparklerPower(fleet.ship(sparklerPos - 1));
+					const fuelCost = Math.ceil(moraleDiff / sparklerPower);
+					const data = [-fuelCost, 0, 0, 0, 0, 0, 0, 0];
+					// Store Difference to Database
+					KC3Database.Naverall({
+						hour: Date.toUTChours(),
+						type: 'nosaki' + cShip.masterId,
+						data: data
+					});
+					console.log("Nosaki sparkled", cShip.rosterId, cShip.name(), moraleDiff, fuelCost);
+				}
+			}
+
 			// if there's still pending exped condition on queue
 			// don't remove async wait false, after that, remove port load wait
 			if(!cShip.pendingConsumption.costnull) {
@@ -166,10 +195,15 @@ Saves and loads list to and from localStorage
 			}
 		},
 		
-		// Mass set multiple ships
-		// [repl] -> replace flag (replace whole list, replacing clear functionality)
-		set :function(data, repl){
+		/**
+		 * Mass set multiple ships
+		 * @param data - array of ship data
+		 * @param repl - replace flag (replace whole list, replacing clear functionality)
+		 * @param port - entering homeport flag (for batch checking morale increasement)
+		 */
+		set :function(data, repl, port){
 			const self = this;
+			if(port) this.enteringPort = true;
 			var rem = Object.keys(this.list);
 			// console.log.apply(console,["Current list"].concat(rem.map(function(x){return x.slice(1);})));
 			for(const ctr in data){
@@ -181,6 +215,7 @@ Saves and loads list to and from localStorage
 						rem.splice(kid, 1);
 				}
 			}
+			this.enteringPort = false;
 			if(!repl) rem.splice(0);
 			// console.log.apply(console,["Removed ship"].concat(rem.map(function(x){return x.slice(1);})));
 			rem.forEach(function(rosterId){

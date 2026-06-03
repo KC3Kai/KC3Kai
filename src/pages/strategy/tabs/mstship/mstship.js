@@ -516,6 +516,8 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
+				// No `album_status` found for Kai Ni Ho
+				if([743, 744, 745].includes(ship_id)) availableTypes.pop();
 				// from `main.js/isShipImageForPortScene`
 				const isShipImageForPort = [951].includes(ship_id),
 				// from `main.js/isShipImageForPowerUp`
