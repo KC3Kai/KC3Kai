@@ -72,7 +72,7 @@
 			$.each(this.db, (eid, entry) => {
 				if (eid.startsWith("s")) {
 					const stockArr = entry.equip || [];
-					if (stockArr.includes(Number(gearId)))
+					if (stockArr.some(id => id && (id > 0 && id == gearId || id.id == gearId)))
 						shipList.push(Number(eid.substr(1)));
 				}
 			});
