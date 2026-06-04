@@ -2925,6 +2925,16 @@ body {
 					box-shadow: 0 0 5px 0 #1e4;
 				}
 
+				&.sptype2::after {
+					content: "";
+					border-left: 8px solid transparent;
+					border-right: 8px solid transparent;
+					border-bottom: 8px solid rgba(235, 220, 10, 0.7);
+					position: relative;
+					bottom: 0.5em;
+					right: 15%;
+				}
+
 				&.noReqs .remodel_slot_itemon {
 					display: none;
 				}

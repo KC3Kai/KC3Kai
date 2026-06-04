@@ -2908,6 +2908,15 @@ ABYSS FLEET
 .module.activity .activity_remodel .remodelSlotItem.sptype2 {
 	box-shadow: 0px 0px 5px 0px #1e4;
 }
+.module.activity .activity_remodel .remodelSlotItem.sptype2::after {
+	content: "";
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid rgba(235, 220, 10, 0.7);
+	position: relative;
+	top: 28px;
+	right: 18px;
+}
 .module.activity .activity_remodel .remodelSlotItem.withStar {
 	height: 69px;
 }

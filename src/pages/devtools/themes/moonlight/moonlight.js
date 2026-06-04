@@ -5363,6 +5363,9 @@
 				}
 			});
 		}
+		if(recipe.api_sp_type) {
+			itemBox.addClass("sptype" + recipe.api_sp_type);
+		}
 		return itemBox;
 	}
 
