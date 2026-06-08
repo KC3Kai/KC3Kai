@@ -151,7 +151,9 @@ module.exports = function(grunt) {
 					src: [
 						'assets/css/global.css',
 						'assets/css/keys.css',
-						'pages/**/*.css'
+						'pages/**/*.css',
+						// because nesting unsupported by cssmin
+						'!pages/devtools/themes/murasaki/murasaki.css'
 					],
 					dest: 'build/tmp/'
 				}]
