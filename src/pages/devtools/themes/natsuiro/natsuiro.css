@@ -2910,12 +2910,12 @@ ABYSS FLEET
 }
 .module.activity .activity_remodel .remodelSlotItem.sptype2::after {
 	content: "";
-	border-left: 8px solid transparent;
-	border-right: 8px solid transparent;
-	border-bottom: 8px solid rgba(235, 220, 10, 0.7);
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom: 8px solid rgba(235, 220, 10, 0.6);
 	position: relative;
-	top: 28px;
-	right: 18px;
+	top: -10px;
+	left: -164px;
 }
 .module.activity .activity_remodel .remodelSlotItem.withStar {
 	height: 69px;
