@@ -3068,6 +3068,15 @@ ABYSS FLEET
 	padding: 1px 1px 1px 1px;
 	overflow: hidden;
 }
+.module.activity .activity_remodel .remodelSlotItem.sptype2::after {
+	content: "";
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom: 8px solid rgba(240, 200, 40, 0.6);
+	position: relative;
+	top: -10px;
+	left: -164px;
+}
 .module.activity .activity_remodel .remodelSlotItem.withStar {
 	height: 69px;
 }
