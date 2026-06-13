@@ -2908,6 +2908,15 @@ ABYSS FLEET
 .module.activity .activity_remodel .remodelSlotItem.sptype2 {
 	box-shadow: 0px 0px 5px 0px #1e4;
 }
+.module.activity .activity_remodel .remodelSlotItem.sptype2::after {
+	content: "";
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom: 8px solid rgba(235, 220, 10, 0.6);
+	position: relative;
+	top: -10px;
+	left: -164px;
+}
 .module.activity .activity_remodel .remodelSlotItem.withStar {
 	height: 69px;
 }
@@ -4715,12 +4724,7 @@ ABYSS FLEET
 }
 @keyframes glowa10 {
 	from {
-		filter:
-			drop-shadow(0 0 5px rgba(255, 87, 112, 0.5))
-			drop-shadow(0 0 7px rgba(228, 66, 141, 0.4))
-			drop-shadow(0 0 9px rgba(196, 45, 168, 0.3))
-			drop-shadow(0 0 7px rgba(228, 66, 141, 0.4))
-			drop-shadow(0 0 5px rgba(255, 87, 112, 0.5));
+		filter: drop-shadow(0 0 5px rgba(255, 87, 112, 0.5)) drop-shadow(0 0 7px rgba(228, 66, 141, 0.4)) drop-shadow(0 0 9px rgba(196, 45, 168, 0.3)) drop-shadow(0 0 7px rgba(228, 66, 141, 0.4)) drop-shadow(0 0 5px rgba(255, 87, 112, 0.5));
 	}
 	to {
 		filter: drop-shadow(0 0 5px #f5c1f5);
