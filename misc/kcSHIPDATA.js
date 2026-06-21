@@ -9952,7 +9952,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [36, 22, 16, 16],
+		SLOTS: [36, 20, 18, 16],
 		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1973: {
@@ -9973,7 +9973,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [36, 32, 16, 16],
+		SLOTS: [36, 24, 18, 22],
 		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1974: {
@@ -9994,7 +9994,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [36, 22, 16, 16],
+		SLOTS: [36, 20, 18, 16],
 		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1975: {
@@ -10015,7 +10015,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [36, 32, 16, 16],
+		SLOTS: [36, 24, 18, 22],
 		EQUIPS: [1581, 1582, 1557, 1583],
 	},
 	1976: {
