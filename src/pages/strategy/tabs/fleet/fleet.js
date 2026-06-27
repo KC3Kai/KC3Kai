@@ -588,7 +588,6 @@
 				self.showKCGear(
 					$(".ship_gear_"+(index+1), shipBox),
 					gear,
-					kcShip.slots[index],
 					kcShip,
 					index
 				);
@@ -597,14 +596,16 @@
 
 		/* Show single equipment
 		   --------------------------------------------*/
-		showKCGear: function(gearBox, kcGear, capacity, kcShip, index) {
+		showKCGear: function(gearBox, kcGear, kcShip, index) {
 			if (!kcGear.masterId || !kcShip.masterId) {
 				gearBox.hide();
 				return;
 			}
 			const masterData = kcGear.master();
+			const capacity = kcShip.slots[index];
 			// to avoid red slot size 1 when Large Flying Boat equipped
-			const slotMaxSize = masterData.api_type[2] === 41 ? 1 : kcShip.slotCapacity(index) || kcShip.master().api_maxeq[index];
+			const slotMaxSize = masterData.api_type[2] === 41 ? 1 : kcShip.slotCapacity(index);
+			const mstMaxSize = (kcShip.master().api_maxeq || [])[index] || 0;
 			const isExslot = index >= kcShip.slotnum;
 			// ex-slot capacity not implemented yet, no aircraft equippable
 			$(".slot_capacity", gearBox).text(isExslot ? "-" : capacity)
@@ -619,6 +620,7 @@
 						default: return "";
 					}
 				})(capacity / (slotMaxSize || 1)));
+			if(slotMaxSize > mstMaxSize) $(".slot_capacity", gearBox).addClass("expand");
 			if(isExslot || KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3]) < 0){
 				$(".slot_capacity", gearBox).addClass("unused");
 			}

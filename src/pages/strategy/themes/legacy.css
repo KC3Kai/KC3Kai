@@ -621,6 +621,9 @@ body {
 	color:#111;
 	text-shadow:1px 1px 0 rgba(255,255,255,0.7);
 }
+.ship_list .ship_item .ship_equip span.expand {
+	color:#1be;
+}
 .ship_list .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#ccc;
 }
@@ -1400,6 +1403,10 @@ body {
 }
 .tab_fleet .fleet_ship .ship_gear .ex_slot .gear_name {
 	color:#79b;
+}
+.tab_fleet .fleet_ship .slot_capacity.expand {
+	color:#169;
+	text-shadow:-1px 0 0 #1be;
 }
 .tab_fleet .fleet_ship .slot_capacity.shouha {
 	color:#aa0;
