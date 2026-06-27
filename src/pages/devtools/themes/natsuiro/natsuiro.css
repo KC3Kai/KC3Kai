@@ -3977,6 +3977,21 @@ ABYSS FLEET
 .module.fleet .lship .ship_gear.empty .ship_gear_slot {
 	color:#999;
 }
+.module.fleet .lship .ship_gear .ship_gear_slot.expand {
+	color:#3cf;
+}
+.module.fleet .lship .ship_gear .ship_gear_slot.shouha {
+	color:#ff0;
+}
+.module.fleet .lship .ship_gear .ship_gear_slot.chuuha {
+	color:#f90;
+}
+.module.fleet .lship .ship_gear .ship_gear_slot.taiha {
+	color:#f00;
+}
+.module.fleet .lship .ship_gear .ship_gear_slot.empty {
+	color:#999;
+}
 .module.fleet .lship .ship_supplies {
 	width:40px;
 	height:40px;
