@@ -642,6 +642,7 @@
 				irange: MasterShip.api_leng,
 				slots: ThisShip.slots,
 				maxSlots: ThisShip.slotsMax || MasterShip.api_maxeq,
+				mstSlots: MasterShip.api_maxeq,
 				exSlot: ThisShip.ex_item,
 				slotNum: ThisShip.slotnum,
 				carry: ThisShip.carrySlots(),
@@ -1326,10 +1327,10 @@
 						cElm.addClass('modernization-able');
 
 					cShip.equip.forEach(function(gid, idx){
-						self.equipImg(cElm, idx + 1, cShip.slotNum, cShip.slots[idx], cShip.maxSlots[idx], gid, cShip.id);
+						self.equipImg(cElm, idx + 1, cShip.slotNum, cShip.slots[idx], [cShip.maxSlots[idx], cShip.mstSlots[idx]], gid, cShip.id);
 					});
 					if(cShip.exSlot !== 0){
-						self.equipImg(cElm, "ex", cShip.slotNum, -2, 0, cShip.exSlot);
+						self.equipImg(cElm, "ex", cShip.slotNum, -2, [0, 0], cShip.exSlot);
 					}
 					$(".ship_equip", cElm).toggleClass("slot5",
 						cShip.slotNum + ((cShip.exSlot !== 0) & 1) > 5);
@@ -1516,7 +1517,7 @@
 		equipImg :function(cElm, slotIndex, slotCount, slotSize, maxSize, gearId, shipId){
 			const element = $(".ship_equip_" + slotIndex, cElm);
 			const sizeSpan = $("span", element);
-			if(maxSize > 0 && slotSize !== undefined) sizeSpan.text(slotSize);
+			if(maxSize[0] > 0 && slotSize !== undefined) sizeSpan.text(slotSize);
 			if(gearId > 0){
 				const gear = KC3GearManager.get(gearId);
 				if(gear.isDummy()){ element.hide(); return; }
@@ -1528,13 +1529,15 @@
 					.attr("alt", gear.master().api_id);
 				// jq.show() not work on some new browser for inline case?
 				$("img", element).show().css("display", "inline");
-				sizeSpan.addClass("sub").toggle(maxSize > 0);
+				sizeSpan.addClass("sub").toggle(maxSize[0] > 0);
+				sizeSpan.toggleClass("expand", maxSize[0] > maxSize[1]);
 				element.show();
 			} else if(slotIndex === "ex" || slotIndex <= Math.max(4, slotCount)){
 				$("img", element).hide();
 				// for ex slot opened, but not equipped
 				sizeSpan.toggleClass("empty", slotSize === -2)
-					.toggle(slotSize === -2 || maxSize > 0);
+					.toggle(slotSize === -2 || maxSize[0] > 0)
+					.toggleClass("expand", maxSize[0] > maxSize[1]);
 				element.show();
 			} else {
 				element.hide();

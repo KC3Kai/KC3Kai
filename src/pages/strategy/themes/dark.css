@@ -674,6 +674,9 @@ button, input, select, textarea {
 	color:#fff;
 	background:rgba(0,0,0,0.5);
 }
+.ship_list .ship_item .ship_equip span.expand {
+	color:#3cf;
+}
 .ship_list .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555;
 }
@@ -1791,6 +1794,10 @@ button, input, select, textarea {
 		rgba(0,0,0,0.2) 30%,
 		rgba(0,0,0,0.4)
 	);
+}
+.tab_fleet .fleet_ship .slot_capacity.expand {
+	color:#ace;
+	text-shadow:-1px 0 0 #3cf;
 }
 .tab_fleet .fleet_ship .slot_capacity.shouha {
 	color:#fe0;
