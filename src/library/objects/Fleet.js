@@ -1763,6 +1763,7 @@ Contains summary information about a fleet and its ships
 						},
 						kyouka: ship.mod,
 						effect: ship.statsSp(),
+						slots: ship.slots,
 						equip: ship.equipment(true).map(g => g.masterId),
 						stars: ship.equipment(true).map(g => g.stars),
 						ace: ship.equipment(true).map(g => g.ace)

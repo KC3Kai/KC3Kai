@@ -397,7 +397,10 @@
 						"font-size":"11px",
 						"white-space":"nowrap",
 					};
-					const title = KC3Meta.term("BattleHistoryMinimapPreview").format(world, map);
+					const title = [
+						'"' + (KC3Master.mapInfo(world, map).api_name || "") + '"',
+						KC3Meta.term("BattleHistoryMinimapPreview").format(world, map)
+					].join(" ");
 					text += $("<div></div>").css({
 						"width": "100%", "text-align": "center",
 						"font-weight": "bold",

@@ -737,6 +737,11 @@ Saves and loads significant data for future use
 			return edge === undefined ? mapCells : mapCells[edge] || {};
 		},
 
+		mapInfo :function(world, map){
+			const mapinfo = this._raw.mapinfo || {};
+			return mapinfo[[world, map].join('')] || false;
+		},
+
 		abyssalShip :function(id, isMasterMerged){
 			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend(true, {}, this.ship(id)) || {};
 			return !Object.notEmpty(master) &&

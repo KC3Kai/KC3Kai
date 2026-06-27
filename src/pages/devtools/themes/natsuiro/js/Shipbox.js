@@ -527,7 +527,7 @@
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( slotCurr );
 				// For now, max slot size will be forced to 1 if Large Flying Boat equipped,
 				// and will restore to its default capacity on resupply if other equipped
-				var slotMax = thisGear && thisGear.master().api_type[2] === 41 ? 1 : this.shipData.master().api_maxeq[slot];
+				var slotMax = thisGear && thisGear.master().api_type[2] === 41 ? 1 : this.shipData.slotCapacity(slot);
 				if(slotCurr < slotMax){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).attr("title",
 						"{0} /{1}".format(slotCurr, slotMax) ).lazyInitTooltip();

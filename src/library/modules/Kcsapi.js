@@ -381,6 +381,7 @@ Previously known as "Reactor"
 					case 102:PlayerManager.consumables.airUnitRation = thisItem.api_count; break;
 					case 103:PlayerManager.consumables.arsenalKey = thisItem.api_count; break;
 					case 104:PlayerManager.consumables.arsenalMaterial = thisItem.api_count; break;
+					case 105:PlayerManager.consumables.hangarExpansion = thisItem.api_count; break;
 					// 901 virtual item, for 800 rank points as quest rewards
 					//     moved to 898 since 2025-08-27, then
 					//     for max gear slots extending card assets as quest rewards
@@ -525,6 +526,50 @@ Previously known as "Reactor"
 			PlayerManager.consumables.reinforceExpansion -= 1;
 			PlayerManager.setConsumables();
 			console.log("Extra Slot unlocked for", rosterId, shipObj.name());
+			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Fleet");
+		},
+		
+		"api_req_kaisou/hangar_expand":function(params, response, headers){
+			var rosterId = parseInt(params.api_ship_id, 10),
+				slotIdx  = parseInt(params.api_slot_pos, 10),
+				shipObj  = KC3ShipManager.get(rosterId),
+				stype    = shipObj.master().api_stype;
+			var prevsMax = shipObj.slotsMax,
+				slotsMax = response.api_data.api_onslot_max;
+			var usedHangar = 0, usedTorch = 0;
+			if(Array.isArray(slotsMax)) {
+				shipObj.slotsMax = slotsMax;
+				KC3ShipManager.save();
+				const mstmax = shipObj.slotCapacity(slotIdx, true);
+				const curmax = shipObj.slotCapacity(slotIdx, false);
+				const incmax = curmax - mstmax;
+				const expandCostsByStype = ({
+					"7": { // CVL
+						"1": { hangar: 1, torch: 1 },
+						"2": { hangar: 2, torch: 2 },
+					},
+					"11": { // CV
+						"1": { hangar: 1, torch: 1 },
+						"2": { hangar: 1, torch: 1 },
+						"3": { hangar: 2, torch: 2 },
+						"4": { hangar: 3, torch: 4 },
+					},
+					"18": { // CVB
+						"1": { hangar: 1, torch: 1 },
+						"2": { hangar: 1, torch: 1 },
+						"3": { hangar: 2, torch: 2 },
+						"4": { hangar: 3, torch: 4 },
+					},
+				})[stype] || {};
+				usedHangar = (expandCostsByStype[incmax] || {}).hangar || 0;
+				usedTorch = (expandCostsByStype[incmax] || {}).torch || 0;
+				PlayerManager.consumables.hangarExpansion -= usedHangar;
+				PlayerManager.consumables.torch -= usedTorch;
+				PlayerManager.setConsumables();
+			}
+			console.log("Slot size expanded for", rosterId, shipObj.name(), slotIdx,
+				"before/after", prevsMax, slotsMax, "consumed", usedHangar, usedTorch);
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Fleet");
 		},
@@ -3023,20 +3068,24 @@ Previously known as "Reactor"
 				case 111: // exchange 10 teruteruBouzu with furniture Window of Rainy End in 2023
 					// exchange 11 teruteruBouzu with furniture and 1 Communication Equipment & Personnel (once) in 2024
 					// exchange 22 teruteruBouzu with 1 Ho229 (once) in 2025
+					// exchange 10 teruteruBouzu with 1 Hangar Expansion (3 times) in 2026
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 10;
 				break;
 				case 112: // exchange 11 teruteruBouzu with 1 Mosquito FB Mk.VI +7 (once) in 2023
 					// exchange 20 teruteruBouzu with 1 Fleet Communication Antenna +1 (once) in 2024
 					// exchange 18 teruteruBouzu with furniture and 1 GFCS Mk.37 (once) in 2025
+					// exchange 18 teruteruBouzu with 1 GFCS Mk.37 + 5inch Twin HA CD (once) in 2026
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 11;
 				break;
 				case 113: // exchange 12 teruteruBouzu with 1 blueRibbon (twice)
 					// exchange 12 teruteruBouzu with 1 blueRibbon (once) in 2025
+					// exchange 10 teruteruBouzu with 1 blueRibbon (once) in 2026
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 12;
 				break;
 				case 114: // exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (7 times) in 2023
 					// exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (8 times) in 2024
-					// exchange 1 teruteruBouzu with Materials [0, 1, 0, 1] (10 times) in 2025
+					// exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (10 times) in 2025
+					// exchange 1 teruteruBouzu with materials [0, 1, 0, 1] (6 times) in 2026
 					//if(itemId === 97) PlayerManager.consumables.teruteruBouzu -= 1;
 				break;
 				default:

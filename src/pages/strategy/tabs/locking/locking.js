@@ -214,8 +214,8 @@
                 // [maxed modded, current + modded, dupe, master init]
                 lk: [shipObj.lk[1], shipObj.lk[0], shipObj.lk[0], shipMaster.api_luck[0]],
 
-                slotCount: shipMaster.api_slot_num,
-                slotMaxSize: shipMaster.api_maxeq,
+                slotCount: shipObj.slotnum,
+                slotMaxSize: shipObj.slotsMax || shipMaster.api_maxeq,
                 exSlot: shipObj.ex_item,
 
                 canEquipDaihatsu: shipObj.canEquipDaihatsu(),

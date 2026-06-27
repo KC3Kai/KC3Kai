@@ -280,8 +280,10 @@
       if(Array.isArray(shipObj.spitems)) ship.spitems = shipObj.spitems;
 
       ship.items = [-1, -1, -1, -1, -1];
-      // slot sizes are not saved for now, use the copy of master data
-      ship.slots = masterData.api_maxeq.slice(0);
+      // slot sizes are not saved for old records, use the copy of master data
+      ship.slots = shipObj.slots || masterData.api_maxeq.slice(0);
+      // use it if slot max sizes expansion saved
+      if(Array.isArray(shipObj.slotsMax)) ship.slotsMax = shipObj.slotsMax;
       ship.ex_item = 0;
       ship.slotnum = slotnum;
       ship.GearManager = {

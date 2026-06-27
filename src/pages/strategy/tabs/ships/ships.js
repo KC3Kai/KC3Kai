@@ -641,7 +641,7 @@
 				range: ThisShip.range,
 				irange: MasterShip.api_leng,
 				slots: ThisShip.slots,
-				maxSlots: MasterShip.api_maxeq,
+				maxSlots: ThisShip.slotsMax || MasterShip.api_maxeq,
 				exSlot: ThisShip.ex_item,
 				slotNum: ThisShip.slotnum,
 				carry: ThisShip.carrySlots(),
