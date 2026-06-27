@@ -569,6 +569,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"102": "airUnitRation",
 				"103": "arsenalKey", // virtual payitem
 				"104": "arsenalMaterial",
+				"105": "hangarExpansion",
 				"892": "rankPoints500", // virtual reward
 				"895": "rankPoints440",
 				"896": "rankPoints50",

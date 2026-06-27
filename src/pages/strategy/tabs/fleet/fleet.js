@@ -604,7 +604,7 @@
 			}
 			const masterData = kcGear.master();
 			// to avoid red slot size 1 when Large Flying Boat equipped
-			const slotMaxSize = masterData.api_type[2] === 41 ? 1 : kcShip.master().api_maxeq[index];
+			const slotMaxSize = masterData.api_type[2] === 41 ? 1 : kcShip.slotCapacity(index) || kcShip.master().api_maxeq[index];
 			const isExslot = index >= kcShip.slotnum;
 			// ex-slot capacity not implemented yet, no aircraft equippable
 			$(".slot_capacity", gearBox).text(isExslot ? "-" : capacity)
