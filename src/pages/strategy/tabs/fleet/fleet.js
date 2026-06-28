@@ -697,10 +697,12 @@
 						fp: ship.fp[0],
 						tp: ship.tp[0],
 						sp: ship.speed,
+						slots: ship.slots,
 						mod: ship.mod,
 						spitems: ship.spitems,
 						equipments: convertEquipmentsOf(ship)
 					};
+					if (ship.slotsMax) shipObj.slotm = ship.slotsMax;
 					fleetObjShips.push( shipObj );
 				});
 				var fleetObj = {

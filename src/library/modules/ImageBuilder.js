@@ -199,6 +199,8 @@
     shipObj.level = shipData.level;
     shipObj.morale = shipData.morale;
     shipObj.cond = shipData.morale;
+    shipObj.slots = shipData.slots;
+    shipObj.slotm = shipData.slotm;
     shipObj.mod = shipData.kyouka;
     shipObj.stats = shipData.stats;
     shipObj.equipments = [];
@@ -283,7 +285,7 @@
       // slot sizes are not saved for old records, use the copy of master data
       ship.slots = shipObj.slots || masterData.api_maxeq.slice(0);
       // use it if slot max sizes expansion saved
-      if(Array.isArray(shipObj.slotsMax)) ship.slotsMax = shipObj.slotsMax;
+      if(Array.isArray(shipObj.slotm)) ship.slotsMax = shipObj.slotm;
       ship.ex_item = 0;
       ship.slotnum = slotnum;
       ship.GearManager = {
