@@ -442,13 +442,13 @@
 			fleetBox.attr("data-fleet", fleetNum);
 			$(".fleet_name", fleetBox).text( kcFleet.name );
 
-			let maxSlots = 0;
+			let maxSlotCnt = 0;
 			$.each( kcFleet.ship(), function(ind, kcShip) {
 				self.showKCShip(fleetBox, kcShip, (ind + 1));
-				maxSlots = Math.max(maxSlots, kcShip.equipmentMaxCount(true));
+				maxSlotCnt = Math.max(maxSlotCnt, kcShip.equipmentMaxCount(true));
 			});
-			$(".fleet_ships", fleetBox).addClass(`max_slot${maxSlots}`);
-			if(maxSlots > 6) $(".fleet_ships", fleetBox).addClass("max_slot6");
+			$(".fleet_ships", fleetBox).addClass(`max_slot${maxSlotCnt}`);
+			if(maxSlotCnt > 6) $(".fleet_ships", fleetBox).addClass("max_slot6");
 
 			// Show fleet info
 			const fstats = kcFleet.totalStats(true, false, true);
@@ -602,7 +602,7 @@
 				return;
 			}
 			const masterData = kcGear.master();
-			const capacity = kcShip.slots[index];
+			const capacity = kcShip.slotSize(index);
 			// to avoid red slot size 1 when Large Flying Boat equipped
 			const slotMaxSize = masterData.api_type[2] === 41 ? 1 : kcShip.slotCapacity(index);
 			const mstMaxSize = (kcShip.master().api_maxeq || [])[index] || 0;

@@ -4112,9 +4112,24 @@ body {
 					&.equipped .ship_gear_slot {
 						color: #ddd;
 					}
-
 					&.empty .ship_gear_slot {
 						color: #999;
+					}
+
+					& .ship_gear_slot.expand {
+						color:#3cf;
+					}
+					& .ship_gear_slot.shouha {
+						color:#ff0;
+					}
+					& .ship_gear_slot.chuuha {
+						color:#f90;
+					}
+					& .ship_gear_slot.taiha {
+						color:#f00;
+					}
+					& .ship_gear_slot.empty {
+						color:#999;
 					}
 				}
 			}
