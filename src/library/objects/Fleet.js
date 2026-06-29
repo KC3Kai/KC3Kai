@@ -1726,7 +1726,7 @@ Contains summary information about a fleet and its ships
 				if (master && [10, 11].includes(master.api_type[2])) {
 					// LoS visible bonus on ship not counted
 					// https://twitter.com/Matsu_class_DD/status/1245457218956226560
-					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
+					value += Math.floor(Math.sqrt(ship.slotSize(index))) * (master.api_saku || 0);
 				}
 			});
 		});
