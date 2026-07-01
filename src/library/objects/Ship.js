@@ -1984,6 +1984,7 @@ KC3改 Ship Object
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu, (T4 Tank variants *2)
 		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
 		//  * 8: [525,526] virtual type of T4 Tank special merging rules, see *2
+		// [576] daihatsu R35 unknown
 		// [496~499] army units unknown, preliminary: https://x.com/yukicacoon/status/1839245331348992263
 		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436, [525, 526]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
@@ -3925,6 +3926,10 @@ KC3改 Ship Object
 			if(this.hasEquipment(409)) return 8;
 		}
 		if(targetShipType.isLand) {
+			// Daihatsu + R35
+			if(this.hasEquipment(576)) return 16;
+			// Toku Daihatsu + Panzer II
+			if(this.hasEquipment(436)) return 9;
 			// Toku Daihatsu + Chi-Ha and Kai
 			if(this.hasEquipment([494, 495])) return 10;
 			// M4A1 DD
@@ -3967,6 +3972,8 @@ KC3改 Ship Object
 			if(this.hasEquipment(409)) return 8;
 			// Panzer III
 			if(this.hasEquipment([482, 514])) return 11;
+			// R35
+			if(this.hasEquipment(576)) return 16;
 			// Panzer II
 			if(this.hasEquipment(436)) return 9;
 			// T89 Tank
