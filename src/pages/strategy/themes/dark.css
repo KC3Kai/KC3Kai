@@ -674,6 +674,9 @@ button, input, select, textarea {
 	color:#fff;
 	background:rgba(0,0,0,0.5);
 }
+.ship_list .ship_item .ship_equip span.expand {
+	color:#3cf;
+}
 .ship_list .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555;
 }
@@ -849,16 +852,19 @@ button, input, select, textarea {
 	color:#fff;
 }
 .tab_overlodger .lodger-data .bar {
-	height: 6px;
+	height:6px;
 }
 .tab_overlodger .lodger-data .bar.INV,
 .tab_overlodger .lodger-data .bar.NM {
-	background-color: #dddddd;
+	background-color:#dddddd;
 	margin:5px 0px 0px 0px;
 }
-.tab_overlodger .lodger-data .materials .material,
-.tab_overlodger .lodger-data .materials .material.over:before {
-	
+.tab_overlodger .lodger-data .materials .material {
+	width:12.5%;
+	border-left:1px solid #777;
+	border-right:1px solid #555;
+	border-radius:0;
+	margin-right:0;
 }
 
 /* Data Backup */
@@ -1791,6 +1797,10 @@ button, input, select, textarea {
 		rgba(0,0,0,0.2) 30%,
 		rgba(0,0,0,0.4)
 	);
+}
+.tab_fleet .fleet_ship .slot_capacity.expand {
+	color:#ace;
+	text-shadow:-1px 0 0 #3cf;
 }
 .tab_fleet .fleet_ship .slot_capacity.shouha {
 	color:#fe0;

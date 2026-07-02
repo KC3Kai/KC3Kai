@@ -438,7 +438,7 @@
 					KC3Meta.itemIcon(thisGear.master().api_type[3]));
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slots[slot], this.shipData))
+					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slotSize(slot), this.shipData))
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
@@ -486,33 +486,34 @@
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
 			}
 			
-			if(this.shipData.slots[ slot ] > 0 ||
-				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3]) > -1)
-			){
-				var slotCurr = this.shipData.slots[slot];
-				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( slotCurr );
+			const gearSlotElm = $(`.ship_gear_${slot+1} .ship_gear_slot`, this.element);
+			const slotCur = this.shipData.slotSize(slot);
+			const gearTypes = (thisGear && thisGear.master().api_type) || [];
+			gearSlotElm.removeClass("expand empty taiha chuuha shouha");
+			if(slotCur > 0 || (KC3GearManager.carrierBasedAircraftType3Ids.includes(gearTypes[3]))){
+				gearSlotElm.text(slotCur);
 				// For now, max slot size will be forced to 1 if Large Flying Boat equipped,
 				// and will restore to its default capacity on resupply if other equipped
-				var slotMax = thisGear && thisGear.master().api_type[2] === 41 ? 1 : this.shipData.master().api_maxeq[slot];
-				if(slotCurr < slotMax){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).attr("title",
-						"{0} /{1}".format(slotCurr, slotMax) ).lazyInitTooltip();
+				const slotMax = gearTypes[2] === 41 ? 1 : this.shipData.slotCapacity(slot);
+				const slotMst = this.shipData.slotCapacity(slot, true);
+				if(slotCur < slotMax){
+					gearSlotElm.attr("title", "{0} /{1}".format(slotCur, slotMax)).lazyInitTooltip();
+				} else if(slotMax > slotMst) {
+					gearSlotElm.attr("title", "{0} /{1}".format(slotMax, slotMst)).lazyInitTooltip();
 				}
-				var slotPercent = slotCurr / (slotMax || 1);
+				if(slotMax > slotMst) gearSlotElm.addClass("expand");
+				const slotPercent = slotCur / (slotMax || 1);
 				if(slotPercent <= 0){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#999");
+					gearSlotElm.addClass("empty");
 				} else if(slotPercent <= 0.25){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f00");
+					gearSlotElm.addClass("taiha");
 				} else if(slotPercent <= 0.50){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f90");
+					gearSlotElm.addClass("chuuha");
 				} else if(slotPercent <= 0.75){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#ff0");
-				} else {
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
+					gearSlotElm.addClass("shouha");
 				}
 			}else{
-				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text("");
-				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
+				gearSlotElm.text("");
 			}
 			
 			$(".ship_gear_"+(slot+1), this.element).css("display", "flex");
