@@ -852,16 +852,19 @@ button, input, select, textarea {
 	color:#fff;
 }
 .tab_overlodger .lodger-data .bar {
-	height: 6px;
+	height:6px;
 }
 .tab_overlodger .lodger-data .bar.INV,
 .tab_overlodger .lodger-data .bar.NM {
-	background-color: #dddddd;
+	background-color:#dddddd;
 	margin:5px 0px 0px 0px;
 }
-.tab_overlodger .lodger-data .materials .material,
-.tab_overlodger .lodger-data .materials .material.over:before {
-	
+.tab_overlodger .lodger-data .materials .material {
+	width:12.5%;
+	border-left:1px solid #777;
+	border-right:1px solid #555;
+	border-radius:0;
+	margin-right:0;
 }
 
 /* Data Backup */

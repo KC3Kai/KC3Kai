@@ -1982,11 +1982,10 @@ KC3改 Ship Object
 		//  * 4: [193,482,514] Toku Daihatsu Landing Craft, Toku Daihatsu Landing Craft + Panzer III (North African Specification), Toku Daihatsu Landing Craft + Panzer III Ausf. J
 		//  * 5: [355,495,514] M4A1 DD, Toku Daihatsu Landing Craft + Chi-Ha Kai, Panzer III Ausf. J
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu, (T4 Tank variants *2)
-		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
+		//  * 7: [436,576] Daihatsu Landing Craft (Panzer II / North African Specification), DLC (R35 & French Infantry)
 		//  * 8: [525,526] virtual type of T4 Tank special merging rules, see *2
-		// [576] daihatsu R35 unknown
 		// [496~499] army units unknown, preliminary: https://x.com/yukicacoon/status/1839245331348992263
-		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], 436, [525, 526]];
+		const landingCraftIds = [[167], [166, 449, 494, 495, 482, 514], 68, 230, [193, 482, 514], [355, 495, 514], [408, 409], [436, 576], [525, 526]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2129,6 +2128,7 @@ KC3改 Ship Object
 			chihaTankKaiAdditive = 0, chihaTankKaiModifier = 1,
 			t4TankVarAdditive = 0, t4TankVarModifier = 1,
 			t4TankKaiAdditive = 0, t4TankKaiModifier = 1,
+			r35TankAdditive = 0, r35TankModifier = 1,
 			synergyAdditive = 0, synergyModifier = 1;
 		
 		let wg42Bonus = 1;
@@ -2159,6 +2159,8 @@ KC3改 Ship Object
 			const chihaKaiCount = this.countEquipment(495);
 			const t4Count = this.countEquipment(525);
 			const t4KaiCount = this.countEquipment(526);
+			const panzer2Count = this.countEquipment(436);
+			const r35Count = this.countEquipment(576);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai
@@ -2178,8 +2180,8 @@ KC3改 Ship Object
 			//   https://twitter.com/yukicacoon/status/1769537134753435786
 			const abCount = this.countEquipment(408);
 			const armedCount = this.countEquipment(409);
-			// Normal, T89, Toku, Panzer2, Honi1, T4 tanks
-			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449, 525, 526]);
+			// Normal, T89, Toku, Panzer2, Honi1, T4 tanks, R35
+			const dlcGroup1Count = this.countEquipment([68, 166, 193, 436, 449, 525, 526, 576]);
 			// T2 tank, T11 shikon, Panzer3, Chiha &Kai
 			const dlcGroup2Count = this.countEquipment([167, 230, 482, 514, 494, 495]);
 			// strange fact: if 2 Armed Daihatsu (0 AB boat) equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
@@ -2198,7 +2200,7 @@ KC3改 Ship Object
 			const abdSynergyModifier = 1 + singleSynergyModifier + doubleSynergyModifier;
 			const abdSynergyAdditive = singleSynergyAdditive + doubleSynergyAdditive;
 			
-			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1, Panzer3, Chiha
+			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1, Panzer3, Chiha, R35
 			// although here using word 'tank', but they are in landing craft cateory unlike T2 tank
 			// Different for uncategorized surface installation types, eg: Anchorage Water Demon Vacation Mode x1.1 for shikon only, Dock Princess x1.4 +0 for 3 sptanks
 			spTankModifier = shikonCount + honi1Count + panzer3Count ? 1.8 : 1;
@@ -2217,6 +2219,9 @@ KC3改 Ship Object
 			t4TankVarAdditive = t4Count + t4KaiCount ? 42 : 0;
 			t4TankKaiModifier = t4KaiCount ? 1.1 : 1;
 			t4TankKaiAdditive = t4KaiCount ? 28 : 0;
+			// uncertain: https://x.com/yukicacoon/status/2072518004232110356
+			r35TankModifier = panzer2Count + r35Count ? 1.2 : 1;
+			r35TankAdditive = panzer2Count + r35Count ? 20 : 0;
 			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -2332,6 +2337,7 @@ KC3改 Ship Object
 				chihaTankKaiModifier,
 				t4TankVarModifier,
 				t4TankKaiModifier,
+				r35TankModifier,
 				synergyModifier,
 			},
 			additives: {
@@ -2344,6 +2350,7 @@ KC3改 Ship Object
 				chihaTankKaiAdditive,
 				t4TankVarAdditive,
 				t4TankKaiAdditive,
+				r35TankAdditive,
 				synergyAdditive,
 			}
 		};
