@@ -23,6 +23,7 @@
 			destr : "Completely destroys"
 		};
 	const EVENT_WORLD_TERMS = [
+		{ id: 62, label: 'EventHistoryWorldTab62' },
 		{ id: 61, label: 'EventHistoryWorldTab61', tooltip: 'EventHistoryWorldTab61Tip' },
 		{ id: 60, label: 'EventHistoryWorldTab60', tooltip: 'EventHistoryWorldTab60Tip' },
 
