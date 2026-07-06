@@ -2056,8 +2056,9 @@ KC3改 Ship Object
 			const hasHoni1 = this.hasEquipment(449);
 			const hasPanzer2 = this.hasEquipment(436);
 			const hasPanzer3 = this.hasEquipment([482, 514]);
+			const hasR35 = this.hasEquipment(576);
 			// When T89Tank/Honi1/Panzer2/Panzer3 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
-			sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1 || hasPanzer3) & 1) + ((hasType89LandingForce && hasPanzer2) & 1);
+			sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1 || hasPanzer3) & 1) + ((hasType89LandingForce && (hasPanzer2 || hasR35)) & 1);
 		}
 		if(landingGroupCount > 0 || t4GroupCount > 0) {
 			const landingGroupMod = landingGroupCount > 0 ? landingGroupStars / landingGroupCount / 50 : 0;
@@ -2126,8 +2127,18 @@ KC3改 Ship Object
 			gunTankAdditive = 0, gunTankModifier = 1,
 			chihaTankAdditive = 0, chihaTankModifier = 1,
 			chihaTankKaiAdditive = 0, chihaTankKaiModifier = 1,
+			
+			armyInfantryAdditive = 0, armyInfantryModifier = 1,
+			armyChihaKaiAdditive = 0, armyChihaKaiModifier = 1,
+			medTankAdditive = 0, medTankModifier = 1,
+			medTankChihaKaiAdditive = 0, medTankChihaKaiModifier = 1,
+			chihaKaiKaMiAdditive = 0, chihaKaiKaMiModifier = 1,
+			armyT4TankAdditive = 0, armyT4TankKaiAdditive = 1,
+			armySynergyAdditive = 0, armySynergyModifier = 1,
+			
 			t4TankVarAdditive = 0, t4TankVarModifier = 1,
 			t4TankKaiAdditive = 0, t4TankKaiModifier = 1,
+			panzer2TankAdditive = 0, panzer2TankModifier = 1,
 			r35TankAdditive = 0, r35TankModifier = 1,
 			synergyAdditive = 0, synergyModifier = 1;
 		
@@ -2157,11 +2168,17 @@ KC3改 Ship Object
 			const panzer3Count = this.countEquipment(482);
 			const chihaCount = this.countEquipment(494);
 			const chihaKaiCount = this.countEquipment(495);
+			const t2Count = this.countEquipment(167);
 			const t4Count = this.countEquipment(525);
 			const t4KaiCount = this.countEquipment(526);
 			const panzer2Count = this.countEquipment(436);
 			const r35Count = this.countEquipment(576);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
+			
+			const armyInfantryCount = this.countEquipment(496);
+			const t97MedTankCount = this.countEquipment(497);
+			const t97MedTankChihaKaiCount = this.countEquipment(498);
+			const armyInfantryChihaKaiCount = this.countEquipment(499);
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -2214,14 +2231,34 @@ KC3改 Ship Object
 			chihaTankAdditive = chihaCount ? 28 : 0;
 			chihaTankKaiModifier = chihaKaiCount ? 1.5 : 1;
 			chihaTankKaiAdditive = chihaKaiCount ? 33 : 0;
+			
+			// https://bbs.nga.cn/read.php?tid=33769345
+			armyInfantryModifier = armyInfantryCount + armyInfantryChihaKaiCount ? 1.2 : 1;
+			armyInfantryAdditive = armyInfantryCount + armyInfantryChihaKaiCount ? 60 : 0;
+			armyChihaKaiModifier = armyInfantryChihaKaiCount ? 1.6 : 1;
+			armyChihaKaiAdditive = armyInfantryChihaKaiCount ? 70 : 0;
+			medTankModifier = t97MedTankCount + t97MedTankChihaKaiCount ? 1.5 : 1;
+			medTankAdditive = t97MedTankCount + t97MedTankChihaKaiCount ? 70 : 1;
+			medTankChihaKaiModifier = t97MedTankChihaKaiCount ? 1.5 : 1;
+			medTankChihaKaiAdditive = t97MedTankChihaKaiCount ? 50 : 0;
+			const hasArmyUnits = armyInfantryCount + armyInfantryChihaKaiCount + t97MedTankCount + t97MedTankChihaKaiCount > 0;
+			const hasChihaKaiOrKaMi = hasArmyUnits && (armyInfantryChihaKaiCount > 0 || (t97MedTankCount + t97MedTankChihaKaiCount + armyInfantryCount + t2Count + t4Count + t4KaiCount) > 0);
+			armySynergyModifier = hasChihaKaiOrKaMi ? 2 : 1;
+			armySynergyAdditive = hasChihaKaiOrKaMi ? 100 : 0;
+			chihaKaiKaMiModifier = hasChihaKaiOrKaMi ? 3 : 1;
+			chihaKaiKaMiAdditive = hasChihaKaiOrKaMi ? 150 : 0;
+			armyT4TankAdditive = hasArmyUnits && t4Count ? 100 : 0;
+			armyT4TankKaiAdditive = hasArmyUnits && t4KaiCount ? 172 : 0;
+			
 			// https://bbs.nga.cn/read.php?tid=39595977
 			t4TankVarModifier = t4Count + t4KaiCount ? 1.2 : 1;
 			t4TankVarAdditive = t4Count + t4KaiCount ? 42 : 0;
 			t4TankKaiModifier = t4KaiCount ? 1.1 : 1;
 			t4TankKaiAdditive = t4KaiCount ? 28 : 0;
-			// uncertain: https://x.com/yukicacoon/status/2072518004232110356
-			r35TankModifier = panzer2Count + r35Count ? 1.2 : 1;
-			r35TankAdditive = panzer2Count + r35Count ? 20 : 0;
+			panzer2TankModifier = panzer2Count ? 1.15 : 1;
+			panzer2TankAdditive = panzer2Count ? 15 : 0;
+			r35TankModifier = r35Count ? 1.2 : 1;
+			r35TankAdditive = r35Count ? 20 : 0;
 			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -2335,8 +2372,15 @@ KC3改 Ship Object
 				gunTankModifier,
 				chihaTankModifier,
 				chihaTankKaiModifier,
+				armyInfantryModifier,
+				armyChihaKaiModifier,
+				medTankModifier,
+				medTankChihaKaiModifier,
+				chihaKaiKaMiModifier,
+				armySynergyModifier,
 				t4TankVarModifier,
 				t4TankKaiModifier,
+				panzer2TankModifier,
 				r35TankModifier,
 				synergyModifier,
 			},
@@ -2348,8 +2392,17 @@ KC3改 Ship Object
 				gunTankAdditive,
 				chihaTankAdditive,
 				chihaTankKaiAdditive,
+				armyInfantryAdditive,
+				armyChihaKaiAdditive,
+				medTankAdditive,
+				medTankChihaKaiAdditive,
+				chihaKaiKaMiAdditive,
+				armyT4TankAdditive,
+				armyT4TankKaiAdditive,
+				armySynergyAdditive,
 				t4TankVarAdditive,
 				t4TankKaiAdditive,
+				panzer2TankAdditive,
 				r35TankAdditive,
 				synergyAdditive,
 			}
@@ -2514,7 +2567,7 @@ KC3改 Ship Object
 		}
 		
 		// Apply modifiers, flooring unknown, anti-land modifiers get in first
-		let result = (((((((((((basicPower
+		let result = (((((((((((((basicPower
 			* mulBonus("stypeModifier")   + addBonus("stypeAdditive"))
 			* mulBonus("generalModifier"))
 			* mulBonus("spTankModifier")  + addBonus("spTankAdditive"))
@@ -2524,6 +2577,8 @@ KC3改 Ship Object
 			* mulBonus("chihaTankKaiModifier") + addBonus("chihaTankKaiAdditive"))
 			* mulBonus("t4TankVarModifier") + addBonus("t4TankVarAdditive"))
 			* mulBonus("t4TankKaiModifier") + addBonus("t4TankKaiAdditive"))
+			* mulBonus("panzer2TankModifier") + addBonus("panzer2TankAdditive"))
+			* mulBonus("r35TankModifier") + addBonus("r35TankAdditive"))
 			* mulBonus("synergyModifier") + addBonus("synergyAdditive"))
 			+ addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
