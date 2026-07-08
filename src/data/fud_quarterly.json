@@ -521,6 +521,22 @@
 			"2": { "type": "hp", "boss": [41] },
 			"3": { "type": "hp", "boss": [47] },
 			"4": { "type": "hp", "boss": [55, 56] }
+		},
+		"621": {
+			"1": { "type": "hp", "boss": [18] },
+			"2": { "type": "tp", "boss": [32], "landing": [30] },
+			"3": { "type": "hp", "boss": [46] }
+		},
+		"622": {
+			"1": { "type": "tp", "boss": [32], "landing": [31] },
+			"2": { "type": "hp", "boss": [43] },
+			"3": { "type": "hp", "boss": [55] }
+		},
+		"623": {
+			"1": { "type": "hp", "boss": [32] },
+			"2": { "type": "tp", "boss": [39], "landing": [38, 43] },
+			"3": { "type": "hp", "boss": [50, 53] },
+			"4": { "type": "hp", "boss": [62] }
 		}
 	},
 	"abyssKaiShipIds": [
@@ -541,9 +557,9 @@
 		2268, 2269, 2310, 2329, 2330, 2331
 	],
 	"lockingTagConfigs": {
-		"maxTagAmount": 14,
+		"maxTagAmount": 12,
 		"moTagIds": [0, 1, 2, 3, 4, 5],
-		"eoTagIds": [1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13]
+		"eoTagIds": [6, 7, 8, 9, 10, 11]
 	},
 	"lockingTagColors": {
 		"legacy": [
