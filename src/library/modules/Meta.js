@@ -293,6 +293,8 @@ Provides access to data on built-in JSON files
 			"630": 48, // Gotland andra: 軽(航空)巡洋艦
 			"597": 49, // Atlanta: 防空巡洋艦
 			"696": 49, // Atlanta K: 防空巡洋艦
+			"991": 49, // Reno: 防空巡洋艦
+			"747": 49, // Reno K: 防空巡洋艦
 			"622": 50, // Yuubari K2: 兵装実験軽巡
 			"623": 50, // Yuubari K2T: 兵装実験軽巡
 			"624": 50, // Yuubari K2D: 兵装実験軽巡

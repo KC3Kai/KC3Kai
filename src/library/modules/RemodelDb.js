@@ -184,6 +184,7 @@
                 case 901: // Javelin
                     return 95;
                 case 597: // Atlanta
+                case 991: // Reno
                     return 100;
                 case 293: // Yuubari Kai
                 case 622: // Yuubari Kai Ni
@@ -219,6 +220,8 @@
                     return 20;
                 case 396: // Gambier Bay Kai
                     return 60;
+                case 1028: // Independence Kai
+                    return 85;
                 case 877: // Conte di Cavour
                 case 392: // Richelieu Kai
                     return 30;
@@ -344,6 +347,7 @@
                 case 681: // Samuel B.Roberts Kai
                     return 20;
                 case 597: // Atlanta
+                case 991: // Reno
                     return 20;
                 case 594: // Akagi Kai Ni
                 case 599: // Akagi Kai Ni E
@@ -387,6 +391,8 @@
                     return 10;
                 case 396: // Gambier Bay Kai
                     return 73;
+                case 1028: // Independence Kai
+                    return 50;
                 case 877: // Conte di Cavour
                     return 10;
                 case 878: // Conte di Cavour Kai
@@ -436,6 +442,7 @@
                     return 3;
                 case 578:  // to Asashimo K2Ho
                 case 1034: // to Suzunami K2Ho
+                case 1028: // to Independence Flight2
                     return 2;
                 default: return 0;
             }
