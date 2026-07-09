@@ -269,7 +269,7 @@ Saves and loads significant data for future use
 			})[rscPath];
 			const paddedId = String(id).padStart(padWidth || 3, "0"),
 				suffix = !["useitem", "se"].includes(rscPath) ? "_" + getFilenameSuffix(id, typeWithPrefix) : "";
-			const uniqueKey = ["full", "port"].includes(type) && rscPath === "ship" ? ((key) => (
+			const uniqueKey = ["full", "port", "full_animation"].includes(type) && rscPath === "ship" ? ((key) => (
 					key ? "_" + key : ""
 				))(this.graph(id).api_filename) : "";
 			const fileExt = ({ "bgm": ".mp3" })[rscPath] || ".png";

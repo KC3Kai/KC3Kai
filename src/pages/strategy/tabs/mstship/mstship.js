@@ -489,6 +489,7 @@
 				].includes(ship_id);
 				// No card but has damaged image
 				const isSpButHasTaiha = [5256, 5269, 5357].includes(ship_id);
+				const isSpFlagGraph = !!KC3Master.graph(ship_id).api_sp_flag;
 				const availableTypes = KC3Master.isSeasonalShip(ship_id) ?
 					isSpecificAlbumTypes ? isSpButHasTaiha ? [
 						'character_full', 'character_full_dmg',
@@ -500,31 +501,40 @@
 					KC3Meta.abyssShipBorderClass(shipData) === "boss" ? [
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'full', 'full_dmg',
-						'banner_d', 'banner_g_dmg_d', 'full_d'
-						// some exists: 'full_dmg_d'
+						'banner_d', 'banner_g_dmg_d', 'full_d', // 'full_dmg_d' omitted
+						'banner_dmg_b', 'banner_g_dmg_b'
+						// used by Mu-class 2317~2319, 'banner3_dmg_b', 'banner3_g_dmg_b' omitted
 					] : [
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'full', 'full_dmg'
-						// some exists: 'banner3', 'banner3_g_dmg'
+						// 'banner3', 'banner3_g_dmg' omitted
 					] : ['card', 'card_dmg',
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'banner2', 'banner2_dmg', 'banner2_g_dmg',
 						'full', 'full_dmg',
 						'character_full', 'character_full_dmg',
 						'character_up', 'character_up_dmg',
+						// 'power_up', 'power_up_dmg' omitted
 						'remodel', 'remodel_dmg',
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
-				// No `album_status` found for Kai Ni Ho
+				// No `album_status` assets found for Kai Ni Ho
 				if([743, 744, 745].includes(ship_id)) availableTypes.pop();
+				// Hard-coded [951] Amatsukaze K2 removed in main.js,
+				// but `port` and `powerup` assets not removed from server yet
+				/*
 				// from `main.js/isShipImageForPortScene`
-				const isShipImageForPort = [951].includes(ship_id),
 				// from `main.js/isShipImageForPowerUp`
+				const isShipImageForPort = [951].includes(ship_id),
 					isShipImageForPowerUp = [951].includes(ship_id);
-				// Also has special port animation under `full_animation(_dmg)`
 				if(isShipImageForPort) availableTypes.push('port', 'port_dmg');
 				if(isShipImageForPowerUp) availableTypes.push('powerup', 'powerup_dmg');
+				*/
+				// Special secretray port animation (Amatsukaze K2)
+				if(isSpFlagGraph && KC3Master.isRegularShip(ship_id)) {
+					availableTypes.push('full_animation', 'full_animation_dmg');
+				}
 				// Special cut-in (Nelson Touch, Nagato/Mutsu, Colorado Cutin...) special type
 				// Kongou-class special ones have no difference with regular full, used by Yamato partner
 				if(KC3Meta.specialCutinIds.includes(ship_id)) {
@@ -545,12 +555,16 @@
 				availableTypes.forEach(type => {
 					// Old suffix for debuffed boss CG used still, see `ShipLoader.hasai` & `hSuffix()`
 					const isDebuffedBoss = type.endsWith("_d"),
+						isBrokenGraph = type.endsWith("_b"),
 						isDamaged = type.endsWith("_dmg"),
-						qualifiedType = isDebuffedBoss ? type.slice(0, -2) :
+						qualifiedType = isDebuffedBoss || isBrokenGraph ? type.slice(0, -2) :
 							isDamaged ? type.slice(0, -4) : type;
-					// New suffix _g used by Mu-class CL, see `ShipLoader.prototype.isLoadEnemyDamagedGraph`
-					const isSpDamagedSuffix = !!KC3Master.graph(ship_id).api_sp_flag;
-					let fileSuffix = isDebuffedBoss ? (isSpDamagedSuffix ? "_g" : this.damagedBossFileSuffix) : "";
+					// New suffix `_b` (previously `_g`) used by Mu-class CL
+					// see also `ShipLoader.prototype.isLoadEnemyDamagedGraph` and `ShipUtil.isEnemyBreakGraph`
+					const isSpDamagedSuffix = isSpFlagGraph && KC3Master.isAbyssalShip(ship_id);
+					if (!isSpDamagedSuffix && isBrokenGraph || isSpDamagedSuffix && isDebuffedBoss) return;
+					const fileSuffix = isSpDamagedSuffix && isBrokenGraph ? "_b" :
+						isDebuffedBoss ? this.damagedBossFileSuffix : "";
 					const img = $("<img />"),
 						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged, fileSuffix);
 					const url = `${this.gameServer.urlPrefix}/kcs2/resources${imgUri}`
