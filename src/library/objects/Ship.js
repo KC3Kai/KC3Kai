@@ -3051,7 +3051,7 @@ KC3改 Ship Object
 	 * @return true if this ship able to do OASW unconditionally regardless of equipment.
 	 */
 	KC3Ship.prototype.isOaswShip = function() {
-		// Possible game server backend uses condition: initAsw >= 50,
+		// Possible condition used by game server backend: initAsw >= 50,
 		//  for sonar types only, CAV/BBV/AV/CV(L)/LHA types still need asw aircraft.
 		// However, `api_tais` attribute is NOT exprtoed in master data to client, except some CVL:
 		// (KC3Master.find_ships(s => ((s.api_tais||[])[0] > 0)).map(o => o.api_name)), so impossible to use:
@@ -4335,7 +4335,8 @@ KC3改 Ship Object
 		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni, Kaga Kai Ni Go
 		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
 		//             Langley and Kai fp > 0, but seems don't attack either
-		if(isThisCarrier && initYasen > 0 && ![707, 925, 930].includes(this.masterId)) return true;
+		//             Independence and Kai fp > 0, don't attack? but Flight II supposed to move
+		if(isThisCarrier && initYasen > 0 && ![707, 925, 930, 1023, 1028].includes(this.masterId)) return true;
 		// Shimanemaru Kai gets special behaviors: moves like a night carrier when any night plane equipped,
 		// but falls back to shelling fires when she is chuuha.
 		const isShimanemaruKaiWithNightPlane = (this.masterId == 1008) && this.canCarrierNightAirAttack();
