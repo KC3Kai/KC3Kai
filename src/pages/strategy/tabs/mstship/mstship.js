@@ -1555,7 +1555,7 @@
 								).attr("title", airpow.slice(1, 4).sumValues());
 							} else if(stat[1] === "adjaa"){
 								// Compute adjusted anti-air power based on known slots
-								const adjShip = AntiAir.abyssalShipAdjustedAntiAir(abyssMaster.api_id);
+								const adjShip = Math.floor(AntiAir.abyssalShipAdjustedAntiAir(abyssMaster.api_id));
 								const adjFleet = AntiAir.abyssalShipFleetAdjustedAntiAir(abyssMaster.api_id);
 								$(".ship_stat_min", statBox).text(Object.nullishTo(adjShip, "?"));
 								$(".ship_stat_max span", statBox).text(Object.nullishTo(adjFleet, "?"));
