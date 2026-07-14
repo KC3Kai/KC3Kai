@@ -4367,15 +4367,16 @@ KC3改 Ship Object
 		if(this.isCarrier() || isHealthyShimanemaruKai) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
-			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
+			// Known night battle capable carriers:
+			//   Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E, Independence Flight II
 			//   Shimanemaru Kai with any night fighter, api_n_mother_list will be 1
 			//     base remodel untested, night bombers untested, empty slot untested
-			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId) || isHealthyShimanemaruKai;
+			const isThisNightCarrier = [545, 599, 610, 883, 1036].includes(this.masterId) || isHealthyShimanemaruKai;
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
 			//const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
-			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E/Ryuuhou K2E)
+			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E/Ryuuhou K2E/Ind F2)
 			return hasNightAircraft && (hasNightAvPersonnel || isThisNightCarrier);
 		}
 		return false;
@@ -6278,7 +6279,12 @@ KC3改 Ship Object
 		var gearInfo;
 		this.equipment(false).forEach((gear, i) => {
 			gearInfo = gear.deckbuilder();
-			if (gearInfo) itemsInfo["i".concat(i+1)] = gearInfo;
+			if (gearInfo) {
+				// support extended by aircalc kcweb
+				if (forImgBuilder && Array.isArray(this.slotsMax))
+					gearInfo.ac = this.slotCapacity(i);
+				itemsInfo["i".concat(i+1)] = gearInfo;
+			}
 		});
 		gearInfo = this.exItem().deckbuilder();
 		if (gearInfo) {
