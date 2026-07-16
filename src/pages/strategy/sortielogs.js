@@ -302,6 +302,9 @@
 						$(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, lastWorldId)).addClass("active");
 					}
 				}
+				if(dropdownWorldselect.length) {
+					dropdownWorldselect.prop("selectedIndex", 0);
+				}
 			}
 			return missingWorldCount;
 		};

@@ -27,17 +27,6 @@
   };
   const akashiRecipesToIgnore = [101, 201, 301, 306];
 
-  // #region event-reward
-
-  let currentMap = [0, 0];
-  let mapInfo = [];
-  let sortieData = {
-    map: null,
-    difficulty: null,
-  };
-
-  // #endregion
-
   const apis = {
     "api_get_member/questlist": [processQuestList],
     "api_req_quest/clearitemget": [processClearItemGet],
@@ -47,16 +36,8 @@
     "api_req_kousyou/remodel_slot": [processRemodelSlot],
     "api_req_kousyou/remodel_slot_recover": [processRemodelSlotRecover],
 
-    // #region event-reward
-
-    'api_get_member/mapinfo': [processMapInfo],
-    'api_req_map/select_eventmap_rank': [processSelectEventMapRank],
-    'api_req_map/start': [processStart],
-    'api_req_map/next': [processNext],
     'api_req_sortie/battleresult': [processEventReward],
     'api_req_combined_battle/battleresult': [processEventReward],
-
-    // #endregion
   };
 
   let prevQuestIdList = [], prevAllQuestsHash = false, alterQuestDetected = false;
@@ -252,54 +233,27 @@
     }
   }
 
-  // #region event-reward
-
-  function processMapInfo(har) {
-    mapInfo = har.response.api_data.api_map_info;
-  }
-
-  function processSelectEventMapRank(har) {
-    const mapId = [har.params.api_maparea_id, har.params.api_map_no].join('');
-    const mapData = mapInfo.find(i => i.api_id == mapId) || {};
-    if (mapData.api_eventmap) {
-      mapData.api_eventmap.api_selected_rank = Number(har.params.api_rank);
-    }
-  }
-
-  function processStart(har) {
-    const apiData = har.response.api_data;
-    const world = Number(apiData.api_maparea_id);
-    const map = Number(apiData.api_mapinfo_no);
-    currentMap = [world, map];
-    sortieData.map = currentMap.join('-');
-    processNext(har);
-  }
-
-  function processNext(har) {
-    if (!currentMap[0] || !currentMap[1]) return;
-    const mapId = currentMap.join('');
-    const mapData = mapInfo.find(i => i.api_id == mapId) || {};
-    if (mapData.api_eventmap) {
-      sortieData.difficulty = mapData.api_eventmap.api_selected_rank || 0;
-    }
-  }
-
+  /**
+   * On battle result for event rewards
+   */
   function processEventReward(har) {
-    if (!currentMap[0] || !currentMap[1]) return;
     const apiData = har.response.api_data;
-    if (apiData.api_get_eventitem === undefined) return;
+    if (!apiData || !apiData.api_get_eventitem) return;
+    const currentMap = KC3SortieManager.getSortieMap();
+    if (!currentMap[0] || !currentMap[1]) return;
+    const mapInfo = KC3SortieManager.getCurrentMapData();
+    if (!mapInfo.difficulty) return;
+
     const body = {
       world: currentMap[0],
       map: currentMap[1],
-      difficulty: sortieData.difficulty,
+      difficulty: mapInfo.difficulty,
       api_get_eventitem: apiData.api_get_eventitem,
       api_select_reward_dict: apiData.api_select_reward_dict || null,
     };
 
     postData('event-rewards', body);
   }
-
-  // #endregion
 
   window.KCRDBSubmission = {
     processData,
