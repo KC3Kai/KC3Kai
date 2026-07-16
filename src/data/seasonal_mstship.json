@@ -9168,7 +9168,7 @@
 		"api_id": 6145,
 		"api_name": "正月大井改",
 		"api_yomi": "おおい",
-		"api_stype": 3,
+		"api_stype": 4,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
@@ -9720,7 +9720,7 @@
 		"api_id": 6214,
 		"api_name": "Valentine大井改",
 		"api_yomi": "おおい",
-		"api_stype": 3,
+		"api_stype": 4,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
@@ -10186,6 +10186,262 @@
 		"api_yomi": "じんげい",
 		"api_stype": 20,
 		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6273": {
+		"api_id": 6273,
+		"api_name": "梅雨千歳改",
+		"api_yomi": "ちとせ",
+		"api_stype": 16,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6274": {
+		"api_id": 6274,
+		"api_name": "梅雨千歳甲",
+		"api_yomi": "ちとせ",
+		"api_stype": 16,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6275": {
+		"api_id": 6275,
+		"api_name": "梅雨千歳航",
+		"api_yomi": "ちとせ",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6276": {
+		"api_id": 6276,
+		"api_name": "梅雨千歳航改二",
+		"api_yomi": "ちとせ",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6277": {
+		"api_id": 6277,
+		"api_name": "梅雨千代田改",
+		"api_yomi": "ちよだ",
+		"api_stype": 16,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6278": {
+		"api_id": 6278,
+		"api_name": "梅雨千代田甲",
+		"api_yomi": "ちよだ",
+		"api_stype": 16,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6279": {
+		"api_id": 6279,
+		"api_name": "梅雨千代田航",
+		"api_yomi": "ちよだ",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6280": {
+		"api_id": 6280,
+		"api_name": "梅雨千代田航改二",
+		"api_yomi": "ちよだ",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6281": {
+		"api_id": 6281,
+		"api_name": "梅雨扶桑改二",
+		"api_yomi": "ふそう",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6282": {
+		"api_id": 6282,
+		"api_name": "梅雨天霧改二",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6283": {
+		"api_id": 6283,
+		"api_name": "梅雨天霧改二丁",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6284": {
+		"api_id": 6284,
+		"api_name": "梅雨Gambier Bay Mk.II",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6285": {
+		"api_id": 6285,
+		"api_name": "梅雨大井改",
+		"api_yomi": "おおい",
+		"api_stype": 4,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6286": {
+		"api_id": 6286,
+		"api_name": "梅雨大井改二",
+		"api_yomi": "おおい",
+		"api_stype": 4,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6287": {
+		"api_id": 6287,
+		"api_name": "梅雨榛名改二",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6288": {
+		"api_id": 6288,
+		"api_name": "梅雨榛名改二乙",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6289": {
+		"api_id": 6289,
+		"api_name": "梅雨榛名改二丙",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6290": {
+		"api_id": 6290,
+		"api_name": "梅雨加古改二",
+		"api_yomi": "かこ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6291": {
+		"api_id": 6291,
+		"api_name": "梅雨伊203改",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6292": {
+		"api_id": 6292,
+		"api_name": "梅雨Gotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6293": {
+		"api_id": 6293,
+		"api_name": "梅雨Gotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6294": {
+		"api_id": 6294,
+		"api_name": "梅雨Tuscaloosa改",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6295": {
+		"api_id": 6295,
+		"api_name": "梅雨冬月改",
+		"api_yomi": "ふゆつき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6296": {
+		"api_id": 6296,
+		"api_name": "梅雨最上改",
+		"api_yomi": "もがみ",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6297": {
+		"api_id": 6297,
+		"api_name": "梅雨Thonburi",
+		"api_yomi": "トンブリ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6298": {
+		"api_id": 6298,
+		"api_name": "梅雨Thonburi改",
+		"api_yomi": "トンブリ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6299": {
+		"api_id": 6299,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6300": {
+		"api_id": 6300,
+		"api_name": "秋冬制服早波改二",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6301": {
+		"api_id": 6301,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6302": {
+		"api_id": 6302,
+		"api_name": "秋冬制服玉波改二",
+		"api_yomi": "たまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6303": {
+		"api_id": 6303,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6304": {
+		"api_id": 6304,
+		"api_name": "秋冬制服涼波改二",
+		"api_yomi": "すずなみ",
+		"api_stype": 2,
+		"api_soku": 10,
 		"api_slot_num": 3
 	}
 }

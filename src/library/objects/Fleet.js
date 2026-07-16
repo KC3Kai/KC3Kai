@@ -451,6 +451,7 @@ Contains summary information about a fleet and its ships
 		var armedCount = 0;
 		var panzerCount = 0;
 		var tokuHoni1Count = 0;
+		var r35Count = 0;
 		// amount of bonus ships 
 		var bonusShipCount = 0;
 		this.ship((shipRid, shipIdx, shipObj) => {
@@ -495,6 +496,10 @@ Contains summary information about a fleet and its ships
 						armedCount += 1;
 						addImprove(gearObj.stars);
 					break;
+					case 576: // R35 tank
+						r35Count += 1;
+						addImprove(gearObj.stars);
+					break;
 					case 436: // Panzer II/North African Spec
 					// [482] Panzer III/North African Spec not counted
 					// [514] Panzer III Ausf.J not counted
@@ -505,7 +510,7 @@ Contains summary information about a fleet and its ships
 						tokuHoni1Count += 1;
 						addImprove(gearObj.stars);
 					// [494] Toku DLC + Chi-Ha not counted
-					// [495] Toku DLC + Chi-Ha Kai not counted?
+					// [495] Toku DLC + Chi-Ha Kai not counted
 					break;
 				}
 			});
@@ -513,7 +518,7 @@ Contains summary information about a fleet and its ships
 		// without cap
 		const basicBonus= 0.05 * (normalCount + tokuCount + t4kaiCount + bonusShipCount)
 						+ 0.02 * (t89Count + abCount + panzerCount + tokuHoni1Count)
-						+ 0.03 * armedCount
+						+ 0.03 * (armedCount + r35Count)
 						+ 0.04 * t4baseCount
 						+ 0.01 * t2Count;
 		// cap at 20%
@@ -526,7 +531,7 @@ Contains summary information about a fleet and its ships
 			[0.050, 0.050, 0.052, 0.054][normalCount] || 0.054;
 		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
 		const landingCraftCount = [normalCount, t89Count, t2Count, t4baseCount, t4kaiCount, tokuCount,
-			abCount, armedCount, panzerCount, tokuHoni1Count].sumValues();
+			abCount, armedCount, panzerCount, tokuHoni1Count, r35Count].sumValues();
 		// "Bstar" in the formula
 		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
@@ -1726,7 +1731,7 @@ Contains summary information about a fleet and its ships
 				if (master && [10, 11].includes(master.api_type[2])) {
 					// LoS visible bonus on ship not counted
 					// https://twitter.com/Matsu_class_DD/status/1245457218956226560
-					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
+					value += Math.floor(Math.sqrt(ship.slotSize(index))) * (master.api_saku || 0);
 				}
 			});
 		});
@@ -1763,6 +1768,7 @@ Contains summary information about a fleet and its ships
 						},
 						kyouka: ship.mod,
 						effect: ship.statsSp(),
+						slots: ship.slots,
 						equip: ship.equipment(true).map(g => g.masterId),
 						stars: ship.equipment(true).map(g => g.stars),
 						ace: ship.equipment(true).map(g => g.ace)
