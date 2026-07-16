@@ -23,6 +23,7 @@
 			destr : "Completely destroys"
 		};
 	const EVENT_WORLD_TERMS = [
+		{ id: 62, label: 'EventHistoryWorldTab62' },
 		{ id: 61, label: 'EventHistoryWorldTab61', tooltip: 'EventHistoryWorldTab61Tip' },
 		{ id: 60, label: 'EventHistoryWorldTab60', tooltip: 'EventHistoryWorldTab60Tip' },
 
@@ -301,6 +302,9 @@
 						$(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, lastWorldId)).addClass("active");
 					}
 				}
+				if(dropdownWorldselect.length) {
+					dropdownWorldselect.prop("selectedIndex", 0);
+				}
 			}
 			return missingWorldCount;
 		};
@@ -397,7 +401,10 @@
 						"font-size":"11px",
 						"white-space":"nowrap",
 					};
-					const title = KC3Meta.term("BattleHistoryMinimapPreview").format(world, map);
+					const title = [
+						'"' + (KC3Master.mapInfo(world, map).api_name || "") + '"',
+						KC3Meta.term("BattleHistoryMinimapPreview").format(world, map)
+					].join(" ");
 					text += $("<div></div>").css({
 						"width": "100%", "text-align": "center",
 						"font-weight": "bold",

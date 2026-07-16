@@ -2103,6 +2103,67 @@
 					multiple: { "houg": -2, "houk": -1, "souk": -2 },
 				},
 			},
+			// SB2U-2
+			"578": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							multiple: { "houg": 1, "saku": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					"UnitedKingdom": [
+						{
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Ranger, Lexington
+						origins: [931, 966],
+						multiple: { "houg": 1, "houk": 1, "houm": 1, "saku": 1 },
+					},
+					{
+						// Saratoga
+						origins: [433],
+						multiple: { "houk": 1, "houm": 1, "saku": 1 },
+					},
+				],
+			},
 			// F4U-4
 			"474": {
 				count: 0,
@@ -2173,8 +2234,8 @@
 					],
 				},
 				byShip: {
-					// Gambier Bay Mk.II, Langley Kai
-					ids: [707, 930],
+					// Gambier Bay Mk.II, Langley Kai, Independence Kai+
+					ids: [707, 930, 1036, 1028],
 					multiple: { "houg": 1, "houk": 1 },
 				},
 			},
@@ -8303,6 +8364,7 @@
 						{
 							remodel: 2,
 							multiple: { "raig": 2, "houk": 1 },
+							distinctGears: [286, 577],
 							countCap: 2,
 						},
 						{
@@ -8310,6 +8372,7 @@
 							minStars: 10,
 							remodel: 2,
 							multiple: { "houg": 1 },
+							distinctGears: [286, 577],
 							countCap: 2,
 						},
 					],
@@ -8324,6 +8387,7 @@
 							remodel: 2,
 							excludes: [556, 557, 558, 559],
 							multiple: { "raig": 2, "houk": 1 },
+							distinctGears: [286, 577],
 							countCap: 2,
 						},
 						{
@@ -8332,6 +8396,7 @@
 							remodel: 2,
 							excludes: [556, 557, 558, 559],
 							multiple: { "raig": 1 },
+							distinctGears: [286, 577],
 							countCap: 2,
 						},
 						{
@@ -8340,6 +8405,7 @@
 							remodel: 2,
 							excludes: [556, 557, 558, 559],
 							multiple: { "houg": 1 },
+							distinctGears: [286, 577],
 							countCap: 2,
 						},
 					],
@@ -8349,6 +8415,7 @@
 						// Fubuki Kai San Go
 						ids: [1040],
 						multiple: { "raig": 2, "houk": 1 },
+						distinctGears: [286, 577],
 						countCap: 2,
 					},
 					{
@@ -8356,6 +8423,7 @@
 						ids: [1040],
 						minStars: 10,
 						multiple: { "houg": 1 },
+						distinctGears: [286, 577],
 						countCap: 2,
 					},
 					{
@@ -8389,6 +8457,157 @@
 						ids: [961],
 						minStars: 5,
 						multiple: { "raig": 1 },
+						distinctGears: [286, 577],
+						countCap: 2,
+					},
+				],
+			},
+			// 61cm Quadruple (Oxygen) Torpedo Mount Model 5 Kai 3
+			"577": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Japan": [
+						{
+							stypes: [2],
+							multiple: { "raig": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 7,
+							multiple: { "houm": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 8,
+							multiple: { "raig": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 9,
+							multiple: { "souk": 1 },
+						},
+						{
+							stypes: [2],
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Asashio Class K2
+					"18": [
+						{
+							remodel: 2,
+							multiple: { "raig": 2, "houk": 1 },
+							distinctGears: [286, 577],
+							countCap: 2,
+						},
+						{
+							// +1 fp if stars +max
+							minStars: 10,
+							remodel: 2,
+							multiple: { "houg": 1 },
+							distinctGears: [286, 577],
+							countCap: 2,
+						},
+					],
+					// Shiratsuyu Class K2
+					"23": "18",
+					// Yuugumo Class K2
+					"38": "18",
+					// Kagerou Class K2
+					//  except Isokaze / Hamakaze B Kai, Urakaze / Tanikaze D Kai
+					"30": [
+						{
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							multiple: { "raig": 2, "houk": 1 },
+							distinctGears: [286, 577],
+							countCap: 2,
+						},
+						{
+							// +1 tp if stars >= +5
+							minStars: 5,
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							multiple: { "raig": 1 },
+							distinctGears: [286, 577],
+							countCap: 2,
+						},
+						{
+							// +1 fp if stars +max
+							minStars: 10,
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							multiple: { "houg": 1 },
+							distinctGears: [286, 577],
+							countCap: 2,
+						},
+					],
+				},
+				byShip: [
+					{
+						// For all ships can equip it
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							multiple: { "raig": 1, "houm": 2 },
+						},
+					},
+					{
+						// Fubuki Kai Ni+
+						ids: [961, 1035, 1040],
+						multiple: { "raig": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						// Fubuki Kai San Go
+						ids: [1040],
+						multiple: { "raig": 2, "houk": 1 },
+						distinctGears: [286, 577],
+						countCap: 2,
+					},
+					{
+						// Fubuki Kai San Go
+						ids: [1040],
+						minStars: 10,
+						multiple: { "houg": 1 },
+						distinctGears: [286, 577],
+						countCap: 2,
+					},
+					{
+						// All remodels of Matsu Class Take
+						origins: [642],
+						single: { "raig": 7, "houk": 2 },
+					},
+					{
+						// extra +2 tp if stars >= +7
+						origins: [642],
+						minStars: 7,
+						distinctGears: [286, 577],
+						single: { "raig": 2 },
+					},
+					{
+						// extra +2 tp if stars +max
+						origins: [642],
+						minStars: 10,
+						distinctGears: [286, 577],
+						single: { "raig": 2 },
+					},
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
+						multiple: { "raig": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "raig": 3, "houk": 2 },
+						},
+					},
+					{
+						// Shigure K3
+						ids: [961],
+						minStars: 5,
+						multiple: { "raig": 1 },
+						distinctGears: [286, 577],
 						countCap: 2,
 					},
 				],
@@ -12775,8 +12994,8 @@
 						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
 					},
 					{
-						// Asashimo K2+, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D
-						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960, 744],
+						// Asashimo K2+, Hatsushimo K2, Kasumi K2/K2B, Ushio K2, Hibiki Kai+, Fuyutsuki Kai, Suzutsuki Kai, Kiyoshimo K2/K2D, Hanazuki Kai
+						ids: [578, 419, 464, 470, 407, 235, 147, 538, 537, 955, 960, 744, 1046],
 						single: { "houg": 1, "tyku": 1, "houk": 2, "houm": 1 },
 					},
 					{
@@ -14314,29 +14533,29 @@
 						multiple: { "tais": 2, "houk": 1, "houm": 1 },
 					},
 					{
-						// Shigure base, Yahagi K2+, Hibiki Kai, Fusou/Yamashiro K2, Suzutsuki/Fuyutsuki Kai, Ushio K2, Hatsushimo K2
-						ids: [43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						// Shigure base, Yahagi K2+, Hibiki Kai, Fusou/Yamashiro K2, Suzutsuki/Fuyutsuki/Hanazuki Kai, Ushio K2, Hatsushimo K2
+						ids: [43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
 						multiple: { "tais": 1 },
 					},
 					// For ships of previous 2 types
 					{
 						minStars: 5,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
 						multiple: { "tais": 1 },
 					},
 					{
 						minStars: 7,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
 						multiple: { "houk": 1 },
 					},
 					{
 						minStars: 9,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
 						multiple: { "houm": 1 },
 					},
 					{
 						minStars: 10,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
 						multiple: { "tais": 1 },
 					},
 				],

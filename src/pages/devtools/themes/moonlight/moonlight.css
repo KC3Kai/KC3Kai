@@ -4900,6 +4900,9 @@ ABYSS FLEET
 .module.fleet .lship .ship_gear.empty .ship_gear_slot {
 	color:#999;
 }
+.module.fleet .ship_gear .ship_gear_slot.slot_expanded {
+	color:#3cf !important;
+}
 .module.fleet .ship_gear .ship_gear_slot.slot_size_empty {
 	color:#999 !important;
 }

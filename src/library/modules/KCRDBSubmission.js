@@ -5,6 +5,7 @@
   const kc3version = (manifest.version || "unk")
     + ("update_url" in manifest ? "_webstore" : "")
     + ((manifest.name || "").includes("Development") ? "_dev" : "");
+
   /** Assuming following texts not changed in kc game API, if changed, have to update them */
   const questTitleToVerify = {
     "261": "海上輸送路の安全確保に努めよ！",
@@ -34,6 +35,9 @@
     "api_req_kousyou/remodel_slotlist_detail": [processRemodelSlotListDetail],
     "api_req_kousyou/remodel_slot": [processRemodelSlot],
     "api_req_kousyou/remodel_slot_recover": [processRemodelSlotRecover],
+
+    'api_req_sortie/battleresult': [processEventReward],
+    'api_req_combined_battle/battleresult': [processEventReward],
   };
 
   let prevQuestIdList = [], prevAllQuestsHash = false, alterQuestDetected = false;
@@ -227,6 +231,28 @@
     if (item.flag_ship_id && item.api_slot_level && har.response.api_data && gearObj.exists()) {
       postData("remodel_slot_recover", item);
     }
+  }
+
+  /**
+   * On battle result for event rewards
+   */
+  function processEventReward(har) {
+    const apiData = har.response.api_data;
+    if (!apiData || !apiData.api_get_eventitem) return;
+    const currentMap = KC3SortieManager.getSortieMap();
+    if (!currentMap[0] || !currentMap[1]) return;
+    const mapInfo = KC3SortieManager.getCurrentMapData();
+    if (!mapInfo.difficulty) return;
+
+    const body = {
+      world: currentMap[0],
+      map: currentMap[1],
+      difficulty: mapInfo.difficulty,
+      api_get_eventitem: apiData.api_get_eventitem,
+      api_select_reward_dict: apiData.api_select_reward_dict || null,
+    };
+
+    postData('event-rewards', body);
   }
 
   window.KCRDBSubmission = {

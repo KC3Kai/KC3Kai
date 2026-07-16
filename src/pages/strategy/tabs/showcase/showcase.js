@@ -467,6 +467,7 @@
 						api_exp: ship.exp,
 						api_slot_ex: ship.ex_item,
 						api_sally_area: ship.sally,
+						api_slotnum: ship.slotnum,
 					};
 					if(Array.isArray(ship.spitems) && ship.spitems.length > 0) {
 						dto.api_sp_effect_items = ship.spitems.map(o => ({
@@ -476,6 +477,9 @@
 							api_souk: o.ar,
 							api_kaih: o.ev,
 						}));
+					}
+					if(Array.isArray(ship.slotsMax)) {
+						dto.api_onslot_max = ship.slotsMax.slice(0);
 					}
 					self.shipsToExport.push(dto);
 				}

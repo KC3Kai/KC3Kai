@@ -282,6 +282,7 @@ if (shipStatSolutions) {
 		const s = shipStatSolutions[id]
 		shipStatReport[id] = {
 			id: Number(id),
+			samples: s.samples,
 			stat: {
 				// max() asssuming devs always buff, no nerf
 				los: Math.max(...s.min.los),
@@ -340,6 +341,7 @@ shipNedb.forEach(db => {
 		if (est) {
 			if (statKeys.some(k => est.stat[k] !== undefined && db.stat[k] !== est.stat[k])) {
 				addStatsDiff(est, 'est')
+				diff.mismatchStats[db.id].est.samples = est.samples
 			}
 		}
 	} else {
