@@ -575,6 +575,17 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
+/** sha hashing with native digest support, async promise returned */
+String.prototype.digest = function(alg) {
+  if (!window.TextEncoder || !window.crypto || !window.crypto.subtle)
+    return Promise.reject(new TypeError("SubtleCrypto digest not supported"));
+  var utf8Array = new window.TextEncoder("utf-8").encode(this);
+  return window.crypto.subtle.digest(alg || "sha-256", utf8Array.buffer).then(digestArray => {
+    var hashArray = Array.from(new Uint8Array(digestArray));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  });
+};
+
 /*******************************\
 |*** Number                     |
 \*******************************/
@@ -848,7 +859,7 @@ Object.defineProperty(Array.prototype, "joinIfNeeded", {
 /**
  * Polyfill for `Array.prototype.flat`, supported since Chromium m69
  * FlattenIntoArray too complex to fit in this module, using implementation also used by BP.flatten method.
- * No `Array.prototype.flatMap` implemention for now.
+ * No `Array.prototype.flatMap` implementation for now.
  * @see https://github.com/es-shims/es-abstract/blob/main/2021/FlattenIntoArray.js
  * @see https://github.com/es-shims/Array.prototype.flat
  */
