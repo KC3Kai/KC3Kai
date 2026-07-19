@@ -1067,3 +1067,12 @@
 	visibility:visible;
 	opacity:1;
 }
+.tab_event .sortie_list .debuff_indicator {
+	position: absolute;
+	left: -5px;
+	top: 16px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #57F287;
+}
