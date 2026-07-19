@@ -30,6 +30,7 @@ Saves and loads significant data for future use
 		_seasonalShips: {},
 		_equipShipTypes: false,
 		_equipExslotShips: false,
+		_alterApiSuspected: false,
 
 		init: function( raw ){
 			this.load();
@@ -108,6 +109,13 @@ Saves and loads significant data for future use
 					self._raw[short_mst_name] = mst_data;
 				}
 			});
+
+			if(this._raw.ship[6] && this._raw.ship[6].api_id == 6) {
+				var shipNo6 = this._raw.ship[6];
+				if(shipNo6.api_name !== "長月" || shipNo6.api_getmes !== "長月だ。<br>駆逐艦と侮るなよ。役に立つはずだ。") {
+					this._alterApiSuspected = true;
+				}
+			}
 
 			if(KC3Meta.isAF() && this._raw.newShips[KC3Meta.getAF(4)] === undefined) {
 				this._raw.newShips[KC3Meta.getAF(4)] = KC3Meta.getAF(2) - KC3Master.newUpdatesExpiredAfter;

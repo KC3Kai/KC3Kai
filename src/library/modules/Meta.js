@@ -138,7 +138,7 @@ Provides access to data on built-in JSON files
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
-		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
+		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`, including `SPECIAL_ENTRY3`
 		specialLandInstallationNames: [
 			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊', '太平洋飛行場姫', '集積地棲姫V バカンスmode', '集積地棲姫V バカンスmode-壊', '集積地棲姫改', '集積地棲姫改-壊', '飛行場棲姫', '深海上陸小鬼'
 		],
@@ -214,6 +214,7 @@ Provides access to data on built-in JSON files
 			718, // Tamanami Kai -> K2
 			426, // Fubuki K2 -> K3
 			1035, // Fubuki K3 -> K3G(T6)
+			710, // Suzunami Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
@@ -223,7 +224,7 @@ Provides access to data on built-in JSON files
 		mutsuCutinShips: [573],
 		coloradoCutinShips: [601, 1496, 913, 918],
 		kongouCutinShips: [591, 592, 593, 954, 694],
-		subFleetCutinShips: [184, 634, 635, 639, 640, 944, 949],
+		subFleetCutinShips: [184, 634, 635, 639, 640, 944, 949, 1065, 1070],
 		yamatoCutinShips: [911, 916],
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
@@ -241,9 +242,9 @@ Provides access to data on built-in JSON files
 			"Italy": [58, 61, 64, 68, 80, 92, 113, 124],
 			"Netherlands": [98],
 			"Australia": [96],
-			"Sweden": [89],
+			"Sweden": [89, 140],
 			"Germany": [47, 48, 55, 57, 63],
-			"France": [70, 79, 128, 129],
+			"France": [70, 79, 128, 129, 138, 139, 141],
 			"Norway": [133],
 			"Russia": [73, 81, 131],
 			"Japan": [
@@ -284,7 +285,7 @@ Provides access to data on built-in JSON files
 			1625: 1561, 1626: 1562, 1627: 266,/*1630: 1630, 1631:1630,*/1634: 1573, 1635: 1561, 1636: 1562,
 			1637: 364,  1638: 48,   1640: 513,  1641: 507,  1642: 508,  1643: 85,   1644: 308,  1645: 376,
 			1646: 439,  1647: 363,  1648: 1648, 1649: 537,  1650: 1650, 1651: 1651, 1652: 1652, 1653: 362,
-			1654: 555,  1655: 564,  1656: 565,  1657: 566
+			1654: 555,  1655: 564,  1656: 565,  1657: 566,  1658: 231,  1659: 162
 		},
 		stypeAltNameMap: {
 			"553": 47, // Ise K2: 改装航空戦艦

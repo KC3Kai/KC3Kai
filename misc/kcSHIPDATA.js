@@ -17780,7 +17780,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1617, 1648, 1618, 1619, 1608],
 	},
 	2350: {
-		name: 'Eldest Internal-Armored Water Demon 1',
+		name: 'Twilight Water Demon Eldest Daughter 1',
 		nameJP: '層間棲艦水鬼長女',
 		image: 'S2350.jpg',
 		type: 'FBB',
@@ -17800,7 +17800,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611],
 	},
 	2351: {
-		name: 'Eldest Internal-Armored Water Demon 2',
+		name: 'Twilight Water Demon Eldest Daughter 2',
 		nameJP: '層間棲艦水鬼長女',
 		image: 'S2350.jpg',
 		type: 'FBB',
@@ -17820,7 +17820,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611],
 	},
 	2352: {
-		name: 'Eldest Internal-Armored Water Demon 3',
+		name: 'Twilight Water Demon Eldest Daughter 3',
 		nameJP: '層間棲艦水鬼長女',
 		image: 'S2350.jpg',
 		type: 'FBB',
@@ -17840,7 +17840,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611],
 	},
 	2356: {
-		name: 'Second Internal-Armored Water Demon 1',
+		name: 'Twilight Water Demon Second Daughter 1',
 		nameJP: '層間棲艦水鬼次女',
 		image: 'S2356.jpg',
 		type: 'FBB',
@@ -17860,7 +17860,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611],
 	},
 	2357: {
-		name: 'Second Internal-Armored Water Demon 2',
+		name: 'Twilight Water Demon Second Daughter 2',
 		nameJP: '層間棲艦水鬼次女',
 		image: 'S2356.jpg',
 		type: 'FBB',
@@ -17880,7 +17880,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611],
 	},
 	2358: {
-		name: 'Second Internal-Armored Water Demon 3',
+		name: 'Twilight Water Demon Second Daughter 3',
 		nameJP: '層間棲艦水鬼次女',
 		image: 'S2356.jpg',
 		type: 'FBB',
@@ -17900,7 +17900,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611],
 	},
 	2359: {
-		name: 'Second Internal-Armored Water Demon - Damaged 1',
+		name: 'Twilight Water Demon Second Daughter - Damaged 1',
 		nameJP: '層間棲艦水鬼次女-壊',
 		image: 'S2359.jpg',
 		type: 'FBB',
@@ -17920,7 +17920,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611, 1634],
 	},
 	2360: {
-		name: 'Second Internal-Armored Water Demon - Damaged 2',
+		name: 'Twilight Water Demon Second Daughter - Damaged 2',
 		nameJP: '層間棲艦水鬼次女-壊',
 		image: 'S2359.jpg',
 		type: 'FBB',
@@ -17940,7 +17940,7 @@ var SHIPDATA_ = {
 		EQUIPS: [1609, 1609, 1559, 1611, 1634],
 	},
 	2361: {
-		name: 'Second Internal-Armored Water Demon - Damaged 3',
+		name: 'Twilight Water Demon Second Daughter - Damaged 3',
 		nameJP: '層間棲艦水鬼次女-壊',
 		image: 'S2359.jpg',
 		type: 'FBB',

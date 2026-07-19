@@ -242,6 +242,8 @@
                     return 12;
                 case 1001: // Kirov
                     return 26;
+                case 1060: // Bearn Kai
+                    return 60;
                 case 196: // Hiryuu Kai Ni
                     return 220;
                 case 426: // Fubuki Kai Ni
@@ -399,6 +401,8 @@
                     return 20;
                 case 916: // Yamato Kai Ni Juu
                     return 50;
+                case 1060: // Bearn Kai
+                    return 40;
                 case 392: // Richelieu Kai
                     return 120;
                 case 426: // Fubuki Kai Ni
@@ -444,6 +448,8 @@
                 case 1034: // to Suzunami K2Ho
                 case 1028: // to Independence Flight2
                     return 2;
+                case 1060: // to Bearn Amelioration
+                    return 1;
                 default: return 0;
             }
         },

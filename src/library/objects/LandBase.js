@@ -204,9 +204,10 @@
 		const shipObj = new KC3Ship();
 		// fixed ID 1 to ensure it's not a dummy ship
 		shipObj.rosterId = 1;
-		// starring by Akagi
-		shipObj.masterId = 83;
+		// starring by a non-carrier to avoid explicit bonus
+		shipObj.masterId = 1;
 		shipObj.hp = [1,1];
+		shipObj.slotnum = this.planes.length;
 		shipObj.items = this.planes.map(function (planeInfo) {
 			return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
 		});
