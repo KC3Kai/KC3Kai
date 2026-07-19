@@ -903,6 +903,7 @@
 					}
 				});
 			};
+
 			$.each(sortieList, function(id, sortie){
 				const mapkey = ["m", sortie.world, sortie.mapnum].join(''),
 					mapInfo = self.maps[mapkey] || {};
@@ -919,6 +920,7 @@
 							.addClass("sortie_rank_" + rankMarker)
 							.attr("data-diff", KC3Meta.term("EventHistoryRank" + rankMarker));
 					}
+					$(".debuff_indicator", sortieBox).toggleClass("xhidden", !(sortie.eventobj && sortie.eventobj.api_m_flag2));
 					$(".sortie_id", sortieBox).text(sortie.id)
 						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
