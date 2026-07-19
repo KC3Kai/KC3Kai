@@ -4044,6 +4044,13 @@ KC3改 Ship Object
 			if(this.hasEquipment(193)) return 3;
 			// Daihatsu
 			if(this.hasEquipment(68)) return 3;
+			// against speed > 0 (!isLand) installations, see SPECIAL_ENTRY3
+			// Toku Daihatsu + Chi-Ha and Kai
+			if(this.hasEquipment([494, 495])) return 10;
+			// Toku Daihatsu + T1 Gun Tank
+			if(this.hasEquipment(449)) return 10;
+			// Toku Daihatsu + 11th Tank
+			if(this.hasEquipment(230)) return 5;
 		}
 		return 0;
 	};
