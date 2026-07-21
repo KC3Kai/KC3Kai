@@ -1133,6 +1133,7 @@
 					else if (flag.includes("skilledLookouts")) { return 32; }
 					else if (flag.includes("searchlight")) { return 24; }
 					else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+				else if (flag.includes("CarrierBomber")) { return 7; }
 					else if (flag.includes("JetFighter")) { return 60; }
 					else if (flag.includes("CarrierFighter")) { return 6; }
 					else if (flag.includes("NightRecon")) { return 50; }

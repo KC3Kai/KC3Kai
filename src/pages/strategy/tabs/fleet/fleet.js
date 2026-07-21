@@ -149,6 +149,7 @@
 				}
 			});
 
+			// kancolle-calc.net has been discontinued since May 2026
 			$("button#control_export_dbuilder").on("click", function() {
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
 				console.log( "JSON to be exported", JSON.stringify( converted ) );

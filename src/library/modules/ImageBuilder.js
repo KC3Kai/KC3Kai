@@ -10,7 +10,7 @@
  *   https://github.com/HitomaruKonpaku/KanColleImgBuilder
  * which depends on GKCOI (Generate KanColle Organization Image) originally created by:
  *   https://github.com/Nishisonic/gkcoi
- * which supports data format originally created by DeckBuilder:
+ * which supports data format originally created by DeckBuilder (discontinued):
  *   http://www.kancolle-calc.net/deckbuilder.html
  */
 (function () {

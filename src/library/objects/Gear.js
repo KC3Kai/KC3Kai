@@ -297,6 +297,7 @@ KC3改 Equipment Object
 		if(this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
+		const fp = this.master().api_houg || 0;
 		// No improvement bonus is default
 		let modifier = 0;
 		switch(type.toLowerCase()) {
@@ -305,6 +306,7 @@ KC3改 Equipment Object
 				switch(type2) {
 					case 1: // Small Cal. Main
 					case 2: // Medium Cal. Main
+					case 3: // Large Cal. Main
 					case 18: // Type 3 Shell
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
@@ -319,9 +321,10 @@ KC3改 Equipment Object
 					case 46: // Amphibious Tank
 					case 52: // Landing Force
 					case 54: // Smoke Generator
-						modifier = 1; break;
-					case 3: // Large Cal. Main
-						modifier = 1.5; break;
+						// according KCVita, besides bonus 0 types, any with fire power > 12 gets 1.5,
+						// so almost all large main guns are 1.5
+						modifier = fp > 12 ? 1.5 : 1;
+						break;
 					case 4: // Secondary
 						// 0.2 per star for some green HA guns,
 						// 0.3 per star for some yellow guns,
@@ -329,12 +332,10 @@ KC3改 Equipment Object
 						// so here use white-list for sqrt(stars)
 						if([11, 134, 135].includes(this.masterId)) {
 							modifier = 1;
-						// 0.3 per star for Secondary (II) guns?
+						// 0.3 per star for Secondary (II) guns or just fire power > 4?
 						// https://twitter.com/hedgehog_hasira/status/1545868174259720192
-						} else if([467].includes(this.masterId)) {
-							return 0.3 * stars;
 						} else {
-							modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
+							modifier = this.master().api_type[3] === 16 ? (fp > 4 ? 0.3 : 0.2) : 0.3;
 							return modifier * stars;
 						}
 						break;
