@@ -1074,6 +1074,7 @@ KC3改 Ship Object
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+				else if (flag.includes("CarrierBomber")) { return 7; }
 				else if (flag.includes("JetFighter")) { return 60; }
 				else if (flag.includes("CarrierFighter")) { return 6; }
 				else if (flag.includes("NightRecon")) { return 50; }
@@ -3069,6 +3070,7 @@ KC3改 Ship Object
 				562, 689, 596, 692, 628, 629, 726, 737, // all remodels of Fletcher-class (except Heywood/Leary base)
 				624, // Yuubari Kai Ni D
 				1040, // Fubuki Kai San Go
+				1062, 1067, // Visby
 			].includes(this.masterId);
 	};
 
@@ -4044,7 +4046,10 @@ KC3改 Ship Object
 			if(this.hasEquipment(193)) return 3;
 			// Daihatsu
 			if(this.hasEquipment(68)) return 3;
-			// against speed > 0 (!isLand) installations, see SPECIAL_ENTRY3
+		}
+		// against speed > 0 (!isLand) installations, see SPECIAL_ENTRY3
+		const isTargetSurfaceLandable = KC3Meta.specialSurfaceInstallationNames.includes(targetShip.api_name);
+		if(isTargetSurfaceLandable) {
 			// Toku Daihatsu + Chi-Ha and Kai
 			if(this.hasEquipment([494, 495])) return 10;
 			// Toku Daihatsu + T1 Gun Tank

@@ -138,12 +138,14 @@ Provides access to data on built-in JSON files
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
-		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`, including `SPECIAL_ENTRY3`
+		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
 		specialLandInstallationNames: [
 			'港湾夏姫', '港湾夏姫-壊', '港湾夏姫II', '港湾夏姫II-壊', '中枢棲姫', '中枢棲姫-壊', '船渠棲姫', '船渠棲姫-壊', '離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊', '集積地棲姫III バカンスmode', '集積地棲姫III バカンスmode-壊', '集積地棲姫IV', '集積地棲姫IV-壊', 'トーチカ小鬼', '対空小鬼', 'トーチカ要塞棲姫', 'トーチカ要塞棲姫-壊', '飛行場夏姫', '港湾棲姫 休日mode', '港湾棲姫 休日mode-壊', '太平洋飛行場姫', '集積地棲姫V バカンスmode', '集積地棲姫V バカンスmode-壊', '集積地棲姫改', '集積地棲姫改-壊', '飛行場棲姫', '深海上陸小鬼'
 		],
 		// from `main.js/SPECIAL_ENTRY2`
 		specialPtImpPackNames: ['PT小鬼群', 'Schnellboot小鬼群'],
+		// from `main.js/SPECIAL_ENTRY3`
+		specialSurfaceInstallationNames: ['泊地水鬼 バカンスmode'],
 		// key: slotitem ID, value: special type2 ID. from:
 		//   Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
 		//   Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
@@ -217,7 +219,7 @@ Provides access to data on built-in JSON files
 			710, // Suzunami Kai -> K2
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733],
+		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733, 1065, 1070],
 		nelsonTouchShips: [571, 576, 572, 577],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],

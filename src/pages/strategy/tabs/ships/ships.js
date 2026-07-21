@@ -176,6 +176,11 @@
 				}
 				KC3StrategyTabs.reloadTab(undefined, false);
 			});
+			// instead of kanmusu list, guided to showcase page for exporting to aircalc
+			$(".ship_export .export_to_kcweb").on("click", function() {
+				KC3StrategyTabs.gotoTab("showcase");
+			});
+			// kancolle-calc.net has been discontinued since May 2026
 			$(".ship_export .export_to_kanmusu_list").on("click", function() {
 				// Export currently visible ships
 				var selectedShips = self.shipCache.filter(function(x) {
