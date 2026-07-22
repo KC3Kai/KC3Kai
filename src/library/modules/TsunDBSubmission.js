@@ -96,6 +96,14 @@
 	const matchGimmickApiName = (apiName = "") => !!apiName.match(/^api_m\d+/);
 	const isMapGimmickTriggered = (apiData = {}) => !!Object.keys(apiData).find(matchGimmickApiName);
 
+	const knownShipSinfo = {
+		"11": "ワシントン条約制限下で設計された、世界中を驚愕さ<br>せたクラスを超えた特型駆逐艦の１番艦、吹雪です。<br>私たちは、後の艦隊型駆逐艦のベースとなりました。<br>はいっ、頑張ります！",
+		"12": "特型駆逐艦、２番艦、白雪です。<br>緒戦の数々の作戦に参加しました。<br>その後、増援の部隊を輸送する第八十一号作戦に護衛<br>隊旗艦として参加致しました。",
+		"15": "特型駆逐艦、５番艦の叢雲よ。<br>え、知らないって？　全く、ありえないわね。<br>南方作戦や、古鷹の救援、数々の作戦に参加した名艦<br>の私を知らないって、あんた、もぐりでしょ！",
+		"31": "帝国海軍の駆逐艦で初めて大型で強力な61cm魚雷を<br>搭載しました、睦月です！<br>旧式ながら、第一線で頑張ったのです！",
+		"69": "特型駆逐艦の１９番目、綾波型でいうと、９番艦の漣<br>だよ。<br>読みにくいって？貴方が字を知らないだけヨ。<br>南雲機動部隊が真珠湾でボコボコやってる時、ミッド<br>ウェー島砲撃を敢行したよ。何気に凄くない？",
+	};
+
 	window.TsunDBSubmission = {
 		celldata : {
 			map: null,
@@ -363,6 +371,7 @@
 		isListenerRegistered: false,
 		mapInfo : [],
 		currentMap : [0, 0],
+		invalidApiValueFound: false,
 		
 		init: function () {
 			this.handlers = {
@@ -1707,9 +1716,20 @@
 			const request = http.params;
 			const response = http.response.api_data;
 			const type = Number(request.api_type);
+			const pageNo = Number(request.api_no);
 
 			if(![1, 2].includes(type)) return; // Ships or equipment only
-			if(response == null || response.api_list === null) return; // Pages with content only
+			if(response == null || !Array.isArray(response.api_list)) return; // Pages with content only
+			if(type == 1 && pageNo == 1 && !this.invalidApiValueFound) {
+				Object.keys(knownShipSinfo).find(indexno => {
+					const shipObj = response.api_list.find(s => s.api_index_no == indexno);
+					if(shipObj && shipObj.api_sinfo && shipObj.api_sinfo !== knownShipSinfo[indexno]) {
+						this.invalidApiValueFound = true;
+						return true;
+					}
+				});
+			}
+			if(this.invalidApiValueFound || KC3Master._alterApiSuspected) return;
 
 			const equips = response.api_list.map((e) => type === 1
 				? {

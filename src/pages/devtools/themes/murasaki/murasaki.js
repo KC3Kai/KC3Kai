@@ -707,10 +707,13 @@
 					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
 					return;
 				}
+				KC3ImageBuilder.exportCurrentFleets();
 			}
+			/*
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
 				JSON.stringify(PlayerManager.prepareDeckbuilder())
 			)));
+			*/
 		});
 
 		const prepareBattleLogsData = function(){

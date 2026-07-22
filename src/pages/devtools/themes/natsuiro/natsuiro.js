@@ -709,10 +709,14 @@
 					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
 					return;
 				}
+				KC3ImageBuilder.exportCurrentFleets();
 			}
+			// kancolle-calc.net has been discontinued since May 2026
+			/*
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
 				JSON.stringify(PlayerManager.prepareDeckbuilder())
 			)));
+			*/
 		});
 
 		const prepareBattleLogsData = function(){

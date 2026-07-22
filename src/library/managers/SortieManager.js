@@ -947,6 +947,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				*/
 				if(updated){
 					this.setCurrentMapData(thisMap, this.map_world, this.map_num);
+					KC3Database.updateSortie(this.onSortie, { "eventobj": eventObject });
 				}
 			}
 			

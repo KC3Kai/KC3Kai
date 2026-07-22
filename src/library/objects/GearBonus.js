@@ -141,12 +141,16 @@
 				initialModelSgRadarIds: [315],
 				frenchYellowSecGunMount: 0,
 				frenchYellowSecGunMountIds: [247],
+				frenchTripleTorpedo1924: 0,
+				frenchTripleTorpedo1924Ids: [580],
 				frenchNightRecon: 0,
 				frenchNightReconIds: [471, 538],
 				frenchNightReconBase: 0,
 				frenchNightReconBaseIds: [471],
 				frenchNightReconKai: 0,
 				frenchNightReconKaiIds: [538],
+				frenchPl101CarrierBomber: 0,
+				frenchPl101CarrierBomberIds: [586],
 				germanLargeRadar: 0,
 				germanLargeRadarIds: [124],
 				ukTwin38cmMk1LargeGunMount: 0,
@@ -606,6 +610,69 @@
 						multiple: { "houm": 1 },
 					},
 				],
+			},
+			// 55cm Triple Torpedo Mount Model 1924
+			"580": {
+				count: 0,
+				byNation: {
+					"France": {
+						multiple: { "raig": 2, "houk": 1, "houm": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							multiple: { "raig": 1, "houm": 1 },
+						},
+					},
+				},
+				byClass: {
+					// La Galissonnière Class
+					"128": {
+						multiple: { "raig": 2, "houk": 1 },
+					},
+					// Algérie Class
+					"138": 128,
+					// Mogador Class
+					"129": {
+						multiple: { "raig": 1, "houk": 1 },
+					},
+					// Aigle Class
+					"139": {
+						multiple: { "raig": 3, "houk": 1 },
+					},
+				},
+			},
+			// 55cm Composite Arrangement Quintuple Torpedo Mount Model 1932
+			"581": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": {
+						multiple: { "raig": 3, "houm": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							multiple: { "raig": 1, "houm": 1 },
+						},
+					},
+				},
+				byClass: {
+					// La Galissonnière Class
+					"128": {
+						multiple: { "raig": 2, "houk": 1 },
+					},
+					// Algérie Class
+					"138": 128,
+					// Mogador Class
+					"129": {
+						multiple: { "raig": 3, "houk": 1 },
+					},
+					// Aigle Class
+					"139": {
+						multiple: { "raig": 1, "houk": 1 },
+					},
+				},
+				byShip: {
+					minStars: 2,
+					multiple: { "raig": 1 },
+				},
 			},
 			// TBM-3W+3S
 			"389": {
@@ -2239,6 +2306,129 @@
 					multiple: { "houg": 1, "houk": 1 },
 				},
 			},
+			// PL101 (Reconnaissance)
+			"585": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1, "houm": 2, "saku": 3 },
+					},
+				},
+				byClass: {
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1, "houm": 2, "saku": 3 },
+					},
+				},
+				byShip: [
+					{
+						// Béarn Kai
+						ids: [1060],
+						multiple: { "houg": 1, "houm": 2 },
+						synergy: {
+							flags: [ "frenchPl101CarrierBomber" ],
+							countFlag: 0,
+							multiple: { "houg": 3, "houm": 2 },
+						},
+					},
+					{
+						// Béarn Kai
+						ids: [1060],
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "houg": 1, "houk": 1, "houm": 1, "saku": 1  },
+					},
+				],
+			},
+			// PL101 (Bomb-carrying)
+			"586": {
+				count: 0,
+				byNation: {
+					"France": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+				},
+				byClass: {
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+				},
+				byShip: {
+					// Béarn Kai
+					ids: [1060],
+					multiple: { "houg": 1, "houk": 1, "houm": 1 },
+				},
+			},
+			// V-156F (SB2U Export Model)
+			"587": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+				},
+				byClass: {
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Béarn Kai
+						ids: [1060],
+						multiple: { "houg": 4, "houk": 1, "houm": 3 },
+					},
+					{
+						minStars: 4,
+						multiple: { "houg": 3, "houk": 1, "houm": 2  },
+					},
+				],
+			},
+			// G-36A (F4F Export Model)
+			"588": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+					"UnitedKingdom": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1, "houm": 1 },
+					},
+				},
+				byClass: {
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Béarn Kai
+						ids: [1060],
+						multiple: { "houg": 1, "houk": 4, "houm": 3 },
+					},
+					{
+						minStars: 5,
+						multiple: { "tyku": 3, "houk": 2, "houm": 1  },
+					},
+				],
+			},
+			// F4U-7
+			"476": {
+				count: 0,
+				byNation: {
+					"France": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1, "houm": 2 },
+					},
+				},
+			},
 			// Ju87C Kai
 			"64": {
 				count: 0,
@@ -3619,6 +3809,11 @@
 			// S9 Osprey
 			"304": {
 				count: 0,
+				byNation: {
+					"Sweden": {
+						multiple: { "houg": 1, "tais": 2, "houk": 2 },
+					},
+				},
 				byClass: {
 					// Kuma Class
 					"4": {
@@ -3630,10 +3825,6 @@
 					"20": "4",
 					// Agano Class
 					"41": "4",
-					// Gotland Class
-					"89": {
-						multiple: { "houg": 1, "tais": 2, "houk": 2 },
-					},
 				},
 			},
 			// Swordfish Mk.II Kai (Recon Seaplane Model)
@@ -6707,6 +6898,60 @@
 					multiple: { "houg": 1 },
 				},
 			},
+			// 13.8cm Single Gun Mount Model 1927
+			"579": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				},
+				byClass: {
+					// Mogador Class
+					"129": {
+						multiple: { "houk": 1, "houm": 1 },
+						synergy: [
+							{
+								flags: [ "frenchTripleTorpedo1924" ],
+								multiple: { "houg": 1, "raig": 1, "houm": 1 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								multiple: { "houg": 1, "houm": 2 },
+							},
+						],
+					},
+					// La Galissonnière Class
+					"128": 129,
+					// Commandant Teste Class
+					"70": 129,
+					// Aigle Class
+					"139": {
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+						synergy: [
+							{
+								flags: [ "frenchTripleTorpedo1924" ],
+								multiple: { "houg": 1, "raig": 1, "houm": 1 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								multiple: { "houg": 1, "houm": 2 },
+							},
+						],
+					},
+				},
+				byShip: [
+					{
+						minCount: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 6,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
 			// 15.2cm Triple Main Gun Mount
 			"536": {
 				count: 0,
@@ -7460,6 +7705,11 @@
 			// Bofors 15.2cm Twin Gun Mount Model 1930
 			"303": {
 				count: 0,
+				byNation: {
+					"Sweden": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
+				},
 				byClass: {
 					// Kuma Class
 					"4": {
@@ -7471,10 +7721,6 @@
 					"20": "4",
 					// Agano Class
 					"41": "4",
-					// Gotland Class
-					"89": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
-					},
 				},
 			},
 			// 8inch Triple Gun Mount Mk.9
@@ -7805,6 +8051,118 @@
 						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 					},
 				},
+			},
+			// 20.3cm/50 Twin Gun Mount Model 1931
+			"582": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Zara Class
+					"64": {
+						multiple: { "houg": 1, "houm": 1 },
+					},
+					// Commandant Teste Class
+					"70": 64,
+					// Richelieu Class
+					"79": 64,
+					// Algérie Class
+					"138": [
+						{
+							multiple: { "houg": 2, "houm": 2 },
+						},
+						{
+							minStars: 1,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Algérie Kai
+					ids: [1056],
+					synergy: {
+						flags: [ "surfaceRadar" ],
+						multiple: { "houg": 1, "houm": 2 },
+					},
+				},
+			},
+			// 20.3cm/50 Twin Gun Mount Kai (SHS Improved Shells)
+			"583": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Zara Class
+					"64": {
+						multiple: { "houg": 1, "houm": 1 },
+					},
+					// Commandant Teste Class
+					"70": 64,
+					// Richelieu Class
+					"79": 64,
+					// Algérie Class
+					"138": [
+						{
+							multiple: { "houg": 2, "houm": 2 },
+						},
+						{
+							minStars: 1,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Algérie Kai
+						ids: [1056],
+						multiple: { "houg": 1, "houm": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							multiple: { "houg": 1, "houm": 2 },
+						},
+					},
+					// For all ships can equip it
+					{
+						minStars: 1,
+						multiple: { "houm": 1 },
+					},
+					{
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Bofors 12cm Single Dual-purpose Gun Mount
+			"584": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"Sweden": {
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+					},
+				},
+				byClass: {
+					// Visby Class
+					"140": {
+						multiple: { "houg": 1, "houk": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							multiple: { "houg": 1, "houm": 2 },
+						},
+					},
+				},
+				byShip: [
+					{
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 4,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 			"362": {
@@ -14808,6 +15166,20 @@
 					},
 				],
 			},
+			// Daihatsu Landing Craft (R35 & French Infantry)
+			"576": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": {
+						multiple: { "houg": 3, "houk": 1, "houm": 2 },
+					},
+				},
+				byShip: {
+					minStars: 2,
+					multiple: { "houg": 1 },
+				},
+			},
 			// Special Type 4 Amphibious Tank
 			"525": {
 				count: 0,
@@ -15610,7 +15982,7 @@
 					},
 					{
 						// Fast Group A, speed level up without Turbine
-						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9],
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9, 1053, 1062],
 						excludes: [181, 316, 91, 280, 196, 9, 201, 426, 1035],
 						minStars: 7,
 						countCap: 2,
@@ -15629,8 +16001,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni, Hiryuu K3, Fubuki K3Go
-						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9],
+						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni, Hiryuu K3, Fubuki K3Go, Vautour, Visby
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9, 1053, 1062],
 						excludes: [181, 316, 91, 280, 196, 9, 201, 426, 1035],
 						speedCap: 10,
 						synergy: [
@@ -15677,17 +16049,17 @@
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D, Noshiro K2
 						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet, Ranger?, Glorious (CV)?, Wasp?
-						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Massachusetts?, Washington, Conte di Cavour Kai+, Glorious (BC)?
+						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, Jean Bart?, South Dakota, Indiana?, Massachusetts?, Washington, Conte di Cavour Kai+, Glorious (BC)?
 						//   All fast DD: not here, see next item
-						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?, Kirov?
-						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?, Minneapolis?
-						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?
+						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, Reno?, De Ruyter, Perth, Helena, Sheffield, Honolulu?, Brooklyn?, Gloire?, Kirov?
+						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton, Tuscaloosa?, Minneapolis?, Algérie?
+						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2, Langley?, Independence?
 						origins: [
 								83, 332, 549, 515, 444, 432, 433, 603, 931, 1025,
-								115, 138, 441, 442, 171, 492, 935, 602, 933, 654, 877, 1022,
-								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 896, 965, 1001,
-								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005,
-								74, 76, 116, 102, 103, 184, 925
+								115, 138, 441, 442, 171, 492, 935, 602, 932, 933, 654, 877, 1022,
+								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 991, 604, 613, 615, 514, 598, 896, 965, 1001,
+								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005, 1051,
+								74, 76, 116, 102, 103, 184, 925, 1023
 							],
 						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
 						speedCap: 10,
@@ -15720,8 +16092,8 @@
 						// Fast Group B2 for all fast DDs
 						stypes: [2],
 						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
-						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze, Fubuki K3+
-						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951, 1035, 1040],
+						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze, Fubuki K3+, Vautour, Visby
+						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951, 1035, 1040, 1053, 1058, 1062, 1067],
 						speedCap: 10,
 						synergy: [
 							{
@@ -15807,14 +16179,14 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari, Shimanemaru?, Nosaki?
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Heianmaru?, Hiemaru?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru, Kumanomaru, No.101 Transport Ship, Asahi, Ootomari, Shimanemaru?, Nosaki?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Valiant?, Nelson, Rodney?, Colorado, Maryland, Nevada?, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou (<K2), Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						//   Slow DE: Inagi K2, Norge, Eidsvold, Thonburi?
-						origins: [184, 634, 635, 944, 162, 154, 465, 621, 699, 900, 943, 945, 953, 1003,
-								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877, 988,
-								75, 89, 92, 521, 522, 534, 544, 995,
+						origins: [184, 634, 635, 944, 1065, 162, 154, 465, 621, 699, 900, 943, 945, 953, 995, 1003, 988,
+								26, 27, 77, 87, 80, 81, 439, 927, 571, 572, 601, 918, 924, 511, 877,
+								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491,
 								922, 998, 999, 973
 							],
@@ -15884,8 +16256,10 @@
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
 						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, Luigi Torelli, C.Cappellini?, Maruyu, I-201, I-203, I-36?, I-41?, Scamp, Salmon?, Drum?, Wahoo?, Dace?
+						//   Slow CV: Béarn
 						origins: [182, 460, 161,
-							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 971, 972, 299, 891, 892, 984, 985
+							126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 535, 934, 163, 881, 882, 971, 972, 299, 891, 892, 984, 985,
+							1055
 						],
 						speedCap: 5,
 						synergy: [
