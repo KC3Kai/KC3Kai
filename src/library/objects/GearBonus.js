@@ -15982,7 +15982,7 @@
 					},
 					{
 						// Fast Group A, speed level up without Turbine
-						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9],
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9, 1053, 1062],
 						excludes: [181, 316, 91, 280, 196, 9, 201, 426, 1035],
 						minStars: 7,
 						countCap: 2,
@@ -16001,8 +16001,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni, Hiryuu K3, Fubuki K3Go
-						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9],
+						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?, Amatsukaze Kai Ni, Hiryuu K3, Fubuki K3Go, Vautour, Visby
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885, 181, 91, 9, 1053, 1062],
 						excludes: [181, 316, 91, 280, 196, 9, 201, 426, 1035],
 						speedCap: 10,
 						synergy: [
@@ -16092,8 +16092,8 @@
 						// Fast Group B2 for all fast DDs
 						stypes: [2],
 						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
-						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze, Fubuki K3+
-						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951, 1035, 1040],
+						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze, Fubuki K3+, Vautour, Visby
+						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316, 951, 1035, 1040, 1053, 1058, 1062, 1067],
 						speedCap: 10,
 						synergy: [
 							{
