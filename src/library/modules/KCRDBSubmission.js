@@ -249,7 +249,7 @@
       map: currentMap[1],
       difficulty: mapInfo.difficulty,
       api_get_eventitem: apiData.api_get_eventitem,
-      api_select_reward_dict: apiData.api_select_reward_dict || null,
+      api_select_reward_dict: apiData.api_select_reward_dict,
     };
 
     postData('event-rewards', body);
