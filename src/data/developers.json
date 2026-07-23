@@ -95,7 +95,7 @@
 				"name": "Sanya V. Litvyak",
 				"avatar" : "https://avatars3.githubusercontent.com/u/1585104?v=4&s=460",
 				"desc" : "AboutDeveloper",
-				"active": 0,
+				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/Nya-chan"
 				}
@@ -1047,6 +1047,7 @@
 			},
 			{
 				"name": "kancolle-calc",
+				"avatar": "../../assets/img/ui/empty.png",
 				"desc": "AboutPartnerKCCalcDesc",
 				"active": 0,
 				"image": "http://kancolle-calc.net/favicon.ico",

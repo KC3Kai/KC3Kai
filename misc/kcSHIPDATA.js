@@ -18437,7 +18437,7 @@ var SHIPDATA_ = {
 		SLOTS: [0, 0, 0, 0, 62],
 		EQUIPS: [1659, 1659, 1659, 1593, 1634],
 	},
-	2389: {
+	2390: {
 		name: 'French Sorrowful Heavy Princess - Damaged 2',
 		nameJP: '仏蘭西哀重姫-壊',
 		image: 'S2389.jpg',
