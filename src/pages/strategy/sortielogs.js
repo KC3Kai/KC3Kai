@@ -76,6 +76,8 @@
 		this.stegcover64 = "";
 		this.exportingReplay = false;
 		this.scrollVars     = {};
+		this.ledgerMaxConcurrent = 2;
+		this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
 
 		/* INIT
 		Prepares static data needed
@@ -93,6 +95,12 @@
 			this.exportingReplay = false;
 			this.enterCount = 0;
 			this.itemsPerPage = ConfigManager.sr_items_per_page || 20;
+		};
+
+		/* LEAVE
+		---------------------------------*/
+		this.leave = function () {
+			this.ledgerLimiter.stopAll(true);
 		};
 
 		/* EXECUTE
@@ -686,6 +694,8 @@
 		Determines list type and gets data from IndexedDB
 		---------------------------------*/
 		this.showPage = function(page, twbsPageObj){
+			this.ledgerLimiter.stopAll(true);
+			this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
 			var self = this;
 			var startTime = Date.now();
 			this.pageNum = page || 1;
@@ -862,46 +872,72 @@
 					heavyDefenseRequest: heavyAirRaid ? heavyAirRaid.api_scc : undefined,
 				};
 			};
-			const showSortieLedger = function(sortieId, sortieBox, sortieWorld) {
+
+			const showSortieLedger = async function (sortieId, sortieBox, sortieWorld) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
 				// Akashi repair not included either, belonged to its own type
 				const buildConsumptionArray = arr => arr.reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
 					return consumption.map((v, i) => {
-						const icon = $("<img />").attr("src", "/assets/img/client/" +
-							["fuel.png", "ammo.png", "steel.png", "bauxite.png",
-								"ibuild.png", "bucket.png", "devmat.png", "screws.png"][i]
-						).width(13).height(13).css("margin", "-3px 2px 0 0");
+						const icon = $("<img />")
+							.attr(
+								"src",
+								"/assets/img/client/" + [
+									"fuel.png",
+									"ammo.png",
+									"steel.png",
+									"bauxite.png",
+									"ibuild.png",
+									"bucket.png",
+									"devmat.png",
+									"screws.png"
+								][i])
+							.width(13)
+							.height(13)
+							.css("margin", "-3px 2px 0 0");
 						return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
 					}).join(" ");
 				};
-				KC3Database.con.navaloverall.where("type").equals("sortie" + sortieId).toArray(arr => {
-					const consumption = buildConsumptionArray(arr);
-					if(arr.length && !consumption.every(v => !v)) {
-						const tooltip = buildLedgerMessage(consumption);
-						if(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6) {
-							let lbTooltip = "";
-							KC3Database.con.navaloverall.where("type").equals("sortie" + (sortieId - 1)).first(firstEntry => {
-							KC3Database.con.navaloverall.offset(firstEntry.id)
-								.until(entry => entry.type === "sortie" + (sortieId + 1))
-								.and(entry => "lbas" + sortieWorld === entry.type)
-								.toArray(lbArr => {
-									const lbConsumption = buildConsumptionArray(lbArr);
-									if(lbArr.length && !lbConsumption.every(v => !v)) {
-										lbTooltip = buildLedgerMessage(lbConsumption);
-									}
-								}).then(() => $(".sortie_map", sortieBox).attr("titlealt",
-									(!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip"))
-										.format(tooltip, lbTooltip)).lazyInitTooltip()
-								);
-							});
-						} else {
-							$(".sortie_map", sortieBox).attr("titlealt",
-								"{0}".format(tooltip)).lazyInitTooltip();
-						}
-					}
-				});
+
+				const arr = await KC3Database.con.navaloverall
+					.where("type")
+					.equals("sortie" + sortieId)
+					.toArray();
+
+				const consumption = buildConsumptionArray(arr);
+				if (!arr.length || consumption.every(v => !v)) {
+					return;
+				}
+
+				const tooltip = buildLedgerMessage(consumption);
+
+				if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6)) {
+					$(".sortie_map", sortieBox)
+						.attr("titlealt", "{0}".format(tooltip))
+						.lazyInitTooltip();
+					return;
+				}
+
+				let lbTooltip = "";
+				const firstEntry = await KC3Database.con.navaloverall
+					.where("type")
+					.equals("sortie" + (sortieId - 1))
+					.first();
+
+				const lbArr = await KC3Database.con.navaloverall
+					.offset(firstEntry.id)
+					.until(entry => entry.type === "sortie" + (sortieId + 1))
+					.and(entry => "lbas" + sortieWorld === entry.type)
+					.toArray();
+
+				const lbConsumption = buildConsumptionArray(lbArr);
+				if (lbArr.length && !lbConsumption.every(v => !v)) {
+					lbTooltip = buildLedgerMessage(lbConsumption);
+				}
+				$(".sortie_map", sortieBox)
+					.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
+					.lazyInitTooltip();
 			};
 
 			$.each(sortieList, function(id, sortie){
@@ -928,7 +964,10 @@
 					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
-					showSortieLedger(sortie.id, sortieBox, sortie.world);
+
+					// schedule `showSortieLedger` as this take tons of time
+					self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world); 
+
 					$(".button_tomanager", sortieBox)
 						.data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);

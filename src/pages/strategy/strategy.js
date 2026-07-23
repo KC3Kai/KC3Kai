@@ -177,7 +177,15 @@
 		KC3StrategyTabs.loading = $(tab).data("id");
 
 		// Interface
-		$("#menu .submenu ul.menulist li").removeClass("active");
+		const activeItem = $("#menu .submenu ul.menulist li.active");
+		const activeItemId = activeItem.attr("data-id");
+		const prevTab = KC3StrategyTabs[activeItemId];
+		if (prevTab && prevTab.definition) {
+			if (prevTab.definition.leave) {
+				prevTab.definition.leave();
+			}
+		}
+		activeItem.removeClass("active");
 		$(tab).addClass("active");
 		$("#content").hide();
 		$("#contentHtml").hide().html("");
