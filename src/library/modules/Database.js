@@ -239,6 +239,15 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 76,
 					},
+					{
+						ch: {
+							sortie: "++id,hq,diff,world,mapnum,[hq+world],[hq+world+mapnum],fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+						},
+						up: function (t){
+							console.log("Database v77", t);
+						},
+						vr: 77,
+					},
 					/*
 					Database versions are only integers, no decimals.
 					7.2 was detected as 72 by chrome, and thus specifying 8 is actually lower version
@@ -520,8 +529,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		count_normal_sorties: function(filterFunc, callback){
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10; })
+				.where("[hq+world]").between([this.index, 1], [this.index, 9], true, true)
 				.and(filterFunc)
 				.count(callback);
 		},
@@ -531,8 +539,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10; })
+				.where("[hq+world]").between([this.index, 1], [this.index, 9], true, true)
 				.and(filterFunc)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
@@ -584,8 +591,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		count_world :function(world, filterFunc, callback){
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world; })
+				.where("[hq+world]").equals([this.index, world])
 				.and(filterFunc)
 				.count(callback);
 		},
@@ -593,10 +599,9 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_world :function(world, filterFunc, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
-			
+
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world; })
+				.where("[hq+world]").equals([this.index, world])
 				.and(filterFunc)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
@@ -626,8 +631,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		count_map :function(world, map, filterFunc, callback){
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
+				.where("[hq+world+mapnum]").equals([this.index, world, map])
 				.and(filterFunc)
 				.count(callback);
 		},
@@ -635,10 +639,9 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_map :function(world, map, filterFunc, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
-			
+
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
+				.where("[hq+world+mapnum]").equals([this.index, world, map])
 				.and(filterFunc)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
