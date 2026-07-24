@@ -256,6 +256,15 @@
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
+	border: 1px solid #222;
+}
+
+.tab_maps .sortie_list .sortie_map.queued {
+	border-left-color: #ffff40;
+}
+
+.tab_maps .sortie_list .sortie_map.loading {
+	border-left-color: #57F287;
 }
 
 /* Sortie Info: FLEET */

@@ -900,44 +900,49 @@
 					}).join(" ");
 				};
 
-				const arr = await KC3Database.con.navaloverall
-					.where("type")
-					.equals("sortie" + sortieId)
-					.toArray();
+				$(".sortie_map", sortieBox).toggleClass('queued loading');
+				try {
+					const arr = await KC3Database.con.navaloverall
+						.where("type")
+						.equals("sortie" + sortieId)
+						.toArray();
 
-				const consumption = buildConsumptionArray(arr);
-				if (!arr.length || consumption.every(v => !v)) {
-					return;
-				}
+					const consumption = buildConsumptionArray(arr);
+					if (!arr.length || consumption.every(v => !v)) {
+						return;
+					}
 
-				const tooltip = buildLedgerMessage(consumption);
+					const tooltip = buildLedgerMessage(consumption);
 
-				if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6)) {
+					if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6)) {
+						$(".sortie_map", sortieBox)
+							.attr("titlealt", "{0}".format(tooltip))
+							.lazyInitTooltip();
+						return;
+					}
+
+					let lbTooltip = "";
+					const firstEntry = await KC3Database.con.navaloverall
+						.where("type")
+						.equals("sortie" + (sortieId - 1))
+						.first();
+
+					const lbArr = await KC3Database.con.navaloverall
+						.offset(firstEntry.id)
+						.until(entry => entry.type === "sortie" + (sortieId + 1))
+						.and(entry => "lbas" + sortieWorld === entry.type)
+						.toArray();
+
+					const lbConsumption = buildConsumptionArray(lbArr);
+					if (lbArr.length && !lbConsumption.every(v => !v)) {
+						lbTooltip = buildLedgerMessage(lbConsumption);
+					}
 					$(".sortie_map", sortieBox)
-						.attr("titlealt", "{0}".format(tooltip))
+						.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
 						.lazyInitTooltip();
-					return;
+				} finally {
+					$(".sortie_map", sortieBox).toggleClass('loading');
 				}
-
-				let lbTooltip = "";
-				const firstEntry = await KC3Database.con.navaloverall
-					.where("type")
-					.equals("sortie" + (sortieId - 1))
-					.first();
-
-				const lbArr = await KC3Database.con.navaloverall
-					.offset(firstEntry.id)
-					.until(entry => entry.type === "sortie" + (sortieId + 1))
-					.and(entry => "lbas" + sortieWorld === entry.type)
-					.toArray();
-
-				const lbConsumption = buildConsumptionArray(lbArr);
-				if (lbArr.length && !lbConsumption.every(v => !v)) {
-					lbTooltip = buildLedgerMessage(lbConsumption);
-				}
-				$(".sortie_map", sortieBox)
-					.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
-					.lazyInitTooltip();
 			};
 
 			$.each(sortieList, function(id, sortie){
@@ -964,9 +969,10 @@
 					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
+					$(".sortie_map", sortieBox).toggleClass('queued');
 
 					// schedule `showSortieLedger` as this take tons of time
-					self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world); 
+					self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world);
 
 					$(".button_tomanager", sortieBox)
 						.data("id", sortie.id)
