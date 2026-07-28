@@ -1023,8 +1023,9 @@
 	opacity:0.25;
 }
 /* difficulty ID should shift +1, but unchanged here */
-.tab_event .sortie_list .sortie_box.sortie_rank_1 {
-	border: rgb(64,64,255) solid 1px;
+.tab_event .sortie_list .sortie_box.sortie_rank_1,
+.tab_event .sortie_list .sortie_box.sortie_rank_1 .debuff_indicator {
+	border: rgb(64, 64, 255) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1:after {
 	color:rgb(0,0,128);
@@ -1032,8 +1033,9 @@
 .tab_event .sortie_list .sortie_box.sortie_rank_1.expanded:after {
 	opacity:0.25;
 }
-.tab_event .sortie_list .sortie_box.sortie_rank_2 {
-	border: rgb(255,255,64) solid 1px;
+.tab_event .sortie_list .sortie_box.sortie_rank_2,
+.tab_event .sortie_list .sortie_box.sortie_rank_2 .debuff_indicator {
+	border: rgb(255, 255, 64) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2:after {
 	color:rgb(128,128,0);
@@ -1041,8 +1043,9 @@
 .tab_event .sortie_list .sortie_box.sortie_rank_2.expanded:after {
 	opacity:0.25;
 }
-.tab_event .sortie_list .sortie_box.sortie_rank_3 {
-	border: rgb(255,64,64) solid 1px;
+.tab_event .sortie_list .sortie_box.sortie_rank_3,
+.tab_event .sortie_list .sortie_box.sortie_rank_3 .debuff_indicator {
+	border: rgb(255, 64, 64) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3:after {
 	color:rgb(128,0,0);
@@ -1113,10 +1116,10 @@
 }
 .tab_event .sortie_list .debuff_indicator {
 	position: absolute;
-	left: -5px;
-	top: 16px;
-	width: 8px;
-	height: 8px;
+	left: -6px;
+	top: 15px;
+	width: 10px;
+	height: 10px;
 	border-radius: 50%;
 	background: #57F287;
 }
