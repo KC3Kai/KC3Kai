@@ -40,7 +40,7 @@
 			const maps = localStorage.getObject("maps") || {};
 			this.maps = {};
 			Object.keys(maps)
-				 // Modern battle API from Fall 17 (World 40) onwards
+				// Modern battle API from Fall 17 (World 40) onwards
 				.filter(id => KC3Meta.isEventWorld(id.slice(1, -1)))
 				.sort((id1, id2) => {
 					const m1 = id1.slice(-1), m2 = id2.slice(-1);
@@ -58,14 +58,22 @@
 		---------------------------------*/
 		execute: function() {
 			$(".loading").hide();
-			this.world = Number(KC3StrategyTabs.pageParams[1] || 0);
 			this.updateMapSwitcher();
-			$(".map_switcher .world_list").on("change", e => {
+			const list = $(".map_switcher .world_list");
+			list.on("change", e => {
 				const value = $(e.target).val();
-				if(value) this.world = Number(value);
+				if (value) {
+					this.world = Number(value);
+				}
 				KC3StrategyTabs.gotoTab(null, this.world);
 			});
-			$(".map_switcher .world_list").val(this.world || 0);
+
+			this.world = Number(KC3StrategyTabs.pageParams[1] || 0);
+			if (!this.world && $('option', list).length) {
+				this.world = Number($('option', list).attr('value'));
+			}
+
+			list.val(this.world || 0);
 			this.loadEventStatistics();
 		},
 
@@ -85,15 +93,42 @@
 		},
 
 		updateMapSwitcher: function() {
-			const listElem = $(".map_switcher .world_list");
-			$.each(this.maps, (_, map) => {
+			const worldIds = Object.values(this.maps).reduce((set, map) => {
 				const mapId = map.id;
-				const world = String(mapId).slice(0, -1);
-				if($(`option[value=${world}]`, listElem).length === 0) {
-					listElem.append(
-						$("<option />").attr("value", world).text(KC3Meta.worldToDesc(world))
-					);
+				const world = Number(String(mapId).slice(0, -1));
+				if (isFinite(world)) {
+					set.add(world);
 				}
+				return set;
+			}, new Set());
+
+			if (!worldIds.size) {
+				return;
+			}
+
+			const root = $(".map_switcher .world_list");
+			const baseOption = $('option', root).addClass('i18n');
+			root.empty();
+
+			KC3Constant.EVENT_WORLD_TERMS.forEach((world) => {
+				if (!worldIds.has(world.id)) {
+					return;
+				}
+
+				const option = $(baseOption).clone();
+				option.val(world.id);
+				option.text(world.label);
+				if (world.tooltip) {
+					option.addClass('i18n_title');
+					option.attr('title', world.tooltip);
+				}
+				root.append(option);
+			});
+
+			KC3Translation.applyWords();
+
+			$('option', root).each((_, e) => {
+				$(e).text(`[${$(e).val()}] ` + $(e).text());
 			});
 		},
 

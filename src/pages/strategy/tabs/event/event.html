@@ -49,6 +49,7 @@ You can also share this to your friends so they can watch it too. Be careful tho
 		<option value="0">Event world option template</option>
 	</select>
 </div>
+
 <!--
 <div class="map_scrollable">
 	<div class="world_list">
@@ -187,6 +188,30 @@ You can also share this to your friends so they can watch it too. Be careful tho
 </div>
 -->
 
+<!-- SETTINGS -->
+<div class="settings">
+	<label class="item">
+		<input type="checkbox" id="loadLedger">
+		<span>Ledger</span>
+	</label>
+	<label class="item sortie_toggle i18n_title" title="BattleHistoryToggleButtonYtip">
+		<input type="checkbox" id="show_yasen_shipstate_toggle">
+		<span>Y</span>
+	</label>
+	<label class="item sortie_toggle i18n_title" title="BattleHistoryToggleButtonTtip">
+		<input type="checkbox" id="show_new_shipstate_toggle">
+		<span>T</span>
+	</label>
+	<label class="item sortie_toggle i18n_title"title="BattleHistoryToggleButtonBtip">
+		<input type="checkbox" id="non_battle_toggle">
+		<span>B</span>
+	</label>
+	<label class="item sortie_toggle i18n_title" title="BattleHistoryToggleButtonOtip">
+		<input type="checkbox" id="boss_node_toggle">
+		<span>O</span>
+	</label>
+</div>
+
 <!-- MAP LIST -->
 <div class="map_scrollable">
 	<div class="map_list">
@@ -213,10 +238,10 @@ You can also share this to your friends so they can watch it too. Be careful tho
 	</div>
 	<div class="sortie_count"></div>
 	<div class="sortie_batch_toggles">
-		<div class="show_yasen_shipstate_toggle sortie_toggle active hover i18n_title" data-target="show_yasen_shipstate" title="BattleHistoryToggleButtonYtip">Y</div>
-		<div class="show_new_shipstate_toggle sortie_toggle active hover i18n_title" data-target="show_new_shipstate" title="BattleHistoryToggleButtonTtip">T</div>
-		<div class="non_battle_toggle sortie_toggle active hover i18n_title" data-target="non_battle" title="BattleHistoryToggleButtonBtip">B</div>
-		<div class="boss_node_toggle sortie_toggle active hover i18n_title" data-target="boss_node" title="BattleHistoryToggleButtonOtip">O</div>
+		<!-- <div class="show_yasen_shipstate_toggle sortie_toggle active hover i18n_title" data-target="show_yasen_shipstate" title="BattleHistoryToggleButtonYtip">Y</div> -->
+		<!-- <div class="show_new_shipstate_toggle sortie_toggle active hover i18n_title" data-target="show_new_shipstate" title="BattleHistoryToggleButtonTtip">T</div> -->
+		<!-- <div class="non_battle_toggle sortie_toggle active hover i18n_title" data-target="non_battle" title="BattleHistoryToggleButtonBtip">B</div> -->
+		<!-- <div class="boss_node_toggle sortie_toggle active hover i18n_title" data-target="boss_node" title="BattleHistoryToggleButtonOtip">O</div> -->
 	</div>
 </div>
 
@@ -324,13 +349,18 @@ You can also share this to your friends so they can watch it too. Be careful tho
 		<div class="sortie_nodes">
 		</div>
 		<div class="sortie_stat">
-			<div class="sortie_end_hp">
-				<span class="boss nowhp">???</span>/<span class="boss maxhp">???</span>
-			</div>
-			<div class="sortie_end_icon">
-				<img class="sortie_end_clear" src="../../../../assets/img/ui/estat_hatsuclear.png"/>
-				<img class="sortie_end_error" src="../../../../assets/img/ui/catbomb.png"/>
-				<img class="sortie_end_final" src="../../../../assets/img/ui/estat_bossfresh.png"/>
+			<div class="sortie_stat_content">
+				<div class="sortie_end_hp">
+					<span class="boss nowhp">???</span>
+					<span>/</span>
+					<span class="boss maxhp">???</span>
+					<span class="boss subhp"></span>
+				</div>
+				<div class="sortie_end_icon">
+					<img class="sortie_end_clear" src="../../../../assets/img/ui/estat_hatsuclear.png"/>
+					<img class="sortie_end_error" src="../../../../assets/img/ui/catbomb.png"/>
+					<img class="sortie_end_final" src="../../../../assets/img/ui/estat_bossfresh.png"/>
+				</div>
 			</div>
 		</div>
 	</div>

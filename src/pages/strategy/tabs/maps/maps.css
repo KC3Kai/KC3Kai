@@ -53,6 +53,34 @@
 	display:none;
 }
 
+.tab_maps .settings {
+	display: flex;
+	margin: 6px 10px;
+}
+
+.tab_maps .settings .item {
+	display: flex;
+	gap: 6px;
+	padding: 2px 8px;
+	border: 1px solid gray;
+	border-left-width: 0;
+}
+
+.tab_maps .settings .item:first-child {
+	border-left-width: 1px;
+}
+
+.tab_maps .settings .item,
+.tab_maps .settings .item * {
+	margin: 0;
+	cursor: pointer;
+}
+
+.tab_maps .settings .item:has(input[disabled]),
+.tab_maps .settings .item:has(input[disabled]) * {
+	cursor: not-allowed;
+}
+
 /* MAP LIST
 ---------------------------------*/
 .tab_maps .map_scrollable {
@@ -257,6 +285,7 @@
 	font-size:16px;
 	font-weight:bold;
 	border: 1px solid #222;
+	transition: border-color 0.3s;
 }
 
 .tab_maps .sortie_list .sortie_map.queued {
