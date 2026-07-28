@@ -8,10 +8,9 @@
 }
 
 .tab_eventstats .map_switcher .world_list {
-	min-width:150px;
-	height:22px;
-	margin:10px 0 0 10px;
-	float:left;
+	min-width: 280px;
+	margin: 5px 10px;
+	padding: 2px 10px;
 }
 
 .tab_eventstats .loading img {

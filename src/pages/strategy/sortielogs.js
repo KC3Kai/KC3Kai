@@ -22,44 +22,6 @@
 			endur : "Leaves the boss below 2HP",
 			destr : "Completely destroys"
 		};
-	const EVENT_WORLD_TERMS = [
-		{ id: 62, label: 'EventHistoryWorldTab62' },
-		{ id: 61, label: 'EventHistoryWorldTab61', tooltip: 'EventHistoryWorldTab61Tip' },
-		{ id: 60, label: 'EventHistoryWorldTab60', tooltip: 'EventHistoryWorldTab60Tip' },
-
-		{ id: 59, label: 'EventHistoryWorldTab59' },
-		{ id: 58, label: 'EventHistoryWorldTab58', tooltip: 'EventHistoryWorldTab58Tip' },
-		{ id: 57, label: 'EventHistoryWorldTab57' },
-		{ id: 56, label: 'EventHistoryWorldTab56', tooltip: 'EventHistoryWorldTab56Tip' },
-		{ id: 55, label: 'EventHistoryWorldTab55', tooltip: 'EventHistoryWorldTab55Tip' },
-		{ id: 54, label: 'EventHistoryWorldTab54' },
-		{ id: 53, label: 'EventHistoryWorldTab53' },
-		{ id: 52, label: 'EventHistoryWorldTab52', tooltip: 'EventHistoryWorldTab52Tip' },
-		{ id: 51, label: 'EventHistoryWorldTab51' },
-		{ id: 50, label: 'EventHistoryWorldTab50' },
-
-		{ id: 49, label: 'EventHistoryWorldTab49', tooltip: 'EventHistoryWorldTab49Tip' },
-		{ id: 48, label: 'EventHistoryWorldTab48', tooltip: 'EventHistoryWorldTab48Tip' },
-		{ id: 47, label: 'EventHistoryWorldTab47', tooltip: 'EventHistoryWorldTab47Tip' },
-		{ id: 46, label: 'EventHistoryWorldTab46' },
-		{ id: 45, label: 'EventHistoryWorldTab45' },
-		{ id: 44, label: 'EventHistoryWorldTab44' },
-		{ id: 43, label: 'EventHistoryWorldTab43' },
-		{ id: 42, label: 'EventHistoryWorldTab42', tooltip: 'EventHistoryWorldTab42Tip' },
-		{ id: 41, label: 'EventHistoryWorldTab41' },
-		{ id: 40, label: 'EventHistoryWorldTab40' },
-
-		{ id: 39, label: 'EventHistoryWorldTab39' },
-		{ id: 38, label: 'EventHistoryWorldTab38' },
-		{ id: 37, label: 'EventHistoryWorldTab37' },
-		{ id: 36, label: 'EventHistoryWorldTab36' },
-		{ id: 35, label: 'EventHistoryWorldTab35' },
-		{ id: 34, label: 'EventHistoryWorldTab34' },
-		{ id: 33, label: 'EventHistoryWorldTab33' },
-		{ id: 32, label: 'EventHistoryWorldTab32' },
-		{ id: 31, label: 'EventHistoryWorldTab31' },
-		{ id: 30, label: 'EventHistoryWorldTab30' },
-	];
 
 	/* KC3改 Sortie Logs
 			Arguments:
@@ -78,11 +40,20 @@
 		this.scrollVars     = {};
 		this.ledgerMaxConcurrent = 2;
 		this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
+		this.tooltipMaxConcurrent = 20;
+		this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
+
+		this.defaultSettings = {
+			event: { world: 0, map: 0 },
+			loadLedger: false,
+		};
+		this.settings = Object.assign({}, this.defaultSettings); 
 
 		/* INIT
 		Prepares static data needed
 		---------------------------------*/
 		this.init = function(){
+			$.extend(true, this.settings, this.defaultSettings);
 			this.locale = KC3Translation.getLocale();
 		};
 
@@ -100,7 +71,7 @@
 		/* LEAVE
 		---------------------------------*/
 		this.leave = function () {
-			this.ledgerLimiter.stopAll(true);
+			this.stopLimiters();
 		};
 
 		/* EXECUTE
@@ -108,6 +79,8 @@
 		---------------------------------*/
 		this.execute = function(){
 			const self = this;
+			this.loadSettings();
+			this.loadSettingUI();
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
 			this.loadWorldSelect();
 			this.loadWorldsFromStorage();
@@ -232,6 +205,9 @@
 				const world = KC3StrategyTabs.pageParams[1];
 				const map = KC3StrategyTabs.pageParams[2];
 				this.switchWorld(world, map);
+			} else if (tabCode === 'event' && this.settings.event.world) {
+				KC3StrategyTabs.gotoTab(null, this.settings.event.world, this.settings.event.map);
+				this.switchWorld(this.settings.event.world, this.settings.event.map);
 			} else {
 				// Select default opened world (topmost for dropdown menu, otherwise `active` class for sidescroll menu)
 				const dropdownselect = $(`.tab_${tabCode} .world-select`);
@@ -239,6 +215,92 @@
 					$(".tab_" + tabCode + " .world_list .world_box.active").data("world_num");
 				this.switchWorld(world);
 			}
+		};
+
+		this.loadSettings = () => {
+			const saved = localStorage.getObject("srMaps");
+			$.extend(this.settings, saved);
+		};
+
+		this.saveSettings = () => {
+			localStorage.setObject("srMaps", this.settings);
+		};
+
+		this.stopLimiters = () => {
+			this.ledgerLimiter.stopAll(true);
+			this.tooltipLimiter.stopAll(true);
+		};
+
+		this.initLimiters = () => {
+			this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
+			this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
+			// this.ledgerLimiter.on('idle', () => console.debug(`ledgerMaxConcurrent#idle`));
+			// this.tooltipLimiter.on('idle', () => console.debug(`tooltipMaxConcurrent#idle`));
+		};
+
+		this.loadSettingUI = () => {
+			const root = $('.settings', $(`.tab_${tabCode}`));
+			ConfigManager.load();
+
+			const loadNewInputs = () => {
+				const configs = [
+					{
+						id: 'loadLedger',
+						cfgKey: 'loadLedger',
+					}
+				];
+
+				configs.forEach((config) => {
+					$(`#${config.id}`, root)
+						.prop('checked', this.settings[config.cfgKey])
+						.on('click', (e) => {
+							this.settings[config.cfgKey] = e.target.checked;
+							this.saveSettings();
+						});
+				});
+			};
+
+			const loadSortieInputs = () => {
+				const configs = [
+					{
+						id: 'show_yasen_shipstate_toggle',
+						cfgKey: 'sr_show_yasen_shipstate',
+					},
+					{
+						id: 'show_new_shipstate_toggle',
+						cfgKey: 'sr_show_new_shipstate',
+					},
+					{
+						id: 'non_battle_toggle',
+						cfgKey: 'sr_show_non_battle',
+						cfgInvert: true,
+					},
+					{
+						id: 'boss_node_toggle',
+						cfgKey: 'sr_show_boss_node',
+					},
+				];
+
+				configs.forEach((config) => {
+					const checked = !!config.cfgInvert
+						? !ConfigManager[config.cfgKey]
+						: ConfigManager[config.cfgKey];
+					$(`#${config.id}`, root)
+						.prop('checked', checked)
+						.on('click', (e) => {
+							const items = $('.item.sortie_toggle input', root);
+							items.prop('disabled', true);
+							ConfigManager.load();
+							ConfigManager[config.cfgKey] = !ConfigManager[config.cfgKey];
+							ConfigManager.save();
+							this.showMap();
+							items.prop('disabled', false);
+						});
+				});
+			};
+
+			loadNewInputs();
+			loadSortieInputs();
 		};
 
 		/**
@@ -249,7 +311,7 @@
 			const baseOption = $('option', root).addClass('i18n');
 			root.empty();
 
-			EVENT_WORLD_TERMS.forEach((world) => {
+			KC3Constant.EVENT_WORLD_TERMS.forEach((world) => {
 				const option = $(baseOption).clone();
 				option.val(world.id);
 				option.text(world.label);
@@ -261,6 +323,10 @@
 			});
 
 			KC3Translation.applyWords();
+
+			$('option', root).each((_, e) => {
+				$(e).text(`[${$(e).val()}] ` + $(e).text());
+			});
 		};
 
 		/**
@@ -271,7 +337,7 @@
 			var lastWorldId = 0;
 			const sidescrollWorldselect = $(`.tab_${tabCode} .world_list`);
 			const dropdownWorldselect = $(`.tab_${tabCode} .world-select`);
-			const knownEventWorldIds = dropdownWorldselect.length ? EVENT_WORLD_TERMS.map(o => o.id) : [];
+			const knownEventWorldIds = dropdownWorldselect.length ? KC3Constant.EVENT_WORLD_TERMS.map(o => o.id) : [];
 			Object.keys(this.maps).sort((id1, id2) => {
 					const m1 = id1.slice(-1), m2 = id2.slice(-1);
 					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
@@ -310,8 +376,10 @@
 						$(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, lastWorldId)).addClass("active");
 					}
 				}
-				if(dropdownWorldselect.length) {
-					dropdownWorldselect.prop("selectedIndex", 0);
+				if (dropdownWorldselect.length) {
+					if (!this.settings.event.world) {
+						dropdownWorldselect.prop("selectedIndex", 0);
+					}
 				}
 			}
 			return missingWorldCount;
@@ -357,6 +425,12 @@
 		Handle event on a world has been selected by clicking menu or by url
 		---------------------------------*/
 		this.switchWorld = function(worldNum, mapNum){
+			if (tabCode === 'event') {
+				this.settings.event.world = Number(worldNum || 0);
+				this.settings.event.map = Number(mapNum || 0);
+				this.saveSettings();
+			} 
+
 			const self = this;
 			self.selectedWorld = Number(worldNum);
 			$(".tab_"+tabCode+" .world_list .world_box").removeClass("active");
@@ -694,8 +768,9 @@
 		Determines list type and gets data from IndexedDB
 		---------------------------------*/
 		this.showPage = function(page, twbsPageObj){
-			this.ledgerLimiter.stopAll(true);
-			this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
+			this.stopLimiters();
+			this.initLimiters();
+
 			var self = this;
 			var startTime = Date.now();
 			this.pageNum = page || 1;
@@ -873,7 +948,7 @@
 				};
 			};
 
-			const showSortieLedger = async function (sortieId, sortieBox, sortieWorld) {
+			const showSortieLedger = function (sortieId, sortieBox, sortieWorld) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
 				// Akashi repair not included either, belonged to its own type
 				const buildConsumptionArray = arr => arr.reduce((acc, o) =>
@@ -901,48 +976,63 @@
 				};
 
 				$(".sortie_map", sortieBox).toggleClass('queued loading');
-				try {
-					const arr = await KC3Database.con.navaloverall
-						.where("type")
-						.equals("sortie" + sortieId)
-						.toArray();
 
-					const consumption = buildConsumptionArray(arr);
-					if (!arr.length || consumption.every(v => !v)) {
-						return;
-					}
+				let tooltip = "";
 
-					const tooltip = buildLedgerMessage(consumption);
+				return KC3Database.con.navaloverall
+					.where("type")
+					.equals("sortie" + sortieId)
+					.toArray()
+					.then(arr => {
+						const consumption = buildConsumptionArray(arr);
+						if (!arr.length || consumption.every(v => !v)) {
+							return null;
+						}
 
-					if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6)) {
+						tooltip = buildLedgerMessage(consumption);
+
+						if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6 || sortieWorld === 7)) {
+							$(".sortie_map", sortieBox)
+								.attr("titlealt", "{0}".format(tooltip))
+								.lazyInitTooltip();
+							return null;
+						}
+
+						return KC3Database.con.navaloverall
+							.where("type")
+							.equals("sortie" + (sortieId - 1))
+							.first();
+					})
+					.then(firstEntry => {
+						if (!firstEntry) {
+							return null;
+						}
+
+						return KC3Database.con.navaloverall
+							.offset(firstEntry.id)
+							.until(entry => entry.type === "sortie" + (sortieId + 1))
+							.and(entry => "lbas" + sortieWorld === entry.type)
+							.toArray();
+					})
+					.then(lbArr => {
+						if (!lbArr) {
+							return null;
+						}
+
+						const lbConsumption = buildConsumptionArray(lbArr);
+						let lbTooltip = "";
+
+						if (lbArr.length && !lbConsumption.every(v => !v)) {
+							lbTooltip = buildLedgerMessage(lbConsumption);
+						}
+
 						$(".sortie_map", sortieBox)
-							.attr("titlealt", "{0}".format(tooltip))
+							.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
 							.lazyInitTooltip();
-						return;
-					}
-
-					let lbTooltip = "";
-					const firstEntry = await KC3Database.con.navaloverall
-						.where("type")
-						.equals("sortie" + (sortieId - 1))
-						.first();
-
-					const lbArr = await KC3Database.con.navaloverall
-						.offset(firstEntry.id)
-						.until(entry => entry.type === "sortie" + (sortieId + 1))
-						.and(entry => "lbas" + sortieWorld === entry.type)
-						.toArray();
-
-					const lbConsumption = buildConsumptionArray(lbArr);
-					if (lbArr.length && !lbConsumption.every(v => !v)) {
-						lbTooltip = buildLedgerMessage(lbConsumption);
-					}
-					$(".sortie_map", sortieBox)
-						.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
-						.lazyInitTooltip();
-				} finally {
-					$(".sortie_map", sortieBox).toggleClass('loading');
-				}
+					})
+					.finally(() => {
+						$(".sortie_map", sortieBox).toggleClass('loading');
+					});
 			};
 
 			$.each(sortieList, function(id, sortie){
@@ -969,10 +1059,12 @@
 					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
-					$(".sortie_map", sortieBox).toggleClass('queued');
 
-					// schedule `showSortieLedger` as this take tons of time
-					self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world);
+					if (self.settings.loadLedger) {
+						$(".sortie_map", sortieBox).toggleClass('queued');
+						// schedule `showSortieLedger` as this take tons of time
+						self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world);
+					}
 
 					$(".button_tomanager", sortieBox)
 						.data("id", sortie.id)
@@ -1244,7 +1336,9 @@
 							var airRaid = parseAirRaidFunc(airRaidRaw);
 
 							// HTML elements
-							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
+							nodeBox = $(".tab_" + tabCode + " .factory .sortie_nodeinfo").clone();
+							const curNodeBox = nodeBox;
+
 							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node, sortieTime ) );
 							if(airRaid.airRaidLostKind > 0) {
 								// Adding to sortie_edge for consistency with old sorties
@@ -1300,6 +1394,7 @@
 							//PlayerManager.combinedFleet = sortie.combined;
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
 								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
+							const curKc3Node = thisNode;
 							thisNode.playerCombinedType = sortie.combined;
 							thisNode.fleetStates = battle.fleetStates;
 							// Known issue: prediction will fail when Damecon used,
@@ -1417,16 +1512,20 @@
 							$.each(thisNode.eships.slice(0, 12), function(index, eship){
 								if(eship > 0){
 									const mainEscort = index >= 6 ? "escort" : "main";
-									$(`.node_eship.${mainEscort}.node_eship_${index+1} img`, nodeBox)
-										.attr("src", KC3Meta.abyssIcon( eship ) )
+									$(`.node_eship.${mainEscort}.node_eship_${index + 1} img`, curNodeBox)
+										.attr("src", KC3Meta.abyssIcon(eship))
 										.attr("alt", eship)
 										.click(shipClickFunc);
-									$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
-										.addClass("hover")
+									$(`.node_eship.${mainEscort}.node_eship_${index + 1}`, curNodeBox)
 										.removeClass(KC3Meta.abyssShipBorderClass())
 										.addClass(KC3Meta.abyssShipBorderClass(eship))
-										.attr("title", thisNode.buildEnemyStatsMessage(index))
 										.show();
+									self.tooltipLimiter.schedulePriority(9, () => Promise.resolve(
+										$(`.node_eship.${mainEscort}.node_eship_${index + 1}`, curNodeBox)
+											.addClass("hover")
+											.attr("title", curKc3Node.buildEnemyStatsMessage(index))
+											.lazyInitTooltip()
+									));
 									if(thisNode.debuffed && index === 0){
 										//console.debug("Boss node " + thisNode.letter + " was debuffed", battle.sortie_id, thisNode);
 										$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
@@ -1449,7 +1548,11 @@
 									$(".node_support .exped", nodeBox).show();
 								}
 								$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
-								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode, true));
+								self.tooltipLimiter.schedule(() => Promise.resolve(
+									$(".node_support", curNodeBox)
+										.attr("title", curKc3Node.buildSupportAttackMessage(curKc3Node, true))
+										.lazyInitTooltip()
+								));
 							}else{
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 							}
@@ -1516,10 +1619,12 @@
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
 								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
-								$(".node_airbattle", nodeBox).attr("title",
-									thisNode.buildAirPowerMessage()
-								);
-								
+								self.tooltipLimiter.schedule(() => Promise.resolve(
+									$(".node_airbattle", curNodeBox)
+										.attr("title", curKc3Node.buildAirPowerMessage())
+										.lazyInitTooltip()
+								));
+
 								["Fighters","Bombers"].forEach(function(planeType){
 									["player","abyssal"].forEach(function(side,jndex){
 										var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
@@ -1531,7 +1636,11 @@
 									});
 								});
 								$("span.node_BAL",nodeBox).toggleClass("aaci_loss", !!thisNode.antiAirFire && thisNode.antiAirFire.length > 0);
-								$(".node_planes", nodeBox).attr("title", thisNode.buildAirBattleLossMessage());
+								self.tooltipLimiter.schedulePriority(7, () => Promise.resolve(
+									$(".node_planes", curNodeBox)
+										.attr("title", curKc3Node.buildAirBattleLossMessage())
+										.lazyInitTooltip()
+								));
 							}
 							//console.debug(`${thisNode.sortie} ${thisNode.letter}`, thisNode);
 							
@@ -1570,10 +1679,20 @@
 							if(mstat.onBoss.hpdat[sortie.id]){
 								mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
 									$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+									if (sortie.eventmap && sortie.eventmap.api_gauge_type === 3 && sortie.eventmap.api_sub_value) {
+										const delta = sortie.eventmap.api_sub_value;
+										$('.subhp', sstat)
+											.text(delta * -1)
+											.attr('title', `${sortie.eventmap.api_now_maphp} - ${delta} = ${sortie.eventmap.api_now_maphp - delta}`);
+									}
 								});
 							}
-							$(".sortie_end_clear",sstat).css('visibility',isHClear ? 'visible' : '');
-							$(".sortie_end_error",sstat).css('visibility',isCtBomb ? 'visible' : '');
+							$(".sortie_end_clear",sstat)
+								.attr('title', 'Clear')
+								.css('visibility',isHClear ? 'visible' : '');
+							$(".sortie_end_error",sstat)
+								.attr('title', 'Catbomb')
+								.css('visibility',isCtBomb ? 'visible' : '');
 							$(".sortie_end_final",sstat)
 								.attr('title',SORTIE_STRING[stateKey || 'faild'])
 								.attr("src",
@@ -1589,8 +1708,10 @@
 					}
 				}catch(e){ console.error("Sortie battle rendering exception", e); }
 			});
-			
-			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
+
+			requestAnimationFrame(() => {
+				$(".tab_" + tabCode + " .sortie_list").createChildrenTooltips();
+			});
 
 		};
 		

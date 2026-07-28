@@ -1241,16 +1241,34 @@ Used by SortieManager
 				maps[ckey].clear |= resultData.api_first_clear;
 				
 				// add a flag to this sortie record
-				if(resultData.api_first_clear && KC3SortieManager.isOnSavedSortie()) {
-					KC3Database.con.sortie.get(KC3SortieManager.getSortieId(), (sortie) => {
-						const eventmap = (sortie || {}).eventmap;
-						if(eventmap) {
-							eventmap.api_first_clear = resultData.api_first_clear;
-							KC3Database.con.sortie.put(sortie).then(() => {
-								console.info("Congratulations! This is your first time clear this map", eventmap);
-							});
+				if (KC3SortieManager.isOnSavedSortie()) {
+					const eventmapExtra = {};
+					if ('api_first_clear' in resultData) {
+						eventmapExtra.api_first_clear = resultData.api_first_clear;
+					}
+					if ('api_landing_hp' in resultData) {
+						const api_sub_value = Number(resultData.api_landing_hp.api_sub_value);
+						if (Number.isFinite(api_sub_value)) {
+							eventmapExtra.api_sub_value = api_sub_value;
+						} else {
+							eventmapExtra.api_sub_value = resultData.api_landing_hp.api_sub_value;
 						}
-					});
+					}
+					if (Object.keys(eventmapExtra).length) {
+						KC3Database.con.sortie.get(KC3SortieManager.getSortieId(), (sortie) => {
+							const eventmap = (sortie || {}).eventmap;
+							if (!eventmap) {
+								return;
+							}
+
+							Object.assign(eventmap, eventmapExtra);
+							KC3Database.con.sortie.put(sortie).then(() => {
+								if (eventmap.api_first_clear) {
+									console.info("Congratulations! This is your first time clear this map", eventmap);
+								}
+							});
+						});
+					}
 				}
 				
 				if(stat) {
