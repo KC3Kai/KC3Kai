@@ -4347,8 +4347,8 @@ KC3改 Ship Object
 		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni, Kaga Kai Ni Go
 		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
 		//             Langley and Kai fp > 0, but seems don't attack either
-		//             Independence and Kai fp > 0, don't attack? but Flight II supposed to move
-		if(isThisCarrier && initYasen > 0 && ![707, 925, 930, 1023, 1028].includes(this.masterId)) return true;
+		//             Independence all remodels fp > 0 don't attack, Flight II neither?
+		if(isThisCarrier && initYasen > 0 && ![707, 925, 930, 1023, 1028, 1036].includes(this.masterId)) return true;
 		// Shimanemaru Kai gets special behaviors: moves like a night carrier when any night plane equipped,
 		// but falls back to shelling fires when she is chuuha.
 		const isShimanemaruKaiWithNightPlane = (this.masterId == 1008) && this.canCarrierNightAirAttack();
