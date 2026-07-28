@@ -589,7 +589,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.and(filterFunc)
 				.count()
 				.then((value) => {
-					callback(value);
+					if (typeof callback === 'function') callback(value);
 					return value;
 				});
 		},
@@ -607,7 +607,7 @@ Uses Dexie.js third-party plugin on the assets directory
 
 			return this.get_sorties_with_battles(query)
 				.then((value) => {
-					callback(value);
+					if (typeof callback === 'function') callback(value);
 					return value;
 				});
 		},
@@ -619,7 +619,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.and(filterFunc)
 				.count()
 				.then((value) => {
-					callback(value);
+					if (typeof callback === 'function') callback(value);
 					return value;
 				});
 		},
@@ -636,7 +636,7 @@ Uses Dexie.js third-party plugin on the assets directory
 
 			return this.get_sorties_with_battles(query)
 				.then((value) => {
-					callback(value);
+					if (typeof callback === 'function') callback(value);
 					return value;
 				});
 		},
@@ -648,7 +648,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.and(filterFunc)
 				.count()
 				.then((value) => {
-					callback(value);
+					if (typeof callback === 'function') callback(value);
 					return value;
 				});
 		},
@@ -665,7 +665,7 @@ Uses Dexie.js third-party plugin on the assets directory
 
 			return this.get_sorties_with_battles(query)
 				.then((value) => {
-					callback(value);
+					if (typeof callback === 'function') callback(value);
 					return value;
 				});
 		},

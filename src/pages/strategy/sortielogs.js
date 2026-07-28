@@ -699,36 +699,37 @@
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			$(".tab_"+tabCode+" .sortie_controls").hide();
-			
+
+			let query;
+
 			// Show all sorties
-			if(this.selectedWorld === 0){
-				KC3Database.count_normal_sorties(this.sortieFilter, function(countSorties){
-					console.debug("Count of All", ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
-					if(expectedEnterCount === self.enterCount)
-						self.showPagination(countSorties);
+			if (this.selectedWorld === 0) {
+				query = KC3Database.count_normal_sorties(this.sortieFilter).then((count) => {
+					console.debug("Count of All", ConfigManager.sr_show_boss_node ? "Boss:" : ":", count);
+					return count;
 				});
-				
-			// Selected specific world
-			}else{
+			} else {
+				// Selected specific world
 				// Show all on this world
-				if(this.selectedMap === 0){
-					KC3Database.count_world(this.selectedWorld, this.sortieFilter,
-					function(countSorties){
-						console.debug("Count of World", self.selectedWorld, ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
-						if(expectedEnterCount === self.enterCount)
-							self.showPagination(countSorties);
+				if (this.selectedMap === 0) {
+					query = KC3Database.count_world(this.selectedWorld, this.sortieFilter).then((count) => {
+						console.debug("Count of World", self.selectedWorld, ConfigManager.sr_show_boss_node ? "Boss:" : ":", count);
+						return count;
 					});
-					
-				// Selected specific map
-				}else{
-					KC3Database.count_map(this.selectedWorld, this.selectedMap, this.sortieFilter,
-					function(countSorties){
-						console.debug("Count of Map", self.selectedWorld, self.selectedMap, ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
-						if(expectedEnterCount === self.enterCount)
-							self.showPagination(countSorties);
+				} else {
+					// Selected specific map
+					query = KC3Database.count_map(this.selectedWorld, this.selectedMap, this.sortieFilter).then((count) => {
+						console.debug("Count of Map", self.selectedWorld, self.selectedMap, ConfigManager.sr_show_boss_node ? "Boss:" : ":", count);
+						return count;
 					});
 				}
 			}
+
+			query.then((count) => {
+				if (expectedEnterCount === self.enterCount) {
+					self.showPagination(count);
+				}
+			});
 		};
 		
 		/* SHOW PAGINATION
@@ -783,33 +784,27 @@
 			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
-			
+
+			let query;
+
 			// Show all sorties
-			if(this.selectedWorld === 0){
-				KC3Database.get_normal_sorties(this.sortieFilter, this.pageNum, this.itemsPerPage, function( sortieList ){
-					self.showList( sortieList );
-					postShowList();
-				});
-				
-			// Selected specific world
-			}else{
+			if (this.selectedWorld === 0) {
+				query = KC3Database.get_normal_sorties(this.sortieFilter, this.pageNum, this.itemsPerPage);
+			} else {
+				// Selected specific world
 				// Show all on this world
-				if(this.selectedMap === 0){
-					KC3Database.get_world(this.selectedWorld, this.sortieFilter, this.pageNum, this.itemsPerPage,
-					function( sortieList ){
-						self.showList( sortieList );
-						postShowList();
-					});
-					
-				// Selected specific map
-				}else{
-					KC3Database.get_map(this.selectedWorld, this.selectedMap, this.sortieFilter, this.pageNum, this.itemsPerPage,
-					function( sortieList ){
-						self.showList( sortieList );
-						postShowList();
-					});
+				if (this.selectedMap === 0) {
+					query = KC3Database.get_world(this.selectedWorld, this.sortieFilter, this.pageNum, this.itemsPerPage);
+				} else {
+					// Selected specific map
+					query = KC3Database.get_map(this.selectedWorld, this.selectedMap, this.sortieFilter, this.pageNum, this.itemsPerPage);
 				}
 			}
+
+			query.then((sortieList) => {
+				self.showList(sortieList);
+				postShowList();
+			});
 		};
 		
 		/* SHOW LIST
