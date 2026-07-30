@@ -14,9 +14,9 @@
 /* WORLD LIST
 ---------------------------------*/
 .tab_event .world-select {
+	min-width: 280px;
 	margin: 5px 10px;
-	padding: 0 10px;
-	min-width: 285px;
+	padding: 2px 10px;
 }
 .tab_event .world_list {
 	height:31px;
@@ -56,6 +56,34 @@
 .tab_event .world_shift.disabled {
 	cursor:default;
 	display:none;
+}
+
+.tab_event .settings {
+	display: flex;
+	margin: 6px 10px;
+}
+
+.tab_event .settings .item {
+	display: flex;
+	gap: 6px;
+	padding: 2px 8px;
+	border: 1px solid gray;
+	border-left-width: 0;
+}
+
+.tab_event .settings .item:first-child {
+	border-left-width: 1px;
+}
+
+.tab_event .settings .item,
+.tab_event .settings .item * {
+	margin: 0;
+	cursor: pointer;
+}
+
+.tab_event .settings .item:has(input[disabled]),
+.tab_event .settings .item:has(input[disabled]) * {
+	cursor: not-allowed;
 }
 
 /* MAP LIST
@@ -309,6 +337,16 @@
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
+	border: 1px solid #222;
+	transition: border-color 0.3s;
+}
+
+.tab_event .sortie_list .sortie_map.queued {
+	border-left-color: #ffff40;
+}
+
+.tab_event .sortie_list .sortie_map.loading {
+	border-left-color: #57F287;
 }
 
 /* Sortie Info: FLEET */
@@ -985,8 +1023,9 @@
 	opacity:0.25;
 }
 /* difficulty ID should shift +1, but unchanged here */
-.tab_event .sortie_list .sortie_box.sortie_rank_1 {
-	border: rgb(64,64,255) solid 1px;
+.tab_event .sortie_list .sortie_box.sortie_rank_1,
+.tab_event .sortie_list .sortie_box.sortie_rank_1 .debuff_indicator {
+	border: rgb(64, 64, 255) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1:after {
 	color:rgb(0,0,128);
@@ -994,8 +1033,9 @@
 .tab_event .sortie_list .sortie_box.sortie_rank_1.expanded:after {
 	opacity:0.25;
 }
-.tab_event .sortie_list .sortie_box.sortie_rank_2 {
-	border: rgb(255,255,64) solid 1px;
+.tab_event .sortie_list .sortie_box.sortie_rank_2,
+.tab_event .sortie_list .sortie_box.sortie_rank_2 .debuff_indicator {
+	border: rgb(255, 255, 64) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2:after {
 	color:rgb(128,128,0);
@@ -1003,8 +1043,9 @@
 .tab_event .sortie_list .sortie_box.sortie_rank_2.expanded:after {
 	opacity:0.25;
 }
-.tab_event .sortie_list .sortie_box.sortie_rank_3 {
-	border: rgb(255,64,64) solid 1px;
+.tab_event .sortie_list .sortie_box.sortie_rank_3,
+.tab_event .sortie_list .sortie_box.sortie_rank_3 .debuff_indicator {
+	border: rgb(255, 64, 64) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3:after {
 	color:rgb(128,0,0);
@@ -1037,12 +1078,17 @@
 	display: none;
 	position:relative;
 }
+.tab_event .sortie_list .sortie_stat_content {
+	display: flex;
+	gap: 8px;
+}
 .tab_event .sortie_list .sortie_end_hp {
-	display: inline-block;
-	width: 12%;
+	display: inline-flex;
+	gap: 4px;
 	text-align: right;
 }
 .tab_event .sortie_list .sortie_end_hp .boss {
+	min-width: 48px;
 	font-weight: bolder;
 	font-size: 1.1em;
 }
@@ -1053,10 +1099,11 @@
 	color: red;
 	font-size: 1.2em;
 }
+.tab_event .sortie_list .sortie_end_hp .boss.subhp {
+}
 .tab_event .sortie_list .sortie_end_icon {
+	flex: 1;
 	display: inline-block;
-	width: 85%;
-	margin-left:4px;
 }
 .tab_event .sortie_list .sortie_end_icon img {
 	width:32px;
@@ -1069,10 +1116,10 @@
 }
 .tab_event .sortie_list .debuff_indicator {
 	position: absolute;
-	left: -5px;
-	top: 16px;
-	width: 8px;
-	height: 8px;
+	left: -6px;
+	top: 15px;
+	width: 10px;
+	height: 10px;
 	border-radius: 50%;
 	background: #57F287;
 }

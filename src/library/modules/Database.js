@@ -239,6 +239,15 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 76,
 					},
+					{
+						ch: {
+							sortie: "++id,hq,diff,world,mapnum,[hq+world],[hq+world+mapnum],fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+						},
+						up: function (t){
+							console.log("Database v77", t);
+						},
+						vr: 77,
+					},
 					/*
 					Database versions are only integers, no decimals.
 					7.2 was detected as 72 by chrome, and thus specifying 8 is actually lower version
@@ -517,49 +526,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				.get(Number(exped_id))
 				.then(callback);
 		},
-		
-		count_normal_sorties: function(filterFunc, callback){
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10; })
-				.and(filterFunc)
-				.count(callback);
-		},
-		
-		get_normal_sorties :function(filterFunc, pageNumber, itemsPerPage, callback){
-			var self = this;
-			var sortieIds = [], bctr, sortieIndexed = {};
-			
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10; })
-				.and(filterFunc)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
-				.toArray(function(sortieList){
-					// Compile all sortieIDs and indexify
-					for(bctr in sortieList){
-						sortieIds.push(sortieList[bctr].id);
-						sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
-						sortieIndexed["s"+sortieList[bctr].id].battles = [];
-					}
-					
-					// Get all battles on those sorties
-					self.con.battle
-						.where("sortie_id").anyOf(sortieIds)
-						.toArray(function(battleList){
-							for(bctr in battleList){
-								if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
-									sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
-								}else{
-									console.error("orphan battle", battleList[bctr]);
-								}
-							}
-							callback(sortieIndexed);
-						});
-				});
-		},
-		
+
 		get_sortie_maps :function(sortieRange, callback) {
 			// Clamp Range Input
 			sortieRange = ((sortieRange && (sortieRange.length >= 2) && sortieRange) || [null,null])
@@ -581,91 +548,128 @@ Uses Dexie.js third-party plugin on the assets directory
 					callback(wmHash);
 				});
 		},
-		
-		count_world :function(world, filterFunc, callback){
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world; })
-				.and(filterFunc)
-				.count(callback);
-		},
-		
-		get_world :function(world, filterFunc, pageNumber, itemsPerPage, callback){
-			var self = this;
-			var sortieIds = [], bctr, sortieIndexed = {};
-			
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world; })
-				.and(filterFunc)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
-				.toArray(function(sortieList){
-					// Compile all sortieIDs and indexify
-					for(bctr in sortieList){
+
+		get_sorties_with_battles: function (sortiePromise) {
+			const self = this;
+			const sortieIds = [];
+			const sortieIndexed = {};
+
+			console.time('get_sorties_with_battles');
+			return sortiePromise
+				.then((sortieList) => {
+					for (const bctr in sortieList) {
 						sortieIds.push(sortieList[bctr].id);
-						sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
-						sortieIndexed["s"+sortieList[bctr].id].battles = [];
+						sortieIndexed["s" + sortieList[bctr].id] = sortieList[bctr];
+						sortieIndexed["s" + sortieList[bctr].id].battles = [];
 					}
-					
-					// Get all battles on those sorties
-					self.con.battle
-						.where("sortie_id").anyOf(sortieIds)
-						.toArray(function(battleList){
-							for(bctr in battleList){
-								if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
-									sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
-								}else{
-									console.error("orphan battle", battleList[bctr]);
-								}
-							}
-							callback(sortieIndexed);
-						});
+					return self.con.battle
+						.where("sortie_id")
+						.anyOf(sortieIds)
+						.toArray();
+				})
+				.then((battleList) => {
+					for (const bctr in battleList) {
+						if (typeof sortieIndexed["s" + battleList[bctr].sortie_id] != "undefined") {
+							sortieIndexed["s" + battleList[bctr].sortie_id].battles.push(battleList[bctr]);
+						} else {
+							console.error("orphan battle", battleList[bctr]);
+						}
+					}
+					return sortieIndexed;
+				})
+				.finally(() => {
+					console.timeEnd('get_sorties_with_battles');
 				});
 		},
-		
-		count_map :function(world, map, filterFunc, callback){
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
+
+		count_normal_sorties: function (filterFunc, callback) {
+			return this.con.sortie
+				.where("[hq+world]")
+				.between([this.index, 1], [this.index, 20], true, true)
 				.and(filterFunc)
-				.count(callback);
-		},
-		
-		get_map :function(world, map, filterFunc, pageNumber, itemsPerPage, callback){
-			var self = this;
-			var sortieIds = [], bctr, sortieIndexed = {};
-			
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
-				.and(filterFunc)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
-				.toArray(function(sortieList){
-					// Compile all sortieIDs and indexify
-					for(bctr in sortieList){
-						sortieIds.push(sortieList[bctr].id);
-						sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
-						sortieIndexed["s"+sortieList[bctr].id].battles = [];
-					}
-					
-					// Get all battles on those sorties
-					self.con.battle
-						.where("sortie_id").anyOf(sortieIds)
-						.toArray(function(battleList){
-							for(bctr in battleList){
-								if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
-									sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
-								}else{
-									console.error("orphan battle", battleList[bctr]);
-								}
-							}
-							callback(sortieIndexed);
-						});
+				.count()
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
 				});
 		},
-		
+
+		get_normal_sorties: function (filterFunc, pageNumber, itemsPerPage, callback) {
+			const query = this.con.sortie
+				.where("hq")
+				.equals(this.index)
+				.and(function (sortie) { return sortie.world <= 20; })
+				.and(filterFunc)
+				.reverse()
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+
+			return this.get_sorties_with_battles(query)
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		count_world: function (world, filterFunc, callback) {
+			return this.con.sortie
+				.where("[hq+world]")
+				.equals([this.index, world])
+				.and(filterFunc)
+				.count()
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		get_world: function (world, filterFunc, pageNumber, itemsPerPage, callback) {
+			const query = this.con.sortie
+				.where("[hq+world]")
+				.equals([this.index, world])
+				.and(filterFunc)
+				.reverse()
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+
+			return this.get_sorties_with_battles(query)
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		count_map: function (world, map, filterFunc, callback) {
+			return this.con.sortie
+				.where("[hq+world+mapnum]")
+				.equals([this.index, world, map])
+				.and(filterFunc)
+				.count()
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		get_map: function (world, map, filterFunc, pageNumber, itemsPerPage, callback) {
+			const query = this.con.sortie
+				.where("[hq+world+mapnum]")
+				.equals([this.index, world, map])
+				.and(filterFunc)
+				.reverse()
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+
+			return this.get_sorties_with_battles(query)
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
 		get_sortie :function( sortie_id, callback ){
 			var self = this;
 			this.con.sortie
@@ -857,7 +861,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.sortie
 				.where("hq").equals(this.index)
 				.and(function(s){
-					return (world ? s.world === world : s.world < 10)
+					return (world ? s.world === world : s.world <= 20)
 						&& (map ? s.mapnum === map : true)
 						&& (startSecs ? s.time >= startSecs : true)
 						&& (endSecs ? s.time < endSecs : true);

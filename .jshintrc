@@ -55,6 +55,7 @@
 		"KC3Ship": true,
 		"ShowcaseExporter": true,
 		"ShowcaseEventList": true,
+		"KC3Constant": true,
 		"KC3StrategyTabs": true,
 		"KC3StrategyTab": true,
 		"KC3Timer": true,
@@ -97,6 +98,7 @@
 		"setInterval": true,
 		"clearTimeout": true,
 		"clearInterval": true,
+		"requestAnimationFrame": true,
 
 		"Range": true,
 		"dateFormat": true,
@@ -105,6 +107,7 @@
 		"saveAs": true,
 		"JSZip": true,
 		"Dexie": true,
+		"Bottleneck": true,
 		"markdown": true,
 		"wanakana": true,
 		"steg": true
