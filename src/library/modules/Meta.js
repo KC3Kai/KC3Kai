@@ -1517,6 +1517,14 @@ Provides access to data on built-in JSON files
 			return Number(worldId) > 20;
 		},
 		
+		eventWorldTerm :function(worldId) {
+			if(this.isEventWorld(worldId)) {
+				return (this._eventColle.eventWorldTerms || []).find(e => worldId == e.id) || {};
+			} else {
+				return this._eventColle.eventWorldTerms || [];
+			}
+		},
+		
 		worldToDesc :function(worldId, mapId, returnTerm) {
 			worldId = Number(worldId);
 			var worldTerm = "Unknown";

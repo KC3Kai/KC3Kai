@@ -1535,9 +1535,16 @@ body {
 }
 .tab_event .world_dropdownmenu,
 .tab_event .world_list,
-.tab_maps .world_list {
+.tab_event .settings,
+.tab_maps .world_list,
+.tab_maps .settings {
 	background:#f0f5ff;
 	border-bottom:1px solid #369;
+}
+.tab_event .settings .item,
+.tab_maps .settings .item {
+	border: 1px solid #369;
+	border-left-width: 0;
 }
 .tab_event .world_box,
 .tab_maps .world_box {
@@ -1612,6 +1619,15 @@ body {
 .tab_maps .sortie_list .sortie_map {
 	background:#ffc;
 	border-radius:8px;
+	border: 1px solid #ace;
+}
+.tab_event .sortie_list .sortie_map.queued,
+.tab_maps .sortie_list .sortie_map.queued {
+	border-left-color: #148;
+}
+.tab_event .sortie_list .sortie_map.loading,
+.tab_maps .sortie_list .sortie_map.loading {
+	border-left-color: #29f;
 }
 .tab_event .sortie_list .sortie_ship,
 .tab_maps .sortie_list .sortie_ship {

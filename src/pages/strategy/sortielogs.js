@@ -42,18 +42,21 @@
 		this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
 		this.tooltipMaxConcurrent = 20;
 		this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
-
 		this.defaultSettings = {
 			event: { world: 0, map: 0 },
 			loadLedger: false,
+			bossArrival: false,
+			onlyBattle: false,
+			evalShipState: true,
+			evalYasen: false,
 		};
-		this.settings = Object.assign({}, this.defaultSettings); 
+		this.settings = {};
 
 		/* INIT
 		Prepares static data needed
 		---------------------------------*/
 		this.init = function(){
-			$.extend(true, this.settings, this.defaultSettings);
+			$.extend(this.settings, this.defaultSettings);
 			this.locale = KC3Translation.getLocale();
 		};
 
@@ -79,9 +82,9 @@
 		---------------------------------*/
 		this.execute = function(){
 			const self = this;
-			this.loadSettings();
-			this.loadSettingUI();
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
+			this.loadSettings();
+			this.loadSettingToggles();
 			this.loadWorldSelect();
 			this.loadWorldsFromStorage();
 			
@@ -165,41 +168,6 @@
 				self.showMap();
 			}).val(self.itemsPerPage);
 			
-			// Toggle between boss node arrival only and with all nodes
-			$(".tab_"+tabCode+" .sortie_batch_toggles .boss_node_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_boss_node = !ConfigManager.sr_show_boss_node;
-				ConfigManager.save();
-				$(this).toggleClass("active", ConfigManager.sr_show_boss_node);
-				self.showMap();
-			}).toggleClass("active", ConfigManager.sr_show_boss_node);
-			
-			// Toggle between battle nodes only and with non-battle nodes
-			$(".tab_"+tabCode+" .sortie_batch_toggles .non_battle_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_non_battle = !ConfigManager.sr_show_non_battle;
-				ConfigManager.save();
-				$(this).toggleClass("active", !ConfigManager.sr_show_non_battle);
-				self.showMap();
-			}).toggleClass("active", !ConfigManager.sr_show_non_battle);
-			
-			// Toggle between using predictions to get taiha/chuuha/sunk state
-			$(".tab_"+tabCode+" .sortie_batch_toggles .show_new_shipstate_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_new_shipstate = !ConfigManager.sr_show_new_shipstate;
-				ConfigManager.save();
-				$(this).toggleClass("active", ConfigManager.sr_show_new_shipstate);
-				self.showMap();
-			}).toggleClass("active", ConfigManager.sr_show_new_shipstate);
-			
-			// Toggle between using predictions to get yasen states
-			$(".tab_"+tabCode+" .sortie_batch_toggles .show_yasen_shipstate_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_yasen_shipstate = !ConfigManager.sr_show_yasen_shipstate;
-				ConfigManager.save();
-				$(this).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
-				self.showMap();
-			}).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
 
 			if (!!KC3StrategyTabs.pageParams[1]) {
 				const world = KC3StrategyTabs.pageParams[1];
@@ -238,69 +206,48 @@
 			// this.tooltipLimiter.on('idle', () => console.debug(`tooltipMaxConcurrent#idle`));
 		};
 
-		this.loadSettingUI = () => {
-			const root = $('.settings', $(`.tab_${tabCode}`));
-			ConfigManager.load();
-
-			const loadNewInputs = () => {
-				const configs = [
-					{
-						id: 'loadLedger',
-						cfgKey: 'loadLedger',
-					}
-				];
-
-				configs.forEach((config) => {
-					$(`#${config.id}`, root)
-						.prop('checked', this.settings[config.cfgKey])
-						.on('click', (e) => {
-							this.settings[config.cfgKey] = e.target.checked;
-							this.saveSettings();
-						});
-				});
-			};
-
-			const loadSortieInputs = () => {
-				const configs = [
-					{
-						id: 'show_yasen_shipstate_toggle',
-						cfgKey: 'sr_show_yasen_shipstate',
-					},
-					{
-						id: 'show_new_shipstate_toggle',
-						cfgKey: 'sr_show_new_shipstate',
-					},
-					{
-						id: 'non_battle_toggle',
-						cfgKey: 'sr_show_non_battle',
-						cfgInvert: true,
-					},
-					{
-						id: 'boss_node_toggle',
-						cfgKey: 'sr_show_boss_node',
-					},
-				];
-
-				configs.forEach((config) => {
-					const checked = !!config.cfgInvert
-						? !ConfigManager[config.cfgKey]
-						: ConfigManager[config.cfgKey];
-					$(`#${config.id}`, root)
-						.prop('checked', checked)
-						.on('click', (e) => {
-							const items = $('.item.sortie_toggle input', root);
-							items.prop('disabled', true);
+		/**
+		 * Load initial states and click events for setting checkboxes
+		 */
+		this.loadSettingToggles = () => {
+			const root = $(`.tab_${tabCode} .settings`);
+			const inputElements = [
+				{
+					id: 'loadLedger',
+					cfgKey: 'loadLedger',
+				},
+				{
+					id: 'show_yasen_shipstate_toggle',
+					cfgKey: 'evalYasen',
+				},
+				{
+					id: 'show_new_shipstate_toggle',
+					cfgKey: 'evalShipState',
+					linkedConfig: 'sr_show_new_shipstate',
+				},
+				{
+					id: 'non_battle_toggle',
+					cfgKey: 'onlyBattle',
+				},
+				{
+					id: 'boss_node_toggle',
+					cfgKey: 'bossArrival',
+				},
+			];
+			inputElements.forEach(config => {
+				$(`#${config.id}`, root)
+					.prop('checked', this.settings[config.cfgKey])
+					.on('click', (e) => {
+						this.settings[config.cfgKey] = !!e.target.checked;
+						this.saveSettings();
+						if (config.linkedConfig) {
 							ConfigManager.load();
-							ConfigManager[config.cfgKey] = !ConfigManager[config.cfgKey];
+							ConfigManager[config.linkedConfig] = this.settings[config.cfgKey];
 							ConfigManager.save();
-							this.showMap();
-							items.prop('disabled', false);
-						});
-				});
-			};
-
-			loadNewInputs();
-			loadSortieInputs();
+						}
+						this.showMap();
+					});
+			});
 		};
 
 		/**
@@ -308,24 +255,17 @@
 		 */
 		this.loadWorldSelect = () => {
 			const root = $(`.tab_${tabCode} .world-select`);
-			const baseOption = $('option', root).addClass('i18n');
+			const baseOption = $('option', root).addClass('l10n');
 			root.empty();
-
-			KC3Constant.EVENT_WORLD_TERMS.forEach((world) => {
+			KC3Meta.eventWorldTerm().forEach((world) => {
 				const option = $(baseOption).clone();
 				option.val(world.id);
-				option.text(world.label);
+				option.text("[{0}] {1}".format(world.id, KC3Meta.term(world.label)));
 				if (world.tooltip) {
-					option.addClass('i18n_title');
-					option.attr('title', world.tooltip);
+					option.addClass('l18n_title');
+					option.attr('title', KC3Meta.term(world.tooltip));
 				}
 				root.append(option);
-			});
-
-			KC3Translation.applyWords();
-
-			$('option', root).each((_, e) => {
-				$(e).text(`[${$(e).val()}] ` + $(e).text());
 			});
 		};
 
@@ -337,7 +277,7 @@
 			var lastWorldId = 0;
 			const sidescrollWorldselect = $(`.tab_${tabCode} .world_list`);
 			const dropdownWorldselect = $(`.tab_${tabCode} .world-select`);
-			const knownEventWorldIds = dropdownWorldselect.length ? KC3Constant.EVENT_WORLD_TERMS.map(o => o.id) : [];
+			const knownEventWorldIds = dropdownWorldselect.length ? KC3Meta.eventWorldTerm().map(o => o.id) : [];
 			Object.keys(this.maps).sort((id1, id2) => {
 					const m1 = id1.slice(-1), m2 = id2.slice(-1);
 					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
@@ -674,7 +614,7 @@
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
 		this.sortieFilter = function(sortie){
-			return !ConfigManager.sr_show_boss_node ||
+			return !this.settings.bossArrival ||
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
@@ -700,31 +640,30 @@
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			$(".tab_"+tabCode+" .sortie_controls").hide();
 
+			const filterFunc = this.sortieFilter.bind(this);
 			let query;
-
 			// Show all sorties
 			if (this.selectedWorld === 0) {
-				query = KC3Database.count_normal_sorties(this.sortieFilter).then((count) => {
-					console.debug("Count of All", ConfigManager.sr_show_boss_node ? "Boss:" : ":", count);
+				query = KC3Database.count_normal_sorties(filterFunc).then((count) => {
+					console.debug("Count of All", self.settings.bossArrival ? "Boss:" : ":", count);
 					return count;
 				});
 			} else {
 				// Selected specific world
 				// Show all on this world
 				if (this.selectedMap === 0) {
-					query = KC3Database.count_world(this.selectedWorld, this.sortieFilter).then((count) => {
-						console.debug("Count of World", self.selectedWorld, ConfigManager.sr_show_boss_node ? "Boss:" : ":", count);
+					query = KC3Database.count_world(this.selectedWorld, filterFunc).then((count) => {
+						console.debug("Count of World", self.selectedWorld, self.settings.bossArrival ? "Boss:" : ":", count);
 						return count;
 					});
 				} else {
 					// Selected specific map
-					query = KC3Database.count_map(this.selectedWorld, this.selectedMap, this.sortieFilter).then((count) => {
-						console.debug("Count of Map", self.selectedWorld, self.selectedMap, ConfigManager.sr_show_boss_node ? "Boss:" : ":", count);
+					query = KC3Database.count_map(this.selectedWorld, this.selectedMap, filterFunc).then((count) => {
+						console.debug("Count of Map", self.selectedWorld, self.selectedMap, self.settings.bossArrival ? "Boss:" : ":", count);
 						return count;
 					});
 				}
 			}
-
 			query.then((count) => {
 				if (expectedEnterCount === self.enterCount) {
 					self.showPagination(count);
@@ -785,22 +724,21 @@
 			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 
+			const filterFunc = this.sortieFilter.bind(this);
 			let query;
-
 			// Show all sorties
 			if (this.selectedWorld === 0) {
-				query = KC3Database.get_normal_sorties(this.sortieFilter, this.pageNum, this.itemsPerPage);
+				query = KC3Database.get_normal_sorties(filterFunc, this.pageNum, this.itemsPerPage);
 			} else {
 				// Selected specific world
 				// Show all on this world
 				if (this.selectedMap === 0) {
-					query = KC3Database.get_world(this.selectedWorld, this.sortieFilter, this.pageNum, this.itemsPerPage);
+					query = KC3Database.get_world(this.selectedWorld, filterFunc, this.pageNum, this.itemsPerPage);
 				} else {
 					// Selected specific map
-					query = KC3Database.get_map(this.selectedWorld, this.selectedMap, this.sortieFilter, this.pageNum, this.itemsPerPage);
+					query = KC3Database.get_map(this.selectedWorld, this.selectedMap, filterFunc, this.pageNum, this.itemsPerPage);
 				}
 			}
-
 			query.then((sortieList) => {
 				self.showList(sortieList);
 				postShowList();
@@ -950,28 +888,23 @@
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
 					return consumption.map((v, i) => {
-						const icon = $("<img />")
-							.attr(
-								"src",
-								"/assets/img/client/" + [
-									"fuel.png",
-									"ammo.png",
-									"steel.png",
-									"bauxite.png",
-									"ibuild.png",
-									"bucket.png",
-									"devmat.png",
-									"screws.png"
-								][i])
-							.width(13)
-							.height(13)
+						const icon = $("<img />").attr("src",
+							"/assets/img/client/" + [
+								"fuel.png",
+								"ammo.png",
+								"steel.png",
+								"bauxite.png",
+								"ibuild.png",
+								"bucket.png",
+								"devmat.png",
+								"screws.png"
+							][i]).width(13).height(13)
 							.css("margin", "-3px 2px 0 0");
 						return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
 					}).join(" ");
 				};
 
 				$(".sortie_map", sortieBox).toggleClass('queued loading');
-
 				let tooltip = "";
 
 				return KC3Database.con.navaloverall
@@ -981,16 +914,15 @@
 					.then(arr => {
 						const consumption = buildConsumptionArray(arr);
 						if (!arr.length || consumption.every(v => !v)) {
-							return null;
+							return;
 						}
 
 						tooltip = buildLedgerMessage(consumption);
-
 						if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6 || sortieWorld === 7)) {
 							$(".sortie_map", sortieBox)
 								.attr("titlealt", "{0}".format(tooltip))
 								.lazyInitTooltip();
-							return null;
+							return;
 						}
 
 						return KC3Database.con.navaloverall
@@ -1000,7 +932,7 @@
 					})
 					.then(firstEntry => {
 						if (!firstEntry) {
-							return null;
+							return;
 						}
 
 						return KC3Database.con.navaloverall
@@ -1011,12 +943,11 @@
 					})
 					.then(lbArr => {
 						if (!lbArr) {
-							return null;
+							return;
 						}
 
 						const lbConsumption = buildConsumptionArray(lbArr);
 						let lbTooltip = "";
-
 						if (lbArr.length && !lbConsumption.every(v => !v)) {
 							lbTooltip = buildLedgerMessage(lbConsumption);
 						}
@@ -1074,7 +1005,7 @@
 						.data("id", sortie.id)
 						.on("click", exportJervisOr);
 					var edges = [];
-					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
+					if(sortie.nodes && !self.settings.onlyBattle) {
 						$.each(sortie.nodes, function(index, node) {
 							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id, sortieTime);
 							const isBattle = node.type === "battle";
@@ -1411,20 +1342,20 @@
 								if(typeof battle.data.api_dock_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
 									if(typeof battle.yasen.api_deck_id != "undefined" &&
-										(ConfigManager.sr_show_yasen_shipstate || KC3Node.debugPrediction())){
+										(self.settings.evalYasen || KC3Node.debugPrediction())){
 										thisNode.night( battle.yasen );
 									}
 								}else if(typeof battle.data.api_deck_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
 									if(typeof battle.yasen.api_deck_id != "undefined" &&
-										(ConfigManager.sr_show_yasen_shipstate || KC3Node.debugPrediction())){
+										(self.settings.evalYasen || KC3Node.debugPrediction())){
 										thisNode.night( battle.yasen );
 									}
 								}else if(typeof battle.yasen.api_deck_id != "undefined"){
 									thisNode.engageNight( battleData, sortie.fleetnum );
 								}
 							} catch(e) {
-								if(ConfigManager.sr_show_new_shipstate || ConfigManager.sr_show_yasen_shipstate) {
+								if(self.settings.evalShipState || self.settings.evalYasen) {
 									console.error("Predicting battle ship state", e);
 								} else {
 									throw e;
@@ -1445,7 +1376,7 @@
 								$(".node_id", nodeBox).addClass("special_cutin");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("special_cutin");
 							}
-							if(ConfigManager.sr_show_new_shipstate){
+							if(self.settings.evalShipState){
 								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
 								if(predicted){
 									const toDamageLevel = (hpRatio) => Math.ceil(hpRatio * 4);
@@ -1473,7 +1404,7 @@
 									}
 								}
 							}
-							if(ConfigManager.sr_show_yasen_shipstate &&
+							if(self.settings.evalYasen &&
 								typeof battle.yasen.api_deck_id != "undefined" &&
 								!(battleType & (BATTLE_NIGHT | BATTLE_NIGHT2DAY))){
 								$(".node_id", nodeBox).addClass("day_to_night");
