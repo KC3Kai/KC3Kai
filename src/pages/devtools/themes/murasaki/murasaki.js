@@ -698,7 +698,10 @@
 		$(".module.controls .btn_export").on("click", function(e){
 			if(window.KC3ImageBuilder) {
 				if(e.altKey) {
-					KC3ImageBuilder.exportCurrentFleets();
+					copyToClipboard(JSON.stringify(PlayerManager.prepareDeckbuilder())).catch(e => {
+						console.debug("Browser does not support Clipboard event", e);
+						KC3ImageBuilder.exportCurrentFleets();
+					});
 					return;
 				}
 				if(e.ctrlKey || e.metaKey) {
@@ -5484,4 +5487,23 @@
 			}
 		}
 	}
+
+	function copyToClipboard(text) {
+		return new Promise((resolve, reject) => {
+			const copyHandler = function(e) {
+				e.preventDefault();
+				if(e.clipboardData) {
+					e.clipboardData.setData("text/plain", text);
+					resolve(text, e);
+				} else {
+					reject(e, text);
+				}
+				return true;
+			};
+			document.addEventListener("copy", copyHandler);
+			document.execCommand("copy");
+			document.removeEventListener("copy", copyHandler);
+		});
+	}
+
 })();
