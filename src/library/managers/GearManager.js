@@ -18,8 +18,8 @@ Saves and loads list to and from localStorage
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		// Type 21, 22 extended since 2023-02-14
 		landBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,37,38,39,40,43,44,45,46,47,48,49,50,51,56,57,58,59,60],
-		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58,60,91],
-		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,91,94],
+		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58,91],
+		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474,541,544,550,551,552,578],
 		// Modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
