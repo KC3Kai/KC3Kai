@@ -553,7 +553,6 @@ Uses Dexie.js third-party plugin on the assets directory
 			const self = this;
 			const sortieIds = [];
 			const sortieIndexed = {};
-
 			console.time('get_sorties_with_battles');
 			return sortiePromise
 				.then((sortieList) => {

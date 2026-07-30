@@ -55,17 +55,14 @@
 
 .tab_maps .settings {
 	display: flex;
-	margin: 6px 10px;
+	padding: 5px 10px;
 }
 
 .tab_maps .settings .item {
 	display: flex;
 	gap: 6px;
 	padding: 2px 8px;
-	border: 1px solid gray;
-	border-left-width: 0;
 }
-
 .tab_maps .settings .item:first-child {
 	border-left-width: 1px;
 }
@@ -75,7 +72,6 @@
 	margin: 0;
 	cursor: pointer;
 }
-
 .tab_maps .settings .item:has(input[disabled]),
 .tab_maps .settings .item:has(input[disabled]) * {
 	cursor: not-allowed;
@@ -194,15 +190,17 @@
 	font-size:12px;
 	line-height:12px;
 	margin:4px 5px 4px 5px;
+	max-width:calc(100% - 400px);
+	overflow:hidden;
+	text-wrap:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* SORTIE TOGGLES
 ---------------------------------*/
 .tab_maps .sortie_batch_toggles {
-	width:280px;
 	height:20px;
-	margin:5px 5px -5px 410px;
-	background:none;
+	margin:5px 10px -5px 5px;
 }
 .tab_maps .sortie_batch_toggles .sortie_toggles {
 	width:150px;
@@ -284,16 +282,7 @@
 	text-align:center;
 	font-size:16px;
 	font-weight:bold;
-	border: 1px solid #222;
 	transition: border-color 0.3s;
-}
-
-.tab_maps .sortie_list .sortie_map.queued {
-	border-left-color: #ffff40;
-}
-
-.tab_maps .sortie_list .sortie_map.loading {
-	border-left-color: #57F287;
 }
 
 /* Sortie Info: FLEET */
