@@ -260,9 +260,9 @@
 			KC3Meta.eventWorldTerm().forEach((world) => {
 				const option = $(baseOption).clone();
 				option.val(world.id);
-				option.text("[{0}] {1}".format(world.id, KC3Meta.term(world.label)));
+				option.text(`[${world.id}] ${KC3Meta.term(world.label)}`);
 				if (world.tooltip) {
-					option.addClass('l18n_title');
+					option.addClass('l10n_title');
 					option.attr('title', KC3Meta.term(world.tooltip));
 				}
 				root.append(option);
