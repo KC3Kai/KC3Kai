@@ -101,34 +101,25 @@
 				}
 				return set;
 			}, new Set());
-
 			if (!worldIds.size) {
 				return;
 			}
 
 			const root = $(".map_switcher .world_list");
-			const baseOption = $('option', root).addClass('i18n');
+			const baseOption = $('option', root).addClass('l10n');
 			root.empty();
-
-			KC3Constant.EVENT_WORLD_TERMS.forEach((world) => {
+			KC3Meta.eventWorldTerm().forEach((world) => {
 				if (!worldIds.has(world.id)) {
 					return;
 				}
-
 				const option = $(baseOption).clone();
 				option.val(world.id);
-				option.text(world.label);
+				option.text(`[${world.id}] ${KC3Meta.term(world.label)}`);
 				if (world.tooltip) {
-					option.addClass('i18n_title');
-					option.attr('title', world.tooltip);
+					option.addClass('l10n_title');
+					option.attr('title', KC3Meta.term(world.tooltip));
 				}
 				root.append(option);
-			});
-
-			KC3Translation.applyWords();
-
-			$('option', root).each((_, e) => {
-				$(e).text(`[${$(e).val()}] ` + $(e).text());
 			});
 		},
 
