@@ -34,6 +34,8 @@
 		sorters: {},
 		sorterDescCtrl: null,
 		viewElements: {},
+		tooltipMaxConcurrent: 20,
+		tooltipLimiter: new Bottleneck(1),
 
 		/* INIT
 		Prepares static data needed
@@ -69,6 +71,12 @@
 				const preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
+		},
+
+		/* LEAVE
+		---------------------------------*/
+		leave: function () {
+			this.stopLimiters();
 		},
 
 		/* EXECUTE
@@ -367,6 +375,14 @@
 				lvEndInput.select();
 			}).val(this.shipLevelFilter[1]);
 		},
+
+		stopLimiters: function () {
+			this.tooltipLimiter.stopAll(true);
+		},
+
+		initLimiters: function () {
+			this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
+		}, 
 
 		refreshInputFilter: function() {
 			const self = this;
@@ -1245,6 +1261,8 @@
 		Reload ship list based on filters
 		---------------------------------*/
 		refreshTable :function(){
+			this.stopLimiters();
+			this.initLimiters();
 			// use "isLoading" to check if we need UI update.
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
@@ -1283,8 +1301,9 @@
 					if (cShip.view) {
 						const cElm = cShip.view;
 						cElm.appendTo(self.shipList);
-						if (cElm.onRecompute)
+						if (cElm.onRecompute) {
 							cElm.onRecompute(cShip);
+						}
 						return;
 					}
 					// elements constructing for the time-consuming 'first time rendering'
@@ -1383,8 +1402,12 @@
 							$(".ship_ribbon", this).hide();
 						}
 						// Update tooltip
-						$(".ship_name", this).lazyInitTooltip();
-						$(".ship_equip", this).lazyInitTooltip();
+						self.tooltipLimiter.schedule(() => Promise.resolve(
+							$(".ship_name", this).lazyInitTooltip()
+						));
+						self.tooltipLimiter.schedule(() => Promise.resolve(
+							$(".ship_equip", this).lazyInitTooltip()
+						)); 
 						const targetElm = $(".ship_img .ship_icon", this);
 						if(targetElm.tooltip("instance") !== undefined){
 							targetElm.tooltip("destroy");
@@ -1392,16 +1415,19 @@
 						if(self.showTooltip){
 							const shipObj = KC3ShipManager.get(thisShip.id);
 							if(shipObj.exists()){
-								// but this is also time-consuming
-								const tooltipBox = shipObj
-									.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
-								targetElm.tooltip({
-									position: { my: "left top", at: "left+25 bottom" },
-									items: "div",
-									content: tooltipBox.prop("outerHTML"),
-									// might be disabled for performance
-									open: KC3Ship.onShipTooltipOpen,
-								});
+								self.tooltipLimiter.schedulePriority(9, () => new Promise((resolve) => {
+									// but this is also time-consuming
+									const tooltipBox = shipObj
+										.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
+									targetElm.tooltip({
+										position: { my: "left top", at: "left+25 bottom" },
+										items: "div",
+										content: tooltipBox.prop("outerHTML"),
+										// might be disabled for performance
+										open: KC3Ship.onShipTooltipOpen,
+									});
+									resolve();
+								}));
 							}
 						}
 						// Rebind click handlers
@@ -1528,12 +1554,16 @@
 				if(gear.isDummy()){ element.hide(); return; }
 				const type3 = gear.master().api_type[3];
 				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
-				$("img", element)
+				const img = $("img", element);
+				img
 					.attr("src", KC3Meta.itemIcon(type3))
-					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id);
-				// jq.show() not work on some new browser for inline case?
-				$("img", element).show().css("display", "inline");
+				this.tooltipLimiter.schedulePriority(7, () => new Promise((resolve) => {
+					img.attr("titlealt", gear.htmlTooltip(slotSize, ship));
+					// jq.show() not work on some new browser for inline case?
+					img.show().css("display", "inline");
+					resolve();
+				}));
 				sizeSpan.addClass("sub").toggle(maxSize[0] > 0);
 				sizeSpan.toggleClass("expand", maxSize[0] > maxSize[1]);
 				element.show();
