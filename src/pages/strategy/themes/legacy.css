@@ -1600,6 +1600,10 @@ body {
 .tab_maps .map_box.active.notcleared {
 	border:2px inset #FAA;
 }
+.tab_event .page_list,
+.tab_maps .page_list {
+	padding:0 10px;
+}
 .tab_event .sortie_list .sortie_box,
 .tab_maps .sortie_list .sortie_box {
 	background:#def;

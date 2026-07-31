@@ -6132,7 +6132,7 @@ KC3改 Ship Object
 			!canAsw ? "" : KC3Meta.term("ShipAccAntisub").format(
 				floorToDecimal(accuracyInfo.asw.accuracy, 1)
 			)
-		].filter(v => !!v).join(" / "));
+		].compact().join(" / "));
 		const shellingEvasion = shipObj.shellingEvasion(
 			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion", false)
 		);

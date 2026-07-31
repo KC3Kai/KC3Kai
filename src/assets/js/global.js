@@ -912,6 +912,32 @@ Object.defineProperty(Array.prototype, "diff", {
 	}
 });
 
+Object.defineProperty(Array.prototype, "compact", {
+	enumerable: false,
+	/**
+	 * A convenient method to remove falsy elements from this Array.
+	 * @param nullishOnly - to only remove nullish elements instead of falsy.
+	 * @return an array without falsy elements.
+	 */
+	value: function compact(nullishOnly) {
+		return nullishOnly ?
+			this.filter(e => !(e === undefined || e === null)) :
+			this.filter(Boolean);
+	}
+});
+
+Object.defineProperty(Array.prototype, "hasTruthy", {
+	enumerable: false,
+	/**
+	 * A convenient method to check if not all the elements in this Array are falsy.
+	 * @param beAll - to check if all elements are truthy values.
+	 * @return true if any (or all) not falsy.
+	 */
+	value: function hasTruthy(beAll) {
+		return beAll ? this.every(Boolean) : this.some(Boolean);
+	}
+});
+
 
 /*******************************\
 |*** Date                       |

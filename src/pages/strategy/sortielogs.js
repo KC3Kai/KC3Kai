@@ -35,14 +35,13 @@
 		this.selectedMap    = 0;
 		this.itemsPerPage   = 20;
 		this.currentSorties = [];
-		this.stegcover64 = "";
+		this.stegcover64    = "";
 		this.exportingReplay = false;
 		this.scrollVars     = {};
 		this.ledgerMaxConcurrent = 2;
-		this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
 		this.tooltipMaxConcurrent = 20;
-		this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
 		this.defaultSettings = {
+			regular: { world: 0, map: 0 },
 			event: { world: 0, map: 0 },
 			loadLedger: false,
 			bossArrival: false,
@@ -56,7 +55,7 @@
 		Prepares static data needed
 		---------------------------------*/
 		this.init = function(){
-			$.extend(this.settings, this.defaultSettings);
+			$.extend(true, this.settings, this.defaultSettings);
 			this.locale = KC3Translation.getLocale();
 		};
 
@@ -65,6 +64,7 @@
 		---------------------------------*/
 		this.reload = function(){
 			ConfigManager.load();
+			this.loadSettings();
 			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
@@ -83,7 +83,6 @@
 		this.execute = function(){
 			const self = this;
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
-			this.loadSettings();
 			this.loadSettingToggles();
 			this.loadWorldSelect();
 			this.loadWorldsFromStorage();
@@ -97,7 +96,10 @@
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
-				KC3StrategyTabs.gotoTab(null, $(this).data("world_num"));
+				const world = $(this).data("world_num");
+				KC3StrategyTabs.gotoTab(null, world);
+				// force to switch when all world is selected on demand
+				if(!world) self.switchWorld(world);
 			});
 			
 			// Toggle-able world scroll
@@ -173,8 +175,13 @@
 				const world = KC3StrategyTabs.pageParams[1];
 				const map = KC3StrategyTabs.pageParams[2];
 				this.switchWorld(world, map);
-			} else if (tabCode === 'event' && this.settings.event.world) {
-				KC3StrategyTabs.gotoTab(null, this.settings.event.world, this.settings.event.map);
+			} else if (tabCode === "maps" && this.settings.regular.world) {
+				KC3StrategyTabs.gotoTab(null,
+					...[this.settings.regular.world, this.settings.regular.map].compact());
+				this.switchWorld(this.settings.regular.world, this.settings.regular.map);
+			} else if (tabCode === "event" && this.settings.event.world) {
+				KC3StrategyTabs.gotoTab(null,
+					...[this.settings.event.world, this.settings.event.map].compact());
 				this.switchWorld(this.settings.event.world, this.settings.event.map);
 			} else {
 				// Select default opened world (topmost for dropdown menu, otherwise `active` class for sidescroll menu)
@@ -195,11 +202,13 @@
 		};
 
 		this.stopLimiters = () => {
-			this.ledgerLimiter.stopAll(true);
-			this.tooltipLimiter.stopAll(true);
+			if (this.ledgerLimiter) this.ledgerLimiter.stopAll(true);
+			if (this.tooltipLimiter) this.tooltipLimiter.stopAll(true);
+			this.ledgerLimiter = undefined;
+			this.tooltipLimiter = undefined;
 		};
 
-		this.initLimiters = () => {
+		this.startLimiters = () => {
 			this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
 			this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
 			// this.ledgerLimiter.on('idle', () => console.debug(`ledgerMaxConcurrent#idle`));
@@ -213,7 +222,7 @@
 			const root = $(`.tab_${tabCode} .settings`);
 			const inputElements = [
 				{
-					id: 'loadLedger',
+					id: 'load_ledger_tips_toggle',
 					cfgKey: 'loadLedger',
 				},
 				{
@@ -365,13 +374,17 @@
 		Handle event on a world has been selected by clicking menu or by url
 		---------------------------------*/
 		this.switchWorld = function(worldNum, mapNum){
-			if (tabCode === 'event') {
+			const self = this;
+			if (tabCode === "maps") {
+				this.settings.regular.world = Number(worldNum || 0);
+				this.settings.regular.map = Number(mapNum || 0);
+				this.saveSettings();
+			}
+			if (tabCode === "event") {
 				this.settings.event.world = Number(worldNum || 0);
 				this.settings.event.map = Number(mapNum || 0);
 				this.saveSettings();
-			} 
-
-			const self = this;
+			}
 			self.selectedWorld = Number(worldNum);
 			$(".tab_"+tabCode+" .world_list .world_box").removeClass("active");
 			$(".tab_"+tabCode+" .world_list .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
@@ -708,10 +721,9 @@
 		Determines list type and gets data from IndexedDB
 		---------------------------------*/
 		this.showPage = function(page, twbsPageObj){
-			this.stopLimiters();
-			this.initLimiters();
-
 			var self = this;
+			this.stopLimiters();
+			this.startLimiters();
 			var startTime = Date.now();
 			this.pageNum = page || 1;
 			var postShowList = function(){
@@ -1312,7 +1324,7 @@
 									.attr("src", KC3Meta.useitemIcon(battle.useitem))
 									.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
 									.attr("title", [$(".node_drop img", nodeBox).attr("title"),
-										KC3Meta.useItemName(battle.useitem)].filter(v => !!v).join(" + "));
+										KC3Meta.useItemName(battle.useitem)].compact().join(" + "));
 							}
 							
 							// Process Battle, simulate combinedFleet type
@@ -1372,7 +1384,7 @@
 									).lazyInitTooltip();
 								}
 							}
-							if(thisNode.sortieSpecialCutins && thisNode.sortieSpecialCutins.some(v => !!v)) {
+							if(thisNode.sortieSpecialCutins && thisNode.sortieSpecialCutins.hasTruthy()) {
 								$(".node_id", nodeBox).addClass("special_cutin");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("special_cutin");
 							}
@@ -1490,11 +1502,11 @@
 								$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
 								if(battle.data.api_friendly_kouku){
 									const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
-									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].filter(v => !!v).join("\n"));
+									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
 								}
 								if(battle.yasen.api_friendly_battle){
 									const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
-									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].filter(v => !!v).join("\n"));
+									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
 								}
 							}else{
 								$(".node_result", nodeBox).removeClass("icon5");
@@ -1774,7 +1786,7 @@
 								});
 							},
 							(xhr, statusText, httpError) => {
-								let msg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
+								let msg = httpError || [statusText, xhr.status].compact().join(" ") || "Error";
 								const json = xhr.responseJSON;
 								if(json) {
 									msg = [[json.statusCode, json.error].join(" ")];
