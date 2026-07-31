@@ -2152,15 +2152,20 @@
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
-			if(selectedFleet < 5){
-				$(".summary-eqlos .summary_text").attr("titlealt",
-					KC3Calc.buildFleetsElosText(MainFleet)).lazyInitTooltip();
-			} else if(selectedFleet === 5){
-				$(".summary-eqlos .summary_text").attr("titlealt",
-					KC3Calc.buildFleetsElosText(MainFleet, EscortFleet, 5)).lazyInitTooltip();
-			} else {
-				$(".summary-eqlos .summary_text").attr("titlealt", "");
-			}
+			KC3QueueManager.tooltipLimiter.schedulePriority(5, () => new Promise((resolve) => {
+				if (selectedFleet < 5) {
+					$(".summary-eqlos .summary_text")
+						.attr("titlealt", KC3Calc.buildFleetsElosText(MainFleet))
+						.lazyInitTooltip();
+				} else if (selectedFleet === 5) {
+					$(".summary-eqlos .summary_text")
+						.attr("titlealt", KC3Calc.buildFleetsElosText(MainFleet, EscortFleet, 5))
+						.lazyInitTooltip();
+				} else {
+					$(".summary-eqlos .summary_text").attr("titlealt", "");
+				}
+				resolve();
+			}));
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
 			$(".summary-airfp .summary_text").text(FleetSummary.air)

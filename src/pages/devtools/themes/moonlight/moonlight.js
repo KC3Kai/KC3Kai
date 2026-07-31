@@ -2254,15 +2254,20 @@
 			$(".summary-saury .summary_text").text( PlayerManager.consumables.mackerel );
 			$(".summary-sardines .summary_text").text( PlayerManager.consumables.sardine );
 			$(".summary-eqlos .summary_text").text(KC3Meta.term("ShipLos"));
-			if(selectedFleet < 5){
-				$(".summary-eqlos .summary_text").attr("titlealt",
-					KC3Calc.buildFleetsElosText(MainFleet)).lazyInitTooltip();
-			} else if(selectedFleet === 5){
-				$(".summary-eqlos .summary_text").attr("titlealt",
-					KC3Calc.buildFleetsElosText(MainFleet, EscortFleet, 5)).lazyInitTooltip();
-			} else {
-				$(".summary-eqlos .summary_text").attr("titlealt", "");
-			}
+			KC3QueueManager.tooltipLimiter.schedulePriority(5, () => new Promise((resolve) => {
+				if (selectedFleet < 5) {
+					$(".summary-eqlos .summary_text")
+						.attr("titlealt", KC3Calc.buildFleetsElosText(MainFleet))
+						.lazyInitTooltip();
+				} else if (selectedFleet === 5) {
+					$(".summary-eqlos .summary_text")
+						.attr("titlealt", KC3Calc.buildFleetsElosText(MainFleet, EscortFleet, 5))
+						.lazyInitTooltip();
+				} else {
+					$(".summary-eqlos .summary_text").attr("titlealt", "");
+				}
+				resolve();
+			}));
 			$(".summary-transport .summary_text").text(KC3Meta.term("PanelTransportPointsAbbr"));
 			$(".summary-transport .summary_textS").text("S: " + (FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOf()));
 			$(".summary-transport .summary_textA").text("A: " + (FleetSummary.tpValueSum.isNaN() ? "?" : FleetSummary.tpValueSum.valueOfRankA()));
