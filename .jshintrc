@@ -3,6 +3,7 @@
 		"PS": true,
 		"ExpeditionHelper": true,
 		"ConfigManager": true,
+		"KC3QueueManager": true,
 		"KC3GearManager": true,
 		"GoalTemplateManager": true,
 		"PlayerManager": true,
