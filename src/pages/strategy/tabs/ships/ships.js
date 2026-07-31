@@ -35,7 +35,6 @@
 		sorterDescCtrl: null,
 		viewElements: {},
 		tooltipMaxConcurrent: 20,
-		tooltipLimiter: new Bottleneck(1),
 
 		/* INIT
 		Prepares static data needed
@@ -377,10 +376,11 @@
 		},
 
 		stopLimiters: function () {
-			this.tooltipLimiter.stopAll(true);
+			if (this.tooltipLimiter) this.tooltipLimiter.stopAll(true);
+			this.tooltipLimiter = undefined;
 		},
 
-		initLimiters: function () {
+		startLimiters: function () {
 			this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
 		}, 
 
@@ -1261,12 +1261,12 @@
 		Reload ship list based on filters
 		---------------------------------*/
 		refreshTable :function(){
-			this.stopLimiters();
-			this.initLimiters();
 			// use "isLoading" to check if we need UI update.
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
 			this.saveSettings();
+			this.stopLimiters();
+			this.startLimiters();
 
 			const self = this;
 			this.startTime = Date.now();
@@ -1407,7 +1407,7 @@
 						));
 						self.tooltipLimiter.schedule(() => Promise.resolve(
 							$(".ship_equip", this).lazyInitTooltip()
-						)); 
+						));
 						const targetElm = $(".ship_img .ship_icon", this);
 						if(targetElm.tooltip("instance") !== undefined){
 							targetElm.tooltip("destroy");

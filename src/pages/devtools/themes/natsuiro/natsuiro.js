@@ -1396,11 +1396,11 @@
 					friendFleetRequestTips,
 					homePortTimeTips,
 					"{0}: {1}".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank),
-					resetTimeTips].filter(s => !!s).join("\n")
+					resetTimeTips].compact().join("\n")
 				);
 			} else {
 				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title",
-					[friendFleetRequestTips, homePortTimeTips, resetTimeTips].filter(s => !!s).join("\n"));
+					[friendFleetRequestTips, homePortTimeTips, resetTimeTips].compact().join("\n"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -3248,7 +3248,7 @@
 				$(".module.activity .battle_support .support_balloon img").attr("src", "/assets/img/items/36.png");
 				$(".module.activity .battle_support .support_balloon").attr("title",
 					[(thisNode.balloonNode ? KC3Meta.term("BattleBalloonNode") : ""), KC3Meta.term("BattleAtollNode")]
-						.filter(s => !!s).join("\n")
+						.compact().join("\n")
 				);
 			}
 
@@ -3403,7 +3403,7 @@
 					),
 					//(thisNode.smokeType > 0 ? KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType) : ""),
 					thisNode.buildUnexpectedDamageMessage()
-				].filter(s => !!s).join("\n")).lazyInitTooltip();
+				].compact().join("\n")).lazyInitTooltip();
 			}
 
 			// Show battle activity if `info_compass` enabled, `info_battle` only affects enemy HP prediction
@@ -3598,7 +3598,7 @@
 				const numNodes = KC3SortieManager.countNodes();
 				if(Array.isArray(thisNode.sortieSpecialCutins)) {
 					$(".module.activity .sortie_node_" + numNodes)
-						.toggleClass("special_cutin", thisNode.sortieSpecialCutins.some(v => !!v));
+						.toggleClass("special_cutin", thisNode.sortieSpecialCutins.hasTruthy());
 				}
 				$(".module.activity .sortie_node_" + numNodes)
 					.toggleClass("smoke_screen", thisNode.smokeType > 0);
@@ -3745,7 +3745,7 @@
 				return;
 			console.debug("PvP Enemy List", data);
 			const jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];
-			const lines2Array = (s) => (s || "").split(/[\r\n]/).filter(l => !!l);
+			const lines2Array = (s) => (s || "").split(/[\r\n]/).compact();
 			const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends);
 			const pvpFriendToggleFunc = function(e) {
 				const enemyBox = $(this).parent();
@@ -3869,7 +3869,7 @@
 				(ctInfo.ctBonusSub !== 1 ? "{0}: {1}".format(
 					KC3Meta.term("PvpExpForSSwAsahi").format(ctInfo.ctBonusSub), baseExp.expectedSub
 				) : ""),
-			].filter(s => !!s).join("\n")).lazyInitTooltip();
+			].compact().join("\n")).lazyInitTooltip();
 			var predictedFormation = playerFleet.predictOpponentFormation(
 				// Normalize opponent's fleet: convert Object to Array, remove -1 elements
 				data.api_deck.api_ships
@@ -4814,7 +4814,7 @@
 			if (Array.isArray(expedMaster.api_sample_fleet)) {
 				$(".module.activity .activity_expeditionPlanner .shipNum").parent().attr("title",
 				"{0}: {1}".format(KC3Meta.term("ExpedSampleFleet"),
-					expedMaster.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
+					expedMaster.api_sample_fleet.compact().map(t => KC3Meta.stype(t)).join(", ")
 				)).lazyInitTooltip();
 			}
 

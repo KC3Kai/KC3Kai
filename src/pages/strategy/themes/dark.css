@@ -1993,6 +1993,10 @@ button, input, select, textarea {
 .tab_maps .map_box.active.notcleared {
 	background:#7c0606;
 }
+.tab_event .page_list,
+.tab_maps .page_list {
+	padding:0 10px;
+}
 .tab_maps .sortie_batch_toggles {
 	margin-right:12px;
 }
