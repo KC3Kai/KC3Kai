@@ -454,22 +454,47 @@
 			// Show fleet info
 			const fstats = kcFleet.totalStats(true, false, true);
 			const fstatsImp = kcFleet.totalStats(true, "exped", true);
-			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
-				.attr("title", KC3Calc.buildFleetsTotalStatsText(kcFleet));
+			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
-			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) )
-				.attr("title", KC3Calc.buildFleetsElosText(kcFleet, 5));
-			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() )
-				.attr("title", KC3Calc.buildFleetsFighterPowerText(kcFleet)
-					+ KC3Calc.buildFleetsAirstrikePowerText(kcFleet)
-					+ KC3Calc.buildFleetsContactChanceText(kcFleet));
-			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
-				.attr("title", KC3Meta.formationText(ConfigManager.aaFormation)
-					+ "\n" + KC3Calc.buildFleetsAdjustedAntiAirText(kcFleet));
-			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() )
-				.attr("title", KC3Calc.buildFleetsSpeedText(kcFleet));
-			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() )
-				.attr("title", KC3Calc.buildFleetExpedSupportText(kcFleet));
+			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
+			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
+			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) );
+			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
+			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
+			KC3QueueManager.deferTooltip(() => {
+				$(".detail_level .detail_value", fleetBox)
+					.attr("title", KC3Calc.buildFleetsTotalStatsText(kcFleet))
+					.lazyInitTooltip();
+			});
+			KC3QueueManager.deferTooltip(() => {
+				$(".detail_los .detail_value", fleetBox)
+					.attr("title", KC3Calc.buildFleetsElosText(kcFleet, 5))
+					.lazyInitTooltip();
+			});
+			KC3QueueManager.deferTooltip(() => {
+				$(".detail_air .detail_value", fleetBox)
+					.attr("title", KC3Calc.buildFleetsFighterPowerText(kcFleet)
+						+ KC3Calc.buildFleetsAirstrikePowerText(kcFleet)
+						+ KC3Calc.buildFleetsContactChanceText(kcFleet))
+					.lazyInitTooltip();
+			});
+			KC3QueueManager.deferTooltip(() => {
+				$(".detail_antiair .detail_value", fleetBox)
+					.attr("title", KC3Meta.formationText(ConfigManager.aaFormation)
+						+ "\n" + KC3Calc.buildFleetsAdjustedAntiAirText(kcFleet))
+					.lazyInitTooltip();
+			});
+			KC3QueueManager.deferTooltip(() => {
+				$(".detail_speed .detail_value", fleetBox)
+					.attr("title", KC3Calc.buildFleetsSpeedText(kcFleet))
+					.lazyInitTooltip();
+			});
+			KC3QueueManager.deferTooltip(() => {
+				$(".detail_support .detail_value", fleetBox)
+					.attr("title", KC3Calc.buildFleetExpedSupportText(kcFleet))
+					.lazyInitTooltip();
+			});
+
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
 				const thisFleetBox = thisButton.parent(), fleetBoxNative = thisFleetBox.get(0);
@@ -574,13 +599,15 @@
 			// Only available for current fleet as no ship attribute omitted
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
 			if(viewType === "current" && kcShip.exists()){
-				// Show a rich text tool-tip like stats in game
-				const tooltipBox = kcShip.htmlTooltip($(".ship_tooltip", shipBox));
-				$(".ship_hover", shipBox).tooltip({
-					position: { my: "left top", at: "right+10 top" },
-					items: "div",
-					content: tooltipBox.prop("outerHTML"),
-					open: KC3Ship.onShipTooltipOpen,
+				KC3QueueManager.deferTooltip(()=> {
+					// Show a rich text tool-tip like stats in game
+					const tooltipBox = kcShip.htmlTooltip($(".ship_tooltip", shipBox));
+					$(".ship_hover", shipBox).tooltip({
+						position: { my: "left top", at: "right+10 top" },
+						items: "div",
+						content: tooltipBox.prop("outerHTML"),
+						open: KC3Ship.onShipTooltipOpen,
+					});
 				});
 			}
 
@@ -635,8 +662,12 @@
 						KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 					}
 				});
-			$(".gear_name", gearBox).text(kcGear.name()).attr("title",
-				kcGear.htmlTooltip(capacity, kcShip)).lazyInitTooltip();
+			$(".gear_name", gearBox).text(kcGear.name());
+			KC3QueueManager.deferTooltip(() => {
+				$(".gear_name", gearBox)
+					.attr("title", kcGear.htmlTooltip(capacity, kcShip))
+					.lazyInitTooltip();
+			});
 			if(kcGear.stars > 0){
 				$(".gear_stars", gearBox).text(
 					"\u2605{0}".format(kcGear.stars >= 10 ? "m" : kcGear.stars)

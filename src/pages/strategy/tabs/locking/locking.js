@@ -11,7 +11,8 @@
         ---------------------------------*/
         init() {
             this.defineSorters();
-            this.showListRowCallback = this.showShipLockingRow;
+            // this.showListRowCallback = this.showShipLockingRow;
+            this.showListRowCallback = (ship, shipRow) => KC3QueueManager.deferTooltip(() => this.showShipLockingRow(ship, shipRow));
             // Amount of locking tags depends on MO/EO settings of each event,
             // order and colors of tag texture see: main.js#BannerPlate.prototype._getTexture,
             // texture sample: http://203.104.209.71/kcs2/img/common/common_event.png
