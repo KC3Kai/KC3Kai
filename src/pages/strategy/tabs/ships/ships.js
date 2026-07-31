@@ -34,7 +34,7 @@
 		sorters: {},
 		sorterDescCtrl: null,
 		viewElements: {},
-		tooltipMaxConcurrent: 20,
+		tooltipLimiter: undefined,
 
 		/* INIT
 		Prepares static data needed
@@ -75,7 +75,8 @@
 		/* LEAVE
 		---------------------------------*/
 		leave: function () {
-			this.stopLimiters();
+			KC3QueueManager.cancelTooltips(this.tooltipLimiter);
+			this.tooltipLimiter = undefined;
 		},
 
 		/* EXECUTE
@@ -374,15 +375,6 @@
 				lvEndInput.select();
 			}).val(this.shipLevelFilter[1]);
 		},
-
-		stopLimiters: function () {
-			if (this.tooltipLimiter) this.tooltipLimiter.stopAll(true);
-			this.tooltipLimiter = undefined;
-		},
-
-		startLimiters: function () {
-			this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
-		}, 
 
 		refreshInputFilter: function() {
 			const self = this;
@@ -1265,12 +1257,11 @@
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
 			this.saveSettings();
-			this.stopLimiters();
-			this.startLimiters();
-
 			const self = this;
-			this.startTime = Date.now();
+			KC3QueueManager.cancelTooltips(this.tooltipLimiter);
+			this.tooltipLimiter = KC3QueueManager.newTooltipLimiter(20);
 
+			this.startTime = Date.now();
 			// Update indicators of sorters
 			$(".tab_ships .ship_header .ship_field.hover").removeClass("sorted");
 			$.each(this.currentSorters, function(i, s){
@@ -1402,12 +1393,12 @@
 							$(".ship_ribbon", this).hide();
 						}
 						// Update tooltip
-						self.tooltipLimiter.schedule(() => Promise.resolve(
-							$(".ship_name", this).lazyInitTooltip()
-						));
-						self.tooltipLimiter.schedule(() => Promise.resolve(
-							$(".ship_equip", this).lazyInitTooltip()
-						));
+						KC3QueueManager.deferTooltip(() => {
+							$(".ship_name", this).lazyInitTooltip();
+						}, 5, self.tooltipLimiter);
+						KC3QueueManager.deferTooltip(() => {
+							$(".ship_equip", this).lazyInitTooltip();
+						}, 5, self.tooltipLimiter);
 						const targetElm = $(".ship_img .ship_icon", this);
 						if(targetElm.tooltip("instance") !== undefined){
 							targetElm.tooltip("destroy");
@@ -1415,7 +1406,7 @@
 						if(self.showTooltip){
 							const shipObj = KC3ShipManager.get(thisShip.id);
 							if(shipObj.exists()){
-								self.tooltipLimiter.schedulePriority(9, () => new Promise((resolve) => {
+								KC3QueueManager.deferTooltip(() => {
 									// but this is also time-consuming
 									const tooltipBox = shipObj
 										.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
@@ -1426,8 +1417,7 @@
 										// might be disabled for performance
 										open: KC3Ship.onShipTooltipOpen,
 									});
-									resolve();
-								}));
+								}, 9, self.tooltipLimiter);
 							}
 						}
 						// Rebind click handlers
@@ -1558,12 +1548,11 @@
 				img
 					.attr("src", KC3Meta.itemIcon(type3))
 					.attr("alt", gear.master().api_id);
-				this.tooltipLimiter.schedulePriority(7, () => new Promise((resolve) => {
+				KC3QueueManager.deferTooltip(() => {
 					img.attr("titlealt", gear.htmlTooltip(slotSize, ship));
 					// jq.show() not work on some new browser for inline case?
 					img.show().css("display", "inline");
-					resolve();
-				}));
+				}, 7, self.tooltipLimiter);
 				sizeSpan.addClass("sub").toggle(maxSize[0] > 0);
 				sizeSpan.toggleClass("expand", maxSize[0] > maxSize[1]);
 				element.show();

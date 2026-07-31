@@ -2152,7 +2152,7 @@
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
-			KC3QueueManager.tooltipLimiter.schedulePriority(5, () => new Promise((resolve) => {
+			KC3QueueManager.deferTooltip(() => {
 				if (selectedFleet < 5) {
 					$(".summary-eqlos .summary_text")
 						.attr("titlealt", KC3Calc.buildFleetsElosText(MainFleet))
@@ -2164,8 +2164,7 @@
 				} else {
 					$(".summary-eqlos .summary_text").attr("titlealt", "");
 				}
-				resolve();
-			}));
+			});
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
 			$(".summary-airfp .summary_text").text(FleetSummary.air)

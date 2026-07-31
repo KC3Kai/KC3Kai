@@ -32,7 +32,7 @@
 		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
 		tooltipBox.hide().appendTo(this.element);
-		KC3QueueManager.tooltipLimiter.schedulePriority(7, () => new Promise((resolve) => {
+		KC3QueueManager.deferTooltip(() => {
 			this.shipData.htmlTooltip(tooltipBox);
 			// Show a rich text tool-tip like stats in game
 			$(".ship_img > img", this.element).tooltip({
@@ -45,8 +45,7 @@
 				content: tooltipBox.html(),
 				open: KC3Ship.onShipTooltipOpen
 			});
-			resolve();
-		}));
+		}, 7);
 		// Double click on icon to show Strategy Room Ship Library page
 		$(".ship_img > img", this.element).data("masterId", this.shipData.masterId)
 			.on("dblclick", function(e){
@@ -77,12 +76,11 @@
 						tabPath: "mstgear-{0}".format($(this).data("masterId"))
 					})).execute();
 				});
-			KC3QueueManager.tooltipLimiter.schedulePriority(9, () => new Promise((resolve) => {
+			KC3QueueManager.deferTooltip(() => {
 				$(".ex_item .gear_icon img", this.element)
 					.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
 					.lazyInitTooltip();
-				resolve();
-			}));
+			}, 9);
 			$(".ex_item", this.element).attr("data-mst-id", myExItem.masterId)
 				.toggleClass("goddess", myExItem.masterId == 43);
 			if (myExItem.stars > 0) {
@@ -455,12 +453,11 @@
 							tabPath: "mstgear-{0}".format($(this).data("masterId"))
 						})).execute();
 					});
-				KC3QueueManager.tooltipLimiter.schedulePriority(9, () => new Promise((resolve) => {
+				KC3QueueManager.deferTooltip(() => {
 					$(".ship_gear_" + (slot + 1) + " .ship_gear_icon", this.element)
 						.attr("titlealt", thisGear.htmlTooltip(this.shipData.slotSize(slot), this.shipData))
 						.lazyInitTooltip();
-					resolve();
-				}));
+				}, 9);
 				
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
 					.attr("data-mst-id", thisGear.masterId)

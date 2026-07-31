@@ -657,7 +657,6 @@ AntiAir: anti-air related calculations
 		isFubukiKai2, isFubukiKai3, isFubukiKai3Go, isShirayukiKai2, isHatsuyukiKai2
 	);
 	var isHiryuuKai3 = masterIdEq( hiryuuK3Icon );
-	var isNotHiryuuKai3 = predNot( isHiryuuKai3 );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -883,10 +882,11 @@ AntiAir: anti-air related calculations
 	// api_kind 13 was deprecated by devs, perhaps masked by kind 8/10 so 0% trigger chance?
 	// according vita codes, non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
 	// eventually fixed by the reworks on 2023-05-26
+	// Hiryuu K3 added since 2026-02-13?
 	declareAACI(
 		13, 1, 4, 1.35, 35, 2510, // vita value
 		[surfaceShipIcon, biHaMountIcon, cdmgIcon, radarIcon],
-		predAllOf(isNotSubmarine, isNotMayaK2, isNotHiryuuKai3, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, isNotMayaK2, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isBuiltinHighAngleMount ),
