@@ -1535,16 +1535,19 @@ body {
 }
 .tab_event .world_dropdownmenu,
 .tab_event .world_list,
+.tab_maps .world_list {
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
 .tab_event .settings,
-.tab_maps .world_list,
 .tab_maps .settings {
+	padding:0 10px;
 	background:#f0f5ff;
 	border-bottom:1px solid #369;
 }
 .tab_event .settings .item,
 .tab_maps .settings .item {
-	border: 1px solid #369;
-	border-left-width: 0;
+	border:unset;
 }
 .tab_event .world_box,
 .tab_maps .world_box {
