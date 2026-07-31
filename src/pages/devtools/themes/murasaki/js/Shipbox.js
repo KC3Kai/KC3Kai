@@ -392,35 +392,35 @@
 	Add special glow if more than 53
 	---------------------------------------------------*/
 	KC3MurasakiShipbox.prototype.showMorale = function(){
-		$(".ship_face_tooltip_outer .ship_morale span").text(this.shipData.morale);
-		$(".ship_morale:not(.ship_face_tooltip_outer .ship_morale)").text(this.shipData.morale);
+		const moraleElm = $(":not(.ship_stats_row) > .ship_morale", this.element);
+		moraleElm.text(this.shipData.morale);
 		switch(true){
 			case this.shipData.morale > 70: // in-game 2 more sparkles
-				$(".ship_morale", this.element).css("background", "#FFFF00");
-				$(".ship_morale", this.element).addClass("glowing strongplus");
+				moraleElm.css("background", "#FFFF00");
+				moraleElm.addClass("glowing strongplus");
 				break;
 			case this.shipData.morale > 57: // in-game 1 more sparkle
-				$(".ship_morale", this.element).css("background", "#FFFF00");
-				$(".ship_morale", this.element).addClass("glowing strong");
+				moraleElm.css("background", "#FFFF00");
+				moraleElm.addClass("glowing strong");
 				break;
 			case this.shipData.morale > 52: // sparkle and get buff
-				$(".ship_morale", this.element).css("background", "#FFFF00");
-				$(".ship_morale", this.element).addClass("glowing");
+				moraleElm.css("background", "#FFFF00");
+				moraleElm.addClass("glowing");
 				break;
 			case this.shipData.morale > 49: // sparkle in-game
-				$(".ship_morale", this.element).css("background", "#FFFF00");
+				moraleElm.css("background", "#FFFF00");
 				break;
 			case this.shipData.morale > 39: // no effect in-game, regular state
-				$(".ship_morale", this.element).css("background", "#FFFFFF");
+				moraleElm.css("background", "#FFFFFF");
 				break;
 			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
-				$(".ship_morale", this.element).css("background", "#FFDDBB");
+				moraleElm.css("background", "#FFDDBB");
 				break;
 			case this.shipData.morale > 19: // orange face, debuff
-				$(".ship_morale", this.element).css("background", "#FFB74A");
+				moraleElm.css("background", "#FFB74A");
 				break;
 			default: // red face, heavy debuff
-				$(".ship_morale", this.element).css("background", "#FFA6A6");
+				moraleElm.css("background", "#FFA6A6");
 				break;
 		}
 	};

@@ -477,33 +477,33 @@
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
 		const moraleClasses = ["glowing", "morale_sparkle", "morale_normal",
-			"morale_mamiya", "morale_orange", "morale_red", ].join(" ");
-		$(".ship_face_tooltip_outer .ship_morale span").text(this.shipData.morale);
-		$(".ship_morale:not(.ship_face_tooltip_outer .ship_morale)").text(this.shipData.morale).removeClass(moraleClasses);
+			"morale_mamiya", "morale_orange", "morale_red"].join(" ");
+		const moraleElm = $(":not(.ship_stats_row) > .ship_morale", this.element);
+		moraleElm.text(this.shipData.morale).removeClass(moraleClasses);
 		switch(true){
 			case this.shipData.morale > 70: // in-game 2 more sparkles
-				$(".ship_morale", this.element).addClass("morale_sparkle glowing strongplus");
+				moraleElm.addClass("morale_sparkle glowing strongplus");
 				break;
 			case this.shipData.morale > 57: // in-game 1 more sparkle
-				$(".ship_morale", this.element).addClass("morale_sparkle glowing strong");
+				moraleElm.addClass("morale_sparkle glowing strong");
 				break;
 			case this.shipData.morale > 52: // sparkle and get buff
-				$(".ship_morale", this.element).addClass("morale_sparkle glowing");
+				moraleElm.addClass("morale_sparkle glowing");
 				break;
 			case this.shipData.morale > 49: // sparkle in-game
-				$(".ship_morale", this.element).addClass("morale_sparkle");
+				moraleElm.addClass("morale_sparkle");
 				break;
 			case this.shipData.morale > 39: // no effect in-game, regular state
-				$(".ship_morale", this.element).addClass("morale_normal");
+				moraleElm.addClass("morale_normal");
 				break;
 			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
-				$(".ship_morale", this.element).addClass("morale_mamiya");
+				moraleElm.addClass("morale_mamiya");
 				break;
 			case this.shipData.morale > 19: // orange face, debuff
-				$(".ship_morale", this.element).addClass("morale_orange");
+				moraleElm.addClass("morale_orange");
 				break;
 			default: // red face, heavy debuff
-				$(".ship_morale", this.element).addClass("morale_red");
+				moraleElm.addClass("morale_red");
 				break;
 		}
 	};
