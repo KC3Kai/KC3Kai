@@ -97,9 +97,13 @@
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
 				const world = $(this).data("world_num");
+				// Force to update settings when all world is selected on demand
+				if(!world && tabCode === "maps") {
+					self.settings.regular.world = 0;
+					self.settings.regular.map = 0;
+					self.saveSettings();
+				}
 				KC3StrategyTabs.gotoTab(null, world);
-				// force to switch when all world is selected on demand
-				if(!world) self.switchWorld(world);
 			});
 			
 			// Toggle-able world scroll
@@ -170,21 +174,19 @@
 				self.showMap();
 			}).val(self.itemsPerPage);
 			
-
 			if (!!KC3StrategyTabs.pageParams[1]) {
 				const world = KC3StrategyTabs.pageParams[1];
 				const map = KC3StrategyTabs.pageParams[2];
 				this.switchWorld(world, map);
 			} else if (tabCode === "maps" && this.settings.regular.world) {
-				KC3StrategyTabs.gotoTab(null,
-					...[this.settings.regular.world, this.settings.regular.map].compact());
-				this.switchWorld(this.settings.regular.world, this.settings.regular.map);
+				// Force to redirect and reload at once
+				KC3StrategyTabs.loading = false;
+				KC3StrategyTabs.gotoTab(null, ...[this.settings.regular.world, this.settings.regular.map].compact());
 			} else if (tabCode === "event" && this.settings.event.world) {
-				KC3StrategyTabs.gotoTab(null,
-					...[this.settings.event.world, this.settings.event.map].compact());
-				this.switchWorld(this.settings.event.world, this.settings.event.map);
+				KC3StrategyTabs.loading = false;
+				KC3StrategyTabs.gotoTab(null, ...[this.settings.event.world, this.settings.event.map].compact());
 			} else {
-				// Select default opened world (topmost for dropdown menu, otherwise `active` class for sidescroll menu)
+				// Select default world (topmost for dropdown menu, otherwise `active` class for sidescroll menu)
 				const dropdownselect = $(`.tab_${tabCode} .world-select`);
 				const world = dropdownselect.length ? dropdownselect.val() :
 					$(".tab_" + tabCode + " .world_list .world_box.active").data("world_num");
@@ -385,7 +387,7 @@
 				this.settings.event.map = Number(mapNum || 0);
 				this.saveSettings();
 			}
-			self.selectedWorld = Number(worldNum);
+			self.selectedWorld = Number(worldNum) || 0;
 			$(".tab_"+tabCode+" .world_list .world_box").removeClass("active");
 			$(".tab_"+tabCode+" .world_list .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
 			$(`.tab_${tabCode} .world-select`).val(worldNum);
@@ -408,7 +410,7 @@
 			self.scrollVars[tabCode].world_max = Math.max(0, countWorlds - maxDispWorlds);
 			updateScrollItem(self.scrollVars[tabCode], "world", tabCode === "maps" ? 87 : 116);
 
-			if(self.selectedWorld !== 0){
+			if(self.selectedWorld > 0){
 				// As IndexedDB real-time updated, also load Storage maps
 				self.maps = JSON.parse(localStorage.maps || "{}");
 				// Add all maps in this world selection
