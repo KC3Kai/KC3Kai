@@ -788,6 +788,21 @@
 		});
 
 		// Switching Activity Tabs
+		$(".module.activity .activity_tabs").on("mousewheel", (ev) => {
+			const items = $(".module.activity .activity_tab");
+			const curIndex = items.filter(".active").index();
+			let newIndex = curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1);
+			if (newIndex < 0) {
+				newIndex = items.length - 1;
+			}
+			if (newIndex > items.length - 1) {
+				newIndex = 0;
+			}
+			if (newIndex === curIndex) {
+				return;
+			}
+			items.eq(newIndex).trigger("click");
+		});
 		$(".module.activity .activity_tab").on("click", function(){
 			var target = $(this).data("target");
 			$(".module.activity .activity_tab").removeClass("active");
@@ -858,6 +873,33 @@
 				showCombinedFleetBars = false;
 				$(".module.fleet .sship .ship_bars").css("opacity", "0");
 			}
+		});
+
+		$(".module.controls").on("mousewheel", (ev) => {
+			const controlNode = $(".module.controls .control_btns")[0];
+			if (controlNode === ev.originalEvent.target || controlNode === ev.originalEvent.target.parentNode || controlNode === ev.originalEvent.target.parentNode.parentNode) {
+				return;
+			}
+			const items = $(".module.controls .control").slice(0, 6);
+			const curIndex = items.filter(".active").index();
+			let newIndex = curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1);
+			if (newIndex < 0) {
+				newIndex = items.length - 1;
+			}
+			if (newIndex > items.length - 1) {
+				newIndex = 0;
+			}
+			if (newIndex === curIndex) {
+				return;
+			}
+			items.eq(newIndex).trigger("click");
+		});
+
+		$(".module.controls .control_btns").on("mousewheel", (ev) => {
+			const buttonSize = $(".module.controls .control_btn").outerWidth(true);
+			const currentLeft = $(".module.controls .scrollable").scrollLeft();
+			const newLeft = currentLeft + buttonSize * (ev.originalEvent.deltaY > 0 ? 1 : -1);
+			ev.currentTarget.scroll({ left: newLeft, behavior: "smooth" });
 		});
 
 		// Scrollable control buttons
