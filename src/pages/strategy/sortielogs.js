@@ -126,7 +126,7 @@
 			
 			// On-click map menus
 			$(".tab_"+tabCode+" .map_list").on("click", ".map_box", function(){
-				KC3StrategyTabs.gotoTab(null, self.selectedWorld, $(this).data("map_num"));
+				KC3StrategyTabs.gotoTab(null, ...[self.selectedWorld, $(this).data("map_num")].compact());
 			});
 			
 			// Toggle-able map scroll

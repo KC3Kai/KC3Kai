@@ -863,7 +863,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				})
 				.toArray(function(arr){
 					var sortiesIds = arr.map(s => s.id);
-					sortieCount = sortiesIds.length
+					sortieCount = sortiesIds.length;
 					if(sortieCount === 0){
 						battleCount = 0;
 						callback(sortieCount, battleCount);
