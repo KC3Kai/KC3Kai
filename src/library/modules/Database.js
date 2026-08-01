@@ -705,12 +705,9 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
 			var sortieIds = [];
 			var bctr;
-			
 			var self = this;
-			
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == mapArea && sortie.mapnum == mapNo; })
+				.where("[hq+world+mapnum]").equals([this.index, mapArea, mapNo])
 				.toArray(function(sortieList){
 					// Compile all sortieIDs and indexify
 					for( bctr in sortieList){
@@ -857,17 +854,21 @@ Uses Dexie.js third-party plugin on the assets directory
 		count_sortie_battle: function(callback, startSecs, endSecs, world, map){
 			var self = this;
 			var sortieCount = 0, battleCount = 0;
-			this.con.sortie
-				.where("hq").equals(this.index)
+			return this.con.sortie.where("time").aboveOrEqual(startSecs)
 				.and(function(s){
-					return (world ? s.world === world : s.world <= 20)
+					return (s.hq == self.index)
+						&& (world ? s.world === world : s.world <= 20)
 						&& (map ? s.mapnum === map : true)
-						&& (startSecs ? s.time >= startSecs : true)
 						&& (endSecs ? s.time < endSecs : true);
 				})
 				.toArray(function(arr){
 					var sortiesIds = arr.map(s => s.id);
-					sortieCount = sortiesIds.length;
+					sortieCount = sortiesIds.length
+					if(sortieCount === 0){
+						battleCount = 0;
+						callback(sortieCount, battleCount);
+						return;
+					}
 					self.con.battle
 						.where("sortie_id").anyOf(sortiesIds)
 						.count(function(bc){

@@ -23,7 +23,8 @@
   }
 
   function cancelTooltips (limiter) {
-    if (limiter) limiter.stopAll(true);
+    console.assert(limiter !== tooltipLimiter, "default limiter cannot be stopped");
+    if (limiter instanceof Bottleneck) limiter.stopAll(true);
   }
 
   window.KC3QueueManager = {
