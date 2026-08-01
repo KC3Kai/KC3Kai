@@ -204,17 +204,15 @@
 		};
 
 		this.stopLimiters = () => {
-			if (this.ledgerLimiter) this.ledgerLimiter.stopAll(true);
-			if (this.tooltipLimiter) this.tooltipLimiter.stopAll(true);
+			KC3QueueManager.cancelTooltips(this.ledgerLimiter);
+			KC3QueueManager.cancelTooltips(this.tooltipLimiter);
 			this.ledgerLimiter = undefined;
 			this.tooltipLimiter = undefined;
 		};
 
 		this.startLimiters = () => {
-			this.ledgerLimiter = new Bottleneck(this.ledgerMaxConcurrent);
-			this.tooltipLimiter = new Bottleneck(this.tooltipMaxConcurrent);
-			// this.ledgerLimiter.on('idle', () => console.debug(`ledgerMaxConcurrent#idle`));
-			// this.tooltipLimiter.on('idle', () => console.debug(`tooltipMaxConcurrent#idle`));
+			this.ledgerLimiter = KC3QueueManager.newTooltipLimiter(this.ledgerMaxConcurrent);
+			this.tooltipLimiter = KC3QueueManager.newTooltipLimiter(this.tooltipMaxConcurrent);
 		};
 
 		/**
@@ -1460,12 +1458,12 @@
 										.removeClass(KC3Meta.abyssShipBorderClass())
 										.addClass(KC3Meta.abyssShipBorderClass(eship))
 										.show();
-									self.tooltipLimiter.schedulePriority(9, () => Promise.resolve(
+									KC3QueueManager.deferTooltip(() => {
 										$(`.node_eship.${mainEscort}.node_eship_${index + 1}`, curNodeBox)
 											.addClass("hover")
 											.attr("title", curKc3Node.buildEnemyStatsMessage(index))
-											.lazyInitTooltip()
-									));
+											.lazyInitTooltip();
+									}, 9, self.tooltipLimiter);
 									if(thisNode.debuffed && index === 0){
 										//console.debug("Boss node " + thisNode.letter + " was debuffed", battle.sortie_id, thisNode);
 										$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
@@ -1488,11 +1486,11 @@
 									$(".node_support .exped", nodeBox).show();
 								}
 								$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
-								self.tooltipLimiter.schedule(() => Promise.resolve(
+								KC3QueueManager.deferTooltip(() => {
 									$(".node_support", curNodeBox)
 										.attr("title", curKc3Node.buildSupportAttackMessage(curKc3Node, true))
-										.lazyInitTooltip()
-								));
+										.lazyInitTooltip();
+								}, 5, self.tooltipLimiter);
 							}else{
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 							}
@@ -1559,12 +1557,12 @@
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
 								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
-								self.tooltipLimiter.schedule(() => Promise.resolve(
+								KC3QueueManager.deferTooltip(() => {
 									$(".node_airbattle", curNodeBox)
 										.attr("title", curKc3Node.buildAirPowerMessage())
-										.lazyInitTooltip()
-								));
-
+										.lazyInitTooltip();
+								}, 5, self.tooltipLimiter);
+								
 								["Fighters","Bombers"].forEach(function(planeType){
 									["player","abyssal"].forEach(function(side,jndex){
 										var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
@@ -1576,11 +1574,11 @@
 									});
 								});
 								$("span.node_BAL",nodeBox).toggleClass("aaci_loss", !!thisNode.antiAirFire && thisNode.antiAirFire.length > 0);
-								self.tooltipLimiter.schedulePriority(7, () => Promise.resolve(
+								KC3QueueManager.deferTooltip(() => {
 									$(".node_planes", curNodeBox)
 										.attr("title", curKc3Node.buildAirBattleLossMessage())
-										.lazyInitTooltip()
-								));
+										.lazyInitTooltip();
+								}, 7, self.tooltipLimiter);
 							}
 							//console.debug(`${thisNode.sortie} ${thisNode.letter}`, thisNode);
 							
