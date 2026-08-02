@@ -789,19 +789,12 @@
 
 		// Switching Activity Tabs
 		$(".module.activity .activity_tabs").on("mousewheel", (ev) => {
-			const items = $(".module.activity .activity_tab");
-			const curIndex = items.filter(".active").index();
-			let newIndex = curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1);
-			if (newIndex < 0) {
-				newIndex = items.length - 1;
-			}
-			if (newIndex > items.length - 1) {
-				newIndex = 0;
-			}
-			if (newIndex === curIndex) {
-				return;
-			}
-			items.eq(newIndex).trigger("click");
+			const tabs = $(".module.activity .activity_tab");
+			const curIndex = tabs.filter(".active").index();
+			const newIndex = (curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1))
+				.wrap(0, tabs.length - 1);
+			if (newIndex === curIndex) return;
+			tabs.eq(newIndex).trigger("click");
 		});
 		$(".module.activity .activity_tab").on("click", function(){
 			var target = $(this).data("target");
@@ -875,47 +868,50 @@
 			}
 		});
 
+		// Fleet/LBAS view toggled by mousewheel
 		$(".module.controls").on("mousewheel", (ev) => {
-			const controlNode = $(".module.controls .control_btns")[0];
-			if (controlNode === ev.originalEvent.target || controlNode === ev.originalEvent.target.parentNode || controlNode === ev.originalEvent.target.parentNode.parentNode) {
+			const scrollableContainer = $(".module.controls .scrollable").get(0);
+			if (scrollableContainer === ev.originalEvent.target
+				|| scrollableContainer === ev.originalEvent.target.parentNode
+				|| scrollableContainer === ev.originalEvent.target.parentNode.parentNode) {
 				return;
 			}
-			const items = $(".module.controls .control").slice(0, 6);
-			const curIndex = items.filter(".active").index();
-			let newIndex = curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1);
-			if (newIndex < 0) {
-				newIndex = items.length - 1;
-			}
-			if (newIndex > items.length - 1) {
-				newIndex = 0;
-			}
-			if (newIndex === curIndex) {
-				return;
-			}
-			items.eq(newIndex).trigger("click");
+			const btns = $(".module.controls .control[class*='fleet_']");
+			const curIndex = btns.filter(".active").index();
+			const newIndex = (curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1))
+				.wrap(0, btns.length - 1);
+			if (newIndex === curIndex) return;
+			btns.eq(newIndex).trigger("click");
 		});
 
-		$(".module.controls .control_btns").on("mousewheel", (ev) => {
+		const scrollControlButtons = (setScrollLeft) => {
+			const buttonCount = $(".module.controls .control_btn").length;
 			const buttonSize = $(".module.controls .control_btn").outerWidth(true);
+			const containerSize = $(".module.controls .scrollable").outerWidth(true);
+			const maxLeft = buttonSize * (buttonCount - Math.floor(containerSize / buttonSize));
 			const currentLeft = $(".module.controls .scrollable").scrollLeft();
-			const newLeft = currentLeft + buttonSize * (ev.originalEvent.deltaY > 0 ? 1 : -1);
-			ev.currentTarget.scroll({ left: newLeft, behavior: "smooth" });
-		});
-
-		// Scrollable control buttons
-		$(".module.controls .scroll_btn").on("click", function(){
-			var buttonCount = $(".module.controls .control_btn").length;
-			var buttonSize = $(".module.controls .control_btn").outerWidth(true);
-			var containerSize = $(".module.controls .scrollable").outerWidth(true);
-			var maxLeft = buttonSize * (buttonCount - Math.floor(containerSize / buttonSize));
-			var currentLeft = $(".module.controls .scrollable").scrollLeft();
-			var goLeft = $(this).hasClass("scroll_left");
-			var newLeft = goLeft ?
-				Math.max(currentLeft - buttonSize, 0) :
-				Math.min(currentLeft + buttonSize, maxLeft);
-			$(".module.controls .scrollable").scrollLeft(newLeft);
+			const newLeft = setScrollLeft(currentLeft, buttonSize, maxLeft);
 			$(".module.controls .scroll_left").toggleClass("disabled", newLeft <= 0);
 			$(".module.controls .scroll_right").toggleClass("disabled", newLeft >= maxLeft);
+		};
+		// Scrollable control buttons by mousewheel
+		$(".module.controls .control_btns").on("mousewheel", (ev) => {
+			scrollControlButtons((currentLeft, buttonSize, maxLeft) => {
+				const newLeft = (currentLeft + buttonSize * (ev.originalEvent.deltaY > 0 ? 1 : -1))
+					.clamp(0, maxLeft);
+				ev.currentTarget.scroll({ left: newLeft, behavior: "smooth" });
+				return newLeft;
+			});
+		});
+		// Scrollable control buttons by clicking side arrows
+		$(".module.controls .scroll_btn").on("click", (ev) => {
+			scrollControlButtons((currentLeft, buttonSize, maxLeft) => {
+				const goLeft = $(ev.target).hasClass("scroll_left");
+				const newLeft = (currentLeft + (goLeft ? -buttonSize : buttonSize))
+					.clamp(0, maxLeft);
+				$(".module.controls .scrollable").scrollLeft(newLeft);
+				return newLeft;
+			});
 		});
 
 		// Resize window to 1200x720
