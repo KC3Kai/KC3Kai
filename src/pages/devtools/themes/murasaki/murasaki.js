@@ -68,64 +68,9 @@
 		utc: 0
 	};
 
-	// make sure localStorage.expedTab is available
-	// and is in correct format.
-	// returns the configuration for expedTab
-	// (previously called localStorage.expedTabLastPick)
-	function ExpedTabValidateConfig(idToValid) {
-		// data format for expedTab:
-		// data.fleetConf: an object
-		// data.fleetConf[fleetNum]:
-		// * fleetNum: 1,2,3,4
-		// * fleetNum could be either number or string
-		//	 they will all be implicitly converted
-		//	 to string (for indexing object) anyway
-		// data.fleetConf[fleetNum].expedition: a number
-		// data.expedConf: an object
-		// data.expedConf[expedNum]:
-		// * expedNum: 1..46, 100..105, 110..115, 131..133, 141..142
-		// * expedNum is number or string, just like fleetNum
-		// data.expedConf[expedNum].greatSuccess: boolean
-
-		let data;
-		const fillExpedConfDefaultGreatSuccess = (...ids) => {
-			ids.forEach(i => {
-				data.expedConf[i] = { greatSuccess: false };
-			});
-		};
-		if (! localStorage.expedTab) {
-			data = {};
-			data.fleetConf = {};
-			for (let i = 1; i <= 4; ++i) {
-				data.fleetConf[i] = { expedition: 1 };
-			}
-			data.expedConf = {};
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 46));
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 115));
-			fillExpedConfDefaultGreatSuccess(131, 132, 133, 141, 142);
-			localStorage.expedTab = JSON.stringify( data );
-		} else {
-			data = JSON.parse( localStorage.expedTab );
-			// add default GS config for new added expeditions
-			// * extended since 2017-10-18: 100~102 display name A1~A3 for World 1
-			// * extended since 2017-10-25: 110~111 B1~B2 for World 2
-			// * extended since 2019-07-18: A4, B3, B4 and World 7. Monthly.
-			// * extended since 2020-02-07: 45, D1, D2
-			// * extended since 2020-03-27: B5, E1 for World 5
-			// * extended since 2020-05-20: A5, A6
-			// * extended since 2020-09-17: 46, E2
-			// * extended since 2021-02-05: B6, D3
-			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
-				fillExpedConfDefaultGreatSuccess(idToValid);
-			}
-		}
-		return data;
-	}
-
 	// selectedExpedition, plannerIsGreatSuccess + selectedFleet => storage
 	function ExpedTabUpdateConfig() {
-		const conf = ExpedTabValidateConfig(selectedExpedition);
+		const conf = KC3ThemeUtil.ExpedTabValidateConfig(selectedExpedition);
 		if(selectedFleet > 4) return;
 		conf.fleetConf[ selectedFleet ].expedition = selectedExpedition;
 		conf.expedConf[ selectedExpedition ].greatSuccess = plannerIsGreatSuccess;
@@ -138,10 +83,10 @@
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
 		if(selectedFleet > 4) return;
-		let conf = ExpedTabValidateConfig(selectedExpedition);
+		let conf = KC3ThemeUtil.ExpedTabValidateConfig(selectedExpedition);
 		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
 		// re-validate config in case that fleet has just returned from a new exped
-		conf = ExpedTabValidateConfig(selectedExpedition);
+		conf = KC3ThemeUtil.ExpedTabValidateConfig(selectedExpedition);
 		plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 	}
 
@@ -168,33 +113,16 @@
 		if (availableFleetInd !== -1) {
 			selectedFleet = availableFleetInd + 1;
 			console.debug("Find available fleet:", selectedFleet);
-			switchToFleet(selectedFleet);
+			KC3ThemeUtil.switchToFleet(selectedFleet);
 			if (needTabSwith)
 				$("#atab_expeditionPlanner").trigger("click");
 		} else {
 			// knowing fleets are all unavailable
 			// we can return focus to the main fleet.
 			// or if combined fleet is in used, we go to combined fleet tab
-			switchToFleet(PlayerManager.combinedFleet !== 0 ? "combined" : 1);
+			KC3ThemeUtil.switchToFleet(PlayerManager.combinedFleet !== 0 ? "combined" : 1);
 			// also return focus to basic tab
 			$("#atab_basic").trigger("click");
-		}
-	}
-
-	function switchToFleet(targetFleet) {
-		if (targetFleet === "combined") {
-			$(".module.controls .fleet_rengo").trigger("click");
-		} else if (targetFleet === "lbas") {
-			$(".module.controls .fleet_lbas").trigger("click");
-		} else {
-			let fleetControls = $(".module.controls .fleet_num").toArray();
-			for (let i=0; i<fleetControls.length; ++i) {
-				const thisFleet = parseInt( $(fleetControls[i]).text(), 10);
-				if (thisFleet === targetFleet) {
-					$( fleetControls[i] ).trigger("click");
-					break;
-				}
-			}
 		}
 	}
 
@@ -216,7 +144,7 @@
 		if (selectedFleet === targetFleet) {
 			return false;
 		}
-		switchToFleet(targetFleet);
+		KC3ThemeUtil.switchToFleet(targetFleet);
 		return true;
 	}
 
@@ -343,62 +271,14 @@
 			return true;
 		}
 
-		// Initialize data managers
-		ConfigManager.load();
-		KC3Master.init();
-		RemodelDb.init();
-		WhoCallsTheFleetDb.init("../../../../");
-		KC3Meta.init("../../../../data/");
-		KC3Master.loadAbyssalShips("../../../../data/");
-		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
-		KC3Meta.loadQuotes();
-		PlayerManager.init();
-		PlayerManager.loadConsumables();
-		KC3ShipManager.load();
-		KC3GearManager.load();
-		KC3SortieManager.load();
-		KC3Database.init();
-		KC3Translation.execute();
-		KC3QuestSync.init();
+		KC3ThemeUtil.initDataManagers();
 
 		myKcServerHost = myKcServerHost || (() => {
 			const server = PlayerManager.hq.getServer();
 			return server.urlPrefix;
 		})();
 
-		// Live translations of Quests, only work for EN
-		if(ConfigManager.checkLiveQuests && ConfigManager.language === "en"){
-			$.ajax({
-				async: true,
-				dataType: "JSON",
-				url: "https://raw.githubusercontent.com/KC3Kai/kc3-translations/master/data/"+ConfigManager.language+"/quests.json?v="+(Date.now()),
-				success: function(newQuestTLs){
-					if(JSON.stringify(newQuestTLs) !== JSON.stringify(KC3Meta._quests)){
-						let enQuests = JSON.parse($.ajax({
-							url : '../../../../data/lang/data/en/quests.json',
-							async: false
-						}).responseText);
-						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
-						//console.debug(KC3Meta._quests);
-						console.info("New quests detected, live updated");/*RemoveLogging:skip*/
-						// Only update meta when en translations actually get updated
-						$.ajax({
-							async: true,
-							dataType: "JSON",
-							url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/develop/src/data/quests_meta.json?v="+(Date.now()),
-							success: function(newQuestMeta){
-								if(JSON.stringify(newQuestMeta) !== JSON.stringify(KC3Meta._questsMeta)){
-									KC3Meta._questsMeta = newQuestMeta;
-									console.info("Quests meta live updated");/*RemoveLogging:skip*/
-								}
-							}
-						});
-					}else{
-						console.info("Quests is up to date");
-					}
-				}
-			});
-		}
+		KC3ThemeUtil.initLiveTranslations();
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity / 100);
@@ -474,7 +354,7 @@
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 				$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics_murasaki);
 				MurasakiListeners.Fleet({ quickStatus: true });
-				updateQuestActivityTab();
+				KC3ThemeUtil.updateQuestActivityTab();
 			}
 		});
 
@@ -652,7 +532,7 @@
 		$(".module.controls .btn_export").on("click", function(e){
 			if(window.KC3ImageBuilder) {
 				if(e.altKey) {
-					copyToClipboard(JSON.stringify(PlayerManager.prepareDeckbuilder())).catch(e => {
+					KC3ThemeUtil.copyToClipboard(JSON.stringify(PlayerManager.prepareDeckbuilder())).catch(e => {
 						console.debug("Browser does not support Clipboard event", e);
 						KC3ImageBuilder.exportCurrentFleets();
 					});
@@ -673,50 +553,10 @@
 			*/
 		});
 
-		const prepareBattleLogsData = function(){
-			// Don't pop up if a battle has not started yet
-			if( !(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
-				|| KC3SortieManager.countNodes() < 1) { return false; }
-			const node = KC3SortieManager.currentNode();
-			if(node.type !== "battle"
-				|| !(node.battleDay || node.battleNight)) { return false; }
-			const isPvP = node.isPvP;
-			return {
-				id: KC3SortieManager.isOnSavedSortie() && KC3SortieManager.onSortie || (isPvP ? "TBD" : "???"),
-				diff: KC3SortieManager.map_difficulty,
-				world: isPvP ? 0 : KC3SortieManager.map_world,
-				mapnum: KC3SortieManager.map_num,
-				fleetnum: KC3SortieManager.fleetSent,
-				combined: PlayerManager.combinedFleet,
-				fleet1: PlayerManager.fleets[0].sortieJson(),
-				fleet2: PlayerManager.fleets[1].sortieJson(),
-				fleet3: PlayerManager.fleets[2].sortieJson(),
-				fleet4: PlayerManager.fleets[3].sortieJson(),
-				support1: isPvP ? 0 : KC3SortieManager.getSupportingFleet(false),
-				support2: isPvP ? 0 : KC3SortieManager.getSupportingFleet(true),
-				lbas: isPvP ? [] : KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world, KC3SortieManager.map_num),
-				battles: [node.buildBattleDBData()]
-			};
-		};
-		const openBattleLogsWindow = function(data, isPopup){
-			try {
-				const url = "https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data);
-				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars,popup"));
-				if(ref && !ref.closed){
-					// Update hash with latest battle data even if window already opened
-					// this might not work for all browser versions as a vulnerability to bypass CORS
-					ref.location.replace(url);
-					// Switch focus to the window if possible
-					if(ref.focus) ref.focus();
-				}
-			} catch (e) {
-				console.warn("Failed to open battle logs", e);
-			}
-		};
 		// Open text-based battle replayer in new tab or popup window
 		$(".module.activity .map_world").addClass("hover").on("click", function(e){
-			const data = prepareBattleLogsData();
-			if(data) openBattleLogsWindow(data, e.altKey);
+			const data = KC3ThemeUtil.prepareBattleLogsData();
+			if(data) KC3ThemeUtil.openBattleLogsWindow(data, e.altKey);
 		});
 
 		/* Expedition Planner
@@ -742,7 +582,7 @@
 		// Expedition Planner
 		$(".expedition_entry").on("click",function(){
 			selectedExpedition = parseInt( $(this).data("expId") );
-			let conf = ExpedTabValidateConfig(selectedExpedition);
+			let conf = KC3ThemeUtil.ExpedTabValidateConfig(selectedExpedition);
 			plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 			ExpedTabUpdateConfig();
 			MurasakiListeners.Fleet();
@@ -904,10 +744,7 @@
 			} catch(e) {}
 		})).execute();
 		
-		// Attempt to activate game on inspected window
-		(new RMsg("service", "activateGame", {
-			tabId: chrome.devtools.inspectedWindow.tabId
-		})).execute();
+		KC3ThemeUtil.activateGame();
 
 		// Waiting for actions
 		$("<div></div>").addClass("waitingForActions logo").html( '<img src="/assets/img/logo/64.png" class="pinkglowanim use-gpu" alt="Waiting logo">' ).appendTo("body");
@@ -921,92 +758,19 @@
 		$(".wrapper").removeClass("hidden");
 	}
 
-	function clearSortieData(){
-		$(".module.activity .activity_box").hideChildrenTooltips();
-		$(".module.activity .activity_battle").css("opacity", "0.25");
-		$(".module.activity .map_world").text("").attr("title", "").removeClass("debuffed");
-		$(".module.activity .map_info").removeClass("map_finisher");
-		$(".module.activity .map_gauge").removeAttr("titlealt");
-		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
-		$(".module.activity .map_hp").text("");
-		$(".module.activity .sortie_nodes .extra_node").remove();
-		$(".module.activity .sortie_nodes").removeAttr("style");
-		$(".module.activity .sortie_node").text("").removeAttr("title")
-			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name boss-node")
-			.removeClass("special_cutin smoke_screen")
-			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
-		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
-		$(".module.activity .sortie_nodes .boss_node").hide();
-		$(".module.activity .node_types").hide();
-		$(".battle_support,.battle_drop",".module.activity").find('img')
-			.css("visibility","");
-		$(".admiral_lvnext")
-			.attr("data-exp-gain","");
-	}
-
-	function clearBattleData(){
-		$(".module.activity .activity_box").hideChildrenTooltips();
-		$(".module.activity .abyss_ship > img").attr("src", KC3Meta.abyssIcon(-1));
-		$(".module.activity .abyss_ship > img").attr("titlealt", "").lazyInitTooltip();
-		$(".module.activity .abyss_ship").removeClass(KC3Meta.abyssShipBorderClass().join(" "));
-		$(".module.activity .abyss_ship").removeClass("sunk");
-		$(".module.activity .abyss_ship").removeData("masterId").off("dblclick");
-		$(".module.activity .abyss_combined").hide();
-		$(".module.activity .abyss_single").show();
-		$(".module.activity .abyss_ship").hide();
-		$(".module.activity .abyss_hp").hide().removeClass("sunk");
-		$(".module.activity .sunk").removeClass("shown safe debuff");
-		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
-		$(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
-		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
-		$(".module.activity .battle_support > img").attr("src", "../../../../assets/img/ui/dark_support.png");
-		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
-		$(".module.activity .battle_support .support_lbas").hide();
-		$(".module.activity .battle_support .support_lbas").hide();
-		$(".module.activity .battle_support .support_exped").hide();
-		$(".module.activity .battle_support .support_balloon").hide();
-		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
-		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
-		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
-		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
-		$(".module.activity .battle_night img").removeClass("hover").off("dblclick");
-		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
-		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
-		$(".module.activity .battle_rating").attr("title", KC3Meta.term("BattleRating")).lazyInitTooltip();
-		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png").removeClass("rounded");
-		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
-		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
-		$(".module.activity .battle_cond_value").text("");
-		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
-		$(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
-		$(".module.activity .battle_engagement").attr("title", "").lazyInitTooltip();
-		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
-		$(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
-		$(".module.activity .battle_detection").attr("title", "").lazyInitTooltip();
-		$(".module.activity .battle_cond_extra.smoke_screen").hide().attr("title", "").lazyInitTooltip();
-		$(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
-		$(".module.activity .battle_airbattle").attr("title", "").lazyInitTooltip();
-		$(".module.activity .plane_text span").text("");
-		$(".module.activity .battle_planes .fighter_ally .plane_icon img").attr("src", KC3Meta.itemIcon(6));
-		$(".module.activity .battle_planes .fighter_enemy .plane_icon img").attr("src", KC3Meta.itemIcon(6));
-		$(".module.activity .battle_planes .bomber_ally .plane_icon img").attr("src", KC3Meta.itemIcon(7));
-		$(".module.activity .battle_planes .bomber_enemy .plane_icon img").attr("src", KC3Meta.itemIcon(7));
-	}
-
 	let MurasakiListeners = {
 		GameStart: function(){ Activate(); },
 		HomeScreen: function(){
 			ConfigManager.loadIfNecessary();
 			Activate();
-			clearSortieData();
-			clearBattleData();
+			KC3ThemeUtil.clearSortieData();
+			KC3ThemeUtil.clearBattleData();
 			if(!overrideFocus){
 				$("#atab_basic").trigger("click");
 			}else{
 				overrideFocus = false;
 			}
-			updateQuestActivityTab(true);
+			KC3ThemeUtil.updateQuestActivityTab(true);
 
 			checkAndRestartMoraleTimer();
 			checkAndRestartUiTimer();
@@ -1266,7 +1030,7 @@
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
-			updateHQEXPGained($(".admiral_lvnext"));
+			KC3ThemeUtil.updateHQEXPGained($(".admiral_lvnext"));
 		},
 
 		Consumables: function(){
@@ -1503,7 +1267,7 @@
 		// Trigger when enter quest screen
 		QuestList: function (data) {
 			$('.quest_filter_button').off('click');
-			updateQuestActivityTab();
+			KC3ThemeUtil.updateQuestActivityTab();
 			if (!ConfigManager.info_quest_activity) {
 				return;
 			}
@@ -2547,7 +2311,7 @@
 
 		SortieStart: function(){
 			// Clear battle details box
-			clearSortieData();
+			KC3ThemeUtil.clearSortieData();
 
 			// Show world map and difficulty
 			$(".module.activity .map_world").text(
@@ -2570,7 +2334,7 @@
 			);
 
 			// Map Gauge and status
-			updateMapGauge(null);
+			KC3ThemeUtil.updateMapGauge(null);
 
 			// Switch to battle tab
 			$(".module.activity .activity_battle").css("opacity", 1);
@@ -2580,7 +2344,7 @@
 		CompassResult: function(){
 			let self = this;
 			// Clear battle details box
-			clearBattleData();
+			KC3ThemeUtil.clearBattleData();
 
 			// Exception unhandled if nodes are empty and current node is undefined for some reasons,
 			// eg: panel reopened during sortie
@@ -2693,7 +2457,7 @@
 								.addClass("hover")
 								.on("dblclick", function(e) {
 									const simData = KC3SortieManager.prepareSimData(edata);
-									if(simData) openSimulatorWindow(simData, e.altKey);
+									if(simData) KC3ThemeUtil.openSimulatorWindow(simData, e.altKey);
 								});
 							$.each(shipList, function(_, shipId){
 								if(shipId > 0){
@@ -2784,7 +2548,7 @@
 					$(".module.activity .node_type_resource").show().children().show();
 
 					if(KC3SortieManager.getCurrentMapData().kind === 'multiple') {
-						updateMapGauge(true,true,true);
+						KC3ThemeUtil.updateMapGauge(true,true,true);
 					}
 					break;
 
@@ -2839,7 +2603,7 @@
 					$(".module.activity .node_type_resource").show().children().show();
 
 					if(thisNode.gaugeDamage > 0 && KC3SortieManager.getCurrentMapData().kind === 'gauge-tp') {
-						updateMapGauge(thisNode.gaugeDamage, true, true);
+						KC3ThemeUtil.updateMapGauge(thisNode.gaugeDamage, true, true);
 					}
 					break;
 
@@ -2875,7 +2639,7 @@
 			let self = this;
 			if(!battleData) { return false; }
 			let updateBattleActivityFunc = function(){
-				clearBattleData();
+				KC3ThemeUtil.clearBattleData();
 				$(".module.activity .abyss_single").show();
 				$(".module.activity .abyss_combined").hide();
 				$(".module.activity .node_type_prev_encounters").hide();
@@ -2936,7 +2700,7 @@
 						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.map(id => KC3Meta.airraiddamage(id) || "?").join(",")) : ""
 					));
 				}
-				let contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+				let contactSpan = KC3ThemeUtil.buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 				$(".module.activity .battle_airbattle").text(
 					thisNode.airbattleIdByWaves ? thisNode.airbattleIdByWaves.map(id => KC3Meta.airbattle(id)[0] || "?").join(",") : thisNode.airbattle[0]
@@ -2976,7 +2740,7 @@
 		BattleStart: function(){
 			let self = this;
 			// Clear battle details box just to make sure
-			clearBattleData();
+			KC3ThemeUtil.clearBattleData();
 
 			let thisNode = KC3SortieManager.currentNode();
 			let enemyFleetBox = thisNode.enemyCombined ? "combined" : "single";
@@ -3028,7 +2792,7 @@
 							
 							if(index === 0) {
 								if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-									updateMapGauge(thisNode.gaugeDamage, thisNode.mainFlagshipKilled);
+									KC3ThemeUtil.updateMapGauge(thisNode.gaugeDamage, thisNode.mainFlagshipKilled);
 								}
 								$(enemyFleetBoxSelector+" .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
 							}
@@ -3038,9 +2802,9 @@
 								.removeClass("safe");
 							
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-							updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+							KC3ThemeUtil.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
 						} else {
-							updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1));
+							KC3ThemeUtil.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1));
 						}
 						
 						$(enemyFleetBoxSelector+" .abyss_hp_"+(index+1)).css("display", "flex");
@@ -3059,7 +2823,7 @@
 			$(".module.activity .battle_engagement").text( thisNode.engagement[2] || thisNode.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisNode.engagement[1] );
 			$(".module.activity .battle_engagement").attr("title", thisNode.engagement[3] || "" );
-			let contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+			let contactSpan = KC3ThemeUtil.buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 
 			// Swap fish and support icons
@@ -3127,7 +2891,7 @@
 						.addClass("hover").off("dblclick")
 						.on("dblclick", function (e) {
 							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
-							if(simData) openSimulatorWindow(simData, e.altKey);
+							if(simData) KC3ThemeUtil.openSimulatorWindow(simData, e.altKey);
 						});
 					// Add tip to show night battle against main or escort fleet
 					if(thisNode.enemyCombined) {
@@ -3293,7 +3057,7 @@
 						
 						if(index === 0) {
 							if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-								updateMapGauge(thisNode.gaugeDamage, thisNode.mainFlagshipKilled);
+								KC3ThemeUtil.updateMapGauge(thisNode.gaugeDamage, thisNode.mainFlagshipKilled);
 							}
 							if(!thisNode.enemyCombined || thisNode.activatedEnemyFleet === 1) {
 								$(".module.activity .abyss_single .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
@@ -3305,7 +3069,7 @@
 							.toggleClass("safe", !!(data || {}).safeSunk);
 						
 						enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-						updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+						KC3ThemeUtil.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).css("display", "flex");
 					}
 				});
@@ -3314,7 +3078,7 @@
 				$(".module.activity .abyss_combined").hide();
 			}
 
-			let contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
+			let contactSpan = KC3ThemeUtil.buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 
 			$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen.png");
@@ -3343,7 +3107,7 @@
 		BattleResult: function(data){
 			const thisNode = KC3SortieManager.currentNode();
 
-			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
+			KC3ThemeUtil.updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 
 			// Show real battle rank
 			$(".module.activity .battle_rating img")
@@ -3416,7 +3180,7 @@
 
 			// Show TP deduction
 			if(KC3SortieManager.getCurrentMapData().kind === 'gauge-tp') {
-				updateMapGauge(
+				KC3ThemeUtil.updateMapGauge(
 					-thisNode.gaugeDamage,
 					true /* does not matter flagship status */
 				);
@@ -3744,7 +3508,7 @@
 			let thisPvP = KC3SortieManager.currentNode();
 
 			// Clear battle details box just to make sure
-			clearBattleData();
+			KC3ThemeUtil.clearBattleData();
 			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") )
 				.attr("title", "").removeClass("debuffed");
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
@@ -3804,7 +3568,7 @@
 							.addClass("safe");
 
 						enemyHPPercent = ( newEnemyHP / thisPvP.maxHPs.enemy[index] );
-						updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+						KC3ThemeUtil.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).css("display", "flex");
 					}
 				});
@@ -3847,7 +3611,7 @@
 			$(".module.activity .battle_engagement").text( thisPvP.engagement[2] || thisPvP.engagement[0] );
 			$(".module.activity .battle_engagement").addClass( thisPvP.engagement[1] );
 			$(".module.activity .battle_engagement").attr("title", thisPvP.engagement[3] || "");
-			let contactSpan = buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
+			let contactSpan = KC3ThemeUtil.buildContactPlaneSpan(thisPvP.fcontactId, thisPvP.fcontact, thisPvP.econtactId, thisPvP.econtact);
 			$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 
 			// Fighter phase
@@ -3940,7 +3704,7 @@
 			$(".module.activity .battle_rating img")
 				.attr("src", `/assets/img/client/ratings/${thisPvP.rating}.png`)
 				.css("opacity", 1);
-			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
+			KC3ThemeUtil.updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 			this.Fleet();
 		},
 
@@ -4335,7 +4099,7 @@
 
 			// after getting the result, we assume user will just resupply & resend to the same expedition
 			// it makes sense to update expedition planner with current fleet-expedition relation.
-			let expedTabConf = ExpedTabValidateConfig();
+			let expedTabConf = KC3ThemeUtil.ExpedTabValidateConfig();
 			let resultFleetNum = data.params.api_deck_id; // string
 			expedTabConf.fleetConf[ resultFleetNum ].expedition = data.expedNum;
 			localStorage.expedTab = JSON.stringify( expedTabConf );
@@ -4643,7 +4407,6 @@
 				ExpdCheckerResult.flagShipLevel,
 				fleet[0] && fleet[0].level,
 				$(".module.activity .activity_expeditionPlanner .flagshipLv"));
-
 
 			setupJQObject(
 				ExpdReqPack.flagShipTypeOf,
@@ -5031,58 +4794,6 @@
 
 	KC3ThemeUtil.setListener(MurasakiListeners);
 
-	function openSimulatorWindow(hashData, isPopup) {
-		try {
-			const url = "https://kc3kai.github.io/kancolle-replay/simulator.html#" + JSON.stringify(hashData);
-			const ref = window.open(url, "simulator", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
-			if(ref && !ref.closed){
-				// Update hash with latest battle data even if window already opened
-				// this might not work for all browser versions as a vulnerability to bypass CORS
-				ref.location.replace(url);
-				// Switch focus to the window if possible
-				if(ref.focus) ref.focus();
-			}
-		} catch (e) {
-			console.warn("Failed to open battle simulator", e);
-		}
-	}
-
-	function updateQuestActivityTab(isGoHome) {
-		if (ConfigManager.info_quest_activity) {
-			$(".activity_tabs .activity_tab").addClass("tab_count_5");
-			$("#atab_quest").show();
-			if (!!isGoHome && $("#atab_quest").hasClass("active")) {
-				$("#atab_basic").trigger("click");
-			}
-		} else {
-			$(".activity_tabs .activity_tab").removeClass("tab_count_5");
-			$("#atab_quest").hide();
-			if ($("#atab_quest").hasClass("active")) {
-				$("#atab_basic").trigger("click");
-			}
-		}
-	}
-
-	function updateEnemyHpBarStyles(hpBarSelector, hpPercent, maxWidth) {
-		if(maxWidth > 0) {
-			$(hpBarSelector).css("width", maxWidth * hpPercent);
-		} else {
-			$(hpBarSelector).css("width", "");
-		}
-		if(hpPercent === undefined || isNaN(hpPercent)) {
-			$(hpBarSelector).css("background", "#999999");
-		} else if(hpPercent <= 0.25) {
-			$(hpBarSelector).css("background", "#FF0000");
-		} else if(hpPercent <= 0.50) {
-			$(hpBarSelector).css("background", "#FF9900");
-		} else if(hpPercent <= 0.75) {
-			$(hpBarSelector).css("background", "#FFFF00");
-		} else {
-			$(hpBarSelector).css("background", "#00FF00");
-		}
-		$(hpBarSelector).parent().toggleClass("sunk", hpPercent <= 0);
-	}
-
 	function fillRemodelSlotItemBox(self, itemBox, recipe, rosterId, stars, akashiMstId) {
 		if(!recipe.api_slot_id) return itemBox;
 		const gearMst = KC3Master.slotitem(recipe.api_slot_id);
@@ -5149,153 +4860,6 @@
 			itemBox.addClass("sptype" + recipe.api_sp_type);
 		}
 		return itemBox;
-	}
-
-	function updateHQEXPGained(ele,newDelta) {
-		let
-			maxHQ  = Object.keys(KC3Meta._exp).map(function(a){return parseInt(a);}).reduce(function(a,b){return a>b?a:b;}),
-			hqDt = (PlayerManager.hq.level>=maxHQ ? 3 : ConfigManager.hqExpDetail),
-			hqt  = KC3Meta.term("HQExpAbbrev" + hqDt);
-		return ele
-			.attr("data-exp",hqt)
-			.attr("data-exp-gain",(function(){
-				if(newDelta !== undefined)
-					return newDelta;
-				else if ((ele.attr("data-exp-gain")||"").length > 0)
-					return KC3SortieManager.hqExpGained;
-				else
-					return "";
-			}()))
-			.text( KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]) );
-	}
-
-	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {
-		let fContactIcon = null,
-			eContactIcon = null,
-			contactSpan = $("<span/>");
-		if(fcontactId > 0){
-			let fcpMaster = KC3Master.slotitem(fcontactId);
-			fContactIcon = $("<img/>")
-				.attr("src", KC3Meta.itemIcon(fcpMaster.api_type[3]))
-				.attr("title", KC3Meta.gearName(fcpMaster.api_name))
-				.attr("alt", fcontactId);
-		}
-		if(econtactId > 0){
-			let ecpMaster = KC3Master.slotitem(econtactId);
-			eContactIcon = $("<img/>")
-				.attr("src", KC3Meta.itemIcon(ecpMaster.api_type[3]))
-				.attr("title", KC3Meta.gearName(ecpMaster.api_name))
-				.attr("alt", econtactId);
-		}
-		contactSpan
-			.append(!!fContactIcon ? fContactIcon : fcontact)
-			.append(KC3Meta.term("BattleContactVs"))
-			.append(!!eContactIcon ? eContactIcon : econtact);
-		return contactSpan;
-	}
-
-	function updateMapGauge(gaugeDmg, fsKill, noBoss) {
-		// Map Gauge and status
-		let thisMapId = KC3SortieManager.getSortieMap().join(''),
-			thisMap   = KC3SortieManager.getCurrentMapData(),
-			mapHP     = 0,
-			onBoss    = KC3SortieManager.currentNode().isValidBoss(),
-			depleteOK = onBoss || !!noBoss,
-			mainFsKill= !!fsKill;
-
-		// Normalize Parameters
-		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
-
-		if(Object.notEmpty(thisMap)){
-			$(".module.activity .map_info").removeClass("map_finisher");
-			$(".module.activity .map_hp").removeAttr("title");
-			if(KC3SortieManager.isPvP() || KC3Meta.isEventWorld(KC3SortieManager.map_world)){
-				$(".module.activity .map_gauge").removeAttr("titlealt");
-			} else {
-				const minimapImg = $("<img/>")
-					.attr("src", "/assets/img/client/minimaps/m{0}.png".format(thisMapId))
-					.attr("width", 300).attr("height", 180)
-					.attr("alt", KC3Meta.term("MinimapImageFailure"));
-				$(".module.activity .map_gauge").attr("titlealt",
-					$("<div></div>").css({ "width": "300px", "height": "180px" })
-						.append(minimapImg).prop("outerHTML")
-				).lazyInitTooltip({
-					position: {
-						my: "left top", at: "left bottom+2",
-						of: $(".module.activity .sortie_nodes"),
-					},
-				});
-			}
-			if( thisMap.clear && !thisMap.killsRequired ){
-				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
-				$(".module.activity .map_gauge .curhp").css('width','0%');
-			}else{
-				let requireFinisher = false;
-
-				// If HP-based gauge
-				if(typeof thisMap.maxhp != "undefined"){
-					// Reduce current map HP with known gauge damage given
-					mapHP = thisMap.curhp - gaugeDmg;
-					// Normalize the gauge until flagship sinking flag
-					mapHP = Math.max(mapHP, mainFsKill ? 0 : 1);
-
-					let rate = [mapHP,thisMap.curhp].sort(function(a,b){
-						return b-a;
-					}).map(function(x){
-						return (x/thisMap.maxhp)*100;
-					});
-
-					console.debug("Map HP:",thisMap.curhp,thisMap.baseHp,rate[0],rate[1]);
-					$(".module.activity .map_hp").text([
-						thisMap.curhp,
-						thisMap.curhp > 9999 ? "" : " ",
-						"/",
-						thisMap.maxhp > 9999 ? "" : " ",
-						thisMap.maxhp
-					].join(""));
-					$(".module.activity .map_gauge")
-						.find('.nowhp').css("width", (rate[0])+"%").end()
-						.find('.curhp').css("width", (rate[1])+"%").end();
-
-					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
-				// If kill-based gauge
-				}else{
-					let totalKills = thisMap.killsRequired || KC3Meta.gauge(thisMapId, thisMap.gaugeNum);
-					console.debug("Map " + thisMapId + " total kills:", totalKills);
-					let killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss);
-					let postBounty = killsLeft - (depleteOK && mainFsKill);
-					if(totalKills){
-						$(".module.activity .map_hp")
-							.text( killsLeft + " / " + totalKills + KC3Meta.term("BattleMapKills"));
-						$(".module.activity .map_gauge")
-							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
-							.find('.nowhp').css("width", ( (killsLeft/totalKills)*100)+"%").end();
-
-						requireFinisher = killsLeft > 0 && killsLeft <= 1;
-					}else{
-						$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNotClear") );
-					}
-				}
-
-				if(requireFinisher){
-					(function(){
-						let infoElm = $(".module.activity .map_info");
-						infoElm.addClass("map_finisher");
-						if(!ConfigManager.info_blink_gauge)
-							infoElm.addClass("noBlink").removeClass("use-gpu");
-						else
-							infoElm.addClass("use-gpu").removeClass("noBlink");
-						$(".module.activity .map_hp")
-							.attr("title", $(".module.activity .map_hp").text())
-							.text(KC3Meta.term("StrategyEvents1HP"))
-							.lazyInitTooltip();
-					})();
-				}
-			}
-		}else{
-			$(".module.activity .map_hp").removeAttr("title")
-				.text( KC3Meta.term("BattleMapNoHpGauge") );
-		}
 	}
 
 	function UpdateRepairTimerDisplays(docking, akashi){
@@ -5380,24 +4944,6 @@
 				KC3Notification.notifySparkle();
 			}
 		}
-	}
-
-	function copyToClipboard(text) {
-		return new Promise((resolve, reject) => {
-			const copyHandler = function(e) {
-				e.preventDefault();
-				if(e.clipboardData) {
-					e.clipboardData.setData("text/plain", text);
-					resolve(text, e);
-				} else {
-					reject(e, text);
-				}
-				return true;
-			};
-			document.addEventListener("copy", copyHandler);
-			document.execCommand("copy");
-			document.removeEventListener("copy", copyHandler);
-		});
 	}
 
 })();
