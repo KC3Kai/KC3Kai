@@ -65,36 +65,11 @@
 		}
 	};
 	(function($) {
-		// AOP around the dispatcher for any exception thrown from event handlers
-		var originalEventDispatch = $.event.dispatch;
-		$.event.dispatch = function() {
-			try {
-				originalEventDispatch.apply(this, arguments);
-			} catch(error) {
-				console.error("Uncaught event", error, this);
-				throw error;
-			}
-		};
 		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
 				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
 			}
-			return this;
-		};
-		// Actively close tooltips of element and its children
-		$.fn.hideChildrenTooltips = function() {
-			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
-				if(typeof $(el).tooltip("instance") !== "undefined")
-					$(el).tooltip("close");
-			});
-			return this;
-		};
-		// Create native-like tooltips of element and its children
-		$.fn.createChildrenTooltips = function() {
-			$.each($("[title]:not([disabled])", this), function(_, el){
-				$(el).lazyInitTooltip();
-			});
 			return this;
 		};
 	}(jQuery));
@@ -869,20 +844,26 @@
 		});
 
 		// Fleet/LBAS view toggled by mousewheel
-		$(".module.controls").on("mousewheel", (ev) => {
-			const scrollableContainer = $(".module.controls .scrollable").get(0);
-			if (scrollableContainer === ev.originalEvent.target
-				|| scrollableContainer === ev.originalEvent.target.parentNode
-				|| scrollableContainer === ev.originalEvent.target.parentNode.parentNode) {
-				return;
-			}
-			const btns = $(".module.controls .control[class*='fleet_']");
-			const curIndex = btns.filter(".active").index();
-			const newIndex = (curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1))
-				.wrap(0, btns.length - 1);
-			if (newIndex === curIndex) return;
-			btns.eq(newIndex).trigger("click");
-		});
+		$(".module.controls")
+			.on('mousewheel', (ev) => {
+				const scrollableContainer = $(".module.controls .scrollable").get(0);
+				if (scrollableContainer === ev.originalEvent.target
+					|| scrollableContainer === ev.originalEvent.target.parentNode
+					|| scrollableContainer === ev.originalEvent.target.parentNode.parentNode) {
+					return;
+				}
+				const btns = $(".module.controls .control[class*='fleet_']");
+				const curIndex = btns.filter(".active").index();
+				const newIndex = (curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1))
+					.wrap(0, btns.length - 1);
+				if (newIndex === curIndex) return;
+				btns.removeClass('active');
+				btns.eq(newIndex).addClass('active');
+			})
+			// Action that runs only after the user stops wheeling
+			.on('mousewheel', $.debounce(300, (ev) => {
+				$(".module.controls .control[class*='fleet_'].active").trigger('click');
+			}));
 
 		const scrollControlButtons = (setScrollLeft) => {
 			const buttonCount = $(".module.controls .control_btn").length;

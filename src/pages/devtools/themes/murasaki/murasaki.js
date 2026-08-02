@@ -64,36 +64,11 @@
 		}
 	};
 	(function($) {
-		// AOP around the dispatcher for any exception thrown from event handlers
-		let originalEventDispatch = $.event.dispatch;
-		$.event.dispatch = function() {
-			try {
-				originalEventDispatch.apply(this, arguments);
-			} catch(error) {
-				console.error("Uncaught event", error, this);
-				throw error;
-			}
-		};
 		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
 				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
 			}
-			return this;
-		};
-		// Actively close tooltips of element and its children
-		$.fn.hideChildrenTooltips = function() {
-			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
-				if(typeof $(el).tooltip("instance") !== "undefined")
-					$(el).tooltip("close");
-			});
-			return this;
-		};
-		// Create native-like tooltips of element and its children
-		$.fn.createChildrenTooltips = function() {
-			$.each($("[title]:not([disabled])", this), function(_, el){
-				$(el).lazyInitTooltip();
-			});
 			return this;
 		};
 	}(jQuery));
