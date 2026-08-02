@@ -364,13 +364,7 @@
 			}
 		});
 		
-		// Resize window to 1200x720
-		$(".module.controls .btn_resize").on("click", function(){
-			// Send fit-screen request to service to be forwarded to gameplay page
-			(new RMsg("service", "fitScreen", {
-				tabId: chrome.devtools.inspectedWindow.tabId
-			})).execute();
-		});
+		KC3ThemeUtil.addFitScreen();
 		
 		// Mute button
 		$(".module.controls .btn_mute").on("click", function(){

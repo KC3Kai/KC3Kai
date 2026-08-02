@@ -241,37 +241,6 @@
 		return $(element).prop('scrollWidth') > $(element).width();
 	};
 
-	// A jquery-ui tooltip options like native one
-	KC3StrategyTabs.nativeTooltipOptions = {
-		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
-		items: "[title],[titlealt]",
-		content: function(){
-			// Default escaping not used, keep html, simulate native one
-			return ($(this).attr("title") || $(this).attr("titlealt") || "")
-				.replace(/\n/g, "<br/>")
-				.replace(/\t/g, "&emsp;&emsp;");
-		}
-	};
-	(function($) {
-		/*
-		// For global error debugging
-		window.onerror = function(messageOrEvent, source, lineno, colno, error) {
-			console.debug(messageOrEvent, error);
-		};
-		*/
-		// A lazy initializing method, prevent duplicate tooltip instance
-		$.fn.lazyInitTooltip = function(opts, isExtendDefault = true) {
-			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip(
-					isExtendDefault ?
-						$.extend(true, {}, KC3StrategyTabs.nativeTooltipOptions, opts) :
-						opts || KC3StrategyTabs.nativeTooltipOptions
-				);
-			}
-			return this;
-		};
-	}(jQuery));
-	
 	// Allow user to set any option except for dataType, cache, and url
 	jQuery.cachedScript = function(url, options, success) {
 		options = $.extend(options || {}, {

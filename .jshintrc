@@ -2,6 +2,7 @@
 	"globals": {
 		"PS": true,
 		"ExpeditionHelper": true,
+		"KC3ThemeUtil": true,
 		"ConfigManager": true,
 		"KC3QueueManager": true,
 		"KC3GearManager": true,
