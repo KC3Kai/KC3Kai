@@ -681,6 +681,23 @@ String.prototype.digest = function(alg) {
 		rfs = rfs === undefined ? Infinity : rfs;
 		return Math.min(Math.max(lfs, rfs), Math.max(Math.min(lfs, rfs), this));
 	};
+
+	Number.prototype.clamp = function(lower, upper) {
+		var l = Number.isFinite(lower) ? Number(lower) : -Infinity;
+		var u = Number.isFinite(upper) ? Number(upper) : Infinity;
+		return l > u ?
+			Math.max(u, Math.min(l, this)) :
+			Math.max(l, Math.min(u, this));
+	};
+
+	Number.prototype.wrap = function(lower, upper) {
+		var l = Number(lower), u = Number(upper);
+		if(l > u) { l = Number(upper); u = Number(lower); }
+		if(this < l) return u;
+		if(this > u) return l;
+		return this.valueOf();
+	};
+
 }).call(Number);
 
 /* JS NATIVE CLASS */
