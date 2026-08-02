@@ -66,6 +66,8 @@
   };
 
   Util.prototype.addCommonActivity = function () {
+    const self = this;
+
     // Switching Activity Tabs
     $(".module.activity .activity_tabs").on("mousewheel", (ev) => {
       const tabs = $(".module.activity .activity_tab");
@@ -82,7 +84,7 @@
       $(this).addClass("active");
       $(".module.activity .activity_box").hide();
       if (target === "expeditionPlanner") {
-        this.listener.UpdateExpeditionPlanner();
+        self.listener.UpdateExpeditionPlanner();
       }
       $(".module.activity .activity_" + target).show();
     });
