@@ -758,22 +758,7 @@
 			checkAndRestartUiTimer();
 		});
 
-		// Switching Activity Tabs
-		$(".module.activity .activity_tab").on("click", function(){
-			let target = $(this).data("target");
-			$(".module.activity .activity_tab").removeClass("active");
-			$(this).addClass("active");
-			$(".module.activity .activity_box").hide();
-			if(target === "expeditionPlanner"){
-				MurasakiListeners.UpdateExpeditionPlanner();
-			}
-			$(".module.activity .activity_" + target).show();
-		});
-		$(".module.activity .activity_tab.active").trigger("click");
-
-		$(".module.activity .activity_dismissable").on("click", function(){
-			$("#atab_basic").trigger("click");
-		});
+		KC3ThemeUtil.addCommonActivity();
 
 		// Expedition Planner
 		$(".expedition_entry").on("click",function(){
@@ -831,40 +816,9 @@
 			}
 		});
 
-		// Scrollable control buttons
-		$(".module.controls .scroll_btn").on("click", function(){
-			let buttonCount = $(".module.controls .control_btn").length;
-			let buttonSize = $(".module.controls .control_btn").outerWidth(true);
-			let containerSize = $(".module.controls .scrollable").outerWidth(true);
-			let maxLeft = buttonSize * (buttonCount - Math.floor(containerSize / buttonSize));
-			let currentLeft = $(".module.controls .scrollable").scrollLeft();
-			let goLeft = $(this).hasClass("scroll_left");
-			let newLeft = goLeft ?
-				Math.max(currentLeft - buttonSize, 0) :
-				Math.min(currentLeft + buttonSize, maxLeft);
-			$(".module.controls .scrollable").scrollLeft(newLeft);
-			$(".module.controls .scroll_left").toggleClass("disabled", newLeft <= 0);
-			$(".module.controls .scroll_right").toggleClass("disabled", newLeft >= maxLeft);
-		});
-
-		// Resize window to 1200x720
-		$(".module.controls .btn_resize").on("click", function(){
-			// Send fit-screen request to service to be forwarded to gameplay page
-			(new RMsg("service", "fitScreen", {
-				tabId: chrome.devtools.inspectedWindow.tabId
-			})).execute();
-		});
-
-		// Mute button
-		$(".module.controls .btn_mute").on("click", function(){
-			// Send toggle sound request to service to be forwarded to gameplay page
-			(new RMsg("service", "toggleSounds", {
-				tabId: chrome.devtools.inspectedWindow.tabId
-			},function(isMuted){
-				$(".module.controls .btn_mute img")
-					.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
-			})).execute();
-		});
+		KC3ThemeUtil.addCommonControls();
+		KC3ThemeUtil.addToggleSounds();
+		KC3ThemeUtil.addFitScreen();
 
 		// Taiha Alert toggle button
 		$(".module.controls .btn_alert_toggle").on("click", function (){
@@ -876,28 +830,8 @@
 			}
 		}).toggleClass("disabled", !ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 
-		// Reload subtitle quotes
-		$(".module.controls .btn_reload_quotes").on("click", function(){
-			// TODO request latest quotes.json for current lang from remote repo
-			// Tell game screen tab use latest meta
-			(new RMsg("service", "reloadMeta", {
-				tabId: chrome.devtools.inspectedWindow.tabId,
-				type: "Quotes"
-			})).execute();
-			// TODO add UI response to show reloading status
-		});
-
-		// Reload meta of quests
-		$(".module.controls .btn_reload_quests").on("click", function(){
-			// TODO request latest quests.json for both EN and current lang from remote repo
-			KC3Meta.reloadQuests();
-			// Tell game screen tab use latest meta
-			(new RMsg("service", "reloadMeta", {
-				tabId: chrome.devtools.inspectedWindow.tabId,
-				type: "Quests"
-			})).execute();
-			// TODO add UI response to show reloading status
-		});
+		KC3ThemeUtil.addReloadQuotes();
+		KC3ThemeUtil.addReloadQuests();
 
 		// Trigger initial selected fleet num
 		$(".module.controls .fleet_num.active").trigger("click");
@@ -5115,6 +5049,8 @@
 			return false;
 		}
 	};
+
+	KC3ThemeUtil.setListener(MurasakiListeners);
 
 	function openSimulatorWindow(hashData, isPopup) {
 		try {
