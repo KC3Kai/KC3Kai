@@ -3,7 +3,7 @@
  */
 (() => {
   function Util() {
-  };
+  }
 
   Util.prototype.setListener = function (listener) {
     this.listener = listener;
@@ -117,7 +117,7 @@
         tabId: chrome.devtools.inspectedWindow.tabId
       })).execute();
     });
-  }
+  };
 
   Util.prototype.addReloadQuotes = function () {
     // Reload subtitle quotes
