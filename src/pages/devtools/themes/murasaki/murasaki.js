@@ -52,27 +52,6 @@
 	// QuestList api result cache
 	let questCacheResult = [];
 
-	// A jquery-ui tooltip options like native one
-	let nativeTooltipOptions = {
-		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
-		items: "[title],[titlealt]",
-		content: function(){
-			// Default escaping not used, keep html, simulate native one
-			return ($(this).attr("title") || $(this).attr("titlealt") || "")
-				.replace(/\n/g, "<br/>")
-				.replace(/\t/g, "&emsp;&emsp;");
-		}
-	};
-	(function($) {
-		// A lazy initializing method, prevent duplicate tooltip instance
-		$.fn.lazyInitTooltip = function(opts) {
-			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
-			}
-			return this;
-		};
-	}(jQuery));
-
 	// Reusable contents of Error Report
 	let errorReport = {
 		title: "",
