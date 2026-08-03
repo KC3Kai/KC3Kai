@@ -2,7 +2,6 @@
 	"globals": {
 		"PS": true,
 		"ExpeditionHelper": true,
-		"KC3ThemeUtil": true,
 		"ConfigManager": true,
 		"KC3QueueManager": true,
 		"KC3GearManager": true,
@@ -66,6 +65,7 @@
 		"KC3LodgerBuffer": true,
 		"KC3SortieLogs": true,
 		"KC3ShipListGrid": true,
+		"KC3ThemeUtils": true,
 		"KC3NatsuiroShipbox": true,
 		"KC3MurasakiShipbox": true,
 		"KC3PlainShipbox": true,

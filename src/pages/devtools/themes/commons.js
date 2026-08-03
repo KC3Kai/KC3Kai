@@ -1,21 +1,33 @@
 /**
- * Common functions for KC3 devtool theme
+ * Common utility functions for KC3改 devtool themes.
+ *
+ * Kanji `Kai` here helps both human and text editor to recoginze this file as UTF-8 without BOM.
+ * If you dont see a kanji there, please set your editor for re-loading with UTF-8 charset.
  */
 (() => {
+  "use strict";
+
   // #region Core
 
-  function Util() {
+  function Utils() {
+    this.supports = ["natsuiro", "moonlight", "murasaki", "plain"];
   }
 
-  Util.prototype.setListener = function (listener) {
+  Utils.prototype.setListener = function (listener) {
     this.listener = listener;
   };
 
   // #endregion Core
 
+  // #region Static constants
+
+  Utils.LOG3 = Math.log10(3);
+
+  // #endregion Static constants
+
   // #region Initialization
 
-  Util.prototype.initDataManagers = function () {
+  Utils.prototype.initDataManagers = function () {
     // Initialize data managers
     ConfigManager.load();
     KC3Master.init();
@@ -35,7 +47,7 @@
     KC3QuestSync.init();
   };
 
-  Util.prototype.initLiveTranslations = function () {
+  Utils.prototype.initLiveTranslations = function () {
     // Live translations of Quests, only work for EN
     if (ConfigManager.checkLiveQuests && ConfigManager.language == "en") {
       $.ajax({
@@ -71,7 +83,7 @@
     }
   };
 
-  Util.prototype.activateGame = function () {
+  Utils.prototype.activateGame = function () {
     // Attempt to activate game on inspected window
     (new RMsg("service", "activateGame", {
       tabId: chrome.devtools.inspectedWindow.tabId
@@ -82,7 +94,7 @@
 
   // #region UI Event Binding
 
-  Util.prototype.addCommonControls = function () {
+  Utils.prototype.addCommonControls = function () {
     // Fleet/LBAS view toggled by mousewheel
     $(".module.controls")
       .on('mousewheel', (ev) => {
@@ -138,7 +150,7 @@
     });
   };
 
-  Util.prototype.addCommonActivity = function () {
+  Utils.prototype.addCommonActivity = function () {
     const self = this;
 
     // Switching Activity Tabs
@@ -169,7 +181,7 @@
     });
   };
 
-  Util.prototype.addToggleSounds = function () {
+  Utils.prototype.addToggleSounds = function () {
     // Mute button
     $(".module.controls .btn_mute").on("click", function () {
       // Send toggle sound request to service to be forwarded to gameplay page
@@ -182,7 +194,7 @@
     });
   };
 
-  Util.prototype.addFitScreen = function () {
+  Utils.prototype.addFitScreen = function () {
     // Resize window to 1200x720
     $(".module.controls .btn_resize").on("click", function () {
       // Send fit-screen request to service to be forwarded to gameplay page
@@ -192,7 +204,7 @@
     });
   };
 
-  Util.prototype.addReloadQuotes = function () {
+  Utils.prototype.addReloadQuotes = function () {
     // Reload subtitle quotes
     $(".module.controls .btn_reload_quotes").on("click", function () {
       // TODO request latest quotes.json for current lang from remote repo
@@ -205,7 +217,7 @@
     });
   };
 
-  Util.prototype.addReloadQuests = function () {
+  Utils.prototype.addReloadQuests = function () {
     // Reload meta of quests
     $(".module.controls .btn_reload_quests").on("click", function () {
       // TODO request latest quests.json for both EN and current lang from remote repo
@@ -229,7 +241,7 @@
    * returns the configuration for expedTab
    * (previously called localStorage.expedTabLastPick)
    */
-  Util.prototype.ExpedTabValidateConfig = function (idToValid) {
+  Utils.prototype.ExpedTabValidateConfig = function (idToValid) {
     // data format for expedTab:
     // data.fleetConf: an object
     // data.fleetConf[fleetNum]:
@@ -280,7 +292,7 @@
     return data;
   };
 
-  Util.prototype.switchToFleet = function (targetFleet) {
+  Utils.prototype.switchToFleet = function (targetFleet) {
     if (targetFleet === "combined") {
       $(".module.controls .fleet_rengo").trigger("click");
     } else if (targetFleet === "lbas") {
@@ -301,7 +313,7 @@
 
   // #region Sortie & Battle Display
 
-  Util.prototype.clearSortieData = function () {
+  Utils.prototype.clearSortieData = function () {
     $(".module.activity .activity_box").hideChildrenTooltips();
     $(".module.activity .activity_battle").css("opacity", "0.25");
     $(".module.activity .map_world").text("").attr("title", "").removeClass("debuffed");
@@ -323,7 +335,7 @@
     $(".admiral_lvnext").attr("data-exp-gain", "");
   };
 
-  Util.prototype.clearBattleData = function () {
+  Utils.prototype.clearBattleData = function () {
     $(".module.activity .activity_box").hideChildrenTooltips();
     $(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
     $(".module.activity .abyss_ship img").attr("titlealt", "").lazyInitTooltip();
@@ -372,7 +384,7 @@
     $(".module.activity .battle_planes .bomber_enemy .plane_icon img").attr("src", KC3Meta.itemIcon(7));
   };
 
-  Util.prototype.updateMapGauge = function (gaugeDmg, fsKill, noBoss) {
+  Utils.prototype.updateMapGauge = function (gaugeDmg, fsKill, noBoss) {
     // Map Gauge and status
     var thisMapId = KC3SortieManager.getSortieMap().join(''),
       thisMap = KC3SortieManager.getCurrentMapData(),
@@ -477,7 +489,7 @@
     }
   };
 
-  Util.prototype.updateEnemyHpBarStyles = function (hpBarSelector, hpPercent, maxWidth) {
+  Utils.prototype.updateEnemyHpBarStyles = function (hpBarSelector, hpPercent, maxWidth) {
     if (maxWidth > 0) {
       $(hpBarSelector).css("width", maxWidth * hpPercent);
     } else {
@@ -497,7 +509,7 @@
     $(hpBarSelector).parent().toggleClass("sunk", hpPercent <= 0);
   };
 
-  Util.prototype.buildContactPlaneSpan = function (fcontactId, fcontact, econtactId, econtact) {
+  Utils.prototype.buildContactPlaneSpan = function (fcontactId, fcontact, econtactId, econtact) {
     var fContactIcon = null,
       eContactIcon = null,
       contactSpan = $("<span/>");
@@ -522,7 +534,7 @@
     return contactSpan;
   };
 
-  Util.prototype.prepareBattleLogsData = function () {
+  Utils.prototype.prepareBattleLogsData = function () {
     // Don't pop up if a battle has not started yet
     if (!(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
       || KC3SortieManager.countNodes() < 1) { return false; }
@@ -553,7 +565,7 @@
 
   // #region External Windows
 
-  Util.prototype.openSimulatorWindow = function (hashData, isPopup) {
+  Utils.prototype.openSimulatorWindow = function (hashData, isPopup) {
     try {
       const url = "https://kc3kai.github.io/kancolle-replay/simulator.html#" + JSON.stringify(hashData);
       const ref = window.open(url, "simulator", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
@@ -569,7 +581,7 @@
     }
   };
 
-  Util.prototype.openBattleLogsWindow = function (data, isPopup) {
+  Utils.prototype.openBattleLogsWindow = function (data, isPopup) {
     try {
       const url = "https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data);
       const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars,popup"));
@@ -586,7 +598,7 @@
 
   // #region UI Helpers
 
-  Util.prototype.copyToClipboard = function (text) {
+  Utils.prototype.copyToClipboard = function (text) {
     return new Promise((resolve, reject) => {
       const copyHandler = function (e) {
         e.preventDefault();
@@ -604,7 +616,7 @@
     });
   };
 
-  Util.prototype.updateQuestActivityTab = function (isGoHome) {
+  Utils.prototype.updateQuestActivityTab = function (isGoHome) {
     if (ConfigManager.info_quest_activity) {
       $(".activity_tabs .activity_tab").addClass("tab_count_5");
       $("#atab_quest").show();
@@ -620,7 +632,7 @@
     }
   };
 
-  Util.prototype.updateHQEXPGained = function (ele, newDelta) {
+  Utils.prototype.updateHQEXPGained = function (ele, newDelta) {
     var
       maxHQ = Object.keys(KC3Meta._exp).map(function (a) { return parseInt(a); }).reduce(function (a, b) { return a > b ? a : b; }),
       hqDt = (PlayerManager.hq.level >= maxHQ ? 3 : ConfigManager.hqExpDetail),
@@ -638,6 +650,6 @@
       .text(KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]));
   };
 
-  window.KC3ThemeUtil = new Util();
+  window.KC3ThemeUtils = new Utils();
 
 })();
