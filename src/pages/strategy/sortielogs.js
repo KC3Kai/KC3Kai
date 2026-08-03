@@ -1617,11 +1617,20 @@
 							if(mstat.onBoss.hpdat[sortie.id]){
 								mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
 									$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
-									if (sortie.eventmap && sortie.eventmap.api_gauge_type === 3 && sortie.eventmap.api_sub_value) {
-										const delta = sortie.eventmap.api_sub_value;
-										$('.subhp', sstat)
-											.text(delta * -1)
-											.attr('title', `${sortie.eventmap.api_now_maphp} - ${delta} = ${sortie.eventmap.api_now_maphp - delta}`);
+									// recorded info from idb instead of localStorage
+									if (sortie.eventmap) {
+										const prehp = sortie.eventmap.api_now_maphp || 0;
+										const tothp = sortie.eventmap.api_max_maphp || 0;
+										if (sortie.eventmap.api_gauge_type === 3 && sortie.eventmap.api_sub_value) {
+											const delta = sortie.eventmap.api_sub_value;
+											$(".subhp", sstat).text(`TP -${delta}`)
+												.attr("title", `${prehp - delta} (/${tothp}) = ${prehp} - ${delta}`);
+										} else if (sortie.eventmap.api_dmg_maphp) {
+											const delta = sortie.eventmap.api_dmg_maphp;
+											const bosshp = sortie.eventmap.api_bosshp;
+											$(".subhp", sstat).text(`-${delta}`)
+												.attr("title", `${prehp - delta} (/${tothp}) = ${prehp} - ${delta} (/${Object.nullishTo(bosshp, '?')})`);
+										}
 									}
 								});
 							}

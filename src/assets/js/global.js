@@ -681,7 +681,7 @@ String.prototype.digest = function(alg) {
 		rfs = rfs === undefined ? Infinity : rfs;
 		return Math.min(Math.max(lfs, rfs), Math.max(Math.min(lfs, rfs), this));
 	};
-
+	// almost equivalent to previous method
 	Number.prototype.clamp = function(lower, upper) {
 		var l = Number.isFinite(lower) ? Number(lower) : -Infinity;
 		var u = Number.isFinite(upper) ? Number(upper) : Infinity;
@@ -696,6 +696,17 @@ String.prototype.digest = function(alg) {
 		if(this < l) return u;
 		if(this > u) return l;
 		return this.valueOf();
+	};
+
+	Number.prototype.warp = function(lower, upper) {
+		var l = Number(lower), u = Number(upper);
+		if(l > u) { l = Number(upper); u = Number(lower); }
+		var v = this.valueOf();
+		while(v < l || v > u) {
+			if(v < l) v += u - l + 1;
+			if(v > u) v -= u - l + 1;
+		}
+		return v;
 	};
 
 }).call(Number);

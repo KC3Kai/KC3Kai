@@ -343,7 +343,7 @@
 			}
 		});
 		
-		KC3ThemeUtil.addFitScreen();
+		KC3ThemeUtils.addFitScreen();
 		
 		// Mute button
 		$(".module.controls .btn_mute").on("click", function(){

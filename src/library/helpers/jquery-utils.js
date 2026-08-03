@@ -1,4 +1,8 @@
+/**
+ * KC3改 extended utilities for jquery & jquery-ui, so must be loaded after jquery.
+ */
 (() => {
+  "use strict";
 
   /**
    * Simulate throttle/debounce func like the ones in lodash
@@ -15,7 +19,8 @@
       }
       function wrapper() {
         /* jshint validthis:true */
-        var self = this || this_obj, args = arguments;
+        var self = this || this_obj;
+        var args = arguments;
         var elapsed = Date.now() - last_exec;
         function exec() {
           last_exec = Date.now();
@@ -48,6 +53,7 @@
         : jq_throttle(delay, callback, at_begin !== false, this_obj);
     };
   }(jQuery));
+
 
   /**
    * jQuery Unveil
@@ -95,7 +101,117 @@
       unveil();
       return this;
     };
-  })(jQuery);
+  }(jQuery));
+
+
+  /**
+   * jQuery Visible/Unvisible plugin, v2.0.3 modded
+   * Copyright (c) 2017-2018 Dmitry Zavodnikov.
+   * Licensed under the MIT License.
+   *
+   * By using DOM `Mutation Observer API` (chrome m18),
+   * binds some event functions to an element like `$.fn.on()`,
+   * triggered on some kind of changes (here visibility) occurred on the element.
+   *
+   * Alt full ver: https://github.com/kapetan/jquery-observe
+   */
+  (function ($) {
+    var BECAME_VISIBLE_MESSAGE   = 'visible';
+    var BECAME_UNVISIBLE_MESSAGE = 'invisible';
+    var unvisibleSet = [];
+
+    function isVisible(element) {
+      return $(element).is(':visible');
+    }
+    function inUnvisibleSet(element) {
+      return unvisibleSet.indexOf(element) !== -1;
+    }
+    function isElement(element) {
+      return element.nodeType === 1;
+    }
+    function addToUnvisibleSet(element) {
+      if (!inUnvisibleSet(element) && isElement(element)) {
+        unvisibleSet.push(element);
+      }
+    }
+    function removeFromUnvisibleSet(element) {
+      var idx = unvisibleSet.indexOf(element);
+      if (idx != -1) {
+        unvisibleSet.splice(idx, 1);
+      }
+    }
+    function initUnvisibleSet(element) {
+      element.childNodes.forEach(function(child) {
+        if (!isVisible(child)) {
+          sendMessage(child, BECAME_UNVISIBLE_MESSAGE);
+          addToUnvisibleSet(child);
+        } else {
+          sendMessage(child, BECAME_VISIBLE_MESSAGE);
+          initUnvisibleSet(child);
+        }
+      });
+    }
+    function sendMessage(element, msg) {
+      $(element).trigger(msg);
+    }
+    function sendTreeMessage(element, msg) {
+      sendMessage(element, msg);
+      element.childNodes.forEach(function(child) {
+        sendTreeMessage(child, msg);
+      });
+    }
+    function becameVisible(element) {
+      removeFromUnvisibleSet(element);
+      sendTreeMessage(element, BECAME_VISIBLE_MESSAGE);
+    }
+    function becameUnvisible(element) {
+      addToUnvisibleSet(element);
+      sendTreeMessage(element, BECAME_UNVISIBLE_MESSAGE);
+    }
+
+    function bindVisibleUnvisible() {
+      // Select the target element
+      var target = $('body').get(0);
+      // Choose browser-specific MutationObserver
+      var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+      // Create an observer instance
+      var observer = new MutationObserver(function(mutations) {
+        mutations.map(function(mutation) {
+          return mutation.target;
+        }).forEach(function(element) {
+          if (inUnvisibleSet(element)) {
+            if (isVisible(element)) {
+              becameVisible(element);
+            }
+          } else {
+            if (!isVisible(element)) {
+              becameUnvisible(element);
+            }
+          }
+        });
+      });
+
+      // Configuration of the observer
+      var config = {
+        childList:              false,
+        attributes:             true,
+        characterData:          false,
+        subtree:                true,
+        attributeOldValue:      false,
+        characterDataOldValue:  false,
+        attributeFilter:        ['class', 'style']
+      };
+      // Pass in the target element, as well as the observer options
+      observer.observe(target, config);
+    }
+
+    $.bindVisibleObserver = function() {
+      initUnvisibleSet($('body').get(0));
+      bindVisibleUnvisible();
+    };
+  }(jQuery));
+
 
   (function ($) {
     // AOP around the dispatcher for any exception thrown from event handlers
@@ -120,10 +236,14 @@
           .replace(/\t/g, "&emsp;&emsp;");
       }
     };
+
     // A lazy initializing method, prevent duplicate tooltip instance
-    $.fn.lazyInitTooltip = function (opts) {
+    $.fn.lazyInitTooltip = function (opts, isExtendDefault = true) {
       if (typeof this.tooltip("instance") === "undefined") {
-        this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
+        this.tooltip(isExtendDefault ?
+          $.extend(true, {}, nativeTooltipOptions, opts) :
+          opts || nativeTooltipOptions
+        );
       }
       return this;
     };

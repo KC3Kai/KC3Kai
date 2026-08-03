@@ -4707,12 +4707,13 @@ KC3改 Ship Object
 				1025, 1030, // Wasp
 				529, 536, 889, // Taiyou/Shinyou/Unyou Kai Ni
 				646, // Kaga K2Go
+				//1055, 1060, 1061, // Bearn (forgotten again)
 			].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs:
 			// she was doing air attack against surface ships, but no plane appears if no aircraft equipped.
-			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~
+			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~, Bearn
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
