@@ -229,8 +229,10 @@
 					isMap ? KC3Meta.term("ShipDropMapPickerDefaultOption") : KC3Meta.term("ShipDropWorldPickerDefaultOption")
 				)
 			);
-			$(".filters .massSelect #eventSelected").toggle(KC3Meta.isEventWorld(worldId));
-			$(".filters .massSelect #timeRange").toggle(!KC3Meta.isEventWorld(worldId));
+			$(".filters .massSelect #eventSelected")
+				.css("display", KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
+			$(".filters .massSelect #timeRange")
+				.css("display", !KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
 				if(isMap) {
