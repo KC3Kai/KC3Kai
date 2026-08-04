@@ -233,15 +233,35 @@
 				.css("display", KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
 			$(".filters .massSelect #timeRange")
 				.css("display", !KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
+			// use map for faster lookup
+			const eventWorldTermMap = KC3Meta.eventWorldTerm()
+				.reduce((m, v) => {
+					m.set(v.id, v);
+					return m;
+				}, new Map());
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
-				if(isMap) {
-					if(worldId == String(mapId).slice(0, -1)) {
+				const world = Number(String(mapId).slice(0, -1));
+				if (isMap) {
+					if (worldId === world) {
 						this.addMapSwitcherOption(mapId, isMap, listElem);
 					}
-				} else {
-					this.addMapSwitcherOption(mapId, isMap, listElem);
+					return;
 				}
+				const worldTerm = eventWorldTermMap.get(world);
+				if (!worldTerm) {
+					this.addMapSwitcherOption(mapId, isMap, listElem);
+					return;
+				}
+				const option = $("<option />")
+					.attr("value", world)
+					.text(`[${worldTerm.id}] ${KC3Meta.term(worldTerm.label)}`);
+				if (worldTerm.tooltip) {
+					option.addClass('l10n_title');
+					option.attr('title', KC3Meta.term(worldTerm.tooltip));
+				}
+				listElem.append(option);
+				eventWorldTermMap.delete(world);
 			});
 		},
 
