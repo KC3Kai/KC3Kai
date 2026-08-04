@@ -11,7 +11,7 @@
         ---------------------------------*/
         init() {
             this.defineSorters();
-            // this.showListRowCallback = this.showShipLockingRow;
+            //this.showListRowCallback = this.showShipLockingRow;
             this.showListRowCallback = (ship, shipRow) => KC3QueueManager.deferTooltip(() => this.showShipLockingRow(ship, shipRow));
             // Amount of locking tags depends on MO/EO settings of each event,
             // order and colors of tag texture see: main.js#BannerPlate.prototype._getTexture,
@@ -86,10 +86,13 @@
                 $(".filters input").each((_, elem) => { elem.disabled = false; });
                 this.adjustHeight();
                 // Defer another adjustment because at this timing new version chrome still hide dom (fail to get element's size and offset)
-                setTimeout(() => {
+                // `postShow` event no longer effective, schedule to row callbacks limiter queue instead
+                KC3QueueManager.deferTooltip(() => {
+                //setTimeout(() => {
                     this.switchToLockTab(this.currentTab);
                     this.adjustHeight();
-                }, Date.now() - startTime);
+                //}, Date.now() - startTime);
+                });
             });
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
             this.addFilterUI();

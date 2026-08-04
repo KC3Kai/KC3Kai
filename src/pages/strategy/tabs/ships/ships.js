@@ -1440,8 +1440,13 @@
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
 				const elapsed = Date.now() - self.startTime;
-				if(self.scrollList) setTimeout(self.toggleTableScrollbar.bind(self, self.scrollList), elapsed);
 				console.debug("Showing ship list took", elapsed, "milliseconds");
+				if(self.scrollList) {
+					KC3QueueManager.deferTooltip(
+						self.toggleTableScrollbar.bind(self, self.scrollList),
+						9, self.tooltipLimiter
+					);
+				}
 			}, 0);
 		},
 
