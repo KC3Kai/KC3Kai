@@ -1,7 +1,7 @@
 /**
  * Common utility functions for KC3改 devtool themes.
  *
- * Kanji `Kai` here helps both human and text editor to recoginze this file as UTF-8 without BOM.
+ * Kanji `Kai` here helps both human and text editor to recognize this file as UTF-8 without BOM.
  * If you dont see a kanji there, please set your editor for re-loading with UTF-8 charset.
  */
 (() => {

@@ -65,10 +65,9 @@
 			$(".control_panel .selectors select").prop("disabled", true);
 			$(".control_panel .time_range input").prop("disabled", true);
 			$(".loading").show();
-			KC3Database.con.sortie.where("world").equals(world).and(
-				data => data.mapnum === map && data.hq === hqId
-				&& (KC3Meta.isEventWorld(world) ||
-					(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1]))
+			KC3Database.con.sortie.where("[hq+world+mapnum]").equals([hqId, world, map])
+			.and(data => KC3Meta.isEventWorld(world) ||
+				(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1])
 			).each(sortie => {
 				this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
 				allPromises.push(KC3Database.con.battle.where("sortie_id").equals(sortie.id).each(battle => {
@@ -306,7 +305,8 @@
 					stype === 100 ? KC3Meta.term("ShipDropShipTypeFilterItem") :
 					KC3Meta.stype(stype)
 				);
-				this.ship_filter_checkbox[stype] = true;
+				this.ship_filter_checkbox[stype] = Object.nullishTo(this.ship_filter_checkbox[stype], true);
+				$(".filter_box .filter_check", elem).toggle(this.ship_filter_checkbox[stype]);
 				elem.on("click", stypeHandler.bind(this, stype, elem, this.ship_filter_checkbox));
 				if(stype === 100 && KC3Meta.isEventWorld(this.selectedWorld)) elem.hide();
 			}
