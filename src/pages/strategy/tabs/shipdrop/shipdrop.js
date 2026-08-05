@@ -233,47 +233,32 @@
 				.css("display", KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
 			$(".filters .massSelect #timeRange")
 				.css("display", !KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
-			// use map for faster lookup
-			const eventWorldTermMap = KC3Meta.eventWorldTerm()
-				.reduce((m, v) => {
-					m.set(v.id, v);
-					return m;
-				}, new Map());
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
-				const world = Number(String(mapId).slice(0, -1));
 				if (isMap) {
-					if (worldId === world) {
+					if (worldId == String(mapId).slice(0, -1)) {
 						this.addMapSwitcherOption(mapId, isMap, listElem);
 					}
-					return;
-				}
-				const worldTerm = eventWorldTermMap.get(world);
-				if (!worldTerm) {
+				} else {
 					this.addMapSwitcherOption(mapId, isMap, listElem);
-					return;
 				}
-				const option = $("<option />")
-					.attr("value", world)
-					.text(`[${worldTerm.id}] ${KC3Meta.term(worldTerm.label)}`);
-				if (worldTerm.tooltip) {
-					option.addClass('l10n_title');
-					option.attr('title', KC3Meta.term(worldTerm.tooltip));
-				}
-				listElem.append(option);
-				eventWorldTermMap.delete(world);
 			});
 		},
 
 		addMapSwitcherOption: function(mapId, isMap, list) {
 			const world = String(mapId).slice(0, -1);
 			const map = String(mapId).slice(-1);
+			const eventTerm = KC3Meta.eventWorldTerm(world);
 			const value = isMap ? map : world;
-			const descFunc = isMap ? KC3Meta.mapToDesc : KC3Meta.worldToDesc;
-			if($(`option[value=${value}]`, list).length === 0) {
-				list.append(
-					$("<option />").attr("value", value).text(descFunc.call(KC3Meta, world, map))
-				);
+			const desc = isMap ? KC3Meta.mapToDesc(world, map) :
+				eventTerm.label || KC3Meta.worldToDesc(world);
+			if ($(`option[value=${value}]`, list).length === 0) {
+				const opt = $("<option />").attr("value", value);
+				if (isMap || !eventTerm.label) opt.text(desc);
+				else opt.text("[{0}] {1}".format(world, KC3Meta.term(desc)));
+				if (!isMap && eventTerm.tooltip)
+					opt.attr("title", KC3Meta.term(eventTerm.tooltip));
+				list.append(opt);
 			}
 		},
 
