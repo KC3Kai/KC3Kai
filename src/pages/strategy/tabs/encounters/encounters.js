@@ -89,12 +89,17 @@
 		addMapSwitcherOption: function(mapId, isMap, list) {
 			const world = String(mapId).slice(0, -1);
 			const map = String(mapId).slice(-1);
+			const eventTerm = KC3Meta.eventWorldTerm(world);
 			const value = isMap ? map : world;
-			const descFunc = isMap ? KC3Meta.mapToDesc : KC3Meta.worldToDesc;
-			if($(`option[value=${value}]`, list).length === 0) {
-				list.append(
-					$("<option />").attr("value", value).text(descFunc.call(KC3Meta, world, map))
-				);
+			const desc = isMap ? KC3Meta.mapToDesc(world, map) :
+				eventTerm.label || KC3Meta.worldToDesc(world);
+			if ($(`option[value=${value}]`, list).length === 0) {
+				const opt = $("<option />").attr("value", value);
+				if (isMap || !eventTerm.label) opt.text(desc);
+				else opt.text("[{0}] {1}".format(world, KC3Meta.term(desc)));
+				if (!isMap && eventTerm.tooltip)
+					opt.attr("title", KC3Meta.term(eventTerm.tooltip));
+				list.append(opt);
 			}
 		},
 		

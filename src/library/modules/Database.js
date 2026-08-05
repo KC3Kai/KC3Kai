@@ -494,35 +494,34 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_expeds :function(pageNumber, itemsPerPage, expeds, fleets, sparkled, callback){
-			this.con.expedition
+			return this.con.expedition
 				.where("hq").equals(this.index)
-				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
-				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.and(function(exped){
+				.and(exped => {
 					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
-					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+					return expeds.includes(exped.mission) && fleets.includes(exped.fleetN)
+						&& sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
 				}).reverse()
 				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
 		count_expeds: function(expeds, fleets, sparkled, callback){
-			this.con.expedition
+			return this.con.expedition
 				.where("hq").equals(this.index)
-				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
-				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.and(function(exped){
+				.and(exped => {
 					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
-					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
-				}).toArray(function(arr) {
+					return expeds.includes(exped.mission) && fleets.includes(exped.fleetN)
+						&& sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+				}).toArray(arr => {
 					const gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
 					const ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
 					callback(arr.length, gs, ns);
+					return arr.length;
 				});
 		},
 		
 		get_exped :function(exped_id, callback){
-			this.con.expedition
+			return this.con.expedition
 				.get(Number(exped_id))
 				.then(callback);
 		},
