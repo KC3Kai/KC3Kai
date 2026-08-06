@@ -164,6 +164,10 @@
 			).createChildrenTooltips().on("click", ".sortie_toggles .sortie_toggle", function(){
 				self.toggleSortie(this, true);
 			});
+			// Workaround for batch toggles (FNS only) not working as expected on first time toggling,
+			// by adding display:none style initially to templates, due to slideDown() buggy on first time run.
+			// No effects on ECA buttons since they have no templates.
+			$(".factory .sortie_box .sortie_roster, .factory .sortie_box .sortie_nodes, .factory .sortie_box .sortie_stat").hide();
 			
 			// Select sorties per page
 			$(".tab_"+tabCode+" .sortie_per_page select").on("change", function(){
