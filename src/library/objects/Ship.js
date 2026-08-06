@@ -4960,7 +4960,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.nightCutinRate = function(spType = 0, cutinSubType = "") {
 		if (spType < 1 || this.isDummy()) { return false; }
-		// not sure: DA success rate almost 99%
+		// According statistics of tests, DA success rate fixed to ~99% (109/110?) irrelevant to base rate
 		if (spType === 1) { return 99; }
 		const typeFactor = {
 			2: 115, // TorpTorpMain
