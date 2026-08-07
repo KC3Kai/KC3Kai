@@ -919,16 +919,38 @@
 					}).join(" ");
 				};
 
+				const isOnSortie = sortieId === KC3SortieManager.onSortie;
+				const sKey = "navaloverall:sortie:" + sortieId;
+				const lKey = "navaloverall:lbas:" + sortieId;
+
 				$(".sortie_map", sortieBox).toggleClass('queued loading');
 				let tooltip = "";
 
-				return KC3Database.con.navaloverall
-					.where("type")
-					.equals("sortie" + sortieId)
-					.toArray()
-					.then(arr => {
-						const consumption = buildConsumptionArray(arr);
-						if (!arr.length || consumption.every(v => !v)) {
+				return KC3Cache.get(sKey)
+					.then((cached) => {
+						if (cached) {
+							return cached.value;
+						}
+						return KC3Database.con.navaloverall
+							.where("type")
+							.equals("sortie" + sortieId)
+							.toArray()
+							.then((arr) => {
+								if (!arr.length) {
+									return null;
+								}
+								const consumption = buildConsumptionArray(arr);
+								if (consumption.every(v => !v)) {
+									return null;
+								}
+								if (!isOnSortie) {
+									KC3Cache.set(sKey, consumption);
+								}
+								return consumption;
+							});
+					})
+					.then((consumption) => {
+						if (!consumption) {
 							return;
 						}
 
@@ -940,36 +962,52 @@
 							return;
 						}
 
-						return KC3Database.con.navaloverall
-							.where("type")
-							.equals("sortie" + (sortieId - 1))
-							.first();
-					})
-					.then(firstEntry => {
-						if (!firstEntry) {
-							return;
-						}
+						return KC3Cache.get(lKey)
+							.then((cachedLb) => {
+								if (cachedLb) {
+									return cachedLb.value;
+								}
+								return KC3Database.con.navaloverall
+									.where("type")
+									.equals("sortie" + (sortieId - 1))
+									.first()
+									.then((firstEntry) => {
+										if (!firstEntry) {
+											return null;
+										}
+										return KC3Database.con.navaloverall
+											.offset(firstEntry.id)
+											.until(entry => entry.type === "sortie" + (sortieId + 1))
+											.and(entry => "lbas" + sortieWorld === entry.type)
+											.toArray();
+									})
+									.then((lbArr) => {
+										if (!lbArr) {
+											return null;
+										}
+										const lbConsumption = buildConsumptionArray(lbArr);
+										if (lbConsumption.every(v => !v)) {
+											if (!isOnSortie) {
+												KC3Cache.set(lKey, null);
+											} 
+											return null;
+										}
+										if (!isOnSortie) {
+											KC3Cache.set(lKey, lbConsumption);
+										}
+										return lbConsumption;
+									});
+							})
+							.then((lbConsumption) => {
+								let lbTooltip = "";
+								if (lbConsumption && !lbConsumption.every(v => !v)) {
+									lbTooltip = buildLedgerMessage(lbConsumption);
+								}
 
-						return KC3Database.con.navaloverall
-							.offset(firstEntry.id)
-							.until(entry => entry.type === "sortie" + (sortieId + 1))
-							.and(entry => "lbas" + sortieWorld === entry.type)
-							.toArray();
-					})
-					.then(lbArr => {
-						if (!lbArr) {
-							return;
-						}
-
-						const lbConsumption = buildConsumptionArray(lbArr);
-						let lbTooltip = "";
-						if (lbArr.length && !lbConsumption.every(v => !v)) {
-							lbTooltip = buildLedgerMessage(lbConsumption);
-						}
-
-						$(".sortie_map", sortieBox)
-							.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
-							.lazyInitTooltip();
+								$(".sortie_map", sortieBox)
+									.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
+									.lazyInitTooltip();
+							});
 					})
 					.finally(() => {
 						$(".sortie_map", sortieBox).toggleClass('loading');
