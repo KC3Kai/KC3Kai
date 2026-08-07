@@ -239,6 +239,15 @@ Uses Dexie.js third-party plugin on the assets directory
 						},
 						vr: 76,
 					},
+					{
+						ch: {
+							sortie: "++id,hq,diff,world,mapnum,[hq+world],[hq+world+mapnum],fleetnum,combined,fleet1,fleet2,fleet3,fleet4,support1,support2,time",
+						},
+						up: function (t){
+							console.log("Database v77", t);
+						},
+						vr: 77,
+					},
 					/*
 					Database versions are only integers, no decimals.
 					7.2 was detected as 72 by chrome, and thus specifying 8 is actually lower version
@@ -485,81 +494,41 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_expeds :function(pageNumber, itemsPerPage, expeds, fleets, sparkled, callback){
-			this.con.expedition
+			return this.con.expedition
 				.where("hq").equals(this.index)
-				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
-				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.and(function(exped){
+				.and(exped => {
 					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
-					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+					return expeds.includes(exped.mission) && fleets.includes(exped.fleetN)
+						&& sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
 				}).reverse()
 				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
 		count_expeds: function(expeds, fleets, sparkled, callback){
-			this.con.expedition
+			return this.con.expedition
 				.where("hq").equals(this.index)
-				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
-				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.and(function(exped){
+				.and(exped => {
 					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
-					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
-				}).toArray(function(arr) {
-					const gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
-					const ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
+					return expeds.includes(exped.mission) && fleets.includes(exped.fleetN)
+						&& sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+				}).toArray(arr => {
+					const [gs, ns] = arr.reduce((tuple, exped) => {
+						if(exped.data.api_clear_result == 2) tuple[0] += 1;
+						if(exped.data.api_clear_result  > 0) tuple[1] += 1;
+						return tuple;
+					}, [0, 0]);
 					callback(arr.length, gs, ns);
+					return arr.length;
 				});
 		},
 		
 		get_exped :function(exped_id, callback){
-			this.con.expedition
+			return this.con.expedition
 				.get(Number(exped_id))
 				.then(callback);
 		},
-		
-		count_normal_sorties: function(filterFunc, callback){
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10; })
-				.and(filterFunc)
-				.count(callback);
-		},
-		
-		get_normal_sorties :function(filterFunc, pageNumber, itemsPerPage, callback){
-			var self = this;
-			var sortieIds = [], bctr, sortieIndexed = {};
-			
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world < 10; })
-				.and(filterFunc)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
-				.toArray(function(sortieList){
-					// Compile all sortieIDs and indexify
-					for(bctr in sortieList){
-						sortieIds.push(sortieList[bctr].id);
-						sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
-						sortieIndexed["s"+sortieList[bctr].id].battles = [];
-					}
-					
-					// Get all battles on those sorties
-					self.con.battle
-						.where("sortie_id").anyOf(sortieIds)
-						.toArray(function(battleList){
-							for(bctr in battleList){
-								if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
-									sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
-								}else{
-									console.error("orphan battle", battleList[bctr]);
-								}
-							}
-							callback(sortieIndexed);
-						});
-				});
-		},
-		
+
 		get_sortie_maps :function(sortieRange, callback) {
 			// Clamp Range Input
 			sortieRange = ((sortieRange && (sortieRange.length >= 2) && sortieRange) || [null,null])
@@ -581,91 +550,127 @@ Uses Dexie.js third-party plugin on the assets directory
 					callback(wmHash);
 				});
 		},
-		
-		count_world :function(world, filterFunc, callback){
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world; })
-				.and(filterFunc)
-				.count(callback);
-		},
-		
-		get_world :function(world, filterFunc, pageNumber, itemsPerPage, callback){
-			var self = this;
-			var sortieIds = [], bctr, sortieIndexed = {};
-			
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world; })
-				.and(filterFunc)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
-				.toArray(function(sortieList){
-					// Compile all sortieIDs and indexify
-					for(bctr in sortieList){
+
+		get_sorties_with_battles: function (sortiePromise) {
+			const self = this;
+			const sortieIds = [];
+			const sortieIndexed = {};
+			console.time('get_sorties_with_battles');
+			return sortiePromise
+				.then((sortieList) => {
+					for (const bctr in sortieList) {
 						sortieIds.push(sortieList[bctr].id);
-						sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
-						sortieIndexed["s"+sortieList[bctr].id].battles = [];
+						sortieIndexed["s" + sortieList[bctr].id] = sortieList[bctr];
+						sortieIndexed["s" + sortieList[bctr].id].battles = [];
 					}
-					
-					// Get all battles on those sorties
-					self.con.battle
-						.where("sortie_id").anyOf(sortieIds)
-						.toArray(function(battleList){
-							for(bctr in battleList){
-								if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
-									sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
-								}else{
-									console.error("orphan battle", battleList[bctr]);
-								}
-							}
-							callback(sortieIndexed);
-						});
+					return self.con.battle
+						.where("sortie_id")
+						.anyOf(sortieIds)
+						.toArray();
+				})
+				.then((battleList) => {
+					for (const bctr in battleList) {
+						if (typeof sortieIndexed["s" + battleList[bctr].sortie_id] != "undefined") {
+							sortieIndexed["s" + battleList[bctr].sortie_id].battles.push(battleList[bctr]);
+						} else {
+							console.error("orphan battle", battleList[bctr]);
+						}
+					}
+					return sortieIndexed;
+				})
+				.finally(() => {
+					console.timeEnd('get_sorties_with_battles');
 				});
 		},
-		
-		count_map :function(world, map, filterFunc, callback){
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
+
+		count_normal_sorties: function (filterFunc, callback) {
+			return this.con.sortie
+				.where("[hq+world]")
+				.between([this.index, 1], [this.index, 20], true, true)
 				.and(filterFunc)
-				.count(callback);
-		},
-		
-		get_map :function(world, map, filterFunc, pageNumber, itemsPerPage, callback){
-			var self = this;
-			var sortieIds = [], bctr, sortieIndexed = {};
-			
-			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
-				.and(filterFunc)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
-				.toArray(function(sortieList){
-					// Compile all sortieIDs and indexify
-					for(bctr in sortieList){
-						sortieIds.push(sortieList[bctr].id);
-						sortieIndexed["s"+sortieList[bctr].id] = sortieList[bctr];
-						sortieIndexed["s"+sortieList[bctr].id].battles = [];
-					}
-					
-					// Get all battles on those sorties
-					self.con.battle
-						.where("sortie_id").anyOf(sortieIds)
-						.toArray(function(battleList){
-							for(bctr in battleList){
-								if(typeof sortieIndexed["s"+battleList[bctr].sortie_id] != "undefined"){
-									sortieIndexed["s"+battleList[bctr].sortie_id].battles.push(battleList[bctr]);
-								}else{
-									console.error("orphan battle", battleList[bctr]);
-								}
-							}
-							callback(sortieIndexed);
-						});
+				.count()
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
 				});
 		},
-		
+
+		get_normal_sorties: function (filterFunc, pageNumber, itemsPerPage, callback) {
+			const query = this.con.sortie
+				.where("hq")
+				.equals(this.index)
+				.and(function (sortie) { return sortie.world <= 20; })
+				.and(filterFunc)
+				.reverse()
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+
+			return this.get_sorties_with_battles(query)
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		count_world: function (world, filterFunc, callback) {
+			return this.con.sortie
+				.where("[hq+world]")
+				.equals([this.index, world])
+				.and(filterFunc)
+				.count()
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		get_world: function (world, filterFunc, pageNumber, itemsPerPage, callback) {
+			const query = this.con.sortie
+				.where("[hq+world]")
+				.equals([this.index, world])
+				.and(filterFunc)
+				.reverse()
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+
+			return this.get_sorties_with_battles(query)
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		count_map: function (world, map, filterFunc, callback) {
+			return this.con.sortie
+				.where("[hq+world+mapnum]")
+				.equals([this.index, world, map])
+				.and(filterFunc)
+				.count()
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
+		get_map: function (world, map, filterFunc, pageNumber, itemsPerPage, callback) {
+			const query = this.con.sortie
+				.where("[hq+world+mapnum]")
+				.equals([this.index, world, map])
+				.and(filterFunc)
+				.reverse()
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+
+			return this.get_sorties_with_battles(query)
+				.then((value) => {
+					if (typeof callback === 'function') callback(value);
+					return value;
+				});
+		},
+
 		get_sortie :function( sortie_id, callback ){
 			var self = this;
 			this.con.sortie
@@ -702,12 +707,9 @@ Uses Dexie.js third-party plugin on the assets directory
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
 			var sortieIds = [];
 			var bctr;
-			
 			var self = this;
-			
 			this.con.sortie
-				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == mapArea && sortie.mapnum == mapNo; })
+				.where("[hq+world+mapnum]").equals([this.index, mapArea, mapNo])
 				.toArray(function(sortieList){
 					// Compile all sortieIDs and indexify
 					for( bctr in sortieList){
@@ -854,17 +856,21 @@ Uses Dexie.js third-party plugin on the assets directory
 		count_sortie_battle: function(callback, startSecs, endSecs, world, map){
 			var self = this;
 			var sortieCount = 0, battleCount = 0;
-			this.con.sortie
-				.where("hq").equals(this.index)
+			return this.con.sortie.where("time").aboveOrEqual(startSecs)
 				.and(function(s){
-					return (world ? s.world === world : s.world < 10)
+					return (s.hq == self.index)
+						&& (world ? s.world === world : s.world <= 20)
 						&& (map ? s.mapnum === map : true)
-						&& (startSecs ? s.time >= startSecs : true)
 						&& (endSecs ? s.time < endSecs : true);
 				})
 				.toArray(function(arr){
 					var sortiesIds = arr.map(s => s.id);
 					sortieCount = sortiesIds.length;
+					if(sortieCount === 0){
+						battleCount = 0;
+						callback(sortieCount, battleCount);
+						return;
+					}
 					self.con.battle
 						.where("sortie_id").anyOf(sortiesIds)
 						.count(function(bc){

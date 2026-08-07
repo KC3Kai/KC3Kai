@@ -3,6 +3,7 @@
 		"PS": true,
 		"ExpeditionHelper": true,
 		"ConfigManager": true,
+		"KC3QueueManager": true,
 		"KC3GearManager": true,
 		"GoalTemplateManager": true,
 		"PlayerManager": true,
@@ -64,6 +65,7 @@
 		"KC3LodgerBuffer": true,
 		"KC3SortieLogs": true,
 		"KC3ShipListGrid": true,
+		"KC3ThemeUtils": true,
 		"KC3NatsuiroShipbox": true,
 		"KC3MurasakiShipbox": true,
 		"KC3PlainShipbox": true,
@@ -97,6 +99,7 @@
 		"setInterval": true,
 		"clearTimeout": true,
 		"clearInterval": true,
+		"requestAnimationFrame": true,
 
 		"Range": true,
 		"dateFormat": true,
@@ -105,6 +108,7 @@
 		"saveAs": true,
 		"JSZip": true,
 		"Dexie": true,
+		"Bottleneck": true,
 		"markdown": true,
 		"wanakana": true,
 		"steg": true

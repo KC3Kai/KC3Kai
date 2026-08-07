@@ -22,44 +22,6 @@
 			endur : "Leaves the boss below 2HP",
 			destr : "Completely destroys"
 		};
-	const EVENT_WORLD_TERMS = [
-		{ id: 62, label: 'EventHistoryWorldTab62' },
-		{ id: 61, label: 'EventHistoryWorldTab61', tooltip: 'EventHistoryWorldTab61Tip' },
-		{ id: 60, label: 'EventHistoryWorldTab60', tooltip: 'EventHistoryWorldTab60Tip' },
-
-		{ id: 59, label: 'EventHistoryWorldTab59' },
-		{ id: 58, label: 'EventHistoryWorldTab58', tooltip: 'EventHistoryWorldTab58Tip' },
-		{ id: 57, label: 'EventHistoryWorldTab57' },
-		{ id: 56, label: 'EventHistoryWorldTab56', tooltip: 'EventHistoryWorldTab56Tip' },
-		{ id: 55, label: 'EventHistoryWorldTab55', tooltip: 'EventHistoryWorldTab55Tip' },
-		{ id: 54, label: 'EventHistoryWorldTab54' },
-		{ id: 53, label: 'EventHistoryWorldTab53' },
-		{ id: 52, label: 'EventHistoryWorldTab52', tooltip: 'EventHistoryWorldTab52Tip' },
-		{ id: 51, label: 'EventHistoryWorldTab51' },
-		{ id: 50, label: 'EventHistoryWorldTab50' },
-
-		{ id: 49, label: 'EventHistoryWorldTab49', tooltip: 'EventHistoryWorldTab49Tip' },
-		{ id: 48, label: 'EventHistoryWorldTab48', tooltip: 'EventHistoryWorldTab48Tip' },
-		{ id: 47, label: 'EventHistoryWorldTab47', tooltip: 'EventHistoryWorldTab47Tip' },
-		{ id: 46, label: 'EventHistoryWorldTab46' },
-		{ id: 45, label: 'EventHistoryWorldTab45' },
-		{ id: 44, label: 'EventHistoryWorldTab44' },
-		{ id: 43, label: 'EventHistoryWorldTab43' },
-		{ id: 42, label: 'EventHistoryWorldTab42', tooltip: 'EventHistoryWorldTab42Tip' },
-		{ id: 41, label: 'EventHistoryWorldTab41' },
-		{ id: 40, label: 'EventHistoryWorldTab40' },
-
-		{ id: 39, label: 'EventHistoryWorldTab39' },
-		{ id: 38, label: 'EventHistoryWorldTab38' },
-		{ id: 37, label: 'EventHistoryWorldTab37' },
-		{ id: 36, label: 'EventHistoryWorldTab36' },
-		{ id: 35, label: 'EventHistoryWorldTab35' },
-		{ id: 34, label: 'EventHistoryWorldTab34' },
-		{ id: 33, label: 'EventHistoryWorldTab33' },
-		{ id: 32, label: 'EventHistoryWorldTab32' },
-		{ id: 31, label: 'EventHistoryWorldTab31' },
-		{ id: 30, label: 'EventHistoryWorldTab30' },
-	];
 
 	/* KC3改 Sortie Logs
 			Arguments:
@@ -73,14 +35,27 @@
 		this.selectedMap    = 0;
 		this.itemsPerPage   = 20;
 		this.currentSorties = [];
-		this.stegcover64 = "";
+		this.stegcover64    = "";
 		this.exportingReplay = false;
 		this.scrollVars     = {};
+		this.ledgerMaxConcurrent = 2;
+		this.tooltipMaxConcurrent = 20;
+		this.defaultSettings = {
+			regular: { world: 0, map: 0 },
+			event: { world: 0, map: 0 },
+			loadLedger: false,
+			bossArrival: false,
+			onlyBattle: false,
+			evalShipState: true,
+			evalYasen: false,
+		};
+		this.settings = {};
 
 		/* INIT
 		Prepares static data needed
 		---------------------------------*/
 		this.init = function(){
+			$.extend(true, this.settings, this.defaultSettings);
 			this.locale = KC3Translation.getLocale();
 		};
 
@@ -89,10 +64,17 @@
 		---------------------------------*/
 		this.reload = function(){
 			ConfigManager.load();
+			this.loadSettings();
 			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
 			this.itemsPerPage = ConfigManager.sr_items_per_page || 20;
+		};
+
+		/* LEAVE
+		---------------------------------*/
+		this.leave = function () {
+			this.stopLimiters();
 		};
 
 		/* EXECUTE
@@ -101,6 +83,7 @@
 		this.execute = function(){
 			const self = this;
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
+			this.loadSettingToggles();
 			this.loadWorldSelect();
 			this.loadWorldsFromStorage();
 			
@@ -113,7 +96,14 @@
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
-				KC3StrategyTabs.gotoTab(null, $(this).data("world_num"));
+				const world = $(this).data("world_num");
+				// Force to update settings when all world is selected on demand
+				if(!world && tabCode === "maps") {
+					self.settings.regular.world = 0;
+					self.settings.regular.map = 0;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.gotoTab(null, world);
 			});
 			
 			// Toggle-able world scroll
@@ -136,7 +126,7 @@
 			
 			// On-click map menus
 			$(".tab_"+tabCode+" .map_list").on("click", ".map_box", function(){
-				KC3StrategyTabs.gotoTab(null, self.selectedWorld, $(this).data("map_num"));
+				KC3StrategyTabs.gotoTab(null, ...[self.selectedWorld, $(this).data("map_num")].compact());
 			});
 			
 			// Toggle-able map scroll
@@ -174,6 +164,10 @@
 			).createChildrenTooltips().on("click", ".sortie_toggles .sortie_toggle", function(){
 				self.toggleSortie(this, true);
 			});
+			// Workaround for batch toggles (FNS only) not working as expected on first time toggling,
+			// by adding display:none style initially to templates, due to slideDown() buggy on first time run.
+			// No effects on ECA buttons since they have no templates.
+			$(".factory .sortie_box .sortie_roster, .factory .sortie_box .sortie_nodes, .factory .sortie_box .sortie_stat").hide();
 			
 			// Select sorties per page
 			$(".tab_"+tabCode+" .sortie_per_page select").on("change", function(){
@@ -184,48 +178,19 @@
 				self.showMap();
 			}).val(self.itemsPerPage);
 			
-			// Toggle between boss node arrival only and with all nodes
-			$(".tab_"+tabCode+" .sortie_batch_toggles .boss_node_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_boss_node = !ConfigManager.sr_show_boss_node;
-				ConfigManager.save();
-				$(this).toggleClass("active", ConfigManager.sr_show_boss_node);
-				self.showMap();
-			}).toggleClass("active", ConfigManager.sr_show_boss_node);
-			
-			// Toggle between battle nodes only and with non-battle nodes
-			$(".tab_"+tabCode+" .sortie_batch_toggles .non_battle_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_non_battle = !ConfigManager.sr_show_non_battle;
-				ConfigManager.save();
-				$(this).toggleClass("active", !ConfigManager.sr_show_non_battle);
-				self.showMap();
-			}).toggleClass("active", !ConfigManager.sr_show_non_battle);
-			
-			// Toggle between using predictions to get taiha/chuuha/sunk state
-			$(".tab_"+tabCode+" .sortie_batch_toggles .show_new_shipstate_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_new_shipstate = !ConfigManager.sr_show_new_shipstate;
-				ConfigManager.save();
-				$(this).toggleClass("active", ConfigManager.sr_show_new_shipstate);
-				self.showMap();
-			}).toggleClass("active", ConfigManager.sr_show_new_shipstate);
-			
-			// Toggle between using predictions to get yasen states
-			$(".tab_"+tabCode+" .sortie_batch_toggles .show_yasen_shipstate_toggle").on("click", function(){
-				ConfigManager.load();
-				ConfigManager.sr_show_yasen_shipstate = !ConfigManager.sr_show_yasen_shipstate;
-				ConfigManager.save();
-				$(this).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
-				self.showMap();
-			}).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
-
 			if (!!KC3StrategyTabs.pageParams[1]) {
 				const world = KC3StrategyTabs.pageParams[1];
 				const map = KC3StrategyTabs.pageParams[2];
 				this.switchWorld(world, map);
+			} else if (tabCode === "maps" && this.settings.regular.world) {
+				// Force to redirect and reload at once
+				KC3StrategyTabs.loading = false;
+				KC3StrategyTabs.gotoTab(null, ...[this.settings.regular.world, this.settings.regular.map].compact());
+			} else if (tabCode === "event" && this.settings.event.world) {
+				KC3StrategyTabs.loading = false;
+				KC3StrategyTabs.gotoTab(null, ...[this.settings.event.world, this.settings.event.map].compact());
 			} else {
-				// Select default opened world (topmost for dropdown menu, otherwise `active` class for sidescroll menu)
+				// Select default world (topmost for dropdown menu, otherwise `active` class for sidescroll menu)
 				const dropdownselect = $(`.tab_${tabCode} .world-select`);
 				const world = dropdownselect.length ? dropdownselect.val() :
 					$(".tab_" + tabCode + " .world_list .world_box.active").data("world_num");
@@ -233,26 +198,88 @@
 			}
 		};
 
+		this.loadSettings = () => {
+			const saved = localStorage.getObject("srMaps");
+			$.extend(this.settings, saved);
+		};
+
+		this.saveSettings = () => {
+			localStorage.setObject("srMaps", this.settings);
+		};
+
+		this.stopLimiters = () => {
+			KC3QueueManager.cancelTooltips(this.ledgerLimiter);
+			KC3QueueManager.cancelTooltips(this.tooltipLimiter);
+			this.ledgerLimiter = undefined;
+			this.tooltipLimiter = undefined;
+		};
+
+		this.startLimiters = () => {
+			this.ledgerLimiter = KC3QueueManager.newTooltipLimiter(this.ledgerMaxConcurrent);
+			this.tooltipLimiter = KC3QueueManager.newTooltipLimiter(this.tooltipMaxConcurrent);
+		};
+
+		/**
+		 * Load initial states and click events for setting checkboxes
+		 */
+		this.loadSettingToggles = () => {
+			const root = $(`.tab_${tabCode} .settings`);
+			const inputElements = [
+				{
+					id: 'load_ledger_tips_toggle',
+					cfgKey: 'loadLedger',
+				},
+				{
+					id: 'show_yasen_shipstate_toggle',
+					cfgKey: 'evalYasen',
+				},
+				{
+					id: 'show_new_shipstate_toggle',
+					cfgKey: 'evalShipState',
+					linkedConfig: 'sr_show_new_shipstate',
+				},
+				{
+					id: 'non_battle_toggle',
+					cfgKey: 'onlyBattle',
+				},
+				{
+					id: 'boss_node_toggle',
+					cfgKey: 'bossArrival',
+				},
+			];
+			inputElements.forEach(config => {
+				$(`#${config.id}`, root)
+					.prop('checked', this.settings[config.cfgKey])
+					.on('click', (e) => {
+						this.settings[config.cfgKey] = !!e.target.checked;
+						this.saveSettings();
+						if (config.linkedConfig) {
+							ConfigManager.load();
+							ConfigManager[config.linkedConfig] = this.settings[config.cfgKey];
+							ConfigManager.save();
+						}
+						this.showMap();
+					});
+			});
+		};
+
 		/**
 		 * Load known world info for dropdown select menu.
 		 */
 		this.loadWorldSelect = () => {
 			const root = $(`.tab_${tabCode} .world-select`);
-			const baseOption = $('option', root).addClass('i18n');
+			const baseOption = $('option', root).addClass('l10n');
 			root.empty();
-
-			EVENT_WORLD_TERMS.forEach((world) => {
+			KC3Meta.eventWorldTerm().forEach((world) => {
 				const option = $(baseOption).clone();
 				option.val(world.id);
-				option.text(world.label);
+				option.text(`[${world.id}] ${KC3Meta.term(world.label)}`);
 				if (world.tooltip) {
-					option.addClass('i18n_title');
-					option.attr('title', world.tooltip);
+					option.addClass('l10n_title');
+					option.attr('title', KC3Meta.term(world.tooltip));
 				}
 				root.append(option);
 			});
-
-			KC3Translation.applyWords();
 		};
 
 		/**
@@ -263,7 +290,7 @@
 			var lastWorldId = 0;
 			const sidescrollWorldselect = $(`.tab_${tabCode} .world_list`);
 			const dropdownWorldselect = $(`.tab_${tabCode} .world-select`);
-			const knownEventWorldIds = dropdownWorldselect.length ? EVENT_WORLD_TERMS.map(o => o.id) : [];
+			const knownEventWorldIds = dropdownWorldselect.length ? KC3Meta.eventWorldTerm().map(o => o.id) : [];
 			Object.keys(this.maps).sort((id1, id2) => {
 					const m1 = id1.slice(-1), m2 = id2.slice(-1);
 					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
@@ -302,8 +329,10 @@
 						$(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, lastWorldId)).addClass("active");
 					}
 				}
-				if(dropdownWorldselect.length) {
-					dropdownWorldselect.prop("selectedIndex", 0);
+				if (dropdownWorldselect.length) {
+					if (!this.settings.event.world) {
+						dropdownWorldselect.prop("selectedIndex", 0);
+					}
 				}
 			}
 			return missingWorldCount;
@@ -350,7 +379,17 @@
 		---------------------------------*/
 		this.switchWorld = function(worldNum, mapNum){
 			const self = this;
-			self.selectedWorld = Number(worldNum);
+			if (tabCode === "maps") {
+				this.settings.regular.world = Number(worldNum || 0);
+				this.settings.regular.map = Number(mapNum || 0);
+				this.saveSettings();
+			}
+			if (tabCode === "event") {
+				this.settings.event.world = Number(worldNum || 0);
+				this.settings.event.map = Number(mapNum || 0);
+				this.saveSettings();
+			}
+			self.selectedWorld = Number(worldNum) || 0;
 			$(".tab_"+tabCode+" .world_list .world_box").removeClass("active");
 			$(".tab_"+tabCode+" .world_list .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
 			$(`.tab_${tabCode} .world-select`).val(worldNum);
@@ -373,7 +412,7 @@
 			self.scrollVars[tabCode].world_max = Math.max(0, countWorlds - maxDispWorlds);
 			updateScrollItem(self.scrollVars[tabCode], "world", tabCode === "maps" ? 87 : 116);
 
-			if(self.selectedWorld !== 0){
+			if(self.selectedWorld > 0){
 				// As IndexedDB real-time updated, also load Storage maps
 				self.maps = JSON.parse(localStorage.maps || "{}");
 				// Add all maps in this world selection
@@ -592,7 +631,7 @@
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
 		this.sortieFilter = function(sortie){
-			return !ConfigManager.sr_show_boss_node ||
+			return !this.settings.bossArrival ||
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
@@ -617,36 +656,36 @@
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			$(".tab_"+tabCode+" .sortie_controls").hide();
-			
+
+			const filterFunc = this.sortieFilter.bind(this);
+			let query;
 			// Show all sorties
-			if(this.selectedWorld === 0){
-				KC3Database.count_normal_sorties(this.sortieFilter, function(countSorties){
-					console.debug("Count of All", ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
-					if(expectedEnterCount === self.enterCount)
-						self.showPagination(countSorties);
+			if (this.selectedWorld === 0) {
+				query = KC3Database.count_normal_sorties(filterFunc).then((count) => {
+					console.debug("Count of All", self.settings.bossArrival ? "Boss:" : ":", count);
+					return count;
 				});
-				
-			// Selected specific world
-			}else{
+			} else {
+				// Selected specific world
 				// Show all on this world
-				if(this.selectedMap === 0){
-					KC3Database.count_world(this.selectedWorld, this.sortieFilter,
-					function(countSorties){
-						console.debug("Count of World", self.selectedWorld, ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
-						if(expectedEnterCount === self.enterCount)
-							self.showPagination(countSorties);
+				if (this.selectedMap === 0) {
+					query = KC3Database.count_world(this.selectedWorld, filterFunc).then((count) => {
+						console.debug("Count of World", self.selectedWorld, self.settings.bossArrival ? "Boss:" : ":", count);
+						return count;
 					});
-					
-				// Selected specific map
-				}else{
-					KC3Database.count_map(this.selectedWorld, this.selectedMap, this.sortieFilter,
-					function(countSorties){
-						console.debug("Count of Map", self.selectedWorld, self.selectedMap, ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
-						if(expectedEnterCount === self.enterCount)
-							self.showPagination(countSorties);
+				} else {
+					// Selected specific map
+					query = KC3Database.count_map(this.selectedWorld, this.selectedMap, filterFunc).then((count) => {
+						console.debug("Count of Map", self.selectedWorld, self.selectedMap, self.settings.bossArrival ? "Boss:" : ":", count);
+						return count;
 					});
 				}
 			}
+			query.then((count) => {
+				if (expectedEnterCount === self.enterCount) {
+					self.showPagination(count);
+				}
+			});
 		};
 		
 		/* SHOW PAGINATION
@@ -687,6 +726,8 @@
 		---------------------------------*/
 		this.showPage = function(page, twbsPageObj){
 			var self = this;
+			this.stopLimiters();
+			this.startLimiters();
 			var startTime = Date.now();
 			this.pageNum = page || 1;
 			var postShowList = function(){
@@ -698,33 +739,26 @@
 			if(twbsPageObj) twbsPageObj.twbsPagination("disable");
 			$(".tab_"+tabCode+" .pagination").show();
 			$(".tab_"+tabCode+" .sortie_list").empty();
-			
+
+			const filterFunc = this.sortieFilter.bind(this);
+			let query;
 			// Show all sorties
-			if(this.selectedWorld === 0){
-				KC3Database.get_normal_sorties(this.sortieFilter, this.pageNum, this.itemsPerPage, function( sortieList ){
-					self.showList( sortieList );
-					postShowList();
-				});
-				
-			// Selected specific world
-			}else{
+			if (this.selectedWorld === 0) {
+				query = KC3Database.get_normal_sorties(filterFunc, this.pageNum, this.itemsPerPage);
+			} else {
+				// Selected specific world
 				// Show all on this world
-				if(this.selectedMap === 0){
-					KC3Database.get_world(this.selectedWorld, this.sortieFilter, this.pageNum, this.itemsPerPage,
-					function( sortieList ){
-						self.showList( sortieList );
-						postShowList();
-					});
-					
-				// Selected specific map
-				}else{
-					KC3Database.get_map(this.selectedWorld, this.selectedMap, this.sortieFilter, this.pageNum, this.itemsPerPage,
-					function( sortieList ){
-						self.showList( sortieList );
-						postShowList();
-					});
+				if (this.selectedMap === 0) {
+					query = KC3Database.get_world(this.selectedWorld, filterFunc, this.pageNum, this.itemsPerPage);
+				} else {
+					// Selected specific map
+					query = KC3Database.get_map(this.selectedWorld, this.selectedMap, filterFunc, this.pageNum, this.itemsPerPage);
 				}
 			}
+			query.then((sortieList) => {
+				self.showList(sortieList);
+				postShowList();
+			});
 		};
 		
 		/* SHOW LIST
@@ -732,8 +766,7 @@
 		---------------------------------*/
 		this.showList = function( sortieList ){
 			const self = this;
-			// Show sortie records on list
-			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
+
 			const shipNameEquipSwitchFunc = function(e){
 				var ref = $(this).parent().parent();
 				if($(".rfleet_detail",ref).css("display") === "none") {
@@ -862,49 +895,90 @@
 					heavyDefenseRequest: heavyAirRaid ? heavyAirRaid.api_scc : undefined,
 				};
 			};
-			const showSortieLedger = function(sortieId, sortieBox, sortieWorld) {
+
+			const showSortieLedger = function (sortieId, sortieBox, sortieWorld) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
 				// Akashi repair not included either, belonged to its own type
 				const buildConsumptionArray = arr => arr.reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
 					return consumption.map((v, i) => {
-						const icon = $("<img />").attr("src", "/assets/img/client/" +
-							["fuel.png", "ammo.png", "steel.png", "bauxite.png",
-								"ibuild.png", "bucket.png", "devmat.png", "screws.png"][i]
-						).width(13).height(13).css("margin", "-3px 2px 0 0");
+						const icon = $("<img />").attr("src",
+							"/assets/img/client/" + [
+								"fuel.png",
+								"ammo.png",
+								"steel.png",
+								"bauxite.png",
+								"ibuild.png",
+								"bucket.png",
+								"devmat.png",
+								"screws.png"
+							][i]).width(13).height(13)
+							.css("margin", "-3px 2px 0 0");
 						return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
 					}).join(" ");
 				};
-				KC3Database.con.navaloverall.where("type").equals("sortie" + sortieId).toArray(arr => {
-					const consumption = buildConsumptionArray(arr);
-					if(arr.length && !consumption.every(v => !v)) {
-						const tooltip = buildLedgerMessage(consumption);
-						if(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6) {
-							let lbTooltip = "";
-							KC3Database.con.navaloverall.where("type").equals("sortie" + (sortieId - 1)).first(firstEntry => {
-							KC3Database.con.navaloverall.offset(firstEntry.id)
-								.until(entry => entry.type === "sortie" + (sortieId + 1))
-								.and(entry => "lbas" + sortieWorld === entry.type)
-								.toArray(lbArr => {
-									const lbConsumption = buildConsumptionArray(lbArr);
-									if(lbArr.length && !lbConsumption.every(v => !v)) {
-										lbTooltip = buildLedgerMessage(lbConsumption);
-									}
-								}).then(() => $(".sortie_map", sortieBox).attr("titlealt",
-									(!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip"))
-										.format(tooltip, lbTooltip)).lazyInitTooltip()
-								);
-							});
-						} else {
-							$(".sortie_map", sortieBox).attr("titlealt",
-								"{0}".format(tooltip)).lazyInitTooltip();
+
+				$(".sortie_map", sortieBox).toggleClass('queued loading');
+				let tooltip = "";
+
+				return KC3Database.con.navaloverall
+					.where("type")
+					.equals("sortie" + sortieId)
+					.toArray()
+					.then(arr => {
+						const consumption = buildConsumptionArray(arr);
+						if (!arr.length || consumption.every(v => !v)) {
+							return;
 						}
-					}
-				});
+
+						tooltip = buildLedgerMessage(consumption);
+						if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6 || sortieWorld === 7)) {
+							$(".sortie_map", sortieBox)
+								.attr("titlealt", "{0}".format(tooltip))
+								.lazyInitTooltip();
+							return;
+						}
+
+						return KC3Database.con.navaloverall
+							.where("type")
+							.equals("sortie" + (sortieId - 1))
+							.first();
+					})
+					.then(firstEntry => {
+						if (!firstEntry) {
+							return;
+						}
+
+						return KC3Database.con.navaloverall
+							.offset(firstEntry.id)
+							.until(entry => entry.type === "sortie" + (sortieId + 1))
+							.and(entry => "lbas" + sortieWorld === entry.type)
+							.toArray();
+					})
+					.then(lbArr => {
+						if (!lbArr) {
+							return;
+						}
+
+						const lbConsumption = buildConsumptionArray(lbArr);
+						let lbTooltip = "";
+						if (lbArr.length && !lbConsumption.every(v => !v)) {
+							lbTooltip = buildLedgerMessage(lbConsumption);
+						}
+
+						$(".sortie_map", sortieBox)
+							.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
+							.lazyInitTooltip();
+					})
+					.finally(() => {
+						$(".sortie_map", sortieBox).toggleClass('loading');
+					});
 			};
 
+			// Show sortie records on list
 			$.each(sortieList, function(id, sortie){
+				let sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 				const mapkey = ["m", sortie.world, sortie.mapnum].join(''),
 					mapInfo = self.maps[mapkey] || {};
 				//console.debug("list.sortie", id, sortie);
@@ -928,7 +1002,13 @@
 					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
-					showSortieLedger(sortie.id, sortieBox, sortie.world);
+
+					if (self.settings.loadLedger) {
+						$(".sortie_map", sortieBox).toggleClass('queued');
+						// schedule `showSortieLedger` as this take tons of time
+						self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world);
+					}
+
 					$(".button_tomanager", sortieBox)
 						.data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
@@ -942,7 +1022,7 @@
 						.data("id", sortie.id)
 						.on("click", exportJervisOr);
 					var edges = [];
-					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
+					if(sortie.nodes && !self.settings.onlyBattle) {
 						$.each(sortie.nodes, function(index, node) {
 							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id, sortieTime);
 							const isBattle = node.type === "battle";
@@ -1084,66 +1164,68 @@
 					const lbMaxSortie = mapInfo.airBase
 						|| (!KC3Meta.isEventWorld(sortie.world) || sortie.world >= CASUAL_IMPL_WORLD ? 0 : 99);
 					let lbi = 0, lbSortie = 0;
-					$.each(sortie.lbas || [], function(index, landbase){
-						// Skip those land bases not set to sortie or defend
-						if(![1, 2].includes(landbase.action)){ return true; }
-						lbi += 1;
-						if(landbase.action === 1){
-							// Skip those land bases over max sortie amount allowed
-							if(lbSortie >= lbMaxSortie) { return true; }
-							lbSortie += 1;
-						}
-						$(".rfleet_lbas"+lbi, sortieBox).removeClass("disabled");
-						$(".rfleet_lbas"+lbi+" .rfleet_title .num", sortieBox)
-							.text("#{0}".format(landbase.rid));
-						$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
-							.text(KC3Meta.term("LandBaseAction" + KC3LandBase.actionEnum(landbase.action)));
-						if(landbase.action === 1){
-							if(Array.isArray(landbase.edges)){
-								$(".rfleet_lbas"+lbi+" .rfleet_title", sortieBox).attr("title",
-									"{0} \u21db {1}".format(landbase.range, landbase.edges.map(
-										id => KC3Meta.nodeLetter(sortie.world, sortie.mapnum, id, sortieTime)
-									).join(", "))
-								);
-							} else {
-								$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
-									.attr("title", landbase.range);
+					KC3QueueManager.deferTooltip(() => {
+						$.each(sortie.lbas || [], function(index, landbase){
+							// Skip those land bases not set to sortie or defend
+							if(![1, 2].includes(landbase.action)){ return true; }
+							lbi += 1;
+							if(landbase.action === 1){
+								// Skip those land bases over max sortie amount allowed
+								if(lbSortie >= lbMaxSortie) { return true; }
+								lbSortie += 1;
 							}
-						}
-						$.each(landbase.planes, function(pi, plane){
-							if(!plane.mst_id){ return false; }
-							var planeBox = $(".tab_"+tabCode+" .factory .rfleet_lbas_plane").clone();
-							var planeMaster = KC3Master.slotitem(plane.mst_id);
-							$(".rfleet_pic img", planeBox)
-								.attr("src", KC3Meta.itemIcon(planeMaster.api_type[3]))
-								.attr("alt", plane.mst_id)
-								.click(gearClickFunc)
-								.addClass("hover");
-							$(".rfleet_detail .rfleet_name ", planeBox)
-								.text(KC3Meta.gearName(planeMaster.api_name))
-								.attr("title", KC3Meta.gearName(planeMaster.api_name));
-							if(plane.state === 1){
-								$(".rfleet_stars img", planeBox)
-									.attr("src", "/assets/img/client/eqstar.png");
-								$(".rfleet_stars span", planeBox).text(plane.stars || 0);
-								if(plane.ace > -1) {
-									$(".rfleet_ace img", planeBox)
-										.attr("src", "/assets/img/client/achev/" + plane.ace + ".png");
+							$(".rfleet_lbas"+lbi, sortieBox).removeClass("disabled");
+							$(".rfleet_lbas"+lbi+" .rfleet_title .num", sortieBox)
+								.text("#{0}".format(landbase.rid));
+							$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
+								.text(KC3Meta.term("LandBaseAction" + KC3LandBase.actionEnum(landbase.action)));
+							if(landbase.action === 1){
+								if(Array.isArray(landbase.edges)){
+									$(".rfleet_lbas"+lbi+" .rfleet_title", sortieBox).attr("title",
+										"{0} \u21db {1}".format(landbase.range, landbase.edges.map(
+											id => KC3Meta.nodeLetter(sortie.world, sortie.mapnum, id, sortieTime)
+										).join(", "))
+									);
 								} else {
-									$(".rfleet_ace img", planeBox).hide();
+									$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
+										.attr("title", landbase.range);
 								}
-								$(".rfleet_count", planeBox).text(plane.count);
-								$(".rfleet_morale img", planeBox)
-									.attr("src", "/assets/img/client/morale/" + ["4","3","2","1"][plane.morale] + ".png");
-							} else {
-								$(".rfleet_stars", planeBox).hide();
-								$(".rfleet_ace", planeBox).hide();
-								$(".rfleet_count", planeBox).hide();
-								$(".rfleet_morale", planeBox).hide();
 							}
-							$(".rfleet_lbas"+lbi+" .rfleet_body", sortieBox).append(planeBox);
+							$.each(landbase.planes, function(pi, plane){
+								if(!plane.mst_id){ return false; }
+								var planeBox = $(".tab_"+tabCode+" .factory .rfleet_lbas_plane").clone();
+								var planeMaster = KC3Master.slotitem(plane.mst_id);
+								$(".rfleet_pic img", planeBox)
+									.attr("src", KC3Meta.itemIcon(planeMaster.api_type[3]))
+									.attr("alt", plane.mst_id)
+									.click(gearClickFunc)
+									.addClass("hover");
+								$(".rfleet_detail .rfleet_name ", planeBox)
+									.text(KC3Meta.gearName(planeMaster.api_name))
+									.attr("title", KC3Meta.gearName(planeMaster.api_name));
+								if(plane.state === 1){
+									$(".rfleet_stars img", planeBox)
+										.attr("src", "/assets/img/client/eqstar.png");
+									$(".rfleet_stars span", planeBox).text(plane.stars || 0);
+									if(plane.ace > -1) {
+										$(".rfleet_ace img", planeBox)
+											.attr("src", "/assets/img/client/achev/" + plane.ace + ".png");
+									} else {
+										$(".rfleet_ace img", planeBox).hide();
+									}
+									$(".rfleet_count", planeBox).text(plane.count);
+									$(".rfleet_morale img", planeBox)
+										.attr("src", "/assets/img/client/morale/" + ["4","3","2","1"][plane.morale] + ".png");
+								} else {
+									$(".rfleet_stars", planeBox).hide();
+									$(".rfleet_ace", planeBox).hide();
+									$(".rfleet_count", planeBox).hide();
+									$(".rfleet_morale", planeBox).hide();
+								}
+								$(".rfleet_lbas"+lbi+" .rfleet_body", sortieBox).append(planeBox);
+							});
 						});
-					});
+					}, 5, self.tooltipLimiter);
 					
 					// console.debug("sortie.battles", sortie.battles);
 					var finalNodeIndex = -1;
@@ -1152,364 +1234,381 @@
 						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">No available node recorded</div>");
 						$(".sortie_edge",  sortieBox).hide();
 					}else{
-						$.each(sortie.battles, function(index, battle){
-							var battleData, battleType;
-							
-							// Determine if day or night battle node
-							// misspelling `api_dock_id` fixed since 2017-11-17, but old data still
-							if(typeof battle.data.api_dock_id != "undefined"){
-								battleData = battle.data;
-								battleType = BATTLE_BASIC;
-								if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
-									battleType += BATTLE_AERIAL;
-							}else if(typeof battle.data.api_deck_id != "undefined"){
-								battleData = battle.data;
-								battleType = BATTLE_BASIC;
-								if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
-									battleType += BATTLE_AERIAL;
-								if(battle.data.api_day_flag !== undefined)
-									battleType += BATTLE_NIGHT2DAY;
-							}else if(typeof battle.yasen.api_deck_id != "undefined"){
-								battleData = battle.yasen;
-								battleType = BATTLE_NIGHT;
-							}else{
-								battleType = BATTLE_INVALID;
-								return true;
-							}
-							
-							// Show on node list
-							var edgeIndex = edges.indexOf(battle.node);
-							if(edgeIndex < 0) {
-								edgeIndex = edges.length;
-								edges.push(battle.node);
-								const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime);
-								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
-									.text(letter).toggleClass("long_name", String(letter).length > 2);
-								if(edgeIndex === 5){
-									$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
-								}
-							}
-							$(".sortie_edge_"+(edgeIndex+1), sortieBox)
-								.toggleClass("boss", !!battle.boss).addClass("active");
-							finalNodeIndex = edgeIndex;
-							
-							var airRaidRaw = battle.airRaid;
-							if(!airRaidRaw)
-								airRaidRaw = (sortie.nodes && sortie.nodes.find(node => node.id === battle.node) || {}).airRaid;
-							var airRaid = parseAirRaidFunc(airRaidRaw);
-
-							// HTML elements
-							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
-							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node, sortieTime ) );
-							if(airRaid.airRaidLostKind > 0) {
-								// Adding to sortie_edge for consistency with old sorties
-								$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
-								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
-								// Show Enemy Air Raid damage
-								const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
-									airRaid.baseTotalDamage,
-									KC3Meta.airraiddamage(airRaid.airRaidLostKind),
-									airRaid.resourceLossAmount,
-									airRaid.airState,
-									"{0}%".format(airRaid.shotdownPercent),
-									KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
-									KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
-									airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
-									airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
-									KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
-								);
-								$(".node_id", nodeBox).attr("title", airRaidTooltip);
-								$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
-							} else {
-								$(".node_id", nodeBox).removeClass("nodamage damaged");
-							}
-							
-							// Result Icons
-							$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
-							$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[0]) );
-							$(".node_rating img", nodeBox).attr("src", "../../assets/img/client/ratings/"+battle.rating+".png");
-							
-							// Kanmusu Drop
-							if(battle.drop > 0){
-								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) )
-									.attr("title", KC3Meta.shipName(battle.drop))
-									.attr("alt", battle.drop)
-									.click(shipClickFunc);
-								$(".node_drop", nodeBox).addClass("hover");
-							}else{
-								$(".node_drop img", nodeBox).attr("src", ConfigManager.info_troll ?
-									"../../assets/img/ui/jervaited.png" :
-									"../../assets/img/ui/shipdrop-x.png");
-							}
-							// Useitem Drop
-							if(battle.useitem > 0){
-								$(".node_drop img", nodeBox)
-									.attr("src", KC3Meta.useitemIcon(battle.useitem))
-									.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
-									.attr("title", [$(".node_drop img", nodeBox).attr("title"),
-										KC3Meta.useItemName(battle.useitem)].filter(v => !!v).join(" + "));
-							}
-							
-							// Process Battle, simulate combinedFleet type
-							// should avoid state-ful PlayerManager dependency as possible as we can
-							//PlayerManager.combinedFleet = sortie.combined;
-							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
-								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
-							thisNode.playerCombinedType = sortie.combined;
-							thisNode.fleetStates = battle.fleetStates;
-							// Known issue: prediction will fail when Damecon used,
-							// because Node does not see equipped damecon from old sortie history,
-							// and damecon used on which node during 1 sortie was not remembered.
-							// So add initial equipment on sortie started instead,
-							// in order to allow Node to check if there is damecon at least for 1st time used.
-							(thisNode.fleetStates || []).forEach((fleet, idx) => {
-								if(!fleet.equip){
-									if(idx === 0) {
-										fleet.equip = sortie["fleet" + sortie.fleetnum].map(ship => ship.equip);
-									} else if(sortie.combined && idx === 1){
-										fleet.equip = sortie.fleet2.map(ship => ship.equip);
-									}
-								}
-							});
-							thisNode.sunken = sinkShips;
-							try {
+						KC3QueueManager.deferTooltip(() => {
+							$.each(sortie.battles, function(index, battle){
+								var battleData, battleType;
+								
+								// Determine if day or night battle node
+								// misspelling `api_dock_id` fixed since 2017-11-17, but old data still
 								if(typeof battle.data.api_dock_id != "undefined"){
-									thisNode.engage( battleData, sortie.fleetnum );
-									if(typeof battle.yasen.api_deck_id != "undefined" &&
-										(ConfigManager.sr_show_yasen_shipstate || KC3Node.debugPrediction())){
-										thisNode.night( battle.yasen );
-									}
+									battleData = battle.data;
+									battleType = BATTLE_BASIC;
+									if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
+										battleType += BATTLE_AERIAL;
 								}else if(typeof battle.data.api_deck_id != "undefined"){
-									thisNode.engage( battleData, sortie.fleetnum );
-									if(typeof battle.yasen.api_deck_id != "undefined" &&
-										(ConfigManager.sr_show_yasen_shipstate || KC3Node.debugPrediction())){
-										thisNode.night( battle.yasen );
-									}
+									battleData = battle.data;
+									battleType = BATTLE_BASIC;
+									if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
+										battleType += BATTLE_AERIAL;
+									if(battle.data.api_day_flag !== undefined)
+										battleType += BATTLE_NIGHT2DAY;
 								}else if(typeof battle.yasen.api_deck_id != "undefined"){
-									thisNode.engageNight( battleData, sortie.fleetnum );
+									battleData = battle.yasen;
+									battleType = BATTLE_NIGHT;
+								}else{
+									battleType = BATTLE_INVALID;
+									return true;
 								}
-							} catch(e) {
-								if(ConfigManager.sr_show_new_shipstate || ConfigManager.sr_show_yasen_shipstate) {
-									console.error("Predicting battle ship state", e);
-								} else {
-									throw e;
+								
+								// Show on node list
+								var edgeIndex = edges.indexOf(battle.node);
+								if(edgeIndex < 0) {
+									edgeIndex = edges.length;
+									edges.push(battle.node);
+									const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime);
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
+										.text(letter).toggleClass("long_name", String(letter).length > 2);
+									if(edgeIndex === 5){
+										$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+									}
 								}
-							}
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox)
+									.toggleClass("boss", !!battle.boss).addClass("active");
+								finalNodeIndex = edgeIndex;
+								
+								var airRaidRaw = battle.airRaid;
+								if(!airRaidRaw)
+									airRaidRaw = (sortie.nodes && sortie.nodes.find(node => node.id === battle.node) || {}).airRaid;
+								var airRaid = parseAirRaidFunc(airRaidRaw);
 
-							if(KC3Node.debugPrediction() && thisNode.unexpectedList && thisNode.unexpectedList.length) {
-								const messages = thisNode.buildUnexpectedDamageMessage();
-								if(messages) {
-									console.warn(`Unexpected damage in sortie #${thisNode.sortie} ${sortie.world}-${sortie.mapnum}-${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime)}`, thisNode.unexpectedList);
-									const prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
-									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",
-										(prevTitle ? prevTitle + "\n" : "") + messages
-									).lazyInitTooltip();
-								}
-							}
-							if(thisNode.sortieSpecialCutins && thisNode.sortieSpecialCutins.some(v => !!v)) {
-								$(".node_id", nodeBox).addClass("special_cutin");
-								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("special_cutin");
-							}
-							if(ConfigManager.sr_show_new_shipstate){
-								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
-								if(predicted){
-									const toDamageLevel = (hpRatio) => Math.ceil(hpRatio * 4);
-									const rawData = thisNode.startsFromNight ? thisNode.battleNight : thisNode.battleDay;
-									let lowestHP = 1;
-									$.each(predicted.playerMain, function(index, ship){
-										const maxHP = thisNode.maxHPs.ally[index];
-										const nowHP = rawData.api_f_nowhps[index];
-										const currentHP = ship.hp / maxHP;
-										if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
-											lowestHP = Math.min(currentHP, lowestHP);
-									});
-									$.each(predicted.playerEscort, function(index, ship){
-										const maxHP = thisNode.maxHPs.allyEscort[index];
-										const nowHP = rawData.api_f_nowhps_combined[index];
-										const currentHP = ship.hp / maxHP;
-										if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
-											lowestHP = Math.min(currentHP, lowestHP);
-									});
-									if(lowestHP < 0) lowestHP = 0;
-									if(lowestHP <= 0.5){
-										const level = toDamageLevel(lowestHP);
-										$(".sortie_edge_"+(edgeIndex+1), sortieBox)
-											.append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][level]}.png"></img></div>`);
-									}
-								}
-							}
-							if(ConfigManager.sr_show_yasen_shipstate &&
-								typeof battle.yasen.api_deck_id != "undefined" &&
-								!(battleType & (BATTLE_NIGHT | BATTLE_NIGHT2DAY))){
-								$(".node_id", nodeBox).addClass("day_to_night");
-								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("day_to_night");
-							}
-							if(KC3Node.debugPrediction()){
-								// Known issue 1: if `api_name` not saved into battle data for old history,
-								// prediction on long distance air raid node will fail.
-								// Known issue 2: saved rating in DB will be incorrect,
-								// if thisNode.allyNoDamage is not correctly calculated on that sortie.
-								console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
-								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch", battle);
-								
-								console.debug("Node " + thisNode.letter + " result mvp", battle.mvp, battle.sortie_id);
-								if(thisNode.predictedMvpCapable){
-									const predictedMvps = thisNode.predictedMvpsNight || thisNode.predictedMvps || [];
-									console.assert(battle.mvp[0] == predictedMvps[0], "MVP prediction mismatch", battle);
-									if(battle.mvp[1]){
-										console.assert(battle.mvp[1] == predictedMvps[1], "Escort MVP prediction mismatch", battle);
-									}
+								// HTML elements
+								nodeBox = $(".tab_" + tabCode + " .factory .sortie_nodeinfo").clone();
+								const curNodeBox = nodeBox;
+
+								$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node, sortieTime ) );
+								if(airRaid.airRaidLostKind > 0) {
+									// Adding to sortie_edge for consistency with old sorties
+									$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
+									// Show Enemy Air Raid damage
+									const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
+										airRaid.baseTotalDamage,
+										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
+										airRaid.resourceLossAmount,
+										airRaid.airState,
+										"{0}%".format(airRaid.shotdownPercent),
+										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
+										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
+										airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
+										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
+										KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
+									);
+									$(".node_id", nodeBox).attr("title", airRaidTooltip);
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
 								} else {
-									console.info("MVP prediction incapable");
+									$(".node_id", nodeBox).removeClass("nodamage damaged");
 								}
-							}
-							sinkShips[0] = sinkShips[0].concat(battle.shizunde[0]);
-							sinkShips[1] = sinkShips[1].concat(battle.shizunde[1]);
-							
-							// Enemies
-							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
-							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(thisNode.eformation) );
-							$.each(thisNode.eships.slice(0, 12), function(index, eship){
-								if(eship > 0){
-									const mainEscort = index >= 6 ? "escort" : "main";
-									$(`.node_eship.${mainEscort}.node_eship_${index+1} img`, nodeBox)
-										.attr("src", KC3Meta.abyssIcon( eship ) )
-										.attr("alt", eship)
+								
+								// Result Icons
+								$(".node_formation img", nodeBox).attr("src", KC3Meta.formationIcon(battleData.api_formation[0]) );
+								$(".node_formation", nodeBox).attr("title", KC3Meta.formationText(battleData.api_formation[0]) );
+								$(".node_rating img", nodeBox).attr("src", "../../assets/img/client/ratings/"+battle.rating+".png");
+								
+								// Kanmusu Drop
+								if(battle.drop > 0){
+									$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) )
+										.attr("title", KC3Meta.shipName(battle.drop))
+										.attr("alt", battle.drop)
 										.click(shipClickFunc);
-									$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
-										.addClass("hover")
-										.removeClass(KC3Meta.abyssShipBorderClass())
-										.addClass(KC3Meta.abyssShipBorderClass(eship))
-										.attr("title", thisNode.buildEnemyStatsMessage(index))
-										.show();
-									if(thisNode.debuffed && index === 0){
-										//console.debug("Boss node " + thisNode.letter + " was debuffed", battle.sortie_id, thisNode);
-										$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
-											.addClass("debuffed");
+									$(".node_drop", nodeBox).addClass("hover");
+								}else{
+									$(".node_drop img", nodeBox).attr("src", ConfigManager.info_troll ?
+										"../../assets/img/ui/jervaited.png" :
+										"../../assets/img/ui/shipdrop-x.png");
+								}
+								// Useitem Drop
+								if(battle.useitem > 0){
+									$(".node_drop img", nodeBox)
+										.attr("src", KC3Meta.useitemIcon(battle.useitem))
+										.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
+										.attr("title", [$(".node_drop img", nodeBox).attr("title"),
+											KC3Meta.useItemName(battle.useitem)].compact().join(" + "));
+								}
+								
+								// Process Battle, simulate combinedFleet type
+								// should avoid state-ful PlayerManager dependency as possible as we can
+								//PlayerManager.combinedFleet = sortie.combined;
+								thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
+									sortie.world, sortie.mapnum, sortie)).defineAsBattle();
+								const curKc3Node = thisNode;
+								thisNode.playerCombinedType = sortie.combined;
+								thisNode.fleetStates = battle.fleetStates;
+								// Known issue: prediction will fail when Damecon used,
+								// because Node does not see equipped damecon from old sortie history,
+								// and damecon used on which node during 1 sortie was not remembered.
+								// So add initial equipment on sortie started instead,
+								// in order to allow Node to check if there is damecon at least for 1st time used.
+								(thisNode.fleetStates || []).forEach((fleet, idx) => {
+									if(!fleet.equip){
+										if(idx === 0) {
+											fleet.equip = sortie["fleet" + sortie.fleetnum].map(ship => ship.equip);
+										} else if(sortie.combined && idx === 1){
+											fleet.equip = sortie.fleet2.map(ship => ship.equip);
+										}
+									}
+								});
+								thisNode.sunken = sinkShips;
+								try {
+									if(typeof battle.data.api_dock_id != "undefined"){
+										thisNode.engage( battleData, sortie.fleetnum );
+										if(typeof battle.yasen.api_deck_id != "undefined" &&
+											(self.settings.evalYasen || KC3Node.debugPrediction())){
+											thisNode.night( battle.yasen );
+										}
+									}else if(typeof battle.data.api_deck_id != "undefined"){
+										thisNode.engage( battleData, sortie.fleetnum );
+										if(typeof battle.yasen.api_deck_id != "undefined" &&
+											(self.settings.evalYasen || KC3Node.debugPrediction())){
+											thisNode.night( battle.yasen );
+										}
+									}else if(typeof battle.yasen.api_deck_id != "undefined"){
+										thisNode.engageNight( battleData, sortie.fleetnum );
+									}
+								} catch(e) {
+									if(self.settings.evalShipState || self.settings.evalYasen) {
+										console.error("Predicting battle ship state", e);
+									} else {
+										throw e;
 									}
 								}
-							});
-							
-							// Support Exped/LBAS triggered
-							if(thisNode.supportFlag || thisNode.lbasFlag || thisNode.nightSupportFlag){
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-								if(
-									(thisNode.supportFlag && battleData.api_support_info) ||
-									(thisNode.nightSupportFlag && battleData.api_n_support_info)
-								) {
-									const supportInfo = battleData.api_support_info || battleData.api_n_support_info;
-									const fleetId = (supportInfo.api_support_airatack||{}).api_deck_id
-										|| (supportInfo.api_support_hourai||{}).api_deck_id || "?";
-									$(".node_support .exped", nodeBox).text(fleetId);
-									$(".node_support .exped", nodeBox).show();
+
+								if(KC3Node.debugPrediction() && thisNode.unexpectedList && thisNode.unexpectedList.length) {
+									const messages = thisNode.buildUnexpectedDamageMessage();
+									if(messages) {
+										console.warn(`Unexpected damage in sortie #${thisNode.sortie} ${sortie.world}-${sortie.mapnum}-${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime)}`, thisNode.unexpectedList);
+										const prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
+										$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",
+											(prevTitle ? prevTitle + "\n" : "") + messages
+										).lazyInitTooltip();
+									}
 								}
-								$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
-								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode, true));
-							}else{
-								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
-							}
-							
-							// Day Friendly Fleet aerial support triggered, or
-							// Night battle Friendly Fleet support triggered
-							if(battle.data.api_friendly_info || battle.yasen.api_friendly_info){
-								$(".node_result", nodeBox).addClass("icon5");
-								$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
-								if(battle.data.api_friendly_kouku){
-									const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
-									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].filter(v => !!v).join("\n"));
+								if(thisNode.sortieSpecialCutins && thisNode.sortieSpecialCutins.hasTruthy()) {
+									$(".node_id", nodeBox).addClass("special_cutin");
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("special_cutin");
 								}
-								if(battle.yasen.api_friendly_battle){
-									const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
-									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].filter(v => !!v).join("\n"));
+								if(self.settings.evalShipState){
+									const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
+									if(predicted){
+										const toDamageLevel = (hpRatio) => Math.ceil(hpRatio * 4);
+										const rawData = thisNode.startsFromNight ? thisNode.battleNight : thisNode.battleDay;
+										let lowestHP = 1;
+										$.each(predicted.playerMain, function(index, ship){
+											const maxHP = thisNode.maxHPs.ally[index];
+											const nowHP = rawData.api_f_nowhps[index];
+											const currentHP = ship.hp / maxHP;
+											if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
+												lowestHP = Math.min(currentHP, lowestHP);
+										});
+										$.each(predicted.playerEscort, function(index, ship){
+											const maxHP = thisNode.maxHPs.allyEscort[index];
+											const nowHP = rawData.api_f_nowhps_combined[index];
+											const currentHP = ship.hp / maxHP;
+											if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
+												lowestHP = Math.min(currentHP, lowestHP);
+										});
+										if(lowestHP < 0) lowestHP = 0;
+										if(lowestHP <= 0.5){
+											const level = toDamageLevel(lowestHP);
+											$(".sortie_edge_"+(edgeIndex+1), sortieBox)
+												.append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][level]}.png"></img></div>`);
+										}
+									}
 								}
-							}else{
-								$(".node_result", nodeBox).removeClass("icon5");
-								$(".node_friend", nodeBox).hide();
-							}
-							
-							// Smoke Screen indicator, daytime only for now
-							if(thisNode.smokeType > 0){
-								$(".node_smoke", nodeBox).show()
-									.text(thisNode.smokeType)
-									.attr("title", KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType));
-							} else {
-								$(".node_smoke", nodeBox).hide();
-							}
-							
-							// Barrage Balloon indicator, daytime only for now
-							if(!!battle.data.api_balloon_cell){
-								const fleetStates = battle.fleetStates || [];
-								// count equipped gears from node battle data, even sunk or retreated
-								const friendBalloons = KC3Calc.countEnemyFleetBalloonShips((fleetStates[0] || {}).equip, (fleetStates[1] || {}).equip);
-								const enemyBalloons = KC3Calc.countEnemyFleetBalloonShips(battle.data.api_eSlot, battle.data.api_eSlot_combined);
-								const isDeployed = friendBalloons + enemyBalloons > 0;
-								$(".node_balloon", nodeBox).show().attr("title", [
-									KC3Meta.term("BattleBalloonNode"),
-									(isDeployed ? "{0} vs {1}".format(friendBalloons, enemyBalloons) :"")
-								].join("\n")).toggleClass("deployed", isDeployed);
-							} else {
-								$(".node_balloon", nodeBox).hide();
-							}
-							
-							// Conditions
-							$(".node_engage", nodeBox).text( thisNode.engagement[2] );
-							$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
-							$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
-							
-							// Day Battle only or Night to Day Battle data
-							if((battleType & BATTLE_NIGHT) === 0){
-								// No detection, aerial and LBAS combat if Night2Day battle not go into day
-								// No detection for long range radar ambush node too, show wave mark instead
-								if(thisNode.detection[0]){
-									$(".node_detect", nodeBox).text( thisNode.detection[0] )
-										.addClass( thisNode.detection[1] )
-										.attr("title", thisNode.isLongRangeRaid ?
-											KC3Meta.term("BattleKindLongRangeRaid") :
-											"{0} vs {1}".format(thisNode.detection[0], thisNode.edetection[0])
-										);
+								if(self.settings.evalYasen &&
+									typeof battle.yasen.api_deck_id != "undefined" &&
+									!(battleType & (BATTLE_NIGHT | BATTLE_NIGHT2DAY))){
+									$(".node_id", nodeBox).addClass("day_to_night");
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("day_to_night");
 								}
+								if(KC3Node.debugPrediction()){
+									// Known issue 1: if `api_name` not saved into battle data for old history,
+									// prediction on long distance air raid node will fail.
+									// Known issue 2: saved rating in DB will be incorrect,
+									// if thisNode.allyNoDamage is not correctly calculated on that sortie.
+									console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
+									console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch", battle);
+									
+									console.debug("Node " + thisNode.letter + " result mvp", battle.mvp, battle.sortie_id);
+									if(thisNode.predictedMvpCapable){
+										const predictedMvps = thisNode.predictedMvpsNight || thisNode.predictedMvps || [];
+										console.assert(battle.mvp[0] == predictedMvps[0], "MVP prediction mismatch", battle);
+										if(battle.mvp[1]){
+											console.assert(battle.mvp[1] == predictedMvps[1], "Escort MVP prediction mismatch", battle);
+										}
+									} else {
+										console.info("MVP prediction incapable");
+									}
+								}
+								sinkShips[0] = sinkShips[0].concat(battle.shizunde[0]);
+								sinkShips[1] = sinkShips[1].concat(battle.shizunde[1]);
 								
-								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
-								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
-								$(".node_airbattle", nodeBox).attr("title",
-									thisNode.buildAirPowerMessage()
-								);
-								
-								["Fighters","Bombers"].forEach(function(planeType){
-									["player","abyssal"].forEach(function(side,jndex){
-										var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
-										// Plane total counts
-										$(nodeName+"T",nodeBox).text(thisNode["plane"+planeType][side][0]);
-										// Plane losses
-										if(thisNode["plane"+planeType][side][1] > 0)
-											$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
-									});
+								// Enemies
+								$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
+								$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(thisNode.eformation) );
+								$.each(thisNode.eships.slice(0, 12), function(index, eship){
+									if(eship > 0){
+										const mainEscort = index >= 6 ? "escort" : "main";
+										$(`.node_eship.${mainEscort}.node_eship_${index + 1} img`, curNodeBox)
+											.attr("src", KC3Meta.abyssIcon(eship))
+											.attr("alt", eship)
+											.click(shipClickFunc);
+										$(`.node_eship.${mainEscort}.node_eship_${index + 1}`, curNodeBox)
+											.removeClass(KC3Meta.abyssShipBorderClass())
+											.addClass(KC3Meta.abyssShipBorderClass(eship))
+											.show();
+										KC3QueueManager.deferTooltip(() => {
+											$(`.node_eship.${mainEscort}.node_eship_${index + 1}`, curNodeBox)
+												.addClass("hover")
+												.attr("title", curKc3Node.buildEnemyStatsMessage(index))
+												.lazyInitTooltip();
+										}, 9, self.tooltipLimiter);
+										if(thisNode.debuffed && index === 0){
+											//console.debug("Boss node " + thisNode.letter + " was debuffed", battle.sortie_id, thisNode);
+											$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
+												.addClass("debuffed");
+										}
+									}
 								});
-								$("span.node_BAL",nodeBox).toggleClass("aaci_loss", !!thisNode.antiAirFire && thisNode.antiAirFire.length > 0);
-								$(".node_planes", nodeBox).attr("title", thisNode.buildAirBattleLossMessage());
-							}
-							//console.debug(`${thisNode.sortie} ${thisNode.letter}`, thisNode);
-							
-							// Node EXP
-							[["base","nodal"],["hq","hq"]].forEach(function(x){
-								if(!!battle[x[0]+"EXP"]) {
-									$(".node_exp."+x[1]+" span.value",nodeBox).text(battle[x[0]+"EXP"]);
-								} else {
-									$(".node_exp."+x[1],nodeBox).css("visibility",'hidden');
+								
+								// Support Exped/LBAS triggered
+								if(thisNode.supportFlag || thisNode.lbasFlag || thisNode.nightSupportFlag){
+									$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
+									if(
+										(thisNode.supportFlag && battleData.api_support_info) ||
+										(thisNode.nightSupportFlag && battleData.api_n_support_info)
+									) {
+										const supportInfo = battleData.api_support_info || battleData.api_n_support_info;
+										const fleetId = (supportInfo.api_support_airatack||{}).api_deck_id
+											|| (supportInfo.api_support_hourai||{}).api_deck_id || "?";
+										$(".node_support .exped", nodeBox).text(fleetId);
+										$(".node_support .exped", nodeBox).show();
+									}
+									$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
+									KC3QueueManager.deferTooltip(() => {
+										$(".node_support", curNodeBox)
+											.attr("title", curKc3Node.buildSupportAttackMessage(curKc3Node, true))
+											.lazyInitTooltip();
+									}, 5, self.tooltipLimiter);
+								}else{
+									$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 								}
+								
+								// Day Friendly Fleet aerial support triggered, or
+								// Night battle Friendly Fleet support triggered
+								if(battle.data.api_friendly_info || battle.yasen.api_friendly_info){
+									$(".node_result", nodeBox).addClass("icon5");
+									$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
+									if(battle.data.api_friendly_kouku){
+										const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
+										$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
+									}
+									if(battle.yasen.api_friendly_battle){
+										const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
+										$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
+									}
+								}else{
+									$(".node_result", nodeBox).removeClass("icon5");
+									$(".node_friend", nodeBox).hide();
+								}
+								
+								// Smoke Screen indicator, daytime only for now
+								if(thisNode.smokeType > 0){
+									$(".node_smoke", nodeBox).show()
+										.text(thisNode.smokeType)
+										.attr("title", KC3Meta.term("BattleSmokeScreen").format(thisNode.smokeType));
+								} else {
+									$(".node_smoke", nodeBox).hide();
+								}
+								
+								// Barrage Balloon indicator, daytime only for now
+								if(!!battle.data.api_balloon_cell){
+									const fleetStates = battle.fleetStates || [];
+									// count equipped gears from node battle data, even sunk or retreated
+									const friendBalloons = KC3Calc.countEnemyFleetBalloonShips((fleetStates[0] || {}).equip, (fleetStates[1] || {}).equip);
+									const enemyBalloons = KC3Calc.countEnemyFleetBalloonShips(battle.data.api_eSlot, battle.data.api_eSlot_combined);
+									const isDeployed = friendBalloons + enemyBalloons > 0;
+									$(".node_balloon", nodeBox).show().attr("title", [
+										KC3Meta.term("BattleBalloonNode"),
+										(isDeployed ? "{0} vs {1}".format(friendBalloons, enemyBalloons) :"")
+									].join("\n")).toggleClass("deployed", isDeployed);
+								} else {
+									$(".node_balloon", nodeBox).hide();
+								}
+								
+								// Conditions
+								$(".node_engage", nodeBox).text( thisNode.engagement[2] );
+								$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
+								$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
+								
+								// Day Battle only or Night to Day Battle data
+								if((battleType & BATTLE_NIGHT) === 0){
+									// No detection, aerial and LBAS combat if Night2Day battle not go into day
+									// No detection for long range radar ambush node too, show wave mark instead
+									if(thisNode.detection[0]){
+										$(".node_detect", nodeBox).text( thisNode.detection[0] )
+											.addClass( thisNode.detection[1] )
+											.attr("title", thisNode.isLongRangeRaid ?
+												KC3Meta.term("BattleKindLongRangeRaid") :
+												"{0} vs {1}".format(thisNode.detection[0], thisNode.edetection[0])
+											);
+									}
+									
+									$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
+									$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
+									KC3QueueManager.deferTooltip(() => {
+										$(".node_airbattle", curNodeBox)
+											.attr("title", curKc3Node.buildAirPowerMessage())
+											.lazyInitTooltip();
+									}, 5, self.tooltipLimiter);
+									
+									["Fighters","Bombers"].forEach(function(planeType){
+										["player","abyssal"].forEach(function(side,jndex){
+											var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
+											// Plane total counts
+											$(nodeName+"T",nodeBox).text(thisNode["plane"+planeType][side][0]);
+											// Plane losses
+											if(thisNode["plane"+planeType][side][1] > 0)
+												$(nodeName+"L",nodeBox).text("-"+thisNode["plane"+planeType][side][1]);
+										});
+									});
+									$("span.node_BAL",nodeBox).toggleClass("aaci_loss", !!thisNode.antiAirFire && thisNode.antiAirFire.length > 0);
+									KC3QueueManager.deferTooltip(() => {
+										$(".node_planes", curNodeBox)
+											.attr("title", curKc3Node.buildAirBattleLossMessage())
+											.lazyInitTooltip();
+									}, 7, self.tooltipLimiter);
+								}
+								//console.debug(`${thisNode.sortie} ${thisNode.letter}`, thisNode);
+								
+								// Node EXP
+								[["base","nodal"],["hq","hq"]].forEach(function(x){
+									if(!!battle[x[0]+"EXP"]) {
+										$(".node_exp."+x[1]+" span.value",nodeBox).text(battle[x[0]+"EXP"]);
+									} else {
+										$(".node_exp."+x[1],nodeBox).css("visibility",'hidden');
+									}
+								});
+								
+								// Add box to UI
+								$(".sortie_nodes", sortieBox).append( nodeBox );
+								
+								// Filter and do whatever, such as dump API data with friend fleet
+								if(typeof window.dumpBattleNode === "function")
+									window.dumpBattleNode.call(self, battle, thisNode, sortie);
 							});
-							
-							// Add box to UI
-							$(".sortie_nodes", sortieBox).append( nodeBox );
-							
-							// Filter and do whatever, such as dump API data with friend fleet
-							if(typeof window.dumpBattleNode === "function")
-								window.dumpBattleNode.call(self, battle, thisNode, sortie);
-						});
-						
+							$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
+						}, 3, self.tooltipLimiter);
 					}
-					
-					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 					
 					var mstat = mapInfo.stat,
 						sstat = $(".sortie_stat", sortieBox),
@@ -1525,10 +1624,29 @@
 							if(mstat.onBoss.hpdat[sortie.id]){
 								mstat.onBoss.hpdat[sortie.id].forEach(function(v,i){
 									$([".boss.",kstat[i],"hp"].join(''),sstat).text(v);
+									// recorded info from idb instead of localStorage
+									if (sortie.eventmap) {
+										const prehp = sortie.eventmap.api_now_maphp || 0;
+										const tothp = sortie.eventmap.api_max_maphp || 0;
+										if (sortie.eventmap.api_gauge_type === 3 && sortie.eventmap.api_sub_value) {
+											const delta = sortie.eventmap.api_sub_value;
+											$(".subhp", sstat).text(`TP -${delta}`)
+												.attr("title", `${prehp - delta} (/${tothp}) = ${prehp} - ${delta}`);
+										} else if (sortie.eventmap.api_dmg_maphp) {
+											const delta = sortie.eventmap.api_dmg_maphp;
+											const bosshp = sortie.eventmap.api_bosshp;
+											$(".subhp", sstat).text(`-${delta}`)
+												.attr("title", `${prehp - delta} (/${tothp}) = ${prehp} - ${delta} (/${Object.nullishTo(bosshp, '?')})`);
+										}
+									}
 								});
 							}
-							$(".sortie_end_clear",sstat).css('visibility',isHClear ? 'visible' : '');
-							$(".sortie_end_error",sstat).css('visibility',isCtBomb ? 'visible' : '');
+							$(".sortie_end_clear",sstat)
+								.attr('title', 'Clear')
+								.css('visibility',isHClear ? 'visible' : '');
+							$(".sortie_end_error",sstat)
+								.attr('title', 'Catbomb')
+								.css('visibility',isCtBomb ? 'visible' : '');
 							$(".sortie_end_final",sstat)
 								.attr('title',SORTIE_STRING[stateKey || 'faild'])
 								.attr("src",
@@ -1544,8 +1662,10 @@
 					}
 				}catch(e){ console.error("Sortie battle rendering exception", e); }
 			});
-			
-			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
+
+			requestAnimationFrame(() => {
+				$(".tab_" + tabCode + " .sortie_list").createChildrenTooltips();
+			});
 
 		};
 		
@@ -1682,7 +1802,7 @@
 								});
 							},
 							(xhr, statusText, httpError) => {
-								let msg = httpError || [statusText, xhr.status].filter(v => !!v).join(" ") || "Error";
+								let msg = httpError || [statusText, xhr.status].compact().join(" ") || "Error";
 								const json = xhr.responseJSON;
 								if(json) {
 									msg = [[json.statusCode, json.error].join(" ")];

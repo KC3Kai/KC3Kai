@@ -1949,6 +1949,11 @@ button, input, select, textarea {
 .tab_maps .sortie_controls .sortie_count {
 	color:#fff;
 }
+.tab_event .settings .item,
+.tab_maps .settings .item {
+	border: 1px solid #888;
+	border-left-width: 0;
+}
 .tab_event .world_box.active,
 .tab_maps .world_box.active {
 	background:#555;
@@ -1988,6 +1993,13 @@ button, input, select, textarea {
 .tab_maps .map_box.active.notcleared {
 	background:#7c0606;
 }
+.tab_event .page_list,
+.tab_maps .page_list {
+	padding:0 10px;
+}
+.tab_maps .sortie_batch_toggles {
+	margin-right:12px;
+}
 .tab_event .sortie_list .sortie_box,
 .tab_maps .sortie_list .sortie_box {
 	background:#303030;
@@ -2006,6 +2018,15 @@ button, input, select, textarea {
 .tab_maps .sortie_list .sortie_map {
 	background:#222;
 	color:#fff;
+	border: 1px solid #222;
+}
+.tab_event .sortie_list .sortie_map.queued,
+.tab_maps .sortie_list .sortie_map.queued {
+	border-left-color: #ffff40;
+}
+.tab_event .sortie_list .sortie_map.loading,
+.tab_maps .sortie_list .sortie_map.loading {
+	border-left-color: #57F287;
 }
 .tab_event .sortie_list .sortie_ship,
 .tab_maps .sortie_list .sortie_ship {

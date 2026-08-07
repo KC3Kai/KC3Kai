@@ -34,6 +34,7 @@
 		sorters: {},
 		sorterDescCtrl: null,
 		viewElements: {},
+		tooltipLimiter: undefined,
 
 		/* INIT
 		Prepares static data needed
@@ -69,6 +70,13 @@
 				const preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
+		},
+
+		/* LEAVE
+		---------------------------------*/
+		leave: function () {
+			KC3QueueManager.cancelTooltips(this.tooltipLimiter);
+			this.tooltipLimiter = undefined;
 		},
 
 		/* EXECUTE
@@ -1249,10 +1257,11 @@
 			if(this.isLoading){ return false; }
 			this.isLoading = true;
 			this.saveSettings();
-
 			const self = this;
-			this.startTime = Date.now();
+			KC3QueueManager.cancelTooltips(this.tooltipLimiter);
+			this.tooltipLimiter = KC3QueueManager.newTooltipLimiter(20);
 
+			this.startTime = Date.now();
 			// Update indicators of sorters
 			$(".tab_ships .ship_header .ship_field.hover").removeClass("sorted");
 			$.each(this.currentSorters, function(i, s){
@@ -1283,8 +1292,9 @@
 					if (cShip.view) {
 						const cElm = cShip.view;
 						cElm.appendTo(self.shipList);
-						if (cElm.onRecompute)
+						if (cElm.onRecompute) {
 							cElm.onRecompute(cShip);
+						}
 						return;
 					}
 					// elements constructing for the time-consuming 'first time rendering'
@@ -1383,8 +1393,12 @@
 							$(".ship_ribbon", this).hide();
 						}
 						// Update tooltip
-						$(".ship_name", this).lazyInitTooltip();
-						$(".ship_equip", this).lazyInitTooltip();
+						KC3QueueManager.deferTooltip(() => {
+							$(".ship_name", this).lazyInitTooltip();
+						}, 5, self.tooltipLimiter);
+						KC3QueueManager.deferTooltip(() => {
+							$(".ship_equip", this).lazyInitTooltip();
+						}, 5, self.tooltipLimiter);
 						const targetElm = $(".ship_img .ship_icon", this);
 						if(targetElm.tooltip("instance") !== undefined){
 							targetElm.tooltip("destroy");
@@ -1392,16 +1406,18 @@
 						if(self.showTooltip){
 							const shipObj = KC3ShipManager.get(thisShip.id);
 							if(shipObj.exists()){
-								// but this is also time-consuming
-								const tooltipBox = shipObj
-									.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
-								targetElm.tooltip({
-									position: { my: "left top", at: "left+25 bottom" },
-									items: "div",
-									content: tooltipBox.prop("outerHTML"),
-									// might be disabled for performance
-									open: KC3Ship.onShipTooltipOpen,
-								});
+								KC3QueueManager.deferTooltip(() => {
+									// but this is also time-consuming
+									const tooltipBox = shipObj
+										.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
+									targetElm.tooltip({
+										position: { my: "left top", at: "left+25 bottom" },
+										items: "div",
+										content: tooltipBox.prop("outerHTML"),
+										// might be disabled for performance
+										open: KC3Ship.onShipTooltipOpen,
+									});
+								}, 9, self.tooltipLimiter);
 							}
 						}
 						// Rebind click handlers
@@ -1424,8 +1440,13 @@
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
 				const elapsed = Date.now() - self.startTime;
-				if(self.scrollList) setTimeout(self.toggleTableScrollbar.bind(self, self.scrollList), elapsed);
 				console.debug("Showing ship list took", elapsed, "milliseconds");
+				if(self.scrollList) {
+					KC3QueueManager.deferTooltip(
+						self.toggleTableScrollbar.bind(self, self.scrollList),
+						9, self.tooltipLimiter
+					);
+				}
 			}, 0);
 		},
 
@@ -1528,12 +1549,15 @@
 				if(gear.isDummy()){ element.hide(); return; }
 				const type3 = gear.master().api_type[3];
 				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
-				$("img", element)
+				const img = $("img", element);
+				img
 					.attr("src", KC3Meta.itemIcon(type3))
-					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id);
-				// jq.show() not work on some new browser for inline case?
-				$("img", element).show().css("display", "inline");
+				KC3QueueManager.deferTooltip(() => {
+					img.attr("titlealt", gear.htmlTooltip(slotSize, ship));
+					// jq.show() not work on some new browser for inline case?
+					img.show().css("display", "inline");
+				}, 7, self.tooltipLimiter);
 				sizeSpan.addClass("sub").toggle(maxSize[0] > 0);
 				sizeSpan.toggleClass("expand", maxSize[0] > maxSize[1]);
 				element.show();

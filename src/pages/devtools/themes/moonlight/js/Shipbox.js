@@ -41,41 +41,55 @@
 		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
 		tooltipBox.hide().appendTo(this.element);
-		this.shipData.htmlTooltip(tooltipBox);
-		// Show a rich text tool-tip like stats in game
-		if($(".wrapper").hasClass("h"))	{
-			$(".ship_img", this.element).tooltip({
-				position: { my: !!isCombinedEscort ? "right-170 top" : "right-25 top",
-					at: "right top", of: $(".module.fleet") },
-				items: "div",
-				content: tooltipBox.html(),
-				open: KC3Ship.onShipTooltipOpen
-			});
-		} else if($(".wrapper").hasClass("v"))	{
-			$(".ship_img", this.element).tooltip({
-				position: { my: !!isCombinedEscort ? "right+60 top" : "right-105 top",
-					at: "right top", of: $(".module.fleet") },
-				items: "div",
-				content: tooltipBox.html(),
-				open: KC3Ship.onShipTooltipOpen
-			});
-		} else if($(".wrapper").hasClass("c")) {
-			$(".ship_img", this.element).tooltip({
-				position: { my: !!isCombinedEscort ? "right+135 top" : "right-35 top",
-					at: "right top", of: $(".module.fleet") },
-				items: "div",
-				content: tooltipBox.html(),
-				open: KC3Ship.onShipTooltipOpen
-			});
-		} else if($(".wrapper").hasClass("t")) {
-			$(".ship_img", this.element).tooltip({
-				position: { my: !!isCombinedEscort ? "right top" : "right top",
-					at: "right top", of: $(".module.quests") },
-				items: "div",
-				content: tooltipBox.html(),
-				open: KC3Ship.onShipTooltipOpen
-			});
-		}
+		KC3QueueManager.deferTooltip(() => {
+			this.shipData.htmlTooltip(tooltipBox);
+			// Show a rich text tool-tip like stats in game
+			if ($(".wrapper").hasClass("h")) {
+				$(".ship_img", this.element).tooltip({
+					position: {
+						my: !!isCombinedEscort ? "right-170 top" : "right-25 top",
+						at: "right top",
+						of: $(".module.fleet")
+					},
+					items: "div",
+					content: tooltipBox.html(),
+					open: KC3Ship.onShipTooltipOpen
+				});
+			} else if ($(".wrapper").hasClass("v")) {
+				$(".ship_img", this.element).tooltip({
+					position: {
+						my: !!isCombinedEscort ? "right+60 top" : "right-105 top",
+						at: "right top",
+						of: $(".module.fleet")
+					},
+					items: "div",
+					content: tooltipBox.html(),
+					open: KC3Ship.onShipTooltipOpen
+				});
+			} else if ($(".wrapper").hasClass("c")) {
+				$(".ship_img", this.element).tooltip({
+					position: {
+						my: !!isCombinedEscort ? "right+135 top" : "right-35 top",
+						at: "right top",
+						of: $(".module.fleet")
+					},
+					items: "div",
+					content: tooltipBox.html(),
+					open: KC3Ship.onShipTooltipOpen
+				});
+			} else if ($(".wrapper").hasClass("t")) {
+				$(".ship_img", this.element).tooltip({
+					position: {
+						my: !!isCombinedEscort ? "right top" : "right top",
+						at: "right top",
+						of: $(".module.quests")
+					},
+					items: "div",
+					content: tooltipBox.html(),
+					open: KC3Ship.onShipTooltipOpen
+				});
+			}
+		}, 7);
 		// Double click on icon to show Strategy Room Ship Library page
 		$(".ship_img", this.element).data("masterId", this.shipData.masterId)
 			.on("dblclick", function(e){
@@ -105,14 +119,17 @@
 		if( myExItem.exists() ) {
 			$(".ex_item .gear_icon img", this.element)
 				.attr("src", KC3Meta.itemIcon(myExItem.master().api_type[3]))
-				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
 				.data("masterId", myExItem.masterId)
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstgear-{0}".format($(this).data("masterId"))
 					})).execute();
-				})
-				.lazyInitTooltip();
+				});
+			KC3QueueManager.deferTooltip(() => {
+				$(".ex_item .gear_icon img", this.element)
+					.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
+					.lazyInitTooltip();
+			}, 9);
 			$(".ex_item", this.element).attr("data-mst-id", myExItem.masterId)
 				.toggleClass("goddess", myExItem.masterId == 43);
 			if (myExItem.stars > 0) {
@@ -460,32 +477,33 @@
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
 		const moraleClasses = ["glowing", "morale_sparkle", "morale_normal",
-			"morale_mamiya", "morale_orange", "morale_red", ].join(" ");
-		$(".ship_morale", this.element).text(this.shipData.morale).removeClass(moraleClasses);
+			"morale_mamiya", "morale_orange", "morale_red"].join(" ");
+		const moraleElm = $(":not(.ship_stats_row) > .ship_morale", this.element);
+		moraleElm.text(this.shipData.morale).removeClass(moraleClasses);
 		switch(true){
 			case this.shipData.morale > 70: // in-game 2 more sparkles
-				$(".ship_morale", this.element).addClass("morale_sparkle glowing strongplus");
+				moraleElm.addClass("morale_sparkle glowing strongplus");
 				break;
 			case this.shipData.morale > 57: // in-game 1 more sparkle
-				$(".ship_morale", this.element).addClass("morale_sparkle glowing strong");
+				moraleElm.addClass("morale_sparkle glowing strong");
 				break;
 			case this.shipData.morale > 52: // sparkle and get buff
-				$(".ship_morale", this.element).addClass("morale_sparkle glowing");
+				moraleElm.addClass("morale_sparkle glowing");
 				break;
 			case this.shipData.morale > 49: // sparkle in-game
-				$(".ship_morale", this.element).addClass("morale_sparkle");
+				moraleElm.addClass("morale_sparkle");
 				break;
 			case this.shipData.morale > 39: // no effect in-game, regular state
-				$(".ship_morale", this.element).addClass("morale_normal");
+				moraleElm.addClass("morale_normal");
 				break;
 			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
-				$(".ship_morale", this.element).addClass("morale_mamiya");
+				moraleElm.addClass("morale_mamiya");
 				break;
 			case this.shipData.morale > 19: // orange face, debuff
-				$(".ship_morale", this.element).addClass("morale_orange");
+				moraleElm.addClass("morale_orange");
 				break;
 			default: // red face, heavy debuff
-				$(".ship_morale", this.element).addClass("morale_red");
+				moraleElm.addClass("morale_red");
 				break;
 		}
 	};
@@ -512,14 +530,17 @@
 					KC3Meta.itemIcon(thisGear.master().api_type[3]));
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slotSize(slot), this.shipData))
-					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
 						(new RMsg("service", "strategyRoomPage", {
 							tabPath: "mstgear-{0}".format($(this).data("masterId"))
 						})).execute();
 					});
+				KC3QueueManager.deferTooltip(() => {
+					$(".ship_gear_" + (slot + 1) + " .ship_gear_icon", this.element)
+						.attr("titlealt", thisGear.htmlTooltip(this.shipData.slotSize(slot), this.shipData))
+						.lazyInitTooltip();
+				}, 9);
 				
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
 					.attr("data-mst-id", thisGear.masterId)

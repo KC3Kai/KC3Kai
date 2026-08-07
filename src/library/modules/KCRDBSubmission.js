@@ -109,7 +109,7 @@
    * On quest screen
    */
   function processQuestList(har) {
-    if (alterQuestDetected) return;
+    if (alterQuestDetected || KC3Master._alterApiSuspected) return;
     const tabId = parseInt(har.params.api_tab_id);
     const list = har.response.api_data.api_list;
     if (tabId === 0) verifyIfQuestAltered(list);
@@ -123,7 +123,7 @@
    * On quest finish
    */
   function processClearItemGet(har) {
-    if (alterQuestDetected) return;
+    if (alterQuestDetected || KC3Master._alterApiSuspected) return;
     const api_quest_id = Number(har.params.api_quest_id);
     const data = har.response.api_data;
     const items = { api_quest_id, data };

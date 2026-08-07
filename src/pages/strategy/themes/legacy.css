@@ -1539,6 +1539,16 @@ body {
 	background:#f0f5ff;
 	border-bottom:1px solid #369;
 }
+.tab_event .settings,
+.tab_maps .settings {
+	padding:0 10px;
+	background:#f0f5ff;
+	border-bottom:1px solid #369;
+}
+.tab_event .settings .item,
+.tab_maps .settings .item {
+	border:unset;
+}
 .tab_event .world_box,
 .tab_maps .world_box {
 	border:1px outset #ace;
@@ -1593,6 +1603,10 @@ body {
 .tab_maps .map_box.active.notcleared {
 	border:2px inset #FAA;
 }
+.tab_event .page_list,
+.tab_maps .page_list {
+	padding:0 10px;
+}
 .tab_event .sortie_list .sortie_box,
 .tab_maps .sortie_list .sortie_box {
 	background:#def;
@@ -1612,6 +1626,15 @@ body {
 .tab_maps .sortie_list .sortie_map {
 	background:#ffc;
 	border-radius:8px;
+	border: 1px solid #ace;
+}
+.tab_event .sortie_list .sortie_map.queued,
+.tab_maps .sortie_list .sortie_map.queued {
+	border-left-color: #148;
+}
+.tab_event .sortie_list .sortie_map.loading,
+.tab_maps .sortie_list .sortie_map.loading {
+	border-left-color: #29f;
 }
 .tab_event .sortie_list .sortie_ship,
 .tab_maps .sortie_list .sortie_ship {
