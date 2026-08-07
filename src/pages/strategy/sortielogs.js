@@ -48,6 +48,7 @@
 			onlyBattle: false,
 			evalShipState: true,
 			evalYasen: false,
+			clearMode: 'all',
 		};
 		this.settings = {};
 
@@ -92,7 +93,16 @@
 				const world = ev.target.value;
 				KC3StrategyTabs.gotoTab(null, world);
 			});
-			
+
+			// On-change clear mode dropdown
+			$(`.tab_${tabCode} .clear-mode-select`)
+				.val(this.settings.clearMode)
+				.on("change", (ev) => {
+					this.settings.clearMode = ev.target.value;
+					this.saveSettings();
+					this.showMap();
+				});
+
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
@@ -257,6 +267,9 @@
 							ConfigManager.load();
 							ConfigManager[config.linkedConfig] = this.settings[config.cfgKey];
 							ConfigManager.save();
+						}
+						if (config.cfgKey === 'loadLedger' && !this.settings[config.cfgKey]) {
+							return;
 						}
 						this.showMap();
 					});
@@ -630,15 +643,23 @@
 		
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
-		this.sortieFilter = function(sortie){
-			return !this.settings.bossArrival ||
+		this.sortieFilter = function (sortie) {
+			// Clear mode filter (event tab only — regular maps don't have eventmap)
+			if (tabCode === 'event' && this.settings.clearMode === 'pre') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 0) return false;
+			} else if (tabCode === 'event' && this.settings.clearMode === 'post') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 1) return false;
+			}
+			// 'all' passes through — no filter
+
+			return !this.settings.bossArrival
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
-				(Array.isArray(sortie.nodes) && sortie.nodes.some(
+				|| (Array.isArray(sortie.nodes) && sortie.nodes.some(
 					node => node.eventId == 5
-					// treat W1-6-N node as boss
-					|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
+						// treat W1-6-N node as boss
+						|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
 				));
 		};
 		
