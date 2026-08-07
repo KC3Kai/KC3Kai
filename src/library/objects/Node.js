@@ -1240,17 +1240,40 @@ Used by SortieManager
 				// obtaining clear once
 				maps[ckey].clear |= resultData.api_first_clear;
 				
-				// add a flag to this sortie record
-				if(resultData.api_first_clear && KC3SortieManager.isOnSavedSortie()) {
-					KC3Database.con.sortie.get(KC3SortieManager.getSortieId(), (sortie) => {
-						const eventmap = (sortie || {}).eventmap;
-						if(eventmap) {
-							eventmap.api_first_clear = resultData.api_first_clear;
-							KC3Database.con.sortie.put(sortie).then(() => {
-								console.info("Congratulations! This is your first time clear this map", eventmap);
-							});
+				// add more attributes to object `eventmap` of this sortie record
+				if (KC3SortieManager.isOnSavedSortie()) {
+					const eventmapToAdd = {};
+					if (this.gaugeDamage >= 0) {
+						eventmapToAdd.api_dmg_maphp = this.gaugeDamage;
+					}
+					if (this.enemyFlagshipHp > 0) {
+						eventmapToAdd.api_bosshp = this.enemyFlagshipHp;
+					}
+					// on first clear flag is true
+					if (resultData.api_first_clear) {
+						eventmapToAdd.api_first_clear = resultData.api_first_clear;
+					}
+					// on TP type gauge damaged
+					if (Object.hasSafePath(resultData, "api_landing_hp.api_sub_value")) {
+						const subTpValue = Number(resultData.api_landing_hp.api_sub_value);
+						if (Number.isFinite(subTpValue)) {
+							eventmapToAdd.api_sub_value = subTpValue;
 						}
-					});
+					}
+					if (Object.notEmpty(eventmapToAdd)) {
+						KC3Database.con.sortie.get(KC3SortieManager.getSortieId(), (sortie) => {
+							const eventmap = (sortie || {}).eventmap;
+							if (!eventmap) {
+								return;
+							}
+							Object.assign(eventmap, eventmapToAdd);
+							KC3Database.con.sortie.put(sortie).then(() => {
+								if (eventmap.api_first_clear) {
+									console.info("Congratulations! This is your first time clear this map", eventmap);
+								}
+							});
+						});
+					}
 				}
 				
 				if(stat) {

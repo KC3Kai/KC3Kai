@@ -29,52 +29,6 @@
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
 
-	// A jquery-ui tooltip options like native one
-	var nativeTooltipOptions = {
-		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
-		items: "[title],[titlealt]",
-		content: function(){
-			// Default escaping not used, keep html, simulate native one
-			return ($(this).attr("title") || $(this).attr("titlealt") || "")
-				.replace(/\n/g, "<br/>")
-				.replace(/\t/g, "&emsp;&emsp;");
-		}
-	};
-	(function($) {
-		// AOP around the dispatcher for any exception thrown from event handlers
-		var originalEventDispatch = $.event.dispatch;
-		$.event.dispatch = function() {
-			try {
-				originalEventDispatch.apply(this, arguments);
-			} catch(error) {
-				console.error("Uncaught event", error, this);
-				throw error;
-			}
-		};
-		// A lazy initializing method, prevent duplicate tooltip instance
-		$.fn.lazyInitTooltip = function(opts) {
-			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
-			}
-			return this;
-		};
-		// Actively close tooltips of element and its children
-		$.fn.hideChildrenTooltips = function() {
-			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
-				if(typeof $(el).tooltip("instance") !== "undefined")
-					$(el).tooltip("close");
-			});
-			return this;
-		};
-		// Create native-like tooltips of element and its children
-		$.fn.createChildrenTooltips = function() {
-			$.each($("[title]:not([disabled])", this), function(_, el){
-				$(el).lazyInitTooltip();
-			});
-			return this;
-		};
-	}(jQuery));
-
 	// make sure localStorage.expedTab is available
 	// and is in correct format.
 	// returns the configuration for expedTab
@@ -389,13 +343,7 @@
 			}
 		});
 		
-		// Resize window to 1200x720
-		$(".module.controls .btn_resize").on("click", function(){
-			// Send fit-screen request to service to be forwarded to gameplay page
-			(new RMsg("service", "fitScreen", {
-				tabId: chrome.devtools.inspectedWindow.tabId
-			})).execute();
-		});
+		KC3ThemeUtils.addFitScreen();
 		
 		// Mute button
 		$(".module.controls .btn_mute").on("click", function(){

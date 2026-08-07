@@ -65,10 +65,9 @@
 			$(".control_panel .selectors select").prop("disabled", true);
 			$(".control_panel .time_range input").prop("disabled", true);
 			$(".loading").show();
-			KC3Database.con.sortie.where("world").equals(world).and(
-				data => data.mapnum === map && data.hq === hqId
-				&& (KC3Meta.isEventWorld(world) ||
-					(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1]))
+			KC3Database.con.sortie.where("[hq+world+mapnum]").equals([hqId, world, map])
+			.and(data => KC3Meta.isEventWorld(world) ||
+				(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1])
 			).each(sortie => {
 				this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
 				allPromises.push(KC3Database.con.battle.where("sortie_id").equals(sortie.id).each(battle => {
@@ -230,12 +229,14 @@
 					isMap ? KC3Meta.term("ShipDropMapPickerDefaultOption") : KC3Meta.term("ShipDropWorldPickerDefaultOption")
 				)
 			);
-			$(".filters .massSelect #eventSelected").toggle(KC3Meta.isEventWorld(worldId));
-			$(".filters .massSelect #timeRange").toggle(!KC3Meta.isEventWorld(worldId));
+			$(".filters .massSelect #eventSelected")
+				.css("display", KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
+			$(".filters .massSelect #timeRange")
+				.css("display", !KC3Meta.isEventWorld(worldId) ? "inline-block" : "none");
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
-				if(isMap) {
-					if(worldId == String(mapId).slice(0, -1)) {
+				if (isMap) {
+					if (worldId == String(mapId).slice(0, -1)) {
 						this.addMapSwitcherOption(mapId, isMap, listElem);
 					}
 				} else {
@@ -247,28 +248,41 @@
 		addMapSwitcherOption: function(mapId, isMap, list) {
 			const world = String(mapId).slice(0, -1);
 			const map = String(mapId).slice(-1);
+			const eventTerm = KC3Meta.eventWorldTerm(world);
 			const value = isMap ? map : world;
-			const descFunc = isMap ? KC3Meta.mapToDesc : KC3Meta.worldToDesc;
-			if($(`option[value=${value}]`, list).length === 0) {
-				list.append(
-					$("<option />").attr("value", value).text(descFunc.call(KC3Meta, world, map))
-				);
+			const desc = isMap ? KC3Meta.mapToDesc(world, map) :
+				eventTerm.label || KC3Meta.worldToDesc(world);
+			if ($(`option[value=${value}]`, list).length === 0) {
+				const opt = $("<option />").attr("value", value);
+				if (isMap || !eventTerm.label) opt.text(desc);
+				else opt.text("[{0}] {1}".format(world, KC3Meta.term(desc)));
+				if (!isMap && eventTerm.tooltip)
+					opt.attr("title", KC3Meta.term(eventTerm.tooltip));
+				list.append(opt);
 			}
 		},
 
 		loadMapsFromStorage: function() {
 			const maps = localStorage.getObject("maps") || {};
+			const regularMaps = Object.keys(maps).filter(id => !KC3Meta.isEventWorld(id.slice(1, -1)));
+			const eventMaps = Object.keys(maps).filter(id => KC3Meta.isEventWorld(id.slice(1, -1)));
 			this.maps = {};
-			Object.keys(maps)
-				.sort((id1, id2) => {
-					const m1 = id1.slice(-1), m2 = id2.slice(-1);
-					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
-					if(w1 === "7") w1 = "3.5";
-					if(w2 === "7") w2 = "3.5";
-					return Number(w1) - Number(w2) || Number(m1) - Number(m2);
-				}).forEach(id => {
-					this.maps[id] = maps[id];
-				});
+			regularMaps.sort((id1, id2) => {
+				const m1 = id1.slice(-1), m2 = id2.slice(-1);
+				let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
+				if(w1 === "7") w1 = "3.5";
+				if(w2 === "7") w2 = "3.5";
+				return Number(w1) - Number(w2) || Number(m1) - Number(m2);
+			}).forEach(id => {
+				this.maps[id] = maps[id];
+			});
+			eventMaps.sort((id1, id2) => {
+				const m1 = id1.slice(-1), m2 = id2.slice(-1);
+				const w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
+				return Number(w2) - Number(w1) || Number(m1) - Number(m2);
+			}).forEach(id => {
+				this.maps[id] = maps[id];
+			});
 		},
 
 		updateFilters : function() {
@@ -306,7 +320,8 @@
 					stype === 100 ? KC3Meta.term("ShipDropShipTypeFilterItem") :
 					KC3Meta.stype(stype)
 				);
-				this.ship_filter_checkbox[stype] = true;
+				this.ship_filter_checkbox[stype] = Object.nullishTo(this.ship_filter_checkbox[stype], true);
+				$(".filter_box .filter_check", elem).toggle(this.ship_filter_checkbox[stype]);
 				elem.on("click", stypeHandler.bind(this, stype, elem, this.ship_filter_checkbox));
 				if(stype === 100 && KC3Meta.isEventWorld(this.selectedWorld)) elem.hide();
 			}

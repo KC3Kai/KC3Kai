@@ -89,12 +89,17 @@
 		addMapSwitcherOption: function(mapId, isMap, list) {
 			const world = String(mapId).slice(0, -1);
 			const map = String(mapId).slice(-1);
+			const eventTerm = KC3Meta.eventWorldTerm(world);
 			const value = isMap ? map : world;
-			const descFunc = isMap ? KC3Meta.mapToDesc : KC3Meta.worldToDesc;
-			if($(`option[value=${value}]`, list).length === 0) {
-				list.append(
-					$("<option />").attr("value", value).text(descFunc.call(KC3Meta, world, map))
-				);
+			const desc = isMap ? KC3Meta.mapToDesc(world, map) :
+				eventTerm.label || KC3Meta.worldToDesc(world);
+			if ($(`option[value=${value}]`, list).length === 0) {
+				const opt = $("<option />").attr("value", value);
+				if (isMap || !eventTerm.label) opt.text(desc);
+				else opt.text("[{0}] {1}".format(world, KC3Meta.term(desc)));
+				if (!isMap && eventTerm.tooltip)
+					opt.attr("title", KC3Meta.term(eventTerm.tooltip));
+				list.append(opt);
 			}
 		},
 		
@@ -103,23 +108,31 @@
 		 */
 		loadMapsFromStorage: function() {
 			const maps = localStorage.getObject("maps") || {};
+			const regularMaps = Object.keys(maps).filter(id => !KC3Meta.isEventWorld(id.slice(1, -1)));
+			const eventMaps = Object.keys(maps).filter(id => KC3Meta.isEventWorld(id.slice(1, -1)));
 			this.maps = {};
-			Object.keys(maps)
-				.sort((id1, id2) => {
-					const m1 = id1.slice(-1), m2 = id2.slice(-1);
-					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
-					if(w1 === "7") w1 = "3.5";
-					if(w2 === "7") w2 = "3.5";
-					return Number(w1) - Number(w2) || Number(m1) - Number(m2);
-				}).forEach(id => {
-					this.maps[id] = maps[id];
-				});
+			regularMaps.sort((id1, id2) => {
+				const m1 = id1.slice(-1), m2 = id2.slice(-1);
+				let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
+				if(w1 === "7") w1 = "3.5";
+				if(w2 === "7") w2 = "3.5";
+				return Number(w1) - Number(w2) || Number(m1) - Number(m2);
+			}).forEach(id => {
+				this.maps[id] = maps[id];
+			});
+			eventMaps.sort((id1, id2) => {
+				const m1 = id1.slice(-1), m2 = id2.slice(-1);
+				const w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
+				return Number(w2) - Number(w1) || Number(m1) - Number(m2);
+			}).forEach(id => {
+				this.maps[id] = maps[id];
+			});
 		},
 		
 		/**
 		 * Alternatively load map info from IndexedDB encounters table,
 		 * to indicate indeed maps player has encountered.
-		 * @return Promise on DB operation done
+		 * @return Promise for DB operation done
 		 */
 		loadMapsFromDatabase: function() {
 			this.maps = {};

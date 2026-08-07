@@ -32,15 +32,20 @@
 		//var shipDb = WhoCallsTheFleetDb.getShipStat(this.shipData.masterId);
 		var tooltipBox = $("#factory .ship_face_tooltip_outer").clone();
 		tooltipBox.hide().appendTo(this.element);
-		this.shipData.htmlTooltip(tooltipBox);
-		// Show a rich text tool-tip like stats in game
-		$(".ship_img", this.element).tooltip({
-			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
-				at: "left top", of: $(".module.fleet") },
-			items: "div",
-			content: tooltipBox.html(),
-			open: KC3Ship.onShipTooltipOpen
-		});
+		KC3QueueManager.deferTooltip(() => {
+			this.shipData.htmlTooltip(tooltipBox);
+			// Show a rich text tool-tip like stats in game
+			$(".ship_img", this.element).tooltip({
+				position: {
+					my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
+					at: "left top",
+					of: $(".module.fleet")
+				},
+				items: "div",
+				content: tooltipBox.html(),
+				open: KC3Ship.onShipTooltipOpen
+			});
+		}, 7);
 		// Double click on icon to show Strategy Room Ship Library page
 		$(".ship_img", this.element).data("masterId", this.shipData.masterId)
 			.on("dblclick", function(e){
@@ -65,14 +70,17 @@
 		if( myExItem.exists() ) {
 			$(".ex_item .gear_icon img", this.element)
 				.attr("src", KC3Meta.itemIcon(myExItem.master().api_type[3]))
-				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
 				.data("masterId", myExItem.masterId)
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstgear-{0}".format($(this).data("masterId"))
 					})).execute();
-				})
-				.lazyInitTooltip();
+				});
+			KC3QueueManager.deferTooltip(() => {
+				$(".ex_item .gear_icon img", this.element)
+					.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
+					.lazyInitTooltip();
+			}, 9);
 			$(".ex_item", this.element).attr("data-mst-id", myExItem.masterId)
 				.toggleClass("goddess", myExItem.masterId == 43);
 			if (myExItem.stars > 0) {
@@ -418,34 +426,35 @@
 	Add special glow if more than 53
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
-		$(".ship_morale", this.element).text( this.shipData.morale );
+		const moraleElm = $(":not(.ship_stats_row) > .ship_morale", this.element);
+		moraleElm.text(this.shipData.morale);
 		switch(true){
 			case this.shipData.morale > 70: // in-game 2 more sparkles
-				$(".ship_morale", this.element).css("background", "#FFFF00");
-				$(".ship_morale", this.element).addClass("glowing strongplus");
+				moraleElm.css("background", "#FFFF00");
+				moraleElm.addClass("glowing strongplus");
 				break;
 			case this.shipData.morale > 57: // in-game 1 more sparkle
-				$(".ship_morale", this.element).css("background", "#FFFF00");
-				$(".ship_morale", this.element).addClass("glowing strong");
+				moraleElm.css("background", "#FFFF00");
+				moraleElm.addClass("glowing strong");
 				break;
 			case this.shipData.morale > 52: // sparkle and get buff
-				$(".ship_morale", this.element).css("background", "#FFFF00");
-				$(".ship_morale", this.element).addClass("glowing");
+				moraleElm.css("background", "#FFFF00");
+				moraleElm.addClass("glowing");
 				break;
 			case this.shipData.morale > 49: // sparkle in-game
-				$(".ship_morale", this.element).css("background", "#FFFF00");
+				moraleElm.css("background", "#FFFF00");
 				break;
 			case this.shipData.morale > 39: // no effect in-game, regular state
-				$(".ship_morale", this.element).css("background", "#FFFFFF");
+				moraleElm.css("background", "#FFFFFF");
 				break;
 			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
-				$(".ship_morale", this.element).css("background", "#FFDDBB");
+				moraleElm.css("background", "#FFDDBB");
 				break;
 			case this.shipData.morale > 19: // orange face, debuff
-				$(".ship_morale", this.element).css("background", "#FFB74A");
+				moraleElm.css("background", "#FFB74A");
 				break;
 			default: // red face, heavy debuff
-				$(".ship_morale", this.element).css("background", "#FFA6A6");
+				moraleElm.css("background", "#FFA6A6");
 				break;
 		}
 	};
@@ -472,14 +481,17 @@
 					KC3Meta.itemIcon(thisGear.master().api_type[3]));
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slotSize(slot), this.shipData))
-					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
 						(new RMsg("service", "strategyRoomPage", {
 							tabPath: "mstgear-{0}".format($(this).data("masterId"))
 						})).execute();
 					});
+				KC3QueueManager.deferTooltip(() => {
+					$(".ship_gear_" + (slot + 1) + " .ship_gear_icon", this.element)
+						.attr("titlealt", thisGear.htmlTooltip(this.shipData.slotSize(slot), this.shipData))
+						.lazyInitTooltip();
+				}, 9);
 				
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
 					.attr("data-mst-id", thisGear.masterId)

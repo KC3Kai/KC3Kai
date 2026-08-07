@@ -4347,8 +4347,8 @@ KC3改 Ship Object
 		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni, Kaga Kai Ni Go
 		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
 		//             Langley and Kai fp > 0, but seems don't attack either
-		//             Independence and Kai fp > 0, don't attack? but Flight II supposed to move
-		if(isThisCarrier && initYasen > 0 && ![707, 925, 930, 1023, 1028].includes(this.masterId)) return true;
+		//             Independence all remodels fp > 0 don't attack, Flight II neither?
+		if(isThisCarrier && initYasen > 0 && ![707, 925, 930, 1023, 1028, 1036].includes(this.masterId)) return true;
 		// Shimanemaru Kai gets special behaviors: moves like a night carrier when any night plane equipped,
 		// but falls back to shelling fires when she is chuuha.
 		const isShimanemaruKaiWithNightPlane = (this.masterId == 1008) && this.canCarrierNightAirAttack();
@@ -4707,12 +4707,13 @@ KC3改 Ship Object
 				1025, 1030, // Wasp
 				529, 536, 889, // Taiyou/Shinyou/Unyou Kai Ni
 				646, // Kaga K2Go
+				//1055, 1060, 1061, // Bearn (forgotten again)
 			].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs:
 			// she was doing air attack against surface ships, but no plane appears if no aircraft equipped.
-			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~
+			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~, Bearn
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
@@ -4959,7 +4960,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.nightCutinRate = function(spType = 0, cutinSubType = "") {
 		if (spType < 1 || this.isDummy()) { return false; }
-		// not sure: DA success rate almost 99%
+		// According statistics of tests, DA success rate fixed to ~99% (109/110?) irrelevant to base rate
 		if (spType === 1) { return 99; }
 		const typeFactor = {
 			2: 115, // TorpTorpMain
@@ -6132,7 +6133,7 @@ KC3改 Ship Object
 			!canAsw ? "" : KC3Meta.term("ShipAccAntisub").format(
 				floorToDecimal(accuracyInfo.asw.accuracy, 1)
 			)
-		].filter(v => !!v).join(" / "));
+		].compact().join(" / "));
 		const shellingEvasion = shipObj.shellingEvasion(
 			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion", false)
 		);

@@ -134,11 +134,13 @@
 				KC3Database.count_sortie_battle(function(sc, bc){
 					self.battleCounts.lastDaySortie = sc;
 					self.battleCounts.lastDayBattle = bc;
-				}, lastDaySec);
+				}, lastDaySec)
+				.then(function(){
 				KC3Database.count_sortie_battle(function(sc, bc){
 					self.battleCounts.last2DaySortie = sc;
 					self.battleCounts.last2DayBattle = bc;
-				}, last2DaySec);
+				}, last2DaySec)
+				.then(function(){
 				KC3Database.count_sortie_battle(function(sc, bc){
 					self.battleCounts.lastMonthSortie = sc;
 					self.battleCounts.lastMonthBattle = bc;
@@ -147,6 +149,8 @@
 					self.refreshHealthMetric();
 					localStorage.setObject("srBtlcnts", self.battleCounts);
 				}, lastMonthSec);
+				});
+				});
 			} else {
 				this.refreshHealthMetric();
 			}

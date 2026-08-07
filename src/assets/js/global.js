@@ -681,6 +681,34 @@ String.prototype.digest = function(alg) {
 		rfs = rfs === undefined ? Infinity : rfs;
 		return Math.min(Math.max(lfs, rfs), Math.max(Math.min(lfs, rfs), this));
 	};
+	// almost equivalent to previous method
+	Number.prototype.clamp = function(lower, upper) {
+		var l = Number.isFinite(lower) ? Number(lower) : -Infinity;
+		var u = Number.isFinite(upper) ? Number(upper) : Infinity;
+		return l > u ?
+			Math.max(u, Math.min(l, this)) :
+			Math.max(l, Math.min(u, this));
+	};
+
+	Number.prototype.wrap = function(lower, upper) {
+		var l = Number(lower), u = Number(upper);
+		if(l > u) { l = Number(upper); u = Number(lower); }
+		if(this < l) return u;
+		if(this > u) return l;
+		return this.valueOf();
+	};
+
+	Number.prototype.warp = function(lower, upper) {
+		var l = Number(lower), u = Number(upper);
+		if(l > u) { l = Number(upper); u = Number(lower); }
+		var v = this.valueOf();
+		while(v < l || v > u) {
+			if(v < l) v += u - l + 1;
+			if(v > u) v -= u - l + 1;
+		}
+		return v;
+	};
+
 }).call(Number);
 
 /* JS NATIVE CLASS */
@@ -909,6 +937,32 @@ Object.defineProperty(Array.prototype, "diff", {
 		if(otherArray === thisArray) return [];
 		var thisSet = new Set(thisArray), otherSet = new Set(otherArray);
 		return [...thisSet].filter(e => !otherSet.has(e));
+	}
+});
+
+Object.defineProperty(Array.prototype, "compact", {
+	enumerable: false,
+	/**
+	 * A convenient method to remove falsy elements from this Array.
+	 * @param nullishOnly - to only remove nullish elements instead of falsy.
+	 * @return an array without falsy elements.
+	 */
+	value: function compact(nullishOnly) {
+		return nullishOnly ?
+			this.filter(e => !(e === undefined || e === null)) :
+			this.filter(Boolean);
+	}
+});
+
+Object.defineProperty(Array.prototype, "hasTruthy", {
+	enumerable: false,
+	/**
+	 * A convenient method to check if not all the elements in this Array are falsy.
+	 * @param beAll - to check if all elements are truthy values.
+	 * @return true if any (or all) not falsy.
+	 */
+	value: function hasTruthy(beAll) {
+		return beAll ? this.every(Boolean) : this.some(Boolean);
 	}
 });
 
