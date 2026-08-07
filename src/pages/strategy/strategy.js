@@ -30,6 +30,7 @@
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3Database.init( PlayerManager.hq.id );
+		KC3Cache.init();
 		RemodelDb.init();
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
