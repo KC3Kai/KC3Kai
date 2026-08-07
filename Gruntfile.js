@@ -261,6 +261,7 @@ module.exports = function(grunt) {
 								"library/modules/QuestSync/Sync.js",
 								"library/modules/QuestSync/Background.js",
 								"library/modules/Database.js",
+								"library/modules/Cache.js",
 								"library/modules/Log/Log.js",
 								"library/modules/Log/Background.js",
 								"library/modules/ImageExport.js",
