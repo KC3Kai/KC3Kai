@@ -513,8 +513,11 @@ Uses Dexie.js third-party plugin on the assets directory
 					return expeds.includes(exped.mission) && fleets.includes(exped.fleetN)
 						&& sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
 				}).toArray(arr => {
-					const gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
-					const ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
+					const [gs, ns] = arr.reduce((tuple, exped) => {
+						if(exped.data.api_clear_result == 2) tuple[0] += 1;
+						if(exped.data.api_clear_result  > 0) tuple[1] += 1;
+						return tuple;
+					}, [0, 0]);
 					callback(arr.length, gs, ns);
 					return arr.length;
 				});

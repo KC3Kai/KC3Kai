@@ -6,7 +6,7 @@
  *              https://github.com/kcwiki/kancolle-data/blob/master/wiki/equipment.json
  * poidb source: https://api.poi.moe/dump/ship-stat.json
  * @require node 8+, fs, https
- * @version 20251225
+ * @version 20260716
  */
 const outputMissingNedb = false, outputDiffReport = true, updateWctfNedb = true
 const wctfShipFile = '../src/data/WhoCallsTheFleet_ships.nedb'
@@ -46,7 +46,7 @@ const downloadWikiData = (dship, dequip, dmaster, dstat) => {
 			console.info(file, 'status code:', resp.statusCode)
 			if (resp.statusCode < 200 || resp.statusCode >= 400) return
 			resp.setEncoding('utf8')
-			const body = [];
+			const body = []
 			resp.on('data', (chunk) => { body.push(chunk) })
 			resp.on('end', () => {
 				try {
