@@ -1031,8 +1031,17 @@
 							});
 					})
 					.finally(() => {
-						$(".sortie_map", sortieBox).toggleClass('loading');
+						$(".sortie_map", sortieBox).toggleClass('loading loaded');
 					});
+			};
+			const queueLedgerLoadingFunc = (e) => {
+				const mapElm = $(e.target);
+				const id = mapElm.data("id"), world = mapElm.data("world");
+				const sortieBox = mapElm.parent().parent();
+				const done = ["queued", "loading", "loaded"].some(c => mapElm.hasClass(c));
+				if(!id || !world || done) return;
+				mapElm.toggleClass("queued");
+				self.ledgerLimiter.schedule(showSortieLedger, id, sortieBox, world);
 			};
 
 			// Show sortie records on list
@@ -1058,10 +1067,12 @@
 						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					const sortieTime = sortie.time * 1000;
-					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
-					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
-					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
+					$(".sortie_date", sortieBox).text(new Date(sortieTime).format("mmm d", false, self.locale));
+					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss"));
 
+					$(".sortie_map", sortieBox).text(
+						(KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum
+					).data("id", sortie.id).data("world", sortie.world).on("click", queueLedgerLoadingFunc);
 					if (self.settings.loadLedger) {
 						$(".sortie_map", sortieBox).toggleClass('queued');
 						// schedule `showSortieLedger` as this take tons of time
