@@ -8,6 +8,8 @@
 (() => {
   'use strict';
 
+  const debug = false;
+
   const dbNonFunc = function (t) { };
   const dbProposed = {};
   const dbUpdates = [
@@ -62,10 +64,39 @@
 
     get: function (key) {
       return this.init()
-        .then(() => this.db.queries.get(key))
+        .then(() => {
+          debug && console.time(key);
+          return this.db.queries.get(key);
+        })
         .then((value) => {
-          // console.debug('KC3Cache.get', key, value);
+          debug && console.debug('KC3Cache.get', key, value);
           return value;
+        })
+        .catch((err) => {
+          console.warn(err.message);
+          throw err;
+        })
+        .finally(() => {
+          debug && console.timeEnd(key);
+        });
+    },
+
+    anyOf: function (keys) {
+      return this.init()
+        .then(() => {
+          debug && console.time(keys);
+          return this.db.queries.where('id').anyOf(keys).toArray();
+        })
+        .then((value) => {
+          debug && console.debug('KC3Cache.anyOf', keys, value);
+          return value;
+        })
+        .catch((err) => {
+          console.warn(err.message);
+          throw err;
+        })
+        .finally(() => {
+          debug && console.timeEnd(keys);
         });
     },
 
@@ -77,7 +108,7 @@
           value: value
         }))
         .then(() => {
-          console.debug('KC3Cache.set', key);
+          debug && console.debug('KC3Cache.set', key);
         });
     },
 
@@ -88,7 +119,7 @@
       return this.init()
         .then(() => this.db.queries.delete(key))
         .then(() => {
-          console.debug('KC3Cache.remove', key);
+          debug && console.debug('KC3Cache.remove', key);
         });
     },
 
@@ -96,7 +127,7 @@
       return this.init()
         .then(() => this.db.queries.clear())
         .then(() => {
-          console.debug('KC3Cache.clear');
+          debug && console.debug('KC3Cache.clear');
         });
     }
   };
