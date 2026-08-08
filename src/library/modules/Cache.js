@@ -9,6 +9,7 @@
   'use strict';
 
   const debug = false;
+  const _debug = (fn) => { if (debug) { fn(); } };
 
   const dbNonFunc = function (t) { };
   const dbProposed = {};
@@ -65,11 +66,11 @@
     get: function (key) {
       return this.init()
         .then(() => {
-          debug && console.time(key);
+          _debug(() => console.time(key));
           return this.db.queries.get(key);
         })
         .then((value) => {
-          debug && console.debug('KC3Cache.get', key, value);
+          _debug(() => console.debug('KC3Cache.get', key, value));
           return value;
         })
         .catch((err) => {
@@ -77,18 +78,18 @@
           throw err;
         })
         .finally(() => {
-          debug && console.timeEnd(key);
+          _debug(() => console.timeEnd(key));
         });
     },
 
     anyOf: function (keys) {
       return this.init()
         .then(() => {
-          debug && console.time(keys);
+          _debug(() => console.time(keys));
           return this.db.queries.where('id').anyOf(keys).toArray();
         })
         .then((value) => {
-          debug && console.debug('KC3Cache.anyOf', keys, value);
+          _debug(() => console.debug('KC3Cache.anyOf', keys, value));
           return value;
         })
         .catch((err) => {
@@ -96,7 +97,7 @@
           throw err;
         })
         .finally(() => {
-          debug && console.timeEnd(keys);
+          _debug(() => console.timeEnd(keys));
         });
     },
 
@@ -108,7 +109,7 @@
           value: value
         }))
         .then(() => {
-          debug && console.debug('KC3Cache.set', key);
+          _debug(() => console.debug('KC3Cache.set', key));
         });
     },
 
@@ -119,7 +120,7 @@
       return this.init()
         .then(() => this.db.queries.delete(key))
         .then(() => {
-          debug && console.debug('KC3Cache.remove', key);
+          _debug(() => console.debug('KC3Cache.remove', key));
         });
     },
 
@@ -127,7 +128,7 @@
       return this.init()
         .then(() => this.db.queries.clear())
         .then(() => {
-          debug && console.debug('KC3Cache.clear');
+          _debug(() => console.debug('KC3Cache.clear'));
         });
     }
   };
