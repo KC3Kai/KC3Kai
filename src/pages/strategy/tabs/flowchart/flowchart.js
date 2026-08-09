@@ -259,9 +259,11 @@
 				$(this).next().tooltip("close");
 			});
 			$(".questDesc", thisBox).text( this.showQuestName ? thisQuest.name : KC3Quest.removeHtmlLinebreak(thisQuest.desc) );
-			$(".questDesc", thisBox)
-				.attr("title", KC3QuestManager.buildHtmlTooltip(quest_id, thisQuest, true, false))
-				.lazyInitTooltip();
+			KC3QueueManager.deferTooltip(() => {
+				$(".questDesc", thisBox)
+					.attr("title", KC3QuestManager.buildHtmlTooltip(quest_id, thisQuest, true, false))
+					.lazyInitTooltip();
+			});
 			$(".questDesc", thisBox).data("rewardConsumables", thisQuest.rewardConsumables);
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
@@ -344,9 +346,11 @@
 			$(".questDesc", thisBox).text(
 				(this.showQuestName ? questMeta.name : KC3Quest.removeHtmlLinebreak(questMeta.desc)) || KC3Meta.term("UntranslatedQuest")
 			);
-			$(".questDesc", thisBox)
-				.attr("title", KC3QuestManager.buildHtmlTooltip(thisQuest.id, questMeta))
-				.lazyInitTooltip();
+			KC3QueueManager.deferTooltip(() => {
+				$(".questDesc", thisBox)
+					.attr("title", KC3QuestManager.buildHtmlTooltip(thisQuest.id, questMeta))
+					.lazyInitTooltip();
+			});
 			$(".questDesc", thisBox).data("rewardConsumables", questMeta.rewardConsumables);
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);

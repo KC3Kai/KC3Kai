@@ -703,8 +703,9 @@
 				ThisShipData.statmax = 1;
 			else
 				ThisShipData.statmax = 0;
-			// Check whether exists special modernization of hp/luck/asw
-			if( ThisShipData.hp[0] > ThisShipData.hp[3]
+			// Check whether exists special modernization of hp/luck/asw, or expanded hangar
+			if( ThisShip.slotsMax
+				|| ThisShipData.hp[0] > ThisShipData.hp[3]
 				|| ThisShipData.lk[0] > ThisShipData.lk[2]
 				|| ThisShipData.as[0] > ThisShipData.as[2]
 			  )

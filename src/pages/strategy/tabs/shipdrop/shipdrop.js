@@ -66,34 +66,26 @@
 			$(".control_panel .time_range input").prop("disabled", true);
 			$(".loading").show();
 
-			const sortieMap = new Map();
-
 			KC3Database.con.sortie
-				.where("[hq+world+mapnum]")
-				.equals([hqId, world, map])
+				.where("[hq+world+mapnum]").equals([hqId, world, map])
 				.and(data => KC3Meta.isEventWorld(world) || (data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1]))
-				.toArray()
-				.then((sorties) => {
+				.toArray(sorties => {
+					const sortieMap = new Map();
 					sorties.forEach((sortie) => {
 						this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
 						sortieMap.set(sortie.id, sortie);
 					});
-
 					return KC3Database.con.battle
-						.where("sortie_id")
-						.anyOf(sorties.map(sortie => sortie.id))
-						.toArray()
-						.then((battles) => {
-							battles.forEach((battle) => {
-								const sortie = sortieMap.get(battle.sortie_id);
-								this.dropTable[sortie.diff][battle.rating] = this.dropTable[sortie.diff][battle.rating] || {};
-								const drop = this.dropTable[sortie.diff][battle.rating][battle.node] =
-									this.dropTable[sortie.diff][battle.rating][battle.node] || {};
-								drop["s-" + battle.drop] = (drop["s-" + battle.drop] || 0) + 1;
-								if (battle.slotitem) drop["e-" + battle.slotitem] = (drop["e-" + battle.slotitem] || 0) + 1;
-								if (battle.useitem) drop["i-" + battle.useitem] = (drop["i-" + battle.useitem] || 0) + 1;
-								if (battle.boss) drop.boss = true;
-							});
+						.where("sortie_id").anyOf(sorties.map(sortie => sortie.id))
+						.each(battle => {
+							const sortie = sortieMap.get(battle.sortie_id);
+							this.dropTable[sortie.diff][battle.rating] = this.dropTable[sortie.diff][battle.rating] || {};
+							const drop = this.dropTable[sortie.diff][battle.rating][battle.node] =
+								this.dropTable[sortie.diff][battle.rating][battle.node] || {};
+							drop["s-" + battle.drop] = (drop["s-" + battle.drop] || 0) + 1;
+							if (battle.slotitem) drop["e-" + battle.slotitem] = (drop["e-" + battle.slotitem] || 0) + 1;
+							if (battle.useitem) drop["i-" + battle.useitem] = (drop["i-" + battle.useitem] || 0) + 1;
+							if (battle.boss) drop.boss = true;
 						});
 				})
 				.then(() => {
