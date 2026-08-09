@@ -35,7 +35,7 @@
 		"scripts": [
 			"assets/js/global.js",
 			"assets/js/jquery.min.js",
-			"assets/js/Dexie.min.js",
+			"assets/js/dexie.min.js",
 			"library/objects/Messengers.js",
 			"library/objects/Quest.js",
 			"library/objects/Screenshot.js",

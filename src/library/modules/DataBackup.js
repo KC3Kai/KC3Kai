@@ -2,7 +2,16 @@
 	"use strict";
 
 	const DBExportBatchSize = 5000;
+	const DBImportBatchSize = 2000;
+
 	const requiresFullTableExport = tableName => ["enemy", "encounters"].includes(tableName);
+	const chunkArray = (arr, size) => {
+		const chunks = [];
+		for (let i = 0; i < arr.length; i += size) {
+			chunks.push(arr.slice(i, i + size));
+		}
+		return chunks;
+	};
 
 	window.KC3DataBackup = {
 		saveData : function(elementkey,callback){//Save All Data to file, elementkey can be null
@@ -134,6 +143,93 @@
 			processTables(dbdata, !!overwrite);
 		},//processDB
 
+		/**
+		 * load data from DB string, elementkey can be null
+		 */
+		processDB_2: function (dbstring, overwrite, elementkey, callback) {
+			console.time("processDB:total");
+			const ekex = (typeof elementkey === "string");
+			const dbdata = JSON.parse(dbstring);
+			if (ekex) $(elementkey).html("");
+
+			const processTables = (dbdata_, overwrite) => {
+				const init = overwrite
+					? new Dexie.Promise(resolve => {
+						KC3Database.con.close();
+						KC3Database.clear(() => {
+							console.log("Cleaned up old database...");
+							resolve();
+						});
+					})
+					: Dexie.Promise.resolve();
+
+				init
+					.then(() => {
+						console.log("Processing tables...");
+						KC3Database.init();
+						KC3Database.con.open();
+						if (ekex) $(elementkey).append("<div class=\"datatransaction\">-DB Transaction Started-</div>");
+
+						for (const index of Object.keys(dbdata_)) {
+							const tabledata = dbdata_[index];
+							if (ekex) $(elementkey).append("<div class=\"" + index + "\">Table queued : " + index + " 『size : " + tabledata.length + "』</div>");
+						}
+
+						if (ekex) $(elementkey + " .datatransaction").text("=DB transaction all queued=");
+
+						return Object.keys(dbdata_).reduce(
+							(prev, tableName) => prev.then(() => {
+								const tabledata = dbdata_[tableName];
+								const table = KC3Database.con[tableName];
+								if (!table) {
+									console.warn("Table not found in schema, skipping:", tableName);
+									return Dexie.Promise.resolve();
+								}
+
+								console.log("Processing " + tableName, "size:", tabledata.length);
+								if (ekex) $(elementkey + " ." + tableName).text("Processing " + tableName + " 『size : " + tabledata.length + "』");
+
+								console.time("processDB:table:" + tableName + ":map+chunk");
+								const records = tabledata.map(record => {
+									const clean = Object.assign({}, record);
+									if (["enemy", "encounters"].indexOf(tableName) === -1) {
+										delete clean.id;
+									}
+									return clean;
+								});
+								const chunks = chunkArray(records, DBImportBatchSize);
+								console.timeEnd("processDB:table:" + tableName + ":map+chunk");
+
+								console.time("processDB:table:" + tableName + ":bulkAdd");
+								return chunks
+									.reduce(
+										(p, chunk, i) => p.then(() => table.bulkAdd(chunk).then(res => {
+											console.debug(`(${tableName})`, 'bulkAdd', chunk.length, (i * DBImportBatchSize) + chunk.length);
+											return res;
+										})),
+										Dexie.Promise.resolve()
+									)
+									.then(() => {
+										console.timeEnd("processDB:table:" + tableName + ":bulkAdd");
+										if (ekex) $(elementkey + " ." + tableName).text("Processed " + tableName);
+									});
+							}),
+							Dexie.Promise.resolve()
+						);
+					})
+					.then(() => {
+						console.timeEnd("processDB:total");
+						callback();
+					})
+					.catch((error) => {
+						console.error(error.message);
+						alert(error.message);
+					});
+			};
+
+			processTables(dbdata, !!overwrite);
+		},
+
 		processStorage: function(importedDataString, overwrite){
 			if(!!overwrite){
 				localStorage.clear();
@@ -177,6 +273,39 @@
 			});//reader.onload
 			reader.readAsArrayBuffer(file_);
 		},//loadData
+
+		loadData_2: function (file_, overwrite, elementkey, callback) {
+			var ekex = ((typeof elementkey) === "string");
+			var zip;
+			var reader = new FileReader();
+			reader.onload = (function (e) {
+				// read the content of the file with JSZip
+				zip = new JSZip(e.target.result);
+				$.each(zip.files, function (index, zipEntry) {
+					switch (zipEntry.name) {
+						case "db.json":
+							console.info("db.json detected.");
+							setTimeout(function () {
+								KC3DataBackup.processDB_2(zipEntry.asText(), overwrite, elementkey, callback);
+							}, 0);
+							break;
+						case "storage.json":
+							console.info("storage.json detected.");
+							if (overwrite)
+								setTimeout(function () {
+									if (ekex) $(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
+									window.KC3DataBackup.processStorage(zipEntry.asText(), overwrite);
+									if (ekex) $(elementkey + " .localstorageprocess").text("=storage processed=");
+								}, 10);
+							break;
+						default:
+							alert("Could be wrong file");
+
+					}//swich: zip name
+				});//file acces foreach
+			});//reader.onload
+			reader.readAsArrayBuffer(file_);
+		},
 
 		// Backup v2 functions
 		saveDataToFolder : function(elementkey, callback, incremental = false) {

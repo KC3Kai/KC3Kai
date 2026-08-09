@@ -997,7 +997,8 @@
 											return null;
 										}
 										return KC3Database.con.navaloverall
-											.offset(firstEntry.id)
+											.where(":id")
+											.aboveOrEqual(firstEntry.id)
 											.until(entry => entry.type === "sortie" + (sortieId + 1))
 											.and(entry => "lbas" + sortieWorld === entry.type)
 											.toArray();
