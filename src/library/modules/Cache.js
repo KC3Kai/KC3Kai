@@ -11,6 +11,10 @@
   const debug = false;
   const _debug = (fn) => { if (debug) { fn(); } };
 
+  const INVALIDATION_ID = 'cache:invalidation:at';
+  const INVALIDATION_THRESHOLD = 86400000;   // 1 day in ms
+  const INVALIDATION_INTERVAL = 3600000;     // 1 hour in ms
+
   const dbNonFunc = function (t) { };
   const dbProposed = {};
   const dbUpdates = [
@@ -130,7 +134,55 @@
         .then(() => {
           _debug(() => console.debug('KC3Cache.clear'));
         });
-    }
+    },
+
+    invalidate: function (timestamp) {
+      return this.init()
+        .then(() => {
+          const threshold = timestamp - INVALIDATION_THRESHOLD;
+          console.time('cache:invalidation');
+          return this.db.queries.where('created_at').below(threshold).delete();
+        })
+        .then(() => this.db.queries.put({
+          id: INVALIDATION_ID,
+          created_at: Date.now(),
+          value: timestamp
+        }))
+        .then(() => {
+          console.timeEnd('cache:invalidation');
+          console.debug('KC3Cache invalidated at', new Date(timestamp));
+        });
+    },
   };
+
+  function _startInvalidationLoop() {
+    console.debug('KC3Cache invalidation loop start');
+
+    window.KC3Cache.get(INVALIDATION_ID)
+      .then((sentinel) => {
+        if (!sentinel) {
+          console.debug('KC3Cache no sentinel, running now');
+        } else {
+          const nextCheckpoint = sentinel.value + INVALIDATION_INTERVAL;
+          console.debug('KC3Cache last invalidation:', new Date(sentinel.value), '>>> next at:', new Date(nextCheckpoint));
+
+          if (Date.now() < nextCheckpoint) {
+            setTimeout(_startInvalidationLoop, nextCheckpoint - Date.now());
+            return;
+          }
+        }
+
+        return window.KC3Cache.invalidate(Date.now())
+          .then(() => {
+            _startInvalidationLoop();
+          });
+      })
+      .catch((err) => {
+        console.warn('KC3Cache invalidation loop error', err);
+        setTimeout(_startInvalidationLoop, INVALIDATION_INTERVAL);
+      });
+  }
+
+  _startInvalidationLoop();
 
 })();
