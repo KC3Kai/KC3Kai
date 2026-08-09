@@ -98,6 +98,26 @@
 				}
 			});
 
+			// Impot data v1 (overwrite) (NEW)
+			$(".tab_databackup .overwrite_data_2").on("click", function () {
+				if (filename === "") {
+					alert("No file selected");
+					return;
+				}
+				if (confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))
+					if (confirm("This will overwrite all of your KC3 data! Are you sure?"))
+						if (isExportedFirst || confirm("If you haven't backed up your old data, it will be lost! Are you sure?")) {
+							toggleFinishedIndicator(false);
+							toggleProgressDisplay(true);
+							window.KC3DataBackup.loadData_2(filename, true, progressTextSelector, () => {
+								setFinishMessage("Finished! Please reload this page.");
+								toggleFinishedIndicator(true);
+								alert("Finished!");
+								isReloadNeeded = true;
+							});
+						}
+			});
+
 			// Export fullset data v2
 			$(".tab_databackup .export_data2").on("click", function(){
 				toggleFinishedIndicator(false);
