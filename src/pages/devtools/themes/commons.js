@@ -17,11 +17,13 @@
     this.listener = listener;
   };
 
+  window.KC3ThemeUtils = new Utils();
+
   // #endregion Core
 
   // #region Static constants
 
-  Utils.LOG3 = Math.log10(3);
+  KC3ThemeUtils.LOG3 = Math.log10(3);
 
   // #endregion Static constants
 
@@ -649,7 +651,5 @@
       }()))
       .text(KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]));
   };
-
-  window.KC3ThemeUtils = new Utils();
 
 })();
