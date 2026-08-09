@@ -1521,12 +1521,20 @@
 									$(".node_result", nodeBox).addClass("icon5");
 									$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
 									if(battle.data.api_friendly_kouku){
-										const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
-										$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
+										KC3QueueManager.deferTooltip(() => {
+											const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
+											$(".node_friend", nodeBox)
+												.attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"))
+												.lazyInitTooltip();
+										}, 5, self.tooltipLimiter);
 									}
 									if(battle.yasen.api_friendly_battle){
-										const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
-										$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
+										KC3QueueManager.deferTooltip(() => {
+											const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
+											$(".node_friend", nodeBox)
+												.attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"))
+												.lazyInitTooltip();
+										}, 5, self.tooltipLimiter);
 									}
 								}else{
 									$(".node_result", nodeBox).removeClass("icon5");
