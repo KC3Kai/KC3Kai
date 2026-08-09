@@ -130,7 +130,7 @@
 			$(".lbcons").hide();
 			$(".map_list").html("").hide();
 			$(".memorial").hide();
-			const allPromises = [];
+
 			const hqId = PlayerManager.hq.id;
 			this.stats = {
 				shipDamageDealt: {},
@@ -203,182 +203,235 @@
 				$(".map_list").text("Failed to retrieve event data due to unexpected error").show();
 			};
 
-			// Get LB Consumption first
-			allPromises.push(KC3Database.con.navaloverall.where("type").equals("lbas" + this.world).toArray(lbArr => {
-				this.stats.lbConsumption = buildConsumptionArray(lbArr);
-			}));
+			const sortieMap = new Map();
 
-			KC3Database.con.sortie.where("world").equals(this.world).and(data => data.hq === hqId).each(sortie => {
-				const mapnum = sortie.mapnum;
-				const diff = sortie.diff;
-				const mapname = `${this.world}${mapnum}`;
-				const mapdata = this.maps["m" + mapname];
-				const selectedDiff = mapdata && mapdata.difficulty;
-				const isDiffMatched = (selectedDiff === undefined) || (diff == selectedDiff);
-				let hpbar = false;
-				if (sortie.eventmap && sortie.eventmap.api_gauge_type == 2) hpbar = true;
-				if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
-				if (!this.stats.bossCount[mapnum]) this.stats.bossCount[mapnum] = 0;
-				if (!this.stats.clearCount[mapnum]) this.stats.clearCount[mapnum] = 0;
-				if (!this.stats.ldCount[mapnum]) this.stats.ldCount[mapnum] = 0;
-				let cleared = false;
-				let lastDance = false;
-				if (sortie.eventmap && sortie.eventmap.api_cleared) cleared = true;
-				if (!cleared && isDiffMatched) {
-					this.stats.clearCount[mapnum]++;
-					const gauges = Object.keys(KC3Meta.eventGauge(mapname));
-					if (sortie.eventmap && sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
-						lastDance = true;
-						this.stats.ldCount[mapnum]++;
-					}
-				}
-				this.stats.sortieCount[mapnum]++;
-				let isClearSortie = false;
-				if (!cleared && hpbar && mapdata && mapdata.stat) {
-					const killid = mapdata.stat.onClear;
-					if (killid == sortie.id) isClearSortie = true;
-				}
-				// Get battle data
-				allPromises.push(KC3Database.con.battle.where("sortie_id").equals(sortie.id)
-				.each(battle => {
-					// Settle droplist first
-					const drop = battle.drop;
-					this.stats.dropList[mapnum] = this.stats.dropList[mapnum] || {};
-					this.stats.dropList[mapnum][drop] = (this.stats.dropList[mapnum][drop] || 0) + 1;
-
-					if (battle.boss) { this.stats.bossCount[mapnum]++; }
-					// Battle API changed from Fall 2017 onwards, skip battle simulation
-					if (this.world < handlableWorld) { return; }
-
-					// Battle analysis
-					const checkForLastHit = battle.boss && isClearSortie;
-					const nodeData = Array.isArray(sortie.nodes)
-						&& sortie.nodes.find(node => node.id === battle.node);
-					if (!nodeData) { return; }
-					const nodeKind = nodeData.eventKind;
-					const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
-					let battleData = time !== "night" ? battle.data : battle.yasen;
-					// missing battle data, F5?
-					if (!Object.notEmpty(battleData)) { return; }
-					const battleType = {
-						player: { 0: "single", 1: "ctf", 2: "stf", 3: "ctf" }[sortie.combined],
-						enemy: !battleData.api_ship_ke_combined ? "single" : "combined",
-						time: time
-					};
-
-					const resultDay = KC3BattlePrediction.analyzeBattle(battleData, {}, battleType);
-					const fleetSent = battleData.api_deck_id;
-					let ships = sortie["fleet" + fleetSent];
-					let maxHps = battleData.api_f_maxhps, initialHps = battleData.api_f_nowhps;
-					if (!maxHps) return;
-					const sortieKuso = this.stats.kuso[sortie.id] || [];
-					ships = checkShipLength(ships, maxHps, sortieKuso);
-					if (ships.length != maxHps.length) {
-						return;
-					}
-					ships = checkShipLength(ships, maxHps);
-					if (sortie.combined > 0) {
-						let fleet2 = sortie.fleet2;
-						const maxHps2 = battleData.api_f_maxhps_combined;
-						if (!maxHps2) return;
-						fleet2 = checkShipLength(fleet2, maxHps2, sortieKuso);
-						if (fleet2.length != maxHps2.length) {
-							return;
-						}
-						ships = ships.concat(fleet2);
-						maxHps = maxHps.concat(maxHps2);
-						initialHps = initialHps.concat(battleData.api_f_nowhps_combined);
-					}
-
-					let eships = battleData.api_ship_ke;
-					if (battleData.api_ship_ke_combined) {
-						eships = eships.concat(battleData.api_ship_ke_combined);
-					}
-
-					let player = resultDay.fleets.playerMain.concat(resultDay.fleets.playerEscort);
-					let enemy = resultDay.fleets.enemyMain.concat(resultDay.fleets.enemyEscort);
-					player.forEach((ship, index) => {
-						this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
-					});
-					checkFleetAttacks(player, ships, checkForLastHit, mapnum);
-					if (Object.notEmpty(battle.yasen) && time === "day") {
-						battleType.time = "night";
-						if (battle.yasen.api_e_nowhps.length > 6) { // Old API entries
-							battle.yasen.api_e_nowhps = battle.yasen.api_e_nowhps.slice(0, 6);
-						}
-						const resultNight = KC3BattlePrediction.analyzeBattle(battle.yasen, {}, battleType);
-						player = resultNight.fleets.playerMain.concat(resultNight.fleets.playerEscort);
-						enemy = resultNight.fleets.enemyMain.concat(resultNight.fleets.enemyEscort);
-						player.forEach((ship, index) => {
-							this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
-						});
-						checkFleetAttacks(player, ships, checkForLastHit, mapnum);
-					}
-
-					// Assign taiha magnets, count used damecon, or assign sunk ships
-					const playerResultDay = resultDay.fleets.playerMain.concat(resultDay.fleets.playerEscort);
-					for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
-						if (!ships[shipIdx]) continue;
-						const taihaHp = maxHps[shipIdx] / 4;
-						const resultHpDayOnly = playerResultDay[shipIdx].hp;
-						const resultHp = player[shipIdx].hp;
-
-						// Handle pre-boss taiha
-						if (resultHp < taihaHp && resultHp > 0 && initialHps[shipIdx] > taihaHp && !battle.boss) {
-								this.stats.taihaMagnets[ships[shipIdx].mst_id] = (this.stats.taihaMagnets[ships[shipIdx].mst_id] || 0) + 1;
-						}
-						// Handle sunk ships
-						if (resultHp <= 0 || resultHpDayOnly <= 0) {
-							if (ships[shipIdx].equip.some(id => [42, 43].includes(id))) {
-								this.stats.dameconCount += 1;
-							} else {
-								if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
-								this.stats.kuso[sortie.id].push(ships[shipIdx].mst_id);
+			Promise.all([
+				// Get LB Consumption first
+				KC3Database.con.navaloverall
+					.where("type")
+					.equals("lbas" + this.world)
+					.toArray()
+					.then((lbArr) => {
+						this.stats.lbConsumption = buildConsumptionArray(lbArr);
+					}),
+				// Get sortie
+				KC3Database.con.sortie
+					.where("world")
+					.equals(this.world)
+					.and(data => data.hq === hqId)
+					.toArray()
+					.then((sorties) => {
+						sorties.forEach((sortie) => {
+							const mapnum = sortie.mapnum;
+							const diff = sortie.diff;
+							const mapname = `${this.world}${mapnum}`;
+							const mapdata = this.maps["m" + mapname];
+							const selectedDiff = mapdata && mapdata.difficulty;
+							const isDiffMatched = (selectedDiff === undefined) || (diff == selectedDiff);
+							let hpbar = false;
+							if (sortie.eventmap && sortie.eventmap.api_gauge_type == 2) hpbar = true;
+							if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
+							if (!this.stats.bossCount[mapnum]) this.stats.bossCount[mapnum] = 0;
+							if (!this.stats.clearCount[mapnum]) this.stats.clearCount[mapnum] = 0;
+							if (!this.stats.ldCount[mapnum]) this.stats.ldCount[mapnum] = 0;
+							let cleared = false;
+							let lastDance = false;
+							if (sortie.eventmap && sortie.eventmap.api_cleared) cleared = true;
+							if (!cleared && isDiffMatched) {
+								this.stats.clearCount[mapnum]++;
+								const gauges = Object.keys(KC3Meta.eventGauge(mapname));
+								if (sortie.eventmap && sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
+									lastDance = true;
+									this.stats.ldCount[mapnum]++;
+								}
 							}
-						}
-					}
+							this.stats.sortieCount[mapnum]++;
+							let isClearSortie = false;
+							if (!cleared && hpbar && mapdata && mapdata.stat) {
+								const killid = mapdata.stat.onClear;
+								if (killid == sortie.id) isClearSortie = true;
+							}
 
-					// Calculate overall damage dealt, including airstrike and LBAS
-					const eMaxHps = !battleData.api_ship_ke_combined ? battleData.api_e_maxhps
-						: battleData.api_e_maxhps.slice(0, 6).concat(battleData.api_e_maxhps_combined);
-					enemy.forEach((eship, index) => {
-						if (!isNaN(eMaxHps[index]) && !isNaN(eship.hp)) {
-							this.stats.overallDamageDealt += (eMaxHps[index] - eship.hp);
-						}
-					});
-				}));
+							sortieMap.set(sortie.id, sortie);
+							sortie.__info = {
+								isDiffMatched,
+								cleared,
+								lastDance,
+								isClearSortie,
+							};
+						});
 
-				// Get sortie consumption
-				allPromises.push(KC3Database.con.navaloverall.where("type").equals("sortie" + sortie.id).toArray(arr => {
-					const consArray = buildConsumptionArray(arr);
-					this.stats.sortieConsumption[mapnum] = this.stats.sortieConsumption[mapnum] || [];
-					this.stats.sortieConsumption[mapnum].push(consArray);
-					if (!cleared && isDiffMatched) {
-						this.stats.clearConsumption[mapnum] = this.stats.clearConsumption[mapnum] || [];
-						this.stats.clearConsumption[mapnum].push(consArray);
-					}
-					if (lastDance) {
-						this.stats.lastDanceConsumption[mapnum] = this.stats.lastDanceConsumption[mapnum] || [];
-						this.stats.lastDanceConsumption[mapnum].push(consArray);
-					}
-				  }));
-			}).then(() => {
-				Promise.all(allPromises).then(() => {
+						return sorties;
+					})
+					.then((sorties) => {
+						return Promise.all([
+							// Get battle data
+							KC3Database.con.battle
+								.where("sortie_id")
+								.anyOf(sorties.map(sortie => sortie.id))
+								.toArray()
+								.then((battles) => {
+									battles.forEach((battle) => {
+										const sortie = sortieMap.get(battle.sortie_id);
+										const mapnum = sortie.mapnum;
+										const isClearSortie = sortie.__info.isClearSortie;
+
+										// Settle droplist first
+										const drop = battle.drop;
+										this.stats.dropList[mapnum] = this.stats.dropList[mapnum] || {};
+										this.stats.dropList[mapnum][drop] = (this.stats.dropList[mapnum][drop] || 0) + 1;
+
+										if (battle.boss) { this.stats.bossCount[mapnum]++; }
+										// Battle API changed from Fall 2017 onwards, skip battle simulation
+										if (this.world < handlableWorld) { return; }
+
+										// Battle analysis
+										const checkForLastHit = battle.boss && isClearSortie;
+										const nodeData = Array.isArray(sortie.nodes)
+											&& sortie.nodes.find(node => node.id === battle.node);
+										if (!nodeData) { return; }
+										const nodeKind = nodeData.eventKind;
+										const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
+										let battleData = time !== "night" ? battle.data : battle.yasen;
+										// missing battle data, F5?
+										if (!Object.notEmpty(battleData)) { return; }
+										const battleType = {
+											player: { 0: "single", 1: "ctf", 2: "stf", 3: "ctf" }[sortie.combined],
+											enemy: !battleData.api_ship_ke_combined ? "single" : "combined",
+											time: time
+										};
+
+										const resultDay = KC3BattlePrediction.analyzeBattle(battleData, {}, battleType);
+										const fleetSent = battleData.api_deck_id;
+										let ships = sortie["fleet" + fleetSent];
+										let maxHps = battleData.api_f_maxhps, initialHps = battleData.api_f_nowhps;
+										if (!maxHps) return;
+										const sortieKuso = this.stats.kuso[sortie.id] || [];
+										ships = checkShipLength(ships, maxHps, sortieKuso);
+										if (ships.length != maxHps.length) {
+											return;
+										}
+										ships = checkShipLength(ships, maxHps);
+										if (sortie.combined > 0) {
+											let fleet2 = sortie.fleet2;
+											const maxHps2 = battleData.api_f_maxhps_combined;
+											if (!maxHps2) return;
+											fleet2 = checkShipLength(fleet2, maxHps2, sortieKuso);
+											if (fleet2.length != maxHps2.length) {
+												return;
+											}
+											ships = ships.concat(fleet2);
+											maxHps = maxHps.concat(maxHps2);
+											initialHps = initialHps.concat(battleData.api_f_nowhps_combined);
+										}
+
+										let eships = battleData.api_ship_ke;
+										if (battleData.api_ship_ke_combined) {
+											eships = eships.concat(battleData.api_ship_ke_combined);
+										}
+
+										let player = resultDay.fleets.playerMain.concat(resultDay.fleets.playerEscort);
+										let enemy = resultDay.fleets.enemyMain.concat(resultDay.fleets.enemyEscort);
+										player.forEach((ship, index) => {
+											this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
+										});
+										checkFleetAttacks(player, ships, checkForLastHit, mapnum);
+										if (Object.notEmpty(battle.yasen) && time === "day") {
+											battleType.time = "night";
+											if (battle.yasen.api_e_nowhps.length > 6) { // Old API entries
+												battle.yasen.api_e_nowhps = battle.yasen.api_e_nowhps.slice(0, 6);
+											}
+											const resultNight = KC3BattlePrediction.analyzeBattle(battle.yasen, {}, battleType);
+											player = resultNight.fleets.playerMain.concat(resultNight.fleets.playerEscort);
+											enemy = resultNight.fleets.enemyMain.concat(resultNight.fleets.enemyEscort);
+											player.forEach((ship, index) => {
+												this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
+											});
+											checkFleetAttacks(player, ships, checkForLastHit, mapnum);
+										}
+
+										// Assign taiha magnets, count used damecon, or assign sunk ships
+										const playerResultDay = resultDay.fleets.playerMain.concat(resultDay.fleets.playerEscort);
+										for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
+											if (!ships[shipIdx]) continue;
+											const taihaHp = maxHps[shipIdx] / 4;
+											const resultHpDayOnly = playerResultDay[shipIdx].hp;
+											const resultHp = player[shipIdx].hp;
+
+											// Handle pre-boss taiha
+											if (resultHp < taihaHp && resultHp > 0 && initialHps[shipIdx] > taihaHp && !battle.boss) {
+												this.stats.taihaMagnets[ships[shipIdx].mst_id] = (this.stats.taihaMagnets[ships[shipIdx].mst_id] || 0) + 1;
+											}
+											// Handle sunk ships
+											if (resultHp <= 0 || resultHpDayOnly <= 0) {
+												if (ships[shipIdx].equip.some(id => [42, 43].includes(id))) {
+													this.stats.dameconCount += 1;
+												} else {
+													if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
+													this.stats.kuso[sortie.id].push(ships[shipIdx].mst_id);
+												}
+											}
+										}
+
+										// Calculate overall damage dealt, including airstrike and LBAS
+										const eMaxHps = !battleData.api_ship_ke_combined ? battleData.api_e_maxhps
+											: battleData.api_e_maxhps.slice(0, 6).concat(battleData.api_e_maxhps_combined);
+										enemy.forEach((eship, index) => {
+											if (!isNaN(eMaxHps[index]) && !isNaN(eship.hp)) {
+												this.stats.overallDamageDealt += (eMaxHps[index] - eship.hp);
+											}
+										});
+									});
+								}),
+							// Get sortie consumption
+							KC3Database.con.navaloverall
+								.where("type")
+								.anyOf(sorties.map(sortie => "sortie" + sortie.id))
+								.toArray()
+								.then((items) => {
+									items.forEach((item) => {
+										const sortie_id = Number(item.type.replace('sortie', ''));
+										const sortie = sortieMap.get(sortie_id);
+										const mapnum = sortie.mapnum;
+										const isDiffMatched = sortie.__info.isDiffMatched;
+										const cleared = sortie.__info.cleared;
+										const lastDance = sortie.__info.lastDance;
+
+										const consArray = buildConsumptionArray([item]);
+										this.stats.sortieConsumption[mapnum] = this.stats.sortieConsumption[mapnum] || [];
+										this.stats.sortieConsumption[mapnum].push(consArray);
+										if (!cleared && isDiffMatched) {
+											this.stats.clearConsumption[mapnum] = this.stats.clearConsumption[mapnum] || [];
+											this.stats.clearConsumption[mapnum].push(consArray);
+										}
+										if (lastDance) {
+											this.stats.lastDanceConsumption[mapnum] = this.stats.lastDanceConsumption[mapnum] || [];
+											this.stats.lastDanceConsumption[mapnum].push(consArray);
+										}
+									});
+								}),
+						]);
+					})
+			])
+				.then(() => {
 					for (let key in this.stats.sortieConsumption) {
 						this.stats.sortieConsumption[key] = this.stats.sortieConsumption[key].reduce((acc, o) =>
-						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
+							acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 					}
 					for (let key in this.stats.clearConsumption) {
 						this.stats.clearConsumption[key] = this.stats.clearConsumption[key].reduce((acc, o) =>
-						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
+							acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 					}
 					for (let key in this.stats.lastDanceConsumption) {
 						this.stats.lastDanceConsumption[key] = this.stats.lastDanceConsumption[key].reduce((acc, o) =>
-						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
+							acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 					}
 					this.displayEventStatistics();
-				}).catch(errorHandler);
-			}).catch(errorHandler);
+				})
+				.catch((err) => {
+					errorHandler(err);
+				});
+
 		},
 
 		displayEventStatistics: function() {
