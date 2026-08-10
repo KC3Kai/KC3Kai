@@ -802,7 +802,7 @@
 												// If there is no current match and we are done with file reading, exit
 												if (done) {
 													flushBatch();
-													return bulkChain;
+													return bulkChain.then(logTableEnd);
 												}
 											}
 
@@ -846,7 +846,8 @@
 												.then(({ value, done }) => f(value, done));
 										};
 
-										return reader.read()
+										return Promise.resolve()
+											.then(() => reader.read())
 											.then(({ value, done }) => f(value, done));
 									});
 							}));
