@@ -332,7 +332,7 @@
 			}
 			
 			// Scroll list top to selected ship
-			setTimeout(function(){ self.scrollShipListTop(); }, 500);
+			setTimeout(this.scrollShipListTop.bind(this), this.initDeferDelay + 500);
 		},
 		
 		/* UPDATE: optional
@@ -771,7 +771,7 @@
 								"armmat": KC3Meta.useitemIcon(94),
 								"techmat": KC3Meta.useitemIcon(100),
 								"arsenalmat": KC3Meta.useitemIcon(104),
-								"boiler": KC3Meta.useitemIcon(902),
+								"boiler": KC3Meta.useitemIcon(899),
 								"bucket": "/assets/img/client/bucket.png",
 								"devmat": "/assets/img/client/devmat.png",
 								"screw": "/assets/img/client/screws.png",
@@ -944,6 +944,8 @@
 					|| KC3Master.slotitem(a).api_type[3] - KC3Master.slotitem(b).api_type[3]
 					|| a - b
 				);
+
+				KC3QueueManager.deferTooltip(() => {
 				const equipTypes = KC3Master.equip_type(shipData.api_stype, shipData.api_id);
 				if (equipTypes.length > 0) {
 					equipTypes.forEach(addEquipType.bind(this, ".equipSlots .equipList"));
@@ -971,9 +973,12 @@
 				} else {
 					$(".equipExSlot").hide();
 				}
-				
+				}); // end of deferTooltip
+
 				// AACI Types
 				$(".aaciList").empty();
+
+				KC3QueueManager.deferTooltip(() => {
 				const aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
 				if (aaciList.length > 0) {
 					$.each(aaciList, function(idx, aaciObj){
@@ -1015,9 +1020,12 @@
 					$(".aaci").hide();
 					$(".aaci").parent().prev().hide();
 				}
-				
+				}); // end of deferTooltip
+
 				// GUN FITS
 				$(".gunfitList").empty();
+
+				KC3QueueManager.deferTooltip(() => {
 				const gunfits = KC3Meta.sortedGunfits(shipData.api_id);
 				if (gunfits) {
 					let lastWeightClass = "";
@@ -1059,6 +1067,7 @@
 				} else {
 					$(".gunfit").parent().prev().hide();
 				}
+				}); // end of deferTooltip
 
 				// VISIBLE EQUIPMENT BONUS
 				$(".bonusList").empty();
@@ -1142,7 +1151,8 @@
 					else if (flag.includes("DeckPersonnel")) { return 29; }
 					return 0;
 				};
-				
+
+				KC3QueueManager.deferTooltip(() => {
 				for (const mstId in bonusDefs) {
 					const def = bonusDefs[mstId];
 					let bonus = {};
@@ -1408,6 +1418,7 @@
 					});
 				}
 				$(".bonusList").parent().prev().toggle(bonusFound);
+				}); // end of deferTooltip
 
 				// BOXES
 				$(".tab_mstship .shipInfo .stats").show();
