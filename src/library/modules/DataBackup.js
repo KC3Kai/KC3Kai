@@ -237,6 +237,7 @@
 		},
 
 		processStorage: function(importedDataString, overwrite){
+			console.time('processStorage');
 			if(!!overwrite){
 				localStorage.clear();
 			}
@@ -244,6 +245,7 @@
 			$.each(data, function(index,access){
 				localStorage[index]=access;
 			});
+			console.timeEnd('processStorage');
 			console.info("Done processing storage");
 		},//processStorage
 
