@@ -749,13 +749,22 @@
 								return dhandle.getFileHandle(`${tableName}.kc3data`)
 									.then(fhandle => fhandle.getFile())
 									.then((file) => {
-										console.time("loadData:table:" + tableName + ":total");
+										const logTableStart = () => {
+											console.time("loadData:table:" + tableName + ":total");
+										};
+										const logTableEnd = () => {
+											console.timeEnd("loadData:table:" + tableName + ":total");
+										};
+
+										logTableStart(); 
 
 										const accumulator = [];
 										let bulkChain = Dexie.Promise.resolve();
 
 										const flushBatch = () => {
-											if (accumulator.length === 0) return bulkChain;
+											if (accumulator.length === 0) {
+												return bulkChain;
+											}
 											const batch = accumulator.splice(0, accumulator.length);
 											bulkChain = bulkChain
 												.then(() => table.bulkAdd(batch))
@@ -764,10 +773,6 @@
 													console.debug(`[${tableName}]`, 'bulkAdd', batch.length, progress[tableName][0]);
 												});
 											return bulkChain;
-										};
-
-										const logTableEnd = () => {
-											console.timeEnd("loadData:table:" + tableName + ":total");
 										};
 
 										const utf8Decoder = new window.TextDecoder("utf-8");
