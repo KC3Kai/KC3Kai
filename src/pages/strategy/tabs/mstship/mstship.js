@@ -394,7 +394,6 @@
 			const tryDamagedGraph = !!this.tryDamaged;
 			const showAllGraphs = switchAllGraphs && !$(".tab_mstship .shipInfo .basic .cglist").length;
 			this.currentShipId = ship_id;
-
 			console.debug("Viewing shipData", shipData);
 			if(!shipData) { return; }
 			
@@ -699,7 +698,6 @@
 				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
 				var remodelInfo = RemodelDb.remodelInfo( ship_id ) || {};
 				var shipOriginId = RemodelDb.originOf(ship_id);
-
 				
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
@@ -1142,7 +1140,7 @@
 					else if (flag.includes("skilledLookouts")) { return 32; }
 					else if (flag.includes("searchlight")) { return 24; }
 					else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
-				else if (flag.includes("CarrierBomber")) { return 7; }
+					else if (flag.includes("CarrierBomber")) { return 7; }
 					else if (flag.includes("JetFighter")) { return 60; }
 					else if (flag.includes("CarrierFighter")) { return 6; }
 					else if (flag.includes("NightRecon")) { return 50; }
