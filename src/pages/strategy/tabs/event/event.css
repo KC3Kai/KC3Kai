@@ -15,8 +15,8 @@
 ---------------------------------*/
 .tab_event .world_dropdownmenu {
 	display: flex;
-	gap: 8px;
-	margin: 5px 10px;
+	gap: 10px;
+	padding: 5px 10px;
 }
 .tab_event .world-select {
 	min-width: 280px;

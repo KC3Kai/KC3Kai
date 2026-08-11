@@ -644,14 +644,13 @@
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
 		this.sortieFilter = function (sortie) {
-			// Clear mode filter (event tab only — regular maps don't have eventmap)
+			// Clear state filter (later event maps only, old event/regular maps don't have eventmap)
 			if (tabCode === 'event' && this.settings.clearMode === 'pre') {
 				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 0) return false;
 			} else if (tabCode === 'event' && this.settings.clearMode === 'post') {
 				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 1) return false;
 			}
-			// 'all' passes through — no filter
-
+			// clear mode 'all' passes through
 			return !this.settings.bossArrival
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
@@ -941,12 +940,11 @@
 					}).join(" ");
 				};
 
+				$(".sortie_map", sortieBox).toggleClass('queued loading');
+				let tooltip = "";
 				const isOnSortie = sortieId === KC3SortieManager.onSortie;
 				const sKey = "navaloverall:sortie:" + sortieId;
 				const lKey = "navaloverall:lbas:" + sortieId;
-
-				$(".sortie_map", sortieBox).toggleClass('queued loading');
-				let tooltip = "";
 
 				return KC3Cache.get(sKey)
 					.then((cached) => {
