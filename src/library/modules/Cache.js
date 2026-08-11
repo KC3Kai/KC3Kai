@@ -37,11 +37,7 @@
     },
 
     remove: (key) => {
-      if (!key || key <= 0) {
-        return Promise.resolve();
-      }
-      store.delete(key);
-      return Promise.resolve();
+      return Promise.resolve(store.delete(key));
     },
 
     clear: () => {
