@@ -787,6 +787,7 @@
 		---------------------------------*/
 		this.showList = function( sortieList ){
 			const self = this;
+			KC3SortieManager.load();
 
 			const shipNameEquipSwitchFunc = function(e){
 				var ref = $(this).parent().parent();
