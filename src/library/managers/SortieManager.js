@@ -128,8 +128,6 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				// Save on database and remember current sortie id
 				KC3Database.Sortie(sortie, function(id){
 					self.onSortie = id;
-					KC3Cache.remove("navaloverall:sortie:" + (id - 1));
-					KC3Cache.remove("navaloverall:lbas:" + (id - 1));
 					self.save();
 					// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
 					if(eventData){
