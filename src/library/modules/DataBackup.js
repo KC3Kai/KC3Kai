@@ -2,7 +2,16 @@
 	"use strict";
 
 	const DBExportBatchSize = 5000;
+	const DBImportBatchSize = 2000;
+
 	const requiresFullTableExport = tableName => ["enemy", "encounters"].includes(tableName);
+	const chunkArray = (arr, size) => {
+		const chunks = [];
+		for (let i = 0; i < arr.length; i += size) {
+			chunks.push(arr.slice(i, i + size));
+		}
+		return chunks;
+	};
 
 	window.KC3DataBackup = {
 		saveData : function(elementkey,callback){//Save All Data to file, elementkey can be null
@@ -134,7 +143,101 @@
 			processTables(dbdata, !!overwrite);
 		},//processDB
 
+		/**
+		 * Import database tables from JSON string using chunked bulkAdd.
+		 * Faster alternative to `processDB` for large datasets.
+		 *
+		 * @param {string} dbstring - JSON string of table data (keyed by table name)
+		 * @param {boolean} overwrite - if true, clear IndexedDB before import
+		 * @param {string|jQuery} elementkey - progress display selector or jQuery object, null to skip
+		 * @param {function} callback - called when all tables are processed
+		 */
+		processDB_2: function (dbstring, overwrite, elementkey, callback) {
+			console.time("processDB:total");
+			const ekex = (typeof elementkey === "string");
+			const dbdata = JSON.parse(dbstring);
+			if (ekex) $(elementkey).html("");
+
+			const processTables = (dbdata_, overwrite) => {
+				const init = overwrite
+					? new Dexie.Promise(resolve => {
+						KC3Database.con.close();
+						KC3Database.clear(() => {
+							console.log("Cleaned up old database...");
+							resolve();
+						});
+					})
+					: Dexie.Promise.resolve();
+
+				init
+					.then(() => {
+						console.log("Processing tables...");
+						KC3Database.init();
+						KC3Database.con.open();
+						if (ekex) $(elementkey).append("<div class=\"datatransaction\">-DB Transaction Started-</div>");
+
+						for (const index of Object.keys(dbdata_)) {
+							const tabledata = dbdata_[index];
+							if (ekex) $(elementkey).append("<div class=\"" + index + "\">Table queued : " + index + " 『size : " + tabledata.length + "』</div>");
+						}
+
+						if (ekex) $(elementkey + " .datatransaction").text("=DB transaction all queued=");
+
+						return Object.keys(dbdata_).reduce(
+							(prev, tableName) => prev.then(() => {
+								const tabledata = dbdata_[tableName];
+								const table = KC3Database.con[tableName];
+								if (!table) {
+									console.warn("Table not found in schema, skipping:", tableName);
+									return Dexie.Promise.resolve();
+								}
+
+								console.log("Processing " + tableName, "size:", tabledata.length);
+								if (ekex) $(elementkey + " ." + tableName).text("Processing " + tableName + " 『size : " + tabledata.length + "』");
+
+								console.time("processDB:table:" + tableName + ":map+chunk");
+								const records = tabledata.map(record => {
+									const clean = Object.assign({}, record);
+									if (["enemy", "encounters"].indexOf(tableName) === -1) {
+										delete clean.id;
+									}
+									return clean;
+								});
+								const chunks = chunkArray(records, DBImportBatchSize);
+								console.timeEnd("processDB:table:" + tableName + ":map+chunk");
+
+								console.time("processDB:table:" + tableName + ":bulkAdd");
+								return chunks
+									.reduce(
+										(p, chunk, i) => p.then(() => table.bulkAdd(chunk).then(res => {
+											console.debug(`[${tableName}]`, 'bulkAdd', chunk.length, (i * DBImportBatchSize) + chunk.length);
+											return res;
+										})),
+										Dexie.Promise.resolve()
+									)
+									.then(() => {
+										console.timeEnd("processDB:table:" + tableName + ":bulkAdd");
+										if (ekex) $(elementkey + " ." + tableName).text("Processed " + tableName);
+									});
+							}),
+							Dexie.Promise.resolve()
+						);
+					})
+					.then(() => {
+						console.timeEnd("processDB:total");
+						callback();
+					})
+					.catch((error) => {
+						console.error(error.message);
+						alert(error.message);
+					});
+			};
+
+			processTables(dbdata, !!overwrite);
+		},
+
 		processStorage: function(importedDataString, overwrite){
+			console.time('processStorage');
 			if(!!overwrite){
 				localStorage.clear();
 			}
@@ -142,38 +245,42 @@
 			$.each(data, function(index,access){
 				localStorage[index]=access;
 			});
+			console.timeEnd('processStorage');
 			console.info("Done processing storage");
 		},//processStorage
 
-		loadData : function(file_,overwrite,elementkey,callback){
-			var ekex = ((typeof elementkey)==="string");
-			var zip;
-			var reader = new FileReader();
-			reader.onload = (function(e) {
-						// read the content of the file with JSZip
-						zip = new JSZip(e.target.result);
-						$.each(zip.files, function (index, zipEntry) {
-							switch (zipEntry.name) {
-								case "db.json":
-									console.info("db.json detected.");
-									setTimeout(function(){
-										KC3DataBackup.processDB(zipEntry.asText(),overwrite,elementkey,callback);
-									},0);
-									break;
-								case "storage.json":
-									console.info("storage.json detected.");
-									if(overwrite)
-											setTimeout(function() {
-												if(ekex)$(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
-												window.KC3DataBackup.processStorage(zipEntry.asText(),overwrite);
-												if(ekex)$(elementkey+" .localstorageprocess").text("=storage processed=");
-											},10);
-									break;
-								default:
-									alert("Could be wrong file");
+		loadData : function(file_, overwrite, elementkey, callback, version = 1) {
+			const ekex = ((typeof elementkey) === "string");
+			const processDB = version >= 2
+				? KC3DataBackup.processDB_2
+				: KC3DataBackup.processDB;
+			let zip;
+			const reader = new FileReader();
+			reader.onload = (function (e) {
+				// read the content of the file with JSZip
+				zip = new JSZip(e.target.result);
+				$.each(zip.files, function (index, zipEntry) {
+					switch (zipEntry.name) {
+						case "db.json":
+							console.info("db.json detected.");
+							setTimeout(function () {
+								processDB(zipEntry.asText(), overwrite, elementkey, callback);
+							}, 0);
+							break;
+						case "storage.json":
+							console.info("storage.json detected.");
+							if (overwrite)
+								setTimeout(function () {
+									if (ekex) $(elementkey).append("<div class =\"localstorageprocess\">-storage processing-</div>");
+									window.KC3DataBackup.processStorage(zipEntry.asText(), overwrite);
+									if (ekex) $(elementkey + " .localstorageprocess").text("=storage processed=");
+								}, 10);
+							break;
+						default:
+							alert("Could be wrong file");
 
-								}//swich: zip name
-							});//file acces foreach
+					}//swich: zip name
+				});//file acces foreach
 			});//reader.onload
 			reader.readAsArrayBuffer(file_);
 		},//loadData
@@ -527,7 +634,239 @@
 					}).catch(errorHandler);
 				}).catch(errorHandler);
 			}).catch(errorHandler);
-		} // loadDataFromFolder end
+		}, // loadDataFromFolder end
+
+		/**
+		 * Import DB and localStorage from a folder using the File System Access API.
+		 * Uses chunked bulkAdd for faster table inserts compared to `loadDataFromFolder`.
+		 * Mirrors the processDB_2 pattern.
+		 *
+		 * @param {string|jQuery} elementkey - progress display selector or jQuery object, null to skip
+		 * @param {function} callback - called with (isError, errorMessage) when import completes
+		 */
+		loadDataFromFolder_2: function (elementkey, callback) {
+			if (!window.showDirectoryPicker || navigator.chromeVersion < 86) {
+				alert("This feature is only supported by Chrome 86 and later");
+				callback(true);
+				return;
+			}
+
+			const ekex = $(elementkey).length > 0;
+			if (ekex) $(elementkey).html(`<div>== Import Progress ==</div>`);
+			const startTime = Date.now();
+			let finished = false;
+			let lastErrMsg = "";
+			const progress = {};
+			const errorHandler = (err) => {
+				finished = "error";
+				// Do not log and alert on:
+				// picker window aborted by user, or permission refused
+				if (err && !["AbortError", "NotAllowedError"].includes(err.name)) {
+					// for 'must handle user gesture to show a file picker'
+					if ("SecurityError" === err.name) {
+						alert(err + "\nJust try again.");
+					} else {
+						console.error("Import unexpectedly rejected", err);
+						lastErrMsg = "Restore " + err;
+						alert(lastErrMsg);
+					}
+				}
+			};
+
+			// Fill progress lines, and poll finished state to callback
+			const updateProgress = () => {
+				if (!ekex) return;
+				for (let name in progress) {
+					const prog = progress[name];
+					if (prog[1] > -1) {
+						progress[name][2].textContent = `${name} : 『${prog[0]}/${prog[1]}』`;
+						if (prog[0] >= prog[1]) progress[name][2].classList.add("complete");
+					}
+				}
+				$(`${elementkey} #_timer`).text(
+					`Elapsed time : ${String((Date.now() - startTime) / 1000).toHHMMSS()}`
+				);
+			};
+			const alertWhenFinished = () => {
+				setTimeout(() => {
+					updateProgress();
+					if (finished) callback(!lastErrMsg && finished === "error", lastErrMsg);
+					else alertWhenFinished();
+				}, 1000);
+			};
+			alertWhenFinished();
+
+			// Files of current known tables in IndexedDB: 17 + 2 extra meta files
+			const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
+			files.push("storage.kc3data");
+			files.push("database.kc3data");
+			KC3Database.con.tables.forEach(table => {
+				progress[table.name] = [0, -1];
+				if (ekex) {
+					$(elementkey).append(
+						`<div id="${table.name}">${table.name} : Loading data </div>`
+					);
+					progress[table.name][2] = $(`${elementkey} #${table.name}`).get(0);
+				}
+			});
+			if (ekex) $(elementkey).append(`<div id="_timer">Elapsed time : 00:00:00</div>`);
+
+			console.time("loadData:total");
+			window.showDirectoryPicker()
+				.then(dhandle => {
+					dhandle.requestPermission({ read: true });
+					// Check if all files are present in dir
+					return Promise.all(files.map(filename => dhandle.getFileHandle(filename)))
+						.then(() => {
+							console.log("Processing localStorage...");
+							dhandle.getFileHandle("storage.kc3data")
+								.then(fh => fh.getFile())
+								.then(file => file.text())
+								.then(text => {
+									window.KC3DataBackup.processStorage(text);
+									if (ekex) $(elementkey).append(`<div class="complete">localStorage complete</div>`);
+								});
+
+							// Clean and re-init DB
+							KC3Database.con.close();
+							KC3Database.clear(() => {
+								console.log("Cleaned up old database...");
+							});
+							console.log("Processing DB tables...");
+							KC3Database.init();
+							KC3Database.con.open();
+
+							dhandle.getFileHandle("database.kc3data")
+								.then(fh => fh.getFile())
+								.then(file => file.text())
+								.then(text => {
+									const totalEntries = JSON.parse(text);
+									for (let index in totalEntries) {
+										progress[index][1] = totalEntries[index];
+									}
+								});
+
+							return Promise.all(KC3Database.con.tables.map(table => {
+								const tableName = table.name;
+								return dhandle.getFileHandle(`${tableName}.kc3data`)
+									.then(fhandle => fhandle.getFile())
+									.then((file) => {
+										const logTableStart = () => {
+											console.time("loadData:table:" + tableName + ":total");
+										};
+										const logTableEnd = () => {
+											console.timeEnd("loadData:table:" + tableName + ":total");
+										};
+
+										logTableStart(); 
+
+										const accumulator = [];
+										let bulkChain = Dexie.Promise.resolve();
+
+										const flushBatch = () => {
+											if (accumulator.length === 0) {
+												return bulkChain;
+											}
+											const batch = accumulator.splice(0, accumulator.length);
+											bulkChain = bulkChain
+												.then(() => table.bulkAdd(batch))
+												.then(() => {
+													progress[tableName][0] += batch.length;
+													console.debug(`[${tableName}]`, 'bulkAdd', batch.length, progress[tableName][0]);
+												});
+											return bulkChain;
+										};
+
+										const utf8Decoder = new window.TextDecoder("utf-8");
+										const reader = file.stream().getReader();
+										const re = /\r\n|\n|\r/gm;
+										let remainder = "";
+										let startIndex = 0;
+
+										/**
+										 * File streaming process:
+										 *
+										 *  1) Read a chunk of bytes from the file
+										 *  2) Decode and add the bytes into a buffer
+										 *  3) Check if a new line delimiter exists in the buffer
+										 *  4) If the delimiter exists, slice the buffer
+										 *  5) If the buffer slice is not empty, add the record to accumulator
+										 *  6) If accumulator reaches DBImportBatchSize, flush via bulkAdd
+										 *  7) If the slice is empty, we have reached the end-of-file and exit
+										 *  8) Goto 1
+										 */
+										const f = (chunk, done) => {
+											// Add new data from file into buffer
+											remainder = remainder.substr(startIndex);
+											chunk = chunk ? utf8Decoder.decode(chunk, { stream: true }) : "";
+											remainder += chunk;
+											// Search buffer for the newline delimiter
+											let result = re.exec(remainder);
+
+											// If there is no current match, we reset the starting index
+											if (!result) {
+												startIndex = re.lastIndex = 0;
+												// If there is no current match and we are done with file reading, exit
+												if (done) {
+													flushBatch();
+													return bulkChain.then(logTableEnd);
+												}
+											}
+
+											// Process the line if there is a matched newline
+											// Usually there is multiple lines pulled in one go, so process all of them at once
+											while (!!result) {
+												// Substring line from current buffer
+												const line = remainder.substr(startIndex, result.index);
+												// Advance buffer position
+												startIndex = re.lastIndex;
+												remainder = remainder.substr(startIndex);
+												startIndex = re.lastIndex = 0;
+
+												// Parse the buffer into an object and add it into the DB
+												if (line.length > 0) {
+													try {
+														const record = JSON.parse(line);
+														if (!requiresFullTableExport(tableName)) {
+															// Remove inbound auto-sequenced primary key
+															delete record.id;
+														}
+														accumulator.push(record);
+														if (accumulator.length >= DBImportBatchSize) {
+															flushBatch();
+														}
+													}
+													catch (error) {
+														console.error(`Table ${tableName} parsing line failed`, line, error);
+														throw error;
+													}
+												} else {
+													flushBatch();
+													return bulkChain.then(logTableEnd);
+												}
+
+												result = re.exec(remainder);
+											}
+
+											return flushBatch()
+												.then(() => reader.read())
+												.then(({ value, done }) => f(value, done));
+										};
+
+										return Promise.resolve()
+											.then(() => reader.read())
+											.then(({ value, done }) => f(value, done));
+									});
+							}));
+						});
+				})
+				.then(() => {
+					finished = true;
+					console.timeEnd("loadData:total");
+					console.info(`Backup v2 importing done`);
+				})
+				.catch(errorHandler);
+		},
 
 	};
 })();

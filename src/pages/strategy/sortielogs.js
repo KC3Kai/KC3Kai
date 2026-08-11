@@ -48,6 +48,7 @@
 			onlyBattle: false,
 			evalShipState: true,
 			evalYasen: false,
+			clearMode: 'all',
 		};
 		this.settings = {};
 
@@ -92,7 +93,16 @@
 				const world = ev.target.value;
 				KC3StrategyTabs.gotoTab(null, world);
 			});
-			
+
+			// On-change clear mode dropdown
+			$(`.tab_${tabCode} .clear-mode-select`)
+				.val(this.settings.clearMode)
+				.on("change", (ev) => {
+					this.settings.clearMode = ev.target.value;
+					this.saveSettings();
+					this.showMap();
+				});
+
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
@@ -258,7 +268,9 @@
 							ConfigManager[config.linkedConfig] = this.settings[config.cfgKey];
 							ConfigManager.save();
 						}
-						if (config.cfgKey === 'loadLedger' && !this.settings[config.cfgKey]) return;
+						if (config.cfgKey === 'loadLedger' && !this.settings[config.cfgKey]) {
+							return;
+						}
 						this.showMap();
 					});
 			});
@@ -631,15 +643,23 @@
 		
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
-		this.sortieFilter = function(sortie){
-			return !this.settings.bossArrival ||
+		this.sortieFilter = function (sortie) {
+			// Clear mode filter (event tab only — regular maps don't have eventmap)
+			if (tabCode === 'event' && this.settings.clearMode === 'pre') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 0) return false;
+			} else if (tabCode === 'event' && this.settings.clearMode === 'post') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 1) return false;
+			}
+			// 'all' passes through — no filter
+
+			return !this.settings.bossArrival
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
-				(Array.isArray(sortie.nodes) && sortie.nodes.some(
+				|| (Array.isArray(sortie.nodes) && sortie.nodes.some(
 					node => node.eventId == 5
-					// treat W1-6-N node as boss
-					|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
+						// treat W1-6-N node as boss
+						|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
 				));
 		};
 		
@@ -767,6 +787,7 @@
 		---------------------------------*/
 		this.showList = function( sortieList ){
 			const self = this;
+			KC3SortieManager.load();
 
 			const shipNameEquipSwitchFunc = function(e){
 				var ref = $(this).parent().parent();
@@ -920,16 +941,38 @@
 					}).join(" ");
 				};
 
+				const isOnSortie = sortieId === KC3SortieManager.onSortie;
+				const sKey = "navaloverall:sortie:" + sortieId;
+				const lKey = "navaloverall:lbas:" + sortieId;
+
 				$(".sortie_map", sortieBox).toggleClass('queued loading');
 				let tooltip = "";
 
-				return KC3Database.con.navaloverall
-					.where("type")
-					.equals("sortie" + sortieId)
-					.toArray()
-					.then(arr => {
-						const consumption = buildConsumptionArray(arr);
-						if (!arr.length || consumption.every(v => !v)) {
+				return KC3Cache.get(sKey)
+					.then((cached) => {
+						if (cached) {
+							return cached.value;
+						}
+						return KC3Database.con.navaloverall
+							.where("type")
+							.equals("sortie" + sortieId)
+							.toArray()
+							.then((arr) => {
+								if (!arr.length) {
+									return null;
+								}
+								const consumption = buildConsumptionArray(arr);
+								if (consumption.every(v => !v)) {
+									return null;
+								}
+								if (!isOnSortie) {
+									KC3Cache.set(sKey, consumption);
+								}
+								return consumption;
+							});
+					})
+					.then((consumption) => {
+						if (!consumption) {
 							return;
 						}
 
@@ -941,36 +984,53 @@
 							return;
 						}
 
-						return KC3Database.con.navaloverall
-							.where("type")
-							.equals("sortie" + (sortieId - 1))
-							.first();
-					})
-					.then(firstEntry => {
-						if (!firstEntry) {
-							return;
-						}
+						return KC3Cache.get(lKey)
+							.then((cachedLb) => {
+								if (cachedLb) {
+									return cachedLb.value;
+								}
+								return KC3Database.con.navaloverall
+									.where("type")
+									.equals("sortie" + (sortieId - 1))
+									.first()
+									.then((firstEntry) => {
+										if (!firstEntry) {
+											return null;
+										}
+										return KC3Database.con.navaloverall
+											.where(":id")
+											.aboveOrEqual(firstEntry.id)
+											.until(entry => entry.type === "sortie" + (sortieId + 1))
+											.and(entry => "lbas" + sortieWorld === entry.type)
+											.toArray();
+									})
+									.then((lbArr) => {
+										if (!lbArr) {
+											return null;
+										}
+										const lbConsumption = buildConsumptionArray(lbArr);
+										if (lbConsumption.every(v => !v)) {
+											if (!isOnSortie) {
+												KC3Cache.set(lKey, null);
+											} 
+											return null;
+										}
+										if (!isOnSortie) {
+											KC3Cache.set(lKey, lbConsumption);
+										}
+										return lbConsumption;
+									});
+							})
+							.then((lbConsumption) => {
+								let lbTooltip = "";
+								if (lbConsumption && !lbConsumption.every(v => !v)) {
+									lbTooltip = buildLedgerMessage(lbConsumption);
+								}
 
-						return KC3Database.con.navaloverall
-							.offset(firstEntry.id)
-							.until(entry => entry.type === "sortie" + (sortieId + 1))
-							.and(entry => "lbas" + sortieWorld === entry.type)
-							.toArray();
-					})
-					.then(lbArr => {
-						if (!lbArr) {
-							return;
-						}
-
-						const lbConsumption = buildConsumptionArray(lbArr);
-						let lbTooltip = "";
-						if (lbArr.length && !lbConsumption.every(v => !v)) {
-							lbTooltip = buildLedgerMessage(lbConsumption);
-						}
-
-						$(".sortie_map", sortieBox)
-							.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
-							.lazyInitTooltip();
+								$(".sortie_map", sortieBox)
+									.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
+									.lazyInitTooltip();
+							});
 					})
 					.finally(() => {
 						$(".sortie_map", sortieBox).toggleClass('loading loaded');

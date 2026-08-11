@@ -254,13 +254,14 @@ module.exports = function(grunt) {
 						"background": {
 							"scripts": [
 								"assets/js/global.js",
-								"assets/js/Dexie.min.js",
+								"assets/js/dexie.min.js",
 								"library/objects.js",
 								"library/managers.js",
 								"library/modules/ChromeSync.js",
 								"library/modules/QuestSync/Sync.js",
 								"library/modules/QuestSync/Background.js",
 								"library/modules/Database.js",
+								"library/modules/Cache.js",
 								"library/modules/Log/Log.js",
 								"library/modules/Log/Background.js",
 								"library/modules/ImageExport.js",
