@@ -8,6 +8,7 @@
 		
 		currentGearId: 0,
 		gameServer: {},
+		gearListCacheKey: "mstgear:gearrecords",
 		
 		/* INIT
 		Prepares static data needed
@@ -20,7 +21,7 @@
 		Prepares latest in game data
 		---------------------------------*/
 		reload :function(){
-			// None for gear library
+			KC3Cache.remove(this.gearListCacheKey);
 		},
 		
 			/* EXECUTE
@@ -35,8 +36,7 @@
 				$(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
 			};
 			const gearListElm = $(".tab_mstgear .gearRecords");
-			const gearListCacheKey = "mstgear:gearrecords";
-			const cachedHtml = KC3Cache.getSync(gearListCacheKey);
+			const cachedHtml = KC3Cache.getSync(this.gearListCacheKey);
 			if(cachedHtml) {
 				gearListElm.html(cachedHtml);
 			} else {
@@ -57,8 +57,7 @@
 					}
 					gearListElm.append(gearBox);
 				});
-				//gearListElm.createChildrenTooltips();
-				KC3Cache.setSync(gearListCacheKey, gearListElm.html());
+				KC3Cache.setSync(this.gearListCacheKey, gearListElm.html());
 			}
 			
 			// Select equipment
