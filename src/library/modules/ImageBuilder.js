@@ -106,6 +106,7 @@
         sortie.fleetnum == 1 && sortie.combined);
       buildFleets(deckBuilder, fleets);
       buildLbasFromSortie(deckBuilder, lbas, usedOnly);
+      buildComment(deckBuilder, sortie);
       openWebsite(deckBuilder, baseUrl, target);
     });
   }
@@ -139,6 +140,34 @@
       obj.version = 4;
     }
     return obj;
+  }
+
+  function buildComment(deckBuilder, sortie) {
+    const getDiffText = (diff) => {
+      if (!diff) {
+        return '';
+      }
+      return KC3Meta.term(
+        [
+          '',
+          'EventHistoryRank1C',
+          'EventHistoryRank1',
+          'EventHistoryRank2',
+          'EventHistoryRank3',
+        ][sortie.diff]);
+    };
+    const arr = [
+      new Date(sortie.time * 1000).toISOString().replace('.000Z', 'Z'),
+      `${[sortie.world, sortie.mapnum].map(v => v).join('-')} ${getDiffText(sortie.diff)}`.trim(),
+      `combined_: ${sortie.combined}`,
+    ];
+    if (sortie.eventmap) {
+      arr.push(
+        `cleared__: ${sortie.eventmap.api_cleared}`,
+        `gauge____: ${sortie.eventmap.api_gauge_num}`,
+      );
+    }
+    deckBuilder.cmt = arr.filter(v => v).join('\n').trim();
   }
 
   function buildFleets(deckBuilder, fleets) {
