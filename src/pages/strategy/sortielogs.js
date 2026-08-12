@@ -901,7 +901,7 @@
 			const showSortieLedger = function (sortieId, sortieBox, sortieWorld) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
 				// Akashi repair not included either, belonged to its own type
-				const buildConsumptionArray = arr => arr.reduce((acc, o) =>
+				const buildConsumptionArray = arr => (arr || []).reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
 					return consumption.map((v, i) => {
@@ -938,12 +938,9 @@
 							.equals("sortie" + sortieId)
 							.toArray()
 							.then((arr) => {
-								if (!arr.length) {
-									return;
-								}
-								const consumption = buildConsumptionArray(arr);
+								let consumption = buildConsumptionArray(arr);
 								if (!consumption.hasTruthy()) {
-									return;
+									consumption = null;
 								}
 								if (!isOnSortie) {
 									KC3Cache.set(sKey, consumption);
@@ -985,9 +982,6 @@
 											.toArray();
 									})
 									.then((lbArr) => {
-										if (!lbArr) {
-											return null;
-										}
 										let lbConsumption = buildConsumptionArray(lbArr);
 										if (!lbConsumption.hasTruthy()) {
 											lbConsumption = null;
