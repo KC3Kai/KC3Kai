@@ -20,7 +20,7 @@
 
     get: (key) => {
       if (!store.has(key)) {
-        return Promise.resolve({ key });
+        return Promise.resolve({});
       }
       const value = store.get(key);
       store.delete(key);
@@ -40,6 +40,9 @@
     },
 
     set: (key, value) => {
+      if (key === undefined) {
+        return Promise.resolve({});
+      }
       if (store.has(key)) {
         store.delete(key);
       } else if (store.size >= maxSize) {
@@ -52,6 +55,9 @@
     },
 
     setSync: (key, value) => {
+      if (key === undefined) {
+        return;
+      }
       if (store.has(key)) {
         store.delete(key);
       } else if (store.size >= maxSize) {
