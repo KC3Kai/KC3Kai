@@ -947,9 +947,9 @@
 				const lKey = "navaloverall:lbas:" + sortieId;
 
 				return KC3Cache.get(sKey)
-					.then((cached) => {
-						if (cached) {
-							return cached.value;
+					.then(({ value: cachedSortie }) => {
+						if (cachedSortie) {
+							return cachedSortie;
 						}
 						return KC3Database.con.navaloverall
 							.where("type")
@@ -983,9 +983,9 @@
 						}
 
 						return KC3Cache.get(lKey)
-							.then((cachedLb) => {
+							.then(({ value: cachedLb }) => {
 								if (cachedLb) {
-									return cachedLb.value;
+									return cachedLb;
 								}
 								return KC3Database.con.navaloverall
 									.where("type")

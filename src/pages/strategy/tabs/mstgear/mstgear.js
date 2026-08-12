@@ -34,23 +34,32 @@
 			const iconFailsafeHandler = function(e) {
 				$(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
 			};
-			$.each(KC3Master.all_slotitems(), function(index, gearData){
-				if(!gearData) { return true; }
-				const id = gearData.api_id,
-					iconType = gearData.api_type[3],
-					gearName = KC3Meta.gearName(gearData.api_name);
-				const gearBox = $(".tab_mstgear .factory .gearRecord")
-					.clone().appendTo(".tab_mstgear .gearRecords");
-				gearBox.attr("data-id", id);
-				$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconType)).error(iconFailsafeHandler);
-				$(".gearName", gearBox).text(`[${id}] ${gearName}`).attr("title", gearName);
-				if(!!ConfigManager.sr_dexmark && !KC3Master.isAbyssalGear(id)) {
-					const isOwned = PictureBook.isEverOwnedGear(id);
-					gearBox.toggleClass("unlocked", isOwned);
-					gearBox.toggleClass("norecord", !isOwned);
-				}
-			});
-			$(".tab_mstgear .gearRecords").createChildrenTooltips();
+			const gearListElm = $(".tab_mstgear .gearRecords");
+			const gearListCacheKey = "mstgear:gearrecords";
+			const cachedHtml = KC3Cache.getSync(gearListCacheKey);
+			if(cachedHtml) {
+				gearListElm.html(cachedHtml);
+			} else {
+				const gearBoxTemplate = $(".tab_mstgear .factory .gearRecord");
+				$.each(KC3Master.all_slotitems(), function(index, gearData){
+					if(!gearData) { return true; }
+					const id = gearData.api_id,
+						iconType = gearData.api_type[3],
+						gearName = KC3Meta.gearName(gearData.api_name);
+					const gearBox = gearBoxTemplate.clone();
+					gearBox.attr("data-id", id);
+					$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconType)).error(iconFailsafeHandler);
+					$(".gearName", gearBox).text(`[${id}] ${gearName}`).attr("title", gearName);
+					if(!!ConfigManager.sr_dexmark && !KC3Master.isAbyssalGear(id)) {
+						const isOwned = PictureBook.isEverOwnedGear(id);
+						gearBox.toggleClass("unlocked", isOwned);
+						gearBox.toggleClass("norecord", !isOwned);
+					}
+					gearListElm.append(gearBox);
+				});
+				//gearListElm.createChildrenTooltips();
+				KC3Cache.setSync(gearListCacheKey, gearListElm.html());
+			}
 			
 			// Select equipment
 			$(".tab_mstgear .gearRecords .gearRecord").on("click", function(){
