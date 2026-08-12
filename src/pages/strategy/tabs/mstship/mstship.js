@@ -45,6 +45,7 @@
 		// Merged master ship data with abyssal stats and seasonal CGs
 		mergedMasterShips: {},
 		damagedBossFileSuffix: "_d",
+		shipListCacheKey: "mstship:shiprecords",
 		
 		/* INIT
 		Prepares static data needed
@@ -61,6 +62,7 @@
 		---------------------------------*/
 		reload :function(){
 			ConfigManager.load();
+			KC3Cache.remove(this.shipListCacheKey);
 			if(!ConfigManager.sr_dexorder) {
 				this.sortedMasterShips = this.mergedMasterShips;
 			} else {
@@ -116,8 +118,7 @@
 
 			// List all ships, cached html used if any, since almost 1MB html takes over 2 secs from scratch
 			const shipListElm = $(".tab_mstship .shipRecords");
-			const shipListCacheKey = "mstship:shiprecords";
-			const cachedHtml = KC3Cache.getSync(shipListCacheKey);
+			const cachedHtml = KC3Cache.getSync(this.shipListCacheKey);
 			if(cachedHtml) {
 				shipListElm.html(cachedHtml);
 			} else {
@@ -150,7 +151,7 @@
 				});
 				// Intentionally use native tooltips for better speed
 				//shipListElm.createChildrenTooltips();
-				KC3Cache.setSync(shipListCacheKey, shipListElm.html());
+				KC3Cache.setSync(this.shipListCacheKey, shipListElm.html());
 			}
 			$("img", shipListElm).unveil(shipListElm, 22);
 			
