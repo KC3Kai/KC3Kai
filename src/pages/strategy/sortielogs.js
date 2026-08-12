@@ -948,7 +948,7 @@
 
 				return KC3Cache.get(sKey)
 					.then(({ value: cachedSortie }) => {
-						if (cachedSortie) {
+						if (cachedSortie !== undefined) {
 							return cachedSortie;
 						}
 						return KC3Database.con.navaloverall
@@ -957,11 +957,11 @@
 							.toArray()
 							.then((arr) => {
 								if (!arr.length) {
-									return null;
+									return;
 								}
 								const consumption = buildConsumptionArray(arr);
-								if (consumption.every(v => !v)) {
-									return null;
+								if (!consumption.hasTruthy()) {
+									return;
 								}
 								if (!isOnSortie) {
 									KC3Cache.set(sKey, consumption);
@@ -984,7 +984,7 @@
 
 						return KC3Cache.get(lKey)
 							.then(({ value: cachedLb }) => {
-								if (cachedLb) {
+								if (cachedLb !== undefined) {
 									return cachedLb;
 								}
 								return KC3Database.con.navaloverall
@@ -1006,12 +1006,9 @@
 										if (!lbArr) {
 											return null;
 										}
-										const lbConsumption = buildConsumptionArray(lbArr);
-										if (lbConsumption.every(v => !v)) {
-											if (!isOnSortie) {
-												KC3Cache.set(lKey, null);
-											} 
-											return null;
+										let lbConsumption = buildConsumptionArray(lbArr);
+										if (!lbConsumption.hasTruthy()) {
+											lbConsumption = null;
 										}
 										if (!isOnSortie) {
 											KC3Cache.set(lKey, lbConsumption);
@@ -1021,7 +1018,7 @@
 							})
 							.then((lbConsumption) => {
 								let lbTooltip = "";
-								if (lbConsumption && !lbConsumption.every(v => !v)) {
+								if (lbConsumption && lbConsumption.hasTruthy()) {
 									lbTooltip = buildLedgerMessage(lbConsumption);
 								}
 
