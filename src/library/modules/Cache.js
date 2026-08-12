@@ -19,13 +19,23 @@
 
     get: (key) => {
       if (!store.has(key)) {
-        return Promise.resolve();
+        return Promise.resolve({ key });
       }
       const value = store.get(key);
       store.delete(key);
       // bump to most-recently-used
       store.set(key, value);
       return Promise.resolve({ key, value });
+    },
+
+    getSync: (key, defaultValue) => {
+      if (!store.has(key)) {
+        return defaultValue;
+      }
+      const value = store.get(key);
+      store.delete(key);
+      store.set(key, value);
+      return value;
     },
 
     set: (key, value) => {
@@ -38,6 +48,17 @@
       }
       store.set(key, value);
       return Promise.resolve({ key, value });
+    },
+
+    setSync: (key, value) => {
+      if (store.has(key)) {
+        store.delete(key);
+      } else if (store.size >= maxSize) {
+        // evict oldest-accessed (first key in Map iteration order)
+        const first = store.keys().next().value;
+        store.delete(first);
+      }
+      return store.set(key, value);
     },
 
     remove: (key) => {
