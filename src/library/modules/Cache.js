@@ -1,17 +1,18 @@
 /**
  * Cache.js
- * KC3改 Cache
+ * KC3改 Cache instance based on key-value storage.
  *
- * Stores ephemeral query results in an in-memory Map.
+ * Stores ephemeral query results in an in-memory Map backend.
  * LRU eviction when size reaches max allowance.
  */
 (() => {
   'use strict';
 
-  // up to 128 bytes per entries (key string + small array for sortie ledger)
-  const avgEntryBytes = 128;
-  // 2 MB / average size
-  const maxSize = Math.floor(2 * 1048576 / avgEntryBytes);
+  // assuming up to 8 KB per entries,
+  // for now, key string + small array for sortie ledger < 128 bytes
+  const avgEntryBytes = 8192;
+  // detected memory (in GB) * MB / average size ~= 512 entries for 4 GB RAM
+  const maxSize = Math.floor((navigator.deviceMemory || 4) * 1048576 / avgEntryBytes);
   const store = new Map();
 
   window.KC3Cache = {
