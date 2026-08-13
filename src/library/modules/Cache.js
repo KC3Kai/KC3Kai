@@ -20,6 +20,7 @@
 
     get: (key) => {
       if (!store.has(key)) {
+        // key === undefined means no hit
         return Promise.resolve({});
       }
       const value = store.get(key);
@@ -31,12 +32,29 @@
 
     getSync: (key, defaultValue) => {
       if (!store.has(key)) {
+        // value === defaultValue === undefined equals to no hit
         return defaultValue;
       }
       const value = store.get(key);
       store.delete(key);
       store.set(key, value);
       return value;
+    },
+
+    getOrInsertComputed: (key, missCallback, hitCallback) => {
+      if (store.has(key)) {
+        const cachedValue = KC3Cache.getSync(key);
+        if (typeof hitCallback === "function") {
+          hitCallback(cachedValue, key);
+        }
+        return cachedValue;
+      }
+      if (typeof missCallback === "function") {
+        const computedValue = missCallback(key);
+        KC3Cache.setSync(key, computedValue);
+        return computedValue;
+      }
+      return missCallback;
     },
 
     set: (key, value) => {
@@ -76,9 +94,10 @@
       return Promise.resolve();
     },
 
-    usage: () => {
+    usage: (sync = false) => {
       const used = store.size, quota = maxSize;
-      return Promise.resolve({ used, quota });
+      const retval = { used, quota };
+      return sync ? retval : Promise.resolve(retval);
     },
 
   };
