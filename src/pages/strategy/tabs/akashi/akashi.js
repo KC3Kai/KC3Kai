@@ -44,7 +44,13 @@
 			this.heldGearRosterIds = [];
 			this.instances = {};
 			this.priorities = this.getPriorities();
-			KC3Cache.remove(this.akashiCacheKey);
+			if(KC3StrategyTabs.pageParams[1]){
+				KC3Cache.remove(`${this.akashiCacheKey}:${KC3StrategyTabs.pageParams[1]}`);
+			} else {
+				["sun","mon","tue","wed","thu","fri","sat"].forEach(dow => {
+					KC3Cache.remove(`${this.akashiCacheKey}:${dow}`);
+				});
+			}
 			
 			// Get API IDs of all player ships, remember all roster IDs of gears they hold
 			$.each(KC3ShipManager.list, function(index, ThisShip){
@@ -369,9 +375,10 @@
 				}
 			};
 			
-			//console.time(this.akashiCacheKey);
+			const dowKey = `${this.akashiCacheKey}:${dayName}`;
+			//console.time(dowKey);
 			const equipListElm = $(".tab_akashi .equipment_list");
-			KC3Cache.getOrInsertComputed(this.akashiCacheKey, () => {
+			KC3Cache.getOrInsertComputed(dowKey, () => {
 				equipListElm.html("");
 				const boxTemplate = $(".tab_akashi .factory .equipment");
 				const shipBoxTemplate = $(".tab_akashi .factory .eq_ship");
@@ -558,7 +565,7 @@
 				".eq_next .eq_res_name .name_val",
 				".eq_res_value.consumed_name .val.hover"
 			].join(","), equipListElm).click(gearNameClickFunc);
-			//console.timeEnd(this.akashiCacheKey);
+			//console.timeEnd(dowKey);
 			if(!!viewMasterId) {
 				// Ensure scroll window to specified anchor
 				setTimeout(function(){
