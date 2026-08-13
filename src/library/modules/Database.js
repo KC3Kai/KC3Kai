@@ -552,10 +552,9 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 
 		get_sorties_with_battles: function (sortiePromise) {
-			const self = this;
 			const sortieIds = [];
 			const sortieIndexed = {};
-			console.time('get_sorties_with_battles');
+			console.time('Index sorties with battles');
 			return sortiePromise
 				.then((sortieList) => {
 					for (const bctr in sortieList) {
@@ -563,7 +562,7 @@ Uses Dexie.js third-party plugin on the assets directory
 						sortieIndexed["s" + sortieList[bctr].id] = sortieList[bctr];
 						sortieIndexed["s" + sortieList[bctr].id].battles = [];
 					}
-					return self.con.battle
+					return this.con.battle
 						.where("sortie_id")
 						.anyOf(sortieIds)
 						.toArray();
@@ -579,17 +578,20 @@ Uses Dexie.js third-party plugin on the assets directory
 					return sortieIndexed;
 				})
 				.finally(() => {
-					console.timeEnd('get_sorties_with_battles');
+					console.timeEnd('Index sorties with battles');
 				});
 		},
 
 		count_normal_sorties: function (filterFunc, callback) {
+			console.time('Count all normal sorties');
 			return this.con.sortie
 				.where("[hq+world]")
 				.between([this.index, 1], [this.index, 20], true, true)
-				.and(filterFunc)
+				// Disable all (boss arrival) filters for all worlds
+				//.and(filterFunc)
 				.count()
 				.then((value) => {
+					console.timeEnd('Count all normal sorties');
 					if (typeof callback === 'function') callback(value);
 					return value;
 				});
@@ -599,8 +601,8 @@ Uses Dexie.js third-party plugin on the assets directory
 			const query = this.con.sortie
 				.where("hq")
 				.equals(this.index)
-				.and(function (sortie) { return sortie.world <= 20; })
-				.and(filterFunc)
+				.and((sortie) => sortie.world.inside(1, 20))
+				//.and(filterFunc)
 				.reverse()
 				.offset((pageNumber - 1) * itemsPerPage)
 				.limit(itemsPerPage)
