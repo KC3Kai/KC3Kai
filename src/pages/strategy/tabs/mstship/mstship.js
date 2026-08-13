@@ -118,10 +118,7 @@
 
 			// List all ships, cached html used if any, since almost 1MB html takes over 2 secs from scratch
 			const shipListElm = $(".tab_mstship .shipRecords");
-			const cachedHtml = KC3Cache.getSync(this.shipListCacheKey);
-			if(cachedHtml) {
-				shipListElm.html(cachedHtml);
-			} else {
+			KC3Cache.getOrInsertComputed(this.shipListCacheKey, () => {
 				const shipBoxTemplate = $(".tab_mstship .factory .shipRecord");
 				$.each(this.sortedMasterShips, function(index, shipData){
 					if(!shipData) { return true; }
@@ -129,7 +126,7 @@
 					const id = shipData.api_id;
 					const isRegularShip = KC3Master.isRegularShip(id);
 					shipBox.attr("data-id", id);
-					shipBox.data("bs", shipData.kc3_bship);
+					shipBox.attr("data-bs", shipData.kc3_bship);
 					$("img", shipBox).attr("src", KC3Meta.shipIcon(0))
 						.attr("data-src", KC3Master.isAbyssalShip(id) ? KC3Meta.abyssIcon(id) : KC3Meta.shipIcon(id));
 					const shipName = KC3Master.isAbyssalShip(id) ?
@@ -151,8 +148,10 @@
 				});
 				// Intentionally use native tooltips for better speed
 				//shipListElm.createChildrenTooltips();
-				KC3Cache.setSync(this.shipListCacheKey, shipListElm.html());
-			}
+				return shipListElm.html();
+			}, (cachedHtml) => {
+				shipListElm.html(cachedHtml);
+			});
 			$("img", shipListElm).unveil(shipListElm, 22);
 			
 			// Select ship

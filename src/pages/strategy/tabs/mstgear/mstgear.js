@@ -36,10 +36,7 @@
 				$(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
 			};
 			const gearListElm = $(".tab_mstgear .gearRecords");
-			const cachedHtml = KC3Cache.getSync(this.gearListCacheKey);
-			if(cachedHtml) {
-				gearListElm.html(cachedHtml);
-			} else {
+			KC3Cache.getOrInsertComputed(this.gearListCacheKey, () => {
 				const gearBoxTemplate = $(".tab_mstgear .factory .gearRecord");
 				$.each(KC3Master.all_slotitems(), function(index, gearData){
 					if(!gearData) { return true; }
@@ -57,8 +54,10 @@
 					}
 					gearListElm.append(gearBox);
 				});
-				KC3Cache.setSync(this.gearListCacheKey, gearListElm.html());
-			}
+				return gearListElm.html();
+			}, (cachedHtml) => {
+				gearListElm.html(cachedHtml);
+			});
 			
 			// Select equipment
 			$(".tab_mstgear .gearRecords .gearRecord").on("click", function(){
