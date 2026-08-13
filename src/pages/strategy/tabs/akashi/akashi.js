@@ -44,13 +44,7 @@
 			this.heldGearRosterIds = [];
 			this.instances = {};
 			this.priorities = this.getPriorities();
-			if(KC3StrategyTabs.pageParams[1]){
-				KC3Cache.remove(`${this.akashiCacheKey}:${KC3StrategyTabs.pageParams[1]}`);
-			} else {
-				["sun","mon","tue","wed","thu","fri","sat"].forEach(dow => {
-					KC3Cache.remove(`${this.akashiCacheKey}:${dow}`);
-				});
-			}
+			this.clearCache(this.currentDayName || KC3StrategyTabs.pageParams[1]);
 			
 			// Get API IDs of all player ships, remember all roster IDs of gears they hold
 			$.each(KC3ShipManager.list, function(index, ThisShip){
@@ -105,7 +99,7 @@
 			if(!KC3Master.available) { return; }
 			self.hideNotImprovable = false;
 			$(".loading").show();
-			const equipList = $(".tab_akashi .equipment_list");
+			const equipListElm = $(".tab_akashi .equipment_list");
 
 			$(".tab_akashi .weekday").each(function(){
 				$(this).text(Date.getDayName($(this).prop("id").substr(8)).toUpperCase());
@@ -125,7 +119,7 @@
 				const toggleClasses = ".equipment.disabled,"
 					+ (self.showEquippedLocked ? "" : ".equipment.equipped,")
 					+ ".equipment.insufficient";
-				$(toggleClasses, equipList).toggle(!self.hideNotImprovable);
+				$(toggleClasses, equipListElm).toggle(!self.hideNotImprovable);
 			});
 
 			if(KC3StrategyTabs.pageParams[3] !== undefined){
@@ -137,7 +131,7 @@
 			const refreshOnToggleEquippedLocked = () => {
 				$(".loading").show();
 				$("#equipped_checkbox").prop("disabled", true);
-				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient", equipList).show();
+				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient", equipListElm).show();
 				this.reload();
 				// To recheck consumable items if locked
 				setTimeout(function(){
@@ -158,10 +152,19 @@
 				this.showDay();
 			}
 
+			// Refresh or clear cache on priorities changed
+			const updateCachedHtml = (clearAll = false) => {
+				if (clearAll) {
+					this.clearCache();
+				} else {
+					const dowKey = `${this.akashiCacheKey}:${this.currentDayName}`;
+					KC3Cache.setSync(dowKey, equipListElm.html());
+				}
+			};
 			$(".eq_priority--toggle").on("click", function () {
 				const ThisBox = $(this).closest(".equipment");
-				const itemId = ThisBox.data("item_id");
-				if (self.priorities.indexOf(itemId) !== -1) {
+				const itemId = Number(ThisBox.data("item_id"));
+				if (self.priorities.includes(itemId)) {
 					self.priorities = self.priorities.filter((id) => id !== itemId);
 				} else {
 					self.priorities.push(itemId);
@@ -169,6 +172,7 @@
 				self.savePriorities();
 				$(this).toggleClass("on");
 				$(".eq_priority--up, .eq_priority--down", ThisBox).toggleClass("off");
+				updateCachedHtml(true);
 			});
 
 			$(".eq_priority--up").on("click", function () {
@@ -177,11 +181,11 @@
 				const prev = ThisBox.prev();
 				// if previous element exists and it's not favorite
 				if (prev.length > 0 && prev.find(".eq_priority--toggle.on").length === 0){
-					//just reload akashi list
+					// just reload akashi list
 					return self.execute();
 				}
-				//otherwise move item in priority list
-				const itemId = ThisBox.data("item_id");
+				// otherwise move item in priority list
+				const itemId = Number(ThisBox.data("item_id"));
 				if (self.priorities.indexOf(itemId) === 0) return;
 				const index = self.priorities.indexOf(itemId);
 				const newIndex = self.priorities.indexOf(prev.data("item_id"));
@@ -189,6 +193,7 @@
 				self.priorities.splice(newIndex, 0, itemId);
 				self.savePriorities();
 				prev.before(ThisBox);
+				updateCachedHtml();
 			});
 
 			$(".eq_priority--down").on("click", function () {
@@ -197,11 +202,11 @@
 				const next = ThisBox.next();
 				// if previous element exists and it's not favorite
 				if (next.length > 0 && next.find(".eq_priority--toggle.on").length === 0){
-					//just reload akashi list
+					// just reload akashi list
 					return self.execute();
 				}
-				//otherwise move item in priority list
-				const itemId = ThisBox.data("item_id");
+				// otherwise move item in priority list
+				const itemId = Number(ThisBox.data("item_id"));
 				if (self.priorities.indexOf(itemId) === self.priorities.length - 1) return;
 				const index = self.priorities.indexOf(itemId);
 				const newIndex = self.priorities.indexOf(next.data("item_id"));
@@ -209,7 +214,9 @@
 				self.priorities.splice(newIndex, 0, itemId);
 				self.savePriorities();
 				next.after(ThisBox);
+				updateCachedHtml();
 			});
+
 			$(".loading").fadeOut();
 		},
 		
@@ -217,17 +224,18 @@
 			const self = this;
 			const todayDow = Date.getJstDate().getDay();
 			dayName = (dayName || $("#weekday-{0}".format(todayDow)).data("value")).toLowerCase();
+			this.currentDayName = dayName;
 			const dayIdx = {"sun":0,"mon":1,"tue":2,"wed":3,"thu":4,"fri":5,"sat":6}[dayName];
 			$(".weekdays .weekday").removeClass("active");
 			$(".weekdays .weekday[data-value={0}]".format(dayName)).addClass("active");
 			var ResBox;
 			
-			this.today = this.upgrades[ dayName ];
+			this.today = this.upgrades[dayName];
 			// Sort gears order by category ID asc, master ID asc
-			this.todaySortedIds = Object.keys(this.today).sort(function(a, b){
-				if(self.priorities.indexOf(a)!==-1 || self.priorities.indexOf(b)!==-1){
-					if(self.priorities.indexOf(a)===-1) return 1;
-					if(self.priorities.indexOf(b)===-1) return -1;
+			this.todaySortedIds = Object.keys(this.today).map(v => Number(v)).sort((a, b) => {
+				if(self.priorities.includes(a) || self.priorities.includes(b)) {
+					if(!self.priorities.includes(a)) return 1;
+					if(!self.priorities.includes(b)) return -1;
 					return self.priorities.indexOf(a) - self.priorities.indexOf(b);
 				}
 				return (KC3Master.slotitem(a).api_type || [])[2] - (KC3Master.slotitem(b).api_type || [])[2]
@@ -393,9 +401,9 @@
 					ThisBox.attr("data-item_id", itemId)
 						.attr("id", "akashi-{0}-{1}".format(dayName, itemId));
 					$(".eq_priority--toggle", ThisBox)
-						.toggleClass("on", self.priorities.indexOf(itemId) !== -1);
+						.toggleClass("on", self.priorities.includes(Number(itemId)));
 					$(".eq_priority--up,.eq_priority--down", ThisBox)
-						.toggleClass("off", self.priorities.indexOf(itemId) === -1);
+						.toggleClass("off", !self.priorities.includes(Number(itemId)));
 
 					$(".eq_icon img", ThisBox)
 						.attr("src", KC3Meta.itemIcon(itemIconType))
@@ -575,18 +583,28 @@
 			}
 		},
 		
+		clearCache: function(dayName) {
+			if(dayName){
+				KC3Cache.remove(`${this.akashiCacheKey}:${dayName}`);
+			} else {
+				["sun","mon","tue","wed","thu","fri","sat"].forEach(dow => {
+					KC3Cache.remove(`${this.akashiCacheKey}:${dow}`);
+				});
+			}
+		},
+
 		getPriorities: function() {
 			var priorities = [];
 			if (!localStorage.srAkashiPriorities) {
-				localStorage.srAkashiPriorities = JSON.stringify( priorities );
+				localStorage.srAkashiPriorities = JSON.stringify(priorities);
 			} else {
-				priorities = JSON.parse( localStorage.srAkashiPriorities );
+				priorities = JSON.parse(localStorage.srAkashiPriorities);
 			}
 			return priorities;
 		},
 		
 		setPriorities: function(priorityList) {
-			localStorage.srAkashiPriorities = JSON.stringify( priorityList );
+			localStorage.srAkashiPriorities = JSON.stringify(priorityList);
 		},
 		
 		savePriorities: function () {
