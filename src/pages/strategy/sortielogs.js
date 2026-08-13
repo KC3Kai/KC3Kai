@@ -65,7 +65,6 @@
 		---------------------------------*/
 		this.reload = function(){
 			ConfigManager.load();
-			this.loadSettings();
 			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
@@ -84,6 +83,7 @@
 		this.execute = function(){
 			const self = this;
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
+			this.loadSettings();
 			this.loadSettingToggles();
 			this.loadWorldSelect();
 			this.loadWorldsFromStorage();
@@ -410,6 +410,7 @@
 			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
+			$(".tab_"+tabCode+" .settings #boss_node_toggle").prop("disabled", tabCode === "maps" && self.selectedWorld === 0);
 
 			var countWorlds = $(".tab_"+tabCode+" .world_list .world_box").length;
 			var maxDispWorlds = 6 + (tabCode === "maps" ? 2 : 0);
@@ -682,7 +683,7 @@
 			// Show all sorties
 			if (this.selectedWorld === 0) {
 				query = KC3Database.count_normal_sorties(filterFunc).then((count) => {
-					console.debug("Count of All", self.settings.bossArrival ? "Boss:" : ":", count);
+					console.debug("Count of All:", count);
 					return count;
 				});
 			} else {
