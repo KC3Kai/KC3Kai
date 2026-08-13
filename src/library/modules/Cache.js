@@ -11,7 +11,7 @@
   // assuming up to 8 KB per entries,
   // known for now:
   //  * key string + small array for sortie ledger < 128 bytes;
-  //  * mstship list html > 995 KB; mstgear list html > 230 KB; akashi list html > 1.5 MB
+  //  * mstship list html > 995 KB; mstgear list html > 230 KB; akashi list html > 1.5 MB (x7 DoW)
   const avgEntryBytes = 8192;
   // detected memory (in GB) * MB / average size ~= 512 entries for 4 GB RAM
   const maxSize = Math.floor((navigator.deviceMemory || 4) * 1048576 / avgEntryBytes);
