@@ -565,7 +565,7 @@
 			const self = this;
 			$(".tab_gears .item_type").removeClass("active");
 			$(".tab_gears .item_type[data-type={0}]".format(type_id)).addClass("active");
-			$(".tab_gears .item_list").html("");
+			const itemListElem = $(".tab_gears .item_list").html("");
 
 			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -661,13 +661,13 @@
 			SlotItems.sort( comparator );
 			const dayOfWeek = Date.getJstDate().getDay();
 			const allProperties = this._allProperties;
+			const itemTemplate = $(".tab_gears .factory .slotitem");
 			$.each(SlotItems, function(index, ThisSlotitem) {
-				const ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
+				const ItemElem = itemTemplate.clone();
 				ItemElem.attr("id", "gears-{0}-{1}".format(ThisSlotitem.type_id, ThisSlotitem.id));
 				$(".icon img", ItemElem)
 					.attr("src", KC3Meta.itemIcon(ThisSlotitem.type_id))
-					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
-				$(".icon img", ItemElem)
+					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); })
 					.attr("title", `[${ThisSlotitem.id}]\n${getItemList(ThisSlotitem.held, ThisSlotitem.extras).join("\n")}`)
 					.attr("alt", ThisSlotitem.id)
 					.on("click", gearClickFunc);
@@ -713,6 +713,7 @@
 						)
 					)
 				)).appendTo( ItemElem.children('.holders') );
+				itemListElem.append(ItemElem);
 			});
 
 			const footerTxt = KC3Meta.term("EquipmentListSummaryFooter").format(
@@ -722,7 +723,7 @@
 					"{0} /{1}".format(KC3GearManager.countNonUseitem(), PlayerManager.hq.gearSlots)
 				)
 			);
-			$(".tab_gears .item_list").append(
+			itemListElem.append(
 				$('<div class="summary footer">').html(footerTxt)
 			);
 
