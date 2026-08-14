@@ -25,7 +25,6 @@
 			this.upgrades = JSON.parse(akashiData);
 			ConfigManager.load();
 			this.showEquippedLocked = !!ConfigManager.sr_akashi_slock;
-			//console.log(this.upgrades);
 		},
 
 		/* RELOAD
@@ -152,12 +151,11 @@
 				this.showDay();
 			}
 
-			// Refresh or clear cache on priorities changed
-			const updateCachedHtml = (clearAll = false) => {
-				if (clearAll) {
-					this.clearCache();
-				} else {
-					const dowKey = `${this.akashiCacheKey}:${this.currentDayName}`;
+			// Clear cache of other days (and refresh current) on priorities changed
+			const updateCachedHtml = (refreshCurrent = true) => {
+				this.clearCache();
+				if (refreshCurrent) {
+					const dowKey = this.getCacheKey(this.currentDayName);
 					KC3Cache.setSync(dowKey, equipListElm.html());
 				}
 			};
@@ -172,7 +170,8 @@
 				self.savePriorities();
 				$(this).toggleClass("on");
 				$(".eq_priority--up, .eq_priority--down", ThisBox).toggleClass("off");
-				updateCachedHtml(true);
+				// ensure item on next show will get new position
+				updateCachedHtml(false);
 			});
 
 			$(".eq_priority--up").on("click", function () {
@@ -224,12 +223,11 @@
 			const self = this;
 			const todayDow = Date.getJstDate().getDay();
 			dayName = (dayName || $("#weekday-{0}".format(todayDow)).data("value")).toLowerCase();
-			this.currentDayName = dayName;
 			const dayIdx = {"sun":0,"mon":1,"tue":2,"wed":3,"thu":4,"fri":5,"sat":6}[dayName];
 			$(".weekdays .weekday").removeClass("active");
 			$(".weekdays .weekday[data-value={0}]".format(dayName)).addClass("active");
 			var ResBox;
-			
+			this.currentDayName = dayName;
 			this.today = this.upgrades[dayName];
 			// Sort gears order by category ID asc, master ID asc
 			this.todaySortedIds = Object.keys(this.today).map(v => Number(v)).sort((a, b) => {
@@ -383,8 +381,8 @@
 				}
 			};
 			
-			const dowKey = `${this.akashiCacheKey}:${dayName}`;
 			//console.time(dowKey);
+			const dowKey = this.getCacheKey(dayName);
 			const equipListElm = $(".tab_akashi .equipment_list");
 			KC3Cache.getOrInsertComputed(dowKey, () => {
 				equipListElm.html("");
@@ -574,6 +572,7 @@
 				".eq_res_value.consumed_name .val.hover"
 			].join(","), equipListElm).click(gearNameClickFunc);
 			//console.timeEnd(dowKey);
+			
 			if(!!viewMasterId) {
 				// Ensure scroll window to specified anchor
 				setTimeout(function(){
@@ -582,15 +581,19 @@
 				}, 500);
 			}
 		},
-		
+
 		clearCache: function(dayName) {
 			if(dayName){
-				KC3Cache.remove(`${this.akashiCacheKey}:${dayName}`);
+				KC3Cache.remove(this.getCacheKey(dayName));
 			} else {
 				["sun","mon","tue","wed","thu","fri","sat"].forEach(dow => {
-					KC3Cache.remove(`${this.akashiCacheKey}:${dow}`);
+					KC3Cache.remove(this.getCacheKey(dow));
 				});
 			}
+		},
+
+		getCacheKey: function(dayName) {
+			return [this.akashiCacheKey, dayName].compact().join(":");
 		},
 
 		getPriorities: function() {
@@ -598,15 +601,19 @@
 			if (!localStorage.srAkashiPriorities) {
 				localStorage.srAkashiPriorities = JSON.stringify(priorities);
 			} else {
-				priorities = JSON.parse(localStorage.srAkashiPriorities);
+				try {
+					priorities = JSON.parse(localStorage.srAkashiPriorities);
+				} finally {
+					priorities = Array.isArray(priorities) ? priorities.map(v => Number(v)).compact() : [];
+				}
 			}
 			return priorities;
 		},
-		
-		setPriorities: function(priorityList) {
+
+		setPriorities: function(priorityList = []) {
 			localStorage.srAkashiPriorities = JSON.stringify(priorityList);
 		},
-		
+
 		savePriorities: function () {
 			this.setPriorities(this.priorities);
 		}
