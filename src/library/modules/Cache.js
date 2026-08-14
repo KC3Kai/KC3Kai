@@ -97,7 +97,8 @@
 
     usage: (sync = false) => {
       const used = store.size, quota = maxSize;
-      const retval = { used, quota };
+      const keys = Array.from(store.keys());
+      const retval = { used, quota, keys };
       return sync ? retval : Promise.resolve(retval);
     },
 
