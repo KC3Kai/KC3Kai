@@ -2376,7 +2376,7 @@
 
 			//console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
-				$($(".module.activity .sortie_nodes .sortie_node")[numNodes - 1]).addClass("boss-node");
+				$(".module.activity .sortie_nodes .sortie_node").eq(numNodes - 1).addClass("nc_boss");
 			}
 			switch(thisNode.type){
 				// Battle node
@@ -2623,7 +2623,6 @@
 			// If compass setting disabled, hide node letters and all battle activities
 			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
-				$(".module.activity .sortie_nodes .boss_node").hide();
 				$(".module.activity .sortie_nodes .sortie_node").hide();
 			} else {
 				$(".module.activity .sortie_nodes .sortie_node").show();
