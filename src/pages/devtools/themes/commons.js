@@ -504,7 +504,9 @@
   };
 
   Utils.prototype.updateEnemyHpBarStyles = function (hpBarSelector, hpPercent, maxWidth) {
-    if (maxWidth > 0) {
+    if (maxWidth === "auto") {
+      $(hpBarSelector).css("width", $(hpBarSelector).parent().width() * hpPercent);
+    } else if (maxWidth > 0) {
       $(hpBarSelector).css("width", maxWidth * hpPercent);
     } else {
       $(hpBarSelector).css("width", "");
