@@ -2798,7 +2798,7 @@
 								.removeClass("safe");
 							
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						} else {
 							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1));
 						}
@@ -3065,7 +3065,7 @@
 							.toggleClass("safe", !!(data || {}).safeSunk);
 						
 						enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).css("display", "flex");
 					}
 				});
@@ -3564,7 +3564,7 @@
 							.addClass("safe");
 
 						enemyHPPercent = ( newEnemyHP / thisPvP.maxHPs.enemy[index] );
-						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).css("display", "flex");
 					}
 				});
