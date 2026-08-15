@@ -704,7 +704,7 @@ body {
 				text-align: center;
 				border: 1px solid #aaa;
 
-                &.boss-node {
+				&.nc_boss {
 					position: relative;
 					border-color: #a90a0a;
 					background: #7d0000;
@@ -4847,11 +4847,6 @@ body {
 					animation: slide infinite 3s alternate 1s;
 				}
 
-				@keyframes slide {
-					0% { margin-left: 0; }
-					30% { margin-left: 0; }
-					100% { margin-left: var(--maxOverflow, -50px); }
-				}
 			}
 
 			& .aa_col {
@@ -4895,6 +4890,12 @@ body {
 			}
 		}
 	}
+}
+
+@keyframes slide {
+	0% { margin-left: 0; }
+	30% { margin-left: 0; }
+	100% { margin-left: var(--maxOverflow, -50px); }
 }
 
 /* Customized Scrollbar */

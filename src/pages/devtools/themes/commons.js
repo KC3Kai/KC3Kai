@@ -327,11 +327,10 @@
     $(".module.activity .sortie_nodes").removeAttr("style");
     $(".module.activity .sortie_node").text("")
       .removeAttr("title")
-      .removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
+      .removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name nc_boss")
       .removeClass("special_cutin smoke_screen")
       .removeClass(KC3Node.knownNodeExtraClasses().join(" "));
-    $(".module.activity .sortie_nodes .boss_node").removeAttr("style");
-    $(".module.activity .sortie_nodes .boss_node").hide();
+    $(".module.activity .sortie_nodes .boss_node").removeAttr("style").hide();
     $(".module.activity .node_types").hide();
     $(".battle_support,.battle_drop", ".module.activity").find('img').css("visibility", "");
     $(".admiral_lvnext").attr("data-exp-gain", "");
@@ -339,46 +338,59 @@
 
   Utils.prototype.clearBattleData = function () {
     $(".module.activity .activity_box").hideChildrenTooltips();
-    $(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
-    $(".module.activity .abyss_ship img").attr("titlealt", "").lazyInitTooltip();
-    $(".module.activity .abyss_ship").removeClass(KC3Meta.abyssShipBorderClass().join(" "));
-    $(".module.activity .abyss_ship").removeClass("sunk");
-    $(".module.activity .abyss_ship").removeData("masterId").off("dblclick");
+    $(".module.activity .abyss_ship > img")
+      .attr("src", KC3Meta.abyssIcon(-1))
+      .attr("titlealt", "").lazyInitTooltip();
+    $(".module.activity .abyss_ship")
+      .removeClass(KC3Meta.abyssShipBorderClass().join(" "))
+      .removeClass("sunk")
+      .removeData("masterId").off("dblclick");
     $(".module.activity .abyss_combined").hide();
     $(".module.activity .abyss_single").show();
     $(".module.activity .abyss_ship").hide();
     $(".module.activity .abyss_hp").hide().removeClass("sunk");
     $(".module.activity .sink_icons .sunk").removeClass("shown safe debuff");
     $(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
-    $(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
-    $(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
+    $(".module.activity .battle_eformation")
+      .attr("title", "").lazyInitTooltip()
+      .css("-webkit-transform", "rotate(0deg)");
     $(".module.activity .battle_support > img").attr("src", "../../../../assets/img/ui/dark_support.png");
-    $(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
+    $(".module.activity .battle_support")
+      .attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
     $(".module.activity .battle_support .support_lbas").hide();
     $(".module.activity .battle_support .support_exped").hide();
     $(".module.activity .battle_support .support_balloon").hide();
-    $(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
+    $(".module.activity .battle_fish img")
+      .attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
     $(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
     $(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
     $(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
-    $(".module.activity .battle_night img").removeClass("hover").off("dblclick");
-    $(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
+    $(".module.activity .battle_night img")
+      .removeClass("hover").off("dblclick")
+      .attr("src", "../../../../assets/img/ui/dark_yasen.png");
     $(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
-    $(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
+    $(".module.activity .battle_rating img")
+      .attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
     $(".module.activity .battle_rating").attr("title", KC3Meta.term("BattleRating")).lazyInitTooltip();
-    $(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png").removeClass("rounded");
-    $(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
-    $(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
+    $(".module.activity .battle_drop img")
+      .attr("src", "../../../../assets/img/ui/dark_shipdrop.png").removeClass("rounded");
+    $(".module.activity .battle_drop")
+      .removeData("masterId").off("dblclick")
+      .removeClass("new_ship")
+      .attr("title", "").lazyInitTooltip();
     $(".module.activity .battle_cond_value").text("");
     $(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
-    $(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
-    $(".module.activity .battle_engagement").attr("title", "").lazyInitTooltip();
+    $(".module.activity .battle_engagement")
+      .removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()))
+      .attr("title", "").lazyInitTooltip();
     $(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
-    $(".module.activity .battle_detection").removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()));
-    $(".module.activity .battle_detection").attr("title", "").lazyInitTooltip();
+    $(".module.activity .battle_detection")
+      .removeClass(KC3Meta.battleSeverityClass(KC3Meta.detection()))
+      .attr("title", "").lazyInitTooltip();
     $(".module.activity .battle_cond_extra.smoke_screen").hide().attr("title", "").lazyInitTooltip();
-    $(".module.activity .battle_airbattle").removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()));
-    $(".module.activity .battle_airbattle").attr("title", "").lazyInitTooltip();
+    $(".module.activity .battle_airbattle")
+      .removeClass(KC3Meta.battleSeverityClass(KC3Meta.airbattle()))
+      .attr("title", "").lazyInitTooltip();
     $(".module.activity .plane_text span").text("");
     $(".module.activity .battle_planes .fighter_ally .plane_icon img").attr("src", KC3Meta.itemIcon(6));
     $(".module.activity .battle_planes .fighter_enemy .plane_icon img").attr("src", KC3Meta.itemIcon(6));
