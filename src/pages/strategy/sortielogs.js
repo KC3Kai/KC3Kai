@@ -916,9 +916,11 @@
 				};
 			};
 
-			const showSortieLedger = function (sortieId, sortieBox, sortieWorld, refreshCache = false) {
+			const showSortieLedger = function (sortieId, sortieBox, sortieWorld,
+				fromClick = false, refreshCache = false) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
-				// Akashi repair not included either, belonged to its own type
+				// Sortie consumption not accurate in time until resupplies and repairs of all fleet members are done later
+				// Akashi repair (Nosaki sparkle) not included either, belonged to its own type
 				const buildConsumptionArray = arr => (arr || []).reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
@@ -939,7 +941,11 @@
 					}).join(" ");
 				};
 
-				$(".sortie_map", sortieBox).toggleClass('queued loading');
+				const mapNameElm = $(".sortie_map", sortieBox);
+				mapNameElm.toggleClass("queued loading");
+				if (fromClick && refreshCache && mapNameElm.tooltip("instance")) {
+					mapNameElm.tooltip("close");
+				}
 				let tooltip = "";
 				const sKey = "navaloverall:sortie:" + sortieId;
 				const lKey = "navaloverall:lbas:" + sortieId;
@@ -968,8 +974,8 @@
 						}
 
 						tooltip = buildLedgerMessage(consumption);
-						if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6 || sortieWorld === 7)) {
-							$(".sortie_map", sortieBox)
+						if (!(KC3Meta.isEventWorld(sortieWorld) || [6, 7].includes(sortieWorld))) {
+							mapNameElm
 								.attr("titlealt", "{0}".format(tooltip))
 								.lazyInitTooltip();
 							return;
@@ -1010,13 +1016,16 @@
 									lbTooltip = buildLedgerMessage(lbConsumption);
 								}
 
-								$(".sortie_map", sortieBox)
+								mapNameElm
 									.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
 									.lazyInitTooltip();
 							});
 					})
 					.finally(() => {
-						$(".sortie_map", sortieBox).toggleClass('loading loaded');
+						mapNameElm.toggleClass("loading loaded");
+						if (fromClick && mapNameElm.tooltip("instance")) {
+							mapNameElm.tooltip("open");
+						}
 					});
 			};
 			const queueLedgerLoadingFunc = (e) => {
@@ -1027,7 +1036,7 @@
 				const refreshCache = e.ctrlKey || e.metaKey;
 				if(!id || !world || (done && !refreshCache)) return;
 				mapElm.toggleClass("queued").toggleClass("loaded", false);
-				self.ledgerLimiter.schedule(showSortieLedger, id, sortieBox, world, refreshCache);
+				self.ledgerLimiter.schedule(showSortieLedger, id, sortieBox, world, true, refreshCache);
 			};
 
 			// Show sortie records on list
