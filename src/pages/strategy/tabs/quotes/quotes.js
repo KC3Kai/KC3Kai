@@ -28,57 +28,55 @@
 			return "[{0}] {1}".format(masterId, shipData ? KC3Meta.shipName(shipData.api_name) : KC3Meta.shipNameById(masterId));
 		},
 		showVoiceDetail: function(masterId) {
-			var self = this;
+			const self = this;
 			$("#error").empty().hide();
 			KC3Meta.loadQuotes();
-			var quotes = KC3Translation.getQuotes(this.repo_loc, true, self.subtitleLang);
+			const quotes = KC3Translation.getQuotes(this.repo_loc, true, self.subtitleLang);
 			masterId = Number(masterId) || 318;
 			var shipLines = quotes[masterId];
-			var shipData = KC3Master.ship(masterId);
+			const shipData = KC3Master.ship(masterId);
 			$(".voice_list").html("");
-			$(".ship_info .ship_name").text(this.buildShipName(masterId));
-			$(".ship_info .ship_name").data("id", masterId);
-			$(".ship_info .ship_name").addClass("hover").off("click").click(function(){
+			$(".ship_info .ship_name").text(this.buildShipName(masterId))
+				.data("id", masterId).addClass("hover").off("click").click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).data("id") );
 			});
 			$(".ship_info .reload").off("click").click(function(){
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
-			var toNextFunc = function(){
+			const toNextFunc = function(){
 				if(!!$(this).data("asid")){
 					self.scrollShipListTop( $(this).data("asid") );
 					KC3StrategyTabs.gotoTab(null, $(this).data("asid") );
 				}
 			};
 			if(shipData.api_aftershipid){
-				$(".ship_info .after_ship").data("asid", shipData.api_aftershipid);
-				$(".ship_info .after_ship").off("click").click(toNextFunc);
-				$(".ship_info .after_ship").show();
+				$(".ship_info .after_ship").data("asid", shipData.api_aftershipid)
+					.off("click").click(toNextFunc).show();
 			} else {
-				$(".ship_info .after_ship").off("click");
-				$(".ship_info .after_ship").hide();
+				$(".ship_info .after_ship").off("click").hide();
 			}
 			$(".ship_info .friend_lines").off("click").click(function(){
 				self.showFriendLines = !self.showFriendLines;
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
-			var toFromFunc = function(){
+			const toFromFunc = function(){
 				self.scrollShipListTop($(this).data("sid"));
 				KC3StrategyTabs.gotoTab(null, $(this).data("sid"));
 			};
-			var toggleSrcFunc = function(){
+			const toggleSrcFunc = function(){
 				$(".ref_sub", $(this).parent()).slideToggle(200);
 			};
-			var toQuoteHtmlLines = (quote, showDelayTime = true) => {
+			const toQuoteHtmlLines = (quote, showDelayTime = true) => {
 				if($.type(quote) === "string") return quote;
 				return Object.keys(quote)
 					.map(k => ((showDelayTime ? "({1}) " : "") + "{0}").format(quote[k], k))
 					.join("</br>");
 			};
 
-			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true, self.showFriendLines);
+			const allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true, self.showFriendLines);
+			const voiceTemplate = $(".factory .voice_entity");
 			$.each(allVoiceNums,function(i,voiceNum) {
-				var elm = $(".factory .voice_entity").clone();
+				const elm = voiceTemplate.clone();
 
 				var state;
 				var src;
@@ -94,28 +92,27 @@
 				}
 				elm.addClass(state);
 
-				$(".voice",elm).text( "{0} [{1}]".format(KC3Translation.voiceNumToDesc(voiceNum), voiceNum) );
-				var voiceFile = KC3Meta.getFilenameByVoiceLine(masterId, voiceNum);
-				var voiceLine = KC3Meta.getVoiceLineByFilename(masterId, voiceFile);
-				$(".voice",elm).data("voiceFile", voiceFile);
-				$(".voice",elm).data("voiceLine", voiceLine);
-
-				$(".voice",elm).on("click", function() {
-					var currentGraph = KC3Master.graph(masterId).api_filename;
-					var voiceFile = $(this).data("voiceFile");
-					var voiceLine = $(this).data("voiceLine");
+				const voiceFile = KC3Meta.getFilenameByVoiceLine(masterId, voiceNum);
+				const voiceLine = KC3Meta.getVoiceLineByFilename(masterId, voiceFile);
+				$(".voice",elm).text( "{0} [{1}]".format(KC3Translation.voiceNumToDesc(voiceNum), voiceNum) )
+					.data("voiceFile", voiceFile)
+					.data("voiceLine", voiceLine)
+					.on("click", function() {
+					const currentGraph = KC3Master.graph(masterId).api_filename;
+					const voiceFile = $(this).data("voiceFile");
+					const voiceLine = $(this).data("voiceLine");
 					console.debug("VOICE: shipId, voiceNum, voiceFile, voiceLine", masterId,
 						voiceNum, voiceFile, voiceLine);
-					var voiceSrc = `${self.gameServer.urlPrefix}/kcs/sound/kc${currentGraph}/${voiceFile}.mp3`;
+					const voiceSrc = `${self.gameServer.urlPrefix}/kcs/sound/kc${currentGraph}/${voiceFile}.mp3`;
 					if($(".voice_list .player audio").length){
 						$(".voice_list .player audio").each((_, a) => {a.pause();});
 					}
 					$(".voice_list .player").empty();
 					$(".voice_list .subtitle").removeClass("playing");
-					var player = $('<audio controls autoplay controlslist="nodownload"><source/></audio>');
+					const player = $('<audio controls autoplay controlslist="nodownload"><source/></audio>');
 					$("source", player).attr("src", voiceSrc);
 					$(".player", elm).html(player);
-					var audio = player.get(0);
+					const audio = player.get(0);
 					audio.onloadedmetadata = function() {
 						$(this).parent().append('<span>{0}</span>'.format(Math.round(this.duration * 1000)));
 					};
@@ -142,7 +139,7 @@
 					$(".source",elm).addClass("hover").data("sid", src.tag);
 					$(".source",elm).click(toFromFunc);
 				}
-				var subtitleText = state === "missing" ? "missing" : toQuoteHtmlLines(src.val);
+				const subtitleText = state === "missing" ? "missing" : toQuoteHtmlLines(src.val);
 				$(".subtitle",elm).html(subtitleText);
 				$(".division",elm).click(toggleSrcFunc);
 				if(self.enQuotes && self.enQuotes[masterId] && self.enQuotes[masterId][voiceNum]){
@@ -165,29 +162,29 @@
 			});
 		},
 		execute: function() {
-			var self = this;
-			var allShips = KC3Master.all_ships();
-			var masterIds = Object
-				  .keys( allShips )
-				  .map( id => parseInt(id, 10) )
-				  .filter( id => KC3Master.isRegularShip(id) )
-				  .sort( (a, b) => a - b );
+			const self = this;
+			const allShips = KC3Master.all_ships();
+			const masterIds = Object.keys( allShips )
+				.map( id => parseInt(id, 10) )
+				.filter( id => KC3Master.isRegularShip(id) )
+				.sort( (a, b) => a - b );
 
-			var shipList = $(".ship_list");
-			var quotes = KC3Translation.getQuotes(this.repo_loc, true, undefined, true);
+			const shipList = $(".ship_list");
+			const quotes = KC3Translation.getQuotes(this.repo_loc, true, undefined, true);
 
+			const shipTemplate = $(".factory .ship_entity");
 			$.each(masterIds, function(i, masterId) {
-				var shipEntity = $(".factory .ship_entity").clone();
-				var shipData = allShips[masterId];
+				const shipEntity = shipTemplate.clone();
+				const shipData = allShips[masterId];
 
-				var graphFilename = KC3Master.graph(masterId).api_filename;
+				const graphFilename = KC3Master.graph(masterId).api_filename;
 				$(".ship_icon img",shipEntity).attr("src", KC3Meta.shipIcon(masterId));
 				$(".ship_name",shipEntity).text(self.buildShipName(masterId, shipData))
 					.attr("title", graphFilename);
 				$(".ship_graph",shipEntity).text(graphFilename);
 
-				var shipLines = quotes[masterId];
-				var availableVoiceNums = KC3Translation.getShipVoiceNums(masterId);
+				const shipLines = quotes[masterId];
+				const availableVoiceNums = KC3Translation.getShipVoiceNums(masterId);
 
 				var directCount = 0;
 				var inheritedCount = 0;
@@ -205,7 +202,7 @@
 						}
 					});
 				}
-				var total = availableVoiceNums.length;
+				const total = availableVoiceNums.length;
 				$(".ship_pg_val1", shipEntity)
 					.css("width", Math.floor(150 * directCount / total	) +"px");
 				$(".ship_pg_val2", shipEntity)
@@ -219,8 +216,8 @@
 			});
 
 			// Try to auto fit the height of window
-			var innerHeight = Math.max(480, window.innerHeight) - 60;
-			if(innerHeight>400){
+			const innerHeight = Math.max(480, window.innerHeight) - 60;
+			if(innerHeight > 400){
 				$(".tab_quotes .ship_list").css("height", innerHeight+"px");
 				$(".tab_quotes .part_right").css("height", innerHeight+"px");
 				$(".tab_quotes .voice_list").css("height", (innerHeight-32)+"px");
@@ -250,11 +247,11 @@
 			return true;
 		},
 		scrollShipListTop: function(shipId) {
-			var shipList = $(".ship_list");
-			var shipItem = $(".ship_list .ship_entity#{0}"
+			const shipList = $(".ship_list");
+			const shipItem = $(".ship_list .ship_entity#{0}"
 				.format(shipId || $(".ship_info .ship_name").data("id"))
 			);
-			var scrollTop = shipItem.length === 1 ?
+			const scrollTop = shipItem.length === 1 ?
 				(shipItem.offset().top
 				 + shipList.scrollTop()
 				 - shipList.offset().top) : 0;
