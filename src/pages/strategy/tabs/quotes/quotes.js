@@ -8,6 +8,7 @@
 		repo_loc: "../../data/",
 		enQuotes: [],
 		jpQuotes: [],
+		clQuotes: [],
 		showFriendLines: false,
 		subtitleLang: "",
 		
@@ -23,17 +24,20 @@
 			this.jpQuotes = [];
 			if(this.subtitleLang !== "jp")
 				this.jpQuotes = KC3Translation.getQuotes(this.repo_loc, false, "jp", false, false);
+			this.reloadQuotes();
 		},
 		buildShipName: function(masterId, shipData) {
 			return "[{0}] {1}".format(masterId, shipData ? KC3Meta.shipName(shipData.api_name) : KC3Meta.shipNameById(masterId));
 		},
+		reloadQuotes: function() {
+			KC3Meta.loadQuotes();
+			this.clQuotes = KC3Translation.getQuotes(this.repo_loc, true, this.subtitleLang);
+		},
 		showVoiceDetail: function(masterId) {
 			const self = this;
 			$("#error").empty().hide();
-			KC3Meta.loadQuotes();
-			const quotes = KC3Translation.getQuotes(this.repo_loc, true, self.subtitleLang);
 			masterId = Number(masterId) || 318;
-			var shipLines = quotes[masterId];
+			const shipLines = this.clQuotes[masterId];
 			const shipData = KC3Master.ship(masterId);
 			$(".voice_list").html("");
 			$(".ship_info .ship_name").text(this.buildShipName(masterId))
@@ -41,6 +45,7 @@
 				KC3StrategyTabs.gotoTab("mstship", $(this).data("id") );
 			});
 			$(".ship_info .reload").off("click").click(function(){
+				self.reloadQuotes();
 				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
 			});
 			const toNextFunc = function(){
