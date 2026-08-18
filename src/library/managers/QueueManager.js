@@ -14,8 +14,8 @@
     let limiter;
     if (typeof window.Bottleneck === "function") {
       limiter = new Bottleneck(maxNb);
-      if (debug) limiter.on('idle', () => {
-        console.debug(`TooltipLimiter(${maxNb}) @ idle`);/*RemoveLogging:skip*/
+      if (debug) limiter.on("idle", () => {
+        console.debug(`TooltipLimiter(${maxNb}) is idle`);
       });
     }
     return limiter;
