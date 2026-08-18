@@ -2376,7 +2376,7 @@
 
 			//console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
-				$($(".module.activity .sortie_nodes .sortie_node")[numNodes - 1]).addClass("boss-node");
+				$(".module.activity .sortie_nodes .sortie_node").eq(numNodes - 1).addClass("nc_boss");
 			}
 			switch(thisNode.type){
 				// Battle node
@@ -2623,7 +2623,6 @@
 			// If compass setting disabled, hide node letters and all battle activities
 			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
-				$(".module.activity .sortie_nodes .boss_node").hide();
 				$(".module.activity .sortie_nodes .sortie_node").hide();
 			} else {
 				$(".module.activity .sortie_nodes .sortie_node").show();
@@ -2799,7 +2798,7 @@
 								.removeClass("safe");
 							
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						} else {
 							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1));
 						}
@@ -3066,7 +3065,7 @@
 							.toggleClass("safe", !!(data || {}).safeSunk);
 						
 						enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
-						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).css("display", "flex");
 					}
 				});
@@ -3565,7 +3564,7 @@
 							.addClass("safe");
 
 						enemyHPPercent = ( newEnemyHP / thisPvP.maxHPs.enemy[index] );
-						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, 28);
+						KC3ThemeUtils.updateEnemyHpBarStyles(".module.activity .abyss_single .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).css("display", "flex");
 					}
 				});

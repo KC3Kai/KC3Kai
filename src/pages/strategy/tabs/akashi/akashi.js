@@ -14,6 +14,7 @@
 		instances: {},
 		hideNotImprovable: false,
 		showEquippedLocked: false,
+		akashiCacheKey: "akashi:equiplist",
 		
 		/* INIT
 		Prepares static data needed
@@ -24,7 +25,6 @@
 			this.upgrades = JSON.parse(akashiData);
 			ConfigManager.load();
 			this.showEquippedLocked = !!ConfigManager.sr_akashi_slock;
-			//console.log(this.upgrades);
 		},
 
 		/* RELOAD
@@ -43,6 +43,7 @@
 			this.heldGearRosterIds = [];
 			this.instances = {};
 			this.priorities = this.getPriorities();
+			this.clearCache(this.currentDayName || KC3StrategyTabs.pageParams[1]);
 			
 			// Get API IDs of all player ships, remember all roster IDs of gears they hold
 			$.each(KC3ShipManager.list, function(index, ThisShip){
@@ -97,7 +98,7 @@
 			if(!KC3Master.available) { return; }
 			self.hideNotImprovable = false;
 			$(".loading").show();
-			this.reload();
+			const equipListElm = $(".tab_akashi .equipment_list");
 
 			$(".tab_akashi .weekday").each(function(){
 				$(this).text(Date.getDayName($(this).prop("id").substr(8)).toUpperCase());
@@ -114,11 +115,10 @@
 
 			$("#disabled_toggle").on("click", function(){
 				self.hideNotImprovable = !self.hideNotImprovable;
-				const equipList = $(".equipment_list");
 				const toggleClasses = ".equipment.disabled,"
 					+ (self.showEquippedLocked ? "" : ".equipment.equipped,")
 					+ ".equipment.insufficient";
-				$(toggleClasses, equipList).toggle(!self.hideNotImprovable);
+				$(toggleClasses, equipListElm).toggle(!self.hideNotImprovable);
 			});
 
 			if(KC3StrategyTabs.pageParams[3] !== undefined){
@@ -130,8 +130,8 @@
 			const refreshOnToggleEquippedLocked = () => {
 				$(".loading").show();
 				$("#equipped_checkbox").prop("disabled", true);
-				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient",
-					$(".equipment_list")).show();
+				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient", equipListElm).show();
+				this.reload();
 				// To recheck consumable items if locked
 				setTimeout(function(){
 					KC3StrategyTabs.gotoTab(null, [KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2],
@@ -151,10 +151,18 @@
 				this.showDay();
 			}
 
+			// Clear cache of other days (and refresh current) on priorities changed
+			const updateCachedHtml = (refreshCurrent = true) => {
+				this.clearCache();
+				if (refreshCurrent) {
+					const dowKey = this.getCacheKey(this.currentDayName);
+					KC3Cache.setSync(dowKey, equipListElm.html());
+				}
+			};
 			$(".eq_priority--toggle").on("click", function () {
 				const ThisBox = $(this).closest(".equipment");
-				const itemId = ThisBox.data("item_id");
-				if (self.priorities.indexOf(itemId) !== -1) {
+				const itemId = Number(ThisBox.data("item_id"));
+				if (self.priorities.includes(itemId)) {
 					self.priorities = self.priorities.filter((id) => id !== itemId);
 				} else {
 					self.priorities.push(itemId);
@@ -162,6 +170,8 @@
 				self.savePriorities();
 				$(this).toggleClass("on");
 				$(".eq_priority--up, .eq_priority--down", ThisBox).toggleClass("off");
+				// ensure item on next show will get new position
+				updateCachedHtml(false);
 			});
 
 			$(".eq_priority--up").on("click", function () {
@@ -170,11 +180,11 @@
 				const prev = ThisBox.prev();
 				// if previous element exists and it's not favorite
 				if (prev.length > 0 && prev.find(".eq_priority--toggle.on").length === 0){
-					//just reload akashi list
+					// just reload akashi list
 					return self.execute();
 				}
-				//otherwise move item in priority list
-				const itemId = ThisBox.data("item_id");
+				// otherwise move item in priority list
+				const itemId = Number(ThisBox.data("item_id"));
 				if (self.priorities.indexOf(itemId) === 0) return;
 				const index = self.priorities.indexOf(itemId);
 				const newIndex = self.priorities.indexOf(prev.data("item_id"));
@@ -182,6 +192,7 @@
 				self.priorities.splice(newIndex, 0, itemId);
 				self.savePriorities();
 				prev.before(ThisBox);
+				updateCachedHtml();
 			});
 
 			$(".eq_priority--down").on("click", function () {
@@ -190,11 +201,11 @@
 				const next = ThisBox.next();
 				// if previous element exists and it's not favorite
 				if (next.length > 0 && next.find(".eq_priority--toggle.on").length === 0){
-					//just reload akashi list
+					// just reload akashi list
 					return self.execute();
 				}
-				//otherwise move item in priority list
-				const itemId = ThisBox.data("item_id");
+				// otherwise move item in priority list
+				const itemId = Number(ThisBox.data("item_id"));
 				if (self.priorities.indexOf(itemId) === self.priorities.length - 1) return;
 				const index = self.priorities.indexOf(itemId);
 				const newIndex = self.priorities.indexOf(next.data("item_id"));
@@ -202,7 +213,9 @@
 				self.priorities.splice(newIndex, 0, itemId);
 				self.savePriorities();
 				next.after(ThisBox);
+				updateCachedHtml();
 			});
+
 			$(".loading").fadeOut();
 		},
 		
@@ -213,21 +226,19 @@
 			const dayIdx = {"sun":0,"mon":1,"tue":2,"wed":3,"thu":4,"fri":5,"sat":6}[dayName];
 			$(".weekdays .weekday").removeClass("active");
 			$(".weekdays .weekday[data-value={0}]".format(dayName)).addClass("active");
-			
-			this.today = this.upgrades[ dayName ];
+			var ResBox;
+			this.currentDayName = dayName;
+			this.today = this.upgrades[dayName];
 			// Sort gears order by category ID asc, master ID asc
-			this.todaySortedIds = Object.keys(this.today).sort(function(a, b){
-				if(self.priorities.indexOf(a)!==-1 || self.priorities.indexOf(b)!==-1){
-					if(self.priorities.indexOf(a)===-1) return 1;
-					if(self.priorities.indexOf(b)===-1) return -1;
+			this.todaySortedIds = Object.keys(this.today).map(v => Number(v)).sort((a, b) => {
+				if(self.priorities.includes(a) || self.priorities.includes(b)) {
+					if(!self.priorities.includes(a)) return 1;
+					if(!self.priorities.includes(b)) return -1;
 					return self.priorities.indexOf(a) - self.priorities.indexOf(b);
 				}
 				return (KC3Master.slotitem(a).api_type || [])[2] - (KC3Master.slotitem(b).api_type || [])[2]
 					|| Number(a) - Number(b);
 			});
-			
-			$(".equipment_list").html("");
-			var ResBox;
 			
 			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -257,13 +268,13 @@
 			};
 			const showDevScrew = function(stars, devmats, devmatsGS, screws, screwsGS){
 				$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox)
-					.text( toAmountStr(devmats) );
+					.text(toAmountStr(devmats));
 				$(".eq_res_value.devmats.plus{0} .cnt".format(stars), ResBox)
-					.text( "({0})".format(toAmountStr(devmatsGS)) );
+					.text("({0})".format(toAmountStr(devmatsGS)));
 				$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox)
-					.text( toAmountStr(screws) );
+					.text(toAmountStr(screws));
 				$(".eq_res_value.screws.plus{0} .cnt".format(stars), ResBox)
-					.text( "({0})".format(toAmountStr(screwsGS)) );
+					.text("({0})".format(toAmountStr(screwsGS)));
 			};
 			const showConsumedItem = function(stars, consumedItem, amount, container = ResBox){
 				if(!consumedItem){
@@ -277,29 +288,25 @@
 						.attr("src", KC3Meta.useitemIcon(consumedItem[0]))
 						.parent().removeClass("hover").addClass("useitem");
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
-						.text( consumedItem[1] );
-					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+						.text(consumedItem[1])
 						.removeClass("hover")
-						.attr("title", "[{0}] {1}".format(consumedItem[0], consumedItem[1]) );
+						.attr("title", "[{0}] {1}".format(consumedItem[0], consumedItem[1]));
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
-						.text( "x{0}".format(toAmountStr(amount)) );
+						.text("x{0}".format(toAmountStr(amount)));
 					return;
 				}
 				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container)
 					.attr("src", KC3Meta.itemIcon(consumedItem.api_type[3]));
 				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
 					.attr("alt", consumedItem.api_id);
-				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
-					.click(gearClickFunc);
 				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
-					.data("item_id", consumedItem.api_id)
-					.data("item_type3", consumedItem.api_type[3])
-					.addClass("hover").click(gearNameClickFunc)
-					.text( KC3Meta.gearName(consumedItem.api_name) );
-				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
-					.attr("title", "[{0}] {1}".format(consumedItem.api_id, KC3Meta.gearName(consumedItem.api_name)) );
+					.attr("data-item_id", consumedItem.api_id)
+					.attr("data-item_type3", consumedItem.api_type[3])
+					.addClass("hover")
+					.text(KC3Meta.gearName(consumedItem.api_name))
+					.attr("title", "[{0}] {1}".format(consumedItem.api_id, KC3Meta.gearName(consumedItem.api_name)));
 				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
-					.text( "x{0}".format(toAmountStr(amount)) );
+					.text("x{0}".format(toAmountStr(amount)));
 			};
 			const showConsumedItemList = function(stars, resArrElm4, resArrElm5, container = ResBox){
 				var consumedResArr = Array.isArray(resArrElm4) ? resArrElm4 : [[resArrElm4, resArrElm5]];
@@ -374,168 +381,198 @@
 				}
 			};
 			
-			$.each(this.todaySortedIds, function(_, itemId){
-				const shipList = self.today[itemId];
-				const itemMst = KC3Master.slotitem(itemId);
-				const itemName = KC3Meta.gearNameById(itemId);
-				const itemIconType = (itemMst.api_type || [])[3] || 0;
-				
-				const ThisBox = $(".tab_akashi .factory .equipment").clone().appendTo(".equipment_list");
-				ThisBox.data("item_id", itemId).attr("id", "akashi-{0}-{1}".format(dayName, itemId));
-				$(".eq_priority--toggle", ThisBox).toggleClass("on", self.priorities.indexOf(itemId) !== -1);
-				$(".eq_priority--up,.eq_priority--down", ThisBox).toggleClass("off", self.priorities.indexOf(itemId) === -1);
-
-				$(".eq_icon img", ThisBox).attr("src", KC3Meta.itemIcon(itemIconType));
-				$(".eq_icon img", ThisBox).attr("alt", itemId);
-				$(".eq_icon img", ThisBox).click(gearClickFunc);
-				
-				$(".eq_name", ThisBox).text(itemName)
-					.attr("title", "[{0}] {1}".format(itemId, itemName))
-					.data("item_id", itemId).data("item_type3", itemIconType)
-					.click(gearNameClickFunc);
-				
-				var hasShip = false;
-				// If shipList not empty means all ships can upgrade this item
-				if(shipList.length === 0){
-					hasShip = true;
-				}
-				
-				// If player has this item, check for marking
-				const hasGear = self.gears.indexOf(parseInt(itemId, 10)) > -1;
-				
-				for(let idx in shipList){
-					const shipId = shipList[idx];
+			//console.time(dowKey);
+			const dowKey = this.getCacheKey(dayName);
+			const equipListElm = $(".tab_akashi .equipment_list");
+			KC3Cache.getOrInsertComputed(dowKey, () => {
+				equipListElm.html("");
+				const boxTemplate = $(".tab_akashi .factory .equipment");
+				const shipBoxTemplate = $(".tab_akashi .factory .eq_ship");
+				const resBoxTemplate = $(".tab_akashi .factory .eq_res");
+				$.each(this.todaySortedIds, function(_, itemId){
+					const shipList = self.today[itemId];
+					const itemMst = KC3Master.slotitem(itemId);
+					const itemName = KC3Meta.gearNameById(itemId);
+					const itemIconType = (itemMst.api_type || [])[3] || 0;
 					
-					// If player has any of needed ships, check for marking
-					if(self.ships.indexOf( shipId ) > -1){
+					const ThisBox = boxTemplate.clone();
+					ThisBox.attr("data-item_id", itemId)
+						.attr("id", "akashi-{0}-{1}".format(dayName, itemId));
+					$(".eq_priority--toggle", ThisBox)
+						.toggleClass("on", self.priorities.includes(Number(itemId)));
+					$(".eq_priority--up,.eq_priority--down", ThisBox)
+						.toggleClass("off", !self.priorities.includes(Number(itemId)));
+
+					$(".eq_icon img", ThisBox)
+						.attr("src", KC3Meta.itemIcon(itemIconType))
+						.attr("alt", itemId);
+					$(".eq_name", ThisBox).text(itemName)
+						.attr("title", "[{0}] {1}".format(itemId, itemName))
+						// Must use attr format instead of jq data, in order to be cached as html
+						.attr("data-item_id", itemId).attr("data-item_type3", itemIconType);
+					
+					var hasShip = false;
+					// If shipList not empty means all ships can upgrade this item
+					if(shipList.length === 0){
 						hasShip = true;
 					}
 					
-					// Add to ship list
-					const ShipBox = $(".tab_akashi .factory .eq_ship").clone();
-					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false) );
-					$(".eq_ship_icon img", ShipBox).attr("alt", shipId );
-					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
-					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName(shipId) );
-					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(shipId, KC3Meta.shipName(shipId)) );
-					$(".eq_ships", ThisBox).append(ShipBox);
-				}
-				
-				// If doesn't have either ship or gear, show disabled red box
-				ThisBox.toggleClass("disabled", !hasGear || !hasShip)
-				// If all gear equipped, show yellow box
-					.toggleClass("equipped", hasGear && hasShip && !self.instances[itemId].unequipped);
-				
-				const imps = WhoCallsTheFleetDb.getItemImprovement(itemId);
-				var dbSecShips = [];
-				if(Array.isArray(imps) && imps.length > 0){
-					const improveList = [];
-					$.each(imps, function(_, imp){
-						var dowReq = false;
-						imp.req.forEach(function(reqArr){
-							// DOW check
-							dowReq |= !Array.isArray(reqArr[0]) || reqArr[0][dayIdx];
-							// Yet another has ship check on reqArr[1]
-							if(reqArr[0][dayIdx] && Array.isArray(reqArr[1]))
-								dbSecShips.push(...reqArr[1]);
-						});
-						if(dowReq) improveList.push(imp);
-					});
-					if(dbSecShips.length){
-						$(".eq_ships", ThisBox).attr("title", "[{0}]".format(dbSecShips.join(",")));
-						// Check inconsistent part of required ships for developers, obsoleted since WCTFDB no longer updated
-						/*
-						if(ConfigManager.devOnlyPages){
-							if(shipList.length !== dbSecShips.length || dbSecShips.some(id => !shipList.includes(id)))
-								$(".eq_ships", ThisBox).css("background-color", "aquamarine");
-							if(shipList.some(id => !dbSecShips.includes(id)))
-								$(".eq_ships", ThisBox).css("background-color", "aliceblue");
+					// If player has this item, check for marking
+					const hasGear = self.gears.indexOf(parseInt(itemId, 10)) > -1;
+					
+					for(let idx in shipList){
+						const shipId = shipList[idx];
+						
+						// If player has any of needed ships, check for marking
+						if(self.ships.indexOf( shipId ) > -1){
+							hasShip = true;
 						}
-						*/
+						
+						// Add to ship list
+						const ShipBox = shipBoxTemplate.clone();
+						$(".eq_ship_icon img", ShipBox)
+							.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
+							.attr("alt", shipId);
+						$(".eq_ship_name", ShipBox)
+							.text( KC3Meta.shipName(shipId))
+							.attr("title", "[{0}] {1}".format(shipId, KC3Meta.shipName(shipId)));
+						$(".eq_ships", ThisBox).append(ShipBox);
 					}
-					$.each(improveList, function(_, imp){
-						ResBox = $(".tab_akashi .factory .eq_res").clone();
-						var resArr = imp.resource || [[]];
-						
-						// Add some precondition ship icons as not check them yet
-						if(improveList.length > 1){
-							const shipIcons = $(".eq_res_label.material", ResBox);
-							shipIcons.empty();
+					
+					// If doesn't have either ship or gear, show disabled red box
+					ThisBox.toggleClass("disabled", !hasGear || !hasShip)
+					// If all gear equipped, show yellow box
+						.toggleClass("equipped", hasGear && hasShip && !self.instances[itemId].unequipped);
+					
+					const imps = WhoCallsTheFleetDb.getItemImprovement(itemId);
+					var dbSecShips = [];
+					if(Array.isArray(imps) && imps.length > 0){
+						const improveList = [];
+						$.each(imps, function(_, imp){
+							var dowReq = false;
 							imp.req.forEach(function(reqArr){
-								if(reqArr[0][dayIdx] && reqArr[1] && reqArr[1].length){
-									reqArr[1].forEach(function(reqShipId){
-										const remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
-										if(!remodel || !remodel.prev
-											|| reqArr[1].indexOf(remodel.prev) < 0){
-											shipIcons.append(
-												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId, undefined, false))
-												.width("16px").height("16px").attr("title", "[{0}]".format(reqShipId))
-											);
-										}
-									});
-								}
+								// DOW check
+								dowReq |= !Array.isArray(reqArr[0]) || reqArr[0][dayIdx];
+								// Yet another has ship check on reqArr[1]
+								if(reqArr[0][dayIdx] && Array.isArray(reqArr[1]))
+									dbSecShips.push(...reqArr[1]);
 							});
+							if(dowReq) improveList.push(imp);
+						});
+						if(dbSecShips.length){
+							$(".eq_ships", ThisBox).attr("title", "[{0}]".format(dbSecShips.join(",")));
+							// Check inconsistent part of required ships for developers, obsoleted since WCTFDB no longer updated
+							/*
+							if(ConfigManager.devOnlyPages){
+								if(shipList.length !== dbSecShips.length || dbSecShips.some(id => !shipList.includes(id)))
+									$(".eq_ships", ThisBox).css("background-color", "aquamarine");
+								if(shipList.some(id => !dbSecShips.includes(id)))
+									$(".eq_ships", ThisBox).css("background-color", "aliceblue");
+							}
+							*/
 						}
-						
-						$(".eq_res_value.fuel", ResBox).text(toAmountStr(resArr[0][0]));
-						$(".eq_res_value.ammo", ResBox).text(toAmountStr(resArr[0][1]));
-						$(".eq_res_value.steel", ResBox).text(toAmountStr(resArr[0][2]));
-						$(".eq_res_value.bauxite", ResBox).text(toAmountStr(resArr[0][3]));
-						if(PlayerManager.hq.lastMaterial[0] < resArr[0][0]
-							|| PlayerManager.hq.lastMaterial[1] < resArr[0][1]
-							|| PlayerManager.hq.lastMaterial[2] < resArr[0][2]
-							|| PlayerManager.hq.lastMaterial[3] < resArr[0][3]){
-							$(".eq_res_line.material", ResBox).addClass("insufficient");
-						}
-						
-						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
-						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][2]);
-						showConsumedItemList("0_5", resArr[1][4], resArr[1][5]);
-						
-						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
-						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][2]);
-						showConsumedItemList("6_9", resArr[2][4], resArr[2][5]);
-						if(imp.upgrade && imp.upgrade[0] > 0){
-							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
-							checkDevScrew("max", itemId, resArr[3][1], resArr[3][2]);
-							showConsumedItemList("max", resArr[3][4], resArr[3][5]);
-							const upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
-							const upgradedItemIconType = (upgradedItem.api_type || [])[3] || 0;
-							$(".eq_next .eq_res_icon img", ResBox).attr("src", KC3Meta.itemIcon(upgradedItemIconType));
-							$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
-							$(".eq_next .eq_res_icon", ResBox).click(gearClickFunc);
-							$(".eq_next .eq_res_name .name_val", ResBox)
-								.text(KC3Meta.gearName(upgradedItem.api_name))
-								.data("item_id", upgradedItem.api_id).data("item_type3", upgradedItemIconType)
-								.click(gearNameClickFunc);
-							if(imp.upgrade[1]){
-								$(".eq_next .eq_res_name .stars_val", ResBox).text(
-									imp.upgrade[1] >= 10 ? "max" : "+"+imp.upgrade[1]
+						$.each(improveList, function(_, imp){
+							ResBox = resBoxTemplate.clone();
+							var resArr = imp.resource || [[]];
+							
+							// Add some precondition ship icons as not check them yet
+							if(improveList.length > 1){
+								const shipIcons = $(".eq_res_label.material", ResBox);
+								shipIcons.empty();
+								imp.req.forEach(function(reqArr){
+									if(reqArr[0][dayIdx] && reqArr[1] && reqArr[1].length){
+										reqArr[1].forEach(function(reqShipId){
+											const remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
+											if(!remodel || !remodel.prev
+												|| reqArr[1].indexOf(remodel.prev) < 0){
+												shipIcons.append(
+													$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId, undefined, false))
+													.width("16px").height("16px").attr("title", "[{0}]".format(reqShipId))
+												);
+											}
+										});
+									}
+								});
+							}
+							
+							$(".eq_res_value.fuel", ResBox).text(toAmountStr(resArr[0][0]));
+							$(".eq_res_value.ammo", ResBox).text(toAmountStr(resArr[0][1]));
+							$(".eq_res_value.steel", ResBox).text(toAmountStr(resArr[0][2]));
+							$(".eq_res_value.bauxite", ResBox).text(toAmountStr(resArr[0][3]));
+							if(PlayerManager.hq.lastMaterial[0] < resArr[0][0]
+								|| PlayerManager.hq.lastMaterial[1] < resArr[0][1]
+								|| PlayerManager.hq.lastMaterial[2] < resArr[0][2]
+								|| PlayerManager.hq.lastMaterial[3] < resArr[0][3]){
+								$(".eq_res_line.material", ResBox).addClass("insufficient");
+							}
+							
+							showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
+							checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][2]);
+							showConsumedItemList("0_5", resArr[1][4], resArr[1][5]);
+							
+							showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
+							checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][2]);
+							showConsumedItemList("6_9", resArr[2][4], resArr[2][5]);
+							if(imp.upgrade && imp.upgrade[0] > 0){
+								showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
+								checkDevScrew("max", itemId, resArr[3][1], resArr[3][2]);
+								showConsumedItemList("max", resArr[3][4], resArr[3][5]);
+								const upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
+								const upgradedItemIconType = (upgradedItem.api_type || [])[3] || 0;
+								$(".eq_next .eq_res_icon img", ResBox)
+									.attr("src", KC3Meta.itemIcon(upgradedItemIconType));
+								$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
+								$(".eq_next .eq_res_name .name_val", ResBox)
+									.text(KC3Meta.gearName(upgradedItem.api_name))
+									.attr("data-item_id", upgradedItem.api_id)
+									.attr("data-item_type3", upgradedItemIconType);
+								if(imp.upgrade[1]){
+									$(".eq_next .eq_res_name .stars_val", ResBox).text(
+										imp.upgrade[1] >= 10 ? "max" : "+"+imp.upgrade[1]
+									);
+								} else {
+									$(".eq_next .eq_res_name .stars", ResBox).hide();
+								}
+								$(".eq_next .eq_res_name", ResBox).attr("title",
+									"[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name))
 								);
 							} else {
-								$(".eq_next .eq_res_name .stars", ResBox).hide();
+								$(".eq_res_line.plusmax", ResBox).addClass("insufficient").hide();
+								$(".eq_next", ResBox).hide();
 							}
-							$(".eq_next .eq_res_name", ResBox).attr("title",
-								"[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name))
+							$(".eq_resources", ThisBox).append(ResBox);
+							// If materials or all consumables insufficient, add a class to hide this item
+							ThisBox.toggleClass("insufficient",
+								hasGear && hasShip && (
+								$(".eq_res_line.material", ResBox).hasClass("insufficient") ||
+								$(".eq_res_line.insufficient", ResBox).length >=
+									$(".eq_res_line", ResBox).length - 1
+								)
 							);
-						} else {
-							$(".eq_res_line.plusmax", ResBox).addClass("insufficient").hide();
-							$(".eq_next", ResBox).hide();
-						}
-						$(".eq_resources", ThisBox).append(ResBox);
-						// If materials or all consumables insufficient, add a class to hide this item
-						ThisBox.toggleClass("insufficient",
-							hasGear && hasShip && (
-							$(".eq_res_line.material", ResBox).hasClass("insufficient") ||
-							$(".eq_res_line.insufficient", ResBox).length >=
-								$(".eq_res_line", ResBox).length - 1
-							)
-						);
-					});
-				} else {
-					$(".eq_resources", ThisBox).hide();
-				}
+						});
+					} else {
+						$(".eq_resources", ThisBox).hide();
+					}
+					equipListElm.append(ThisBox);
+				});
+				return equipListElm.html();
+			}, (cachedHtml) => {
+				equipListElm.html(cachedHtml);
 			});
+			// Bind all click events
+			$(".eq_ship_icon img", equipListElm).click(shipClickFunc);
+			$([
+				".eq_icon img",
+				".eq_next .eq_res_icon",
+				".eq_res_icon.consumed_icon.hover"
+			].join(","), equipListElm).click(gearClickFunc);
+			$([
+				".eq_name",
+				".eq_next .eq_res_name .name_val",
+				".eq_res_value.consumed_name .val.hover"
+			].join(","), equipListElm).click(gearNameClickFunc);
+			//console.timeEnd(dowKey);
+			
 			if(!!viewMasterId) {
 				// Ensure scroll window to specified anchor
 				setTimeout(function(){
@@ -544,21 +581,39 @@
 				}, 500);
 			}
 		},
-		
+
+		clearCache: function(dayName) {
+			if(dayName){
+				KC3Cache.remove(this.getCacheKey(dayName));
+			} else {
+				["sun","mon","tue","wed","thu","fri","sat"].forEach(dow => {
+					KC3Cache.remove(this.getCacheKey(dow));
+				});
+			}
+		},
+
+		getCacheKey: function(dayName) {
+			return [this.akashiCacheKey, dayName].compact().join(":");
+		},
+
 		getPriorities: function() {
 			var priorities = [];
 			if (!localStorage.srAkashiPriorities) {
-				localStorage.srAkashiPriorities = JSON.stringify( priorities );
+				localStorage.srAkashiPriorities = JSON.stringify(priorities);
 			} else {
-				priorities = JSON.parse( localStorage.srAkashiPriorities );
+				try {
+					priorities = JSON.parse(localStorage.srAkashiPriorities);
+				} finally {
+					priorities = Array.isArray(priorities) ? priorities.map(v => Number(v)).compact() : [];
+				}
 			}
 			return priorities;
 		},
-		
-		setPriorities: function(priorityList) {
-			localStorage.srAkashiPriorities = JSON.stringify( priorityList );
+
+		setPriorities: function(priorityList = []) {
+			localStorage.srAkashiPriorities = JSON.stringify(priorityList);
 		},
-		
+
 		savePriorities: function () {
 			this.setPriorities(this.priorities);
 		}

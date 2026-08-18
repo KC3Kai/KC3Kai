@@ -2,7 +2,7 @@ let window = self;
 onmessage = function(request) {
 	this.window = self;
 	self.window = self;
-	importScripts(request.data.url+"assets/js/Dexie.min.js");
+	importScripts(request.data.url+"assets/js/dexie.min.js");
 	importScripts(request.data.url+"library/modules/Database.js");
 	KC3Database.init( request.data.playerId );
 	fetchData(request.data);

@@ -49,6 +49,8 @@
 				if(isReloadNeeded) window.location.reload();
 			});
 
+			//#region V1 (zip-based)
+
 			// Export data v1
 			$(".tab_databackup .export_data").on("click", function(){
 				if(confirm("Are you sure you want to export your data?")){
@@ -79,11 +81,12 @@
 			});
 
 			// Impot data v1 (overwrite)
-			$(".tab_databackup .overwrite_data").on("click", function(){
-				if(filename==="") {
+			$(".tab_databackup .overwrite_data, .tab_databackup .overwrite_data_2").on("click", function(){
+				if(filename === ""){
 					alert("No file selected");
 					return;
 				}
+				const version = $(this).hasClass("overwrite_data_2") ? 2 : 1;
 				if(confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))
 				if(confirm("This will overwrite all of your KC3 data! Are you sure?"))
 				if(isExportedFirst || confirm("If you haven't backed up your old data, it will be lost! Are you sure?")){
@@ -94,9 +97,13 @@
 						toggleFinishedIndicator(true);
 						alert("Finished!");
 						isReloadNeeded = true;
-					});
+					}, version);
 				}
 			});
+
+			//#endregion
+
+			//#region V2 (folder-based)
 
 			// Export fullset data v2
 			$(".tab_databackup .export_data2").on("click", function(){
@@ -121,16 +128,21 @@
 			});
 
 			// Import data v2
-			$(".tab_databackup .import_data2").on("click", function(){
+			$(".tab_databackup .import_data2, .tab_databackup .import_data2_2").on("click", function(){
+				const fn = $(this).hasClass("import_data2_2")
+					? window.KC3DataBackup.loadDataFromFolder_2
+					: window.KC3DataBackup.loadDataFromFolder;
 				toggleFinishedIndicator(false);
 				toggleProgressDisplay(true);
-				window.KC3DataBackup.loadDataFromFolder(progressTextSelector, (autoBack, lastErr) => {
+				fn(progressTextSelector, (autoBack, lastErr) => {
 					if(autoBack) toggleProgressDisplay(false);
 					if(!autoBack && !lastErr) isReloadNeeded = true;
 					setFinishMessage(lastErr || "Finished! Please reload this page.");
 					toggleFinishedIndicator(true);
 				});
 			});
+
+			//#endregion
 
 		}
 	};

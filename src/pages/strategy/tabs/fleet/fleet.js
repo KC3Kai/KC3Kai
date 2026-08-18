@@ -452,8 +452,6 @@
 			if(maxSlotCnt > 6) $(".fleet_ships", fleetBox).addClass("max_slot6");
 
 			// Show fleet info
-			const fstats = kcFleet.totalStats(true, false, true);
-			const fstatsImp = kcFleet.totalStats(true, "exped", true);
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );

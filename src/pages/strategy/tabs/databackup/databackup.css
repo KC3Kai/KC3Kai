@@ -25,7 +25,12 @@
 	padding:15px;
 	text-align:left;
 }
-
+.tab_databackup .action-container {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-top: 10px;
+}
 .tab_databackup .warning,
 .tab_databackup .processDisplay,
 .tab_databackup .processDisplay .expedFinished {
@@ -39,5 +44,5 @@
 	height:300px;
 }
 .tab_databackup .processDisplay .progressColumn {
-	min-width:240px;
+	min-width:280px;
 }

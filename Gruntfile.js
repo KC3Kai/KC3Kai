@@ -254,7 +254,7 @@ module.exports = function(grunt) {
 						"background": {
 							"scripts": [
 								"assets/js/global.js",
-								"assets/js/Dexie.min.js",
+								"assets/js/dexie.min.js",
 								"library/objects.js",
 								"library/managers.js",
 								"library/modules/ChromeSync.js",
