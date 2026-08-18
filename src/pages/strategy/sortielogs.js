@@ -48,6 +48,7 @@
 			onlyBattle: false,
 			evalShipState: true,
 			evalYasen: false,
+			clearMode: 'all',
 		};
 		this.settings = {};
 
@@ -64,7 +65,6 @@
 		---------------------------------*/
 		this.reload = function(){
 			ConfigManager.load();
-			this.loadSettings();
 			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
@@ -83,6 +83,7 @@
 		this.execute = function(){
 			const self = this;
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
+			this.loadSettings();
 			this.loadSettingToggles();
 			this.loadWorldSelect();
 			this.loadWorldsFromStorage();
@@ -92,7 +93,16 @@
 				const world = ev.target.value;
 				KC3StrategyTabs.gotoTab(null, world);
 			});
-			
+
+			// On-change clear mode dropdown
+			$(`.tab_${tabCode} .clear-mode-select`)
+				.val(this.settings.clearMode)
+				.on("change", (ev) => {
+					this.settings.clearMode = ev.target.value;
+					this.saveSettings();
+					this.showMap();
+				});
+
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
@@ -258,6 +268,9 @@
 							ConfigManager[config.linkedConfig] = this.settings[config.cfgKey];
 							ConfigManager.save();
 						}
+						if (config.cfgKey === 'loadLedger' && !this.settings[config.cfgKey]) {
+							return;
+						}
 						this.showMap();
 					});
 			});
@@ -397,6 +410,7 @@
 			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
+			$(".tab_"+tabCode+" .settings #boss_node_toggle").prop("disabled", tabCode === "maps" && self.selectedWorld === 0);
 
 			var countWorlds = $(".tab_"+tabCode+" .world_list .world_box").length;
 			var maxDispWorlds = 6 + (tabCode === "maps" ? 2 : 0);
@@ -630,15 +644,22 @@
 		
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
-		this.sortieFilter = function(sortie){
-			return !this.settings.bossArrival ||
+		this.sortieFilter = function (sortie) {
+			// Clear state filter (later event maps only, old event/regular maps don't have eventmap)
+			if (tabCode === 'event' && this.settings.clearMode === 'pre') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 0) return false;
+			} else if (tabCode === 'event' && this.settings.clearMode === 'post') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 1) return false;
+			}
+			// clear mode 'all' passes through
+			return !this.settings.bossArrival
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
-				(Array.isArray(sortie.nodes) && sortie.nodes.some(
+				|| (Array.isArray(sortie.nodes) && sortie.nodes.some(
 					node => node.eventId == 5
-					// treat W1-6-N node as boss
-					|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
+						// treat W1-6-N node as boss
+						|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
 				));
 		};
 		
@@ -662,7 +683,7 @@
 			// Show all sorties
 			if (this.selectedWorld === 0) {
 				query = KC3Database.count_normal_sorties(filterFunc).then((count) => {
-					console.debug("Count of All", self.settings.bossArrival ? "Boss:" : ":", count);
+					console.debug("Count of All:", count);
 					return count;
 				});
 			} else {
@@ -766,7 +787,6 @@
 		---------------------------------*/
 		this.showList = function( sortieList ){
 			const self = this;
-
 			const shipNameEquipSwitchFunc = function(e){
 				var ref = $(this).parent().parent();
 				if($(".rfleet_detail",ref).css("display") === "none") {
@@ -896,10 +916,12 @@
 				};
 			};
 
-			const showSortieLedger = function (sortieId, sortieBox, sortieWorld) {
+			const showSortieLedger = function (sortieId, sortieBox, sortieWorld,
+				fromClick = false, refreshCache = false) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
-				// Akashi repair not included either, belonged to its own type
-				const buildConsumptionArray = arr => arr.reduce((acc, o) =>
+				// Sortie consumption not accurate in time until resupplies and repairs of all fleet members are done later
+				// Akashi repair (Nosaki sparkle) not included either, belonged to its own type
+				const buildConsumptionArray = arr => (arr || []).reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
 					return consumption.map((v, i) => {
@@ -919,61 +941,102 @@
 					}).join(" ");
 				};
 
-				$(".sortie_map", sortieBox).toggleClass('queued loading');
+				const mapNameElm = $(".sortie_map", sortieBox);
+				mapNameElm.toggleClass("queued loading");
+				if (fromClick && refreshCache && mapNameElm.tooltip("instance")) {
+					mapNameElm.tooltip("close");
+				}
 				let tooltip = "";
+				const sKey = "navaloverall:sortie:" + sortieId;
+				const lKey = "navaloverall:lbas:" + sortieId;
 
-				return KC3Database.con.navaloverall
-					.where("type")
-					.equals("sortie" + sortieId)
-					.toArray()
-					.then(arr => {
-						const consumption = buildConsumptionArray(arr);
-						if (!arr.length || consumption.every(v => !v)) {
+				return KC3Cache.get(sKey)
+					.then(({ value: cachedSortie }) => {
+						if (!refreshCache && cachedSortie !== undefined) {
+							return cachedSortie;
+						}
+						return KC3Database.con.navaloverall
+							.where("type")
+							.equals("sortie" + sortieId)
+							.toArray()
+							.then((arr) => {
+								let consumption = buildConsumptionArray(arr);
+								if (!consumption.hasTruthy()) {
+									consumption = null;
+								}
+								KC3Cache.set(sKey, consumption);
+								return consumption;
+							});
+					})
+					.then((consumption) => {
+						if (!consumption) {
 							return;
 						}
 
 						tooltip = buildLedgerMessage(consumption);
-						if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6 || sortieWorld === 7)) {
-							$(".sortie_map", sortieBox)
+						if (!(KC3Meta.isEventWorld(sortieWorld) || [6, 7].includes(sortieWorld))) {
+							mapNameElm
 								.attr("titlealt", "{0}".format(tooltip))
 								.lazyInitTooltip();
 							return;
 						}
 
-						return KC3Database.con.navaloverall
-							.where("type")
-							.equals("sortie" + (sortieId - 1))
-							.first();
-					})
-					.then(firstEntry => {
-						if (!firstEntry) {
-							return;
-						}
+						return KC3Cache.get(lKey)
+							.then(({ value: cachedLb }) => {
+								if (!refreshCache && cachedLb !== undefined) {
+									return cachedLb;
+								}
+								return KC3Database.con.navaloverall
+									.where("type")
+									.equals("sortie" + (sortieId - 1))
+									.first()
+									.then((firstEntry) => {
+										if (!firstEntry) {
+											return null;
+										}
+										return KC3Database.con.navaloverall
+											.where(":id")
+											.aboveOrEqual(firstEntry.id)
+											.until(entry => entry.type === "sortie" + (sortieId + 1))
+											.and(entry => "lbas" + sortieWorld === entry.type)
+											.toArray();
+									})
+									.then((lbArr) => {
+										let lbConsumption = buildConsumptionArray(lbArr);
+										if (!lbConsumption.hasTruthy()) {
+											lbConsumption = null;
+										}
+										KC3Cache.set(lKey, lbConsumption);
+										return lbConsumption;
+									});
+							})
+							.then((lbConsumption) => {
+								let lbTooltip = "";
+								if (lbConsumption && lbConsumption.hasTruthy()) {
+									lbTooltip = buildLedgerMessage(lbConsumption);
+								}
 
-						return KC3Database.con.navaloverall
-							.offset(firstEntry.id)
-							.until(entry => entry.type === "sortie" + (sortieId + 1))
-							.and(entry => "lbas" + sortieWorld === entry.type)
-							.toArray();
-					})
-					.then(lbArr => {
-						if (!lbArr) {
-							return;
-						}
-
-						const lbConsumption = buildConsumptionArray(lbArr);
-						let lbTooltip = "";
-						if (lbArr.length && !lbConsumption.every(v => !v)) {
-							lbTooltip = buildLedgerMessage(lbConsumption);
-						}
-
-						$(".sortie_map", sortieBox)
-							.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
-							.lazyInitTooltip();
+								mapNameElm
+									.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
+									.lazyInitTooltip();
+							});
 					})
 					.finally(() => {
-						$(".sortie_map", sortieBox).toggleClass('loading');
+						mapNameElm.toggleClass("loading loaded");
+						if (fromClick && mapNameElm.tooltip("instance")) {
+							mapNameElm.tooltip("open");
+						}
 					});
+			};
+			const queueLedgerLoadingFunc = (e) => {
+				const mapElm = $(e.target);
+				const id = mapElm.data("id"), world = mapElm.data("world");
+				const sortieBox = mapElm.parent().parent();
+				const done = ["queued", "loading", "loaded"].some(c => mapElm.hasClass(c));
+				const refreshCache = e.ctrlKey || e.metaKey;
+				if(!id || !world || (done && !refreshCache)) return;
+				mapElm.toggleClass("queued").toggleClass("loaded", false);
+				self.ledgerLimiter.schedule(showSortieLedger, id, sortieBox, world, true, refreshCache);
 			};
 
 			// Show sortie records on list
@@ -999,11 +1062,13 @@
 						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					const sortieTime = sortie.time * 1000;
-					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
-					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
-					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
+					$(".sortie_date", sortieBox).text(new Date(sortieTime).format("mmm d", false, self.locale));
+					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss"));
 
-					if (self.settings.loadLedger) {
+					$(".sortie_map", sortieBox).text(
+						(KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum
+					).data("id", sortie.id).data("world", sortie.world).on("click", queueLedgerLoadingFunc);
+					if (self.settings.loadLedger && sortie.battles.length > 0) {
 						$(".sortie_map", sortieBox).toggleClass('queued');
 						// schedule `showSortieLedger` as this take tons of time
 						self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world);
@@ -1509,12 +1574,20 @@
 									$(".node_result", nodeBox).addClass("icon5");
 									$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
 									if(battle.data.api_friendly_kouku){
-										const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
-										$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
+										KC3QueueManager.deferTooltip(() => {
+											const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
+											$(".node_friend", nodeBox)
+												.attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"))
+												.lazyInitTooltip();
+										}, 5, self.tooltipLimiter);
 									}
 									if(battle.yasen.api_friendly_battle){
-										const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
-										$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"));
+										KC3QueueManager.deferTooltip(() => {
+											const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
+											$(".node_friend", nodeBox)
+												.attr("title", [$(".node_friend", nodeBox).attr("title"), msg].compact().join("\n"))
+												.lazyInitTooltip();
+										}, 5, self.tooltipLimiter);
 									}
 								}else{
 									$(".node_result", nodeBox).removeClass("icon5");

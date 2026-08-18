@@ -16,6 +16,7 @@
 		"AntiAir": true,
 		"KC3ChromeSync": true,
 		"KC3BattlePrediction": true,
+		"KC3Cache": true,
 		"KC3QuestSync": true,
 		"KC3Dashboard": true,
 		"KC3DataBackup": true,

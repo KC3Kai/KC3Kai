@@ -66,7 +66,7 @@
 		}
 
 		showShipQuests(ship, shipRow) {
-			for(let questId of ship.quests) {
+			ship.quests.forEach(questId => {
 				const questMeta = KC3Meta.quest(questId);
 				const questDiv = $("<div />")
 					.addClass("ship_field ship_stat questIcon")
@@ -86,9 +86,12 @@
 				}
 
 				questDiv.text(questMeta.code);
-				questDiv.attr("title", KC3QuestManager.buildHtmlTooltip(questId, questMeta));
+				KC3QueueManager.deferTooltip(() => {
+					questDiv.attr("title", KC3QuestManager.buildHtmlTooltip(questId, questMeta))
+						.lazyInitTooltip();
+				});
 				$(".ship_quests", shipRow).append(questDiv);
-			}
+			});
 		}
 
 	}

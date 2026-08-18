@@ -60,38 +60,43 @@
 			map = Number(map);
 			const hqId = PlayerManager.hq.id;
 			this.dropTable = {};
-			const allPromises = [];
+
 			$(".tab_shipdrop .content_root").empty();
 			$(".control_panel .selectors select").prop("disabled", true);
 			$(".control_panel .time_range input").prop("disabled", true);
 			$(".loading").show();
-			KC3Database.con.sortie.where("[hq+world+mapnum]").equals([hqId, world, map])
-			.and(data => KC3Meta.isEventWorld(world) ||
-				(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1])
-			).each(sortie => {
-				this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
-				allPromises.push(KC3Database.con.battle.where("sortie_id").equals(sortie.id).each(battle => {
-					this.dropTable[sortie.diff][battle.rating] = this.dropTable[sortie.diff][battle.rating] || {};
-					const drop = this.dropTable[sortie.diff][battle.rating][battle.node] =
-						this.dropTable[sortie.diff][battle.rating][battle.node] || {};
-					drop["s-" + battle.drop] = (drop["s-" + battle.drop] || 0) + 1;
-					if(battle.slotitem) drop["e-" + battle.slotitem] = (drop["e-" + battle.slotitem] || 0) + 1;
-					if(battle.useitem) drop["i-" + battle.useitem] = (drop["i-" + battle.useitem] || 0) + 1;
-					if(battle.boss) drop.boss = true;
-				}).catch(e => {throw e;}));
-			}).then(() => {
-				Promise.all(allPromises).then(this.filterShipDrop.bind(this)).catch(e => {
-					console.error("Loading battle data failed", e);
+
+			KC3Database.con.sortie
+				.where("[hq+world+mapnum]").equals([hqId, world, map])
+				.and(data => KC3Meta.isEventWorld(world) || (data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1]))
+				.toArray(sorties => {
+					const sortieMap = new Map();
+					sorties.forEach((sortie) => {
+						this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
+						sortieMap.set(sortie.id, sortie);
+					});
+					return KC3Database.con.battle
+						.where("sortie_id").anyOf(sorties.map(sortie => sortie.id))
+						.each(battle => {
+							const sortie = sortieMap.get(battle.sortie_id);
+							this.dropTable[sortie.diff][battle.rating] = this.dropTable[sortie.diff][battle.rating] || {};
+							const drop = this.dropTable[sortie.diff][battle.rating][battle.node] =
+								this.dropTable[sortie.diff][battle.rating][battle.node] || {};
+							drop["s-" + battle.drop] = (drop["s-" + battle.drop] || 0) + 1;
+							if (battle.slotitem) drop["e-" + battle.slotitem] = (drop["e-" + battle.slotitem] || 0) + 1;
+							if (battle.useitem) drop["i-" + battle.useitem] = (drop["i-" + battle.useitem] || 0) + 1;
+							if (battle.boss) drop.boss = true;
+						});
+				})
+				.then(() => {
+					this.filterShipDrop();
+				})
+				.catch((err) => {
+					console.error("Loading battle data failed", err);
 					$(".loading").hide();
-				$(".control_panel .selectors select").prop("disabled", false);
-				$(".control_panel .time_range input").prop("disabled", false);
+					$(".control_panel .selectors select").prop("disabled", false);
+					$(".control_panel .time_range input").prop("disabled", false);
 				});
-			}).catch(e => {
-				console.error("Loading sortie data failed", e);
-				$(".loading").hide();
-				$(".control_panel .selectors select").prop("disabled", false);
-				$(".control_panel .time_range input").prop("disabled", false);
-			});
 		},
 
 		filterShipDrop: function() {
