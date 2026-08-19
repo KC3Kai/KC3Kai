@@ -128,7 +128,7 @@
 				"*://127.0.0.1:*/*"
 			],
 			"js": [
-				"library/modules/xhr/inject.js"
+				"library/injections/kcs2_start.js"
 			],
 			"run_at": "document_start",
 			"all_frames": true
@@ -148,7 +148,6 @@
 			"js": [
 				"assets/js/jquery.min.js",
 				"library/objects/Messengers.js",
-				"library/modules/xhr/content.js",
 				"library/injections/kcs2.js"
 			],
 			"run_at": "document_end",
@@ -158,7 +157,7 @@
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://cdnjs.cloudflare.com 'unsafe-eval'; object-src 'self'",
 	"web_accessible_resources": [
 		"assets/img/*",
-		"library/modules/xhr/XMLHttpRequest.js",
+		"library/injections/XhrProxy.js",
 		"library/injections/dmm_injectable.js",
 		"library/injections/kcs2_injectable.js"
 	]

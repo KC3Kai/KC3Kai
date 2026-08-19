@@ -1,7 +1,5 @@
 (() => {
 
-  console.debug('KC3XHR', 'XMLHttpRequest.js');
-
   const filterApis = [
     'api_port/port',
     'api_req_map/start',
@@ -12,7 +10,7 @@
 
   window.addEventListener('message', (event) => {
     const data = event.data;
-    if (!data || !data.id || data.type !== 'WEB_REQ_BLOCKING:RES') {
+    if (!data || !data.id || data.type !== 'KCS_REQ_VERIFY:RES') {
       return;
     }
 
@@ -101,7 +99,7 @@
             msgResolvers.set(id, resolve);
             window.postMessage({
               id,
-              type: 'WEB_REQ_BLOCKING:REQ',
+              type: 'KCS_REQ_VERIFY:REQ',
               data: {
                 method: _method,
                 url: parseApi(_url),
@@ -110,9 +108,8 @@
             }, '*');
           })
             .then((result) => {
-              if (result.data && result.data.length) {
-                const msg = 'Continue with warnings?\n' + result.data.join('\n').trim();
-                if (!confirm(msg)) {
+              if (result && result.data && result.data.shouldConfirm) {
+                if (!confirm(result.data.message)) {
                   setTimeout(() => {
                     if (typeof xhr.onerror === 'function') xhr.onerror(new ProgressEvent('error'));
                     if (typeof xhr.onloadend === 'function') xhr.onloadend(new ProgressEvent('loadend'));
