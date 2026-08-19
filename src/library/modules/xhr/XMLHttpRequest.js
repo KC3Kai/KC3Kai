@@ -5,6 +5,7 @@
   const filterApis = [
     'api_port/port',
     'api_req_map/start',
+    'api_req_mission/start',
   ];
 
   const msgResolvers = new Map();
@@ -15,7 +16,7 @@
       return;
     }
 
-    const resolver = msgResolvers.get(data.id)
+    const resolver = msgResolvers.get(data.id);
     if (!resolver) {
       return;
     }

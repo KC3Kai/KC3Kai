@@ -247,6 +247,7 @@ Retrieves when needed to apply on components
 				wr_sortie_lbas_unsupplied          : false,
 				wr_sortie_fleet_strike_force_idle  : false,
 				wr_sortie_fleet_combined_idle      : false,
+				wr_expe_ship_unsupplied            : true,
 
 				disableConsoleLogHooks : false,
 				forwardConsoleOutput   : false,
