@@ -240,6 +240,14 @@ Retrieves when needed to apply on components
 				idbSavePvP             : true,
 				idbSaveLedgers         : true,
 
+				wr_sortie_ship_taiha               : true,
+				wr_sortie_ship_chuuha              : false,
+				wr_sortie_ship_unsupplied          : false,
+				wr_sortie_ship_untag               : true,
+				wr_sortie_lbas_unsupplied          : false,
+				wr_sortie_fleet_strike_force_idle  : false,
+				wr_sortie_fleet_combined_idle      : false,
+
 				disableConsoleLogHooks : false,
 				forwardConsoleOutput   : false,
 				hoursToKeepLogs        : 12,
