@@ -97,6 +97,16 @@
   function verifyMissionStart(api_mission_id, api_mission, api_deck_id) {
     // console.debug('verifyMissionStart', { api_mission_id, api_mission, api_deck_id });
     const msg = [];
+
+    const ships = getActiveShips(api_deck_id);
+
+    if (config.wr_expe_ship_unsupplied) {
+      const tmp = ships.filter((s) => s.isNeedSupply());
+      if (tmp.length) {
+        msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
+      }
+    }
+
     return msg;
   }
 
@@ -108,12 +118,12 @@
           Number(data.api_mapinfo_no),
           Number(data.api_deck_id) - 1
         );
-      // case 'api_req_mission/start':
-      //   return verifyMissionStart(
-      //     Number(data.api_mission_id),
-      //     Number(data.api_mission),
-      //     Number(data.api_deck_id) - 1
-      //   );
+      case 'api_req_mission/start':
+        return verifyMissionStart(
+          Number(data.api_mission_id),
+          Number(data.api_mission),
+          Number(data.api_deck_id) - 1
+        );
     }
     return [];
   }
