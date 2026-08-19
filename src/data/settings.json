@@ -1782,47 +1782,52 @@
 		]
 	},
 	{
-		"section": "SettingsWebRequestBlocking",
+		"section": "SettingsRequestVerifier",
 		"help": "",
 		"contents": [
 			{
-				"id": "wr_sortie_ship_taiha",
-				"name": "wr_sortie_ship_taiha",
+				"id": "rv_enabled",
+				"name": "rv_enabled",
 				"type": "check"
 			},
 			{
-				"id": "wr_sortie_ship_chuuha",
-				"name": "wr_sortie_ship_chuuha",
+				"id": "rv_sortie_ship_taiha",
+				"name": "rv_sortie_ship_taiha",
 				"type": "check"
 			},
 			{
-				"id": "wr_sortie_ship_unsupplied",
-				"name": "wr_sortie_ship_unsupplied",
+				"id": "rv_sortie_ship_chuuha",
+				"name": "rv_sortie_ship_chuuha",
 				"type": "check"
 			},
 			{
-				"id": "wr_sortie_ship_untag",
-				"name": "wr_sortie_ship_untag",
+				"id": "rv_sortie_ship_unsupplied",
+				"name": "rv_sortie_ship_unsupplied",
 				"type": "check"
 			},
 			{
-				"id": "wr_sortie_lbas_unsupplied",
-				"name": "wr_sortie_lbas_unsupplied",
+				"id": "rv_sortie_ship_untag",
+				"name": "rv_sortie_ship_untag",
 				"type": "check"
 			},
 			{
-				"id": "wr_sortie_fleet_strike_force_idle",
-				"name": "wr_sortie_fleet_strike_force_idle",
+				"id": "rv_sortie_lbas_unsupplied",
+				"name": "rv_sortie_lbas_unsupplied",
 				"type": "check"
 			},
 			{
-				"id": "wr_sortie_fleet_combined_idle",
-				"name": "wr_sortie_fleet_combined_idle",
+				"id": "rv_sortie_fleet_strike_force_idle",
+				"name": "rv_sortie_fleet_strike_force_idle",
 				"type": "check"
 			},
 			{
-				"id": "wr_expe_ship_unsupplied",
-				"name": "wr_expe_ship_unsupplied",
+				"id": "rv_sortie_fleet_combined_idle",
+				"name": "rv_sortie_fleet_combined_idle",
+				"type": "check"
+			},
+			{
+				"id": "rv_expe_ship_unsupplied",
+				"name": "rv_expe_ship_unsupplied",
 				"type": "check"
 			}
 		]

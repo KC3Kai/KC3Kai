@@ -78,4 +78,17 @@
 		});
 	})).execute();
 
+	window.addEventListener('message', (event) => {
+		const data = event.data;
+		if (!data || !data.id || data.type !== 'KCS_REQ_VERIFY:REQ') {
+			return;
+		}
+
+		console.debug('KCS_REQ_VERIFY:REQ', data);
+		chrome.runtime.sendMessage(data, (response) => {
+			console.debug('KCS_REQ_VERIFY:RES', response);
+			window.postMessage(response, '*');
+		});
+	});
+
 })();

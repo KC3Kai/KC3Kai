@@ -1,6 +1,6 @@
 (() => {
 
-  console.info('KC3改 WebRequest loaded');
+  console.debug('KcsRequestVerifier loaded');
 
   const config = ConfigManager;
 
@@ -30,35 +30,35 @@
     // console.debug('fleets', fleets);
     // console.debug('ships', ships);
 
-    if (config.wr_sortie_ship_taiha) {
+    if (config.rv_sortie_ship_taiha) {
       const tmp = ships.filter((s) => s.isTaiha());
       if (tmp.length) {
         msg.push('Taiha ships: ' + tmp.map((s) => s.name()).join(', '));
       }
     }
 
-    if (config.wr_sortie_ship_chuuha) {
+    if (config.rv_sortie_ship_chuuha) {
       const tmp = ships.filter((s) => !s.isTaiha() && (s.hp[0] <= s.hp[1] / 2));
       if (tmp.length) {
         msg.push('Chuuha ships: ' + tmp.map((s) => s.name()).join(', '));
       }
     }
 
-    if (config.wr_sortie_ship_unsupplied) {
+    if (config.rv_sortie_ship_unsupplied) {
       const tmp = ships.filter((s) => s.isNeedSupply());
       if (tmp.length) {
         msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
       }
     }
 
-    if (config.wr_sortie_ship_untag && isEventWorld(api_maparea_id)) {
+    if (config.rv_sortie_ship_untag && isEventWorld(api_maparea_id)) {
       const tmp = ships.filter((s) => s.sally === 0);
       if (tmp.length) {
         msg.push('Untagged ships: ' + tmp.map((s) => s.name()).join(', '));
       }
     }
 
-    if (config.wr_sortie_lbas_unsupplied) {
+    if (config.rv_sortie_lbas_unsupplied) {
       const tmp = PlayerManager.bases
         .filter((base) => base.map === api_maparea_id && base.action === 1 && !base.isPlanesSupplied());
       if (tmp.length) {
@@ -67,7 +67,7 @@
     }
 
     if (
-      config.wr_sortie_fleet_strike_force_idle
+      config.rv_sortie_fleet_strike_force_idle
       && isEventWorld(api_maparea_id)
       && api_deck_id !== 2
       && !PlayerManager.combinedFleet
@@ -77,7 +77,7 @@
     }
 
     if (
-      config.wr_sortie_fleet_combined_idle
+      config.rv_sortie_fleet_combined_idle
       && isEventWorld(api_maparea_id)
       && api_deck_id === 0
       && !PlayerManager.combinedFleet
@@ -100,7 +100,7 @@
 
     const ships = getActiveShips(api_deck_id);
 
-    if (config.wr_expe_ship_unsupplied) {
+    if (config.rv_expe_ship_unsupplied) {
       const tmp = ships.filter((s) => s.isNeedSupply());
       if (tmp.length) {
         msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
@@ -111,6 +111,10 @@
   }
 
   function verify(api, data) {
+    if (!config.rv_enabled) {
+      return [];
+    }
+
     switch (api) {
       case 'api_req_map/start':
         return verifyMapStart(
@@ -125,24 +129,39 @@
           Number(data.api_deck_id) - 1
         );
     }
+
     return [];
   }
 
-  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.id && msg.type === 'WEB_REQ_BLOCKING:REQ') {
-      // console.debug('onMessage', msg);
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.id && message.type === 'KCS_REQ_VERIFY:REQ') {
+      const details = verify(message.data.url, message.data.body);
+      let msg = '';
+
+      if (details.length) {
+        const title = 'Continue with warnings?';
+        msg = [
+          title,
+          details.join('\n'),
+        ].join('\n').trim();
+      }
+
       const result = {
-        id: msg.id,
-        type: 'WEB_REQ_BLOCKING:RES',
-        data: verify(msg.data.url, msg.data.body),
-        _request: msg,
+        id: message.id,
+        type: 'KCS_REQ_VERIFY:RES',
+        data: {
+          shouldConfirm: details.length,
+          message: msg,
+          details,
+        },
+        _request: message,
       };
       sendResponse(result);
       return true;
     }
   });
 
-  window.KC3WebRequest = {
+  window.KcsRequestVerifier = {
     getActiveShips,
     verifyMapStart,
     verifyMissionStart,
