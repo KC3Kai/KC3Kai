@@ -1,10 +1,10 @@
 (() => {
 
-  const filterApis = [
+  const filterApis = new Set([
     'api_port/port',
     'api_req_map/start',
     'api_req_mission/start',
-  ];
+  ]);
 
   const msgResolvers = new Map();
 
@@ -61,10 +61,10 @@
   function ProxiedXHR() {
     const xhr = new OriginalXHR();
 
+    let _state = 'PENDING';
     let _method;
     let _url;
     let _body;
-    let _state = 'PENDING';
     let _args;
 
     const originalOpen = xhr.open;
@@ -85,48 +85,45 @@
         return originalSend.apply(this, _args);
       }
 
-      if (body && _method === 'POST' && _url.includes('/kcsapi/')) {
+      if (body && _method === 'POST' && _url.includes('/kcsapi/') && filterApis.has(parseApi(_url))) {
         _body = parseBody(body);
+        _args = arguments;
         console.debug('XHR', 'send', { method: _method, url: _url, body: _body });
 
-        if (filterApis.includes(parseApi(_url))) {
-          _args = arguments;
+        // Generate high-precision transaction key
+        const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-          // Generate high-precision transaction key
-          const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        new Promise((resolve) => {
+          msgResolvers.set(id, resolve);
+          window.postMessage({
+            id,
+            type: 'KCS_REQ_VERIFY:REQ',
+            data: {
+              method: _method,
+              url: parseApi(_url),
+              body: _body
+            }
+          }, '*');
+        })
+          .then((result) => {
+            if (result && result.data && result.data.shouldConfirm) {
+              if (!confirm(result.data.message)) {
+                setTimeout(() => {
+                  if (typeof xhr.onerror === 'function') xhr.onerror(new ProgressEvent('error'));
+                  if (typeof xhr.onloadend === 'function') xhr.onloadend(new ProgressEvent('loadend'));
+                }, 0);
 
-          new Promise((resolve) => {
-            msgResolvers.set(id, resolve);
-            window.postMessage({
-              id,
-              type: 'KCS_REQ_VERIFY:REQ',
-              data: {
-                method: _method,
-                url: parseApi(_url),
-                body: _body
+                _state = 'BLOCKED';
+                xhr.send(body);
+                return;
               }
-            }, '*');
-          })
-            .then((result) => {
-              if (result && result.data && result.data.shouldConfirm) {
-                if (!confirm(result.data.message)) {
-                  setTimeout(() => {
-                    if (typeof xhr.onerror === 'function') xhr.onerror(new ProgressEvent('error'));
-                    if (typeof xhr.onloadend === 'function') xhr.onloadend(new ProgressEvent('loadend'));
-                  }, 0);
+            }
 
-                  _state = 'BLOCKED';
-                  xhr.send(body);
-                  return;
-                }
-              }
+            _state = 'APPROVED';
+            xhr.send(body);
+          });
 
-              _state = 'APPROVED';
-              xhr.send(body);
-            });
-
-          return;
-        }
+        return;
       }
 
       return originalSend.apply(this, arguments);
