@@ -11,7 +11,7 @@
 	"use strict";
 
 	var intervalChecker;
-	function checkAgain(){
+	function checkAgain() {
 		console.log("Checking game canvas...");
 		const gameCanvas = document.querySelector("canvas");
 		if (gameCanvas) {
@@ -41,8 +41,8 @@
 				if (!Promise.try) editArea.css("zoom", scale);
 				$("body").css("overflow", "hidden");
 				// Prevent Tab key scrolling, and F7 mode
-				$(document).on("keydown", function(e){
-					if(e.which === 9 || e.which === 118) {
+				$(document).on("keydown", function (e) {
+					if (e.which === 9 || e.which === 118) {
 						$(document).scrollTop(0);
 						e.stopPropagation();
 						e.preventDefault();
@@ -59,7 +59,7 @@
 			body.appendChild(script);
 		}
 		// Register original canvas screenshot message handler
-		chrome.runtime.onMessage.addListener(function(request, sender, response) {
+		chrome.runtime.onMessage.addListener(function (request, sender, response) {
 			if (request.action != "getGameCanvasData") return true;
 			const gameCanvas = document.querySelector("canvas");
 			if (!gameCanvas) {
@@ -90,5 +90,17 @@
 			window.postMessage(response, '*');
 		});
 	});
+
+	const files = [
+		'library/injections/axios_inject.js',
+	];
+
+	files
+		.map(v => chrome.runtime.getURL(v))
+		.forEach((src) => {
+			const script = document.createElement('script');
+			script.src = src;
+			document.body.append(script);
+		});
 
 })();

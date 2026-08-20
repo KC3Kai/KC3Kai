@@ -128,24 +128,6 @@
 				"*://127.0.0.1:*/*"
 			],
 			"js": [
-				"library/injections/kcs2_start.js"
-			],
-			"run_at": "document_start",
-			"all_frames": true
-		},
-		{
-			"matches": [
-				"*://*/kcs2/index.php?api_root=/kcsapi*"
-			],
-			"include_globs": [
-				"*://*.kancolle-server.com/*",
-				"*://203.104.209.*/*",
-				"*://125.6.184.*/*",
-				"*://125.6.189.*/*",
-				"*://192.168.*:*/*",
-				"*://127.0.0.1:*/*"
-			],
-			"js": [
 				"assets/js/jquery.min.js",
 				"library/objects/Messengers.js",
 				"library/injections/kcs2.js"
@@ -157,7 +139,7 @@
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://cdnjs.cloudflare.com 'unsafe-eval'; object-src 'self'",
 	"web_accessible_resources": [
 		"assets/img/*",
-		"library/injections/XhrProxy.js",
+		"library/injections/axios_inject.js",
 		"library/injections/dmm_injectable.js",
 		"library/injections/kcs2_injectable.js"
 	]
