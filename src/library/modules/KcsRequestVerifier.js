@@ -18,6 +18,61 @@
     return ships;
   }
 
+  function filterCheckShips(ships) {
+    // Ignore unlocked ships for warnings
+    return config.rv_ship_unlock_ignore
+      ? ships.filter((s) => s.lock === 1)
+      : ships;
+  }
+
+  /**
+   * Check if main fleet composition can form a combined fleet.
+   * Ship type ids (api_stype) map by index in [stype.json](../../data/lang/data/en/stype.json)
+   */
+  function countStype(ships, ...stypes) {
+    return ships.filter((s) => stypes.includes(s.master().api_stype)).length;
+  }
+
+  /**
+   * Check if main + escort fleet composition can form a combined fleet.
+   * Ship type ids (api_stype) map by index in [stype.json](../../data/lang/data/en/stype.json)
+   * 
+   * @see https://en.kancollewiki.net/Combined_Fleet
+   */
+  function canFormCombined(mainShips, escortShips) {
+    // CTF (1): main 2 CV/CVB/CVL, escort 1 CL + 2 DD
+    if (
+      true
+      && countStype(mainShips, 7, 11, 18) >= 2
+      && countStype(escortShips, 3) >= 1
+      && countStype(escortShips, 2) >= 2
+    ) {
+      return true;
+    }
+
+    // STF (2): main 2 FBB/BB/BBV/CA/CAV/CL/CLT, escort 1 CL + 2 DD
+    if (
+      true
+      && countStype(mainShips, 3, 4, 5, 6, 8, 9, 10) >= 2
+      && countStype(escortShips, 3) >= 1
+      && countStype(escortShips, 2) >= 2
+    ) {
+      return true;
+    }
+
+    // TCF (3): main 4 DD/DE, escort 1 CL/CT + 3 DD/DE
+    if (
+      true
+      && countStype(mainShips, 1, 2) >= 4
+      && countStype(escortShips, 3, 21) >= 1
+      && countStype(escortShips, 1, 2) >= 3
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   function verifyMapStart(api_maparea_id, api_mapinfo_no, api_deck_id) {
     // console.debug('verifyMapStart', { api_maparea_id, api_mapinfo_no, api_deck_id });
     const msg = [];
@@ -26,13 +81,15 @@
       ? [0, 1]
       : api_deck_id;
     const ships = getActiveShips(fleets);
+    // Keep full list for fleet checks, filtered one for warnings
+    const checkShips = filterCheckShips(ships);
 
     // console.debug('fleets', fleets);
     // console.debug('ships', ships);
 
     // Warn if any sortieing ship is taiha
     if (config.rv_sortie_ship_taiha) {
-      const tmp = ships.filter((s) => s.isTaiha());
+      const tmp = checkShips.filter((s) => s.isTaiha());
       if (tmp.length) {
         msg.push('Taiha ships: ' + tmp.map((s) => s.name()).join(', '));
       }
@@ -40,7 +97,7 @@
 
     // Warn if any sortieing ship is chuuha
     if (config.rv_sortie_ship_chuuha) {
-      const tmp = ships.filter((s) => !s.isTaiha() && (s.hp[0] <= s.hp[1] / 2));
+      const tmp = checkShips.filter((s) => !s.isTaiha() && (s.hp[0] <= s.hp[1] / 2));
       if (tmp.length) {
         msg.push('Chuuha ships: ' + tmp.map((s) => s.name()).join(', '));
       }
@@ -48,7 +105,7 @@
 
     // Warn if any sortieing ship needs supply
     if (config.rv_sortie_ship_unsupplied) {
-      const tmp = ships.filter((s) => s.isNeedSupply());
+      const tmp = checkShips.filter((s) => s.isNeedSupply());
       if (tmp.length) {
         msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
       }
@@ -56,7 +113,7 @@
 
     // Warn if any sortieing ship has no event tag
     if (config.rv_sortie_ship_untag && isEventWorld(api_maparea_id)) {
-      const tmp = ships.filter((s) => s.sally === 0);
+      const tmp = checkShips.filter((s) => s.sally === 0);
       if (tmp.length) {
         msg.push('Untagged ships: ' + tmp.map((s) => s.name()).join(', '));
       }
@@ -88,14 +145,11 @@
       && isEventWorld(api_maparea_id)
       && api_deck_id === 0
       && !PlayerManager.combinedFleet
+      && ships.length >= 2
+      && canFormCombined(ships, getActiveShips(1))
       && PlayerManager.fleets[1].mission.every(v => v === 0)
     ) {
-      const escortShips = getActiveShips(1);
-      const dds = escortShips.filter((s) => s.master().api_stype === 2).length;
-      const cls = escortShips.filter((s) => s.master().api_stype === 3).length;
-      if (cls >= 1 && dds >= 2) {
-        msg.push('Idle Combined Fleet?');
-      }
+      msg.push('Idle Combined Fleet?');
     }
 
     // Block sorties with fleet 2

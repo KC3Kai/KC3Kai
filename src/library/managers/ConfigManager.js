@@ -241,6 +241,7 @@ Retrieves when needed to apply on components
 				idbSaveLedgers         : true,
 
 				rv_enabled                         : true,
+				rv_ship_unlock_ignore              : false,
 				rv_sortie_ship_taiha               : true,
 				rv_sortie_ship_chuuha              : false,
 				rv_sortie_ship_unsupplied          : false,

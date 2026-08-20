@@ -1791,6 +1791,11 @@
 				"type": "check"
 			},
 			{
+				"id": "rv_ship_unlock_ignore",
+				"name": "rv_ship_unlock_ignore",
+				"type": "check"
+			},
+			{
 				"id": "rv_sortie_ship_taiha",
 				"name": "rv_sortie_ship_taiha",
 				"type": "check"
