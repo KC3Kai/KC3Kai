@@ -94,6 +94,9 @@
             return config;
           })
           .catch((error) => {
+            if (axios.isCancel(error)) {
+              throw error;
+            }
             console.error(error);
             return config;
           });
