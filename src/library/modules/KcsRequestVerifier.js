@@ -103,9 +103,9 @@
       }
     }
 
-    // Warn if any sortieing ship needs supply
+    // Warn if any sortieing ship is not fully supplied
     if (config.rv_sortie_ship_unsupplied) {
-      const tmp = checkShips.filter((s) => s.isNeedSupply());
+      const tmp = checkShips.filter((s) => !s.isSupplied());
       if (tmp.length) {
         msg.push(KC3Meta.term('RequestVerifierSortieShipUnsuppliedMsg').format(tmp.map((s) => s.name()).join(', ')));
       }
