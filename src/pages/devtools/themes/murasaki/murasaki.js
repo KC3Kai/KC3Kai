@@ -2800,7 +2800,7 @@
 							enemyHPPercent = ( newEnemyHP / thisNode.maxHPs.enemy[index] );
 							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), enemyHPPercent, "auto");
 						} else {
-							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1));
+							KC3ThemeUtils.updateEnemyHpBarStyles(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1), undefined, "auto");
 						}
 						
 						$(enemyFleetBoxSelector+" .abyss_hp_"+(index+1)).css("display", "flex");
