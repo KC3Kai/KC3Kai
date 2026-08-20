@@ -95,12 +95,10 @@
 		'library/injections/axios_inject.js',
 	];
 
-	files
-		.map(v => chrome.runtime.getURL(v))
-		.forEach((src) => {
-			const script = document.createElement('script');
-			script.src = src;
-			document.body.append(script);
-		});
+	files.forEach((v) => {
+		const script = document.createElement('script');
+		script.src = chrome.runtime.getURL(v);
+		document.body.append(script);
+	});
 
 })();
