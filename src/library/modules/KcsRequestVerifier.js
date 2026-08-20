@@ -26,8 +26,15 @@
   }
 
   /**
-   * Check if main fleet composition can form a combined fleet.
-   * Ship type ids (api_stype) map by index in [stype.json](../../data/lang/data/en/stype.json)
+   * Fleet not on expedition
+   */
+  function isFleetIdle(index) {
+    return PlayerManager.fleets[index].mission.every(v => v === 0);
+  }
+
+  /**
+   * Count ships whose type id (api_stype) is one of the given stypes.
+   * Ship type ids map by index in [stype.json](../../data/lang/data/en/stype.json)
    */
   function countStype(ships, ...stypes) {
     return ships.filter((s) => stypes.includes(s.master().api_stype)).length;
@@ -147,7 +154,7 @@
       && !PlayerManager.combinedFleet
       && ships.length >= 2
       && canFormCombined(ships, getActiveShips(1))
-      && PlayerManager.fleets[1].mission.every(v => v === 0)
+      && isFleetIdle(1)
     ) {
       msg.push('Idle Combined Fleet?');
     }
@@ -182,6 +189,15 @@
       if (tmp.length) {
         msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
       }
+    }
+
+    // Warn if sending fleet 2 to expedition while a Combined Fleet could be formed
+    if (
+      config.rv_expe_fleet_combined_idle
+      && api_deck_id === 1
+      && canFormCombined(getActiveShips(0), ships)
+    ) {
+      msg.push('Idle Combined Fleet?');
     }
 
     return msg;
