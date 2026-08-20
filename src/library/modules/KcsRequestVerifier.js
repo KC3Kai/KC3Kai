@@ -30,6 +30,7 @@
     // console.debug('fleets', fleets);
     // console.debug('ships', ships);
 
+    // Warn if any sortieing ship is taiha
     if (config.rv_sortie_ship_taiha) {
       const tmp = ships.filter((s) => s.isTaiha());
       if (tmp.length) {
@@ -37,6 +38,7 @@
       }
     }
 
+    // Warn if any sortieing ship is chuuha
     if (config.rv_sortie_ship_chuuha) {
       const tmp = ships.filter((s) => !s.isTaiha() && (s.hp[0] <= s.hp[1] / 2));
       if (tmp.length) {
@@ -44,6 +46,7 @@
       }
     }
 
+    // Warn if any sortieing ship needs supply
     if (config.rv_sortie_ship_unsupplied) {
       const tmp = ships.filter((s) => s.isNeedSupply());
       if (tmp.length) {
@@ -51,6 +54,7 @@
       }
     }
 
+    // Warn if any sortieing ship has no event tag
     if (config.rv_sortie_ship_untag && isEventWorld(api_maparea_id)) {
       const tmp = ships.filter((s) => s.sally === 0);
       if (tmp.length) {
@@ -58,6 +62,7 @@
       }
     }
 
+    // Warn if an LBAS on this map needs planes supplied
     if (config.rv_sortie_lbas_unsupplied) {
       const tmp = PlayerManager.bases
         .filter((base) => base.map === api_maparea_id && base.action === 1 && !base.isPlanesSupplied());
@@ -66,6 +71,7 @@
       }
     }
 
+    // Warn if sortieing a different fleet while the Strike Force (fleet 3) is ready but idle
     if (
       config.rv_sortie_fleet_strike_force_idle
       && isEventWorld(api_maparea_id)
@@ -76,6 +82,7 @@
       msg.push('Idle Strike Force?');
     }
 
+    // Warn if sortieing fleet 1 alone while a Combined Fleet could be formed
     if (
       config.rv_sortie_fleet_combined_idle
       && isEventWorld(api_maparea_id)
@@ -91,6 +98,21 @@
       }
     }
 
+    // Block sorties with fleet 2
+    if (config.rv_sortie_fleet_2_blocked && api_deck_id === 1) {
+      msg.push('Fleet 2 blocked');
+    }
+
+    // Block sorties with fleet 3 unless it is a full 7-ship Strike Force
+    if (config.rv_sortie_fleet_3_blocked && api_deck_id === 2 && ships.length < 7) {
+      msg.push('Fleet 3 blocked');
+    }
+
+    // Block sorties with fleet 4
+    if (config.rv_sortie_fleet_4_blocked && api_deck_id === 3) {
+      msg.push('Fleet 4 blocked');
+    }
+
     return msg;
   }
 
@@ -100,6 +122,7 @@
 
     const ships = getActiveShips(api_deck_id);
 
+    // Warn if any expedition ship needs supply
     if (config.rv_expe_ship_unsupplied) {
       const tmp = ships.filter((s) => s.isNeedSupply());
       if (tmp.length) {
@@ -111,6 +134,7 @@
   }
 
   function verify(api, data) {
+    // Master switch for request verification
     if (!config.rv_enabled) {
       return [];
     }
