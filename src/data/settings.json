@@ -1826,6 +1826,21 @@
 				"type": "check"
 			},
 			{
+				"id": "rv_sortie_fleet_2_blocked",
+				"name": "rv_sortie_fleet_2_blocked",
+				"type": "check"
+			},
+			{
+				"id": "rv_sortie_fleet_3_blocked",
+				"name": "rv_sortie_fleet_3_blocked",
+				"type": "check"
+			},
+			{
+				"id": "rv_sortie_fleet_4_blocked",
+				"name": "rv_sortie_fleet_4_blocked",
+				"type": "check"
+			},
+			{
 				"id": "rv_expe_ship_unsupplied",
 				"name": "rv_expe_ship_unsupplied",
 				"type": "check"

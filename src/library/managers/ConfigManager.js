@@ -248,6 +248,9 @@ Retrieves when needed to apply on components
 				rv_sortie_lbas_unsupplied          : false,
 				rv_sortie_fleet_strike_force_idle  : false,
 				rv_sortie_fleet_combined_idle      : false,
+				rv_sortie_fleet_2_blocked          : false,
+				rv_sortie_fleet_3_blocked          : false,
+				rv_sortie_fleet_4_blocked          : false,
 				rv_expe_ship_unsupplied            : true,
 
 				disableConsoleLogHooks : false,
