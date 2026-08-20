@@ -94,19 +94,12 @@
     // console.debug('fleets', fleets);
     // console.debug('ships', ships);
 
-    // Warn if any sortieing ship is taiha
-    if (config.rv_sortie_ship_taiha) {
-      const tmp = checkShips.filter((s) => s.isTaiha());
+    // Warn if any sortieing ship is at or below the HP threshold (25% per level)
+    if (config.rv_sortie_ship_hp_threshold > 0) {
+      const ratio = config.rv_sortie_ship_hp_threshold * 0.25;
+      const tmp = checkShips.filter((s) => s.hp[0] / s.hp[1] <= ratio);
       if (tmp.length) {
-        msg.push('Taiha ships: ' + tmp.map((s) => s.name()).join(', '));
-      }
-    }
-
-    // Warn if any sortieing ship is chuuha
-    if (config.rv_sortie_ship_chuuha) {
-      const tmp = checkShips.filter((s) => !s.isTaiha() && (s.hp[0] <= s.hp[1] / 2));
-      if (tmp.length) {
-        msg.push('Chuuha ships: ' + tmp.map((s) => s.name()).join(', '));
+        msg.push(KC3Meta.term('RequestVerifierSortieShipHpThresholdMsg').format(tmp.map((s) => s.name()).join(', ')));
       }
     }
 
@@ -114,7 +107,7 @@
     if (config.rv_sortie_ship_unsupplied) {
       const tmp = checkShips.filter((s) => s.isNeedSupply());
       if (tmp.length) {
-        msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
+        msg.push(KC3Meta.term('RequestVerifierSortieShipUnsuppliedMsg').format(tmp.map((s) => s.name()).join(', ')));
       }
     }
 
@@ -122,7 +115,7 @@
     if (config.rv_sortie_ship_untag && isEventWorld(api_maparea_id)) {
       const tmp = checkShips.filter((s) => s.sally === 0);
       if (tmp.length) {
-        msg.push('Untagged ships: ' + tmp.map((s) => s.name()).join(', '));
+        msg.push(KC3Meta.term('RequestVerifierSortieShipUntagMsg').format(tmp.map((s) => s.name()).join(', ')));
       }
     }
 
@@ -131,7 +124,7 @@
       const tmp = PlayerManager.bases
         .filter((base) => base.map === api_maparea_id && base.action === 1 && !base.isPlanesSupplied());
       if (tmp.length) {
-        msg.push('Unsupplied LBAS: #' + tmp.map((base) => base.rid).join(', #'));
+        msg.push(KC3Meta.term('RequestVerifierSortieLbasUnsuppliedMsg').format(tmp.map((base) => '#' + base.rid).join(', ')));
       }
     }
 
@@ -143,7 +136,7 @@
       && !PlayerManager.combinedFleet
       && PlayerManager.fleets[2].ships.filter(v => v > 0).length >= 7
     ) {
-      msg.push('Idle Strike Force?');
+      msg.push(KC3Meta.term('RequestVerifierSortieFleetStrikeForceIdleMsg'));
     }
 
     // Warn if sortieing fleet 1 alone while a Combined Fleet could be formed
@@ -156,22 +149,22 @@
       && canFormCombined(ships, getActiveShips(1))
       && isFleetIdle(1)
     ) {
-      msg.push('Idle Combined Fleet?');
+      msg.push(KC3Meta.term('RequestVerifierSortieFleetCombinedIdleMsg'));
     }
 
     // Block sorties with fleet 2
     if (config.rv_sortie_fleet_2_blocked && api_deck_id === 1) {
-      msg.push('Fleet 2 blocked');
+      msg.push(KC3Meta.term('RequestVerifierSortieFleet2BlockedMsg'));
     }
 
     // Block sorties with fleet 3 unless it is a full 7-ship Strike Force
     if (config.rv_sortie_fleet_3_blocked && api_deck_id === 2 && ships.length < 7) {
-      msg.push('Fleet 3 blocked');
+      msg.push(KC3Meta.term('RequestVerifierSortieFleet3BlockedMsg'));
     }
 
     // Block sorties with fleet 4
     if (config.rv_sortie_fleet_4_blocked && api_deck_id === 3) {
-      msg.push('Fleet 4 blocked');
+      msg.push(KC3Meta.term('RequestVerifierSortieFleet4BlockedMsg'));
     }
 
     return msg;
@@ -183,11 +176,11 @@
 
     const ships = getActiveShips(api_deck_id);
 
-    // Warn if any expedition ship needs supply
+    // Warn if any expedition ship is not fully supplied
     if (config.rv_expe_ship_unsupplied) {
-      const tmp = ships.filter((s) => s.isNeedSupply());
+      const tmp = ships.filter((s) => !s.isSupplied());
       if (tmp.length) {
-        msg.push('Unsupplied ships: ' + tmp.map((s) => s.name()).join(', '));
+        msg.push(KC3Meta.term('RequestVerifierExpeShipUnsuppliedMsg').format(tmp.map((s) => s.name()).join(', ')));
       }
     }
 
@@ -197,7 +190,7 @@
       && api_deck_id === 1
       && canFormCombined(getActiveShips(0), ships)
     ) {
-      msg.push('Idle Combined Fleet?');
+      msg.push(KC3Meta.term('RequestVerifierExpeFleetCombinedIdleMsg'));
     }
 
     return msg;
@@ -233,7 +226,7 @@
       let msg = '';
 
       if (details.length) {
-        const title = 'Continue with warnings?';
+        const title = KC3Meta.term('RequestVerifierConfirmTitle');
         msg = [
           title,
           details.join('\n'),
