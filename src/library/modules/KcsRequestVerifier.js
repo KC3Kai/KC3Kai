@@ -150,7 +150,7 @@
         id: message.id,
         type: 'KCS_REQ_VERIFY:RES',
         data: {
-          shouldConfirm: details.length,
+          shouldConfirm: !!details.length,
           message: msg,
           details,
         },

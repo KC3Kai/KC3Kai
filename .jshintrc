@@ -76,6 +76,7 @@
 		"chrome": true,
 		"localStorage": true,
 		"Storage": true,
+		"AbortSignal": true,
 		"Audio": true,
 		"Blob": true,
 		"Canvas": true,
