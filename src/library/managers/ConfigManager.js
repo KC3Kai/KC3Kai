@@ -242,8 +242,7 @@ Retrieves when needed to apply on components
 
 				rv_enabled                         : true,
 				rv_ship_unlock_ignore              : false,
-				rv_sortie_ship_taiha               : true,
-				rv_sortie_ship_chuuha              : false,
+				rv_sortie_ship_hp_threshold        : 1,
 				rv_sortie_ship_unsupplied          : false,
 				rv_sortie_ship_untag               : true,
 				rv_sortie_lbas_unsupplied          : false,
