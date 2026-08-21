@@ -128,7 +128,7 @@
 	"web_accessible_resources": [
 		"assets/img/*",
 		"library/injections/dmm_injectable.js",
-		"library/injections/axios_inject.js",
+		"library/injections/axios_injectable.js",
 		"library/injections/kcs2_injectable.js"
 	]
 }
