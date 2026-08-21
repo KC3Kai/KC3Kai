@@ -177,7 +177,7 @@
     if (config.rv_exped_ship_unsupplied) {
       const tmp = ships.filter((s) => !s.isSupplied());
       if (tmp.length) {
-        msg.push(KC3Meta.term('RequestVerifierExpeShipUnsuppliedMsg').format(tmp.map((s) => s.name()).join(', ')));
+        msg.push(KC3Meta.term('RequestVerifierExpedShipUnsuppliedMsg').format(tmp.map((s) => s.name()).join(', ')));
       }
     }
 
@@ -187,7 +187,7 @@
       && api_deck_idx === 1
       && canFormCombined(getActiveShips(0), ships)
     ) {
-      msg.push(KC3Meta.term('RequestVerifierExpeFleetCombinedIdleMsg'));
+      msg.push(KC3Meta.term('RequestVerifierExpedFleetCombinedIdleMsg'));
     }
 
     return msg;
