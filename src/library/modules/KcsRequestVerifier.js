@@ -8,8 +8,8 @@
     return world > 20;
   }
 
-  function getActiveShips(fleets) {
-    const ships = (Array.isArray(fleets) ? fleets : [fleets])
+  function getActiveShips(indexes) {
+    const ships = (Array.isArray(indexes) ? indexes : [indexes])
       .map((fleet) => PlayerManager.fleets[fleet].ships)
       .flat()
       .filter((id) => id > 0)
@@ -80,14 +80,12 @@
     return false;
   }
 
-  function verifyMapStart(api_maparea_id, api_mapinfo_no, api_deck_id) {
-    // console.debug('verifyMapStart', { api_maparea_id, api_mapinfo_no, api_deck_id });
+  function verifyMapStart(api_deck_id, api_maparea_id, api_mapinfo_no) {
     const msg = [];
-
-    const fleets = PlayerManager.combinedFleet
+    const decks = PlayerManager.combinedFleet
       ? [0, 1]
       : api_deck_id;
-    const ships = getActiveShips(fleets);
+    const ships = getActiveShips(decks);
     // Keep full list for fleet checks, filtered one for warnings
     const checkShips = filterCheckShips(ships);
 
@@ -170,10 +168,8 @@
     return msg;
   }
 
-  function verifyMissionStart(api_mission_id, api_mission, api_deck_id) {
-    // console.debug('verifyMissionStart', { api_mission_id, api_mission, api_deck_id });
+  function verifyMissionStart(api_deck_id, api_mission_id, api_mission) {
     const msg = [];
-
     const ships = getActiveShips(api_deck_id);
 
     // Warn if any expedition ship is not fully supplied
@@ -205,15 +201,15 @@
     switch (api) {
       case 'api_req_map/start':
         return verifyMapStart(
+          Number(data.api_deck_id) - 1,
           Number(data.api_maparea_id),
-          Number(data.api_mapinfo_no),
-          Number(data.api_deck_id) - 1
+          Number(data.api_mapinfo_no)
         );
       case 'api_req_mission/start':
         return verifyMissionStart(
+          Number(data.api_deck_id) - 1,
           Number(data.api_mission_id),
-          Number(data.api_mission),
-          Number(data.api_deck_id) - 1
+          Number(data.api_mission)
         );
     }
 
