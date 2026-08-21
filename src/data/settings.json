@@ -969,18 +969,18 @@
 			},
 			{
 				"id": "rv_exped_ship_unsupplied",
-				"name": "SettingsRequestVerifierExpeShipUnsupplied",
+				"name": "SettingsRequestVerifierExpedShipUnsupplied",
 				"type": "check",
 				"options": {
-					"tooltip": "SettingsRequestVerifierExpeShipUnsuppliedTip"
+					"tooltip": "SettingsRequestVerifierExpedShipUnsuppliedTip"
 				}
 			},
 			{
 				"id": "rv_exped_fleet_combined_idle",
-				"name": "SettingsRequestVerifierExpeFleetCombinedIdle",
+				"name": "SettingsRequestVerifierExpedFleetCombinedIdle",
 				"type": "check",
 				"options": {
-					"tooltip": "SettingsRequestVerifierExpeFleetCombinedIdleTip"
+					"tooltip": "SettingsRequestVerifierExpedFleetCombinedIdleTip"
 				}
 			}
 		]
