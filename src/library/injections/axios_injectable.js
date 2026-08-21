@@ -12,29 +12,29 @@
 
   function parseApi(url) {
     const basePath = '/kcsapi/';
-    const res = url.substring(url.indexOf(basePath) + basePath.length);
+    const baseIndex = url.indexOf(basePath);
+    const res = baseIndex > -1 ? url.substring(baseIndex + basePath.length) : "";
     return res;
   }
 
   function parseBody(body) {
-    if (body instanceof FormData) {
+    if (typeof body === 'string') {
+      try {
+        const params = new URLSearchParams(body);
+        return Object.fromEntries(params.entries());
+      } catch (err) {
+        console.warn('Parsing search params data', err, body);
+        return {};
+      }
+    } else if (body instanceof FormData) {
       const obj = {};
       for (const [key, value] of body.entries()) {
         obj[key] = value;
       }
       return obj;
     }
-
-    if (typeof body === 'string') {
-      try {
-        const params = new URLSearchParams(body);
-        return Object.fromEntries(params.entries());
-      } catch (err) {
-        console.warn('parseBody', err);
-      }
-    }
-
-    return body;
+    console.warn('Unknown request payload type', body);
+    return {};
   }
 
   //#endregion

@@ -1,19 +1,20 @@
+/**
+ * KC3改 KCS game API request verifier, and warning messages generator for http request blocker, running under devtools panel context, accepting verification requests from runtime messages.
+ * Messaging flowchart: axios_injectable.js (window message) -> kcs.js (runtime msg request) -> this verifier (runtime msg response) -> kcs.js (window message) -> axios_injectable.js
+ *
+ * @see injections/axios_injectable.js - game window document script for intercepting game http post requests, and warning and blocking specific ones checked by this verifier.
+ * @see injections/kcs.js - extension content script for injecting script above into game window document, and adapting between its window messages and runtime messages for this verifier.
+ */
 (() => {
 
   console.debug('KcsRequestVerifier loaded');
 
   const config = ConfigManager;
 
-  function isEventWorld(world) {
-    return world > 20;
-  }
-
   function getActiveShips(indexes) {
     const ships = (Array.isArray(indexes) ? indexes : [indexes])
-      .map((fleet) => PlayerManager.fleets[fleet].ships)
+      .map((fleet) => PlayerManager.fleets[fleet].ship())
       .flat()
-      .filter((id) => id > 0)
-      .map((id) => KC3ShipManager.get(id))
       .filter((ship) => ship && !ship.isDummy());
     return ships;
   }
@@ -29,7 +30,7 @@
    * Fleet not on expedition
    */
   function isFleetIdle(index) {
-    return PlayerManager.fleets[index].mission.every(v => v === 0);
+    return !PlayerManager.fleets[index].isOnExped();
   }
 
   /**
@@ -80,12 +81,12 @@
     return false;
   }
 
-  function verifyMapStart(api_deck_id, api_maparea_id, api_mapinfo_no) {
+  function verifyMapStart(api_deck_idx, api_maparea_id, api_mapinfo_no) {
     const msg = [];
-    const decks = PlayerManager.combinedFleet
+    const fleetIdx = PlayerManager.combinedFleet
       ? [0, 1]
-      : api_deck_id;
-    const ships = getActiveShips(decks);
+      : api_deck_idx;
+    const ships = getActiveShips(fleetIdx);
     // Keep full list for fleet checks, filtered one for warnings
     const checkShips = filterCheckShips(ships);
 
@@ -110,7 +111,7 @@
     }
 
     // Warn if any sortieing ship has no event tag
-    if (config.rv_sortie_ship_untag && isEventWorld(api_maparea_id)) {
+    if (config.rv_sortie_ship_untag && KC3Meta.isEventWorld(api_maparea_id)) {
       const tmp = checkShips.filter((s) => s.sally === 0);
       if (tmp.length) {
         msg.push(KC3Meta.term('RequestVerifierSortieShipUntagMsg').format(tmp.map((s) => s.name()).join(', ')));
@@ -126,13 +127,13 @@
       }
     }
 
-    // Warn if sortieing a different fleet while the Strike Force (fleet 3) is ready but idle
+    // Warn if sortieing a different fleet while the Striking Force (fleet 3) is ready but idle
     if (
       config.rv_sortie_fleet_strike_force_idle
-      && isEventWorld(api_maparea_id)
-      && api_deck_id !== 2
+      && KC3Meta.isEventWorld(api_maparea_id)
+      && api_deck_idx !== 2
       && !PlayerManager.combinedFleet
-      && PlayerManager.fleets[2].ships.filter(v => v > 0).length >= 7
+      && PlayerManager.fleets[2].isStrikingForce()
     ) {
       msg.push(KC3Meta.term('RequestVerifierSortieFleetStrikeForceIdleMsg'));
     }
@@ -140,8 +141,8 @@
     // Warn if sortieing fleet 1 alone while a Combined Fleet could be formed
     if (
       config.rv_sortie_fleet_combined_idle
-      && isEventWorld(api_maparea_id)
-      && api_deck_id === 0
+      && KC3Meta.isEventWorld(api_maparea_id)
+      && api_deck_idx === 0
       && !PlayerManager.combinedFleet
       && ships.length >= 2
       && canFormCombined(ships, getActiveShips(1))
@@ -151,29 +152,29 @@
     }
 
     // Block sorties with fleet 2
-    if (config.rv_sortie_fleet_2_blocked && api_deck_id === 1) {
+    if (config.rv_sortie_fleet_2_blocked && api_deck_idx === 1) {
       msg.push(KC3Meta.term('RequestVerifierSortieFleet2BlockedMsg'));
     }
 
-    // Block sorties with fleet 3 unless it is a full 7-ship Strike Force
-    if (config.rv_sortie_fleet_3_blocked && api_deck_id === 2 && ships.length < 7) {
+    // Block sorties with fleet 3 unless it is a full 7-ship Striking Force
+    if (config.rv_sortie_fleet_3_blocked && api_deck_idx === 2 && ships.length < 7) {
       msg.push(KC3Meta.term('RequestVerifierSortieFleet3BlockedMsg'));
     }
 
     // Block sorties with fleet 4
-    if (config.rv_sortie_fleet_4_blocked && api_deck_id === 3) {
+    if (config.rv_sortie_fleet_4_blocked && api_deck_idx === 3) {
       msg.push(KC3Meta.term('RequestVerifierSortieFleet4BlockedMsg'));
     }
 
     return msg;
   }
 
-  function verifyMissionStart(api_deck_id, api_mission_id, api_mission) {
+  function verifyMissionStart(api_deck_idx, api_mission_id, api_mission) {
     const msg = [];
-    const ships = getActiveShips(api_deck_id);
+    const ships = getActiveShips(api_deck_idx);
 
     // Warn if any expedition ship is not fully supplied
-    if (config.rv_expe_ship_unsupplied) {
+    if (config.rv_exped_ship_unsupplied) {
       const tmp = ships.filter((s) => !s.isSupplied());
       if (tmp.length) {
         msg.push(KC3Meta.term('RequestVerifierExpeShipUnsuppliedMsg').format(tmp.map((s) => s.name()).join(', ')));
@@ -182,8 +183,8 @@
 
     // Warn if sending fleet 2 to expedition while a Combined Fleet could be formed
     if (
-      config.rv_expe_fleet_combined_idle
-      && api_deck_id === 1
+      config.rv_exped_fleet_combined_idle
+      && api_deck_idx === 1
       && canFormCombined(getActiveShips(0), ships)
     ) {
       msg.push(KC3Meta.term('RequestVerifierExpeFleetCombinedIdleMsg'));
@@ -218,7 +219,13 @@
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.id && message.type === 'KCS_REQ_VERIFY:REQ') {
-      const details = verify(message.data.url, message.data.body);
+      const api = message.data.url;
+      const data = message.data.body;
+      // Do not log privacy
+      if (data.api_token) {
+        delete data.api_token;
+      }
+      const details = verify(api, data);
       let msg = '';
 
       if (details.length) {
@@ -227,6 +234,7 @@
           title,
           details.join('\n'),
         ].join('\n').trim();
+        console.info('Request verified', api, data, details);
       }
 
       const result = {

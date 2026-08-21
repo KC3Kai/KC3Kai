@@ -29,9 +29,7 @@
 		"file:///*",
 		"*://*.dmm.com/*",
 		"*://*.kancolle-server.com/*",
-		"*://203.104.209.7/*",
-		"*://192.168.*:*/*",
-		"*://127.0.0.1:*/*"
+		"*://203.104.209.7/*"
 	],
 	"background": {
 		"scripts": [
@@ -60,19 +58,13 @@
 	},
 	"content_scripts": [
 		{
-			"matches": [
-				"*://*.dmm.com/*"
-			],
-			"js": [
-				"library/injections/cookie.js"
-			],
+			"matches": ["*://*.dmm.com/*"],
+			"js": ["library/injections/cookie.js"],
 			"run_at": "document_end",
 			"all_frames": true
 		},
 		{
-			"matches": [
-				"*://*.dmm.com/*"
-			],
+			"matches": ["*://*.dmm.com/*"],
 			"include_globs": [
 				"*://www.dmm.com/netgame/*/app_id=854854*",
 				"*://play.games.dmm.com/game/kancolle*"
@@ -104,9 +96,7 @@
 			"all_frames": true
 		},
 		{
-			"matches": [
-				"*://osapi.dmm.com/gadgets/*aid=854854*"
-			],
+			"matches": ["*://osapi.dmm.com/gadgets/*aid=854854*"],
 			"js": [
 				"assets/js/jquery.min.js",
 				"library/objects/Messengers.js",
@@ -116,9 +106,7 @@
 			"all_frames": true
 		},
 		{
-			"matches": [
-				"*://*/kcs2/index.php?api_root=/kcsapi*"
-			],
+			"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
 			"include_globs": [
 				"*://*.kancolle-server.com/*",
 				"*://203.104.209.*/*",
@@ -139,8 +127,8 @@
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://cdnjs.cloudflare.com 'unsafe-eval'; object-src 'self'",
 	"web_accessible_resources": [
 		"assets/img/*",
-		"library/injections/axios_inject.js",
 		"library/injections/dmm_injectable.js",
+		"library/injections/axios_inject.js",
 		"library/injections/kcs2_injectable.js"
 	]
 }

@@ -750,20 +750,6 @@
 				"options" : { "label" : "%" }
 			},
 			{
-				"id" : "alert_pre_sortie",
-				"name" : "SettingsPreSortieAlert",
-				"type" : "radio",
-				"options" : {
-					"choices" : [
-						[ 0, "None"],
-						[ 1, "#1"],
-						[ 2, "#2"],
-						[ 3, "#3"],
-						[ 4, "#4"]
-					]
-				}
-			},
-			{
 				"id" : "pan_sfxnotify_eventonly",
 				"name" : "SettingsPanelPortSoundNotifyEventOnly",
 				"type" : "check",
@@ -864,6 +850,137 @@
 				"type" : "check",
 				"options" : {
 					"tooltip": "SettingsDisableUnlockShipsTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsRequestVerifier",
+		"help": "",
+		"contents": [
+			{
+				"id" : "alert_pre_sortie",
+				"name" : "SettingsPreSortieAlert",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None"],
+						[ 1, "#1"],
+						[ 2, "#2"],
+						[ 3, "#3"],
+						[ 4, "#4"]
+					],
+					"tooltip": "SettingsPreSortieAlertTip"
+				}
+			},
+			{
+				"id": "rv_enabled",
+				"name": "SettingsRequestVerifierEnabled",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierEnabledTip"
+				}
+			},
+			{
+				"id": "rv_ship_unlock_ignore",
+				"name": "SettingsRequestVerifierShipUnlockIgnore",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierShipUnlockIgnoreTip"
+				}
+			},
+			{
+				"id": "rv_sortie_ship_hp_threshold",
+				"name": "SettingsRequestVerifierSortieShipHpThreshold",
+				"type": "radio",
+				"options": {
+					"choices": [
+						[ 0, "None" ],
+						[ 1, "SettingsRequestVerifierHpTaiha" ],
+						[ 2, "SettingsRequestVerifierHpChuuha" ],
+						[ 3, "SettingsRequestVerifierHpShouha" ]
+					],
+					"tooltip": "SettingsRequestVerifierSortieShipHpThresholdTip"
+				}
+			},
+			{
+				"id": "rv_sortie_ship_unsupplied",
+				"name": "SettingsRequestVerifierSortieShipUnsupplied",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieShipUnsuppliedTip"
+				}
+			},
+			{
+				"id": "rv_sortie_ship_untag",
+				"name": "SettingsRequestVerifierSortieShipUntag",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieShipUntagTip"
+				}
+			},
+			{
+				"id": "rv_sortie_lbas_unsupplied",
+				"name": "SettingsRequestVerifierSortieLbasUnsupplied",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieLbasUnsuppliedTip"
+				}
+			},
+			{
+				"id": "rv_sortie_fleet_strike_force_idle",
+				"name": "SettingsRequestVerifierSortieFleetStrikeForceIdle",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFleetStrikeForceIdleTip"
+				}
+			},
+			{
+				"id": "rv_sortie_fleet_combined_idle",
+				"name": "SettingsRequestVerifierSortieFleetCombinedIdle",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFleetCombinedIdleTip"
+				}
+			},
+			{
+				"id": "rv_sortie_fleet_2_blocked",
+				"name": "SettingsRequestVerifierSortieFleet2Blocked",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFleet2BlockedTip"
+				}
+			},
+			{
+				"id": "rv_sortie_fleet_3_blocked",
+				"name": "SettingsRequestVerifierSortieFleet3Blocked",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFleet3BlockedTip"
+				}
+			},
+			{
+				"id": "rv_sortie_fleet_4_blocked",
+				"name": "SettingsRequestVerifierSortieFleet4Blocked",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFleet4BlockedTip"
+				}
+			},
+			{
+				"id": "rv_exped_ship_unsupplied",
+				"name": "SettingsRequestVerifierExpeShipUnsupplied",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierExpeShipUnsuppliedTip"
+				}
+			},
+			{
+				"id": "rv_exped_fleet_combined_idle",
+				"name": "SettingsRequestVerifierExpeFleetCombinedIdle",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierExpeFleetCombinedIdleTip"
 				}
 			}
 		]
@@ -1777,122 +1894,6 @@
 				"type" : "check",
 				"options" : {
 					"tooltip" : "SettingsSavePvpToDbTip"
-				}
-			}
-		]
-	},
-	{
-		"section": "SettingsRequestVerifier",
-		"help": "",
-		"contents": [
-			{
-				"id": "rv_enabled",
-				"name": "SettingsRequestVerifierEnabled",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierEnabledTip"
-				}
-			},
-			{
-				"id": "rv_ship_unlock_ignore",
-				"name": "SettingsRequestVerifierShipUnlockIgnore",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierShipUnlockIgnoreTip"
-				}
-			},
-			{
-				"id": "rv_sortie_ship_hp_threshold",
-				"name": "SettingsRequestVerifierSortieShipHpThreshold",
-				"type": "radio",
-				"options": {
-					"choices": [
-						[ 0, "None" ],
-						[ 1, "SettingsRequestVerifierHpTaiha" ],
-						[ 2, "SettingsRequestVerifierHpChuuha" ],
-						[ 3, "SettingsRequestVerifierHpShouha" ]
-					],
-					"tooltip": "SettingsRequestVerifierSortieShipHpThresholdTip"
-				}
-			},
-			{
-				"id": "rv_sortie_ship_unsupplied",
-				"name": "SettingsRequestVerifierSortieShipUnsupplied",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieShipUnsuppliedTip"
-				}
-			},
-			{
-				"id": "rv_sortie_ship_untag",
-				"name": "SettingsRequestVerifierSortieShipUntag",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieShipUntagTip"
-				}
-			},
-			{
-				"id": "rv_sortie_lbas_unsupplied",
-				"name": "SettingsRequestVerifierSortieLbasUnsupplied",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieLbasUnsuppliedTip"
-				}
-			},
-			{
-				"id": "rv_sortie_fleet_strike_force_idle",
-				"name": "SettingsRequestVerifierSortieFleetStrikeForceIdle",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieFleetStrikeForceIdleTip"
-				}
-			},
-			{
-				"id": "rv_sortie_fleet_combined_idle",
-				"name": "SettingsRequestVerifierSortieFleetCombinedIdle",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieFleetCombinedIdleTip"
-				}
-			},
-			{
-				"id": "rv_sortie_fleet_2_blocked",
-				"name": "SettingsRequestVerifierSortieFleet2Blocked",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieFleet2BlockedTip"
-				}
-			},
-			{
-				"id": "rv_sortie_fleet_3_blocked",
-				"name": "SettingsRequestVerifierSortieFleet3Blocked",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieFleet3BlockedTip"
-				}
-			},
-			{
-				"id": "rv_sortie_fleet_4_blocked",
-				"name": "SettingsRequestVerifierSortieFleet4Blocked",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierSortieFleet4BlockedTip"
-				}
-			},
-			{
-				"id": "rv_expe_ship_unsupplied",
-				"name": "SettingsRequestVerifierExpeShipUnsupplied",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierExpeShipUnsuppliedTip"
-				}
-			},
-			{
-				"id": "rv_expe_fleet_combined_idle",
-				"name": "SettingsRequestVerifierExpeFleetCombinedIdle",
-				"type": "check",
-				"options": {
-					"tooltip": "SettingsRequestVerifierExpeFleetCombinedIdleTip"
 				}
 			}
 		]
