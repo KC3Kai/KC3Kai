@@ -10,6 +10,13 @@
 (function () {
 	"use strict";
 
+	function loadScript(src) {
+		const script = document.createElement("script");
+		script.setAttribute("type", "text/javascript");
+		script.setAttribute("src", src);
+		document.body.appendChild(script);
+	}
+
 	var intervalChecker;
 	function checkAgain() {
 		console.log("Checking game canvas...");
@@ -50,20 +57,15 @@
 				});
 			}
 		}
+
 		// Experimental function: improve 3rd-party components used by game
 		if (Array.isArray(response.value) && !!response.value[2]) {
-			const script = document.createElement("script");
-			script.setAttribute("type", "text/javascript");
-			script.setAttribute("src", chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
-			document.body.appendChild(script);
+			loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
 		}
+
 		// For blocking unexpected game request by verifications on fleets and states against configured conditions
-		if (Array.isArray(response.value) && !!response.value[3]) {
-			const script = document.createElement("script");
-			script.type = "text/javascript";
-			script.src = chrome.runtime.getURL("library/injections/axios_injectable.js");
-			document.body.appendChild(script);
-		}
+		loadScript(chrome.runtime.getURL("library/injections/axios_injectable.js"));
+
 		// Register original canvas screenshot message handler
 		chrome.runtime.onMessage.addListener(function (request, sender, response) {
 			if (request.action != "getGameCanvasData") return true;
@@ -87,14 +89,22 @@
 	// Adaptor between window messages and runtime messages for request verifier and blocker
 	window.addEventListener('message', (event) => {
 		const data = event.data;
-		if (!data || !data.id || data.type !== 'KCS_REQ_VERIFY:REQ') {
+		if (!data) {
 			return;
 		}
-		// console.debug('KCS_REQ_VERIFY:REQ', data);
-		chrome.runtime.sendMessage(data, (response) => {
-			// console.debug('KCS_REQ_VERIFY:RES', response);
-			window.postMessage(response, '*');
-		});
+		if (['CONFIG:GET', 'KCS_REQ_VERIFY:REQ'].includes(data.type)) {
+			// console.debug(data.type, data);
+			chrome.runtime.sendMessage(data, (response) => {
+				// console.debug(response.type, response);
+				window.postMessage(response, '*');
+			});
+		}
+	});
+
+	chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+		if (message.type === 'CONFIG:CHANGE') {
+			window.postMessage(message, '*');
+		}
 	});
 
 })();

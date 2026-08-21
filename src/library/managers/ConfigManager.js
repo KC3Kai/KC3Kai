@@ -559,5 +559,23 @@ Retrieves when needed to apply on components
 			try { ret &= KC3ShipManager.get(x).rosterId == x; } catch (e) {} finally { return ret; }
 		});
 
-})();
+	chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+		if (message.type === 'CONFIG:GET') {
+			const data = JSON.parse(localStorage.getItem(CONFIG_KEY_NAME));
+			sendResponse({ type: 'CONFIG:DATA', data });
+		}
+	});
 
+	if (chrome.devtools) {
+		window.addEventListener("storage", (event) => {
+			if (event.key !== CONFIG_KEY_NAME) {
+				return;
+			}
+			chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+				type: 'CONFIG:CHANGE',
+				data: JSON.parse(event.newValue),
+			});
+		});
+	}
+
+})();

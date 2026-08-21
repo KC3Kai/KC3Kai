@@ -218,7 +218,7 @@
   }
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.id && message.type === 'KCS_REQ_VERIFY:REQ') {
+    if (message.type === 'KCS_REQ_VERIFY:REQ' && message.id) {
       const api = message.data.url;
       const data = message.data.body;
       // Do not log privacy
@@ -248,8 +248,8 @@
         _request: message,
       };
       sendResponse(result);
-      return true;
     }
+    return true;
   });
 
   window.KcsRequestVerifier = {
