@@ -8,6 +8,12 @@
 
   const msgResolvers = new Map();
 
+  let axios;
+  /**
+   * Use `null` as id can be `0`
+   */
+  let kcsInterceptorId = null;
+
   //#region helper
 
   function parseApi(url) {
@@ -55,27 +61,36 @@
 
   window.addEventListener('message', (event) => {
     const data = event.data;
-    if (!data || !data.id || data.type !== 'KCS_REQ_VERIFY:RES') {
+    // console.debug(data);
+    if (!data) {
       return;
     }
 
-    const resolver = msgResolvers.get(data.id);
-    if (!resolver) {
+    if (data.type === 'CONFIG:CHANGE' && data.data && axios) {
+      if (data.data.rv_enabled) {
+        useKcsInterceptor();
+      } else {
+        ejectKcsInterceptor();
+      }
       return;
     }
 
-    resolver(data);
-    msgResolvers.delete(data.id);
+    if (data.type === 'KCS_REQ_VERIFY:RES' && data.id) {
+      const resolver = msgResolvers.get(data.id);
+      if (!resolver) {
+        return;
+      }
+
+      resolver(data);
+      msgResolvers.delete(data.id);
+    }
   });
 
   //#endregion
 
-  const axios = window.axios;
-  if (!axios) {
-    return;
-  }
+  //#region axios
 
-  axios.interceptors.request.use((config) => {
+  function getKcsInterceptor(config) {
     // console.debug(config);
     const method = config.method.toUpperCase();
     if (method === 'POST') {
@@ -103,6 +118,50 @@
       }
     }
     return config;
-  });
+  }
+
+  function useKcsInterceptor() {
+    if (kcsInterceptorId === null) {
+      console.log('KCSAPI interceptor active');
+      kcsInterceptorId = axios.interceptors.request.use(getKcsInterceptor);
+    }
+  }
+
+  function ejectKcsInterceptor() {
+    if (kcsInterceptorId !== null) {
+      console.log('KCSAPI interceptor inactive');
+      axios.interceptors.request.eject(kcsInterceptorId);
+      kcsInterceptorId = null;
+    }
+  }
+
+  function findAxios() {
+    axios = window.axios;
+
+    if (!axios) {
+      setTimeout(() => findAxios(), 1000);
+      return;
+    }
+
+    new Promise((resolve) => {
+      const onMsg = (event) => {
+        if (event.data && event.data.type === 'CONFIG:DATA') {
+          resolve(event.data.data);
+          window.removeEventListener('message', onMsg);
+        }
+      };
+      window.addEventListener('message', onMsg);
+      window.postMessage({ type: 'CONFIG:GET' });
+    })
+      .then((config) => {
+        if (config && config.rv_enabled) {
+          useKcsInterceptor();
+        }
+      });
+  }
+
+  findAxios();
+
+  //#endregion
 
 })();
