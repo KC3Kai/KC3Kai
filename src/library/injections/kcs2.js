@@ -112,7 +112,7 @@
 				})).execute();
 				return;
 			default:
-				// all other types inlcuding `RV_CONFIG:DATA`, `CONFIG:CHANGE` and `KCS_REQ_VERIFY:RES` will be dropped here
+				// all other types: `RV_CONFIG:DATA`, `CONFIG:CHANGE` and `KCS_REQ_VERIFY:RES` will be dropped here
 				// console.debug('window message event', event);
 				return;
 		}
@@ -120,10 +120,13 @@
 	// Notify injected request blocker on config changed
 	RMsg.addListener((request, sender, response) => {
 		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
+			// only expose properties about cared by injected document scripts
+			const { rv_enabled } = request.config || {};
 			window.postMessage({
 				type: 'CONFIG:CHANGE',
-				config: request.config
+				config: { rv_enabled }
 			}, windowOrigin);
+			// no response needed by config manager
 		}
 		return true;
 	});

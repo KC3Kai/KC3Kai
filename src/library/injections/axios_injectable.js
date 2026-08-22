@@ -12,7 +12,7 @@
 
   let axios;
   /**
-   * Use `null` as id can be `0`
+   * Initialized with nullish, as id can be `0`
    */
   let kcsInterceptorId = null;
 
@@ -49,7 +49,7 @@
 
   //#region message
 
-  function _postMsg(data) {
+  function postMsg(data) {
     return new Promise((resolve) => {
       const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       msgResolvers.set(id, resolve);
@@ -68,7 +68,7 @@
       return;
     }
 
-    if (data.type === 'CONFIG:CHANGE' && data.config && axios) {
+    if (data.type === 'CONFIG:CHANGE' && data.config) {
       if (data.config.rv_enabled) {
         useKcsInterceptor();
       } else {
@@ -101,7 +101,7 @@
       if (filterApis.has(api)) {
         const body = parseBody(config.data);
         // console.debug(body);
-        return _postMsg({ method, url: api, body })
+        return postMsg({ method, url: api, body })
           .then((result) => {
             if (result && result.data && result.data.shouldConfirm) {
               if (!confirm(result.data.message)) {
@@ -123,14 +123,14 @@
   }
 
   function useKcsInterceptor() {
-    if (axios && kcsInterceptorId === null) {
+    if (axios && kcsInterceptorId == null) {
       console.log('KCSAPI interceptor active');
       kcsInterceptorId = axios.interceptors.request.use(kcsRequestHandler);
     }
   }
 
   function ejectKcsInterceptor() {
-    if (axios && kcsInterceptorId !== null) {
+    if (axios && kcsInterceptorId != null) {
       console.log('KCSAPI interceptor inactive');
       axios.interceptors.request.eject(kcsInterceptorId);
       kcsInterceptorId = null;
