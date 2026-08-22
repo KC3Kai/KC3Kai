@@ -141,25 +141,20 @@
     axios = window.axios;
 
     if (!axios) {
-      setTimeout(() => findAxios(), 1000);
+      setTimeout(findAxios, 1000);
       return;
     }
 
-    new Promise((resolve) => {
-      const onMsg = (event) => {
-        if (event.data && event.data.type === 'RV_CONFIG:DATA') {
-          resolve(event.data.rv_enabled);
-          window.removeEventListener('message', onMsg);
-        }
-      };
-      window.addEventListener('message', onMsg);
-      window.postMessage({ type: 'RV_CONFIG:GET' }, windowOrigin);
-    })
-      .then((rv_enabled) => {
-        if (rv_enabled) {
+    const handleMsgOnce = (event) => {
+      if (event.data && event.data.type === 'RV_CONFIG:DATA') {
+        window.removeEventListener('message', handleMsgOnce);
+        if (event.data.rv_enabled) {
           useKcsInterceptor();
         }
-      });
+      }
+    };
+    window.addEventListener('message', handleMsgOnce);
+    window.postMessage({ type: 'RV_CONFIG:GET' }, windowOrigin);
   }
 
   findAxios();

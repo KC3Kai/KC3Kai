@@ -10,6 +10,8 @@
   console.debug('KcsRequestVerifier loaded');
 
   const config = ConfigManager;
+  // In order to notify content script, config reloading itself already handled by theme script
+  config.registerChangeNotifier();
 
   function getActiveShips(indexes) {
     const ships = (Array.isArray(indexes) ? indexes : [indexes])
@@ -256,7 +258,6 @@
   });
 
   window.KcsRequestVerifier = {
-    getActiveShips,
     verifyMapStart,
     verifyMissionStart,
   };
