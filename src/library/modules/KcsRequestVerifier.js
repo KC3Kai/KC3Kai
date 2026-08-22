@@ -218,7 +218,11 @@
   }
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'KCS_REQ_VERIFY:REQ' && message.id) {
+    if (message.identifier === 'kc3_kcsRequestVerifier'
+      && message.action === 'KCS_REQ_VERIFY:REQ'
+      && message.id
+      && message.data
+    ) {
       const api = message.data.url;
       const data = message.data.body;
       // Do not log privacy

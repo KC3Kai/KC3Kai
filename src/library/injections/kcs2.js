@@ -31,7 +31,7 @@
 	intervalChecker = setInterval(checkAgain, 500);
 
 	(new RMsg("service", "getConfig", {
-		id: ["api_gameScale", "dmm_customize", "fix_game_code", "rv_enabled"],
+		id: ["api_gameScale", "dmm_customize", "fix_game_code"],
 		attr: ["dmmplay", "extract_api"]
 	}, function (response) {
 		if (Array.isArray(response.value) && Array.isArray(response.storage)) {
@@ -89,22 +89,35 @@
 	// Adaptor between window messages and runtime messages for request verifier and blocker
 	window.addEventListener('message', (event) => {
 		const data = event.data;
-		if (!data) {
+		if (!data || !data.type) {
 			return;
 		}
-		if (['CONFIG:GET', 'KCS_REQ_VERIFY:REQ'].includes(data.type)) {
-			// console.debug(data.type, data);
-			chrome.runtime.sendMessage(data, (response) => {
-				// console.debug(response.type, response);
-				window.postMessage(response, '*');
-			});
+		switch (data.type) {
+			case 'KCS_REQ_VERIFY:REQ':
+				// console.debug(data.type, data);
+				(new RMsg('kcsRequestVerifier', data.type, data, (response) => {
+					// console.debug(response.type, response);
+					window.postMessage(response, '*');
+				})).execute();
+				return;
+			case 'RV_CONFIG:GET':
+				// console.debug(data.type, data);
+				(new RMsg('service', 'getConfig', { id: 'rv_enabled' }, (response) => {
+					window.postMessage({ type: 'RV_CONFIG:DATA', rv_enabled: response && !!response.value }, '*');
+				})).execute();
+				return;
+			default:
+				// all other types inlcuding `RV_CONFIG:DATA`, `CONFIG:CHANGE` and `KCS_REQ_VERIFY:RES` will be dropped here
+				// console.debug('window message event', event);
+				return;
 		}
 	});
-
-	chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-		if (message.type === 'CONFIG:CHANGE') {
-			window.postMessage(message, '*');
+	// Notify injected request blocker on config changed
+	RMsg.addListener((request, sender, response) => {
+		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
+			window.postMessage({ type: 'CONFIG:CHANGE', config: request.config }, '*');
 		}
+		return true;
 	});
 
 })();
