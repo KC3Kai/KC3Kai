@@ -83,6 +83,37 @@
     return false;
   }
 
+  /**
+   * @see https://en.kancollewiki.net/Support_Expedition
+   */
+  function canFormSupport(ships) {
+    if (countStype(ships, 2) < 2) {
+      return false;
+    }
+
+    // Shelling: 2 DD + 3 (F)BB(V) + 1 CV(B)
+    if (countStype(ships, 8, 9, 10) >= 3 && countStype(ships, 11, 18) >= 1) {
+      return true;
+    }
+
+    // Shelling: 2 DD + 4 CA(V)
+    if (countStype(ships, 5, 6) >= 4) {
+      return true;
+    }
+
+    // Airstrike: 2 DD + 4 CV(B/L)
+    if (countStype(ships, 7, 11, 18) >= 4) {
+      return true;
+    }
+
+    // ASW: 2 DD + 2 CVL + 2 CV(B)
+    if (countStype(ships, 7) >= 2 && countStype(ships, 11, 18) >= 2) {
+      return true;
+    }
+
+    return false;
+  }
+
   function verifyMapStart(api_deck_idx, api_maparea_id, api_mapinfo_no) {
     const msg = [];
     const fleetIdx = PlayerManager.combinedFleet
@@ -104,6 +135,14 @@
       }
     }
 
+    // Warn if any sortieing ship is below the morale threshold
+    if (config.rv_sortie_ship_morale_threshold > 0) {
+      const tmp = checkShips.filter((s) => s.morale < config.rv_sortie_ship_morale_threshold);
+      if (tmp.length) {
+        msg.push(KC3Meta.term('RequestVerifierSortieShipMoraleMsg').format(tmp.map((s) => s.name()).join(', ')));
+      }
+    }
+
     // Warn if any sortieing ship is not fully supplied
     if (config.rv_sortie_ship_unsupplied) {
       const tmp = checkShips.filter((s) => !s.isSupplied());
@@ -120,10 +159,17 @@
       }
     }
 
-    // Warn if an LBAS on this map needs planes supplied
-    if (config.rv_sortie_lbas_unsupplied) {
+    // Warn if an LBAS on this map needs planes supplied (sortie: action 1, defense: action 2)
+    if (config.rv_sortie_lbas_unsupplied_sortie || config.rv_sortie_lbas_unsupplied_defense) {
+      const lbasActions = [];
+      if (config.rv_sortie_lbas_unsupplied_sortie) {
+        lbasActions.push(1);
+      }
+      if (config.rv_sortie_lbas_unsupplied_defense) {
+        lbasActions.push(2);
+      }
       const tmp = PlayerManager.bases
-        .filter((base) => base.map === api_maparea_id && base.action === 1 && !base.isPlanesSupplied());
+        .filter((base) => base.map === api_maparea_id && lbasActions.includes(base.action) && !base.isPlanesSupplied());
       if (tmp.length) {
         msg.push(KC3Meta.term('RequestVerifierSortieLbasUnsuppliedMsg').format(tmp.map((base) => '#' + base.rid).join(', ')));
       }
@@ -191,6 +237,16 @@
     ) {
       msg.push(KC3Meta.term('RequestVerifierExpedFleetCombinedIdleMsg'));
     }
+
+    // Warn if sending a fleet to expedition while it could form a Support Fleet
+    if (
+      config.rv_exped_fleet_support_idle
+      && canFormSupport(ships)
+    ) {
+      msg.push(KC3Meta.term('RequestVerifierExpedFleetSupportIdleMsg'));
+    }
+
+    msg.push('TEST!');
 
     return msg;
   }
