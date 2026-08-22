@@ -8,6 +8,8 @@
 
   const msgResolvers = new Map();
 
+  const windowOrigin = window.origin || '*';
+
   let axios;
   /**
    * Use `null` as id can be `0`
@@ -55,7 +57,7 @@
         id,
         type: 'KCS_REQ_VERIFY:REQ',
         data,
-      }, '*');
+      }, windowOrigin);
     });
   }
 
@@ -151,7 +153,7 @@
         }
       };
       window.addEventListener('message', onMsg);
-      window.postMessage({ type: 'RV_CONFIG:GET' });
+      window.postMessage({ type: 'RV_CONFIG:GET' }, windowOrigin);
     })
       .then((rv_enabled) => {
         if (rv_enabled) {
