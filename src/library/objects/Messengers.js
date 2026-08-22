@@ -37,6 +37,12 @@ Sample Usage:
 		if(lastErrorMsg && !chromeWarningsToIgnore.includes(lastErrorMsg))
 			console.warn("Unexpected runtime.lastError: " + lastErrorMsg, lastError, response);
 	};
+	const defaultMessageHandler = function(request, sender, response) {
+		if(request && (request.identifier || "").startsWith("kc3_")) {
+			response(request, sender);
+		}
+		return true;
+	};
 	
 	/* RUNTIME MESSAGE
 	Send message to all components, which will only execute on "target"
@@ -60,6 +66,10 @@ Sample Usage:
 		return true; // for async callbacks
 	};
 	
+	RMsg.addListener = function(messageHandler){
+		return chrome.runtime.onMessage.addListener(messageHandler || defaultMessageHandler);
+	};
+
 	/* TAB MESSAGE
 	Send message to a specific Chrome tab
 	------------------------------------------*/

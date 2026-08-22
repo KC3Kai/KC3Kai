@@ -66,8 +66,8 @@
       return;
     }
 
-    if (data.type === 'CONFIG:CHANGE' && data.data && axios) {
-      if (data.data.rv_enabled) {
+    if (data.type === 'CONFIG:CHANGE' && data.config && axios) {
+      if (data.config.rv_enabled) {
         useKcsInterceptor();
       } else {
         ejectKcsInterceptor();
@@ -90,7 +90,7 @@
 
   //#region axios
 
-  function getKcsInterceptor(config) {
+  function kcsRequestHandler(config) {
     // console.debug(config);
     const method = config.method.toUpperCase();
     if (method === 'POST') {
@@ -121,14 +121,14 @@
   }
 
   function useKcsInterceptor() {
-    if (kcsInterceptorId === null) {
+    if (axios && kcsInterceptorId === null) {
       console.log('KCSAPI interceptor active');
-      kcsInterceptorId = axios.interceptors.request.use(getKcsInterceptor);
+      kcsInterceptorId = axios.interceptors.request.use(kcsRequestHandler);
     }
   }
 
   function ejectKcsInterceptor() {
-    if (kcsInterceptorId !== null) {
+    if (axios && kcsInterceptorId !== null) {
       console.log('KCSAPI interceptor inactive');
       axios.interceptors.request.eject(kcsInterceptorId);
       kcsInterceptorId = null;
@@ -145,16 +145,16 @@
 
     new Promise((resolve) => {
       const onMsg = (event) => {
-        if (event.data && event.data.type === 'CONFIG:DATA') {
-          resolve(event.data.data);
+        if (event.data && event.data.type === 'RV_CONFIG:DATA') {
+          resolve(event.data.rv_enabled);
           window.removeEventListener('message', onMsg);
         }
       };
       window.addEventListener('message', onMsg);
-      window.postMessage({ type: 'CONFIG:GET' });
+      window.postMessage({ type: 'RV_CONFIG:GET' });
     })
-      .then((config) => {
-        if (config && config.rv_enabled) {
+      .then((rv_enabled) => {
+        if (rv_enabled) {
           useKcsInterceptor();
         }
       });
