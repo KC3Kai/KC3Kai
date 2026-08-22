@@ -472,6 +472,23 @@ Retrieves when needed to apply on components
 			this.loadIfNecessary();
 			this.timerDisplayType = (this.timerDisplayType % 2) + 1;
 			this.save();
+		},
+
+		// On loaded into expected devtools context like info panel rather than init/recorder pages,
+		// add a storage event listener on config changed to notify content scripts
+		registerChangeNotifier :function(){
+			if (chrome.devtools && chrome.tabs && window.TMsg) {
+				window.addEventListener("storage", (event) => {
+					if (event.key !== CONFIG_KEY_NAME) {
+						return;
+					}
+					const tabId = chrome.devtools.inspectedWindow.tabId;
+					(new TMsg(tabId, "gamescreen", "kc3_config.changed", {
+						config: JSON.parse(event.newValue),
+					})).execute();
+					console.debug("Config changed notification has been sent to tab", tabId);
+				});
+			}
 		}
 
 	};
@@ -558,19 +575,5 @@ Retrieves when needed to apply on components
 			var ret = !isNaN(x) && isFinite(x) && typeof x === 'number' && !this.exists(x);
 			try { ret &= KC3ShipManager.get(x).rosterId == x; } catch (e) {} finally { return ret; }
 		});
-
-	// On loaded into devtools context, a storage listener on config changed to notify content scripts
-	if (chrome.devtools && chrome.tabs && window.TMsg) {
-		window.addEventListener("storage", (event) => {
-			if (event.key !== CONFIG_KEY_NAME) {
-				return;
-			}
-			const tabId = chrome.devtools.inspectedWindow.tabId;
-			(new TMsg(tabId, "gamescreen", "kc3_config.changed", {
-				config: JSON.parse(event.newValue),
-			})).execute();
-			console.debug("Config changed notification has been sent to tab", tabId);
-		});
-	}
 
 })();
