@@ -503,9 +503,20 @@
     }
   };
 
+  Utils.prototype.setStyleVar = function(singleElement, name, value) {
+    const jqElm = $(singleElement);
+    if (jqElm.length > 0) {
+      const styleAttr = jqElm.get(0).style;
+      styleAttr.removeProperty(name);
+      if (value != null) styleAttr.setProperty(name, value);
+    }
+  };
+
   Utils.prototype.updateEnemyHpBarStyles = function (hpBarSelector, hpPercent, maxWidth) {
-    if (maxWidth === "auto") {
-      $(hpBarSelector).css("width", $(hpBarSelector).parent().width() * hpPercent);
+    if (maxWidth === "var") {
+      this.setStyleVar(hpBarSelector, "--hpPercent", isNaN(hpPercent) ? 1 : hpPercent <= 0 ? 0 : hpPercent);
+    } else if (maxWidth === "auto") {
+      $(hpBarSelector).css("width", isNaN(hpPercent) ? "100%" : hpPercent <= 0 ? "0%" : (hpPercent * 100) + "%");
     } else if (maxWidth > 0) {
       $(hpBarSelector).css("width", maxWidth * hpPercent);
     } else {
