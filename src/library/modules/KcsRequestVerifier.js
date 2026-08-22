@@ -252,15 +252,19 @@
   function verifyShipDestroy(api_ship_id) {
     const msg = [];
 
-    // Warn if destroying the last copy of a ship class
+    // Warn if destroying the last copy of a ship class (api_ship_id can be "id" or "id1,id2,...")
     if (config.rv_ship_destroy) {
-      const ship = KC3ShipManager.get(api_ship_id);
-      const origin = RemodelDb.originOf(ship.masterId) || ship.masterId;
-      const copies = KC3ShipManager
-        .find((s) => (RemodelDb.originOf(s.masterId) || s.masterId) === origin)
-        .length;
-      if (copies < 2) {
-        msg.push(KC3Meta.term('RequestVerifierShipDestroyMsg').format(ship.name()));
+      const lastCopies = String(api_ship_id).split(',')
+        .map((id) => KC3ShipManager.get(Number(id)))
+        .filter((ship) => {
+          const origin = RemodelDb.originOf(ship.masterId) || ship.masterId;
+          const copies = KC3ShipManager
+            .find((s) => (RemodelDb.originOf(s.masterId) || s.masterId) === origin)
+            .length;
+          return copies < 2;
+        });
+      if (lastCopies.length) {
+        msg.push(KC3Meta.term('RequestVerifierShipDestroyMsg').format(lastCopies.map((s) => s.name()).join(', ')));
       }
     }
 
@@ -287,7 +291,7 @@
           Number(data.api_mission)
         );
       case 'api_req_kousyou/destroyship':
-        return verifyShipDestroy(Number(data.api_ship_id));
+        return verifyShipDestroy(data.api_ship_id);
     }
 
     return [];
