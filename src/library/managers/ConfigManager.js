@@ -560,14 +560,16 @@ Retrieves when needed to apply on components
 		});
 
 	// On loaded into devtools context, a storage listener on config changed to notify content scripts
-	if (chrome.devtools && chrome.tabs) {
+	if (chrome.devtools && chrome.tabs && window.TMsg) {
 		window.addEventListener("storage", (event) => {
 			if (event.key !== CONFIG_KEY_NAME) {
 				return;
 			}
-			(new TMsg(chrome.devtools.inspectedWindow.tabId, "gamescreen", "kc3_config.changed", {
+			const tabId = chrome.devtools.inspectedWindow.tabId;
+			(new TMsg(tabId, "gamescreen", "kc3_config.changed", {
 				config: JSON.parse(event.newValue),
 			})).execute();
+			console.debug("Config changed notification has been sent to tab", tabId);
 		});
 	}
 
