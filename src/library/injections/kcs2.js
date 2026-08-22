@@ -10,6 +10,8 @@
 (function () {
 	"use strict";
 
+	const windowOrigin = window.origin || "*";
+
 	function loadScript(src) {
 		const script = document.createElement("script");
 		script.setAttribute("type", "text/javascript");
@@ -97,13 +99,16 @@
 				// console.debug(data.type, data);
 				(new RMsg('kcsRequestVerifier', data.type, data, (response) => {
 					// console.debug(response.type, response);
-					window.postMessage(response, '*');
+					window.postMessage(response, windowOrigin);
 				})).execute();
 				return;
 			case 'RV_CONFIG:GET':
 				// console.debug(data.type, data);
 				(new RMsg('service', 'getConfig', { id: 'rv_enabled' }, (response) => {
-					window.postMessage({ type: 'RV_CONFIG:DATA', rv_enabled: response && !!response.value }, '*');
+					window.postMessage({
+						type: 'RV_CONFIG:DATA',
+						rv_enabled: response && !!response.value
+					}, windowOrigin);
 				})).execute();
 				return;
 			default:
@@ -115,7 +120,10 @@
 	// Notify injected request blocker on config changed
 	RMsg.addListener((request, sender, response) => {
 		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
-			window.postMessage({ type: 'CONFIG:CHANGE', config: request.config }, '*');
+			window.postMessage({
+				type: 'CONFIG:CHANGE',
+				config: request.config
+			}, windowOrigin);
 		}
 		return true;
 	});
