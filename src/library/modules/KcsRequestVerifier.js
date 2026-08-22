@@ -246,7 +246,23 @@
       msg.push(KC3Meta.term('RequestVerifierExpedFleetSupportIdleMsg'));
     }
 
-    msg.push('TEST!');
+    return msg;
+  }
+
+  function verifyShipDestroy(api_ship_id) {
+    const msg = [];
+
+    // Warn if destroying the last copy of a ship class
+    if (config.rv_ship_destroy) {
+      const ship = KC3ShipManager.get(api_ship_id);
+      const origin = RemodelDb.originOf(ship.masterId) || ship.masterId;
+      const copies = KC3ShipManager
+        .find((s) => (RemodelDb.originOf(s.masterId) || s.masterId) === origin)
+        .length;
+      if (copies < 2) {
+        msg.push(KC3Meta.term('RequestVerifierShipDestroyMsg').format(ship.name()));
+      }
+    }
 
     return msg;
   }
@@ -270,6 +286,8 @@
           Number(data.api_mission_id),
           Number(data.api_mission)
         );
+      case 'api_req_kousyou/destroyship':
+        return verifyShipDestroy(Number(data.api_ship_id));
     }
 
     return [];
@@ -316,6 +334,7 @@
   window.KcsRequestVerifier = {
     verifyMapStart,
     verifyMissionStart,
+    verifyShipDestroy,
   };
 
 })();

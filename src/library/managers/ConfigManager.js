@@ -141,6 +141,7 @@ Retrieves when needed to apply on components
 				rv_exped_ship_unsupplied          : true,
 				rv_exped_fleet_combined_idle      : false,
 				rv_exped_fleet_support_idle       : false,
+				rv_ship_destroy                   : true,
 
 				alert_taiha          : false,
 				alert_taiha_blur     : false,

@@ -1011,6 +1011,14 @@
 				"options": {
 					"tooltip": "SettingsRequestVerifierExpedFleetSupportIdleTip"
 				}
+			},
+			{
+				"id": "rv_ship_destroy",
+				"name": "SettingsRequestVerifierShipDestroy",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierShipDestroyTip"
+				}
 			}
 		]
 	},

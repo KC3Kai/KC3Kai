@@ -4,6 +4,7 @@
     // 'api_port/port',
     'api_req_map/start',
     'api_req_mission/start',
+    'api_req_kousyou/destroyship',
   ]);
 
   const msgResolvers = new Map();
