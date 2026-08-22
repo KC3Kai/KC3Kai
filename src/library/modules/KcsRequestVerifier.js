@@ -249,7 +249,6 @@
           message: msg,
           details,
         },
-        _request: message,
       };
       sendResponse(result);
     }
