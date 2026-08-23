@@ -9,6 +9,7 @@
     'api_req_map/start',
     'api_req_mission/start',
     'api_req_kousyou/destroyship',
+    'api_req_kaisou/powerup',
   ]);
 
   const interceptors = {

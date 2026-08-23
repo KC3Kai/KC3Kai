@@ -241,7 +241,7 @@
     // Warn if sending a fleet to expedition while it could form a Support Fleet
     if (
       config.rv_exped_fleet_support_idle
-      && ![301, 302].includes(api_mission_id)
+      && ![33, 34, 301, 302].includes(api_mission_id)
       && canFormSupport(ships)
     ) {
       msg.push(KC3Meta.term('RequestVerifierExpedFleetSupportIdleMsg'));
@@ -256,7 +256,7 @@
     // Warn if destroying the last copy of a ship class (api_ship_id can be "id" or "id1,id2,...")
     if (config.rv_ship_destroy) {
       const lastCopies = String(api_ship_id).split(',')
-        .map((id) => KC3ShipManager.get(Number(id)))
+        .map((id) => KC3ShipManager.get(id))
         .filter((ship) => {
           const origin = RemodelDb.originOf(ship.masterId) || ship.masterId;
           const copies = KC3ShipManager
@@ -293,6 +293,8 @@
         );
       case 'api_req_kousyou/destroyship':
         return verifyShipDestroy(data.api_ship_id);
+      case 'api_req_kaisou/powerup':
+        return verifyShipDestroy(data.api_id_items);
     }
 
     return [];
