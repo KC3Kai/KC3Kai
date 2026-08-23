@@ -308,6 +308,7 @@
       // Do not log privacy
       if (data.api_token) {
         delete data.api_token;
+        delete data.api_verno;
       }
       const details = verify(api, data);
       let msg = '';

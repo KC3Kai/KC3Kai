@@ -13,7 +13,7 @@
 	const windowOrigin = window.origin || "*";
 
 	/**
-	 * Config keys relayed to the injected document script
+	 * Config keys relayed to the injected document scripts
 	 */
 	const relayedConfigs = [
 		'rv_enabled',
@@ -96,7 +96,7 @@
 		});
 	})).execute();
 
-	// Adaptor between window messages and runtime messages for request verifier and blocker
+	// Adaptor between window messages and runtime messages for injected document scripts
 	window.addEventListener('message', (event) => {
 		const data = event.data;
 		if (!data || !data.type) {
@@ -132,10 +132,10 @@
 		}
 	});
 
-	// Notify injected request blocker on config changed
+	// Notify injected document scripts on config changed
 	RMsg.addListener((request, sender, response) => {
 		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
-			// only expose properties about cared by injected document scripts
+			// only expose properties about cared by injected document scripts for security
 			const config = request.config || {};
 			const newConfig = relayedConfigs.reduce((obj, key) => {
 				obj[key] = config[key];
