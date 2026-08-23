@@ -241,6 +241,7 @@
     // Warn if sending a fleet to expedition while it could form a Support Fleet
     if (
       config.rv_exped_fleet_support_idle
+      && ![301, 302].includes(api_mission_id)
       && canFormSupport(ships)
     ) {
       msg.push(KC3Meta.term('RequestVerifierExpedFleetSupportIdleMsg'));
