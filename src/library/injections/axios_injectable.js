@@ -1,21 +1,31 @@
 (() => {
 
-  const filterApis = new Set([
+  const windowOrigin = window.origin || '*';
+
+  const msgResolvers = new Map();
+
+  const kcsAllowApis = new Set([
     // 'api_port/port',
     'api_req_map/start',
     'api_req_mission/start',
     'api_req_kousyou/destroyship',
   ]);
 
-  const msgResolvers = new Map();
-
-  const windowOrigin = window.origin || '*';
+  const interceptors = {
+    kcs: {
+      config: 'rv_enabled',
+      type: 'request',
+      resolveHandler: kcsResolveHandler,
+    },
+    // retry: {
+    //   config: 'rr_enabled',
+    //   type: 'response',
+    //   resolveHandler: (response) => response,
+    //   rejectHandler: retryRejectHandler,
+    // },
+  };
 
   let axios;
-  /**
-   * Initialized with nullish, as id can be `0`
-   */
-  let kcsInterceptorId = null;
 
   //#region helper
 
@@ -70,11 +80,7 @@
     }
 
     if (data.type === 'CONFIG:CHANGE' && data.config) {
-      if (data.config.rv_enabled) {
-        useKcsInterceptor();
-      } else {
-        ejectKcsInterceptor();
-      }
+      toggleFromPayload(data.config);
       return;
     }
 
@@ -93,13 +99,15 @@
 
   //#region axios
 
-  function kcsRequestHandler(config) {
+  //#region handler
+
+  function kcsResolveHandler(config) {
     // console.debug(config);
     const method = config.method.toUpperCase();
     if (method === 'POST') {
       const api = parseApi(config.url);
       // console.debug(api);
-      if (filterApis.has(api)) {
+      if (kcsAllowApis.has(api)) {
         const body = parseBody(config.data);
         // console.debug(body);
         return postMsg({ method, url: api, body })
@@ -123,20 +131,47 @@
     return config;
   }
 
-  function useKcsInterceptor() {
-    if (axios && kcsInterceptorId == null) {
-      console.log('KCSAPI interceptor active');
-      kcsInterceptorId = axios.interceptors.request.use(kcsRequestHandler);
+  //#endregion
+
+  //#region common
+
+  function useInterceptor(name) {
+    const entry = interceptors[name];
+    if (axios && entry && entry.resolveHandler && entry._activeId === undefined) {
+      const args = entry.rejectHandler === undefined
+        ? [entry.resolveHandler]
+        : [entry.resolveHandler, entry.rejectHandler];
+      entry._activeId = axios.interceptors[entry.type].use(...args);
+      console.log('AXIOS interceptor use:', name);
     }
   }
 
-  function ejectKcsInterceptor() {
-    if (axios && kcsInterceptorId != null) {
-      console.log('KCSAPI interceptor inactive');
-      axios.interceptors.request.eject(kcsInterceptorId);
-      kcsInterceptorId = null;
+  function ejectInterceptor(name) {
+    const entry = interceptors[name];
+    if (axios && entry && entry._activeId !== undefined) {
+      axios.interceptors[entry.type].eject(entry._activeId);
+      entry._activeId = undefined;
+      console.log('AXIOS interceptor eject:', name);
     }
   }
+
+  function toggleFromPayload(payload) {
+    if (!payload || typeof payload !== 'object') {
+      return;
+    }
+    Object.keys(interceptors).forEach((name) => {
+      const entry = interceptors[name];
+      if (entry.config in payload) {
+        if (payload[entry.config]) {
+          useInterceptor(name);
+        } else {
+          ejectInterceptor(name);
+        }
+      }
+    });
+  }
+
+  //#endregion
 
   function findAxios() {
     axios = window.axios;
@@ -149,11 +184,10 @@
     const handleMsgOnce = (event) => {
       if (event.data && event.data.type === 'RV_CONFIG:DATA') {
         window.removeEventListener('message', handleMsgOnce);
-        if (event.data.rv_enabled) {
-          useKcsInterceptor();
-        }
+        toggleFromPayload(event.data.config);
       }
     };
+
     window.addEventListener('message', handleMsgOnce);
     window.postMessage({ type: 'RV_CONFIG:GET' }, windowOrigin);
   }
