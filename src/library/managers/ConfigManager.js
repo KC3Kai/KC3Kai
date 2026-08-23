@@ -143,8 +143,6 @@ Retrieves when needed to apply on components
 				rv_exped_fleet_support_idle       : false,
 				rv_ship_destroy                   : true,
 
-				rr_enabled                        : false,
-
 				alert_taiha          : false,
 				alert_taiha_blur     : false,
 				alert_taiha_blood    : false,

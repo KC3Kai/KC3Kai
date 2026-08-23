@@ -4,7 +4,7 @@
 
   const msgResolvers = new Map();
 
-  const kcsAllowApis = new Set([
+  const kcsApisToVerify = new Set([
     // 'api_port/port',
     'api_req_map/start',
     'api_req_mission/start',
@@ -12,13 +12,13 @@
   ]);
 
   const interceptors = {
-    kcs: {
+    kcsverify: {
       config: 'rv_enabled',
       type: 'request',
       resolveHandler: kcsResolveHandler,
     },
-    // retry: {
-    //   config: 'rr_enabled',
+    // apiretry: {
+    //   config: 'apiretry_enhancer',
     //   type: 'response',
     //   resolveHandler: (response) => response,
     //   rejectHandler: retryRejectHandler,
@@ -79,8 +79,8 @@
       return;
     }
 
-    if (data.type === 'CONFIG:CHANGE' && data.config) {
-      toggleFromPayload(data.config);
+    if (data.type === 'AXIOS_INT_CONFIG:CHANGE' && data.config) {
+      toggleInterceptorBy(data.config);
       return;
     }
 
@@ -107,7 +107,7 @@
     if (method === 'POST') {
       const api = parseApi(config.url);
       // console.debug(api);
-      if (kcsAllowApis.has(api)) {
+      if (kcsApisToVerify.has(api)) {
         const body = parseBody(config.data);
         // console.debug(body);
         return postMsg({ method, url: api, body })
@@ -137,32 +137,32 @@
 
   function useInterceptor(name) {
     const entry = interceptors[name];
-    if (axios && entry && entry.resolveHandler && entry._activeId === undefined) {
+    if (axios && entry && entry.resolveHandler && entry.activeId === undefined) {
       const args = entry.rejectHandler === undefined
         ? [entry.resolveHandler]
         : [entry.resolveHandler, entry.rejectHandler];
-      entry._activeId = axios.interceptors[entry.type].use(...args);
-      console.log('AXIOS interceptor use:', name);
+      entry.activeId = axios.interceptors[entry.type].use(...args);
+      console.log('Axios interceptor use:', name);
     }
   }
 
   function ejectInterceptor(name) {
     const entry = interceptors[name];
-    if (axios && entry && entry._activeId !== undefined) {
-      axios.interceptors[entry.type].eject(entry._activeId);
-      entry._activeId = undefined;
-      console.log('AXIOS interceptor eject:', name);
+    if (axios && entry && entry.activeId !== undefined) {
+      axios.interceptors[entry.type].eject(entry.activeId);
+      entry.activeId = undefined;
+      console.log('Axios interceptor eject:', name);
     }
   }
 
-  function toggleFromPayload(payload) {
-    if (!payload || typeof payload !== 'object') {
+  function toggleInterceptorBy(config) {
+    if (config == null || typeof config !== 'object') {
       return;
     }
     Object.keys(interceptors).forEach((name) => {
       const entry = interceptors[name];
-      if (entry.config in payload) {
-        if (payload[entry.config]) {
+      if (entry.config in config) {
+        if (config[entry.config]) {
           useInterceptor(name);
         } else {
           ejectInterceptor(name);
@@ -182,14 +182,14 @@
     }
 
     const handleMsgOnce = (event) => {
-      if (event.data && event.data.type === 'RV_CONFIG:DATA') {
+      if (event.data && event.data.type === 'AXIOS_INT_CONFIG:DATA') {
         window.removeEventListener('message', handleMsgOnce);
-        toggleFromPayload(event.data.config);
+        toggleInterceptorBy(event.data.config);
       }
     };
 
     window.addEventListener('message', handleMsgOnce);
-    window.postMessage({ type: 'RV_CONFIG:GET' }, windowOrigin);
+    window.postMessage({ type: 'AXIOS_INT_CONFIG:GET' }, windowOrigin);
   }
 
   findAxios();
