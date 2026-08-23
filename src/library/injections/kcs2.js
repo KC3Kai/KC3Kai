@@ -17,7 +17,7 @@
 	 */
 	const relayedConfigs = [
 		'rv_enabled',
-		'rr_enabled',
+		'apiretry_enhancer',
 	];
 
 	function loadScript(src) {
@@ -110,23 +110,23 @@
 					window.postMessage(response, windowOrigin);
 				})).execute();
 				return;
-			case 'RV_CONFIG:GET':
+			case 'AXIOS_INT_CONFIG:GET':
 				// console.debug(data.type, data);
 				(new RMsg('service', 'getConfig', { id: relayedConfigs }, (response) => {
-					const newConfig = relayedConfigs.reduce((acc, key, i) => {
-						if (response && response.value) {
-							acc[key] = response.value[i];
+					const newConfig = relayedConfigs.reduce((obj, key, i) => {
+						if (response && Array.isArray(response.value)) {
+							obj[key] = response.value[i];
 						}
-						return acc;
+						return obj;
 					}, {});
 					window.postMessage({
-						type: 'RV_CONFIG:DATA',
+						type: 'AXIOS_INT_CONFIG:DATA',
 						config: newConfig,
 					}, windowOrigin);
 				})).execute();
 				return;
 			default:
-				// all other types: `RV_CONFIG:DATA`, `CONFIG:CHANGE` and `KCS_REQ_VERIFY:RES` will be dropped here
+				// all other data types not handled will be dropped here
 				// console.debug('window message event', event);
 				return;
 		}
@@ -137,12 +137,12 @@
 		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
 			// only expose properties about cared by injected document scripts
 			const config = request.config || {};
-			const newConfig = relayedConfigs.reduce((acc, key) => {
-				acc[key] = config[key];
-				return acc;
+			const newConfig = relayedConfigs.reduce((obj, key) => {
+				obj[key] = config[key];
+				return obj;
 			}, {});
 			window.postMessage({
-				type: 'CONFIG:CHANGE',
+				type: 'AXIOS_INT_CONFIG:CHANGE',
 				config: newConfig,
 			}, windowOrigin);
 			// no response needed by config manager
