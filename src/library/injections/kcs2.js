@@ -12,6 +12,14 @@
 
 	const windowOrigin = window.origin || "*";
 
+	/**
+	 * Config keys relayed to the injected document script
+	 */
+	const relayedConfigs = [
+		'rv_enabled',
+		'rr_enabled',
+	];
+
 	function loadScript(src) {
 		const script = document.createElement("script");
 		script.setAttribute("type", "text/javascript");
@@ -104,10 +112,16 @@
 				return;
 			case 'RV_CONFIG:GET':
 				// console.debug(data.type, data);
-				(new RMsg('service', 'getConfig', { id: 'rv_enabled' }, (response) => {
+				(new RMsg('service', 'getConfig', { id: relayedConfigs }, (response) => {
+					const newConfig = relayedConfigs.reduce((acc, key, i) => {
+						if (response && response.value) {
+							acc[key] = response.value[i];
+						}
+						return acc;
+					}, {});
 					window.postMessage({
 						type: 'RV_CONFIG:DATA',
-						rv_enabled: response && !!response.value
+						config: newConfig,
 					}, windowOrigin);
 				})).execute();
 				return;
@@ -117,14 +131,19 @@
 				return;
 		}
 	});
+
 	// Notify injected request blocker on config changed
 	RMsg.addListener((request, sender, response) => {
 		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
 			// only expose properties about cared by injected document scripts
-			const { rv_enabled } = request.config || {};
+			const config = request.config || {};
+			const newConfig = relayedConfigs.reduce((acc, key) => {
+				acc[key] = config[key];
+				return acc;
+			}, {});
 			window.postMessage({
 				type: 'CONFIG:CHANGE',
-				config: { rv_enabled }
+				config: newConfig,
 			}, windowOrigin);
 			// no response needed by config manager
 		}
