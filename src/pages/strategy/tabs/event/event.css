@@ -1097,10 +1097,14 @@
 	font-size: 1.2em;
 }
 .tab_event .sortie_list .sortie_end_hp .boss.subhp {
+	min-width: 80px;
+	text-align: left;
+	padding-left: 8px;
 }
 .tab_event .sortie_list .sortie_end_icon {
 	flex: 1;
 	display: inline-block;
+	margin-left: 8px;
 }
 .tab_event .sortie_list .sortie_end_icon img {
 	width:32px;
