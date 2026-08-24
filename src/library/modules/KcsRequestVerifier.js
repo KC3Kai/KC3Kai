@@ -1,9 +1,9 @@
 /**
  * KC3改 KCS game API request verifier, and warning messages generator for http request blocker, running under devtools panel context, accepting verification requests from runtime messages.
- * Messaging flowchart: axios_injectable.js (window message) -> kcs.js (runtime msg request) -> this verifier (runtime msg response) -> kcs.js (window message) -> axios_injectable.js
+ * Messaging flowchart: axios_injectable.js (window message) -> kcs2.js (runtime msg request) -> this verifier (runtime msg response) -> kcs2.js (window message) -> axios_injectable.js
  *
  * @see injections/axios_injectable.js - game window document script for intercepting game http post requests, and warning and blocking specific ones checked by this verifier.
- * @see injections/kcs.js - extension content script for injecting script above into game window document, and adapting between its window messages and runtime messages for this verifier.
+ * @see injections/kcs2.js - extension content script for injecting script above into game window document, adapting and relaying messages between injected script above and this verifier.
  */
 (() => {
 
@@ -37,7 +37,7 @@
 
   /**
    * Count ships whose type id (api_stype) is one of the given stypes.
-   * Ship type ids map by index in [stype.json](../../data/lang/data/en/stype.json)
+   * Ship type ids could be referenced by index in [stype.json](../../data/lang/data/en/stype.json)
    */
   function countStype(ships, ...stypes) {
     return ships.filter((s) => stypes.includes(s.master().api_stype)).length;
@@ -45,7 +45,6 @@
 
   /**
    * Check if main + escort fleet composition can form a combined fleet.
-   * Ship type ids (api_stype) map by index in [stype.json](../../data/lang/data/en/stype.json)
    * 
    * @see https://en.kancollewiki.net/Combined_Fleet
    */
@@ -85,6 +84,8 @@
 
   /**
    * @see https://en.kancollewiki.net/Support_Expedition
+   * @see KC3Fleet.prototype.estimateSupportType - instead of determining type of any support fleet,
+   *      this method guesses composition may be a frequently used support fleet.
    */
   function canFormSupport(ships) {
     if (countStype(ships, 2) < 2) {

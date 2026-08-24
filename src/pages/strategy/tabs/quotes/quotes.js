@@ -241,7 +241,7 @@
 			}
 
 			// Scroll list top to selected ship
-			setTimeout(function(){self.scrollShipListTop();}, 500);
+			setTimeout(function(){self.scrollShipListTop();}, 700);
 		},
 		update: function(pageParams) {
 			if(!!pageParams[1]){
