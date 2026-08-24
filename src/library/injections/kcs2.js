@@ -77,8 +77,10 @@
 		loadScript(chrome.runtime.getURL("library/injections/axios_injectable.js"));
 
 		// Register original canvas screenshot message handler
-		chrome.runtime.onMessage.addListener(function (request, sender, response) {
-			if (request.action != "getGameCanvasData") return true;
+		RMsg.addListener(function (request, sender, response) {
+			if (request.identifier !== "kc3_gamescreen" || request.action != "getGameCanvasData") {
+				return true;
+			}
 			const gameCanvas = document.querySelector("canvas");
 			if (!gameCanvas) {
 				response({});
@@ -94,6 +96,7 @@
 			}
 			return true;
 		});
+
 	})).execute();
 
 	// Adaptor between window messages and runtime messages for injected document scripts
