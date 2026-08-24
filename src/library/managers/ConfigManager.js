@@ -125,6 +125,24 @@ Retrieves when needed to apply on components
 				alert_rsc_cap        : 95,
 				alert_pre_sortie     : 0,
 
+				rv_enabled                        : true,
+				rv_ship_unlock_ignore             : false,
+				rv_sortie_ship_hp_threshold       : 1,
+				rv_sortie_ship_morale_threshold   : 0,
+				rv_sortie_ship_unsupplied         : false,
+				rv_sortie_ship_untag              : true,
+				rv_sortie_lbas_unsupplied_sortie  : false,
+				rv_sortie_lbas_unsupplied_defense : false,
+				rv_sortie_fleet_strike_force_idle : false,
+				rv_sortie_fleet_combined_idle     : false,
+				rv_sortie_fleet_2_blocked         : false,
+				rv_sortie_fleet_3_blocked         : false,
+				rv_sortie_fleet_4_blocked         : false,
+				rv_exped_ship_unsupplied          : true,
+				rv_exped_fleet_combined_idle      : false,
+				rv_exped_fleet_support_idle       : false,
+				rv_ship_destroy                   : true,
+
 				alert_taiha          : false,
 				alert_taiha_blur     : false,
 				alert_taiha_blood    : false,
@@ -458,6 +476,23 @@ Retrieves when needed to apply on components
 			this.loadIfNecessary();
 			this.timerDisplayType = (this.timerDisplayType % 2) + 1;
 			this.save();
+		},
+
+		// On loaded into expected devtools context like info panel rather than init/recorder pages,
+		// add a storage event listener on config changed to notify content scripts
+		registerChangeNotifier :function(){
+			if (chrome.devtools && chrome.tabs && window.TMsg) {
+				window.addEventListener("storage", (event) => {
+					if (event.key !== CONFIG_KEY_NAME) {
+						return;
+					}
+					const tabId = chrome.devtools.inspectedWindow.tabId;
+					(new TMsg(tabId, "gamescreen", "kc3_config.changed", {
+						config: JSON.parse(event.newValue),
+					})).execute();
+					console.debug("Config changed notification has been sent to tab", tabId);
+				});
+			}
 		}
 
 	};
@@ -546,4 +581,3 @@ Retrieves when needed to apply on components
 		});
 
 })();
-

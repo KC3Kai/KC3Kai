@@ -63,11 +63,12 @@
 		toggleSetting("map_letters", "#nodeletters");
 		//toggleSetting("api_translation", "#questtl");
 		//toggleSetting("api_tracking", "#questtrack");
-		toggleSetting("info_quest_activity", "#questtab");
+		//toggleSetting("info_quest_activity", "#questtab");
 		toggleSetting("api_askExit", "#exitconfirm");
 		toggleSetting("mute_game_tab", "#mutegametab");
 		toggleSetting("alert_taiha", "#taihaalert");
 		toggleSetting("focus_game_tab", "#focusgame");
+		toggleSetting("rv_enabled", "#requestverifier");
 		toggleSetting("TsunDBSubmission_enabled", "#tsundbsubmission");
 		toggleSetting("PoiDBSubmission_enabled", "#poidbsubmission");
 		toggleSetting("KCRDBSubmission_enabled", "#kcrdbsubmission");

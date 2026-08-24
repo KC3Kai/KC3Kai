@@ -10,8 +10,25 @@
 (function () {
 	"use strict";
 
+	const windowOrigin = window.origin || "*";
+
+	/**
+	 * Config keys relayed to the injected document scripts
+	 */
+	const relayedConfigs = [
+		'rv_enabled',
+		'apiretry_enhancer',
+	];
+
+	function loadScript(src) {
+		const script = document.createElement("script");
+		script.setAttribute("type", "text/javascript");
+		script.setAttribute("src", src);
+		document.body.appendChild(script);
+	}
+
 	var intervalChecker;
-	function checkAgain(){
+	function checkAgain() {
 		console.log("Checking game canvas...");
 		const gameCanvas = document.querySelector("canvas");
 		if (gameCanvas) {
@@ -41,8 +58,8 @@
 				if (!Promise.try) editArea.css("zoom", scale);
 				$("body").css("overflow", "hidden");
 				// Prevent Tab key scrolling, and F7 mode
-				$(document).on("keydown", function(e){
-					if(e.which === 9 || e.which === 118) {
+				$(document).on("keydown", function (e) {
+					if (e.which === 9 || e.which === 118) {
 						$(document).scrollTop(0);
 						e.stopPropagation();
 						e.preventDefault();
@@ -50,16 +67,17 @@
 				});
 			}
 		}
+
 		// Experimental function: improve 3rd-party components used by game
 		if (Array.isArray(response.value) && !!response.value[2]) {
-			const body = $("body")[0];
-			const script = document.createElement("script");
-			script.setAttribute("type", "text/javascript");
-			script.setAttribute("src", chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
-			body.appendChild(script);
+			loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
 		}
+
+		// For blocking unexpected game request by verifications on fleets and states against configured conditions
+		loadScript(chrome.runtime.getURL("library/injections/axios_injectable.js"));
+
 		// Register original canvas screenshot message handler
-		chrome.runtime.onMessage.addListener(function(request, sender, response) {
+		chrome.runtime.onMessage.addListener(function (request, sender, response) {
 			if (request.action != "getGameCanvasData") return true;
 			const gameCanvas = document.querySelector("canvas");
 			if (!gameCanvas) {
@@ -77,5 +95,59 @@
 			return true;
 		});
 	})).execute();
+
+	// Adaptor between window messages and runtime messages for injected document scripts
+	window.addEventListener('message', (event) => {
+		const data = event.data;
+		if (!data || !data.type) {
+			return;
+		}
+		switch (data.type) {
+			case 'KCS_REQ_VERIFY:REQ':
+				// console.debug(data.type, data);
+				(new RMsg('kcsRequestVerifier', data.type, data, (response) => {
+					// console.debug(response.type, response);
+					window.postMessage(response, windowOrigin);
+				})).execute();
+				return;
+			case 'AXIOS_INT_CONFIG:GET':
+				// console.debug(data.type, data);
+				(new RMsg('service', 'getConfig', { id: relayedConfigs }, (response) => {
+					const newConfig = relayedConfigs.reduce((obj, key, i) => {
+						if (response && Array.isArray(response.value)) {
+							obj[key] = response.value[i];
+						}
+						return obj;
+					}, {});
+					window.postMessage({
+						type: 'AXIOS_INT_CONFIG:DATA',
+						config: newConfig,
+					}, windowOrigin);
+				})).execute();
+				return;
+			default:
+				// all other data types not handled will be dropped here
+				// console.debug('window message event', event);
+				return;
+		}
+	});
+
+	// Notify injected document scripts on config changed
+	RMsg.addListener((request, sender, response) => {
+		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
+			// only expose properties about cared by injected document scripts for security
+			const config = request.config || {};
+			const newConfig = relayedConfigs.reduce((obj, key) => {
+				obj[key] = config[key];
+				return obj;
+			}, {});
+			window.postMessage({
+				type: 'AXIOS_INT_CONFIG:CHANGE',
+				config: newConfig,
+			}, windowOrigin);
+			// no response needed by config manager
+		}
+		return true;
+	});
 
 })();
