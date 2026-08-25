@@ -137,7 +137,7 @@
 
 	// Notify injected document scripts on config changed
 	RMsg.addListener((request, sender, response) => {
-		if (request.identifier === 'kc3_gamescreen' && request.action === 'kc3_config.changed') {
+		if (request.identifier === 'kc3_gamescreen' && request.action === 'configManagerChanged') {
 			// only expose properties about cared by injected document scripts for security
 			const config = request.config || {};
 			const newConfig = relayedConfigs.reduce((obj, key) => {

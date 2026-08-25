@@ -11,7 +11,7 @@
 
   const config = ConfigManager;
   // In order to notify content script, config reloading itself already handled by theme script
-  config.registerChangeNotifier();
+  config.registerChangesNotifier();
 
   function getActiveShips(indexes) {
     const ships = (Array.isArray(indexes) ? indexes : [indexes])
@@ -24,7 +24,7 @@
   function filterCheckShips(ships) {
     // Ignore unlocked ships for warnings
     return config.rv_ship_unlock_ignore
-      ? ships.filter((s) => s.lock === 1)
+      ? ships.filter((s) => !!s.lock)
       : ships;
   }
 
