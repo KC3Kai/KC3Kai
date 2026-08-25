@@ -480,17 +480,17 @@ Retrieves when needed to apply on components
 
 		// On loaded into expected devtools context like info panel rather than init/recorder pages,
 		// add a storage event listener on config changed to notify content scripts
-		registerChangeNotifier :function(){
+		registerChangesNotifier :function(){
 			if (chrome.devtools && chrome.tabs && window.TMsg) {
 				window.addEventListener("storage", (event) => {
 					if (event.key !== CONFIG_KEY_NAME) {
 						return;
 					}
 					const tabId = chrome.devtools.inspectedWindow.tabId;
-					(new TMsg(tabId, "gamescreen", "kc3_config.changed", {
+					(new TMsg(tabId, "gamescreen", "configManagerChanged", {
 						config: JSON.parse(event.newValue),
 					})).execute();
-					console.debug("Config changed notification has been sent to tab", tabId);
+					console.debug("Config changes notification has been sent to tab", tabId);
 				});
 			}
 		}
