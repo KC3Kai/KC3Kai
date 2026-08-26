@@ -4707,9 +4707,21 @@ KC3改 Ship Object
 				1025, 1030, // Wasp
 				529, 536, 889, // Taiyou/Shinyou/Unyou Kai Ni
 				646, // Kaga K2Go
-				//1055, 1060, 1061, // Bearn (forgotten again)
+				1055, 1060, 1061, // Bearn (fixed since 2026-08-26)
 			].includes(this.masterId);
-			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
+			// Bearn amelioration as carrier, can equip guns, torpedoes either
+			if(this.masterId === 1061) {
+				// in fact, top gear (the same below) should refer to `api_si_list[0]` instead of all equipment,
+				// api_si_list should be single element of used weapon if no special attacks above triggered
+				const topAttack = results[0],
+					topGear = this.equipment().find(g => g.exists() && [1, 2, 3].includes(g.master().api_type[1]));
+				if((topAttack && topAttack[0] === "Cutin" && topAttack[1] === 3)
+					|| (topGear && topGear.api_type[1] === 3)) {
+					results.push(["Torpedo", 3]);
+				} else {
+					pushRocketAttackIfNecessary(["SingleAttack", 0]);
+				}
+			} else if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs:
 			// she was doing air attack against surface ships, but no plane appears if no aircraft equipped.
