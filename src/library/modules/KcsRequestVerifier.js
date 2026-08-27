@@ -200,19 +200,24 @@
       msg.push(KC3Meta.term('RequestVerifierSortieFleetCombinedIdleMsg'));
     }
 
+    // Block sorties with fleet 1 if it has only 1 or 2 idle ship(s)
+    if (config.rv_sortie_fleet_1_blocked && api_deck_idx === 0 && ships.length < 3) {
+      msg.push(KC3Meta.term('RequestVerifierSortieFleetBlockedMsg').format(1));
+    }
+
     // Block sorties with fleet 2
     if (config.rv_sortie_fleet_2_blocked && api_deck_idx === 1) {
-      msg.push(KC3Meta.term('RequestVerifierSortieFleet2BlockedMsg'));
+      msg.push(KC3Meta.term('RequestVerifierSortieFleetBlockedMsg').format(2));
     }
 
     // Block sorties with fleet 3 unless it is a full 7-ship Striking Force
     if (config.rv_sortie_fleet_3_blocked && api_deck_idx === 2 && ships.length < 7) {
-      msg.push(KC3Meta.term('RequestVerifierSortieFleet3BlockedMsg'));
+      msg.push(KC3Meta.term('RequestVerifierSortieFleetBlockedMsg').format(3));
     }
 
     // Block sorties with fleet 4
     if (config.rv_sortie_fleet_4_blocked && api_deck_idx === 3) {
-      msg.push(KC3Meta.term('RequestVerifierSortieFleet4BlockedMsg'));
+      msg.push(KC3Meta.term('RequestVerifierSortieFleetBlockedMsg').format(4));
     }
 
     return msg;

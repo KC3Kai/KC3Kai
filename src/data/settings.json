@@ -965,6 +965,14 @@
 				}
 			},
 			{
+				"id": "rv_sortie_fleet_1_blocked",
+				"name": "SettingsRequestVerifierSortieFleet1Blocked",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFleet1BlockedTip"
+				}
+			},
+			{
 				"id": "rv_sortie_fleet_2_blocked",
 				"name": "SettingsRequestVerifierSortieFleet2Blocked",
 				"type": "check",
