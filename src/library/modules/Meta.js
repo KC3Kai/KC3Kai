@@ -289,6 +289,7 @@ Provides access to data on built-in JSON files
 			1646: 439,  1647: 363,  1648: 1648, 1649: 537,  1650: 1650, 1651: 1651, 1652: 1652, 1653: 362,
 			1654: 555,  1655: 564,  1656: 565,  1657: 566,  1658: 231,  1659: 162
 		},
+		// from `main.js/ShipMstModel.prototype.shipTypeName`
 		stypeAltNameMap: {
 			"553": 47, // Ise K2: 改装航空戦艦
 			"554": 47, // Hyuuga K2: 改装航空戦艦
@@ -326,6 +327,7 @@ Provides access to data on built-in JSON files
 			"988": 63, // Nankai: 雑役船
 			"996": 64, // Nosaki: 給糧艦
 			"1002":64, // Nosaki K: 給糧艦
+			// "1070",    Hiemaru K has 特運潜母艦 icon designation, but not listed here
 		},
 		
 		/* Initialization
