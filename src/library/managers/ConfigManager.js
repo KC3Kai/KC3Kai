@@ -139,6 +139,7 @@ Retrieves when needed to apply on components
 				rv_sortie_fleet_2_blocked         : false,
 				rv_sortie_fleet_3_blocked         : false,
 				rv_sortie_fleet_4_blocked         : false,
+				rv_sortie_friendly_idle           : false,
 				rv_exped_ship_unsupplied          : true,
 				rv_exped_fleet_combined_idle      : false,
 				rv_exped_fleet_support_idle       : false,

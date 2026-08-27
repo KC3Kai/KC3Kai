@@ -997,6 +997,14 @@
 				}
 			},
 			{
+				"id": "rv_sortie_friendly_idle",
+				"name": "SettingsRequestVerifierSortieFriendlyIdle",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsRequestVerifierSortieFriendlyIdleTip"
+				}
+			},
+			{
 				"id": "rv_exped_ship_unsupplied",
 				"name": "SettingsRequestVerifierExpedShipUnsupplied",
 				"type": "check",
