@@ -220,6 +220,16 @@
       msg.push(KC3Meta.term('RequestVerifierSortieFleetBlockedMsg').format(4));
     }
 
+    // Warn on event sortie without friend fleet
+    if (
+      config.rv_sortie_friendly_idle
+      && KC3Meta.isEventWorld(api_maparea_id)
+      && PlayerManager.friendlySettings
+      && PlayerManager.friendlySettings.api_request_flag === 0
+    ) {
+      msg.push(KC3Meta.term('RequestVerifierSortieFriendlyIdleMsg'));
+    }
+
     return msg;
   }
 
