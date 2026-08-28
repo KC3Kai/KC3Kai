@@ -34,7 +34,7 @@
 				surfaceRadar: 0,
 				// Array constants used instead for faster executions:
 				// surfaceRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_saku >= 5 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 517, 527, 528, 573],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 517, 527, 528, 573, 574],
 				airRadar: 0,
 				// airRadarIds: KC3Master.find_slotitems(g => g.api_type[1] == 8 && g.api_tyku >= 2 && g.api_id <= KC3Master.abyssalGearIdFrom).map(g => g.api_id)
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460, 506, 527, 528, 573, 574],
