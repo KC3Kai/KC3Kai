@@ -85,6 +85,7 @@
 		"HTMLCanvasElement": true,
 		"Image": true,
 		"URL": true,
+		"URLSearchParams": true,
 		"Worker": true,
 		"XMLHttpRequest": true,
 		"Promise": true,

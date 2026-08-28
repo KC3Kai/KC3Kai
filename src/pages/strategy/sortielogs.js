@@ -1296,7 +1296,9 @@
 					var finalNodeIndex = -1;
 					// For each battle
 					if(sortie.battles.length === 0){
-						$(".sortie_edges", sortieBox).append("<div class=\"nonodes\">No available node recorded</div>");
+						$(".sortie_edges", sortieBox).append(
+							$('<div class="nonodes"></div>').text(KC3Meta.term("BattleHistoryNoRecordYetLabel"))
+						);
 						$(".sortie_edge",  sortieBox).hide();
 					}else{
 						KC3QueueManager.deferTooltip(() => {
