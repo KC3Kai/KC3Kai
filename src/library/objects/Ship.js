@@ -4716,7 +4716,7 @@ KC3改 Ship Object
 				const topAttack = results[0],
 					topGear = this.equipment().find(g => g.exists() && [1, 2, 3].includes(g.master().api_type[1]));
 				if((topAttack && topAttack[0] === "Cutin" && topAttack[1] === 3)
-					|| (topGear && topGear.api_type[1] === 3)) {
+					|| (topGear && topGear.master().api_type[1] === 3)) {
 					results.push(["Torpedo", 3]);
 				} else {
 					pushRocketAttackIfNecessary(["SingleAttack", 0]);
@@ -4725,7 +4725,7 @@ KC3改 Ship Object
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs:
 			// she was doing air attack against surface ships, but no plane appears if no aircraft equipped.
-			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp~~, Bearn
+			// Known ships go here: Ark with Swordfish ~~, Taiyou-class K2, Kaga K2Go, Lexington, Wasp, Bearn~~
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
 			pushRocketAttackIfNecessary(["Torpedo", 3]);
