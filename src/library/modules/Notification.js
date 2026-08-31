@@ -42,7 +42,10 @@
     clearSound();
     audio = new Audio(src);
     audio.volume = ConfigManager.alert_volume / 100;
-    audio.play();
+    const p = audio.play();
+    if (p instanceof Promise) p.catch(e => {
+      console.debug('Audio play', e);
+    });
   }
 
   function focusTab() {
