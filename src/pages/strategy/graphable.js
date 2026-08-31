@@ -16,6 +16,7 @@
 		// Executes only on first tab visit unless refreshed
 		init(){
 			this.locale = KC3Translation.getLocale();
+			this.graphableItems.full = this.graphableItems.full.map(t => KC3Meta.term(t));
 		}
 		
 		// Executes every tab visit

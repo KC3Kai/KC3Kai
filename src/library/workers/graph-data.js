@@ -70,10 +70,9 @@ function formatData(startHour, endHour, options, result){
 		// Fill the label name
 		let pointHour = startHour + (options.interval * i);
 		let pointDate = new Date(pointHour * 60 * 60 * 1000);
-		if (options.interval >= 24) {
-			labels[i] = (pointDate.getMonth()+1)+"/"+pointDate.getDate();
-		} else {
-			labels[i] = pointDate.getHours()+"00h";
+		labels[i] = (pointDate.getMonth()+1) + "-" + pointDate.getDate();
+		if (options.interval < 24) {
+			labels[i] += " " + (pointDate.getHours()<10?"0":"") + pointDate.getHours() + "00";
 		}
 		// Check if point values is zero, carry over last known value to this point
 		options.graphableItems.dbkey.forEach(function(dbkey){
