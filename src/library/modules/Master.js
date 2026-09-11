@@ -485,7 +485,9 @@ Saves and loads significant data for future use
 		 *   * [963/968] Akizuki/Hatsuzuki K2 can NOT equip small main gun/torpedo/large radar [1, 5, 13] in slot 4;
 		 *   * [978] Thonburi Kai can NOT equip medium main gun [2] in slot 3;
 		 *   * [961/1035] Shigure/Fubuki K3 can NOT equip small main gun/torpedo [1, 5] in slot 4;
-		 *   * [743/744/745] Yuugumo-class K2Ho can equip only aa gun/rations [21, 43] in slot 4;
+		 *   * [743/744/745] Yuugumo-class K2Ho can equip only aa gun/ration [21, 43] in slot 4;
+		 *   * [1071] Kitakami K3 can NOT equip small/medium/torpedo/seaplane [1, 2, 5, 10, 11, 45] in slot 4/5;
+		 *   * [748/749] Fusou-class K2Ho can equip only seaplane bomber/t3 shell/ap shell/aa gun/ration/tank [11, 18, 19, 21, 43, 46] in slot 4/5;
 		 *
 		 *   * Hard-coded exceptions are removed and defined in API since 2025-06-27, following notes deprecated:
 		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,

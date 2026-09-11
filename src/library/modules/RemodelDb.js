@@ -127,6 +127,8 @@
                 case 578: // Asashimo K2
                     return 36;
                 case 543: // Naganami K2
+                case 411: // Fusou K2
+                case 412: // Yamashiro K2
                     return 48;
                 case 202: // Shirayuki
                 case 208: // Shikinami
@@ -195,6 +197,7 @@
                 case 734: // Phoenix Kai
                     return 30;
                 case 215: // Kuma
+                case 119: // Kitakami Kai Ni
                 case 579: // Gotland Kai
                     return 55;
                 case 306: // Noshiro Kai
@@ -405,6 +408,11 @@
                     return 40;
                 case 392: // Richelieu Kai
                     return 120;
+                case 411: // Fusou Kai Ni
+                case 412: // Yamashiro Kai Ni
+                    return 188;
+                case 119: // Kitakami Kai Ni
+                    return 550;
                 case 426: // Fubuki Kai Ni
                     return 800;
                 case 1035: // Fubuki Kai San
@@ -441,8 +449,11 @@
         calcArsenalMat: function(ship_id_from) {
             switch(ship_id_from) {
                 case 1035: // to Fubuki K3Go (T6)
+                case 119:  // to Kitakami K3
                     return 5;
                 case 543:  // to Naganami K2Ho
+                case 411:  // to Fusou K2Ho
+                case 412:  // to Yamashiro K2Ho
                     return 3;
                 case 578:  // to Asashimo K2Ho
                 case 1034: // to Suzunami K2Ho
