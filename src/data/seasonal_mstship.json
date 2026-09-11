@@ -3690,7 +3690,7 @@
 		"api_yomi": "マエストラーレ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5461": {
 		"api_id": 5461,
@@ -10440,6 +10440,222 @@
 		"api_id": 6304,
 		"api_name": "秋冬制服涼波改二",
 		"api_yomi": "すずなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6305": {
+		"api_id": 6305,
+		"api_name": "夏龍鳳改",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6306": {
+		"api_id": 6306,
+		"api_name": "水着Gotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6307": {
+		"api_id": 6307,
+		"api_name": "水着迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6308": {
+		"api_id": 6308,
+		"api_name": "水着長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6309": {
+		"api_id": 6309,
+		"api_name": "水着天龍改二",
+		"api_yomi": "てんりゅう",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6310": {
+		"api_id": 6310,
+		"api_name": "水着龍田改二",
+		"api_yomi": "たつた",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6311": {
+		"api_id": 6311,
+		"api_name": "夏五十鈴改二",
+		"api_yomi": "いすず",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6312": {
+		"api_id": 6312,
+		"api_name": "夏扶桑改二",
+		"api_yomi": "ふそう",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6313": {
+		"api_id": 6313,
+		"api_name": "夏山城改二",
+		"api_yomi": "やましろ",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6314": {
+		"api_id": 6314,
+		"api_name": "夏大和改",
+		"api_yomi": "やまと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"6315": {
+		"api_id": 6315,
+		"api_name": "夏三隈改",
+		"api_yomi": "みくま",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6316": {
+		"api_id": 6316,
+		"api_name": "夏Z3 zwei",
+		"api_yomi": "マックス・シュルツ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6317": {
+		"api_id": 6317,
+		"api_name": "夏Z1 zwei",
+		"api_yomi": "レーベレヒト・マース",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6318": {
+		"api_id": 6318,
+		"api_name": "夏最上改",
+		"api_yomi": "もがみ",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6319": {
+		"api_id": 6319,
+		"api_name": "水着秋津洲改",
+		"api_yomi": "あきつしま",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6320": {
+		"api_id": 6320,
+		"api_name": "水着Grecale改",
+		"api_yomi": "グレカーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6321": {
+		"api_id": 6321,
+		"api_name": "水着Perth改",
+		"api_yomi": "パース",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6322": {
+		"api_id": 6322,
+		"api_name": "睡眠加古改二",
+		"api_yomi": "かこ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6323": {
+		"api_id": 6323,
+		"api_name": "夏の私服伊203改",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6324": {
+		"api_id": 6324,
+		"api_name": "お出掛け古鷹改二",
+		"api_yomi": "ふるたか",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6325": {
+		"api_id": 6325,
+		"api_name": "トーチ作戦迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6326": {
+		"api_id": 6326,
+		"api_name": "トーチ作戦長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6327": {
+		"api_id": 6327,
+		"api_name": "水着涼波改二",
+		"api_yomi": "すずなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6328": {
+		"api_id": 6328,
+		"api_name": "水着Minneapolis",
+		"api_yomi": "ミネアポリス",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6329": {
+		"api_id": 6329,
+		"api_name": "水着Minneapolis改",
+		"api_yomi": "ミネアポリス",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6330": {
+		"api_id": 6330,
+		"api_name": "水着Heywood L.E.",
+		"api_yomi": "ヘイウッド",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6331": {
+		"api_id": 6331,
+		"api_name": "水着Heywood L.E.改",
+		"api_yomi": "ヘイウッド",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
