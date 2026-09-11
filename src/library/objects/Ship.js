@@ -3094,7 +3094,7 @@ KC3改 Ship Object
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
-		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
+		const isFusouClassKaiNi = [411, 412, 748, 749].includes(this.masterId);
 		const isKagaK2Go = this.masterId === 646;
 		// CVL Suzuya/Kumano Kou Kai Ni may not able to OASW, even equips Sonar?
 		const isNotSuzuyaKumanoCarrier = ![508, 509].includes(this.masterId);
@@ -3201,7 +3201,7 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.isHayasuiKaiWithTorpedoBomber();
 		const isKagaK2Go = this.masterId === 646;
-		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
+		const isFusouClassKaiNi = [411, 412, 748, 749].includes(this.masterId);
 		// CAV, CVL, BBV, AV, LHA(*), CV(*): CVL-like Hayasui Kai, Kaga Kai Ni Go; Yamashiomaru, Shimanemaru, Hiryuu K3
 		const isAirAntiSubStype = this.isAirAntiSubStype()
 			|| isHayasuiKaiWithTorpedoBomber || isKagaK2Go
@@ -3796,7 +3796,7 @@ KC3改 Ship Object
 							{ p1: [546], p2: [541, 573] }, // Musashi + Nagato-class, not swappable
 							{ p1: [541], p2: [573] },      // Nagato + Mutsu
 							{ p1: [553], p2: [554] },      // Ise + Hyuuga
-							{ p1: [411], p2: [412] },      // Fusou + Yamashiro
+							{ p1: [411, 748], p2: [412, 749] }, // Fusou + Yamashiro (K2Ho since 2026-09-10)
 							{ p1: [576], p2: [364] },      // Nelson + Warspite
 							{ p1: [591], p2: [592] },      // Kongou + Hiei
 							{ p1: [591], p2: [593] },      // Kongou + Haruna K2B (Haruna added since 2023-05-01)
@@ -4300,8 +4300,8 @@ KC3改 Ship Object
 			else
 				pushRocketAttackIfNecessary(["SingleAttack", 0]);
 		}
-		// is this ship Fusou-class Kai Ni
-		else if([411, 412].includes(this.masterId)) {
+		// is this ship Fusou-class Kai Ni+
+		else if([411, 412, 748, 749].includes(this.masterId)) {
 			if(targetShipType.isSubmarine) {
 				const aswAircraft = this.hasNonZeroSlotEquipmentFunc(g => g.isAswAircraft(false));
 				const depthCharge = this.hasEquipmentType(2, 15);
@@ -4494,7 +4494,7 @@ KC3改 Ship Object
 		const isThisLightCarrier = stype === 7;
 		const isThisDestroyer = stype === 2;
 		const isThisKagaK2Go = this.masterId === 646;
-		const isFusouClassKaiNi = [411, 412].includes(this.masterId);
+		const isFusouClassKaiNi = [411, 412, 748, 749].includes(this.masterId);
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
 		// simulate server-side night air attack flag: `api_n_mother_list`
@@ -4584,8 +4584,8 @@ KC3改 Ship Object
 					results.push(KC3Ship.specialAttackTypeNight(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(0, yamatoCutinId)));
 				}
 				// special [490] Night Zuiun Cutin since 2023-02-14, sharing ID 200 with daytime Zuiun Multi-Angle Attack, behaves more like single ship cutins below, except multiple enemy targets
-				// basic conditions: capable stypes CL, CAV, BBV, AV; Night Zuiun equpped; main guns >= 2, not even chuuha
-				if([3, 6, 10, 16].includes(stype)
+				// basic conditions: capable stypes CL(T), CAV, BBV, AV; Night Zuiun equpped; main guns >= 2, not even chuuha
+				if([3, 4, 6, 10, 16].includes(stype)
 					&& this.hasNonZeroSlotEquipment(490) && this.countEquipmentType(1, 1) >= 2
 					&& !this.isStriped()) {
 					results.push(KC3Ship.specialAttackTypeNight(200, null, this.estimateNightZuiunCutinModifier()));

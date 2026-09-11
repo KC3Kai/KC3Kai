@@ -118,6 +118,8 @@ Provides access to data on built-in JSON files
 			651,           // Tang Yang
 			662,           // Noshiro Kai Ni (Poke dupe)
 			694,           // Kirishima K2C
+			748,           // Fusou Kai Ni Ho
+			749,           // Yamashiro Kai Ni Ho
 			942, 737,      // Richard P.Leary
 			935, 724,      // Jean Bart (Equip2 dupe?)
 			945,           // No.101 Transport Ship
@@ -131,6 +133,9 @@ Provides access to data on built-in JSON files
 			1001,          // Kirov
 			1005,          // Minneapolis
 			1035, 1040,    // Fubuki K3(Go)
+			1041,          // Hanazuki
+			1044,          // Kiri
+			1055,          // Bearn
 		],
 		specialAbyssalIdVoicePrefixes: {
 			// Why do devs make wrong voice filename matching even for last event?
@@ -217,6 +222,7 @@ Provides access to data on built-in JSON files
 			426, // Fubuki K2 -> K3
 			1035, // Fubuki K3 -> K3G(T6)
 			710, // Suzunami Kai -> K2
+			119, // Kitakami K2 -> K3
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 572, 573, 576, 577, 591, 592, 593, 954, 694, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 944, 949, 911, 916, 546, 392, 969, 724, 364, 733, 1065, 1070],
@@ -231,7 +237,7 @@ Provides access to data on built-in JSON files
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392, 969, 724],
-		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 577, 364, 733, 591, 592, 593, 694, 954, 697, 659, 446, 447, 1496, 918, 724, 392, 969],
+		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 748, 749, 576, 577, 364, 733, 591, 592, 593, 694, 954, 697, 659, 446, 447, 1496, 918, 724, 392, 969],
 		richelieuClassCutinShips: [392, 969, 724],
 		queenElizabethClassCutinShips: [364, 733],
 		// getCountryName by ctype in `main.js#SlotItemEffectParamModel.SHIP_COUNTRY`
@@ -328,6 +334,7 @@ Provides access to data on built-in JSON files
 			"996": 64, // Nosaki: 給糧艦
 			"1002":64, // Nosaki K: 給糧艦
 			// "1070",    Hiemaru K has 特運潜母艦 icon designation, but not listed here
+			"1071":65, // Kitakami K3: 改装多目的搭載母艦(icon designation is '多目的搭母艦')
 		},
 		
 		/* Initialization
