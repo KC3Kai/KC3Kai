@@ -16187,9 +16187,9 @@
 						],
 					},
 					{
-						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni, Fubuki Kai San
-						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131, 9],
-						excludes: [662, 131, 136, 916, 951, 1031, 9, 201, 426, 1040],
+						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni, Fubuki Kai San, Kitakami Kai San
+						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131, 9, 25],
+						excludes: [662, 131, 136, 916, 951, 1031, 9, 201, 426, 1040, 25, 58, 119],
 						speedCap: 10,
 						synergy: [
 							{
@@ -16224,7 +16224,7 @@
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005, 1051,
 								74, 76, 116, 102, 103, 184, 925, 1023
 							],
-						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
+						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877, 1071],
 						speedCap: 10,
 						synergy: [
 							{
