@@ -304,7 +304,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyAug',
 				key: 'timeToResetYearlyAugQuests',
 				resetMonth: AUGUST,
-				questIds: [438],
+				questIds: [438, 1051],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyAug.type);
 				},
@@ -317,7 +317,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlySep',
 				key: 'timeToResetYearlySepQuests',
 				resetMonth: SEPTEMBER,
-				questIds: [375, 439, 440, 657, 928, 1018, 1107],
+				questIds: [375, 439, 440, 657, 928, 1018, 1050, 1107],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
 				},
@@ -1136,6 +1136,26 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShip([1035, 1040], 0) // Fubuki K3/K3Go
 							&& fleet.hasShipClass(12, 1);     // Fubuki-class
+					},
+				"1050": // By17 Sortie Kitakami K2+, Ooi K2, one as flagship, 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([119, 1071, 118], 0)     // Kitakami/Ooi K2+, one flagship
+							&& fleet.countShip([119, 1071, 118]) >= 2 // one escort
+							&& fleet.countShipType(2) >= 2;
+					},
+				"1051": // By18 Sortie Yamashiro K2Ho as flagship, Fusou/Shigure, 2 of Mogami, Michishio, Asagumo, Yamagumo
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([749], 0) // Yamashiro K2Ho
+							&& (fleet.countShip(26)  + // Fusou
+								fleet.countShip(43)    // Shigure
+							) >= 1
+							&& (fleet.countShip(70)  + // Mogami
+								fleet.countShip(97)  + // Michishio
+								fleet.countShip(413) + // Asagumo
+								fleet.countShip(414)   // Yamagumo
+							) >= 2;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

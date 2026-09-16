@@ -88,7 +88,7 @@
 					
 					if (rel.merged_at) {
 						$(".versionIcon img", releaseBox).attr("src",
-							rel.number < 9999 // no more webstore publish since this PR?
+							rel.number <= 3425 // no more webstore publish since this PR (2026-09-01)
 							? "../../assets/img/social/ws.png"
 							: "../../assets/img/social/gz.png"
 						);
