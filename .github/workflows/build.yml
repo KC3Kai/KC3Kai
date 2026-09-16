@@ -48,13 +48,13 @@ jobs:
         grunt build
         echo KC3Kai $PACKAGE_VERSION package: $GITHUB_WORKSPACE/build/release.zip
     # PACKAGE AND DEPLOY TO CHROME WEBSTORE
-    - name: Publish to webstore
-      timeout-minutes: 10
-      env:
-        WEBSTORE_CLIENT_ID: ${{ secrets.WEBSTORE_CLIENT_ID }}
-        WEBSTORE_CLIENT_SECRET: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
-        WEBSTORE_REFRESH_TOKEN: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
-      run: grunt webstore
+    # - name: Publish to webstore
+    #   timeout-minutes: 10
+    #   env:
+    #    WEBSTORE_CLIENT_ID: ${{ secrets.WEBSTORE_CLIENT_ID }}
+    #    WEBSTORE_CLIENT_SECRET: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
+    #    WEBSTORE_REFRESH_TOKEN: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
+    #  run: grunt webstore
     # DEPLOY TO GITHUB RELEASES
     - name: Push git tag
       timeout-minutes: 10
