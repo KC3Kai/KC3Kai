@@ -2311,20 +2311,40 @@
 				count: 0,
 				starsDist: [],
 				byNation: {
-					"France": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 1, "houm": 2, "saku": 3 },
-					},
+					"France": [
+						{
+							multiple: { "houg": 2, "tyku": 1, "houk": 1, "houm": 2, "saku": 3 },
+						},
+						{
+							minStars: 8,
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 				},
 				byClass: {
 					// Houshou Class
-					"27": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 1, "houm": 2, "saku": 3 },
-					},
+					"27": [
+						{
+							multiple: { "houg": 2, "tyku": 1, "houk": 1, "houm": 2, "saku": 3 },
+						},
+						{
+							minStars: 8,
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
-						// Béarn Kai
-						ids: [1060],
+						// Béarn Kai+
+						ids: [1060, 1061],
 						multiple: { "houg": 1, "houm": 2 },
 						synergy: {
 							flags: [ "frenchPl101CarrierBomber" ],
@@ -2333,8 +2353,8 @@
 						},
 					},
 					{
-						// Béarn Kai
-						ids: [1060],
+						// Béarn Kai+
+						ids: [1060, 1061],
 						multiple: { "houg": 1, "houk": 1, "houm": 1 },
 					},
 					{
@@ -2347,19 +2367,55 @@
 			"586": {
 				count: 0,
 				byNation: {
-					"France": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
-					},
+					"France": [
+						{
+							multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 				},
 				byClass: {
 					// Houshou Class
-					"27": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
-					},
+					"27": [
+						{
+							multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "saku": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 				},
 				byShip: {
-					// Béarn Kai
-					ids: [1060],
+					// Béarn Kai+
+					ids: [1060, 1061],
 					multiple: { "houg": 1, "houk": 1, "houm": 1 },
 				},
 			},
@@ -2380,8 +2436,8 @@
 				},
 				byShip: [
 					{
-						// Béarn Kai
-						ids: [1060],
+						// Béarn Kai+
+						ids: [1060, 1061],
 						multiple: { "houg": 4, "houk": 1, "houm": 3 },
 					},
 					{
@@ -2410,8 +2466,8 @@
 				},
 				byShip: [
 					{
-						// Béarn Kai
-						ids: [1060],
+						// Béarn Kai+
+						ids: [1060, 1061],
 						multiple: { "houg": 1, "houk": 4, "houm": 3 },
 					},
 					{
@@ -3398,7 +3454,7 @@
 						remodel: 2,
 						multiple: { "houg": 3 },
 					},
-					// Fusou Class Kai Ni
+					// Fusou Class Kai Ni+
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 2 },
@@ -3473,7 +3529,7 @@
 						remodel: 2,
 						multiple: { "houg": 3 },
 					},
-					// Fusou Class Kai Ni
+					// Fusou Class Kai Ni+
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 2 },
@@ -5843,11 +5899,22 @@
 							multiple: { "houg": 1, "houm": 3 },
 						},
 					],
-					// Fusou Class Kai Ni
-					"26": {
-						remodel: 2,
-						multiple: { "houg": 1 },
-					},
+					// Fusou Class Kai Ni+
+					"26": [
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+						// extra +1 fp and synergy for Kai Ni Ho
+						{
+							remodel: 3,
+							multiple: { "houg": 1 },
+							synergy: {
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
+						},
+					],
 				},
 				byShip: {
 					// extra +1 ev for Hyuuga Kai Ni
@@ -9458,8 +9525,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Yuubari K2T
-						ids: [623],
+						// Yuubari K2T, Kitakami K3
+						ids: [623, 1071],
 						multiple: { "houg": 1, "raig": 4, "houk": -2 },
 					},
 					{
@@ -10091,8 +10158,8 @@
 						},
 					},
 					{
-						// Yura Kai, Yukikaze Kai Ni, Shigure Kai San, Fubuki Kai San+
-						ids: [220, 656, 961, 1035, 1040],
+						// Yura Kai, Yukikaze Kai Ni, Shigure Kai San, Fubuki Kai San+, Kitakami Kai San
+						ids: [220, 656, 961, 1035, 1040, 1071],
 						minStars: 7,
 						multiple: { "tyku": 2 },
 					},
@@ -10104,7 +10171,7 @@
 					},
 					{
 						// Shigure Kai San, Fubuki Kai San, Fubuki Kai San Go
-						ids: [961, 1035, 1040],
+						ids: [961, 1035, 1040, 1071],
 						minStars: 7,
 						multiple: { "houg": 1 },
 						synergy: {
@@ -10257,13 +10324,13 @@
 						},
 					},
 					{
-						// Ooi/Kitakami K2, Yura K2, Naka K2
-						ids: [119, 118,     488, 160],
+						// Ooi/Kitakami K2+, Yura K2, Naka K2
+						ids: [119, 118, 1071, 488, 160],
 						multiple: { "houk": 1 },
 					},
 					{
-						// Ooi/Kitakami K2, Yura K2
-						ids: [119, 118,     488],
+						// Ooi/Kitakami K2+, Yura K2
+						ids: [119, 118, 1071, 488],
 						single: { "houk": 1 },
 					},
 					{
@@ -10331,8 +10398,8 @@
 						],
 					},
 					{
-						// Fubuki K3+
-						ids: [1035, 1040],
+						// Fubuki K3+, Kitakami K3
+						ids: [1035, 1040, 1071],
 						multiple: { "houg": 3, "tyku": 4, "tais": 2, "houk": 3 },
 						synergy: [
 							{
@@ -10791,8 +10858,8 @@
 						],
 					},
 					{
-						// Ooi/Kitakami K2
-						ids: [119, 118],
+						// Ooi/Kitakami K2, Kitakami K3
+						ids: [119, 118, 1071],
 						multiple: { "houg": 2, "houk": 1 },
 						synergy: [
 							{
@@ -10808,6 +10875,11 @@
 								single: { "houg": 1, "tyku": 2, "houk": 1 },
 							},
 						],
+					},
+					{
+						// Kitakami K3
+						ids: [1071],
+						single: { "houk": 1 },
 					},
 					{
 						// Fujinami/Tamanami K2, Shigure K3, Fubuki K3+
@@ -11058,8 +11130,8 @@
 						],
 					},
 					{
-						// Shigure K3
-						ids: [961],
+						// Shigure K3, Inagi K2, Kitakami K3
+						ids: [961, 979, 1071],
 						synergy: [
 							{
 								flags: [ "surfaceRadar" ],
@@ -12733,28 +12805,28 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Isuzu Kai Ni
-						ids: [141],
+						// Isuzu Kai Ni, Kitakami Kai San
+						ids: [141, 1071],
 						minStars: 2,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [141],
+						ids: [141, 1071],
 						minStars: 4,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [141],
+						ids: [141, 1071],
 						minStars: 6,
 						multiple: { "houm": 1 },
 					},
 					{
-						ids: [141],
+						ids: [141, 1071],
 						minStars: 8,
 						multiple: { "tyku": 1 },
 					},
 					{
-						ids: [141],
+						ids: [141, 1071],
 						minStars: 10,
 						multiple: { "houk": 1 },
 					},
@@ -12875,8 +12947,8 @@
 						single: { "houg": 1, "tyku": 2, "houk": 3 },
 					},
 					{
-						// Haurna K2+, Fusou K2, Yamashiro K2
-						ids: [151, 593, 954, 411, 412],
+						// Haurna K2+, Fusou K2+, Yamashiro K2+
+						ids: [151, 593, 954, 411, 748, 412, 749],
 						single: { "houg": 3, "tyku": 4 },
 					},
 					{
@@ -13018,27 +13090,27 @@
 				starsDist: [],
 				byShip: [
 					{
-						// Tang Yang/Yukikaze K2, Shigure K3, Fubuki K3Go, Inagi K2
-						ids: [651, 656, 961, 1035, 1040, 979],
+						// Tang Yang/Yukikaze K2, Shigure K3, Fubuki K3Go, Inagi K2, Kitakami K3
+						ids: [651, 656, 961, 1035, 1040, 979, 1071],
 						single: { "houg": 2, "houm": 3 },
 					},
 					{
-						ids: [651, 656, 961, 1035, 1040, 979],
+						ids: [651, 656, 961, 1035, 1040, 979, 1071],
 						minStars: 7,
 						single: { "houk": 1 },
 					},
 					{
-						ids: [651, 656, 961, 1035, 1040, 979],
+						ids: [651, 656, 961, 1035, 1040, 979, 1071],
 						minStars: 8,
 						single: { "houm": 1 },
 					},
 					{
-						ids: [651, 656, 961, 1035, 1040, 979],
+						ids: [651, 656, 961, 1035, 1040, 979, 1071],
 						minStars: 9,
 						single: { "houg": 1 },
 					},
 					{
-						ids: [651, 656, 961, 1035, 1040, 979],
+						ids: [651, 656, 961, 1035, 1040, 979, 1071],
 						minStars: 10,
 						single: { "houm": 1 },
 					},
@@ -13170,6 +13242,11 @@
 				count: 0,
 				byShip: [
 					{
+						// Kitakami Kai San
+						ids: [1071],
+						multiple: { "houg": 2, "tyku": 6, "houk": 4, "houm": 2, "souk": 2 },
+					},
+					{
 						// Ushio K2, Shigure K2+, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+, Haruna K2B+, Harusame K2
 						ids: [407,   145, 961,    419,             151,       541,       911, 916,   593, 954,    975],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
@@ -13245,18 +13322,18 @@
 						single: { "tyku": 1, "houk": 1 },
 					},
 					{
-						// Tang Yang, Yukikaze K2, Shigure K3, Fubuki K3/K3Go
-						ids: [651, 656, 961, 1035, 1040],
+						// Tang Yang, Yukikaze K2, Shigure K3, Fubuki K3/K3Go, Kitakami K3
+						ids: [651, 656, 961, 1035, 1040, 1071],
 						minStars: 4,
 						single: { "houg": 1, "tyku": 2, "houk": 3 },
 					},
 					{
-						ids: [651, 656, 961, 1035, 1040],
+						ids: [651, 656, 961, 1035, 1040, 1071],
 						minStars: 8,
 						single: { "tyku": 1 },
 					},
 					{
-						ids: [651, 656, 961, 1035, 1040],
+						ids: [651, 656, 961, 1035, 1040, 1071],
 						minStars: 10,
 						single: { "houm": 1 },
 					},
@@ -13347,8 +13424,8 @@
 						single: { "houg": 2, "tyku": 2, "houk": 4, "houm": 3 },
 					},
 					{
-						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai, Amatsukaze K2, Harusame K2
-						ids: [145, 497, 656, 557, 558, 951, 975],
+						// Shigure K2, Shiratsuyu K2, Yukikaze K2, Isokaze B Kai, Hamakaze B Kai, Amatsukaze K2, Harusame K2, Kitakami K3
+						ids: [145, 497, 656, 557, 558, 951, 975, 1071],
 						single: { "houg": 1, "tyku": 1, "houk": 3, "houm": 2 },
 					},
 					{
@@ -13433,8 +13510,8 @@
 						single: { "houg": 2, "houk": 3, "houm": 1, "saku": 2 },
 					},
 					{
-						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2+, Kiyoshimo K2, Harusame K2, Fubuki K3+
-						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955, 975, 1035, 1040, 744],
+						// Hibiki/Kai, Ushio K2, Hatsushimo K2, Kasumi K2/K2B, Yukikaze K2, Shigure K3, Asashimo K2+, Kiyoshimo K2, Harusame K2, Fubuki K3+, Kitakami K3
+						ids: [147, 235, 407, 419, 464, 470, 656, 961, 578, 955, 975, 1035, 1040, 744, 1071],
 						single: { "houg": 1, "houk": 2, "houm": 1, "saku": 1 },
 					},
 					{
@@ -13551,6 +13628,29 @@
 						multiple: { "houg": 1 },
 					},
 					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 9,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
 						// Shirayuki K2, Hatsuyuki K2, from getSlot25mmMachinegunLightShipEffect
 						ids: [986, 987],
 						multiple: { "tyku": 1, "houk": 1 },
@@ -13620,6 +13720,35 @@
 					{
 						// Inagi Kai Ni
 						ids: [979],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 7,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 9,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
 						minStars: 10,
 						multiple: { "houg": 1 },
 					},
@@ -13695,6 +13824,11 @@
 						multiple: { "houg": 1 },
 					},
 					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
 						// Shirayuki K2, Hatsuyuki K2, from getSlot25mmMachinegunLightShipEffect
 						ids: [986, 987],
 						multiple: { "tyku": 1, "houk": 1 },
@@ -13740,6 +13874,35 @@
 						ids: [979],
 						minStars: 10,
 						multiple: { "tyku": 2 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 9,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Kitakami K3, Fusou/Yamashiro K2Ho
+						ids: [1071, 748, 749],
+						minStars: 10,
+						multiple: { "houg": 2 },
 					},
 				],
 			},
@@ -13960,8 +14123,8 @@
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					{
-						// Shigure K3, Fubuki K3+
-						ids: [961, 1035, 1040],
+						// Shigure K3, Fubuki K3+, Kitakami K3
+						ids: [961, 1035, 1040, 1071],
 						single: { "houg": 2, "tyku": 3, "houk": 4 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -14053,8 +14216,8 @@
 						},
 					},
 					{
-						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+
-						ids: [981, 983, 982, 1033, 1034, 745],
+						// Fujinami Kai Ni, Hamanami Kai Ni, Hayanami Kai Ni, Tamanami Kai Ni, Suzunami Kai Ni+, Kitakami K3
+						ids: [981, 983, 982, 1033, 1034, 745, 1071],
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
@@ -14392,8 +14555,8 @@
 						single: { "houm": 1 },
 					},
 					{
-						// Nagato K2, Fusou-class K2
-						ids: [541, 411, 412],
+						// Nagato K2, Fusou-class K2+
+						ids: [541, 411, 412, 748, 749],
 						single: { "houg": 1, "tyku": 2 },
 					},
 					{
@@ -14508,31 +14671,31 @@
 						single: { "houk": 1, "tais": 1 },
 					},
 					{
-						// Naka K2, Yura K2, Isuzu K2
-						ids: [160, 488, 141],
+						// Naka K2, Yura K2, Isuzu K2, Kitakami K3
+						ids: [160, 488, 141, 1071],
 						single: { "houk": 1, "tais": 1 },
 					},
 					{
-						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
-						ids: [145, 961, 363, 476, 578, 744, 588, 667],
+						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+, Kitakami K3
+						ids: [145, 961, 363, 476, 578, 744, 588, 667, 1071],
 						minStars: 4,
 						single: { "tais": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
-						ids: [145, 363, 476, 578, 744, 588, 667],
+						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+, Kitakami K3
+						ids: [145, 961, 363, 476, 578, 744, 588, 667, 1071],
 						minStars: 6,
 						single: { "houk": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
-						ids: [145, 363, 476, 578, 744, 588, 667],
+						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+, Kitakami K3
+						ids: [145, 961, 363, 476, 578, 744, 588, 667, 1071],
 						minStars: 8,
 						single: { "tais": 1 },
 					},
 					{
-						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+
-						ids: [145, 363, 476, 578, 744, 588, 667],
+						// Shigure K2+, Harukaze Kai, Kamikaze Kai, Asashimo K2+, Yamakaze K2+, Kitakami K3
+						ids: [145, 961, 363, 476, 578, 744, 588, 667, 1071],
 						minStars: 10,
 						single: { "houk": 1 },
 					},
@@ -14613,8 +14776,8 @@
 						single: { "houk": 5, "tais": 3 },
 					},
 					{
-						// Noshiro K2
-						ids: [662],
+						// Noshiro K2, Kitakami K3
+						ids: [662, 1071],
 						single: { "tais": 2, "houk": 4 },
 					},
 				],
@@ -14704,17 +14867,17 @@
 						multiple: { "tais": 2 },
 					},
 					{
-						// Noshiro K2, Shigure K3, Fubuki K3Go
-						ids: [662, 961, 1040],
+						// Noshiro K2, Shigure K3, Fubuki K3Go, Kitakami K3
+						ids: [662, 961, 1040, 1071],
 						multiple: { "tais": 4, "houk": 1 },
 					},
 					{
-						ids: [662, 961, 1040],
+						ids: [662, 961, 1040, 1071],
 						minStars: 9,
 						multiple: { "houk": 1 },
 					},
 					{
-						ids: [662, 961, 1040],
+						ids: [662, 961, 1040, 1071],
 						minStars: 10,
 						multiple: { "tais": 1 },
 					},
@@ -14891,29 +15054,29 @@
 						multiple: { "tais": 2, "houk": 1, "houm": 1 },
 					},
 					{
-						// Shigure base, Yahagi K2+, Hibiki Kai, Fusou/Yamashiro K2, Suzutsuki/Fuyutsuki/Hanazuki Kai, Ushio K2, Hatsushimo K2
-						ids: [43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
+						// Shigure base, Yahagi K2+, Hibiki Kai, Fusou/Yamashiro K2+, Suzutsuki/Fuyutsuki/Hanazuki Kai, Ushio K2, Hatsushimo K2
+						ids: [43, 663, 668, 235, 411, 748, 412, 749, 537, 538, 1046, 407, 419],
 						multiple: { "tais": 1 },
 					},
 					// For ships of previous 2 types
 					{
 						minStars: 5,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 748, 412, 749, 537, 538, 1046, 407, 419],
 						multiple: { "tais": 1 },
 					},
 					{
 						minStars: 7,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 748, 412, 749, 537, 538, 1046, 407, 419],
 						multiple: { "houk": 1 },
 					},
 					{
 						minStars: 9,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 748, 412, 749, 537, 538, 1046, 407, 419],
 						multiple: { "houm": 1 },
 					},
 					{
 						minStars: 10,
-						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 412, 537, 538, 1046, 407, 419],
+						ids: [243, 228, 651, 656, 557, 558, 43, 663, 668, 235, 411, 748, 412, 749, 537, 538, 1046, 407, 419],
 						multiple: { "tais": 1 },
 					},
 				],
@@ -15830,8 +15993,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Okinami K2, Akigumo K2, Shigure K3, Amatsukaze K2, Yukikaze K2, Fubuki K3+ with Air Radar
-						ids: [569, 648, 961, 951, 656, 1035, 1040],
+						// Okinami K2, Akigumo K2, Shigure K3, Amatsukaze K2, Yukikaze K2, Fubuki K3+, Kitakami K3 with Air Radar
+						ids: [569, 648, 961, 951, 656, 1035, 1040, 1071],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
@@ -16024,9 +16187,9 @@
 						],
 					},
 					{
-						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni, Fubuki Kai San
-						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131, 9],
-						excludes: [662, 131, 136, 916, 951, 1031, 9, 201, 426, 1040],
+						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni, Fubuki Kai San, Kitakami Kai San
+						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131, 9, 25],
+						excludes: [662, 131, 136, 916, 951, 1031, 9, 201, 426, 1040, 25, 58, 119],
 						speedCap: 10,
 						synergy: [
 							{
@@ -16061,7 +16224,7 @@
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655, 923, 1005, 1051,
 								74, 76, 116, 102, 103, 184, 925, 1023
 							],
-						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
+						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877, 1071],
 						speedCap: 10,
 						synergy: [
 							{

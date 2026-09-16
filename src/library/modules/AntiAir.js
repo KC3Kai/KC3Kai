@@ -657,6 +657,7 @@ AntiAir: anti-air related calculations
 		isFubukiKai2, isFubukiKai3, isFubukiKai3Go, isShirayukiKai2, isHatsuyukiKai2
 	);
 	var isHiryuuKai3 = masterIdEq( hiryuuK3Icon );
+	var isKitakamiKai3 = masterIdEq( 1071 );
 
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
@@ -897,11 +898,12 @@ AntiAir: anti-air related calculations
 
 	// Maya K2
 	// Hiryuu K3 added since 2026-02-13
+	// Kitakami K3 added since 2026-09-10
 	declareAACI(
 		10, 3, 6, 1.65, 60, 1900, // vita value
 		[mayaK2Icon, haMountIcon, cdmgIcon, radarIcon],
 		// Omitted slot num for kinds that ship and remodel specified, same below
-		predAnyOf(isMayaK2, isHiryuuKai3),
+		predAnyOf(isMayaK2, isHiryuuKai3, isKitakamiKai3),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -923,10 +925,11 @@ AntiAir: anti-air related calculations
 	// All values like fixed and rate below are uncertain because only 1~13 implemented by KC vita, rate values from fourinone sim and noro6 sim
 	// AA stat 2 machine gun capable for kind 14~17: https://twitter.com/nishikkuma/status/1535641120386224129
 	// Isuzu K2
+	// Kitakami K3 added since 2026-09-10
 	declareAACI(
 		14, 4, 1, 1.45, 63, 2290,
 		[isuzuK2Icon, haMountIcon, aaGunIcon, radarIcon],
-		predAllOf(isIsuzuK2),
+		predAnyOf(isIsuzuK2, isKitakamiKai3),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -1004,10 +1007,11 @@ AntiAir: anti-air related calculations
 
 	// Yura K2
 	// Fubuki K3+ added since 2026-04-23
+	// Kitakami K3 added since 2026-09-10
 	declareAACI(
 		21, 5, 1, 1.45, 60, 2260,
 		[yuraK2Icon, haMountIcon, radarIcon],
-		predAnyOf(isYuraK2, isFubukiKai3, isFubukiKai3Go),
+		predAnyOf(isYuraK2, isFubukiKai3, isFubukiKai3Go, isKitakamiKai3),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -1328,10 +1332,11 @@ AntiAir: anti-air related calculations
 	// Hatsuyuki/Hamanami K2, Akizuki-class? added since 2025-5-12
 	// fixed 6->7?
 	// Fubuki K3+ added since 2026-04-23
+	// Kitakami K3 added since 2026-09-10
 	declareAACI(
 		49, 6, 1, 1.5, 60, 2245,
 		[fujinamiK2Icon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAnyOf(isDesDiv32Kai2OrTokugataKai2),
+		predAnyOf(isDesDiv32Kai2OrTokugataKai2, isKitakamiKai3),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isBuiltinHighAngleMount, 2 ),
@@ -1378,10 +1383,11 @@ AntiAir: anti-air related calculations
 	);
 
 	// Hiryuu K3
+	// Kitakami K3 added since 2026-09-10
 	declareAACI(
 		53, 4, 1, 1.6, 50, 2275,
 		[hiryuuK3Icon, haMountCdIcon, radarIcon],
-		predAllOf(isHiryuuKai3),
+		predAnyOf(isHiryuuKai3, isKitakamiKai3),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMountWithAtLeast(9) ),

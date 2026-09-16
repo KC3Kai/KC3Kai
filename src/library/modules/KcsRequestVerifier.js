@@ -271,17 +271,17 @@
 
     // Warn if destroying the last copy of a ship class (api_ship_id can be "id" or "id1,id2,...")
     if (config.rv_ship_destroy) {
-      const lastCopies = String(api_ship_id).split(',')
-        .map((id) => KC3ShipManager.get(id))
-        .filter((ship) => {
-          const origin = RemodelDb.originOf(ship.masterId) || ship.masterId;
-          const copies = KC3ShipManager
-            .find((s) => (RemodelDb.originOf(s.masterId) || s.masterId) === origin)
-            .length;
-          return copies < 2;
+      const destroyingShips = String(api_ship_id).split(',')
+        .map((id) => KC3ShipManager.get(id));
+      const lastCopyShips = destroyingShips.filter((ship) => {
+          const originId = RemodelDb.originOf(ship.masterId) || ship.masterId;
+          const originFilter = (s) => ((RemodelDb.originOf(s.masterId) || s.masterId) === originId);
+          const destroyingCopies = destroyingShips.filter(originFilter).length;
+          const totalCopies = KC3ShipManager.find(originFilter).length;
+          return totalCopies <= destroyingCopies;
         });
-      if (lastCopies.length) {
-        msg.push(KC3Meta.term('RequestVerifierShipDestroyMsg').format(lastCopies.map((s) => s.name()).join(', ')));
+      if (lastCopyShips.length) {
+        msg.push(KC3Meta.term('RequestVerifierShipDestroyMsg').format(lastCopyShips.map((s) => s.name()).join(', ')));
       }
     }
 
