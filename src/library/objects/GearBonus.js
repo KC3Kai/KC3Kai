@@ -9547,7 +9547,7 @@
 					{
 						// All other ships who can equip it
 						stypes: [3, 4, 13, 14, 16],
-						excludes: [118, 119, 506, 507, 586, 623, 657, 668],
+						excludes: [118, 119, 506, 507, 586, 623, 657, 668, 1071],
 						multiple: { "houg": -1, "houk": -7 },
 					},
 				],
