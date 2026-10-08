@@ -352,6 +352,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			return true;
 		},
 		
+		/* RELOAD GAME IFRAME
+		Ask the game frame to reload itself, without reloading the whole tab
+		------------------------------------------*/
+		"reloadIframe" :function(request, sender, response){
+			(new TMsg(request.tabId, "gamescreen", "reloadIframe", { text: request.text })).execute();
+		},
+		
 		/* GET TAB INFO
 		Return all info of the tab inspected by devtools panel
 		------------------------------------------*/

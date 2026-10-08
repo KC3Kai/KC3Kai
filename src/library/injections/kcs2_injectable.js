@@ -11,7 +11,8 @@
 	"use strict";
 
 	const maxRetries = 60;
-	let checkerTimer = 0, retries = 0;
+	let checkerTimer = 0;
+	let retries = 0;
 
 	const checkComponents = function () {
 		console.log("Checking 3rd-party components...");
@@ -97,6 +98,20 @@
 		if (checkerTimer) clearInterval(checkerTimer);
 		return true;
 	};
-	checkerTimer = setInterval(checkComponents, 1000);
+
+	// checkerTimer = setInterval(checkComponents, 1000);
+
+	window.addEventListener('message', (event) => {
+		const data = event.data;
+		// console.debug(data);
+		if (!data || !data.type) {
+			return;
+		}
+		if (data.type === 'IFRAME:RELOAD') {
+			if (confirm(data.text || "Reload the game iframe?")) {
+				window.location.reload();
+			}
+		}
+	});
 
 })();

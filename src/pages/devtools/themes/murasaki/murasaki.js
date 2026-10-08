@@ -12,8 +12,6 @@
 	let selectedExpedition = 1;
 	let plannerIsGreatSuccess = false;
 	let showCombinedFleetBars = true;
-	let isTakingScreenshot = false;
-	let isActiveTabInvoked = false;
 	let overrideFocus = false;
 	
 	// a flag used by Fleet & ExpeditionStart to indicate
@@ -484,46 +482,6 @@
 
 		// Initial Hidden Nosaki Timer
 		$(".module.status .status_nosaki").hide();
-
-		// Screenshot buttons
-		$(".module.controls .btn_ss1").on("click", function(){
-			if (isTakingScreenshot) return;
-			isTakingScreenshot = true;
-			$(this).addClass("active");
-
-			const tabId = chrome.devtools.inspectedWindow.tabId;
-			const doScreenshot = function() {
-				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
-				(new RMsg("service", "screenshot", {
-					tabId: tabId,
-					playerName: PlayerManager.hq.name
-				}, function(){
-					$(".module.controls .btn_ss1").removeClass("active");
-					isTakingScreenshot = false;
-				})).execute();
-			};
-			// Check if permission has been granted first
-			if(!isActiveTabInvoked){
-				(new RMsg("service", "checkPermission", {
-					tabId: tabId
-				}, function(response){
-					if(response && response.value){
-						isActiveTabInvoked = true;
-						doScreenshot();
-					} else {
-						MurasakiListeners.ModalBox({
-							title: KC3Meta.term("PanelPermissionTitle"),
-							message: KC3Meta.term("PanelPermissionMessage"),
-						});
-						isActiveTabInvoked = false;
-						$(".module.controls .btn_ss1").removeClass("active");
-						isTakingScreenshot = false;
-					}
-				})).execute();
-			} else {
-				doScreenshot();
-			}
-		});
 
 		// Export button
 		$(".module.controls .btn_export").on("click", function(e){
