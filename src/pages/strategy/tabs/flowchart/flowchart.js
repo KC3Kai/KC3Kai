@@ -118,28 +118,29 @@
 				$(".tab_flowchart .extralist .complete").hide();
 			});
 			completeExtralist.toggle(this.showingAll);
-
+			
 			// Hide or show complete quests using some CSS logic
+			const complateStyleElmId = "#hide-complete-branches";
 			$(".hideCompleted").on("click", function() {
-				if (!document.getElementById("completed-css")) {
-					const style = document.createElement('style');
-					style.id = "completed-css";
-					style.innerHTML = `
-						/* Quest is complete and has no children */
-						.questInfo.complete:has(+ .questChildren:empty) {display: none;}
-						
-						/* Quest is complete and there are no incomplete children quests */
-						.questInfo.complete:not(:has(+ .questChildren .questInfo:not(.complete))) {display: none;}
+				if ($(complateStyleElmId).length === 0) {
+					const styleElm = document.createElement("style");
+					styleElm.id = complateStyleElmId.substr(1);
+					styleElm.type = "text/css";
+					/*
+					 * Hide tree branches with:
+					 ** Quest is complete and has no children;
+					 ** Quest is complete and there are no incomplete children quests;
+					 */
+					styleElm.innerHTML = `
+	.questInfo.complete:has(+ .questChildren:empty) { display: none; }
+	.questInfo.complete:not(:has(+ .questChildren .questInfo:not(.complete))) { display: none; }
 					`;
-					document.body.appendChild(style);
+					$(".tab_flowchart").append(styleElm);
 				}
 			});
-
 			$(".showCompleted").on("click", function() {
-				const completedCss = document.getElementById("completed-css");
-				if (completedCss) {
-					document.body.removeChild(completedCss);
-				}
+				const styleElm = $(complateStyleElmId);
+				if (styleElm.length > 0) styleElm.remove();
 			});
 
 			$(".resetDailies").on("click", function(){
