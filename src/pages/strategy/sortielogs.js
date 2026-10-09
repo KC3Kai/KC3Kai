@@ -48,6 +48,7 @@
 			onlyBattle: false,
 			evalShipState: true,
 			evalYasen: false,
+			clearMode: 'all',
 		};
 		this.settings = {};
 
@@ -92,7 +93,16 @@
 				const world = ev.target.value;
 				KC3StrategyTabs.gotoTab(null, world);
 			});
-			
+
+			// On-change clear mode dropdown
+			$(`.tab_${tabCode} .clear-mode-select`)
+				.val(this.settings.clearMode)
+				.on("change", (ev) => {
+					this.settings.clearMode = ev.target.value;
+					this.saveSettings();
+					this.showMap();
+				});
+
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
@@ -258,7 +268,9 @@
 							ConfigManager[config.linkedConfig] = this.settings[config.cfgKey];
 							ConfigManager.save();
 						}
-						if (config.cfgKey === 'loadLedger' && !this.settings[config.cfgKey]) return;
+						if (config.cfgKey === 'loadLedger' && !this.settings[config.cfgKey]) {
+							return;
+						}
 						this.showMap();
 					});
 			});
@@ -632,15 +644,22 @@
 		
 		/* A callback function to add more filtering conditions to database query.
 		---------------------------------*/
-		this.sortieFilter = function(sortie){
-			return !this.settings.bossArrival ||
+		this.sortieFilter = function (sortie) {
+			// Clear state filter (later event maps only, old event/regular maps don't have eventmap)
+			if (tabCode === 'event' && this.settings.clearMode === 'pre') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 0) return false;
+			} else if (tabCode === 'event' && this.settings.clearMode === 'post') {
+				if (!sortie.eventmap || sortie.eventmap.api_cleared !== 1) return false;
+			}
+			// clear mode 'all' passes through
+			return !this.settings.bossArrival
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
-				(Array.isArray(sortie.nodes) && sortie.nodes.some(
+				|| (Array.isArray(sortie.nodes) && sortie.nodes.some(
 					node => node.eventId == 5
-					// treat W1-6-N node as boss
-					|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
+						// treat W1-6-N node as boss
+						|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
 				));
 		};
 		
@@ -768,8 +787,6 @@
 		---------------------------------*/
 		this.showList = function( sortieList ){
 			const self = this;
-			KC3SortieManager.load();
-
 			const shipNameEquipSwitchFunc = function(e){
 				var ref = $(this).parent().parent();
 				if($(".rfleet_detail",ref).css("display") === "none") {
@@ -899,9 +916,11 @@
 				};
 			};
 
-			const showSortieLedger = function (sortieId, sortieBox, sortieWorld) {
+			const showSortieLedger = function (sortieId, sortieBox, sortieWorld,
+				fromClick = false, refreshCache = false) {
 				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
-				// Akashi repair not included either, belonged to its own type
+				// Sortie consumption not accurate in time until resupplies and repairs of all fleet members are done later
+				// Akashi repair (Nosaki sparkle) not included either, belonged to its own type
 				const buildConsumptionArray = arr => (arr || []).reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 				const buildLedgerMessage = consumption => {
@@ -922,16 +941,18 @@
 					}).join(" ");
 				};
 
-				const isOnSortie = sortieId === KC3SortieManager.onSortie;
+				const mapNameElm = $(".sortie_map", sortieBox);
+				mapNameElm.toggleClass("queued loading");
+				if (fromClick && refreshCache && mapNameElm.tooltip("instance")) {
+					mapNameElm.tooltip("close");
+				}
+				let tooltip = "";
 				const sKey = "navaloverall:sortie:" + sortieId;
 				const lKey = "navaloverall:lbas:" + sortieId;
 
-				$(".sortie_map", sortieBox).toggleClass('queued loading');
-				let tooltip = "";
-
 				return KC3Cache.get(sKey)
 					.then(({ value: cachedSortie }) => {
-						if (cachedSortie !== undefined) {
+						if (!refreshCache && cachedSortie !== undefined) {
 							return cachedSortie;
 						}
 						return KC3Database.con.navaloverall
@@ -943,9 +964,7 @@
 								if (!consumption.hasTruthy()) {
 									consumption = null;
 								}
-								if (!isOnSortie) {
-									KC3Cache.set(sKey, consumption);
-								}
+								KC3Cache.set(sKey, consumption);
 								return consumption;
 							});
 					})
@@ -955,8 +974,8 @@
 						}
 
 						tooltip = buildLedgerMessage(consumption);
-						if (!(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6 || sortieWorld === 7)) {
-							$(".sortie_map", sortieBox)
+						if (!(KC3Meta.isEventWorld(sortieWorld) || [6, 7].includes(sortieWorld))) {
+							mapNameElm
 								.attr("titlealt", "{0}".format(tooltip))
 								.lazyInitTooltip();
 							return;
@@ -964,7 +983,7 @@
 
 						return KC3Cache.get(lKey)
 							.then(({ value: cachedLb }) => {
-								if (cachedLb !== undefined) {
+								if (!refreshCache && cachedLb !== undefined) {
 									return cachedLb;
 								}
 								return KC3Database.con.navaloverall
@@ -987,9 +1006,7 @@
 										if (!lbConsumption.hasTruthy()) {
 											lbConsumption = null;
 										}
-										if (!isOnSortie) {
-											KC3Cache.set(lKey, lbConsumption);
-										}
+										KC3Cache.set(lKey, lbConsumption);
 										return lbConsumption;
 									});
 							})
@@ -999,13 +1016,16 @@
 									lbTooltip = buildLedgerMessage(lbConsumption);
 								}
 
-								$(".sortie_map", sortieBox)
+								mapNameElm
 									.attr("titlealt", (!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")).format(tooltip, lbTooltip))
 									.lazyInitTooltip();
 							});
 					})
 					.finally(() => {
-						$(".sortie_map", sortieBox).toggleClass('loading loaded');
+						mapNameElm.toggleClass("loading loaded");
+						if (fromClick && mapNameElm.tooltip("instance")) {
+							mapNameElm.tooltip("open");
+						}
 					});
 			};
 			const queueLedgerLoadingFunc = (e) => {
@@ -1013,9 +1033,10 @@
 				const id = mapElm.data("id"), world = mapElm.data("world");
 				const sortieBox = mapElm.parent().parent();
 				const done = ["queued", "loading", "loaded"].some(c => mapElm.hasClass(c));
-				if(!id || !world || done) return;
-				mapElm.toggleClass("queued");
-				self.ledgerLimiter.schedule(showSortieLedger, id, sortieBox, world);
+				const refreshCache = e.ctrlKey || e.metaKey;
+				if(!id || !world || (done && !refreshCache)) return;
+				mapElm.toggleClass("queued").toggleClass("loaded", false);
+				self.ledgerLimiter.schedule(showSortieLedger, id, sortieBox, world, true, refreshCache);
 			};
 
 			// Show sortie records on list
@@ -1047,7 +1068,7 @@
 					$(".sortie_map", sortieBox).text(
 						(KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum
 					).data("id", sortie.id).data("world", sortie.world).on("click", queueLedgerLoadingFunc);
-					if (self.settings.loadLedger) {
+					if (self.settings.loadLedger && sortie.battles.length > 0) {
 						$(".sortie_map", sortieBox).toggleClass('queued');
 						// schedule `showSortieLedger` as this take tons of time
 						self.ledgerLimiter.schedule(showSortieLedger, sortie.id, sortieBox, sortie.world);
