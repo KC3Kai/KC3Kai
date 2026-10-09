@@ -118,7 +118,30 @@
 				$(".tab_flowchart .extralist .complete").hide();
 			});
 			completeExtralist.toggle(this.showingAll);
-			
+
+			// Hide or show complete quests using some CSS logic
+			$(".hideCompleted").on("click", function() {
+				if (!document.getElementById("completed-css")) {
+					const style = document.createElement('style');
+					style.id = "completed-css";
+					style.innerHTML = `
+						/* Quest is complete and has no children */
+						.questInfo.complete:has(+ .questChildren:empty) {display: none;}
+						
+						/* Quest is complete and there are no incomplete children quests */
+						.questInfo.complete:not(:has(+ .questChildren .questInfo:not(.complete))) {display: none;}
+					`;
+					document.body.appendChild(style);
+				}
+			});
+
+			$(".showCompleted").on("click", function() {
+				const completedCss = document.getElementById("completed-css");
+				if (completedCss) {
+					document.body.removeChild(completedCss);
+				}
+			});
+
 			$(".resetDailies").on("click", function(){
 				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 					KC3QuestManager.resetDailies();
