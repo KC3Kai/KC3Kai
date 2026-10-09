@@ -99,19 +99,6 @@
 		return true;
 	};
 
-	// checkerTimer = setInterval(checkComponents, 1000);
-
-	window.addEventListener('message', (event) => {
-		const data = event.data;
-		// console.debug(data);
-		if (!data || !data.type) {
-			return;
-		}
-		if (data.type === 'IFRAME:RELOAD') {
-			if (confirm(data.text || "Reload the game iframe?")) {
-				window.location.reload();
-			}
-		}
-	});
+	checkerTimer = setInterval(checkComponents, 1000);
 
 })();

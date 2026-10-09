@@ -3615,6 +3615,7 @@ ABYSS FLEET
 }
 .module.controls .btn_mute img,
 .module.controls .btn_resize img,
+.module.controls .btn_reload_iframe img,
 .module.controls .btn_ss1 img {
 	filter:invert(80%);
 	-webkit-filter:invert(80%);

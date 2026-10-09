@@ -69,10 +69,9 @@
 		}
 
 		// Experimental function: improve 3rd-party components used by game
-		// if (Array.isArray(response.value) && !!response.value[2]) {
-		// 	loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
-		// }
-		loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
+		if (Array.isArray(response.value) && !!response.value[2]) {
+			loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
+		}
 
 		// For blocking unexpected game request by verifications on fleets and states against configured conditions
 		loadScript(chrome.runtime.getURL("library/injections/axios_injectable.js"));
@@ -83,7 +82,7 @@
 				return true;
 			}
 			switch (request.action) {
-				case "getGameCanvasData": {
+				case "getGameCanvasData":
 					const gameCanvas = document.querySelector("canvas");
 					if (!gameCanvas) {
 						response({});
@@ -97,14 +96,14 @@
 							});
 						});
 					}
-					return true;
-				}
+					break;
 				case "reloadIframe":
-					window.postMessage({ type: "IFRAME:RELOAD", text: request.text }, windowOrigin);
-					return true;
-				default:
-					return true;
+					if (confirm(request.text || "Reload the subframe of game page?")) {
+						window.location.reload();
+					}
+					break;
 			}
+			return true;
 		});
 
 	})).execute();
