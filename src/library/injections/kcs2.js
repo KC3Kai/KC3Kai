@@ -68,7 +68,7 @@
 			}
 		}
 
-		// Experimental function: improve 3rd-party components used by game
+		// Experimental function: improve 3rd-party components used by the game
 		if (Array.isArray(response.value) && !!response.value[2]) {
 			loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
 		}
@@ -76,7 +76,7 @@
 		// For blocking unexpected game request by verifications on fleets and states against configured conditions
 		loadScript(chrome.runtime.getURL("library/injections/axios_injectable.js"));
 
-		// Register original canvas screenshot message handler
+		// Register message handler for original canvas screenshot and iframe reloading
 		RMsg.addListener(function (request, sender, response) {
 			if (request.identifier !== "kc3_gamescreen") {
 				return true;
