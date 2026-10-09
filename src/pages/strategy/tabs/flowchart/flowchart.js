@@ -120,11 +120,11 @@
 			completeExtralist.toggle(this.showingAll);
 			
 			// Hide or show complete quests using some CSS logic
-			const complateStyleElmId = "#hide-complete-branches";
+			const completeStyleElmId = "#hide-complete-branches";
 			$(".hideCompleted").on("click", function() {
-				if ($(complateStyleElmId).length === 0) {
+				if ($(completeStyleElmId).length === 0) {
 					const styleElm = document.createElement("style");
-					styleElm.id = complateStyleElmId.substr(1);
+					styleElm.id = completeStyleElmId.substr(1);
 					styleElm.type = "text/css";
 					/*
 					 * Hide tree branches with:
@@ -139,7 +139,7 @@
 				}
 			});
 			$(".showCompleted").on("click", function() {
-				const styleElm = $(complateStyleElmId);
+				const styleElm = $(completeStyleElmId);
 				if (styleElm.length > 0) styleElm.remove();
 			});
 
