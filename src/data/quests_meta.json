@@ -1000,7 +1000,7 @@
 	},
 	"359": {
 		"unlock": [986],
-		"hash": 1520407038
+		"hash": -1206689719
 	},
 	"360": {},
 	"361": {
@@ -2529,18 +2529,18 @@
 	},
 	"984": {
 		"unlock": [359, 985, 1119],
-		"hash": 313020654
+		"hash": 19617647
 	},
 	"985": {
-		"unlock": [987, 1002, 1156],
-		"hash": -1884687541
+		"unlock": [987, 1002],
+		"hash": -1929675468
 	},
 	"986": {
-		"unlock": [987, 1002],
-		"hash": 1236463370
+		"unlock": [987, 1039],
+		"hash": 770515079
 	},
 	"987": {
-		"hash": 747084307
+		"hash": -1811418492
 	},
 	"988": {
         "hash": 21243418
@@ -2579,7 +2579,8 @@
 		"unlock": [1133]
 	},
 	"1002": {
-		"hash": 1244010250
+		"unlock": [1171],
+		"hash": -1732223503
 	},
 	"1003": {},
 	"1004": {},
@@ -2699,15 +2700,15 @@
 		"hash": 83351655
 	},
 	"1038": {
-		"unlock": [1039, 1040],
-		"hash": 1935352460
+		"unlock": [1039],
+		"hash": -752590024
 	},
 	"1039": {
-		"unlock": [1157],
-		"hash": 1424529197
+		"unlock": [1040],
+		"hash": -1263413287
 	},
 	"1040": {
-		"hash": 214825363
+		"hash": 1821850175
 	},
 	"1041": {
 		"unlock": [1159]
@@ -2760,6 +2761,7 @@
 		"rewardConsumables": [0, 12, 0, 0]
 	},
 	"1052": {},
+	"1053": {},
 	"1101": {
 		"unlock": [1102, 1103],
 		"rewardConsumables": [8, 0, 8, 4]
@@ -2831,7 +2833,7 @@
 		"unlock": [983]
 	},
 	"1119": {
-		"unlock": [1156],
+		"unlock": [1038],
 		"hash": -1634581198
 	},
 	"1120": {
@@ -2977,6 +2979,9 @@
 		"hash": 473686214
 	},
 	"1170": {},
+	"1171": {
+		"hash": -2068761457
+	},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],
