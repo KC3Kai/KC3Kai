@@ -13408,7 +13408,12 @@
 						stypes: [1],
 						multiple: { "tyku": 1, "houk": 2, "souk": 1 },
 					},
-					// Includes all bonuses from T13 Kai either:
+					// Includes all bonuses from [106] T13 Kai either:
+					{
+						// Kitakami Kai San
+						ids: [1071],
+						multiple: { "houg": 2, "tyku": 6, "houk": 4, "houm": 2, "souk": 2 },
+					},
 					{
 						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2
 						ids: [407,   145,        419,             151,       541],
