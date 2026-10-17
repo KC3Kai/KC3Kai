@@ -145,13 +145,17 @@ known IDs see QuestManager
 
 		// is selected on progress, or force to be adjusted on shared counter
 		if(this.tracking && (this.isSelected() || !!isAdjustingCounter)){
-			// passive adjusted never reach completion
-			var maxValue = !!isAdjustingCounter ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
-			if (this.tracking[reqNum][0] < maxValue) {
-				isIncreased = true;
-				this.tracking[reqNum][0] += Math.min(amount, maxValue - this.tracking[reqNum][0]);
+			if (Array.isArray(this.tracking[reqNum])) {
+				// passive adjusted never reach completion
+				var maxValue = !!isAdjustingCounter ? this.tracking[reqNum][1] - 1 : this.tracking[reqNum][1];
+				if (this.tracking[reqNum][0] < maxValue) {
+					isIncreased = true;
+					this.tracking[reqNum][0] += Math.min(amount, maxValue - this.tracking[reqNum][0]);
+				}
+				KC3QuestManager.save();
+			} else {
+				console.warn("Unexpected progress index requested", reqNum, this.tracking);
 			}
-			KC3QuestManager.save();
 		}
 		// Some quests are reported bug-like behavior on progress counter at server-side,
 		// Try to simulate the increment behavior, keep counters the same with in-game's
