@@ -97,6 +97,8 @@
   // #region UI Event Binding
 
   Utils.prototype.addCommonControls = function () {
+    const self = this;
+
     // Fleet/LBAS view toggled by mousewheel
     $(".module.controls")
       .on('mousewheel', (ev) => {
@@ -149,6 +151,56 @@
         $(".module.controls .scrollable").scrollLeft(newLeft);
         return newLeft;
       });
+    });
+
+    // Screenshot button
+    let isTakingScreenshot = false, isActiveTabInvoked = false;
+    $(".module.controls .btn_ss1").on("click", function () {
+      if (isTakingScreenshot) return;
+      isTakingScreenshot = true;
+      $(this).addClass("active");
+
+      const tabId = chrome.devtools.inspectedWindow.tabId;
+      const doScreenshot = function () {
+        // Tell service to pass a message to gamescreen on inspected window to get a screenshot
+        (new RMsg("service", "screenshot", {
+          tabId: tabId,
+          playerName: PlayerManager.hq.name
+        }, function () {
+          $(".module.controls .btn_ss1").removeClass("active");
+          isTakingScreenshot = false;
+        })).execute();
+      };
+      // Check if permission has been granted first
+      if (!isActiveTabInvoked) {
+        (new RMsg("service", "checkPermission", {
+          tabId: tabId
+        }, function (response) {
+          if (response && response.value) {
+            isActiveTabInvoked = true;
+            doScreenshot();
+          } else {
+            self.listener.ModalBox({
+              title: KC3Meta.term("PanelPermissionTitle"),
+              message: KC3Meta.term("PanelPermissionMessage"),
+            });
+            isActiveTabInvoked = false;
+            $(".module.controls .btn_ss1").removeClass("active");
+            isTakingScreenshot = false;
+          }
+        })).execute();
+      } else {
+        doScreenshot();
+      }
+    });
+
+    // Reload game iframe button
+    $(".module.controls .btn_reload_iframe").on("click", function () {
+      // The game frame confirms with this text, then reloads itself
+      (new RMsg("service", "reloadIframe", {
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        text: KC3Meta.term("PanelReloadIframeConfirm")
+      })).execute();
     });
   };
 

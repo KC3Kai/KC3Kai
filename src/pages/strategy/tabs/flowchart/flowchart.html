@@ -40,6 +40,10 @@
 	<div class="questControl hover questFilter i18n" data-filterPeriod="quarterly">QuestFlowchartResetQuarterlies</div>
 	<div class="questControl hover questFilter i18n" data-filterPeriod="yearly">QuestFlowchartResetYearlies</div>
 	<div class="clear"></div>
+	<div class="questLabel i18n">QuestFlowchartHideComplete</div>
+	<div class="questControl hover hideCompleted i18n">QuestFlowchartHideCompleteEnable</div>
+	<div class="questControl hover showCompleted i18n">QuestFlowchartHideCompleteDisable</div>
+	<div class="clear"></div>
 </div>
 
 <!-- RECURRING -->
@@ -74,8 +78,8 @@
 			</div>
 			<div class="clear"></div>
 		</div>
-		<ul class="questChildren">
-		</ul>
+		<!-- must keep UL real empty, even without a linefeed, to match with :has(:empty) -->
+		<ul class="questChildren"></ul>
 		<div class="clear"></div>
 	</li>
 	</ul>
