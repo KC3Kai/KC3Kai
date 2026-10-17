@@ -4,7 +4,7 @@ name: CI Build
 on:
   push:
     branches:
-      - webstore
+      - debug-webstore
 
 jobs:
   build:
@@ -46,6 +46,7 @@ jobs:
       timeout-minutes: 10
       run: |
         grunt build
+        grunt compress:release
         echo KC3Kai $PACKAGE_VERSION package: $GITHUB_WORKSPACE/build/release.zip
     # PACKAGE AND DEPLOY TO CHROME WEBSTORE
     # - name: Publish to webstore
@@ -54,18 +55,18 @@ jobs:
     #    WEBSTORE_CLIENT_ID: ${{ secrets.WEBSTORE_CLIENT_ID }}
     #    WEBSTORE_CLIENT_SECRET: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
     #    WEBSTORE_REFRESH_TOKEN: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
-    #  run: grunt webstore
+    #  run: grunt webstore_upload:kc3kai
     # DEPLOY TO GITHUB RELEASES
-    - name: Push git tag
-      timeout-minutes: 10
-      env:
-        KC3_VERSION: ${{ env.PACKAGE_VERSION }}
-        GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
-      run: |
-        git config --global user.email "dragonjet@kc3.moe"
-        git config --global user.name "Github Actions"
-        git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
-        git push -q https://dragonjet:$GITHUB_TOKEN@github.com/KC3Kai/KC3Kai --tags
+    #- name: Push git tag
+    #  timeout-minutes: 10
+    #  env:
+    #    KC3_VERSION: ${{ env.PACKAGE_VERSION }}
+    #    GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
+    #  run: |
+    #    git config --global user.email "dragonjet@kc3.moe"
+    #    git config --global user.name "Github Actions"
+    #    git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
+    #    git push -q https://dragonjet:$GITHUB_TOKEN@github.com/KC3Kai/KC3Kai --tags
     - name: Create release
       id: create_release
       # https://github.com/actions/create-release
@@ -86,7 +87,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/release.zip
+        asset_path: ${{ github.workspace }}/build/release.zip
         asset_name: kc3kai-${{ env.KC3_VERSION }}.zip
         asset_content_type: application/zip
     - name: Package auto-updater asset
@@ -98,6 +99,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/updater-win64.zip
+        asset_path: ${{ github.workspace }}/build/updater-win64.zip
         asset_name: kc3kai-chromium-standalone-updater-win64.zip
         asset_content_type: application/zip
