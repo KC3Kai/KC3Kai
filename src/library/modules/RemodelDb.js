@@ -140,6 +140,7 @@
                 case 362: // Oyashio
                 case 390: // Amagiri Kai
                 case 903: // Amagiri K2
+                case 391: // Sagiri Kai
                 case 368: // Uranami
                 case 720: // Hayashio
                 case 973: // Thonburi
@@ -339,6 +340,8 @@
                 case 955: // Kiyoshimo K2
                 case 960: // Kiyoshimo K2D
                     return 10;
+                case 391: //  Sagiri Kai
+                    return 38;
                 case 203: // Hatsuyuki
                 case 996: // Nosaki
                     return 7;
@@ -458,6 +461,7 @@
                 case 578:  // to Asashimo K2Ho
                 case 1034: // to Suzunami K2Ho
                 case 1028: // to Independence Flight2
+                case 391:  // to Sagiri K2
                     return 2;
                 case 1060: // to Bearn Amelioration
                     return 1;

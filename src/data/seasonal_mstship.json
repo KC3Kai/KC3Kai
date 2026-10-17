@@ -10398,11 +10398,11 @@
 	},
 	"6299": {
 		"api_id": 6299,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "夏制服早波改二",
+		"api_yomi": "はやなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6300": {
 		"api_id": 6300,
@@ -10414,11 +10414,11 @@
 	},
 	"6301": {
 		"api_id": 6301,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "夏制服玉波改二",
+		"api_yomi": "たまなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6302": {
 		"api_id": 6302,
@@ -10430,11 +10430,11 @@
 	},
 	"6303": {
 		"api_id": 6303,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "夏制服涼波改二",
+		"api_yomi": "すずなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"6304": {
 		"api_id": 6304,
@@ -10657,6 +10657,270 @@
 		"api_name": "水着Heywood L.E.改",
 		"api_yomi": "ヘイウッド",
 		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6332": {
+		"api_id": 6332,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6333": {
+		"api_id": 6333,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6334": {
+		"api_id": 6334,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6335": {
+		"api_id": 6335,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6336": {
+		"api_id": 6336,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6337": {
+		"api_id": 6337,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6338": {
+		"api_id": 6338,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6339": {
+		"api_id": 6339,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6340": {
+		"api_id": 6340,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6341": {
+		"api_id": 6341,
+		"api_name": "浴衣稲木",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6342": {
+		"api_id": 6342,
+		"api_name": "浴衣稲木改",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6343": {
+		"api_id": 6343,
+		"api_name": "浴衣稲木改二",
+		"api_yomi": "いなぎ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6344": {
+		"api_id": 6344,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6345": {
+		"api_id": 6345,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6346": {
+		"api_id": 6346,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6347": {
+		"api_id": 6347,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6348": {
+		"api_id": 6348,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6349": {
+		"api_id": 6349,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6350": {
+		"api_id": 6350,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6351": {
+		"api_id": 6351,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6352": {
+		"api_id": 6352,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6353": {
+		"api_id": 6353,
+		"api_name": "浴衣多摩改二",
+		"api_yomi": "たま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6354": {
+		"api_id": 6354,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6355": {
+		"api_id": 6355,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6356": {
+		"api_id": 6356,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6357": {
+		"api_id": 6357,
+		"api_name": "浴衣白露改二",
+		"api_yomi": "しらつゆ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6358": {
+		"api_id": 6358,
+		"api_name": "浴衣迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6359": {
+		"api_id": 6359,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6360": {
+		"api_id": 6360,
+		"api_name": "浴衣長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6361": {
+		"api_id": 6361,
+		"api_name": "浴衣Conte di Cavour改",
+		"api_yomi": "カブール",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6362": {
+		"api_id": 6362,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6363": {
+		"api_id": 6363,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6364": {
+		"api_id": 6364,
+		"api_name": "浴衣Gotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
 		"api_soku": 10,
 		"api_slot_num": 3
 	}

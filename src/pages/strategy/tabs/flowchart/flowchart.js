@@ -119,6 +119,30 @@
 			});
 			completeExtralist.toggle(this.showingAll);
 			
+			// Hide or show complete quests using some CSS logic
+			const completeStyleElmId = "#hide-complete-branches";
+			$(".hideCompleted").on("click", function() {
+				if ($(completeStyleElmId).length === 0) {
+					const styleElm = document.createElement("style");
+					styleElm.id = completeStyleElmId.substr(1);
+					styleElm.type = "text/css";
+					/*
+					 * Hide tree branches with:
+					 ** Quest is complete and has no children;
+					 ** Quest is complete and there are no incomplete children quests;
+					 */
+					styleElm.innerHTML = `
+	.questInfo.complete:has(+ .questChildren:empty) { display: none; }
+	.questInfo.complete:not(:has(+ .questChildren .questInfo:not(.complete))) { display: none; }
+					`;
+					$(".tab_flowchart").append(styleElm);
+				}
+			});
+			$(".showCompleted").on("click", function() {
+				const styleElm = $(completeStyleElmId);
+				if (styleElm.length > 0) styleElm.remove();
+			});
+
 			$(".resetDailies").on("click", function(){
 				if(confirm(KC3Meta.term("QuestFlowchartConfirm"))){
 					KC3QuestManager.resetDailies();
