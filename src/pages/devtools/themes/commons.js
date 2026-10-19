@@ -99,6 +99,11 @@
   Utils.prototype.addCommonControls = function () {
     const self = this;
 
+    // Switch the fleet view only after the user stops changing it
+    const clickFleetControl = $.debounce(300, (selector) => {
+      $(selector).trigger("click");
+    });
+
     // Fleet/LBAS view toggled by mousewheel
     $(".module.controls")
       .on('mousewheel', (ev) => {
@@ -117,9 +122,9 @@
         btns.eq(newIndex).addClass('active');
       })
       // Action that runs only after the user stops wheeling
-      .on('mousewheel', $.debounce(300, (ev) => {
-        $(".module.controls .control[class*='fleet_'].active").trigger('click');
-      }));
+      .on('mousewheel', () => {
+        clickFleetControl(".module.controls .control[class*='fleet_'].active");
+      });
 
     const scrollControlButtons = (setScrollLeft) => {
       const buttonCount = $(".module.controls .control_btn").length;
@@ -215,27 +220,27 @@
       },
       49: () => {
         // 1 key switch to fleet #1 view
-        $(".module.controls .fleet_num:contains('1')").trigger("click");
+        clickFleetControl(".module.controls .fleet_num:contains('1')");
       },
       50: () => {
         // 2 key switch to fleet #2 view
-        $(".module.controls .fleet_num:contains('2')").trigger("click");
+        clickFleetControl(".module.controls .fleet_num:contains('2')");
       },
       51: () => {
         // 3 key switch to fleet #3 view
-        $(".module.controls .fleet_num:contains('3')").trigger("click");
+        clickFleetControl(".module.controls .fleet_num:contains('3')");
       },
       52: () => {
         // 4 key switch to fleet #4 view
-        $(".module.controls .fleet_num:contains('4')").trigger("click");
+        clickFleetControl(".module.controls .fleet_num:contains('4')");
       },
       53: () => {
         // 5 key switch to combined fleet view
-        $(".module.controls .fleet_rengo").trigger("click");
+        clickFleetControl(".module.controls .fleet_rengo");
       },
       54: () => {
         // 6 key switch to LBAS view
-        $(".module.controls .fleet_lbas").trigger("click");
+        clickFleetControl(".module.controls .fleet_lbas");
       },
       81: () => {
         // Q key switch to basic tab
