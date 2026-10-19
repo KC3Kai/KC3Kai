@@ -356,7 +356,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		Ask the game frame to reload itself, without reloading the whole tab
 		------------------------------------------*/
 		"reloadIframe" :function(request, sender, response){
-			(new TMsg(request.tabId, "gamescreen", "reloadIframe", { text: request.text })).execute();
+			(new TMsg(request.tabId, "gamescreen", "reloadIframe", {
+				text: request.text,
+				ask: request.ask
+			})).execute();
 		},
 		
 		/* GET TAB INFO

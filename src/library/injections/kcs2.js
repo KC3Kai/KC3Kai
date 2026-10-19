@@ -27,6 +27,21 @@
 		document.body.appendChild(script);
 	}
 
+	function doReloadIframe(text, ask) {
+		if (ask === false || confirm(text || "Reload the subframe of game page?")) {
+			window.location.reload();
+		}
+	}
+
+	// Forward all key events to the devtools panel for hotkeys
+	$(document).on("keydown", function (e) {
+		if (e.which === 117) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+		(new RMsg("devtools", "hotkey", { key: e.which, shiftKey: e.shiftKey })).execute();
+	});
+
 	var intervalChecker;
 	function checkAgain() {
 		console.log("Checking game canvas...");
@@ -98,9 +113,7 @@
 					}
 					break;
 				case "reloadIframe":
-					if (confirm(request.text || "Reload the subframe of game page?")) {
-						window.location.reload();
-					}
+					doReloadIframe(request.text, request.ask);
 					break;
 			}
 			return true;
