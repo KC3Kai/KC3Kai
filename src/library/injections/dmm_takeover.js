@@ -46,6 +46,11 @@
 			// Timer to keep auto-focusing on window every second
 			setInterval(function(){
 				if(self.nonFocusSeconds === 0){
+					// Do not steal focus from the game iframe, so its keys
+					// can be forwarded to the devtools panel
+					if (document.activeElement && document.activeElement.tagName === "IFRAME") {
+						return;
+					}
 					window.focus();
 				}else{
 					self.nonFocusSeconds--;

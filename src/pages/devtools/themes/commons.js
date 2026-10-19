@@ -280,6 +280,7 @@
     };
 
     const handleHotkey = (e) => {
+      // console.debug(e);
       const action = hotkeys[e.keyCode];
       if (!action) return;
       action(e);

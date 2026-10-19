@@ -35,6 +35,7 @@
 
 	// Forward all key events to the devtools panel for hotkeys
 	$(document).on("keydown", function (e) {
+		// console.debug(e);
 		if (e.which === 117) {
 			e.stopPropagation();
 			e.preventDefault();
