@@ -28,7 +28,7 @@
 	}
 
 	function doReloadIframe(text, ask) {
-		if (ask === false || confirm(text || "Reload the subframe of game page?")) {
+		if (!ask || confirm(text || "Reload the subframe of game page?")) {
 			window.location.reload();
 		}
 	}
