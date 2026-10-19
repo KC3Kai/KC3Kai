@@ -163,6 +163,7 @@ Retrieves when needed to apply on components
 				api_tracking      : false,
 				api_mustPanel     : true,
 				api_askExit       : true,
+				api_askReload     : true,
 				api_directRefresh : false,
 				api_margin        : 0,
 				api_bg_color      : "#def",
