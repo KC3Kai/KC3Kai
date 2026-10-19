@@ -194,13 +194,112 @@
       }
     });
 
-    // Reload game iframe button
-    $(".module.controls .btn_reload_iframe").on("click", function () {
-      // The game frame confirms with this text, then reloads itself
+    // Reload game iframe, let the game frame confirm if configured
+    const reloadGameIframe = () => {
+      ConfigManager.loadIfNecessary();
       (new RMsg("service", "reloadIframe", {
         tabId: chrome.devtools.inspectedWindow.tabId,
-        text: KC3Meta.term("PanelReloadIframeConfirm")
+        text: KC3Meta.term("PanelReloadIframeConfirm"),
+        ask: ConfigManager.api_askReload,
       })).execute();
+    };
+
+    $(".module.controls .btn_reload_iframe").on("click", reloadGameIframe);
+
+    // Key actions, keyed by keyCode
+    const hotkeys = {
+      9: (e) => {
+        // Tab key, prevent it scrolling any window
+        e.stopPropagation();
+        e.preventDefault();
+      },
+      49: () => {
+        // 1 key switch to fleet #1 view
+        $(".module.controls .fleet_num:contains('1')").trigger("click");
+      },
+      50: () => {
+        // 2 key switch to fleet #2 view
+        $(".module.controls .fleet_num:contains('2')").trigger("click");
+      },
+      51: () => {
+        // 3 key switch to fleet #3 view
+        $(".module.controls .fleet_num:contains('3')").trigger("click");
+      },
+      52: () => {
+        // 4 key switch to fleet #4 view
+        $(".module.controls .fleet_num:contains('4')").trigger("click");
+      },
+      53: () => {
+        // 5 key switch to combined fleet view
+        $(".module.controls .fleet_rengo").trigger("click");
+      },
+      54: () => {
+        // 6 key switch to LBAS view
+        $(".module.controls .fleet_lbas").trigger("click");
+      },
+      81: () => {
+        // Q key switch to basic tab
+        $(".module.activity #atab_basic").trigger("click");
+      },
+      87: () => {
+        // W key switch to battle tab
+        $(".module.activity #atab_battle").trigger("click");
+      },
+      69: () => {
+        // E key switch to quest tab
+        if (ConfigManager.info_quest_activity) {
+          $(".module.activity #atab_quest").trigger("click");
+        }
+      },
+      82: () => {
+        // R key switch to exped planner tab
+        $(".module.activity #atab_expeditionPlanner").trigger("click");
+      },
+      117: (e) => {
+        // F6 key reload the game iframe
+        e.stopPropagation();
+        e.preventDefault();
+        reloadGameIframe();
+      },
+      118: () => {
+        // F7 take panel's screenshot
+        // TODO captureVisibleTab not work since no way to grant activeTab permission
+      },
+      119: (e) => {
+        // F8 mute toggle OR Shift+F8 alert sound toggle
+        if (e.shiftKey) {
+          $(".module.controls .btn_alert_toggle").trigger("click");
+        } else {
+          $(".module.controls .btn_mute").trigger("click");
+        }
+      },
+      120: () => {
+        // F9 screenshot
+        $(".module.controls .btn_ss1").trigger("click");
+      },
+    };
+
+    const handleHotkey = (e) => {
+      const action = hotkeys[e.keyCode];
+      if (!action) return;
+      action(e);
+    };
+
+    $(document).on("keydown", handleHotkey);
+
+    // Hotkeys forwarded from the game frame
+    RMsg.addListener((request, sender, response) => {
+      if (request.identifier !== "kc3_devtools" || request.action !== "hotkey") return false;
+      if (!sender.tab || sender.tab.id !== chrome.devtools.inspectedWindow.tabId) return false;
+      handleHotkey({
+        keyCode: request.key,
+        which: request.key,
+        shiftKey: !!request.shiftKey,
+        stopPropagation: () => {},
+        preventDefault: () => {},
+      });
+      response({ handled: true });
+      return true;
     });
   };
 
