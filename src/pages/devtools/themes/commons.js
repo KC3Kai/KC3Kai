@@ -99,9 +99,17 @@
   Utils.prototype.addCommonControls = function () {
     const self = this;
 
-    // Switch the fleet view only after the user stops changing it
-    const clickFleetControl = $.debounce(300, (selector) => {
-      $(selector).trigger("click");
+    // Fleet/LBAS view controls, shared by mousewheel and hotkeys
+    const fleetControls = () => $(".module.controls .control[class*='fleet_']");
+
+    // Update the active control immediately, then click it after the user stops
+    const setActiveFleetControl = (selector) => {
+      fleetControls().removeClass("active");
+      $(selector).addClass("active");
+    };
+
+    const clickActiveFleetControl = $.debounce(300, () => {
+      fleetControls().filter(".active").trigger("click");
     });
 
     // Fleet/LBAS view toggled by mousewheel
@@ -113,7 +121,7 @@
           || scrollableContainer === ev.originalEvent.target.parentNode.parentNode) {
           return;
         }
-        const btns = $(".module.controls .control[class*='fleet_']");
+        const btns = fleetControls();
         const curIndex = btns.filter(".active").index();
         const newIndex = (curIndex + (ev.originalEvent.deltaY > 0 ? 1 : -1))
           .wrap(0, btns.length - 1);
@@ -123,7 +131,7 @@
       })
       // Action that runs only after the user stops wheeling
       .on('mousewheel', () => {
-        clickFleetControl(".module.controls .control[class*='fleet_'].active");
+        clickActiveFleetControl();
       });
 
     const scrollControlButtons = (setScrollLeft) => {
@@ -220,27 +228,33 @@
       },
       49: () => {
         // 1 key switch to fleet #1 view
-        clickFleetControl(".module.controls .fleet_num:contains('1')");
+        setActiveFleetControl(".module.controls .fleet_num:contains('1')");
+        clickActiveFleetControl();
       },
       50: () => {
         // 2 key switch to fleet #2 view
-        clickFleetControl(".module.controls .fleet_num:contains('2')");
+        setActiveFleetControl(".module.controls .fleet_num:contains('2')");
+        clickActiveFleetControl();
       },
       51: () => {
         // 3 key switch to fleet #3 view
-        clickFleetControl(".module.controls .fleet_num:contains('3')");
+        setActiveFleetControl(".module.controls .fleet_num:contains('3')");
+        clickActiveFleetControl();
       },
       52: () => {
         // 4 key switch to fleet #4 view
-        clickFleetControl(".module.controls .fleet_num:contains('4')");
+        setActiveFleetControl(".module.controls .fleet_num:contains('4')");
+        clickActiveFleetControl();
       },
       53: () => {
         // 5 key switch to combined fleet view
-        clickFleetControl(".module.controls .fleet_rengo");
+        setActiveFleetControl(".module.controls .fleet_rengo");
+        clickActiveFleetControl();
       },
       54: () => {
         // 6 key switch to LBAS view
-        clickFleetControl(".module.controls .fleet_lbas");
+        setActiveFleetControl(".module.controls .fleet_lbas");
+        clickActiveFleetControl();
       },
       81: () => {
         // Q key switch to basic tab
