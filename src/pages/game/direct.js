@@ -114,7 +114,15 @@
 		} else {
 			$(".altGameModes .deprecated").hide();
 		}
-		
+
+		// Foldable hotkeys, expanded by default
+		$(".hotkeys").on("click", function(ev){
+			if ($(ev.target).closest(".more").length) return;
+			$(".hotkeys .more").toggle(300);
+			const button = $(".hotkeys .moreButton");
+			button.text(button.text() === "+" ? "-" : "+");
+		});
+
 		// Auto-check live translations
 		$(".tl_checknow").on("click", function(){
 			$(".tl_checknow").hide();

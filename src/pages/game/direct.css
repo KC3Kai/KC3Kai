@@ -215,6 +215,17 @@ body {
 .hotkeys li span {
 	font-size:12px;
 }
+.hotkeys li:not(.more) {
+	cursor:pointer;
+}
+.hotkeys .moreButton {
+	width:370px;
+	text-align:right;
+	line-height:11px;
+	font-size:11px;
+	font-weight:bold;
+	cursor:pointer;
+}
 
 /* ALT GAME MODES
 --------------------------*/
