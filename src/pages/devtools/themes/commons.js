@@ -248,9 +248,17 @@
       hotkey_activity_basic: () => $(".module.activity #atab_basic").trigger("click"),
       hotkey_activity_battle: () => $(".module.activity #atab_battle").trigger("click"),
       hotkey_activity_quest: () => {
-        if (ConfigManager.info_quest_activity) {
-          $(".module.activity #atab_quest").trigger("click");
+        if (!ConfigManager.info_quest_activity) return;
+        const questTab = $(".module.activity #atab_quest");
+        if (!questTab.hasClass("active")) {
+          questTab.trigger("click");
+          return;
         }
+        // Advance the filter in DOM order. After the last filter, clear the filter.
+        const filters = $(".module.activity .quest_filter_button[filter]");
+        const active = filters.filter(".active");
+        const next = filters.eq(filters.index(active) + 1);
+        (next.length ? next : active).trigger("click");
       },
       hotkey_activity_exped: () => $(".module.activity #atab_expeditionPlanner").trigger("click"),
       hotkey_reload_iframe: reloadGameIframe,
