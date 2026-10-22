@@ -1547,6 +1547,26 @@
 		]
 	},
 	{
+		"section": "SettingsHotkeys",
+		"contents" : [
+			{ "id" : "hotkey_fleet_1", "name" : "SettingsHotkeyFleet1", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_fleet_2", "name" : "SettingsHotkeyFleet2", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_fleet_3", "name" : "SettingsHotkeyFleet3", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_fleet_4", "name" : "SettingsHotkeyFleet4", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_fleet_combined", "name" : "SettingsHotkeyFleetCombined", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_lbas", "name" : "SettingsHotkeyLbas", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_activity_basic", "name" : "SettingsHotkeyActivityBasic", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_activity_battle", "name" : "SettingsHotkeyActivityBattle", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_activity_quest", "name" : "SettingsHotkeyActivityQuest", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_activity_exped", "name" : "SettingsHotkeyActivityExped", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_reload_iframe", "name" : "SettingsHotkeyReloadIframe", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_mute", "name" : "SettingsHotkeyMute", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_alert", "name" : "SettingsHotkeyAlert", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_screenshot", "name" : "SettingsHotkeyScreenshot", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_clear_overlays", "name" : "SettingsHotkeyClearOverlays", "type" : "hotkey", "options" : {} }
+		]
+	},
+	{
 		"section": "Moonlight",
 		"contents" : [
 			{

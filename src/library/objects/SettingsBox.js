@@ -40,6 +40,15 @@ To be dynamically used on the settings page
 			$(".options", self.element).empty();
 			self[info.type]( info.options );
 		});
+		// A reset hotkey must steal the default key from another action
+		if (info.type === "hotkey") {
+			$(".resetButton", this.element).on("click", () => {
+				ConfigManager.loadIfNecessary();
+				stealHotkey(ConfigManager[self.config], self.config);
+				ConfigManager.save();
+				SettingsBox.refreshHotkeys();
+			});
+		}
 		$(this.element)
 			.toggleClass("deprecated", !!info.deprecated)
 			.toggleClass("dangerous", !!info.chui);
@@ -262,6 +271,133 @@ To be dynamically used on the settings page
 				.prop("disabled", typeof options.choices[ctr][2] != "undefined")
 			);
 		}
+	};
+
+	SettingsBox.prototype.hotkey = function() {
+		const input = $("<input/>")
+			.attr("type", "text")
+			.attr("readonly", "readonly")
+			.prop("disabled", this.disabled)
+			.addClass("hotkey")
+			.attr("data-config", this.config);
+		$(".options", this.element).append(input);
+		refreshHotkey(input);
+		input.on("click", () => startHotkeyCapture(input));
+	};
+
+	/**
+	 * Show the current binding of one input.
+	 * @param {jQuery} input - hotkey input
+	 */
+	const refreshHotkey = (input) => {
+		if (input.hasClass("recording")) return;
+		const binding = ConfigManager[input.attr("data-config")];
+		input.val(ConfigManager.hotkeyLabel(binding))
+			.attr("placeholder", binding ? "" : KC3Meta.term("SettingsHotkeyUnassigned"));
+	};
+
+	/**
+	 * Refresh all hotkey inputs and their reset buttons.
+	 */
+	SettingsBox.refreshHotkeys = () => {
+		$(".settingBox .options .hotkey").each((_index, element) => {
+			const input = $(element);
+			if (input.hasClass("recording")) return;
+			refreshHotkey(input);
+			const config = input.attr("data-config");
+			input.closest(".settingBox").find(".resetButton").toggle(
+				JSON.stringify(ConfigManager[config])
+				!== JSON.stringify(ConfigManager.defaults()[config])
+			);
+		});
+	};
+
+	/**
+	 * Listen for one key and save it as the binding of this input.
+	 * @param {jQuery} input - hotkey input
+	 */
+	const startHotkeyCapture = (input) => {
+		if (input.prop("disabled") || input.hasClass("recording")) return;
+		const config = input.attr("data-config");
+		const note = input.closest(".settingBox").find(".note");
+		input.addClass("recording")
+			.val("")
+			.attr("placeholder", KC3Meta.term("SettingsHotkeyPressKey"));
+		$(document).on("keydown.hotkeyCapture", (ev) => {
+			ev.stopPropagation();
+			ev.preventDefault();
+			if (ConfigManager.eventCode(ev) === "Escape") {
+				stopHotkeyCapture(input);
+				return;
+			}
+			const binding = ConfigManager.hotkeyFromEvent(ev);
+			if (!binding) return;
+			if (isReservedHotkey(binding)) {
+				elementControl(note, "red", KC3Meta.term("SettingsHotkeyReserved"));
+				return;
+			}
+			stopHotkeyCapture(input);
+			ConfigManager.loadIfNecessary();
+			stealHotkey(binding, config);
+			ConfigManager[config] = binding;
+			ConfigManager.save();
+			SettingsBox.refreshHotkeys();
+			elementControl(note, "", KC3Meta.term("SettingsErrorNG"));
+		});
+		input.one("blur", () => {
+			stopHotkeyCapture(input);
+		});
+	};
+
+	/**
+	 * Stop the key listener and show the saved binding again.
+	 * @param {jQuery} input - hotkey input
+	 */
+	const stopHotkeyCapture = (input) => {
+		$(document).off("keydown.hotkeyCapture");
+		input.removeClass("recording");
+		refreshHotkey(input);
+	};
+
+	/**
+	 * Compare two bindings by key code and all modifiers.
+	 * @param {?Object} a - first binding
+	 * @param {?Object} b - second binding
+	 * @returns {boolean} true if both bindings are equal
+	 */
+	const sameHotkey = (a, b) => {
+		return !!a && !!b
+			&& a.code === b.code
+			&& Boolean(a.mod) === Boolean(b.mod)
+			&& Boolean(a.alt) === Boolean(b.alt)
+			&& Boolean(a.shift) === Boolean(b.shift);
+	};
+
+	/**
+	 * Clear every other action that uses this binding.
+	 * @param {Object} binding - new binding
+	 * @param {string} exceptConfig - config key to keep
+	 */
+	const stealHotkey = (binding, exceptConfig) => {
+		ConfigManager.hotkeyConfigs().forEach((key) => {
+			if (key !== exceptConfig && sameHotkey(ConfigManager[key], binding)) {
+				ConfigManager[key] = null;
+			}
+		});
+	};
+
+	/**
+	 * Check if the browser or the panel reserves a binding.
+	 * @param {Object} binding - binding to check
+	 * @returns {boolean} true if the binding is reserved
+	 */
+	const isReservedHotkey = (binding) => {
+		const code = binding.code;
+		if (code === "Tab" || code === "F5" || code === "F11" || code === "F12") return true;
+		if (binding.mod && (code === "KeyW" || code === "KeyT" || code === "KeyN")) return true;
+		if (binding.mod && code === "KeyQ" && ConfigManager.isMacPlatform()) return true;
+		if (binding.alt && code === "F4") return true;
+		return false;
 	};
 
 	function elementControl(ele,colorCSS,msg) {

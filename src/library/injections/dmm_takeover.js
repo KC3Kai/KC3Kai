@@ -58,13 +58,7 @@
 				}
 			}, 1000);
 
-			// Press F7 to stop focusing on window to get time to focus on flash
 			$(document).on("keydown", function(event){
-				if (event.which === 118) {
-					self.nonFocusSeconds = 20;
-					event.stopPropagation();
-					event.preventDefault();
-				}
 				// Press Tab to show special HUD
 				if (event.which === 9) {
 					// reserved for implementation
@@ -101,8 +95,13 @@
 			var overlay_nextBlock = $("<div>").addClass("overlay_next notranslate")
 				.append($("<div>").addClass("nextButtonBlock"))
 				.append(
-					$("<span>").html(KC3Meta.term("NextButtonBlockOverlay")).click(function() {
-						// Equivalent to F10 key, no confirm dialogue for now
+					$("<span>").html(
+						ConfigManager.hotkey_clear_overlays
+							? KC3Meta.term("NextButtonBlockOverlay").format(
+								ConfigManager.hotkeyLabel(ConfigManager.hotkey_clear_overlays))
+							: KC3Meta.term("NextButtonBlockOverlayNoKey")
+					).on("click", () => {
+						// Same action as the clear-overlays hotkey, no confirm dialogue for now
 						//if (confirm(KC3Meta.term("NextButtonBlockOverlayConfirmRemove"))) {
 							self.clearOverlays()({action: "clearOverlays"}, {}, function() {});
 						//}
@@ -591,8 +590,9 @@
 		clearOverlayHotKey: function(){
 			var self = this;
 			$(document).on("keydown", function(event){
-				// F10: Clear overlays
-				if (event.which === 121) {
+				if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_clear_overlays, event)) {
+					event.stopPropagation();
+					event.preventDefault();
 					self.clearOverlays()({action:'clearOverlays'}, {}, function(){});
 				}
 			});
@@ -643,10 +643,10 @@
 		Ask background service to take my selfie
 		--------------------------------------*/
 		screenshotHotkey: function(){
-			var self = this;
 			$(document).on("keydown", function(event){
-				// F9: Screenshot
-				if (event.which === 120) {
+				if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_screenshot, event)) {
+					event.stopPropagation();
+					event.preventDefault();
 					(new RMsg("service", "screenshot", {})).execute();
 				}
 			});

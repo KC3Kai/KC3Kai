@@ -44,6 +44,24 @@
 		KC3Translation.execute();
 		KC3Database.init();
 		
+		// Show the configured hotkeys, hide unassigned rows
+		$(".hotkeys li[data-hotkeys]").each((_index, element) => {
+			const row = $(element);
+			const description = row.children("span").first();
+			row.children("kbd").remove();
+			let isBound = false;
+			row.attr("data-hotkeys").split(",").forEach((config) => {
+				const label = ConfigManager.hotkeyLabel(ConfigManager[config]);
+				if (!label) return;
+				isBound = true;
+				label.split(" + ").forEach((part) => {
+					description.before($("<kbd>").text(part), " ");
+				});
+			});
+			if (!isBound) row.removeClass("more");
+			row.toggle(isBound);
+		});
+
 		// Start play without devtools panel
 		$("#startAnyway").on("click", activateDmmPlay);
 		

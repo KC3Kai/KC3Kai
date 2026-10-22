@@ -219,90 +219,81 @@
 
     $(".module.controls .btn_reload_iframe").on("click", reloadGameIframe);
 
-    // Key actions, keyed by keyCode
-    const hotkeys = {
-      9: (e) => {
-        // Tab key, prevent it scrolling any window
-        e.stopPropagation();
-        e.preventDefault();
-      },
-      49: () => {
-        // 1 key switch to fleet #1 view
+    /** Key actions, keyed by config key. */
+    const hotkeyActions = {
+      hotkey_fleet_1: () => {
         setActiveFleetControl(".module.controls .fleet_num:contains('1')");
         clickActiveFleetControl();
       },
-      50: () => {
-        // 2 key switch to fleet #2 view
+      hotkey_fleet_2: () => {
         setActiveFleetControl(".module.controls .fleet_num:contains('2')");
         clickActiveFleetControl();
       },
-      51: () => {
-        // 3 key switch to fleet #3 view
+      hotkey_fleet_3: () => {
         setActiveFleetControl(".module.controls .fleet_num:contains('3')");
         clickActiveFleetControl();
       },
-      52: () => {
-        // 4 key switch to fleet #4 view
+      hotkey_fleet_4: () => {
         setActiveFleetControl(".module.controls .fleet_num:contains('4')");
         clickActiveFleetControl();
       },
-      53: () => {
-        // 5 key switch to combined fleet view
+      hotkey_fleet_combined: () => {
         setActiveFleetControl(".module.controls .fleet_rengo");
         clickActiveFleetControl();
       },
-      54: () => {
-        // 6 key switch to LBAS view
+      hotkey_lbas: () => {
         setActiveFleetControl(".module.controls .fleet_lbas");
         clickActiveFleetControl();
       },
-      81: () => {
-        // Q key switch to basic tab
-        $(".module.activity #atab_basic").trigger("click");
-      },
-      87: () => {
-        // W key switch to battle tab
-        $(".module.activity #atab_battle").trigger("click");
-      },
-      69: () => {
-        // E key switch to quest tab
+      hotkey_activity_basic: () => $(".module.activity #atab_basic").trigger("click"),
+      hotkey_activity_battle: () => $(".module.activity #atab_battle").trigger("click"),
+      hotkey_activity_quest: () => {
         if (ConfigManager.info_quest_activity) {
           $(".module.activity #atab_quest").trigger("click");
         }
       },
-      82: () => {
-        // R key switch to exped planner tab
-        $(".module.activity #atab_expeditionPlanner").trigger("click");
-      },
-      117: (e) => {
-        // F6 key reload the game iframe
-        e.stopPropagation();
-        e.preventDefault();
-        reloadGameIframe();
-      },
-      118: () => {
-        // F7 take panel's screenshot
-        // TODO captureVisibleTab not work since no way to grant activeTab permission
-      },
-      119: (e) => {
-        // F8 mute toggle OR Shift+F8 alert sound toggle
-        if (e.shiftKey) {
-          $(".module.controls .btn_alert_toggle").trigger("click");
-        } else {
-          $(".module.controls .btn_mute").trigger("click");
-        }
-      },
-      120: () => {
-        // F9 screenshot
-        $(".module.controls .btn_ss1").trigger("click");
-      },
+      hotkey_activity_exped: () => $(".module.activity #atab_expeditionPlanner").trigger("click"),
+      hotkey_reload_iframe: reloadGameIframe,
+      hotkey_mute: () => $(".module.controls .btn_mute").trigger("click"),
+      hotkey_alert: () => $(".module.controls .btn_alert_toggle").trigger("click"),
+      hotkey_screenshot: () => $(".module.controls .btn_ss1").trigger("click"),
     };
 
+    // Show the configured key in the control tooltips
+    const updateHotkeyTitles = () => {
+      ConfigManager.loadIfNecessary();
+      [
+        ["hotkey_screenshot", ".module.controls .btn_ss1", "PanelScreenshot"],
+        ["hotkey_mute", ".module.controls .btn_mute", "PanelToggleSounds"],
+        ["hotkey_reload_iframe", ".module.controls .btn_reload_iframe", "PanelReloadIframe"],
+        ["hotkey_alert", ".module.controls .btn_alert_toggle", "PanelToggleAlert"],
+      ].forEach(([config, selector, term]) => {
+        const binding = ConfigManager[config];
+        const text = KC3Meta.term(term);
+        $(selector).attr("title", binding
+          ? text.format(ConfigManager.hotkeyLabel(binding))
+          : text.replace(/\s*\(\{0\}\)$/, ""));
+      });
+    };
+    updateHotkeyTitles();
+    window.addEventListener("storage", (event) => {
+      if (event.key === ConfigManager.keyName()) updateHotkeyTitles();
+    });
+
     const handleHotkey = (e) => {
-      // console.debug(e);
-      const action = hotkeys[e.keyCode];
-      if (!action) return;
-      action(e);
+      // Tab is reserved, always swallow it to prevent scrolling
+      if (ConfigManager.eventCode(e) === "Tab") {
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+      }
+      ConfigManager.loadIfNecessary();
+      const actionKey = Object.keys(hotkeyActions)
+        .find((key) => ConfigManager.hotkeyMatches(ConfigManager[key], e));
+      if (!actionKey) return;
+      e.stopPropagation();
+      e.preventDefault();
+      hotkeyActions[actionKey]();
     };
 
     $(document).on("keydown", handleHotkey);
@@ -312,9 +303,11 @@
       if (request.identifier !== "kc3_devtools" || request.action !== "hotkey") return false;
       if (!sender.tab || sender.tab.id !== chrome.devtools.inspectedWindow.tabId) return false;
       handleHotkey({
-        keyCode: request.key,
-        which: request.key,
+        code: request.code,
+        ctrlKey: !!request.ctrlKey,
+        altKey: !!request.altKey,
         shiftKey: !!request.shiftKey,
+        metaKey: !!request.metaKey,
         stopPropagation: () => {},
         preventDefault: () => {},
       });

@@ -83,7 +83,18 @@ $(document).on("ready", function(){
 	KC3QuestManager.load();
 	KC3Database.init();
 	KC3Translation.execute();
-	
+
+	/**
+	 * Show the configured clear-overlays key on the blocked-advance overlay.
+	 */
+	const setNextBlockText = () => {
+		const binding = ConfigManager.hotkey_clear_overlays;
+		$(".overlay_next span").text(binding
+			? KC3Meta.term("NextButtonBlockOverlay").format(ConfigManager.hotkeyLabel(binding))
+			: KC3Meta.term("NextButtonBlockOverlayNoKey"));
+	};
+	setNextBlockText();
+
 	// User css customizations
 	if(ConfigManager.dmm_custom_css !== ""){
 		var customCSS = document.createElement("style");
@@ -182,6 +193,7 @@ $(document).on("ready", function(){
 	window.addEventListener("storage", function({key, timeStamp, url}){
 		if(key === ConfigManager.keyName()) {
 			ConfigManager.load();
+			setNextBlockText();
 			if($("#dmm_custom_css").html() !== ConfigManager.dmm_custom_css){
 				$("#dmm_custom_css").html(ConfigManager.dmm_custom_css);
 			}
@@ -286,29 +298,19 @@ $(document).on("ready", function(){
 });
 
 $(document).on("keydown", function(event){
-	switch(event.keyCode) {
-		// F7: Toggle keyboard focus
-		case(118):
-			autoFocus = 20;
-			return false;
-			
-		// F9: Screenshot
-		case(120):
-			chrome.tabs.getCurrent(function(tab) {
-				interactions.screenshot({
-					tabId: tab.id, playerName: tab.title
-				}, {}, function(){});
-			});
-			return false;
-		
-		// F10: Clear overlays
-		case(121):
-			interactions.clearOverlays({}, {}, function(){});
-			return false;
-		
-		// Other else
-		default:
-		break;
+	ConfigManager.loadIfNecessary();
+	if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_screenshot, event)) {
+		event.stopPropagation();
+		event.preventDefault();
+		chrome.tabs.getCurrent((tab) => {
+			interactions.screenshot({
+				tabId: tab.id, playerName: tab.title
+			}, {}, () => {});
+		});
+	} else if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_clear_overlays, event)) {
+		event.stopPropagation();
+		event.preventDefault();
+		interactions.clearOverlays({}, {}, () => {});
 	}
 });
 

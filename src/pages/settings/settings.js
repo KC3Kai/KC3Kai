@@ -13,6 +13,19 @@
 			dataType: 'json',
 			url: "/data/settings.json",
 			success: function(response){
+				/**
+				 * Reset all hotkey configs to their defaults.
+				 */
+				const resetAllHotkeys = () => {
+					ConfigManager.loadIfNecessary();
+					const defaults = ConfigManager.defaults();
+					ConfigManager.hotkeyConfigs().forEach((key) => {
+						ConfigManager[key] = defaults[key];
+					});
+					ConfigManager.save();
+					SettingsBox.refreshHotkeys();
+				};
+
 				for(const sctr in response){
 					// Hide "private/deprecated" section
 					if(!!response[sctr].hide) continue;
@@ -39,6 +52,14 @@
 						$(".title a", sectionBox).css("text-decoration", "line-through");
 					}
 					
+					// Add Reset All button to the Hotkeys section
+					if (response[sctr].section === "SettingsHotkeys") {
+						$("<div>").addClass("resetAll hover")
+							.text(KC3Meta.term("SettingsResetAll"))
+							.on("click", resetAllHotkeys)
+							.appendTo(sectionBox);
+					}
+
 					// Add settings boxes under this section
 					for(const cctr in response[sctr].contents){
 						// Hide "private/deprecated" settings

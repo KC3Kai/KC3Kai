@@ -265,7 +265,98 @@ Retrieves when needed to apply on components
 				forwardConsoleOutput   : false,
 				hoursToKeepLogs        : 12,
 				hoursToKeepErrors      : 168,
+
+				/** Custom hotkeys, null means unassigned. */
+				hotkey_fleet_1: { code: "Digit1", mod: false, alt: false, shift: false },
+				hotkey_fleet_2: { code: "Digit2", mod: false, alt: false, shift: false },
+				hotkey_fleet_3: { code: "Digit3", mod: false, alt: false, shift: false },
+				hotkey_fleet_4: { code: "Digit4", mod: false, alt: false, shift: false },
+				hotkey_fleet_combined: { code: "Digit5", mod: false, alt: false, shift: false },
+				hotkey_lbas: { code: "Digit6", mod: false, alt: false, shift: false },
+				hotkey_activity_basic: { code: "KeyQ", mod: false, alt: false, shift: false },
+				hotkey_activity_battle: { code: "KeyW", mod: false, alt: false, shift: false },
+				hotkey_activity_quest: { code: "KeyE", mod: false, alt: false, shift: false },
+				hotkey_activity_exped: { code: "KeyR", mod: false, alt: false, shift: false },
+				hotkey_reload_iframe: { code: "F6", mod: false, alt: false, shift: false },
+				hotkey_mute: { code: "F8", mod: false, alt: false, shift: false },
+				hotkey_alert: { code: "F8", mod: false, alt: false, shift: true },
+				hotkey_screenshot: { code: "F9", mod: false, alt: false, shift: false },
+				hotkey_clear_overlays: { code: "F10", mod: false, alt: false, shift: false },
 			};
+		},
+
+		/**
+		 * Get the physical key code of a keyboard event.
+		 * jQuery 2.2.4 does not copy the native `code` property onto its wrapper.
+		 * @param {KeyboardEvent|jQuery.Event} e - keyboard event
+		 * @returns {string} key code, or an empty string
+		 */
+		eventCode: (e) => {
+			return (e && (e.code || (e.originalEvent && e.originalEvent.code))) || "";
+		},
+
+		/**
+		 * Build a hotkey binding from a keyboard event.
+		 * @param {KeyboardEvent|jQuery.Event} e - keyboard event
+		 * @returns {?Object} binding, or null for a modifier-only key
+		 */
+		hotkeyFromEvent: function(e) {
+			const code = this.eventCode(e);
+			if (!code || /^(Control|Shift|Alt|Meta)(Left|Right)$/.test(code)) return null;
+			return {
+				code: code,
+				mod: !!(e.ctrlKey || e.metaKey),
+				alt: !!e.altKey,
+				shift: !!e.shiftKey,
+			};
+		},
+
+		/**
+		 * Check a keyboard event against a binding.
+		 * @param {?Object} binding - saved binding, or null
+		 * @param {KeyboardEvent|jQuery.Event} e - keyboard event
+		 * @returns {boolean} true if the event matches the binding
+		 */
+		hotkeyMatches: function(binding, e) {
+			const code = this.eventCode(e);
+			if (!binding || !binding.code || !code) return false;
+			return binding.code === code
+				&& Boolean(binding.mod) === Boolean(e.ctrlKey || e.metaKey)
+				&& Boolean(binding.alt) === Boolean(e.altKey)
+				&& Boolean(binding.shift) === Boolean(e.shiftKey);
+		},
+
+		isMacPlatform: () => {
+			return /^Mac/.test(navigator.platform || "");
+		},
+
+		/**
+		 * Get the display text of a binding, for example "Ctrl + Shift + F8".
+		 * @param {?Object} binding - saved binding, or null
+		 * @returns {string} display text, or an empty string
+		 */
+		hotkeyLabel: function(binding) {
+			if (!binding || !binding.code) return "";
+			const parts = [];
+			if (binding.mod) parts.push(this.isMacPlatform() ? "Cmd" : "Ctrl");
+			if (binding.alt) parts.push("Alt");
+			if (binding.shift) parts.push("Shift");
+			let code = binding.code;
+			if (/^Key[A-Z]$/.test(code)) code = code.slice(3);
+			else if (/^Digit[0-9]$/.test(code)) code = code.slice(5);
+			else if (code === "Escape") code = "Esc";
+			parts.push(code);
+			return parts.join(" + ");
+		},
+
+		/**
+		 * Get the config keys of all hotkey actions.
+		 * @returns {string[]} config keys
+		 */
+		hotkeyConfigs: function() {
+			return Object.keys(this.defaults()).filter((key) => {
+				return key.indexOf("hotkey_") === 0;
+			});
 		},
 
 		keyName : function(){

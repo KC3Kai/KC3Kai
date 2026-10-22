@@ -166,6 +166,16 @@
 		KC3SortieManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
+		/**
+		 * Show the configured mute key on the mute button.
+		 */
+		const updateMuteTitle = () => {
+			const binding = ConfigManager.hotkey_mute;
+			$(".btn_mute").attr("title", binding
+				? KC3Meta.term("PanelToggleSounds").format(ConfigManager.hotkeyLabel(binding))
+				: KC3Meta.term("PanelToggleSounds").replace(/\s*\(\{0\}\)$/, ""));
+		};
+		updateMuteTitle();
 		KC3QuestSync.init();
 		
 		// Live translations
@@ -215,6 +225,7 @@
 		window.addEventListener("storage", function({key, timeStamp, url}){
 			if(key === ConfigManager.keyName()) {
 				ConfigManager.load();
+				updateMuteTitle();
 				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
 
 				if($("#pan_custom_css").html() != ConfigManager.pan_custom_css)

@@ -126,6 +126,24 @@ img, svg {
 	font-size:12px;
 	line-height:24px;
 }
+.section .resetAll {
+	float:right;
+	height:20px;
+	line-height:18px;
+	margin:2px 10px 0px 10px;
+	padding:0px 8px;
+	border-radius:7px;
+	font-size:12px;
+	color:#222;
+	background:#ffc;
+	border:1px solid #ccc;
+	cursor:pointer;
+}
+.section .resetAll:hover {
+	background:#7ad;
+	border:1px solid #369;
+	color:#fff;
+}
 /* Settings Boxes */
 .settingBox {
 	width:750px;
@@ -302,6 +320,23 @@ img, svg {
 }
 .settingBox .options .dropdown option:disabled {
 	color:#f99;
+}
+.settingBox .options .hotkey {
+	width:430px;
+	height:25px;
+	line-height:23px;
+	font-size:14px;
+	margin:9px 5px 0px 0px;
+	border-radius:7px;
+	background:#ffc;
+	border:1px solid #ccc;
+	padding:0px 3px;
+	cursor:pointer;
+}
+.settingBox .options .hotkey.recording {
+	background:#7ad;
+	border:1px solid #369;
+	color:#fff;
 }
 
 .settingBox.deprecated .title {
