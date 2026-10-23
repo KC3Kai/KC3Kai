@@ -350,6 +350,17 @@ Retrieves when needed to apply on components
 		},
 
 		/**
+		 * Get the text with the hotkey label, for example "Mute (F8)".
+		 * @param {string} text - text to show
+		 * @param {?Object} binding - saved binding, or null
+		 * @returns {string} text with the label, or the text if no key is bound
+		 */
+		hotkeyTitle: function(text, binding) {
+			const label = this.hotkeyLabel(binding);
+			return label ? text + " (" + label + ")" : text;
+		},
+
+		/**
 		 * Get the config keys of all hotkey actions.
 		 * @returns {string[]} config keys
 		 */

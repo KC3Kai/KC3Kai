@@ -276,11 +276,8 @@
         ["hotkey_reload_iframe", ".module.controls .btn_reload_iframe", "PanelReloadIframe"],
         ["hotkey_alert", ".module.controls .btn_alert_toggle", "PanelToggleAlert"],
       ].forEach(([config, selector, term]) => {
-        const binding = ConfigManager[config];
-        const text = KC3Meta.term(term);
-        $(selector).attr("title", binding
-          ? text.format(ConfigManager.hotkeyLabel(binding))
-          : text.replace(/\s*\(\{0\}\)$/, ""));
+        const title = ConfigManager.hotkeyTitle(KC3Meta.term(term), ConfigManager[config]);
+        $(selector).attr("title", title);
       });
     };
     updateHotkeyTitles();

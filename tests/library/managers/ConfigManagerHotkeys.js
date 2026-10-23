@@ -110,6 +110,18 @@ QUnit.test("hotkeyLabel orders modifiers and shortens codes", (assert) => {
 	assert.strictEqual(ConfigManager.hotkeyLabel(null), "");
 });
 
+QUnit.test("hotkeyTitle adds the label when a key is bound", (assert) => {
+	assert.strictEqual(
+		ConfigManager.hotkeyTitle("Mute", { code: "F8", mod: false, alt: false, shift: false }),
+		"Mute (F8)"
+	);
+	assert.strictEqual(ConfigManager.hotkeyTitle("Mute", null), "Mute");
+	assert.strictEqual(
+		ConfigManager.hotkeyTitle("Mute", { code: "", mod: false, alt: false, shift: false }),
+		"Mute"
+	);
+});
+
 QUnit.test("defaults contain the 15 hotkeys", (assert) => {
 	const expected = {
 		hotkey_fleet_1:         { code: "Digit1", mod: false, alt: false, shift: false },

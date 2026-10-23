@@ -170,10 +170,8 @@
 		 * Show the configured mute key on the mute button.
 		 */
 		const updateMuteTitle = () => {
-			const binding = ConfigManager.hotkey_mute;
-			$(".btn_mute").attr("title", binding
-				? KC3Meta.term("PanelToggleSounds").format(ConfigManager.hotkeyLabel(binding))
-				: KC3Meta.term("PanelToggleSounds").replace(/\s*\(\{0\}\)$/, ""));
+			const title = ConfigManager.hotkeyTitle(KC3Meta.term("PanelToggleSounds"), ConfigManager.hotkey_mute);
+			$(".btn_mute").attr("title", title);
 		};
 		updateMuteTitle();
 		KC3QuestSync.init();
