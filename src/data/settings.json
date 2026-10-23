@@ -1563,6 +1563,7 @@
 			{ "id" : "hotkey_mute", "name" : "SettingsHotkeyMute", "type" : "hotkey", "options" : {} },
 			{ "id" : "hotkey_alert", "name" : "SettingsHotkeyAlert", "type" : "hotkey", "options" : {} },
 			{ "id" : "hotkey_screenshot", "name" : "SettingsHotkeyScreenshot", "type" : "hotkey", "options" : {} },
+			{ "id" : "hotkey_export", "name" : "SettingsHotkeyExport", "type" : "hotkey", "options" : {} },
 			{ "id" : "hotkey_clear_overlays", "name" : "SettingsHotkeyClearOverlays", "type" : "hotkey", "options" : {} }
 		]
 	},

@@ -219,6 +219,31 @@
 
     $(".module.controls .btn_reload_iframe").on("click", reloadGameIframe);
 
+    // Export button
+    $(".module.controls .btn_export").on("click", (ev) => {
+      if (!window.KC3ImageBuilder) return;
+      if (ev.altKey) {
+        KC3ThemeUtils.copyToClipboard(JSON.stringify(PlayerManager.prepareDeckbuilder())).catch(e => {
+          console.debug("Browser does not support Clipboard event", e);
+          KC3ImageBuilder.exportCurrentFleets();
+        });
+        return;
+      }
+      if (ev.ctrlKey || ev.metaKey) {
+        // pass 0 instead of undefined to export land bases of all worlds,
+        // auto pick up world here since kcweb accepts land bases up to 3 for now
+        KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
+        return;
+      }
+      KC3ImageBuilder.exportCurrentFleets();
+      // kancolle-calc.net has been discontinued since May 2026
+      /*
+      window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+        JSON.stringify(PlayerManager.prepareDeckbuilder())
+      )));
+      */
+    });
+
     /** Key actions, keyed by config key. */
     const hotkeyActions = {
       hotkey_fleet_1: () => {
@@ -245,8 +270,12 @@
         setActiveFleetControl(".module.controls .fleet_lbas");
         clickActiveFleetControl();
       },
-      hotkey_activity_basic: () => $(".module.activity #atab_basic").trigger("click"),
-      hotkey_activity_battle: () => $(".module.activity #atab_battle").trigger("click"),
+      hotkey_activity_basic: () => {
+        $(".module.activity #atab_basic").trigger("click");
+      },
+      hotkey_activity_battle: () => {
+        $(".module.activity #atab_battle").trigger("click");
+      },
       hotkey_activity_quest: () => {
         if (!ConfigManager.info_quest_activity) return;
         const questTab = $(".module.activity #atab_quest");
@@ -260,11 +289,26 @@
         const next = filters.eq(filters.index(active) + 1);
         (next.length ? next : active).trigger("click");
       },
-      hotkey_activity_exped: () => $(".module.activity #atab_expeditionPlanner").trigger("click"),
+      hotkey_activity_exped: () => {
+        $(".module.activity #atab_expeditionPlanner").trigger("click");
+      },
       hotkey_reload_iframe: reloadGameIframe,
-      hotkey_mute: () => $(".module.controls .btn_mute").trigger("click"),
-      hotkey_alert: () => $(".module.controls .btn_alert_toggle").trigger("click"),
-      hotkey_screenshot: () => $(".module.controls .btn_ss1").trigger("click"),
+      hotkey_mute: () => {
+        $(".module.controls .btn_mute").trigger("click");
+      },
+      hotkey_alert: () => {
+        $(".module.controls .btn_alert_toggle").trigger("click");
+      },
+      hotkey_screenshot: () => {
+        $(".module.controls .btn_ss1").trigger("click");
+      },
+      hotkey_export: (ev) => {
+        $(".module.controls .btn_export").trigger($.Event("click", {
+          altKey: ev.altKey,
+          ctrlKey: ev.ctrlKey,
+          metaKey: ev.metaKey,
+        }));
+      },
     };
 
     // Show the configured key in the control tooltips
@@ -272,6 +316,7 @@
       ConfigManager.loadIfNecessary();
       [
         ["hotkey_screenshot", ".module.controls .btn_ss1", "PanelScreenshot"],
+        ["hotkey_export", ".module.controls .btn_export", "PanelExportToKCDB"],
         ["hotkey_mute", ".module.controls .btn_mute", "PanelToggleSounds"],
         ["hotkey_reload_iframe", ".module.controls .btn_reload_iframe", "PanelReloadIframe"],
         ["hotkey_alert", ".module.controls .btn_alert_toggle", "PanelToggleAlert"],
@@ -294,11 +339,14 @@
       }
       ConfigManager.loadIfNecessary();
       const actionKey = Object.keys(hotkeyActions)
-        .find((key) => ConfigManager.hotkeyMatches(ConfigManager[key], e));
+        .find((key) => {
+          // The export hotkey ignores mod and alt, because they select the export mode
+          return ConfigManager.hotkeyMatches(ConfigManager[key], e, key === "hotkey_export");
+        });
       if (!actionKey) return;
       e.stopPropagation();
       e.preventDefault();
-      hotkeyActions[actionKey]();
+      hotkeyActions[actionKey](e);
     };
 
     $(document).on("keydown", handleHotkey);

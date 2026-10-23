@@ -65,6 +65,31 @@ QUnit.test("hotkeyMatches treats Ctrl and Meta as one primary modifier", (assert
 	}), false);
 });
 
+QUnit.test("hotkeyMatches can ignore the mod and alt modifiers", (assert) => {
+	const binding = { code: "F7", mod: false, alt: false, shift: false };
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F7", ctrlKey: false, metaKey: false, altKey: false, shiftKey: false
+	}, true), true);
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F7", ctrlKey: true, metaKey: false, altKey: false, shiftKey: false
+	}, true), true);
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F7", ctrlKey: false, metaKey: true, altKey: false, shiftKey: false
+	}, true), true);
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F7", ctrlKey: false, metaKey: false, altKey: true, shiftKey: false
+	}, true), true);
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F7", ctrlKey: false, metaKey: false, altKey: false, shiftKey: true
+	}, true), false);
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F8", ctrlKey: true, metaKey: false, altKey: false, shiftKey: false
+	}, true), false);
+	assert.strictEqual(ConfigManager.hotkeyMatches(binding, {
+		code: "F7", ctrlKey: true, metaKey: false, altKey: false, shiftKey: false
+	}), false);
+});
+
 QUnit.test("eventCode reads native and jQuery-wrapped events", (assert) => {
 	const jQueryStyle = {
 		originalEvent: { code: "Digit1" },
@@ -122,7 +147,7 @@ QUnit.test("hotkeyTitle adds the label when a key is bound", (assert) => {
 	);
 });
 
-QUnit.test("defaults contain the 15 hotkeys", (assert) => {
+QUnit.test("defaults contain the 16 hotkeys", (assert) => {
 	const expected = {
 		hotkey_fleet_1:         { code: "Digit1", mod: false, alt: false, shift: false },
 		hotkey_fleet_2:         { code: "Digit2", mod: false, alt: false, shift: false },
@@ -138,6 +163,7 @@ QUnit.test("defaults contain the 15 hotkeys", (assert) => {
 		hotkey_mute:            { code: "F8", mod: false, alt: false, shift: false },
 		hotkey_alert:           { code: "F8", mod: false, alt: false, shift: true },
 		hotkey_screenshot:      { code: "F9", mod: false, alt: false, shift: false },
+		hotkey_export:          null,
 		hotkey_clear_overlays:  { code: "F10", mod: false, alt: false, shift: false },
 	};
 	const defaults = ConfigManager.defaults();

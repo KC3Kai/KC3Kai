@@ -281,6 +281,7 @@ Retrieves when needed to apply on components
 				hotkey_mute: { code: "F8", mod: false, alt: false, shift: false },
 				hotkey_alert: { code: "F8", mod: false, alt: false, shift: true },
 				hotkey_screenshot: { code: "F9", mod: false, alt: false, shift: false },
+				hotkey_export: null,
 				hotkey_clear_overlays: { code: "F10", mod: false, alt: false, shift: false },
 			};
 		},
@@ -315,14 +316,15 @@ Retrieves when needed to apply on components
 		 * Check a keyboard event against a binding.
 		 * @param {?Object} binding - saved binding, or null
 		 * @param {KeyboardEvent|jQuery.Event} e - keyboard event
+		 * @param {boolean} [ignoreMod] - ignore the mod and alt modifiers
 		 * @returns {boolean} true if the event matches the binding
 		 */
-		hotkeyMatches: function(binding, e) {
+		hotkeyMatches: function(binding, e, ignoreMod) {
 			const code = this.eventCode(e);
 			if (!binding || !binding.code || !code) return false;
 			return binding.code === code
-				&& Boolean(binding.mod) === Boolean(e.ctrlKey || e.metaKey)
-				&& Boolean(binding.alt) === Boolean(e.altKey)
+				&& (ignoreMod || Boolean(binding.mod) === Boolean(e.ctrlKey || e.metaKey))
+				&& (ignoreMod || Boolean(binding.alt) === Boolean(e.altKey))
 				&& Boolean(binding.shift) === Boolean(e.shiftKey);
 		},
 

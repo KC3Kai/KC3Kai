@@ -429,31 +429,6 @@
 		// Initial Hidden Nosaki Timer
 		$(".module.status .status_nosaki").hide();
 
-		// Export button
-		$(".module.controls .btn_export").on("click", function(e){
-			if(window.KC3ImageBuilder) {
-				if(e.altKey) {
-					KC3ThemeUtils.copyToClipboard(JSON.stringify(PlayerManager.prepareDeckbuilder())).catch(e => {
-						console.debug("Browser does not support Clipboard event", e);
-						KC3ImageBuilder.exportCurrentFleets();
-					});
-					return;
-				}
-				if(e.ctrlKey || e.metaKey) {
-					// pass 0 instead of undefined to export land bases of all worlds,
-					// auto pick up world here since kcweb accepts land bases up to 3 for now
-					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
-					return;
-				}
-				KC3ImageBuilder.exportCurrentFleets();
-			}
-			// kancolle-calc.net has been discontinued since May 2026
-			/*
-			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-				JSON.stringify(PlayerManager.prepareDeckbuilder())
-			)));
-			*/
-		});
 		// Open text-based battle replayer in new tab or popup window
 		$(".module.activity .map_world").addClass("hover").on("click", function(e){
 			const data = KC3ThemeUtils.prepareBattleLogsData();
