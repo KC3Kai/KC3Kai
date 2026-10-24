@@ -13,24 +13,21 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [6.x]
+        node-version: [24.x]
         os: [ubuntu-latest]
 
     steps:
     # PREPARE SOURCE CODES AND DEPENDENCIES
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
       with:
         submodules: true
     - name: Use node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
       timeout-minutes: 10
       run: |
-        npm install -g grunt-cli@1.3
-        npm install
-        patch -N -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch
         npm install
     # ENSURE CODES TESTED SINCE JOBS RUN IN PARALLEL
     - name: Unit tests
@@ -45,8 +42,8 @@ jobs:
     - name: Build release
       timeout-minutes: 10
       run: |
-        grunt build
-        grunt compress:release
+        npx grunt build
+        npx grunt compress:release
         echo KC3Kai $PACKAGE_VERSION package: $GITHUB_WORKSPACE/build/release.zip
     # PACKAGE AND DEPLOY TO CHROME WEBSTORE
     # - name: Publish to webstore
@@ -92,7 +89,7 @@ jobs:
         asset_content_type: application/zip
     - name: Package auto-updater asset
       timeout-minutes: 10
-      run: grunt compress:updater
+      run: npx grunt compress:updater
     - name: Upload auto-updater asset
       uses: actions/upload-release-asset@v1
       env:
