@@ -10,19 +10,79 @@
 (function () {
 	"use strict";
 
+	const debug = false;
 	const maxRetries = 60;
 	let checkerTimer = 0;
 	let retries = 0;
 
-	const checkComponents = function () {
+	/**
+	 * Target frame rate passed by kcs2.js.
+	 * @type {number} 0 means disabled.
+	 */
+	const targetFps = (() => {
+		const script = document.currentScript;
+		const value = script && script.dataset ? parseInt(script.dataset.fps, 10) : 0;
+		return value > 0 ? value : 0;
+	})();
+
+	/**
+	 * Raise the game frame rate and log the measured rate.
+	 * @param {object} createjs - Global CreateJS namespace.
+	 */
+	const hookTicker = (createjs) => {
+		const ticker = createjs && createjs.Ticker;
+		if (!ticker || !targetFps || ticker.__kc3FpsHooked) return;
+		ticker.__kc3FpsHooked = true;
+
+		const originalSetFPS = ticker.setFPS;
+		/**
+		 * Keep the target rate when the game restores its saved 60 fps value,
+		 * and do not exceed the target rate.
+		 * @param {number} fps - Requested frame rate.
+		 */
+		ticker.setFPS = function (fps) {
+			const rate = fps === 60 ? targetFps : Math.min(fps, targetFps);
+			return originalSetFPS.call(this, rate);
+		};
+		originalSetFPS.call(ticker, targetFps);
+
+		if (debug) {
+			let ticks = 0;
+			let lastTime = Date.now();
+			ticker.addEventListener("tick", () => {
+				ticks += 1;
+			});
+			/**
+			 * Log the measured frame rate.
+			 */
+			const logFps = () => {
+				const now = Date.now();
+				const elapsed = now - lastTime;
+				const measured = elapsed > 0 ? ticks * 1000 / elapsed : 0;
+				ticks = 0;
+				lastTime = now;
+				console.log("[KC3] Game FPS: " + measured.toFixed(1) + " / target " + ticker.framerate);
+			};
+			setInterval(logFps, 1000);
+		}
+	};
+
+	/**
+	 * Check for the game's third-party components.
+	 * @returns {boolean} True if the components are ready.
+	 */
+	const checkComponents = () => {
 		console.log("Checking 3rd-party components...");
 		retries += 1;
 		const pixi = window.PIXI;
 		const howler = window.Howler;
-		if (!pixi || !howler) {
+		const createjs = window.createjs;
+		if (!pixi || !howler || (targetFps && !createjs)) {
 			if (retries > maxRetries) clearInterval(checkerTimer);
 			return false;
 		}
+
+		hookTicker(createjs);
 
 		// Register original canvas screenshot message listener?
 		//pixi.settings.RENDER_OPTIONS.preserveDrawingBuffer = true;

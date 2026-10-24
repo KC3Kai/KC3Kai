@@ -1250,6 +1250,20 @@
 				}
 			},
 			{
+				"id" : "game_fps",
+				"name" : "SettingsGameFps",
+				"type" : "dropdown",
+				"options" : {
+					"tooltip": "SettingsGameFpsTip",
+					"casting": "Number",
+					"choices" : [
+						[ "30", "30" ],
+						[ "60", "60" ],
+						[ "120", "120" ]
+					]
+				}
+			},
+			{
 				"id" : "fix_game_code",
 				"name" : "SettingsGameLibFixes",
 				"type" : "check",

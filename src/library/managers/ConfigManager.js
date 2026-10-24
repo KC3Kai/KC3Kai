@@ -186,6 +186,7 @@ Retrieves when needed to apply on components
 				mute_game_tab     : false,
 				focus_game_tab    : false,
 				fix_game_code     : false,
+				game_fps          : 60,
 				dmm_forcecookies  : false,
 				dmm_redirgadget   : false,
 				dmm_gadgetcache   : "",

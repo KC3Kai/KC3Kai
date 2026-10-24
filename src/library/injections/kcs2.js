@@ -55,10 +55,13 @@
 		}, {});
 	};
 
-	function loadScript(src) {
+	function loadScript(src, attrs) {
 		const script = document.createElement("script");
 		script.setAttribute("type", "text/javascript");
 		script.setAttribute("src", src);
+		if (attrs) {
+			Object.keys(attrs).forEach((key) => script.setAttribute(key, attrs[key]));
+		}
 		document.body.appendChild(script);
 	}
 
@@ -102,7 +105,7 @@
 	intervalChecker = setInterval(checkAgain, 500);
 
 	(new RMsg("service", "getConfig", {
-		id: ["api_gameScale", "dmm_customize", "fix_game_code"],
+		id: ["api_gameScale", "dmm_customize", "fix_game_code", "game_fps"],
 		attr: ["dmmplay", "extract_api"]
 	}, function (response) {
 		if (Array.isArray(response.value) && Array.isArray(response.storage)) {
@@ -130,8 +133,15 @@
 		}
 
 		// Experimental function: improve 3rd-party components used by the game
-		if (Array.isArray(response.value) && !!response.value[2]) {
-			loadScript(chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
+		if (Array.isArray(response.value)) {
+			const gameFps = response.value[3];
+			const unlockFps = gameFps && gameFps !== 60;
+			if (response.value[2] || unlockFps) {
+				loadScript(
+					chrome.runtime.getURL("library/injections/kcs2_injectable.js"),
+					unlockFps ? { "data-fps": String(gameFps) } : null
+				);
+			}
 		}
 
 		// For blocking unexpected game request by verifications on fleets and states against configured conditions
