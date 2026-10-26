@@ -76,7 +76,7 @@
   window.addEventListener('message', (event) => {
     const data = event.data;
     // console.debug(data);
-    if (!data) {
+    if (!data || !data.type) {
       return;
     }
 

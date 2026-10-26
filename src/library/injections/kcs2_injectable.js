@@ -16,14 +16,29 @@
 	let retries = 0;
 
 	/**
-	 * Target frame rate passed by kcs2.js.
+	 * Parse a frame rate.
+	 * @param {*} value - Raw frame rate.
+	 * @returns {number} Positive frame rate, or 0 if invalid.
+	 */
+	const parseFps = (value) => {
+		const fps = parseInt(value, 10);
+		return fps > 0 ? fps : 0;
+	};
+
+	/**
+	 * Current target frame rate, updated by config changes.
 	 * @type {number} 0 means disabled.
 	 */
-	const targetFps = (() => {
+	let targetFps = (() => {
 		const script = document.currentScript;
-		const value = script && script.dataset ? parseInt(script.dataset.fps, 10) : 0;
-		return value > 0 ? value : 0;
+		return parseFps(script && script.dataset ? script.dataset.fps : 0);
 	})();
+
+	/**
+	 * Game ticker hooked by this script, if any.
+	 * @type {object|null}
+	 */
+	let gameTicker = null;
 
 	/**
 	 * Raise the game frame rate and log the measured rate.
@@ -31,20 +46,14 @@
 	 */
 	const hookTicker = (createjs) => {
 		const ticker = createjs && createjs.Ticker;
-		if (!ticker || !targetFps || ticker.__kc3FpsHooked) return;
-		ticker.__kc3FpsHooked = true;
+		if (!ticker) {
+			return;
+		}
 
-		const originalSetFPS = ticker.setFPS;
-		/**
-		 * Keep the target rate when the game restores its saved 60 fps value,
-		 * and do not exceed the target rate.
-		 * @param {number} fps - Requested frame rate.
-		 */
-		ticker.setFPS = function (fps) {
-			const rate = fps === 60 ? targetFps : Math.min(fps, targetFps);
-			return originalSetFPS.call(this, rate);
-		};
-		originalSetFPS.call(ticker, targetFps);
+		gameTicker = ticker;
+		if (targetFps) {
+			ticker.setFPS(targetFps);
+		}
 
 		if (debug) {
 			let ticks = 0;
@@ -160,5 +169,23 @@
 	};
 
 	checkerTimer = setInterval(checkComponents, 1000);
+
+	/**
+	 * Apply a frame rate change sent by the config manager.
+	 */
+	window.addEventListener('message', (event) => {
+		const data = event.data;
+		if (!data || data.type !== 'AXIOS_INT_CONFIG:CHANGE' || !data.config) {
+			return;
+		}
+		const fps = parseFps(data.config.game_fps);
+		if (!fps) {
+			return;
+		}
+		targetFps = fps;
+		if (gameTicker) {
+			gameTicker.setFPS(fps);
+		}
+	});
 
 })();

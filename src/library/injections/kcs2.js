@@ -18,6 +18,7 @@
 	const relayedConfigs = [
 		'rv_enabled',
 		'apiretry_enhancer',
+		'game_fps',
 	];
 
 	/**
@@ -132,16 +133,13 @@
 			}
 		}
 
-		// Experimental function: improve 3rd-party components used by the game
+		// Experimental function: improve 3rd-party components used by the game,
+		// always loaded to apply live frame rate changes
 		if (Array.isArray(response.value)) {
-			const gameFps = response.value[3];
-			const unlockFps = gameFps && gameFps !== 60;
-			if (response.value[2] || unlockFps) {
-				loadScript(
-					chrome.runtime.getURL("library/injections/kcs2_injectable.js"),
-					unlockFps ? { "data-fps": String(gameFps) } : null
-				);
-			}
+			loadScript(
+				chrome.runtime.getURL("library/injections/kcs2_injectable.js"),
+				{ "data-fps": response.value[3] || 60 }
+			);
 		}
 
 		// For blocking unexpected game request by verifications on fleets and states against configured conditions
