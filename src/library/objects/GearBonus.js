@@ -2898,6 +2898,7 @@
 			// XF5U
 			"375": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Lexington Class
 					"69": {
@@ -2917,6 +2918,46 @@
 					"3": {
 						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
 					},
+				},
+				byShip: {
+					minStars: 2,
+					multiple: { "tyku": 1, "houk": 1 },
+				},
+			},
+			// XF6F-6
+			"589": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Lexington Class
+					"69": [
+						{
+							minStars: 1,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houm": 1 },
+						},
+					],
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+					// Independence Class
+					"116": "69",
+					// Ranger Class
+					"118": "69",
 				},
 			},
 			// FR-1 Fireball
