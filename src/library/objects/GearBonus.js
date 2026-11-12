@@ -614,6 +614,7 @@
 			// 55cm Triple Torpedo Mount Model 1924
 			"580": {
 				count: 0,
+				starsDist: [],
 				byNation: {
 					"France": {
 						multiple: { "raig": 2, "houk": 1, "houm": 2 },
@@ -639,6 +640,24 @@
 						multiple: { "raig": 3, "houk": 1 },
 					},
 				},
+				byShip: [
+					{
+						minStars: 7,
+						multiple: { "raig": 1 },
+					},
+					{
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						minStars: 9,
+						multiple: { "raig": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "houm": 1 },
+					},
+				],
 			},
 			// 55cm Composite Arrangement Quintuple Torpedo Mount Model 1932
 			"581": {
@@ -1210,6 +1229,7 @@
 			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Graf Zeppelin Class
 					"63": {
@@ -1227,12 +1247,34 @@
 					{
 						ids: [534, 381, 536],
 						multiple: { "tais": 2, "houk": 1 },
+					},
+					{
+						// Taiyou (incl Kasugamaru), Unyou (incl Yawatamaru), Shinyou
+						origins: [521, 522, 534],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [521, 522, 534],
+						minStars: 2,
+						multiple: { "tais": 1 },
+					},
+					{
+						origins: [521, 522, 534],
+						minStars: 3,
+						multiple: { "houm": 1 },
+					},
+					{
+						origins: [521, 522, 534],
+						minStars: 4,
+						multiple: { "houk": 1 },
 					},
 				],
 			},
 			// Ju 87C Kai Ni (w/ KMX / Skilled)
 			"306": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Graf Zeppelin Class
 					"63": {
@@ -1250,6 +1292,27 @@
 					{
 						ids: [534, 381, 536],
 						multiple: { "tais": 2, "houk": 1 },
+					},
+					{
+						// Taiyou (incl Kasugamaru), Unyou (incl Yawatamaru), Shinyou
+						origins: [521, 522, 534],
+						minStars: 1,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [521, 522, 534],
+						minStars: 2,
+						multiple: { "tais": 1 },
+					},
+					{
+						origins: [521, 522, 534],
+						minStars: 3,
+						multiple: { "houm": 1 },
+					},
+					{
+						origins: [521, 522, 534],
+						minStars: 4,
+						multiple: { "houk": 1 },
 					},
 				],
 			},
@@ -7078,6 +7141,10 @@
 				byShip: [
 					{
 						minCount: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						minStars: 4,
 						multiple: { "houg": 1 },
 					},
 					{

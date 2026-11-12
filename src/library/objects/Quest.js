@@ -478,7 +478,9 @@ known IDs see QuestManager
 		}; };
 		const checkExpectedHash = (meta) => {
 			if(meta.hash && this.hash && meta.hash !== this.hash) {
-				console.debug(`Quest ${this.id} hash ${this.hash}, expected:`, meta.hash);
+				if(this.status !== 3) {
+					console.debug(`Quest ${this.id} hash ${this.hash}, expected:`, meta.hash);
+				}
 				return false;
 			}
 			return true;

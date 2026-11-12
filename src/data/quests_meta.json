@@ -1097,7 +1097,7 @@
 		"hash": -393525169
 	},
 	"381": {
-		"hash": 587145157
+		"hash": 1262955079
 	},
 	"382": {
 		"unlock": [383, 1048],
@@ -1112,6 +1112,9 @@
 	},
 	"385": {
 		"hash": 1590684280
+	},
+	"386": {
+		"hash": 475448355
 	},
 	"401": {},
 	"402": {
@@ -2982,6 +2985,7 @@
 	"1171": {
 		"hash": -2068761457
 	},
+	"1172": {},
 	"EoF&RemarksOfDataFormat": {
 		"unlock": ["ID list of quests can be unlocked by this"],
 		"tracking": ["arrays of progress requirements:", ["current progress counter, always 0-started", "counter max value for repeating times of one requirement condition"]],

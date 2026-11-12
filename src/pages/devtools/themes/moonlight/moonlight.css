@@ -3014,6 +3014,8 @@ ABYSS FLEET
 	padding: 5px 4px;
 	color: #ddd;
 	font-size: 11px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 .module.activity .activity_remodel .remodel_header {
 	width: 180px;

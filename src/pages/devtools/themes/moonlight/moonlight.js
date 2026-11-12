@@ -3758,7 +3758,8 @@
 			$(".remodel_slotlist", remodelListBox).empty();
 			$.each(data.currentList, (idx, recipe) => {
 				const itemBox = $("#factory .remodelSlotItem").clone();
-				fillRemodelSlotItemBox(this, itemBox, recipe)
+				fillRemodelSlotItemBox(this, itemBox, recipe,
+					undefined, recipe.api_max_level > -1 ? null : undefined)
 					.appendTo($(".remodel_slotlist", remodelListBox));
 			});
 			$(".module.activity .activity_remodel").createChildrenTooltips();
@@ -4829,10 +4830,10 @@
 			stars = KC3GearManager.get(rosterId).stars;
 		}
 		if(stars !== undefined) {
-			$(".remodel_slot_star span", itemBox).text(stars);
+			$(".remodel_slot_star span", itemBox).text(stars === null ? recipe.api_max_level : stars);
 			$(".remodel_slot_star", itemBox).show();
 			itemBox.addClass("withStar");
-			if(akashiMstId) {
+			if(stars != null && akashiMstId) {
 				const percent = KC3Meta.akashiRemodelSuccessRate(akashiMstId, stars);
 				if(percent) {
 					$(".remodel_slot_success span", itemBox).text(percent);
