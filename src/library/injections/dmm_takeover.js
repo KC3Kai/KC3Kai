@@ -20,9 +20,8 @@
 			this.layout();
 			this.backgrounds();
 			this.subtitleSpace();
-			this.clearOverlayHotKey();
+			this.hotkeys();
 			this.exitConfirmation();
-			this.screenshotHotkey();
 			this.injectDMM();
 
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
@@ -37,7 +36,7 @@
 		},
 
 		/* WINDOW KEEP FOCUS, NOT FLASH
-		So we can detect keydown for hotkeys
+		So keydown events reach this document for hotkeys
 		--------------------------------------*/
 		nonFocusSeconds: 0,
 		windowFocus: function(){
@@ -57,15 +56,6 @@
 					console.debug("No focus countdown", self.nonFocusSeconds);
 				}
 			}, 1000);
-
-			$(document).on("keydown", function(event){
-				// Press Tab to show special HUD
-				if (event.which === 9) {
-					// reserved for implementation
-					event.stopPropagation();
-					event.preventDefault();
-				}
-			});
 		},
 
 		/* CUSTOM HTML TAGS
@@ -584,17 +574,28 @@
 			};
 		},
 
-		/* CLEAR OVERLAYS
-		Empties or hides current shown or filled overlays
+		/* HOTKEYS
+		Swallow bound keys, forward all key events to the devtools panel,
+		and run the actions handled by this page.
 		--------------------------------------*/
-		clearOverlayHotKey: function(){
+		hotkeys: function(){
 			var self = this;
-			$(document).on("keydown", function(event){
-				if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_clear_overlays, event)) {
-					event.stopPropagation();
-					event.preventDefault();
-					self.clearOverlays()({action:'clearOverlays'}, {}, function(){});
+			KC3Hotkeys.init(function(event){
+				// Press Tab to show special HUD
+				if (event.which === 9) {
+					// reserved for implementation
+					return true;
 				}
+				if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_screenshot, event)) {
+					(new RMsg("service", "screenshot", {})).execute();
+					return true;
+				}
+				// Clear overlays: empties or hides current shown or filled overlays
+				if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_clear_overlays, event)) {
+					self.clearOverlays()({action:'clearOverlays'}, {}, function(){});
+					return true;
+				}
+				return false;
 			});
 		},
 		clearOverlays: function(){
@@ -637,19 +638,6 @@
 					margin_top: parseInt($("#root > div > main").css("margin-top"))
 				});
 			};
-		},
-
-		/* SCREENSHOT HOTKEY
-		Ask background service to take my selfie
-		--------------------------------------*/
-		screenshotHotkey: function(){
-			$(document).on("keydown", function(event){
-				if (ConfigManager.hotkeyMatches(ConfigManager.hotkey_screenshot, event)) {
-					event.stopPropagation();
-					event.preventDefault();
-					(new RMsg("service", "screenshot", {})).execute();
-				}
-			});
 		},
 
 		/* GET GAMESCREEN OFFSET

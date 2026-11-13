@@ -71,6 +71,7 @@
 		"KC3MurasakiShipbox": true,
 		"KC3PlainShipbox": true,
 		"DMMCustomizations": true,
+		"KC3Hotkeys": true,
 		"interactions": true,
 
 		"chrome": true,

@@ -21,41 +21,6 @@
 		'game_fps',
 	];
 
-	/**
-	 * Hotkey bindings, kept in sync with the extension config
-	 */
-	let hotkeyBindings = {};
-
-	/**
-	 * Get the physical key code of a keyboard event.
-	 * jQuery 2.2.4 does not copy the native `code` property onto its wrapper.
-	 * @param {KeyboardEvent|jQuery.Event} e - keyboard event
-	 * @returns {string} key code, or an empty string
-	 */
-	const eventCode = (e) => {
-		return e.code || (e.originalEvent && e.originalEvent.code) || "";
-	};
-
-	const isHotkeyBound = (e) => {
-		const code = eventCode(e);
-		return Object.keys(hotkeyBindings).some((key) => {
-			const binding = hotkeyBindings[key];
-			return !!binding && !!binding.code
-				&& binding.code === code
-				&& Boolean(binding.mod) === Boolean(e.ctrlKey || e.metaKey)
-				&& Boolean(binding.alt) === Boolean(e.altKey)
-				&& Boolean(binding.shift) === Boolean(e.shiftKey);
-		});
-	};
-
-	const updateHotkeyBindings = (config) => {
-		if (!config) return;
-		hotkeyBindings = Object.keys(config).reduce((bindings, key) => {
-			if (key.indexOf("hotkey_") === 0) bindings[key] = config[key];
-			return bindings;
-		}, {});
-	};
-
 	function loadScript(src, attrs) {
 		const script = document.createElement("script");
 		script.setAttribute("type", "text/javascript");
@@ -73,24 +38,7 @@
 	}
 
 	// Swallow bound keys, and forward all key events to the devtools panel
-	$(document).on("keydown", function (e) {
-		if (isHotkeyBound(e)) {
-			e.stopPropagation();
-			e.preventDefault();
-		}
-		(new RMsg("devtools", "hotkey", {
-			code: eventCode(e),
-			ctrlKey: e.ctrlKey,
-			altKey: e.altKey,
-			shiftKey: e.shiftKey,
-			metaKey: e.metaKey,
-		})).execute();
-	});
-
-	// Read the hotkey bindings. A content script cannot read extension storage.
-	(new RMsg("service", "getConfig", {}, (response) => {
-		updateHotkeyBindings(response && response.value);
-	})).execute();
+	KC3Hotkeys.init();
 
 	var intervalChecker;
 	function checkAgain() {
@@ -124,7 +72,7 @@
 				$("body").css("overflow", "hidden");
 				// Prevent Tab key scrolling
 				$(document).on("keydown", function (e) {
-					if (eventCode(e) === "Tab") {
+					if (e.which === 9) {
 						$(document).scrollTop(0);
 						e.stopPropagation();
 						e.preventDefault();
@@ -216,7 +164,6 @@
 		if (request.identifier === 'kc3_gamescreen' && request.action === 'configManagerChanged') {
 			// only expose properties about cared by injected document scripts for security
 			const config = request.config || {};
-			updateHotkeyBindings(config);
 			const newConfig = relayedConfigs.reduce((obj, key) => {
 				obj[key] = config[key];
 				return obj;

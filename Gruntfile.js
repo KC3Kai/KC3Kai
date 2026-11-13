@@ -297,6 +297,7 @@ module.exports = function(grunt) {
 									"library/modules/Meta.js",
 									"library/modules/RemodelDb.js",
 									"library/modules/Translation.js",
+									"library/injections/hotkeys.js",
 									"library/injections/dmm_takeover.js",
 									"library/injections/dmm.js"
 								],
@@ -319,6 +320,7 @@ module.exports = function(grunt) {
 								"js": [
 									"assets/js/global.js",
 									"library/objects.js",
+									"library/injections/hotkeys.js",
 									"library/injections/kcs2.js"
 								],
 								"run_at": "document_end",
