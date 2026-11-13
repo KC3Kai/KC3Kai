@@ -10923,5 +10923,189 @@
 		"api_stype": 3,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"6365": {
+		"api_id": 6365,
+		"api_name": "ハロウィンRoma改",
+		"api_yomi": "ローマ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6366": {
+		"api_id": 6366,
+		"api_name": "ハロウィンGrecale",
+		"api_yomi": "グレカーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6367": {
+		"api_id": 6367,
+		"api_name": "ハロウィン浜波改二",
+		"api_yomi": "はまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6368": {
+		"api_id": 6368,
+		"api_name": "ハロウィン早波改二",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6369": {
+		"api_id": 6369,
+		"api_name": "ハロウィンMaestrale改",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6370": {
+		"api_id": 6370,
+		"api_name": "ハロウィン朝日改",
+		"api_yomi": "あさひ",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6371": {
+		"api_id": 6371,
+		"api_name": "ハロウィン鵜来改",
+		"api_yomi": "うくる",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6372": {
+		"api_id": 6372,
+		"api_name": "ハロウィンTuscaloosa改",
+		"api_yomi": "タスカルーサ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6373": {
+		"api_id": 6373,
+		"api_name": "ハロウィン能美改",
+		"api_yomi": "のうみ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6374": {
+		"api_id": 6374,
+		"api_name": "ハロウィン長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"6375": {
+		"api_id": 6375,
+		"api_name": "ハロウィンConte di Cavour改",
+		"api_yomi": "カブール",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6376": {
+		"api_id": 6376,
+		"api_name": "ハロウィンConte di Cavour nuovo",
+		"api_yomi": "カブール",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6377": {
+		"api_id": 6377,
+		"api_name": "ハロウィン鈴谷改",
+		"api_yomi": "すずや",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6378": {
+		"api_id": 6378,
+		"api_name": "ハロウィンIndiana改",
+		"api_yomi": "インディアナ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6379": {
+		"api_id": 6379,
+		"api_name": "ハロウィン鈴谷",
+		"api_yomi": "すずや",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6380": {
+		"api_id": 6380,
+		"api_name": "ハロウィン鈴谷改二",
+		"api_yomi": "すずや",
+		"api_stype": 6,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6381": {
+		"api_id": 6381,
+		"api_name": "ハロウィン鈴谷航改二",
+		"api_yomi": "すずや",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6382": {
+		"api_id": 6382,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"6383": {
+		"api_id": 6383,
+		"api_name": "ハロウィン対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"6384": {
+		"api_id": 6384,
+		"api_name": "ハロウィンIndiana",
+		"api_yomi": "インディアナ",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"6385": {
+		"api_id": 6385,
+		"api_name": "オクトーバーフェストZ1 zwei",
+		"api_yomi": "レーベレヒト・マース",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6386": {
+		"api_id": 6386,
+		"api_name": "オクトーバーフェストGotland改",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"6387": {
+		"api_id": 6387,
+		"api_name": "オクトーバーフェスト神鷹改二",
+		"api_yomi": "しんよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
 	}
 }

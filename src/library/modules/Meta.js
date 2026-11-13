@@ -109,6 +109,7 @@ Provides access to data on built-in JSON files
 			515,           // Ark Royal (Poke dupe)
 			522, 884,      // Yawatamaru (K2 Equip3 dupe), Unyou
 			528,           // Hayanami
+			536,           // Shinyou Kai Ni (K2 Poke3 dupe)
 			549,           // Intrepid (Poke dupe)
 			568,           // Kuroshio Kai Ni (Poke dupe)
 			573,           // Mutsu Kai Ni (Poke dupe)
@@ -135,6 +136,7 @@ Provides access to data on built-in JSON files
 			1035, 1040,    // Fubuki K3(Go)
 			1041,          // Hanazuki
 			1044,          // Kiri
+			1053,          // Vautour
 			1055,          // Bearn
 		],
 		specialAbyssalIdVoicePrefixes: {
