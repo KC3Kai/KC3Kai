@@ -616,13 +616,31 @@
 				count: 0,
 				starsDist: [],
 				byNation: {
-					"France": {
-						multiple: { "raig": 2, "houk": 1, "houm": 2 },
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							multiple: { "raig": 1, "houm": 1 },
+					"France": [
+						{
+							multiple: { "raig": 2, "houk": 1, "houm": 2 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								multiple: { "raig": 1, "houm": 1 },
+							},
 						},
-					},
+						{
+							minStars: 7,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 9,
+							multiple: { "raig": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
 				},
 				byClass: {
 					// La Galissonnière Class
@@ -640,24 +658,6 @@
 						multiple: { "raig": 3, "houk": 1 },
 					},
 				},
-				byShip: [
-					{
-						minStars: 7,
-						multiple: { "raig": 1 },
-					},
-					{
-						minStars: 8,
-						multiple: { "houk": 1 },
-					},
-					{
-						minStars: 9,
-						multiple: { "raig": 1 },
-					},
-					{
-						minStars: 10,
-						multiple: { "houm": 1 },
-					},
-				],
 			},
 			// 55cm Composite Arrangement Quintuple Torpedo Mount Model 1932
 			"581": {
@@ -7100,9 +7100,15 @@
 				count: 0,
 				starsDist: [],
 				byNation: {
-					"France": {
-						multiple: { "houg": 1, "houk": 1 },
-					},
+					"France": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 				byClass: {
 					// Mogador Class
@@ -7141,10 +7147,6 @@
 				byShip: [
 					{
 						minCount: 2,
-						multiple: { "houg": 1 },
-					},
-					{
-						minStars: 4,
 						multiple: { "houg": 1 },
 					},
 					{
